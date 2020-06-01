@@ -2,6 +2,9 @@
 *.txt
 *.o
 *.~
+*.sty
+*.gz
+#*
 Flux/flux
 Flux/fFile
 Flux/fFileIndex
@@ -21,5 +24,5 @@ Phase/uFile
 Phase/uFileIndex
 Phase/sFile
 Phase/select.py
-EPEC/epec
+IslandDynamics/island
 gitadd

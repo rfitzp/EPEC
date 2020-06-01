@@ -23,9 +23,9 @@ int main ()
   // ...............
   // Welcome message
   // ...............
-  printf ("\n############\n");
-  printf ("Program EPEC\n");
-  printf ("############\n\n");
+  printf ("\n#####################\n");
+  printf ("Program IslandDyamics\n");
+  printf ("######################\n\n");
 
   // .............
   // Read namelist

@@ -26,7 +26,7 @@ else ifeq ($(UNAME), Linux)
 	C_LIBS	   = -lgfortran -lgsl -lgslcblas
 endif
 
-EXECUTABLE = ../epec
+EXECUTABLE = ../island
 
 $(EXECUTABLE):	 	$(C_OBJECT) $(F_OBJECT)
 			$(C_COMPILER) -o $(EXECUTABLE)  $(C_OBJECT) $(F_OBJECT) $(C_LIBS)

@@ -573,11 +573,11 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
       }
   fclose (file);
 
-  file = OpenFilea ((char*) "../EPEC/Stage1/q.txt");
+  file = OpenFilea ((char*) "../IslandDynamics/Stage1/q.txt");
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, TIME);
   fclose (file);
 
-  file = OpenFilea ((char*) "../EPEC/Stage1/omega0.txt");
+  file = OpenFilea ((char*) "../IslandDynamics/Stage1/omega0.txt");
   for (int j = 0; j < nres; j++)
      fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk(j), rk(j), wkl(j) /tau_A/1.e3, wk(j) /tau_A/1.e3, wke(j) /tau_A/1.e3, TIME);
   fclose (file);
@@ -628,7 +628,7 @@ void Phase::Scan_Shift ()
   fclose (file2);
   fclose (file3);
 
-  FILE* file4 = OpenFilea ((char*) "../EPEC/Stage1/vac.txt");
+  FILE* file4 = OpenFilea ((char*) "../IslandDynamics/Stage1/vac.txt");
 
   for (int j = 0; j < nres; j++)
     {
@@ -837,7 +837,7 @@ void Phase::IslandDynamics ()
   FILE*  file4  = OpenFilew ((char*) "Stage2/omega.txt");
   FILE*  file5  = OpenFilew ((char*) "Stage2/rmp.txt");
   FILE*  file6  = OpenFilew ((char*) "Stage2/mirnov.txt");
-  FILE*  file8  = OpenFilea ((char*) "../EPEC/Stage1/scan.txt");  
+  FILE*  file8  = OpenFilea ((char*) "../IslandDynamics/Stage1/scan.txt");  
   FILE*  file9  = OpenFilew ((char*) "Stage2/deltane.txt");
   FILE*  file10 = OpenFilew ((char*) "Stage2/deltaTe.txt");
   FILE*  file11 = OpenFilew ((char*) "Stage2/dne.txt");
@@ -986,7 +986,7 @@ void Phase::IslandDynamics ()
   // Save calculation
   Save ();
   
-  FILE* filew = OpenFilea ((char*) "../EPEC/Stage1//omega.txt");
+  FILE* filew = OpenFilea ((char*) "../IslandDynamics/Stage1//omega.txt");
   for (int j = 0; j < nres; j++)
     fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e\n", mk (j), rk (j), wk (j) /tau_A/1.e3, ww (j) /tau_A/1.e3, TIME);
   fclose (file);
