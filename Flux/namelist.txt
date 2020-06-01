@@ -7,7 +7,7 @@
 	Q95     = 4.5   ! Target Q95 for rescaling equilibrium
 	NTOR    = 3     ! Toroidal mode number
 	MMIN    = 4	! Minimum poloidal mode number
-	MMAX    = 14    ! Maximum toroidal mode number
+	MMAX    = 30    ! Maximum toroidal mode number
 	PSILIM  = 0.997 ! Ignore rational surfaces for PsiN > PSILIM
 	TIME    = 0.    ! Experimental time
 &end
