@@ -1,0 +1,580 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\def\vecsign{\mathchar"017E}
+\def\dvecsign{\smash{\stackon[-2.3pt]{\vecsign}{\rotatebox{180}{$\vecsign$}}}}
+\def\dvec#1{\def\useanchorwidth{T}\stackon[-4.2pt]{#1}{\,\dvecsign}}
+\usepackage{stackengine}
+\stackMath
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{\bf Neoclassical Physics}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+
+\section{Lowest-Order Force Balance}
+Let
+\begin{align}
+\vec{B} &= I(\psi)\,\vec{\nabla} \zeta + \vec{\nabla}\zeta\times \vec{\nabla}\psi,\\[0.5ex]
+\vec{E} &= -\vec{\nabla}{\mit\Phi}(\psi) + E_\parallel\,\vec{b}, 
+\end{align}
+where $\vec{b}=\vec{B}/B$.
+Expect $n_a=n_a(\psi)$, $p_a=p_a(\psi)$, and $T_a= T_a(\psi)$.
+We can write
+\begin{equation}
+\vec{u}_j^{\,a} = u_{\parallel\,j}^{\,a}\,\vec{b} + \vec{u}_{\perp\,j}^{\,a},
+\end{equation}
+and 
+\begin{align}
+\vec{u}_0^{\,a} &= \vec{V}_a,\\[0.5ex]
+\vec{u}_1^{\,a} &= - \frac{2}{5}\,\frac{\vec{q}_a}{p_a},
+\end{align}
+with 
+\begin{align}
+\vec{u}_{\perp\,0}^{\,a} &= \frac{\vec{E}\times \vec{B}}{B^{\,2}} + \frac{\vec{B}\times \vec{\nabla} p_a}{n_a\,e_a\,B^{\,2}},\\[0.5ex]
+\vec{u}_{\perp\,1}^{\,a}&= - \frac{\vec{B}\times \vec{\nabla} T_a}{e_a\,B^{\,2}}.
+\end{align}
+It follows that
+\begin{equation}\label{e24x}
+u_{\theta\,j}^{\,a} = \frac{u_{\parallel\,j}^{\,a}}{B} - \frac{V_{\psi\,j}^{\,a}}{B^{\,2}},
+\end{equation}
+where
+\begin{align}
+u_{\theta\,j}^{\,a} &= \frac{\vec{u}_j^{\,a}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta},\\[0.5ex]
+V_{\psi\,0}^{\,a}(\psi) &=-\left( \frac{\vec{u}_{\perp\,0}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta}\right)B^{\,2}=
+- \frac{I\,T_a}{e_a}\left(\frac{d \ln p_a}{d\psi}+\frac{e_a}{T_a}\,\frac{d{\mit\Phi}}{d\psi}\right),\\[0.5ex]
+V_{\psi\,1}^{\,a}(\psi) &= -\left(\frac{\vec{u}_{\perp\,1}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta}\right)B^{\,2}=
+\frac{I\,T_a}{e_a}\,\frac{d\ln T_a}{d\psi}.
+\end{align}
+
+\section{Friction Forces}
+\begin{align}
+\left(\begin{array}{c}\vec{F}_{a\,0}\\[0.5ex]\vec{F}_{a\,1}\end{array}\right)&=\sum_b\left(
+\begin{array}{rr} l_{00}^{\,ab},&l_{01}^{\,ab}\\[0.5ex]
+l_{10}^{\,ab},&l_{11}^{ab}\end{array}\right)\left(\begin{array}{c}\vec{ u}_{0}^{\,b}\\[0.5ex]\vec{u}_{1}^{\,b}\end{array}\right),\\[0.5ex]
+l_{jk}^{\,ab}&= \left(\sum_c \frac{n_a\,m_a}{\tau_{ac}}\,M_{ac}^{\,jk}\right)\delta_{ab} +\frac{n_a\,m_a}{\tau_{ab}}\,N_{ab}^{\,jk},\\[0.5ex]
+\frac{1}{\tau_{ab}} &= \frac{4}{3\sqrt{\pi}}\,\frac{4\pi\,n_b\,e_a^{\,2}\,e_b^{\,2}\,\ln{\mit\Lambda}}{(4\pi\,\epsilon_0)^2 \,m_a^{\,2}\,v_{T\,a}^{\,3}},\\[0.5ex]
+v_{T\,a} &= \sqrt{\frac{2\,T_a}{m_a}},\\[0.5ex]
+M_{ab}^{\,00} &= -\frac{1+m_a/m_b}{(1+x_{ab}^{\,2})^{\,3/2}},\\[0.5ex]
+M_{ab}^{\,01}&= -\frac{3}{2}\,\frac{1+m_a/m_b}{(1+x_{ab}^{\,2})^{\,5/2}}= M_{ab}^{\,10},\\[0.5ex]
+M_{ab}^{\,11}& = -\frac{13/4 + 4\,x_{ab}^{\,2} + (15/2)\,x_{ab}^{\,4}}{(1+x_{ab}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{ab}^{\,00} &= \frac{1+m_a/m_b}{(1+x_{ab}^{\,2})^{\,3/2}},\\[0.5ex]
+N_{ab}^{\,01}&= \frac{3}{2}\,\frac{T_a}{T_b}\,\frac{1+m_b/m_a}{x_{ab}\,(1+x_{ba}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{ab}^{\,10}&= \frac{3}{2}\,\frac{1+m_a/m_b}{(1+x_{ab}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{ab}^{\,11}& =\frac{27}{4}\,\frac{T_a}{T_b}\,\frac{x_{ab}^{\,2}}{(1+x_{ab}^{\,2})^{\,5/2}},
+\end{align}
+where 
+\begin{equation}
+x_{ab}=\frac{v_{T\,b}}{v_{T\,a}}.
+\end{equation} 
+
+Species are $e$, $i$, and $I$. Let 
+\begin{equation}
+Z_{\rm eff}= \frac{n_i\,e_i^{\,2}+n_I\,e_I^{\,2}}{n_e\,e_e^{\,2}}.
+\end{equation} 
+Follows that
+\begin{align}
+\frac{n_e}{n_i} &= \frac{Z_I-1}{Z_I-Z_{\rm eff}},\\[0.5ex]
+\frac{n_I}{n_i} &=\frac{Z_{\rm eff}-1}{Z_I\,(Z_I-Z_{\rm eff})},\\[0.5ex]
+\frac{n_I}{n_e} &= \frac{Z_{\rm eff}-1}{Z_I\,(Z_I-1)}.
+\end{align}
+
+Thus, 
+\begin{align}
+M_{aa}^{\,00} &= -\frac{1}{\sqrt{2}},\\[0.5ex]
+M_{aa}^{\,01}&= -\frac{3}{4\sqrt{2}}= M_{aa}^{\,10},\\[0.5ex]
+M_{aa}^{\,11}& = -\frac{59}{16\,\sqrt{2}},\\[0.5ex]
+N_{aa}^{\,00} &= \frac{1}{\sqrt{2}},\\[0.5ex]
+N_{aa}^{\,01}&= \frac{3}{4\sqrt{2}},\\[0.5ex]
+N_{aa}^{\,10}&=\frac{3}{4\sqrt{2}},\\[0.5ex]
+N_{aa}^{\,11}& =\frac{27}{16\sqrt{2}},
+\end{align}
+for $a=e$, $i$, $I$.  Now, 
+\begin{align}
+M_{iI}^{\,00} &= -\frac{1+m_i/m_I}{(1+x_{iI}^{\,2})^{\,3/2}},\\[0.5ex]
+M_{iI}^{\,01}&= -\frac{3}{2}\,\frac{1+m_i/m_I}{(1+x_{iI}^{\,2})^{5/2}}= M_{iI}^{\,10},\\[0.5ex]
+M_{iI}^{\,11}& = -\frac{13/4+4\,x_{iI}^{\,2}+(15/2)\,x_{iI}^{\,4}}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{iI}^{\,00} &= \frac{1+m_i/m_I}{(1+x_{iI}^{\,2})^{\,3/2}},\\[0.5ex]
+N_{iI}^{\,01}&= \frac{3}{2}\,\frac{T_i}{T_I}\,\frac{1+m_I/m_i}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{iI}^{\,10}&=\frac{3}{2}\,\frac{1+m_i/m_I}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{iI}^{\,11}& =\frac{27}{4}\,\frac{T_i}{T_I}\,\frac{x_{iI}^{\,2}}{(1+x_{iI}^{\,2})^{\,5/2}}.
+\end{align}
+Furthermore, 
+\begin{align}
+M_{Ii}^{\,00} &= -\frac{1+m_I/m_i}{(1+x_{Ii}^{\,2})^{\,3/2}},\\[0.5ex]
+M_{Ii}^{\,01}&= -\frac{3}{2}\,\frac{1+m_I/m_i}{(1+x_{Ii}^{\,2})^{5/2}}= M_{Ii}^{\,10},\\[0.5ex]
+M_{Ii}^{\,11}& = -\frac{13/4+4\,x_{Ii}^{\,2}+(15/2)\,x_{Ii}^{\,4}}{(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{Ii}^{\,00} &= \frac{1+m_I/m_i}{(1+x_{Ii}^{\,2})^{\,3/2}},\\[0.5ex]
+N_{Ii}^{\,01}&= \frac{3}{2}\,\frac{T_I}{T_i}\,\frac{1+m_i/m_I}{x_{Ii}\,(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{Ii}^{\,10}&=\frac{3}{2}\,\frac{1+m_I/m_i}{(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+N_{Ii}^{\,11}& =\frac{27}{4}\,\frac{T_I}{T_i}\,\frac{x_{Ii}^{\,2}}{(1+x_{Ii}^{\,2})^{\,5/2}}.
+\end{align}
+Also,
+\begin{align}
+M_{ea}^{\,00} &= -1,\\[0.5ex]
+M_{ea}^{\,01}&= -\frac{3}{2}= M_{ea}^{\,10},\\[0.5ex]
+M_{ea}^{\,11}& = -\frac{13}{4},\\[0.5ex]
+N_{ea}^{\,00} &= 1,\\[0.5ex]
+N_{ea}^{\,01}&= 0,\\[0.5ex]
+N_{ea}^{\,10}&=\frac{3}{2},\\[0.5ex]
+N_{ea}^{\,11}& =0,
+\end{align}
+for $a=i$, $I$, where we have neglected terms of order $(m_e/m_i)^{\,1/2}$. Finally,
+\begin{align}
+M_{ae}^{\,00} &= 0,\\[0.5ex]
+M_{ae}^{\,01}&=0= M_{ae}^{\,10},\\[0.5ex]
+M_{ae}^{\,11}& = 0,\\[0.5ex]
+N_{ae}^{\,00} &= 0,\\[0.5ex]
+N_{ae}^{\,01}&= 0,\\[0.5ex]
+N_{ae}^{\,10}&=0\\[0.5ex]
+N_{ae}^{\,11}& =0,
+\end{align}
+for $a=i$, $I$. 
+
+Now,
+\begin{align}
+l_{jk}^{\,ii} & = \frac{n_i\,m_i}{\tau_{ii}}\left[\left(\sum_a \frac{n_a\,e_a^{\,2}}{n_i\,e_i^{\,2}}\,M_{ia}^{\,jk}\right) + N_{ii}^{\,jk}\right]\\[0.5ex]
+&= \frac{n_i\,m_i}{\tau_{ii}}\left(M_{ii}^{\,jk}+N_{ii}^{\,jk}+\alpha\,M_{iI}^{\,jk}\right),
+\end{align}
+where 
+\begin{equation}
+\alpha= \frac{n_I\,e_I^{\,2}}{n_i\,e_i^{\,2}}= (Z_{\rm eff}-1)\left(\frac{Z_I}{Z_I-Z_{\rm eff}}\right).
+\end{equation}
+Thus,
+\begin{align}
+l^{\,ii}_{00} &= -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}},\\[0.5ex]
+l^{\,ii}_{01}&= -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{5/2}},\\[0.5ex]
+l^{\,ii}_{10}&= -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{5/2}},\\[0.5ex]
+l^{\,ii}_{11}& = -\frac{n_i\,m_i}{\tau_{ii}}\,\left\{\sqrt{2}+ \frac{\alpha\,[13/4+4\,x_{iI}^{\,2}+(15/2)\,x_{iI}^{\,4}]}{(1+x_{iI}^{\,2})^{\,5/2}}\right\}.
+\end{align}
+Now,
+\begin{equation}
+l_{jk}^{\,iI} = \frac{n_i\,m_i}{\tau_{ii}}\,\alpha\,N_{iI}^{\,jk},
+\end{equation}
+so 
+\begin{align}
+l^{\,iI}_{00} &= \frac{n_i\,m_i}{\tau_{ii}}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}},\\[0.5ex]
+l^{\,iI}_{01}&= \frac{n_i\,m_i}{\tau_{ii}}\,\frac{3}{2}\,\frac{T_i}{T_I}\,\frac{\alpha\,(1+m_I/m_i)}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+l^{\,iI}_{10}&= \frac{n_i\,m_i}{\tau_{ii}}\,\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+l^{\,iI}_{11}& = \frac{n_i\,m_i}{\tau_{ii}}\,\frac{27}{4}\,\frac{T_i}{T_I}\,\frac{\alpha\,x_{iI}^{\,2}}{(1+x_{iI}^{\,2})^{\,5/2}}.
+\end{align}
+Now,
+\begin{align}
+l_{jk}^{\,II} & = \frac{n_I\,m_I}{\tau_{II}}\left[\left(\sum_a \frac{n_a\,e_a^{\,2}}{n_I\,e_I^{\,2}}\,M_{Ia}^{\,jk}\right) + N_{II}^{\,jk}\right]\\[0.5ex]
+&=\frac{n_I\,m_I}{\tau_{II}}\left(M_{II}^{\,jk}+N_{II}^{\,jk}+\alpha^{-1}\,M_{Ii}^{\,jk}\right)\nonumber\\[0.5ex]
+&= \frac{n_i\,m_i}{\tau_{ii}}\,\alpha^{\,2}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\left(M_{II}^{\,jk}+N_{II}^{\,jk}+\alpha^{-1}\,M_{Ii}^{\,jk}\right),
+\end{align}
+so
+\begin{align}
+l^{\,II}_{00} &= -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{\,3/2}},\\[0.5ex]
+l^{\,II}_{01}&= -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{5/2}},\\[0.5ex]
+l^{\,II}_{10}&= -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{5/2}},\\[0.5ex]
+l^{\,II}_{11}& = -\frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\left\{\sqrt{2}\,\alpha^{\,2}+
+\frac{\alpha\,[13/4+4\,x_{Ii}^{\,2}+(15/2)\,x_{Ii}^{\,4}]}{(1+x_{Ii}^{\,2})^{\,5/2}}
+\right\}.
+\end{align}
+Finally, 
+\begin{equation}
+l_{jk}^{\,Ii} = \frac{n_i\,m_i}{\tau_{ii}}\,\alpha\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,N_{Ii}^{\,jk},
+\end{equation}
+so 
+\begin{align}
+l^{\,Ii}_{00} &= \frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{\,3/2}},\\[0.5ex]
+l^{\,Ii}_{01}&= \frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{T_I}{T_i}\,\frac{\alpha\,(1+m_i/m_I)}{x_{Ii}\,(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+l^{\,Ii}_{10}&= \frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+l^{\,Ii}_{11}& = \frac{n_i\,m_i}{\tau_{ii}}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{27}{4}\,\frac{T_I}{T_i}\,\frac{\alpha\,x_{Ii}^{\,2}}{(1+x_{Ii}^{\,2})^{\,5/2}}.
+\end{align}
+
+Thus, 
+\begin{align}
+(F^{\,i})&= \frac{n_i\,m_i}{\tau_{ii}}\left\{-\left[F^{\,ii}\right]\,(u^{\,i})+\left[F^{\,iI}\right]\,(u^{\,I})\right\},\\[0.5ex]
+(F^{\,I})&= \frac{n_i\,m_i}{\tau_{ii}}\left\{\left[F^{\,Ii}\right]\,(u^{\,i})-\left[F^{\,II}\right]\,(u^{\,I})\right\},
+\end{align}
+where
+\begin{align}
+(F^{\,a})&= \left(\begin{array}{c}\vec{F}_{a\,0}\\[0.5ex]\vec{F}_{a\,1}\end{array}\right),\\[0.5ex]
+(u^{\,a})&= \left(\begin{array}{c}\vec{u}^{\,a}_0\\[0.5ex]\vec{u}^{\,a}_1\end{array}\right).
+\end{align}
+Here,
+\begin{align}
+F^{\,ii}_{\,00} &= \frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI})^{\,3/2}},\\[0.5ex]
+F^{\,ii}_{\,01}&=\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{5/2}},\\[0.5ex]
+F^{\,ii}_{\,10}&=\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{5/2}}=F^{\,ii}_{\,01},\\[0.5ex]
+F^{\,ii}_{\,11}& =\sqrt{2}+ \frac{\alpha\,[13/4+4\,x_{iI}^{\,2}+(15/2)\,x_{iI}^{\,4}]}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,iI}_{\,00} &=\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}}=F^{\,ii}_{\,00},\\[0.5ex]
+F^{\,iI}_{\,01}&= \frac{3}{2}\,\frac{T_i}{T_I}\,\frac{\alpha\,(1+m_I/m_i)}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,iI}_{\,10}&=\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,5/2}}=F^{\,ii}_{01},\\[0.5ex]
+F^{\,iI}_{\,11}& =\frac{27}{4}\,\frac{T_i}{T_I}\,\frac{\alpha\,x_{iI}^{\,2}}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,Ii}_{\,00} &=\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{\,3/2}}=
+\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}}=F^{\,ii}_{\,00},\\[0.5ex]
+F^{\,Ii}_{\,01}&=\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{T_I}{T_i}\,\frac{\alpha\,(1+m_i/m_I)}{x_{Ii}\,(1+x_{iI}^{\,2})^{\,5/2}}=\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,5/2}}=F^{\,ii}_{01},\\[0.5ex]
+F^{\,Ii}_{\,10}&=\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{\,5/2}}=\frac{3}{2}\,\frac{T_i}{T_I}\,\frac{\alpha\,(1+m_I/m_i)}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}}=F^{\,iI}_{01},\\[0.5ex]
+F^{\,Ii}_{\,11}& =\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{27}{4}\,\frac{T_I}{T_i}\,\frac{\alpha\,x_{Ii}^{\,2}}{(1+x_{Ii}^{\,2})^{\,5/2}}=\frac{27}{4}\,\frac{\alpha\,x_{iI}^{\,2}}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,II}_{\,00} &= \frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{\,3/2}}=\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}}=F^{\,ii}_{00},\\[0.5ex]
+F^{\,II}_{\,01}&=\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{5/2}}
+=\frac{3}{2}\,\frac{T_i}{T_I}\,\frac{\alpha\,(1+m_I/m_i)}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}}=F^{\,iI}_{01},\\[0.5ex]
+F^{\,II}_{\,10}&=\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\frac{3}{2}\,\frac{\alpha\,(1+m_I/m_i)}{(1+x_{Ii}^{\,2})^{5/2}}=\frac{3}{2}\,\frac{T_i}{T_I}\,\frac{\alpha\,(1+m_I/m_i)}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}}=F^{\,iI}_{01},\\[0.5ex]
+F^{\,II}_{\,11}& =\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,\left\{\sqrt{2}\,\alpha^{\,2}+
+\frac{\alpha\,[13/4+4\,x_{Ii}^{\,2}+(15/2)\,x_{Ii}^{\,4}]}{(1+x_{Ii}^{\,2})^{\,5/2}}
+\right\}\nonumber\\[0.5ex]
+&=\frac{T_i}{T_I}\left\{\sqrt{2}\,\alpha^{\,2}\,x_{Ii} + \frac{\alpha\,[
+15/2+4\,x_{iI}^{\,2}+(13/4)\,x_{iI}^{\,4}]}{(1+x_{iI}^{\,2})^{\,5/2}}\right\}.
+\end{align}
+Note that $F^{\,ii}_{0j}=F^{\,Ii}_{0j}$ and $F^{\,iI}_{0j}=F^{\,II}_{0j}$, for $j=0$, $1$, which implies
+that $(F^{\,I})_0+(F^{\,i})_0= 0$. This is a statement of collisional momentum conservation.
+Furthermore, $F^{\,ii}_{j0}=F^{\,iI}_{j0}$ and $F^{\,Ii}_{j0}=F^{\,II}_{j0}$. 
+
+Now,
+\begin{align}
+l_{jk}^{\,ee} & = \frac{n_e\,m_e}{\tau_{ee}}\left[\left(\sum_a \frac{n_a\,e_a^{\,2}}{n_e\,e_e^{\,2}}\,M_{ea}^{\,jk}\right) + N_{ee}^{\,jk}\right]\\[0.5ex]
+&= \frac{n_e\,m_e}{\tau_{ee}}\left(M_{ee}^{\,jk}+N_{ee}^{\,jk}+Z_{\rm eff}\,M_{ei}^{\,jk}\right),
+\end{align}
+where $a= e$, $i$, $I$. 
+It follows that 
+\begin{align}
+l^{\,ee}_{00} &= -\frac{n_e\,m_e}{\tau_{ee}}\,Z_{\rm eff},\\[0.5ex]
+l^{\,ee}_{01}&= -\frac{n_e\,m_e}{\tau_{ee}}\,\frac{3}{2}\,Z_{\rm eff},\\[0.5ex]
+l^{\,ee}_{10}&= -\frac{n_e\,m_e}{\tau_{ee}}\,\frac{3}{2}\,Z_{\rm eff},\\[0.5ex]
+l^{\,ee}_{11}& =- \frac{n_e\,m_e}{\tau_{ee}}\left(\sqrt{2} + \frac{13}{4}\,Z_{\rm eff}\right).
+\end{align}
+Likewise,
+\begin{equation}
+l_{jk}^{\,ea} = \frac{n_e\,m_e}{\tau_{ee}}\,Z_{{\rm eff}\,a}\,N_{ea}^{\,jk},
+\end{equation}
+where 
+\begin{equation}
+Z_{{\rm eff}\,a}= \frac{n_a\,e_a^{\,2}}{n_e\,e_e^{\,2}},
+\end{equation}
+ for $a=i$, $I$. In particular, 
+ \begin{align}
+Z_{{\rm eff}\,i}&=\frac{Z_I-Z_{\rm eff}}{Z_I-1},\\[0.5ex]
+Z_{{\rm eff}\,I}&= \frac{Z_I\,(Z_{\rm eff}-1)}{Z_I-1}.
+\end{align}
+
+Hence,
+\begin{align}
+l^{\,ei}_{00} &= \frac{n_e\,m_e}{\tau_{ee}}\,Z_{{\rm eff}\,i},\\[0.5ex]
+l^{\,ei}_{01}&= 0,\\[0.5ex]
+l^{\,ei}_{10}&= \frac{n_e\,m_e}{\tau_{ee}}\,\frac{3}{2}\,Z_{{\rm eff}\,i},\\[0.5ex]
+l^{\,ei}_{11}& = 0,
+\end{align}
+and
+\begin{align}
+l^{\,eI}_{00} &= \frac{n_e\,m_e}{\tau_{ee}}\,Z_{{\rm eff}\,I},\\[0.5ex]
+l^{\,eI}_{01}&= 0,\\[0.5ex]
+l^{\,eI}_{10}&= \frac{n_e\,m_e}{\tau_{ee}}\,\frac{3}{2}\,Z_{{\rm eff}\,I},\\[0.5ex]
+l^{\,eI}_{11}& = 0.
+\end{align}
+
+Thus, 
+\begin{equation}
+(F^{\,e})= \frac{n_e\,m_e}{\tau_{ee}}\left\{-\left[F^{\,ee}\right]\,(u^{\,e})+\left[F^{\,ei}\right]\,(u^{\,i}) +\left[F^{\,eI}\right]\,(u^{\,I}) \right\},
+\end{equation}
+where
+\begin{align}
+F^{\,ee}_{00} &= Z_{\rm eff},\\[0.5ex]
+F^{\,ee}_{01} &= \frac{3}{2}\,Z_{\rm eff},\\[0.5ex]
+F^{\,ee}_{10} &= \frac{3}{2}\,Z_{\rm eff},\\[0.5ex]
+F^{\,ee}_{11} &= \sqrt{2} + \frac{13}{4}\,Z_{\rm eff},\\[0.5ex]
+F^{\,ei}_{00} &= Z_{{\rm eff}\,i},\\[0.5ex]
+F^{\,ei}_{01} &= 0,\\[0.5ex]
+F^{\,ei}_{10} &= \frac{3}{2}\,Z_{{\rm eff}\,i},\\[0.5ex]
+F^{\,ei}_{11} &= 0,\\[0.5ex]
+F^{\,eI}_{00} &= Z_{{\rm eff}\,I},\\[0.5ex]
+F^{\,eI}_{01} &= 0,\\[0.5ex]
+F^{\,eI}_{10} &= \frac{3}{2}\,Z_{{\rm eff}\,I},\\[0.5ex]
+F^{\,eI}_{11} &= 0.
+\end{align}
+Note that $F^{\,ee}_{j0}= F^{\,ei}_{j0} + F^{\,eI}_{j0}$. 
+
+\section{Neoclassical Viscosities}
+\begin{equation}
+\left\langle \vec{B}\cdot\vec{\nabla}\cdot (\dvec{{\mit\Pi}}^{\,a})\right\rangle = \frac{n_a\,m_a}{\tau_{aa}}\left[\mu^{\,a}\right](u_\theta^{\,a}),
+\end{equation}
+where
+\begin{align}
+\langle A\rangle &= \left.\oint\frac{A(\theta)\,d\theta}{\vec{B}\cdot\vec{\nabla}\theta}\right/
+\oint \frac{d\theta}{\vec{B}\cdot\vec{\nabla}\theta},\\[0.5ex]
+(\dvec{{\mit\Pi}}^{\,a})&= \left(\begin{array}{c}{\dvec {\mit\Pi}}_{\parallel\,a}\\[1ex]
+{\dvec {\mit\Theta}}_{\parallel\,a}\end{array}\right),\\[0.5ex]
+(u_\theta^{\,a})&= \left(\begin{array}{c}u_{\theta\,0}^{\,a}\,\langle B^{\,2}\rangle\\[1ex]
+u_{\theta\,1}^{\,a}\,\langle B^{\,2}\rangle\end{array}\right),\\[0.5ex]
+\left[\mu^{\,a}\right] &=\left(\begin{array}{rr} \mu_{00}^{\,a}, & \mu_{01}^{\,a}\\[0.5ex]
+\mu_{10}^{\,a},&\mu_{11}^{\,a}\end{array}\right).
+\end{align}
+
+Let
+\begin{align}
+\mu_{00}^{\,a} &= K_{00}^{\,a},\\[0.5ex]
+\mu_{01}^{\,a} &= \frac{5}{2}\,K_{00}^{\,a}- K_{01}^{\,a}=\mu_{10}^{\,a},\\[0.5ex]
+\mu_{11}^{\,a} &= K_{11}^{\,a} - 5\,K_{01}^{\,a}+\frac{25}{4}\,K_{00}^{\,a},
+\end{align}
+and
+\begin{align}
+\omega_{t\,a} &=\frac{v_{T\,a}}{R_0\,q},\\[0.5ex]
+\nu_{\ast\,a}&= \frac{8}{3\pi}\,\frac{\langle B^{\,2}\rangle}{\langle (\vec{b}\cdot\vec{\nabla}B)^{\,2}\rangle}\,\frac{g\,\omega_{t\,a}}{v_{T\,a}^{\,2}\,\tau_{aa}}\simeq \frac{16}{3\pi}\frac{g}{\epsilon^{\,2}\,\omega_{t\,a}\,\tau_{aa}},\\[0.5ex]
+g &= \frac{1-f_c}{f_c},\\[0.5ex]
+f_c &= \frac{3}{4}\,\langle B^{\,2}\rangle\int_{0}^{1/B_{\rm max}}\frac{\lambda\,d\lambda}{\langle\sqrt{1-\lambda\,B}\rangle}\simeq 1-1.46\,\epsilon^{\,1/2}+0.46\,\epsilon^{\,3/2}.
+\end{align}
+We have
+\begin{equation}
+K_{ij}^{\,a} = g\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,4+i+j}\,\hat{\nu}_D^{\,a}(x)\,dx}{[x^{\,2}+\nu_{\ast\,a}\,\hat{\nu}_D^{\,a}(x)]\,[x^{\,2}+(5\pi/8)\,(\omega_{t\,a}\,\tau_{aa})^{-1}\,\hat{\nu}_T^{\,a}(x)]},
+\end{equation}
+and 
+\begin{align}
+\hat{\nu}_D^{\,a}(x)&=\frac{3\sqrt{\pi}}{4}\sum_b 
+\frac{n_b\,e_b^{\,2}}{n_a\,e_a^{\,2}}\left[\left(1-\frac{x_{ab}}{2\,x}\right)\psi\!\left(\frac{x}{x_{ab}}\right)
++\psi'\!\left(\frac{x}{x_{ab}}\right)\right]\frac{1}{x},\\[0.5ex]
+\hat{\nu}_\epsilon^{\,a}(x)&=\frac{3\sqrt{\pi}}{2}\sum_b 
+\frac{n_b\,e_b^{\,2}}{n_a\,e_a^{\,2}}\left[\frac{m_a}{m_b}\,\psi\!\left(\frac{x}{x_{ab}}\right)
+-\psi'\!\left(\frac{x}{x_{ab}}\right)\right]\frac{1}{x},\\[0.5ex]
+\hat{\nu}_T^{\,a}(x) &= 3\,\hat{\nu}_D^{\,a}(x)+\hat{\nu}_{\epsilon}^{\,a}(x),\\[0.5ex]
+\psi(x) &=\frac{2}{\sqrt{\pi}}\int_0^{x^{\,2}}\sqrt{t}\,{\rm e}^{-t}\,dt = {\rm erf}(x)-\frac{2}{\sqrt{\pi}}\,x\,{\rm e}^{-x^{\,2}},\\[0.5ex]
+\psi'(x)&= \frac{2}{\sqrt{\pi}}\,x\,{\rm e}^{-x^{\,2}}.
+\end{align}
+In particular,
+\begin{align}
+K_{ij}^{\,i} &= g\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,2+i+j}\,\hat{\nu}_D^{\,i}(x)\,dx}{[x+\nu_{\ast\,i}\,\hat{\nu}_D^{\,i}(x)]\,[x+(5\pi/8)\,(\omega_{t\,i}\,\tau_{ii})^{\,-1}\,\hat{\nu}_T^{\,i}(x)]},\\[0.5ex]
+\hat{\nu}_D^{\,i}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]&\phantom{=}
++\frac{3\sqrt{\pi}}{4}\,\alpha\left[\left(1-\frac{x_{iI}}{2\,x}\right)\psi\!\left(\frac{x}{x_{iI}}\right)
++\psi'\!\left(\frac{x}{x_{iI}}\right)\right]\frac{1}{x},\\[0.5ex]
+\hat{\nu}_\epsilon^{\,i}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]&\phantom{=}
++\frac{3\sqrt{\pi}}{2}\,\alpha\left[\frac{m_i}{m_I}\,\psi\!\left(\frac{x}{x_{iI}}\right)
+-\psi'\!\left(\frac{x}{x_{iI}}\right)\right]\frac{1}{x},
+\end{align}
+and
+\begin{align}
+K_{ij}^{\,I}& = g\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,2+i+j}\,\hat{\nu}_D^{\,I}(x)\,dx}{[x+\nu_{\ast\,I}\,\hat{\nu}_D^{\,I}(x)]\,[x+(5\pi/8)\,(\omega_{t\,I}\,\tau_{II})^{\,-1}\,\hat{\nu}_T^{\,I}(x)]},\\[0.5ex]
+\hat{\nu}_D^{\,I}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]&\phantom{=}
++\frac{3\sqrt{\pi}}{4}\,\alpha^{\,-1}\left[\left(1-\frac{x_{Ii}}{2\,x}\right)\psi\!\left(\frac{x}{x_{Ii}}\right)
++\psi'\!\left(\frac{x}{x_{Ii}}\right)\right]\frac{1}{x},\\[0.5ex]
+\hat{\nu}_\epsilon^{\,I}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]&\phantom{=}
++\frac{3\sqrt{\pi}}{2}\,\alpha^{\,-1}\left[\frac{m_I}{m_i}\,\psi\!\left(\frac{x}{x_{Ii}}\right)
+-\psi'\!\left(\frac{x}{x_{Ii}}\right)\right]\frac{1}{x},
+\end{align}
+and
+\begin{align}
+K_{ij}^{\,e}& = g\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,4+i+j}\,\hat{\nu}_D^{\,e}(x)\,dx}{[x^{\,2}+\nu_{\ast\,e}\,\hat{\nu}_D^{\,e}(x)]\,[x^{\,2}+(5\pi/8)\,(\omega_{t\,e}\,\tau_{ee})^{\,-1}\,\hat{\nu}_T^{\,e}(x)]},\\[0.5ex]
+\hat{\nu}_D^{\,e}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]+\frac{3\sqrt{\pi}}{4}\,Z_{\rm eff},\\[0.5ex]
+\hat{\nu}_\epsilon^{\,e}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right].
+\end{align}
+
+\section{Parallel Force and Heat Balance Equations}
+\begin{align}
+\langle \vec{B}\cdot\vec{\nabla}\cdot{\dvec{\mit\Pi}}_a\rangle &= \langle\vec{B}\cdot \vec{F}_{a\,0}\rangle +\langle\vec{B}\cdot\vec{F}_{a\,0}^{\,cx}\rangle
++n_a\,e_a\,\langle \vec{E}\cdot\vec{B}\rangle ,\\[0.5ex]
+\langle \vec{B}\cdot\vec{\nabla}\cdot{\dvec{\mit\Theta}}_a\rangle &= \langle\vec{B}\cdot \vec{F}_{a\,1}\rangle+\langle\vec{B}\cdot\vec{F}_{a\,1}^{\,cx}\rangle.
+\end{align}
+Now, 
+\begin{align}
+\langle \vec{B}\cdot  \vec{F}^{\,i}\rangle&= \frac{n_i\,m_i}{\tau_{ii}}\left\{-\left[F^{\,ii}\right] (u_\parallel^{\,i}) + \left[F^{\,iI}\right]
+(u_{\parallel}^{\,I})\right\},\\[0.5ex]
+\langle \vec{B}\cdot  \vec{F}^{\,I}\rangle&= \frac{n_i\,m_i}{\tau_{ii}}\left\{\left[F^{\,Ii}\right]
+(u_{\parallel}^{\,i})-\left[F^{\,II}\right] (u_\parallel^{\,I}) \right\},\\[0.5ex]
+\langle \vec{B}\cdot  \vec{F}^{\,e}\rangle&= \frac{n_e\,m_e}{\tau_{ee}}\left\{-\left[F^{\,ee}\right] (u_\parallel^{\,e}) + \left[F^{\,ei}\right]
+(u_{\parallel}^{\,i})+ \left[F^{\,eI}\right]
+(u_{\parallel}^{\,I})\right\},\\[0.5ex]
+\langle \vec{B}\cdot\vec{F}^{\,i\,cx}\rangle&=-n_i\,m_i\,\langle\sigma\,v\rangle_i^{\,cx}\,[X^{\,i}](\tilde{u}_{\parallel}^{\,i}),\\[0.5ex]
+\langle \vec{B}\cdot\vec{F}^{\,I\,cx}\rangle&=0,\\[0.5ex]
+\langle \vec{B}\cdot\vec{F}^{\,e\,cx}\rangle&=0,
+\end{align}
+where
+\begin{align}
+(u_\parallel^{\,a})&= \left(\begin{array}{c}\langle u_{\parallel\,0}^{\,a}\,B\rangle\\[1ex]
+\langle u_{\parallel\,1}^{\,a}\,B\rangle\end{array}\right),\\[0.5ex]
+(\tilde{u}_\parallel^{\,a})&= \left(\begin{array}{c}\langle n_n\,u_{\parallel\,0}^{\,a}\,B\rangle\\[1ex]
+\langle n_n\,u_{\parallel\,1}^{\,a}\,B\rangle\end{array}\right),\\[0.5ex]
+[X^{\,i}]&=\left(\begin{array}{cc}1,&0\\[0.5ex]
+0,&E_n/T_i\end{array}\right).
+\end{align}
+Here, $E_n$ is the neutral kinetic energy, $n_n$ the
+neutral number density, and $\langle\sigma\,v\rangle_i^{\,cx}$
+the majority ion charge exchange rate coefficient. 
+
+Let
+\begin{align}
+(E_\parallel) &=\left(\begin{array}{c}\langle E_\parallel\,B\rangle/\langle B\rangle\\[0.5ex]
+0\end{array}\right),\\[0.5ex]
+{\mit\Omega}_a &= \frac{e_a\,\langle B\rangle}{m_a},\\[0.5ex]
+[\tilde{\mu}^{\,I}] &= \alpha^{\,2}\,\frac{m_i}{m_I}\,x_{Ii}^{\,3}\,[\mu^{\,I}]=\alpha^{\,2}\,\frac{T_i}{T_I}\,x_{Ii}\,[\mu^{\,I}].
+\end{align}
+Follows that
+\begin{equation}
+\left[\begin{array}{rr} [F^{\,ii}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
+\left[\begin{array}{c}(u_\parallel^{\,i}) \\[0.5ex] (u_\parallel^{\,I})\end{array}\right]
+= -\left[\begin{array}{c} [\mu^{\,i}]\,(u_\theta^{\,i}) \\[0.5ex]
+[\tilde{\mu}^{\,I}]\,(u_\theta^{\,I})\end{array}\right]+\left[\begin{array}{c}{\tau_{ii}\,\langle\sigma\,v\rangle_i^{\,cx}\,[X^{\,i}]\,(\tilde{u})_{\parallel\,i}},\\[0.5ex] 0\end{array}\right]\\[0.5ex],
+\end{equation}
+and
+\begin{equation}\label{e173}
+[\mu^{\,e}]\,(u_\theta^{\,e})= -[F^{\,ee}]\,(u_\parallel^{\,e})+[F^{\,ei}]\,(u_\parallel^{\,i})+[F^{\,eI}]\,(u_\parallel^{\,I})+{\mit\Omega}_e\,\tau_{ee}\,(E_\parallel).
+\end{equation}
+
+Follows from Eq.~(\ref{e24x}) that
+\begin{equation}
+ (u_{\parallel}^{\,a})  = (u_\theta^{\,a}) + (V_\psi^{\,a}).
+\end{equation}
+where
+\begin{equation}
+V_\psi^{\,a} = \left(\begin{array}{c}V_{\psi\,0}^{\,a}\\[1ex]
+V_{\psi\,1}^{\,a}\end{array}\right).
+\end{equation}
+Thus, 
+\begin{equation}\label{emode}
+\left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]
+\left[\begin{array}{c}(u_\theta^{\,i}) \\[0.5ex] (u_\theta^{\,I})\end{array}\right]
+= -\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
+\left[\begin{array}{c} (V_\psi^{\,i})\\[0.5ex]
+(V_\psi^{\,I})\end{array}\right],
+\end{equation}
+where
+\begin{align}
+[Y^{\,i}] &= \tau_{ii}\,\langle\sigma v\rangle_i^{\,cx}\,\langle n_n\rangle \,[X^{\,i}],\\[0.5ex]
+y &= \frac{\langle n_n\rangle\,\langle B^{\,2}\rangle}{\langle n_n\,B^{\,2}\rangle}.
+\end{align}
+Can write
+\begin{equation}
+(V_\psi^{\,a}) = (V_\ast^{\,a}) + (V_E),
+\end{equation}
+where
+\begin{align}
+V_{\ast\,0}^{\,a}(\psi) &=
+- \frac{I\,T_a}{e_a}\,\frac{d \ln p_a}{d\psi},\\[0.5ex]
+V_{\ast\,1}^{\,a}(\psi) &= \frac{I\,T_a}{e_a}\,\frac{d\ln T_a}{d\psi},\\[0.5ex]
+V_{E\,0}(\psi) &=- I\,\frac{d{\mit\Phi}}{d\psi}
+,\\[0.5ex]
+V_{E\,1}(\psi) &= 0.
+\end{align}
+Fact that $F^{\,ii}_{j0} =F^{\,iI}_{j0}$ and $F^{\,Ii}_{j0}=F^{\,II}_{j0}$ means that we can rewrite Eq.~(\ref{emode}) as
+\begin{equation}
+\left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]
+\left[\begin{array}{c}(u_\theta^{\,i}) \\[0.5ex] (u_\theta^{\,I})\end{array}\right]
+= -\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
+\left[\begin{array}{c} (V_\ast^{\,i})\\[0.5ex]
+(V_\ast^{\,I})\end{array}\right].
+\end{equation}
+Let
+\begin{equation}
+\left[\begin{array}{rr} [L^{\,ii}], & [L^{\,iI}]\\[0.5ex] [L^{\,Ii}],& [L^{\,II}]\end{array}\right]=\left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]^{\,-1}
+\,
+\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right].
+\end{equation}
+Follows that
+\begin{align}
+(u_\theta^{\,i}) &= -[L^{\,ii}]\,(V_\ast^{\,i})-[L^{\,iI}]\,(V_\ast^{\,I}),\\[0.5ex]
+(u_\theta^{\,I}) &= - [L^{\,II}]\,(V_\ast^{\,I}) - [L^{\,Ii}]\,(V_\ast^{\,i}),\\[0.5ex]
+(u_\parallel^{\,i}) &= (V_E) + (1-[L^{\,ii}])\,(V_\ast^{\,i}) -[L^{\,iI}]\,(V_\ast^{\,I}),\\[0.5ex]
+(u_\parallel^{\,I}) &= (V_E) + (1-[L^{\,II}])\,(V_\ast^{\,I}) -[L^{\,Ii}]\,(V_\ast^{\,i}).
+\end{align}
+
+Equation~(\ref{e173}) becomes 
+\begin{align}
+[F^{\,ee}+\mu^{\,e}]\,(u_\theta^{\,e})& = -\left([F^{\,ee}]-[F^{\,ei}]-[F^{eI}]\right)(V_E)-[F^{\,ee}]\,(V_\ast^{\,e})\nonumber\\[0.5ex]&
++ \left\{[F^{ei}]\,(1-[L^{\,ii}])-[F^{eI}]\,[L^{\,Ii}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
+&\phantom{=}
++ \left\{[F^{\,eI}]\,(1-[L^{\,II}])-[F^{\,ei}]\,[L^{\,iI}]\right\}(V_\ast^{\,I})+{\mit\Omega}_{ee}\,\tau_{ee}\,(E_\parallel).
+\end{align}
+However, because $F^{\,ee}_{j0}=F^{ei}_{j0}+F^{\,eI}_{j0}$, the previous equation becomes
+\begin{align}
+[F^{\,ee}+\mu^{\,e}]\,(u_\theta^{\,e})& =-[F^{\,ee}]\,(V_\ast^{\,e})
++ \left\{[F^{\,eI}]\,(1-[L^{\,ii}])-[F^{\,II}]\,[L^{\,Ii}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
+&\phantom{=}
++ \left\{[F^{eI}\,]\,(1-[L^{\,II}])-[F^{\,ei}]\,[L^{\,iI}]\right\}(V_\ast^{\,I})+{\mit\Omega}_{ee}\,\tau_{ee}\,(E_\parallel).
+\end{align}
+Let
+\begin{align}
+[Q^{\,ee}] &= [F^{\,ee}+\mu^{\,e}]^{\,-1},\\[0.5ex]
+[L^{\,ee}] &= [Q^{\,ee}]\,[F^{\,ee}],\\[0.5ex]
+[L^{\,ei}] &= -[Q^{\,ee}]\left\{[F^{\,ei}\,]\,(1-[L^{\,ii}])-[F^{\,eI}]\,[L^{\,Ii}]\right\},\\[0.5ex]
+[L^{\,eI}] &= -[Q^{\,ee}]\left\{[F^{\,eI}]\,(1-[L^{\,II}])-[F^{\,ei}]\,[L^{\,iI}]\right\}.
+\end{align}
+Follows that
+\begin{align}
+(u_\theta^{\,e}) &=-[L^{\,ee}]\,(V_{\ast}^{\,e})- [L^{\,ei}]\,(V_{\ast}^{\,i}) -[L^{\,eI}]\,(V_\ast^{\,I}) 
++ {\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),\\[0.5ex]
+(u_\parallel^{\,e}) &= (V_E) + (1-[L^{\,ee}])\,(V_{\ast}^{\,e}) - [L^{\,ei}]\,(V_{\ast}^{\,i}) -[L^{\,eI}]\,(V_\ast^{\,I})
++ {\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),
+\end{align}
+
+Finally,
+\begin{align}
+(j_\parallel) &=\sum_a n_a\,e_a\,(u_\parallel^{\,a})\nonumber\\[0.5ex]
+&=\left\{n_i\,e_i\,(1-[L^{\,ii}]) - n_I\,e_I\,[L^{\,Ii}] - n_e\,e_e\,[L^{\,ei}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
+&\phantom{=}+\left\{n_I\,e_I\,(1-[L^{\,II}]) - n_i\,e_i\,[L^{\,iI}]-n_e\,e_e\,[L^{\,eI}]\right\}(V_\ast^{\,I})\nonumber\\[0.5ex]
+&\phantom{=}+n_e\,e_e\,(1-[L^{\,ee}])\,(V_\ast^{\,e}) +n_e\,e_e\,{\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),
+\end{align}
+where we have made use of the fact that $n_i\,e_i+n_I\,e_I+n_e\,e_e=0$. 
+
+\section{Velocities and Current Density}
+Let
+\begin{align}
+\omega_E &=-\frac{d{\mit\Phi}}{d\psi},\\[0.5ex]
+\omega_{\ast\,a} &= -\frac{T_a}{e_a}\,\frac{d\ln p_a}{d\psi},\\[0.5ex]
+\eta_a &= \frac{d\ln T_a}{d\ln n_a}.
+\end{align}
+It follows that
+\begin{align}
+V_{\ast\,0}^{\,a}&= I\,\omega_{\ast\,a},\\[0.5ex]
+V_{\ast\,1}^{\,a} &=-I\left(\frac{\eta_a}{1+\eta_a}\right)\omega_{\ast\,a},\\[0.5ex]
+V_{E\,0}&= I\,\omega_{E},\\[0.5ex]
+V_{E\,1} &=0.
+\end{align}
+
+We have $e_e=-e$, $e_i=e$, $e_I= Z_I\,e$. 
+Thus,
+\begin{align}
+\frac{V_\theta^{\,i}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -L^{\,ii}_{00}\,\omega_{\ast\,i}-
+L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]\phantom{=}
+&+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
+\frac{V_\theta^{\,I}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -L^{\,II}_{00}\,\omega_{\ast\,I}-
+L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\nonumber\\[0.5ex]\phantom{=}
+&+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i},\\[0.5ex]
+\frac{\langle V_\parallel^{\,i}\,B\rangle}{I} &=\omega_E +\omega_{\ast\,i}-L^{\,ii}_{00}\,\omega_{\ast\,i}-
+L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]\phantom{=}
+&+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
+\frac{\langle V_\parallel^{\,I} B\rangle}{I} &= \omega_E +\omega_{\ast\,I}-L^{\,II}_{00}\,\omega_{\ast\,I}-
+L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\nonumber\\[0.5ex]\phantom{=}
+&+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
+\end{align}
+
+Can write
+\begin{equation}
+j_\parallel = j_{\rm bootstrap} + j_{\rm ohmic},
+\end{equation}
+where
+\begin{align}
+\frac{\langle j_{\rm bootstrap}\,B\rangle}{I}&= -\left\{1-L^{\,ii}_{00} - \left(\frac{Z_{\rm eff}-1}{Z_I-Z_{\rm eff}}\right)L^{\,Ii}_{00}
++ \left(\frac{Z_I-1}{Z_I-Z_{\rm eff}}\right)L^{\,ei}_{00}\right\}\frac{dp_i}{d\psi}\nonumber\\[0.5ex]
+&\phantom{=}
+- \left\{1-L^{\,II}_{00} - \left(\frac{Z_I-Z_{\rm eff}}{Z_{\rm eff}-1}\right)L^{\,iI}_{00}
++ \left(\frac{Z_I-1}{Z_{\rm eff}-1}\right)L^{\,eI}_{00}\right\}\frac{dp_I}{d\psi}
+\nonumber\\[0.5ex]
+&\phantom{=}-(1-L^{\,ee}_{00})\,\frac{dp_e}{d\psi}\nonumber\\[0.5ex]
+&\phantom{=}- \left\{L^{\,ii}_{01} + \left(\frac{Z_{\rm eff}-1}{Z_I-Z_{\rm eff}}\right)L^{\,Ii}_{01}
+- \left(\frac{Z_I-1}{Z_I-Z_{\rm eff}}\right)L^{\,ei}_{01}\right\}n_i\,\frac{dT_i}{d\psi}\nonumber\\[0.5ex]
+&\phantom{=}
+- \left\{L^{\,II}_{01} + \left(\frac{Z_I-Z_{\rm eff}}{Z_{\rm eff}-1}\right)L^{\,iI}_{01}
+- \left(\frac{Z_I-1}{Z_{\rm eff}-1}\right)L^{\,eI}_{01}\right\}n_I\,\frac{dT_I}{d\psi}
+\nonumber\\[0.5ex]
+&\phantom{=}-L^{\,ee}_{01}\,n_e\,\frac{dT_e}{d\psi}
+\end{align}
+and
+\begin{equation}
+\langle j_{\rm ohmic}\,B\rangle = Q^{\,ee}_{00}\,\sigma_{ee}\,\langle E_\parallel\,B\rangle,
+\end{equation}
+where 
+\begin{equation}
+\sigma_{ee} = \frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e}.
+\end{equation}
+
+
+\end{document}
+

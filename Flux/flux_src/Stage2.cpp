@@ -1,0 +1,1095 @@
+// Stage2.cpp
+
+#include "Flux.h"
+
+// ####################################################
+// Function to input Stage1 data and output Stage2 data
+// ####################################################
+void Flux::Stage2 ()
+{
+  // ..............................
+  // Set weights for Simpson's rule
+  // ..............................
+  Stage2SetSimpsonWeights ();
+  
+  // ................................
+  // Read data for Stage2 calculation
+  // ................................
+  Stage2ReadData ();
+
+  // ..........................
+  // Calculate Stage2 q profile
+  // ..........................
+  Stage2CalcQ ();
+
+  // ......................
+  // Find rational surfaces
+  // ......................
+  Stage2FindRational ();
+  
+  // ..................................................
+  // Calculate straight angle data on rational surfaces
+  // ..................................................
+  Stage2CalcStraightAngle ();
+
+  // ......................................................
+  // Calculate neoclassical angle data on rational surfaces
+  // ......................................................
+  Stage2CalcNeoclassicalAngle ();
+ 
+  // ......................................................
+  // Calculate neoclassical parameters at rational surfaces
+  // ......................................................
+  Stage2CalcNeoclassicalPara ();
+  
+  // ............................
+  // Calculate stability matrices
+  // ............................
+  Stage2CalcMatrices ();
+
+  // ............
+  // Output fFile
+  // ............
+  FILE* file = OpenFilew ((char*) "fFile");
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
+	   R0, B0, ra * R0, q95, r95 /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
+  for (int j = 0; j < NPSI; j++)
+    fprintf (file, "%16.9e %16.9e %16.9e\n",
+	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
+  for (int i = 0; i < nres; i++)
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i]);
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
+	       GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
+	       GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+  for (int i = 0; i < nres; i++)
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n", mres[i],
+	     GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
+	     GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
+  fclose (file);
+
+  if (INTP > 0 && TIME > 0.)
+    {
+      char* filename = new char[200];
+      sprintf (filename, "fFiles/f.%d", int (TIME));
+      file = OpenFilew (filename);
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
+	       R0, B0, ra * R0, q95, r95 /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
+      for (int j = 0; j < NPSI; j++)
+	fprintf (file, "%16.9e %16.9e %16.9e\n",
+		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
+      for (int i = 0; i < nres; i++)
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i]);
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < nres; j++)
+	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
+		   GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < nres; j++)
+	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
+		   GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+      for (int i = 0; i < nres; i++)
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n", i,
+		 GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
+		 GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
+      fclose (file);
+
+      file = OpenFilea ((char*) "fFiles/Index");
+      fprintf (file, "%s %19.6e\n", filename, TIME);
+      fclose (file);
+      
+      delete[] filename;
+    }
+  
+  // ........
+  // Clean up
+  // ........
+  delete[] RPTS;  delete[] ZPTS;
+  delete[] RBPTS; delete[] ZBPTS;
+  delete[] RLPTS; delete[] ZLPTS;
+
+  gsl_matrix_free (PSIARRAY);
+
+  delete[] PSIN; delete[] G;   delete[] Pr;
+  delete[] GGp;  delete[] Prp; delete[] Q;
+
+  delete[] s; delete[] Rs;
+
+  delete[] P;   delete[] RP; delete[] rP;  delete[] GP;
+  delete[] QGP; delete[] QP; delete[] PP;  delete[] GPP;
+  delete[] PPP; delete[] S;  delete[] QX;
+
+  delete[] mres; delete[] qres; delete[] rres;  delete[] sres;
+  delete[] gres; delete[] Rres; delete[] gmres; delete[] fcres;
+  delete[] PsiNres;
+
+  delete[] th; 
+  gsl_matrix_free (Rst); gsl_matrix_free (Zst);
+
+  delete[] Th;
+  gsl_matrix_free (Rnc); gsl_matrix_free (Znc); 
+
+  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc);
+ 
+  delete[] I1;    delete[] I2;    delete[] I3;    
+  delete[] Ktres; delete[] Kares; delete[] ajj; delete[] dPsidr;
+
+  gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
+  
+  gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
+  gsl_vector_complex_free (EI);  gsl_vector_complex_free (EO);
+}
+
+// #############################################
+// Function to assign weights for Simpson's rule
+// #############################################
+void Flux::Stage2SetSimpsonWeights ()
+{
+  double h  = 2.*M_PI   /double (NTHETA-1);  // Step length for angular integrals
+         hh = 0.9999999 /double (NTHETA-1);  // Step length for fraction of circulating particles integrals
+
+  Weight1D.resize (NTHETA);
+  weight1D.resize (NTHETA);
+  Weight2D.resize (NTHETA, NTHETA);
+  for (int j = 0; j < NTHETA; j++)
+    {
+    	Weight1D (j) = 0.;
+	weight1D (j) = 0.;
+
+	for (int k = 0; k < NTHETA; k++)
+	  Weight2D (j, k) = 0.;
+    }
+  for (int j = 0; j < NTHETA-2; j += 2)
+    {
+      Weight1D (j)   +=      h /3.;
+      Weight1D (j+1) += 4. * h /3.;
+      Weight1D (j+2) +=      h /3.;
+
+      weight1D (j)   +=      hh /3.;
+      weight1D (j+1) += 4. * hh /3.;
+      weight1D (j+2) +=      hh /3.;
+      
+      for (int k = 0; k < NTHETA-2; k += 2)
+	{
+	  Weight2D (j,   k)   +=       h*h /9.;
+	  Weight2D (j+1, k)   +=  4. * h*h /9.;
+	  Weight2D (j+2, k)   +=       h*h /9.;
+	  Weight2D (j,   k+1) +=  4. * h*h /9.;
+	  Weight2D (j+1, k+1) += 16. * h*h /9.;
+	  Weight2D (j+2, k+1) +=  4. * h*h /9.;
+	  Weight2D (j,   k+2) +=       h*h /9.;
+	  Weight2D (j+1, k+2) +=  4. * h*h /9.;
+	  Weight2D (j+2, k+2) +=       h*h /9.;
+	}
+    }
+}
+
+// #############################################
+// Function to read data for Stage2 calculations
+// #############################################
+void Flux::Stage2ReadData ()
+{
+  printf ("Reading data from gFile:\n");
+  
+  // ..............
+  // Read R0 and B0
+  // ..............
+  FILE* file = OpenFiler ((char*) "Stage1/R0B0.txt");
+  if (fscanf (file, "%lf %lf", &R0, &B0) != 2)
+    {
+      printf ("FLUX: Error reading Stage1/R0B0.txt\n");
+      exit (1);
+    }
+  fclose (file);
+
+  // ................
+  // Read array sizes
+  // ................
+  file = OpenFiler ((char*) "Stage1/Points.txt");
+  if (fscanf (file, "%d %d %d %d", &NRPTS, &NZPTS, &NBPTS, &NLPTS) != 4)
+    {
+      printf ("FLUX: Error reading Stage1/Points.txt\n");
+      exit (1);
+    }
+  fclose (file);
+
+  // ..............
+  // Read R, Z grid
+  // ..............
+  RPTS = new double[NRPTS];  // R array
+  ZPTS = new double[NZPTS];  // Z array
+
+  file = OpenFiler ((char*) "Stage1/R.txt");
+  for (int i = 0; i < NRPTS; i++)
+    if (fscanf (file, "%lf", &RPTS[i]) != 1)
+      {
+	printf ("FLUX: Error reading Stage1/R.txt\n");
+	exit (1);
+      }
+  fclose (file);
+  file = OpenFiler ((char*) "Stage1/Z.txt");
+  for (int j = 0; j < NZPTS; j++)
+    if (fscanf (file, "%lf", &ZPTS[j]) != 1)
+      {
+	printf ("FLUX: Error reading Stage1/Z.txt\n");
+	exit (1);
+      }
+  fclose (file);
+
+  // .......................
+  // Read magnetic axis data
+  // .......................
+  file = OpenFiler ((char*) "Stage1/Axis.txt");
+  if (fscanf (file, "%lf %lf %lf", &Raxis, &Zaxis) != 2)
+    {
+      printf ("FLUX: Error reading Stage1/Axis.txt\n");
+      exit (1);
+    }	
+  fclose (file);
+
+  // ..............................
+  // Read boundary and limiter data
+  // ..............................
+  RBPTS = new double[NBPTS];  // R coordinates of boundary
+  ZBPTS = new double[NBPTS];  // Z coordinates of boundary
+
+  file = OpenFiler ((char*) "Stage1/Boundary.txt");
+  for (int i = 0; i < NBPTS; i++)
+    if (fscanf (file, "%lf %lf", &RBPTS[i], &ZBPTS[i]) != 2)
+      {
+	printf ("FLUX: Error reading Stage1/Boundary.txt\n");
+	exit (1);
+      }
+  fclose (file);
+
+  RLPTS = new double[NLPTS];  // R coordinates of limiter
+  ZLPTS = new double[NLPTS];  // Z coordinates of limiter
+
+  file = OpenFiler ((char*) "Stage1/Limiter.txt");
+  for (int i = 0; i < NLPTS; i++)
+    if (fscanf (file, "%lf %lf", &RLPTS[i], &ZLPTS[i]) != 2)
+      {
+	printf ("FLUX: Error reading Stage1/Limiter.txt\n");
+	exit (1);
+      }
+  fclose (file);
+
+  // .................
+  // Find RIN and ROUT
+  // .................
+  for (int i = 0; i < NLPTS-1; i++)
+    {
+      if ((ZLPTS[i] - Zaxis) * (ZLPTS[i+1] - Zaxis) < 0.)
+	{
+	  if (RLPTS[i] < Raxis)
+	    RIN  = (RLPTS[i] * (ZLPTS[i+1] - Zaxis) + RLPTS[i+1] * (Zaxis - ZLPTS[i])) /(ZLPTS[i+1] - ZLPTS[i]);
+	  else if (RLPTS[i] > Raxis)
+	    ROUT = (RLPTS[i] * (ZLPTS[i+1] - Zaxis) + RLPTS[i+1] * (Zaxis - ZLPTS[i])) /(ZLPTS[i+1] - ZLPTS[i]);
+	}
+    }
+  if ((ZLPTS[NLPTS-1] - Zaxis) * (ZLPTS[0] - Zaxis) < 0.)
+    {
+      if (RLPTS[NLPTS-1] < Raxis)
+	RIN  = (RLPTS[NLPTS-1] * (ZLPTS[0] - Zaxis) + RLPTS[0] * (Zaxis - ZLPTS[NLPTS-1])) /(ZLPTS[0] - ZLPTS[NLPTS-1]);
+      else if (RLPTS[NLPTS-1] > Raxis)
+	ROUT = (RLPTS[NLPTS-1] * (ZLPTS[0] - Zaxis) + RLPTS[0] * (Zaxis - ZLPTS[NLPTS-1])) /(ZLPTS[0] - ZLPTS[NLPTS-1]);
+    }
+  RIN  *= R0;
+  ROUT *= R0;
+  printf ("R0      = %11.4e  B0          = %11.4e\n", R0,  B0);
+  printf ("RIN     = %11.4e  ROUT        = %11.4e\n", RIN, ROUT);
+
+  // ........
+  // Read Psi
+  // ........
+  PSIARRAY = gsl_matrix_alloc (NRPTS, NZPTS);  // Psi (R, Z)
+
+  double val; int ival;
+  file = OpenFiler ((char*) "Stage1/PsiSequential.txt");
+  for (int i = 0; i < NRPTS; i++)
+    for (int j = 0; j < NZPTS; j++)
+      {	
+	if (fscanf (file, "%d %d %lf", &ival, &ival, &val) != 3)
+	  {
+	    printf ("FLUX: Error reading Stage1/PsiSequential.txt\n");
+	    exit (1);
+	  }
+	gsl_matrix_set (PSIARRAY, i, j, val);
+      }
+  fclose (file);
+
+  // ....................................................
+  // Modify PSI such that PsiBoundary = 0 and PsiAxis = 1
+  // ....................................................
+  double PsiAxis     = InterpolatePsi (Raxis,    Zaxis,    0);
+  double PsiBoundary = InterpolatePsi (RBPTS[0], ZBPTS[0], 0);
+
+  for (int i = 0; i < NRPTS; i++)
+    for (int j = 0; j < NZPTS; j++)
+      {
+	double val = gsl_matrix_get (PSIARRAY, i, j) - PsiBoundary;
+	gsl_matrix_set (PSIARRAY, i, j, val);
+      }
+
+  PsiAxis     = InterpolatePsi (Raxis,    Zaxis,    0);
+  PsiBoundary = InterpolatePsi (RBPTS[0], ZBPTS[0], 0);
+  Psic        = PsiAxis / (R0*R0*B0);
+
+  for (int i = 0; i < NRPTS; i++)
+    for (int j = 0; j < NZPTS; j++)
+      {
+	double val = gsl_matrix_get (PSIARRAY, i, j) /PsiAxis;
+	gsl_matrix_set (PSIARRAY, i, j, val);
+      }
+
+  printf ("PsiAxis = %11.4e  PsiBoundary = %11.4e  PsiAxis /(R0*R0*B0) = %11.4e\n", PsiAxis, PsiBoundary, Psic);
+
+  // ......................
+  // Output Psi, PsiR, PsiZ
+  // ......................
+  file = OpenFilew ((char*) "Stage2/Psi.txt");
+  for (int i = 0; i < NRPTS; i++)
+    {
+      for (int j = 0; j < NZPTS; j++)
+	fprintf (file, "%16.9e ",  gsl_matrix_get (PSIARRAY, i, j));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+  file = OpenFilew ((char*) "Stage2/PsiR.txt");
+  for (int i = 0; i < NRPTS; i++)
+    {
+      for (int j = 0; j < NZPTS; j++)
+	fprintf (file, "%16.9e ", GetPsiR (RPTS[i], ZPTS[j]));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+  file = OpenFilew ((char*) "Stage2/PsiZ.txt");
+  for (int i = 0; i < NRPTS; i++)
+    {
+      for (int j = 0; j < NZPTS; j++)
+	fprintf (file, "%16.9e ", GetPsiZ (RPTS[i], ZPTS[j]));
+      fprintf (file, "\n");
+    }
+  fclose (file);  
+
+  // .............................
+  // Read equilibrium profile data
+  // .............................
+  PSIN = new double[NRPTS]; // PSI_N array 
+  G    = new double[NRPTS]; // g
+  Pr   = new double[NRPTS]; // p
+  GGp  = new double[NRPTS]; // g dg/dpsi
+  Prp  = new double[NRPTS]; // dp/dpsi
+  Q    = new double[NRPTS]; // q
+
+  file = OpenFiler ((char*) "Stage1/Profiles.txt");
+  for (int i = 0; i < NRPTS; i++)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf", &PSIN[i], &G[i], &Pr[i], &GGp[i], &Prp[i], &Q[i]) != 6)
+      {
+	printf ("FLUX: Error reading Stage1/Profiles.txt\n");
+	exit (1);
+      }
+  fclose (file);
+
+  // ....................................................
+  // Find closest equilibrium grid-point to magnetic axis
+  // ....................................................
+  double rmin = 1.e6;
+  for (int i = 0; i < NRPTS; i++)
+    if (fabs (RPTS[i] - Raxis) < rmin)
+      {
+	rmin = fabs (RPTS[i] - Raxis);
+	ic   = i;
+      }
+  rmin = 1.e6;
+  for (int j = 0; j < NZPTS; j++)
+    if (fabs (ZPTS[j] - Zaxis) < rmin)
+      {
+	rmin = fabs (ZPTS[j] - Zaxis);
+	jc   = j;
+      }
+
+  // ..........................................................................
+  // Find closest equilibrium grid-point to inner magnetic boundary on midplane
+  // ..........................................................................
+  ia = 0;
+  for (int i = 0; i <= ic; i++)
+    {
+      if (gsl_matrix_get (PSIARRAY, i, jc) < 0.)
+	ia++;
+    }
+  Rbound = (RPTS[ia-1]*gsl_matrix_get (PSIARRAY, ia, jc) - RPTS[ia]*gsl_matrix_get (PSIARRAY, ia-1, jc))
+    /(gsl_matrix_get (PSIARRAY, ia, jc) - gsl_matrix_get (PSIARRAY, ia-1, jc));
+
+  L = ic-ia+2;  // Number of points in Psi (R, Zaxis) array
+}
+
+// ######################################
+// Function to calculate Stage2 q profile
+// ######################################
+void Flux::Stage2CalcQ ()
+{
+  // ............................
+  // Setup Psi (R, Zaxis) profile
+  // ............................
+  s = new double[L]; // Array of s = sqrt [1 - Psi (R, Zaxis)] values
+
+  for (int l = 0; l < L-2; l++)
+    s[L-2-l] = sqrt (1. - gsl_matrix_get (PSIARRAY, l+ia, jc));
+  s[0]   = 0.;
+  s[L-1] = 1.;
+
+  // .........................
+  // Setup R (Z=Zaxis) profile
+  // .........................
+  Rs = new double[L]; // Array of R (s) values
+
+  for (int l = 0; l < L-2; l++)
+    Rs[L-2-l] = RPTS[l+ia];
+  Rs[0]   = Raxis;
+  Rs[L-1] = Rbound;
+
+  FILE* file = OpenFilew ((char*) "Stage2/rs.txt");
+  for (int l = 0; l  < L; l++)
+    fprintf (file, "%16.9e %16.9e\n", Rs[l], s[l]);
+  fclose (file);
+
+  // ......................
+  // Set up Stage2 Psi grid
+  // ......................
+  P   = new double[NPSI];  // Psi array
+  RP  = new double[NPSI];  // R(Psi)
+  rP  = new double[NPSI];  // r(Psi)
+  GP  = new double[NPSI];  // g(Psi)
+  QGP = new double[NPSI];  // q(psi)/g(psi) 
+  QP  = new double[NPSI];  // q(Psi)
+  PP  = new double[NPSI];  // P(Psi)
+  GPP = new double[NPSI];  // dg/dPsi
+  PPP = new double[NPSI];  // dP/dPsi
+  S   = new double[NPSI];  // sqrt (1 - Psi)
+  QX  = new double[NPSI];  // q(Psi) from gFile
+
+  for (int j = 0; j < NPSI; j++)
+    {
+      double s = double (j) /double (NPSI-1);
+
+      P[j] = 1. - s;
+      S[j] = sqrt (1. - P[j]);
+    }
+
+  // .......................................
+  // Calculate Stage2 g(Psi), P(Psi) profile
+  // .......................................
+  for (int j = 0; j < NPSI; j++)
+    {
+      double pval = 1. - P[j];
+
+      GP [j] = Interpolate (NRPTS, PSIN, G,   pval, 0);
+      PP [j] = Interpolate (NRPTS, PSIN, Pr,  pval, 0);
+      GPP[j] = Interpolate (NRPTS, PSIN, GGp, pval, 0) /GP[j];
+      PPP[j] = Interpolate (NRPTS, PSIN, Prp, pval, 0);
+      QX [j] = Interpolate (NRPTS, PSIN, Q,   pval, 0);
+    }
+
+  // ...............................
+  // Calculate Stage2 R(Psi) profile
+  // ...............................
+  for (int j = 0; j < NPSI; j++)
+    RP[j] = Interpolate (L, s, Rs, S[j], 0);
+
+  // ......................................
+  // Calculate Stage2 q(Psi)/g(Psi) profile
+  // ......................................
+  printf ("Calculating q(Psi)/g(Psi) profile:\n");
+  CalcQGP ();
+  QGP[0]      = Q[0] /G[0];
+  QP[0]       = Q[0];
+  QGP[NPSI-1] = Q[NRPTS-1] /G[NRPTS-1];
+  QP[NPSI-1]  = Q[NRPTS-1];
+
+  // .............................
+  // Calculate Stage2 r(P) profile
+  // .............................
+  printf ("Calculating r(Psi) profile:\n");
+  CalcrP ();
+  rP[0] = 0.;
+  ra    = rP[NPSI-1];
+
+  // ................
+  // Find q95 and r95
+  // ................
+  double g95, ga, qa, psiN95;
+  double sval = sqrt (0.95);
+  double sa   = 1.;
+  q95    = Interpolate (NPSI, S, QP, sval, 0);
+  r95    = Interpolate (NPSI, S, rP, sval, 0);
+  g95    = Interpolate (NPSI, S, GP, sval, 0);
+  ga     = Interpolate (NPSI, S, GP, sa,   0);
+  qa     = Interpolate (NPSI, S, QP, sa,   0);
+  psiN95 = 1. - Interpolate (NPSI, rP, P, r95, 0);
+  printf ("q95 = %11.4e  psiN95 = %11.4e  r95/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e\n", q95, psiN95, r95 /ra, qa, ra, ra*R0);
+
+  // ...................................................
+  // If qflg = 1 rescale equilibrium such that q95 = Q95
+  // ...................................................
+  if (QFLG == 1)
+    {
+      // Modify gg'
+      double shft = (Q95*Q95 /q95/q95 - 1.) * g95*g95;
+      for (int j = 0; j < NPSI; j++)
+	GP[j] = sqrt (GP[j]*GP[j] + shft);
+      
+      // Recalculate Stage2 q(Psi)/g(Psi) profile
+      printf ("Recalculating q(Psi)/g(Psi) profile:\n");
+      CalcQGP ();
+      QGP[0]      = QGP[0] * G[0] /GP[0];
+      QP[0]       = QP[0]  * GP[0] /G[0];
+      QGP[NPSI-1] = QGP[NRPTS-1] * G[NRPTS-1]  /GP[NRPTS-1];
+      QP[NPSI-1]  = QP[NRPTS-1]  * GP[NRPTS-1] /G[NRPTS-1];
+      
+      // Recalculate Stage2 r(P) profile
+      printf ("Recalculating r(Psi) profile:\n");
+      CalcrP ();
+      rP[0] = 0.;
+      ra    = rP[NPSI-1];
+
+      // Confirm q95 and r95
+      q95 = Interpolate (NPSI, S, QP, sval, 0);
+      qa  = Interpolate (NPSI, S, QP, sa,   0);
+      r95 = Interpolate (NPSI, S, rP, sval, 0);
+      printf ("q95 = %11.4e  r95/ra = %11.4e  qa = %11.4e\n", q95, r95 /ra, qa);
+    }
+
+  // ..................
+  // Output q95 and r95
+  // ..................
+  file = OpenFilew ((char*) "Stage2/q95.txt");
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e\n", q95, r95 /ra, QP[0], QP[NPSI-1]);
+  fclose (file);
+
+  // ......................
+  // Output Stage2 profiles
+  // ......................
+  file = OpenFilew ((char*) "Stage2/qr.txt");
+  for (int j = 0; j < NPSI; j++)
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
+	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j]);
+  fclose (file);
+}
+
+// ###################################
+// Function to find rational surfaces.
+// Assumes monotonic q-profile.
+// ###################################
+void Flux::Stage2FindRational ()
+{
+  // .....................................
+  // Determine number of rational surfaces
+  // .....................................
+  int mmin = int (double (NTOR) * QP[0]) + 1;
+  int mmax = int (double (NTOR) * QP[NPSI-1]);
+  if (mmin < MMIN)
+    mmin = MMIN;
+  if (mmax > MMAX)
+    mmax = MMAX;
+  nres = mmax - mmin + 1;
+
+  // .....................................
+  // Calculate rational surface quantities
+  // .....................................
+  mres    = new int   [nres];
+  qres    = new double[nres];
+  rres    = new double[nres];
+  sres    = new double[nres];
+  gres    = new double[nres];
+  Rres    = new double[nres];
+  gmres   = new double[nres];
+  fcres   = new double[nres];
+  PsiNres = new double[nres];
+  for (int i = 0; i < nres; i++)
+    {
+      mres[i] = mmin + i;
+
+      qres[i] = double (mres[i]) /double (NTOR);
+      rres[i] = Interpolate (NPSI, QP, rP, qres[i], 0);
+      sres[i] = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
+
+      // Check that PsiN < PSILIM
+      PsiNres[i] = 1. - Interpolate (NPSI, rP, P, rres[i], 0);
+      if (PsiNres[i] > PSILIM)
+	{
+	  nres = i;
+	  break; 
+	}
+
+      // Correct rres values
+      for (int ii = 0; ii < 4; ii++)
+	{
+	  double qqq = Interpolate (NPSI, rP, QP, rres[i], 0);
+	  rres[i]   += (double (mres[i]) /double (NTOR) /qqq - 1.) * rres[i] /sres[i];
+	  sres[i]    = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
+	}
+      gmres[i] = Interpolate (NPSI, rP, QP, rres[i], 0) - qres[i];
+
+      gres[i]    = Interpolate (NPSI, rP, GP, rres[i], 0);
+      Rres[i]    = Interpolate (NPSI, rP, RP, rres[i], 0);
+      PsiNres[i] = 1. - Interpolate (NPSI, rP, P, rres[i], 0);
+    }
+
+  printf ("Rational surface data:\n");
+  for (int i = 0; i < nres; i++)
+    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e\n", mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i]);
+
+  // .....................................
+  // Confirm q values at rational surfaces
+  // .....................................
+  printf ("Confirm rational surface q-values:\n");
+  CheckQP ();
+ }
+
+// ##################################################
+// Calculate straight angle data at rational surfaces
+// ##################################################
+void Flux::Stage2CalcStraightAngle ()
+{
+  // ..................
+  // Set up theta array
+  // ..................
+  th = new double[NTHETA]; 
+  for (int k = 0; k < NTHETA; k++)
+    {
+      double t = double (k) /double (NTHETA-1);
+      th[k]    = 2.* M_PI * t;
+    }
+  Rst = gsl_matrix_alloc (nres, NTHETA);
+  Zst = gsl_matrix_alloc (nres, NTHETA);
+
+  // .............................
+  // Calculate straight angle data
+  // .............................
+  printf ("Calculating straight angle data at rational surface:\n");
+  CalcStraightAngle ();
+
+  // ...........
+  // Output nres
+  // ...........
+  FILE* file = OpenFilew ((char*) "Stage2/nres.txt");
+  fprintf (file, "%d\n", nres);
+  fclose (file);
+
+  // ..........
+  // Output Rst
+  // ..........
+  file = OpenFilew ((char*) "Stage2/Rst.txt");
+  for (int k = 0; k < NTHETA; k++)
+    {
+      fprintf (file, "%16.9e ", th[k] /M_PI);
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_matrix_get (Rst, j, k));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+
+  // ..........
+  // Output Zst
+  // ..........
+  file = OpenFilew ((char*) "Stage2/Zst.txt");
+  for (int k = 0; k < NTHETA; k++)
+    {
+      fprintf (file, "%16.9e ", th[k] /M_PI);
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_matrix_get (Zst, j, k));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+}
+
+// ######################################################
+// Calculate neoclassical angle data at rational surfaces
+// ######################################################
+void Flux::Stage2CalcNeoclassicalAngle ()
+{
+  // ...........................................
+  // Calculate gamma values at rational surfaces
+  // ...........................................
+  printf ("Calculating gamma values at rational surfaces:\n");
+  CalcGamma ();
+
+  for (int i = 0; i < nres; i++)
+    printf ("mpol = %3d  rs/ra = %11.4e  gamma = %11.4e  gamma*q/g = %11.4e\n",
+	    mres[i], rres[i] /ra, gmres[i], gmres[i]*qres[i] /gres[i]);
+
+  // ..................
+  // Set up Theta array
+  // ..................
+  Th = new double[NTHETA];
+  for (int k = 0; k < NTHETA; k++)
+    {
+      double t = double (k) /double (NTHETA-1);
+      Th[k]    = 2.* M_PI * t;
+    }
+  Rnc = gsl_matrix_alloc (nres, NTHETA);
+  Znc = gsl_matrix_alloc (nres, NTHETA);
+
+  // .................................
+  // Calculate neoclassical angle data
+  // .................................
+  printf ("Calculating neoclassical angle data at rational surfaces:\n");
+  CalcNeoclassicalAngle ();
+
+  // ..........
+  // Output Rnc
+  // ..........
+  FILE* file = OpenFilew ((char*) "Stage2/Rnc.txt");
+  for (int k = 0; k < NTHETA; k++)
+    {
+      fprintf (file, "%16.9e ", Th[k] /M_PI);
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_matrix_get (Rnc, j, k));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+
+  // ..........
+  // Output Znc
+  // ..........
+  file = OpenFilew ((char*) "Stage2/Znc.txt");
+  for (int k = 0; k < NTHETA; k++)
+    {
+      fprintf (file, "%16.9e ", Th[k] /M_PI);
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_matrix_get (Znc, j, k));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+
+  // ..................................
+  // Calculate |B| on rational surfaces
+  // ..................................
+  Bnc = gsl_matrix_alloc (nres, NTHETA);
+  for (int j = 0; j < nres; j++)
+    for (int k = 0; k < NTHETA; k++)
+      {
+	double gval = gres[j];
+	double Rval = gsl_matrix_get (Rnc, j, k);
+	double Zval = gsl_matrix_get (Znc, j, k);
+	double PsiR = GetPsiR (Rval, Zval);
+	double PsiZ = GetPsiZ (Rval, Zval);
+	double Grad = sqrt (PsiR*PsiR + PsiZ*PsiZ);
+	double Bval = sqrt (gval*gval + Psic*Psic * Grad*Grad) /Rval;
+
+	gsl_matrix_set (Bnc, j, k, Bval);
+      }
+
+  // ..........
+  // Output Bnc
+  // ..........
+  file = OpenFilew ((char*) "Stage2/Bnc.txt");
+  for (int k = 0; k < NTHETA; k++)
+    {
+      fprintf (file, "%16.9e ", Th[k] /M_PI);
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_matrix_get (Bnc, j, k));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+
+  // .........................................
+  // Calculate d|B|dTheta on rational surfaces
+  // .........................................
+  Cnc = gsl_matrix_alloc (nres, NTHETA);
+  double* Y = new double[NTHETA];
+  for (int j = 0; j < nres; j++)
+    {
+      for (int k = 0; k < NTHETA; k++)
+ 	Y[k] = gsl_matrix_get (Bnc, j, k);
+
+      for (int k = 0; k < NTHETA; k++)
+	{
+	  double val = InterpolatePeriodic (NTHETA, Th, Y, Th[k], 1);
+	  gsl_matrix_set (Cnc, j, k, val);
+	}
+    }
+  delete[] Y;
+
+  // ..........
+  // Output Cnc
+  // ..........
+  file = OpenFilew ((char*) "Stage2/Cnc.txt");
+  for (int k = 0; k < NTHETA; k++)
+    {
+      fprintf (file, "%16.9e ", Th[k]/M_PI);
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_matrix_get (Cnc, j, k));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+}
+
+// ######################################################
+// Calculate neoclassical parameters at rational surfaces
+// ######################################################
+void Flux::Stage2CalcNeoclassicalPara ()
+{
+  // ................
+  // Allocate memory
+  // ...............
+  I1     = new double[nres];
+  I2     = new double[nres];
+  I3     = new double[nres];
+  I4     = gsl_matrix_alloc (nres, NNC);
+  I5     = gsl_matrix_alloc (nres, NNC);
+  I6     = gsl_matrix_alloc (nres, NTHETA);
+  Ktres  = new double[nres];
+  Kares  = new double[nres];
+  ajj    = new double[nres];
+  dPsidr = new double[nres];
+
+  // ......................................................
+  // Calculate neoclassical parameters at rational surfaces
+  // ......................................................
+  printf ("Calculating neoclassical parameters at rational surfaces:\n");
+  double sum;
+  for (int i = 0; i < nres; i++)
+    {
+      // Calculate I1
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) /gsl_matrix_get (Bnc, i, j);
+      sum /= 2.*M_PI;
+      
+      I1[i] = sum;
+
+      // Calculate I2
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) * gsl_matrix_get (Bnc, i, j);
+      sum /= 2.*M_PI;
+      
+      I2[i] = sum;
+
+      // Calculate I3
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) * gsl_matrix_get (Cnc, i, j) * gsl_matrix_get (Cnc, i, j)
+	  /gsl_matrix_get (Bnc, i, j);
+      sum /= 2.*M_PI;
+      
+      I3[i] = sum;
+
+      // Calculate I4
+      for (int k = 0; k < NNC; k++)
+	{
+	  double kk = double (k+1);
+
+	  sum = 0.;
+	  for (int j = 0; j < NTHETA; j++)
+	    sum += Weight1D (j) * cos (kk * Th[j]) /gsl_matrix_get (Bnc, i, j);
+	  sum *= sqrt (2.*kk) /2./M_PI;
+
+	  gsl_matrix_set (I4, i, k, sum);
+	}
+
+      // Calculate I5
+      for (int k = 0; k < NNC; k++)
+	{
+	  double kk = double (k+1);
+
+	  sum = 0.;
+	  for (int j = 0; j < NTHETA; j++)
+	    sum += Weight1D (j) * cos (kk * Th[j]) /gsl_matrix_get (Bnc, i, j)
+	      /gsl_matrix_get (Bnc, i, j) /2.;
+	  sum *= sqrt (2.*kk) /2./M_PI;
+
+	  gsl_matrix_set (I5, i, k, sum);
+	}
+
+      // Calcuate Kt and Ka
+      sum = 0.;
+      for (int k = 0; k < NNC; k++)
+	sum += gsl_matrix_get (I4, i, k) * gsl_matrix_get (I5, i, k);
+      Ktres[i] = I1[i]*I1[i] * I3[i] /I2[i]/I2[i] /sum;
+      Kares[i] = (8./3./M_PI) * (I2[i] /I3[i]) * Ktres[i]*Ktres[i];
+
+      // Calculate Bmax
+      double Bmax = -1.;
+      for (int k = 0; k < NTHETA; k++)
+	if (gsl_matrix_get (Bnc, i, k) > Bmax)
+	  Bmax = gsl_matrix_get (Bnc, i, k);
+      
+      // Calculate I6
+      for (int k = 0; k < NTHETA; k++)
+	{
+	  double lambda = double (k) * hh;
+
+	  sum = 0.;
+	  for (int kk = 0; kk < NTHETA; kk++)
+	    sum += Weight1D (kk) * sqrt (1. - lambda * gsl_matrix_get (Bnc, i, kk) /Bmax)
+	      /gsl_matrix_get (Bnc, i, kk);
+	  sum /= 2.*M_PI;
+	  
+	  gsl_matrix_set (I6, i, k, sum);
+	}
+
+      // Calculate fraction of circulating particles
+      sum = 0.;
+      for (int k = 0; k < NTHETA; k++)
+	{
+	  double lambda = double (k) * hh;
+	  sum += weight1D (k) * lambda /gsl_matrix_get (I6, i, k);
+	}
+      sum *= 0.75 * I2[i] /Bmax/Bmax;
+
+      fcres[i] = sum;
+
+      // Calculate ajj values
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	{
+	  double Rval = gsl_matrix_get (Rst, i, j);
+	  double Zval = gsl_matrix_get (Zst, i, j);
+ 	  double PsiR = GetPsiR (Rval, Zval);
+	  double PsiZ = GetPsiZ (Rval, Zval);
+	  sum += Weight1D (j) /(PsiR*PsiR + PsiZ*PsiZ);
+	}
+      double fac = rres[i] * gres[i] /qres[i] /Psic;
+      sum *= fac*fac /(2.*M_PI);
+     
+      ajj[i] = sum;
+
+      // Calculate dPsidr values
+      dPsidr[i] = rres[i] * gres[i] /qres[i] /fabs(Psic);
+    }
+
+  // ..............................
+  // Output neoclassical parameters
+  // ..............................
+  for (int i = 0; i < nres; i++)
+    printf ("mpol = %3d I1 = %11.4e I2 = %11.4e I3 = %11.4e I4 = (%11.4e; %11.4e) I5 = (%11.4e; %11.4e) Kt = %11.4e Ka = %11.4e fc = %11.4e ajj = %11.4e dPsiNdr = %11.4e\n",
+	    mres[i], I1[i], I2[i], I3[i],
+	    gsl_matrix_get (I4, i, 0), gsl_matrix_get (I4, i, NNC-1),
+	    gsl_matrix_get (I5, i, 0), gsl_matrix_get (I5, i, NNC-1),
+	    Ktres[i], Kares[i], fcres[i], ajj[i], dPsidr[i]);
+}
+
+// ############################
+// Calculate stability matrices
+// ############################
+void Flux::Stage2CalcMatrices ()
+{
+  printf ("Calculating stability matrices:\n");
+  
+  // ..................
+  // Calculate F matrix
+  // ..................
+  FF = gsl_matrix_complex_alloc (nres, nres);
+  EE = gsl_matrix_complex_alloc (nres, nres);
+ 
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      {
+	double sumc = 0.;
+	for (int k = 0; k < NTHETA; k++)
+	  for (int kk = 0; kk < NTHETA; kk++)
+	    sumc += Weight2D (k, kk) * GreenPlasmaCos (i, k, j, kk);
+	sumc /= 2.*M_PI * 2.*M_PI;
+
+	double sums = 0.;
+	for (int k = 0; k < NTHETA; k++)
+	  for (int kk = 0; kk < NTHETA; kk++)
+	    sums += Weight2D (k, kk) * GreenPlasmaSin (i, k, j, kk);
+	sums /= 2.*M_PI * 2.*M_PI;
+
+	gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
+      }
+
+  printf ("F-matrix:\n");
+  for (int i = 0; i < nres; i++)
+    {
+      for (int j = 0; j < nres; j++)
+	printf ("(%9.2e,%9.2e) ", GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
+      printf ("\n");
+    }
+
+  FILE* file = OpenFilew ("Stage2/F_Matrix.txt");
+  for (int i = 0; i < nres; i++)
+    {
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_complex_abs (gsl_matrix_complex_get (FF, i, j)));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+
+  // ------------------
+  // Calculate E-matrix
+  // ------------------
+  gsl_permutation* px  = gsl_permutation_alloc (nres);
+  int              sss = 0;
+
+  gsl_linalg_complex_LU_decomp (FF, px, &sss);
+  gsl_linalg_complex_LU_invert (FF, px, EE);
+
+  gsl_permutation_free (px);
+
+  printf ("E-matrix:\n");
+  for (int i = 0; i < nres; i++)
+    {
+      for (int j = 0; j < nres; j++)
+	printf ("(%9.2e,%9.2e) ", GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+      printf ("\n");
+    }
+
+  file = OpenFilew ("Stage2/E_Matrix.txt");
+  for (int i = 0; i < nres; i++)
+    {
+      for (int j = 0; j < nres; j++)
+	fprintf (file, "%16.9e ", gsl_complex_abs (gsl_matrix_complex_get (EE, i, j)));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+
+  // -------------------
+  // Calculate E-vectors
+  // -------------------
+  EI = gsl_vector_complex_alloc (nres);
+  EO = gsl_vector_complex_alloc (nres);
+ 
+  for (int i = 0; i < nres; i++)
+    {
+      double sumc = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sumc += Weight1D (j) * GreenInboardCos (i, j);
+      sumc *= (R0 /RIN) /2./M_PI;
+
+      double sums = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sums += Weight1D (j) * GreenInboardSin (i, j);
+      sums *= (R0 /RIN) /2./M_PI;
+
+      gsl_vector_complex_set (EI, i, gsl_complex_rect (sumc, sums));
+   
+      sumc = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sumc += Weight1D (j) * GreenOutboardCos (i, j);
+      sumc *= (R0 /ROUT) /2./M_PI;
+
+      sums = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sums += Weight1D (j) * GreenOutboardSin (i, j);
+      sums *= (R0 /ROUT) /2./M_PI;
+
+      gsl_vector_complex_set (EO, i, gsl_complex_rect (sumc, sums));
+    }
+
+  printf ("E-vectors:\n");
+  for (int i = 0; i < nres; i++)
+    printf ("mpol = %4d  rs/ra = %11.4e  EI = (%11.4e, %11.4e)  EO = (%11.4e, %11.4e)\n", mres[i], rres[i]/ra,
+	    GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
+	    GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
+}

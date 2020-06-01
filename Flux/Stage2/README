@@ -1,0 +1,37 @@
+Asymptote scripts (see http://asymptote.sourceforge.net/)
+
+<filename>.asy
+Usage:	    ./asy <filename>
+Produces:   <filename>.eps
+..........................................................
+
+psi.asy      ... plots psi (R, Z)
+psir.asy     ... plots interpolated dPsi/dR (R, Z)
+psiz.asy     ... plots interpolated dPsi/dZ (R, Z)
+
+qr.asy       ... plots q(r) profile
+qredge.asy   ... plots q(r) profile close to plasma edge
+pr.asy       ... plots p(r) profile
+g.asy        ... plots g(r) profile
+
+rational.asy ... plots rational surfaces
+
+rst.asy      ... plots R versus theta on rational surfaces
+zst.asy      ... plots Z versus theta on rational surfaces
+
+rnc.asy      ... plots R versus Theta on rational surfaces
+znc.asy      ... plots Z versus Theta on rational surfaces
+bnc.asy      ... plots B versus Theta on rational surfaces
+
+ekk.asy      ... plots diagonal elements of E-matrix
+ereal.asy    ... plots real parts of E-matrix
+eimag.asy    ... plots imaginary parts of E-matrix
+
+eereal.asy   ... plots real parts of e-vectors
+eeimag.asy   ... plots imaginary parts of e-vectors
+eeabs.asy    ... plots absolute values of e-vectors
+eearg.asy    ... plots arguments of e-vectors
+
+
+
+
