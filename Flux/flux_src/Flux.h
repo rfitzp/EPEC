@@ -40,7 +40,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
 #include <vector>
 #include <blitz/array.h>
 #include <gsl/gsl_complex.h>
@@ -71,8 +70,9 @@ extern "C" void NameListRead (int* INTP, int* NPSI, int* NTHETA, int* NNC, int* 
 // gFile reading function
 extern "C" void gFileRead ();
 
-// gFile interpolation function
-extern "C" void gFileInterpolate ();
+// gFile interpolation functions
+extern "C" void gFileInterpolateCubic ();
+extern "C" void gFileInterpolateQuartic ();
 
 // ############
 // Class header
@@ -151,7 +151,7 @@ class Flux
   double* GPP;         // dg/dPsi
   double* PPP;         // dP/dPsi
   double* S;           // sqrt(1 - Psi)
-  double* QX;          // q(Psi) from EQDSK
+  double* QX;          // q(Psi) from gFile
 
   // Rational surface data
   int     nres;        // Number of rational surfaces
@@ -222,7 +222,10 @@ public:
 private:
 
   // gFile interpolation routines
-  void _gFileInterp (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3, char* gFile, double time);
+  void _gFileInterpCubic (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
+			  char* gFile, double time);
+  void _gFileInterpQuartic (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
+			    char* gFile4, double time4, char* gFile, double time);
   void gFileInterp (vector<string> gFileName, vector<double> gFileTime, int gFileNumber, double time);
 
   // Set global parameters

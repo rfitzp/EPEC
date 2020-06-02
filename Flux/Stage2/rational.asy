@@ -43,19 +43,7 @@ real rw     = (real) xx[0];
 real[] yy   = A3[1];
 real zw     = (real) yy[0]; 
 
-file    in5 = input("../Stage1/Coils.txt").line();
-real[][] A5 = in5.dimension (0,0);
-A5          = transpose(A5);
-     
-real[] RRplu  = A5[0];
-real[] RRmin  = A5[1];
-real[] ZZplu  = A5[2];
-real[] ZZmin  = A5[3];
-real rrplu    = (real) RRplu[0];
-real rrmin    = (real) RRmin[0];
-real zzplu    = (real) ZZplu[0];
-real zzmin    = (real) ZZmin[0];
-size(rsize,zsize,(rmin,zmin),(rmax,zmax));
+size (rsize, zsize, (rmin, zmin), (rmax, zmax));
 
 pen s = black+3.;
 draw ((rmin,zmin)--(rmax,zmin)--(rmax,zmax)--(rmin,zmax)--(rmin,zmin),s);
@@ -75,10 +63,6 @@ for (int i = 0; i < nres; ++i)
     //draw(graph(Rst,Zst),s,marker(scale(0.5mm)*polygon(3)));//
     draw(graph(Rst,Zst),s);
   }
-
-s = solid + black + 2.;
-draw ((rrplu,zzplu)--(rrmin,zzmin),s);
-draw ((rrplu,-zzplu)--(rrmin,-zzmin),s);
 
 pen q = fontsize(20.);
 defaultpen (q);

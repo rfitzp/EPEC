@@ -15,7 +15,7 @@ Flux::Flux ()
 void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME)
 {
   // Set global parameters
-  SetParameters (_NTOR, _MMIN, _MMAX, _TIME, _INTP);
+  SetParameters (_INTP, _NTOR, _MMIN, _MMAX, _TIME);
 
   // Input gFile data and output Stage1 data.
   // Stage1 data output to directory /Stage1.
@@ -62,7 +62,7 @@ void Flux::SetParameters (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TI
     MMAX = _MMAX;
   if (_TIME > 0.)
     TIME = _TIME;
-  if (_INTP >= 0)
+  if (_INTP > -1)
     INTP = _INTP;
 
   // Output calculation parameters
