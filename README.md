@@ -6,7 +6,7 @@ FLUX           - reads gFile(s) and generates equilibrium data needed by NEOCLAS
 
 NEOCLASSICAL   - reads pFile(s) and generates neoclassical data needed by PHASE
 
-PHASE          - performs island dynamics simulation in fixed equilibrium
+PHASE          - reads GPEC data (uFile(s) and lFile(s)) and performs island dynamics simulation in fixed equilibrium
 
 ISLANDDYNAMICS - performs island dynamics simulation in time-varying equilibrium
 
