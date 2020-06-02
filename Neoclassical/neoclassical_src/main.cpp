@@ -19,7 +19,7 @@ int main (int argc, char** argv)
   char* yvalue = NULL; char* ivalue = NULL; 
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hin:t:y:I:")) != -1)
+  while ((c = getopt (argc, argv, "f:hi:n:t:y:I:")) != -1)
     switch (c)
       {
       case 'f':
@@ -52,7 +52,7 @@ int main (int argc, char** argv)
 	break;
       case '?':
 	if (optopt == 'n' || optopt == 'I' || optopt == 'f' || optopt == 't' || optopt == 'y' || optopt == 'i')
-	  printf ("Opetion = %c requires an argument\n", optopt);
+	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
 	  else
@@ -63,7 +63,7 @@ int main (int argc, char** argv)
       }
 
   int    _NEUTRAL = -1; int _IMPURITY = -1; int _FREQ = -999999; int _INTP = -1;
-  double _TIME = 0.; double _YN = -1.;
+  double _TIME = -1.; double _YN = -1.;
 
   if (nvalue != NULL)
     _NEUTRAL = atoi (nvalue);

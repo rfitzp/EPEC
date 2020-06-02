@@ -91,13 +91,13 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
      TIME = _TIME;
   if (_YN > 0.)
      YN = _YN;
-  if (_INTP > 0.)
-     INTP = 1;
+  if (_INTP > -1)
+     INTP = _INTP;
 
   // Output calculation parameters
   printf ("Reading parameters from namelist.txt:\n");
-  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d NN   = %11.4e LN  = %11.4e SVN = %11.4e YN  = %11.4e EN  = %11.4e TIME = %11.4e INTP = %2d Lambda = %11.4e\n",
-	  CHI, IMPURITY, NEUTRAL, FREQ, NN, LN, SVN, YN, EN, TIME, INTP, COULOMB);
+  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d NN   = %11.4e LN  = %11.4e SVN = %11.4e YN  = %11.4e EN  = %11.4e TIME = %11.4e INTP = %2d Lambda = %11.4e\n",
+	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, NN, LN, SVN, YN, EN, TIME, COULOMB);
 
   // Sanity check
   if (CHI <= 0.)

@@ -227,9 +227,9 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   allocate (RLIM   (NLIM))
   allocate (ZLIM   (NLIM))
 
-  weight1 = (time - time2) * (time - time3) /(time1 - time2) /(time1 - time3);
-  weight2 = (time - time1) * (time - time3) /(time2 - time1) /(time2 - time3);
-  weight3 = (time - time1) * (time - time2) /(time3 - time1) /(time3 - time2);
+  weight1 = (time - time2) * (time - time3) /(time1 - time2) /(time1 - time3)
+  weight2 = (time - time1) * (time - time3) /(time2 - time1) /(time2 - time3)
+  weight3 = (time - time1) * (time - time2) /(time3 - time1) /(time3 - time2)
 
   R0      = R01      * weight1 + R02      * weight2 + R03      * weight3
   B0      = B01      * weight1 + B02      * weight2 + B03      * weight3
@@ -622,10 +622,10 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   allocate (RLIM   (NLIM))
   allocate (ZLIM   (NLIM))
   
-  weight1 = (time - time2) * (time - time3) * (time - time4) /(time1 - time2) /(time1 - time3) /(time1 - time4);
-  weight2 = (time - time1) * (time - time3) * (time - time4) /(time2 - time1) /(time2 - time3) /(time2 - time4);
-  weight3 = (time - time1) * (time - time2) * (time - time4) /(time3 - time1) /(time3 - time2) /(time3 - time4);
-  weight4 = (time - time1) * (time - time2) * (time - time3) /(time4 - time1) /(time4 - time2) /(time4 - time3);
+  weight1 = (time - time2) * (time - time3) * (time - time4) /(time1 - time2) /(time1 - time3) /(time1 - time4)
+  weight2 = (time - time1) * (time - time3) * (time - time4) /(time2 - time1) /(time2 - time3) /(time2 - time4)
+  weight3 = (time - time1) * (time - time2) * (time - time4) /(time3 - time1) /(time3 - time2) /(time3 - time4)
+  weight4 = (time - time1) * (time - time2) * (time - time3) /(time4 - time1) /(time4 - time2) /(time4 - time3)
 
   R0      = R01      * weight1 + R02      * weight2 + R03      * weight3 + R04      * weight4 
   B0      = B01      * weight1 + B02      * weight2 + B03      * weight3 + B04      * weight4
@@ -724,6 +724,17 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   deallocate (ZBOUND3)
   deallocate (RLIM3)
   deallocate (ZLIM3)
+
+  deallocate (T4)
+  deallocate (P4)
+  deallocate (TTp4)
+  deallocate (Pp4)
+  deallocate (Q4)
+  deallocate (PSI4)
+  deallocate (RBOUND4)
+  deallocate (ZBOUND4)
+  deallocate (RLIM4)
+  deallocate (ZLIM4)
 
   deallocate (T)
   deallocate (P)

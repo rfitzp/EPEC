@@ -289,10 +289,14 @@ class Neoclassical
   // Read pFile
   void pFileRead ();
   // Interpolate pFiles
-  void pFileInterpolate (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile, double time);
+  void pFileInterpolateCubic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile, double time);
+  void pFileInterpolateQuartic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3,  double time4, char* pFile4,
+				double time3, char* pFile, double time);
   void pFileInterp (vector<string> pFileName, vector<double> pFileTime, int pFileNumber, double time);
   // Interpolate Fields
-  void FieldInterpolate (Field& Field1, Field& Field2, Field& Field3, Field& Field, double weight1, double weight2, double weight3);
+  void FieldInterpolateCubic (Field& Field1, Field& Field2, Field& Field3, Field& Field, double weight1, double weight2, double weight3);
+  void FieldInterpolateQuartic (Field& Field1, Field& Field2, Field& Field3, Field& Field4, Field& Field,
+				double weight1, double weight2, double weight3, double weight4);
   // Read discharge parameters
   void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, double _YN, double _TIME);
   // Read equilibrium data
