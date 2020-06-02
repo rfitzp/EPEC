@@ -795,8 +795,8 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   printf ("%s %11.4e\n", pFile3, weight3);
 }
 
-void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3,  double time4, char* pFile4,
-					    double time3, char* pFile, double time)
+void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile4,
+					    double time4, char* pFile, double time)
 {
   int    n;
   double x, y, dydx;

@@ -102,7 +102,7 @@ pen s;
 s = white + dotted + 0.5;
 if (q16.length > 0)
    {  
-     draw (graph (q16, i16), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, grey));
+     draw (graph (q16, i16), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, palegreen));
    }	
 if (q15.length > 0)
    {  

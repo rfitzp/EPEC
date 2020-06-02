@@ -67,7 +67,7 @@ int main ()
 
   // Initialize output files
   if (RESTART)
-    system ("cd ../Stage1; rm *.txt");
+    system ("cd Stage1; rm *.txt");
   
   // ..................
   // Perform simulation

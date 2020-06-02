@@ -24,7 +24,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
 #include <vector>
 #include <blitz/array.h>
 #include <gsl/gsl_const_mksa.h>
