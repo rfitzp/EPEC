@@ -2,6 +2,7 @@
 	IMPURITY = 1      ! If != 0 then include single ion impurity species in calculation
 	NEUTRAL  = 1      ! If !=0  then include majority ion neutrals in calculation
 	FREQ     = 0      ! If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency
+	PHASE    = 1      ! If != 0 then PHASE calculation enabled
 	STAGE2   = 0      ! If != 0 then Stage2 PHASE calculation enabled
 	INTP     = 0      ! If == 0 then fFile/nfile/uFile/lFile used
 	                  ! If == 1 then fFile/nFile interpolated and uFile/lFile used

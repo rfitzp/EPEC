@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* STAGE2,
+extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* PHASE, int* STAGE2,
 			      int* INTP, int* RESTART, int* OLD, double* TSTART, double* TEND, double* DT);
 
 // #############
@@ -33,21 +33,22 @@ int main ()
   int    IMPURITY; // If != 0 then single ion impurity species included in calculation
   int    NEUTRAL;  // If != 0 then majority ion neutrals included in calculation
   int    FREQ;     // If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency
+  int    PHASE;    // If != 0 then PHASE calculation enabled
+  int    STAGE2;   // If != 0 then Stage2 PHASE calculation enabled
   int    INTP;     // If == 0 then fFile/nfile/uFile/lFile used
 	           // If == 1 then fFile/nFile interpolated and uFile/lFile used
 		   // If == 2 then all files interpolated
-  int    STAGE2;   // If != 0 then Stage2 PHASE calculation enabled
   int    RESTART;  // If != 0 then delete all previous EPEC data
   int    OLD;      // If != 0 then restart PHASE calculations from previous run
   double TSTART;   // Simulation experimental start time (ms)
   double TEND;     // Simulation experimental end time (ms)
   double DT;       // Simulation experimental time step (ms)
 
-  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &STAGE2, &INTP, &RESTART, &OLD, &TSTART, &TEND, &DT);
+  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &PHASE, &STAGE2, &INTP, &RESTART, &OLD, &TSTART, &TEND, &DT);
 
   printf ("Reading namelist:\n");
-  printf ("IMPURITY = %2d  NEUTRAL = %2d  FREQ = %2d  INTP = %2d  STAGE2 = %2d  RESTART = %2d  OLD = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
-	  IMPURITY, NEUTRAL, FREQ, INTP, STAGE2, RESTART, OLD, TSTART, TEND, DT);
+  printf ("IMPURITY = %2d  NEUTRAL = %2d  FREQ = %2d  INTP = %2d  PHASE = %2d, STAGE2 = %2d  RESTART = %2d  OLD = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
+	  IMPURITY, NEUTRAL, FREQ, INTP, PHASE, STAGE2, RESTART, OLD, TSTART, TEND, DT);
  
   // Sanity check
   if (TEND < TSTART)
@@ -104,8 +105,9 @@ int main ()
 	  exit (1);
 
       // Call program PHASE
-      if (system (PHASEstring) != 0)
-	exit (1);
+      if (PHASE)
+	if (system (PHASEstring) != 0)
+	  exit (1);
 
       // Increment time
       time += DT;
