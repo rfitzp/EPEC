@@ -16,7 +16,7 @@ void Flux::Stage2 ()
   // Read data for Stage2 calculation
   // ................................
   Stage2ReadData ();
-
+  
   // ..........................
   // Calculate Stage2 q profile
   // ..........................
@@ -242,6 +242,13 @@ void Flux::Stage2ReadData ()
       }
   fclose (file);
 
+  dR  = RPTS[1] - RPTS[0];
+  dZ  = ZPTS[1] - ZPTS[0];
+  dR2 = dR*dR;
+  dZ2 = dZ*dZ;
+  dR3 = dR*dR2;
+  dZ3 = dZ*dZ2;
+
   // .......................
   // Read magnetic axis data
   // .......................
@@ -376,7 +383,7 @@ void Flux::Stage2ReadData ()
 	fprintf (file, "%16.9e ", GetPsiZ (RPTS[i], ZPTS[j]));
       fprintf (file, "\n");
     }
-  fclose (file);  
+  fclose (file);
 
   // .............................
   // Read equilibrium profile data

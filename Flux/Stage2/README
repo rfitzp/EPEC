@@ -22,16 +22,4 @@ zst.asy      ... plots Z versus theta on rational surfaces
 rnc.asy      ... plots R versus Theta on rational surfaces
 znc.asy      ... plots Z versus Theta on rational surfaces
 bnc.asy      ... plots B versus Theta on rational surfaces
-
-ekk.asy      ... plots diagonal elements of E-matrix
-ereal.asy    ... plots real parts of E-matrix
-eimag.asy    ... plots imaginary parts of E-matrix
-
-eereal.asy   ... plots real parts of e-vectors
-eeimag.asy   ... plots imaginary parts of e-vectors
-eeabs.asy    ... plots absolute values of e-vectors
-eearg.asy    ... plots arguments of e-vectors
-
-
-
-
+cnc.asy      ... plots dBdTheta versus Theta on rational surfaces

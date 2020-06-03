@@ -2,18 +2,18 @@ import graph;
 
 size(500,500,IgnoreAspect);
 
-file    inz = input("nres.out").line();
+file    inz = input("nres.txt").line();
 real[][] Az = inz.dimension (0,0);
 Az          = transpose(Az);
 
 real[] Nres = Az[0];
 real nres   = Nres[0];
 
-file    inx = input("Cnc.out").line();
+file    inx = input("Cnc.txt").line();
 real[][] Ax = inx.dimension (0,0);
 Ax          = transpose(Ax);
 
-file    iny = input("Znc.out").line();
+file    iny = input("Znc.txt").line();
 real[][] Ay = iny.dimension (0,0);
 Ay          = transpose(Ay);
   
@@ -36,5 +36,5 @@ xequals (1., s);
 
 pen q = fontsize(20.);
 defaultpen (q);
-xaxis("${\mit\Theta}$",BottomTop,LeftTicks);
+xaxis("${\mit\Theta}/\pi$",BottomTop,LeftTicks);
 yaxis("$dB/d{\mit\Theta}$",LeftRight,RightTicks);

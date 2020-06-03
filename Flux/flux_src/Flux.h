@@ -71,6 +71,7 @@ extern "C" void NameListRead (int* INTP, int* NPSI, int* NTHETA, int* NNC, int* 
 extern "C" void gFileRead ();
 
 // gFile interpolation functions
+extern "C" void gFileInterpolateQuadratic ();
 extern "C" void gFileInterpolateCubic ();
 extern "C" void gFileInterpolateQuartic ();
 
@@ -110,6 +111,8 @@ class Flux
   double*     RPTS;     // R array
   int         NZPTS;    // Number of Z points
   double*     ZPTS;     // Z array
+  double      dR;       // R grid spacing
+  double      dZ;       // Z grid spacing
   int         NBPTS;    // Number of boundary points
   double*     RBPTS;    // R on plasma boundary
   double*     ZBPTS;    // Z on plasma boundary
@@ -123,6 +126,8 @@ class Flux
   double*     GGp;      // g dg/dPsi
   double*     Prp;      // dp/dPsi
   double*     Q;        // q(Psi)
+
+  double dR2, dZ2, dR3, dZ3;
  
   // Flux coordinate construction parameters
   double  Psic;        // Psi on magnetic axis
@@ -222,12 +227,13 @@ public:
 private:
 
   // gFile interpolation routines
-  void _gFileInterpCubic (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
-			  char* gFile, double time);
-  void _gFileInterpQuartic (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
-			    char* gFile4, double time4, char* gFile, double time);
-  void gFileInterp (vector<string> gFileName, vector<double> gFileTime, int gFileNumber, double time);
-
+  void gFileInterp          (vector<string> gFileName, vector<double> gFileTime, int gFileNumber, double time);
+  void gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile,  double time);
+  void gFileInterpCubic     (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
+			     char* gFile, double time);
+  void gFileInterpQuartic   (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
+			     char* gFile4, double time4, char* gFile, double time);
+  
   // Set global parameters
   void SetParameters (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME);
   // Input gFile data and output Stage1 data
@@ -266,22 +272,25 @@ private:
   void CalcNeoclassicalAngle ();
 
   // 1D interpolation function with nonuniform grid
-  double Interpolate (int I, double* X, double* Y, double x, int order);
+  double Interpolate         (int I, double* X, double* Y, double x,                                 int order);
+  double InterpolateCubic    (       double* X, double* Y, double x, int i0, int i1, int i2,         int order);
+  double InterpolateQuartic  (       double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
   // 1D interpolation function with nonuniform grid and periodic function
-  double InterpolatePeriodic (int I, double* X, double* Y, double x, int order);
+  double InterpolatePeriodic         (int I, double* X, double* Y, double x,                                 int order);
+  double InterpolatePeriodicQuartic  (int I, double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
   // Interpolate Psi on uniform 2D grid
-  double InterpolatePsi (double RR, double ZZ, int order);
+  double InterpolatePsi               (double RR, double ZZ,                                                                 int order);
+  double InterpolatePsiCubicCubic     (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2,                 int order);
+  double InterpolatePsiQuarticCubic   (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2,         int order);
+  double InterpolatePsiCubicQuartic   (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2, int j3,         int order);
+  double InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2, int j3, int order);
   // Evaluate Psi (R, Z)
   double GetPsi (double r, double z);
   // Evaluate dPsi/dR (R, Z)
   double GetPsiR (double r, double z);
   // Evaluate dPsi/dZ (R, Z)
   double GetPsiZ (double r, double z);
-  // Evaluate d^2Psi/dR^2 (R, Z)
-  double GetPsiRR (double r, double z);
-  // Evaluate d^2Psi/dZ^2 (R, Z)
-  double GetPsiZZ (double r, double z);
-
+ 
   // Calculate Green's functions
   double GreenPlasmaCos   (int i, int j, int ip, int jp);
   double GreenPlasmaSin   (int i, int j, int ip, int jp);
