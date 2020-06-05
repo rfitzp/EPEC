@@ -85,8 +85,6 @@ void IslandDynamics ()
   printf ("RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
 
-  exit (1);
-
   // ............
   // Sanity check
   // ............
