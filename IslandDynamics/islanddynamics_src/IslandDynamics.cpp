@@ -76,14 +76,16 @@ void IslandDynamics ()
   PHASE_INTF = NEO_INTF;
 
   printf ("Reading namelist:\n");
-  printf ("FLUX_NTOR  = %3d  FLUX_MMIN    = %3d  FLUX_MMAX = %3d\n",
+  printf ("FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX   = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  printf ("NEO_INTF   = %2d   NEO_IMPURITY = %2d  NEO_NEUTRAL = %2d  NEO_FREQ = %2d  NEO_YN = %11.4e\n",
+  printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL = %2d           NEO_FREQ = %2d  NEO_YN = %11.4e\n",
 	  NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_YN);
-  printf ("PHASE_INTN = %2d   PHASE_STAGE2 = %2d  PHASE_OLD = %2d\n",
+  printf ("PHASE_INTN = %2d  PHASE_STAGE2 = %2d           PHASE_OLD   = %2d\n",
 	  PHASE_INTN, PHASE_STAGE2, PHASE_OLD);
-  printf ("RESTART    = %2d   TSTART       = %11.4e  TEND = %11.4e  DT = %11.4e\n",
+  printf ("RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
+
+  exit (1);
 
   // ............
   // Sanity check
