@@ -10,7 +10,7 @@ void Neoclassical::pFileRead ()
 {
   int    n;
   double x, y, dydx;
-  char   s[200];
+  char   s[MAXFILENAMELENGTH];
   
   // Check for existence of pfile
   FILE* file = OpenFiler ((char*) "pFile");

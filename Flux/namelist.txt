@@ -1,5 +1,5 @@
 &FluxInputs
-	INTP    = 0      ! Set interpolation flag
+	INTG    = 0      ! Flag for interpolating gFiles
 	NPSI    = 512	 ! Number of points in PsiN grid
 	NTHETA  = 513    ! Number of points in theta grid (must be odd)
 	NNC     = 20     ! Number of neoclassical harmonics

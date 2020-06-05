@@ -59,30 +59,34 @@ int pRhs5 (double r, const double y[], double dydr[], void* params)
 
 int main (int argc, char** argv)
 {
+  // ...............
   // Welcome message
+  // ...............
   printf ("\n############\nProgram FLUX\n############\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
 
-  // Get options
+  // ........................
+  // Get command line options
+  // ........................
   int c;
   char* nvalue = NULL; char* mvalue = NULL; char* Mvalue = NULL;
-  char* tvalue = NULL; char* ivalue = NULL;
+  char* tvalue = NULL; char* gvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "hi:n:m:t:M:")) != -1)
+  while ((c = getopt (argc, argv, "hg:n:m:t:M:")) != -1)
     switch (c)
       {
       case 'h':
 	printf ("Options:\n");
 	printf ("-h      - list options\n");
-	printf ("-i INTP - set interpolation flag\n");
-	printf ("-n NTOR - set toroidal mode number\n");
-	printf ("-m MMIN - set minumum mode number\n");
-	printf ("-t TIME - set experimental time\n");
-	printf ("-M MMAX - set maximum mode number\n");
+	printf ("-g INTG - set interpolation flag INTG\n");
+	printf ("-n NTOR - set toroidal mode number to NTOR\n");
+	printf ("-m MMIN - set minumum mode number to MMIN\n");
+	printf ("-t TIME - set experimental time to TIME\n");
+	printf ("-M MMAX - set maximum mode number to MMAX\n");
 	exit (0);
-     case 'i':
-	ivalue = optarg;
+     case 'g':
+	gvalue = optarg;
 	break;
      case 'n':
 	nvalue = optarg;
@@ -97,7 +101,7 @@ int main (int argc, char** argv)
 	Mvalue = optarg;
 	break;
       case '?':
-	if (optopt == 'n' || optopt == 'm' || optopt == 'M' || optopt == 't' || optopt == 'i')
+	if (optopt == 'n' || optopt == 'm' || optopt == 'M' || optopt == 't' || optopt == 'g')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -108,7 +112,7 @@ int main (int argc, char** argv)
 	abort ();
       }
 
-  int    _NTOR = -1, _MMIN = -1, _MMAX = -1, _INTP = -1;
+  int    _NTOR = -1, _MMIN = -1, _MMAX = -1, _INTG = -1;
   double _TIME = 0.;
   
   if (nvalue != NULL)
@@ -119,12 +123,14 @@ int main (int argc, char** argv)
     _MMAX = atoi (Mvalue);
   if (tvalue != NULL)
     _TIME = double (atof (tvalue));
-  if (ivalue != NULL)
-    _INTP = atoi (ivalue);
+  if (gvalue != NULL)
+    _INTG = atoi (gvalue);
 
-  // Call program
+  // .................
+  // Call program FLUX
+  // .................
   Flux flux;
-  flux.Solve (_INTP, _NTOR, _MMIN, _MMAX, _TIME);
+  flux.Solve (_INTG, _NTOR, _MMIN, _MMAX, _TIME);
  
   return 0;
 }

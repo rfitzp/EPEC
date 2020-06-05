@@ -22,7 +22,7 @@ double Flux::ToroidalP (int m, int n, double z)
   // Check argument
   if (z < 1.)
     {
-      printf ("FLUX: ToroidalP: Error z < 1.\n");
+      printf ("FLUX:: ToroidalP: Error z < 1.\n");
       exit (1);
     }	
 

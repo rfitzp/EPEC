@@ -1,107 +1,226 @@
 // Interpolate.cpp
 
-#include "Neoclassical.h"
-#include "Field.h"
+// PROGRAM ORGANIZATION:
 
-// ##############################################
-// 1D interpolation function with nonuniform grid
+// double Neoclassical:: Interpolate             (int I, Array<double,1> X, Array<double,1> Y, double x, int order)
+// double Neoclassical:: InterpolateCubic        (Array<double,1> X, Array<double,1> Y, double x, int i0, int i1, int i2, int order)
+// double Neoclassical:: InterpolateQuartic      (Array<double,1> X, Array<double,1> Y, double x, int i0, int i1, int i2, int i3, int order)
+// double Neoclassical:: InterpolateField        (Field& F, double x, int order)
+// double Neoclassical:: InterpolateFieldCubic   (Field& F, double x, int i0, int i1, int i2, int order)
+// double Neoclassical:: InterpolateFieldQuartic (Field& F, double x, int i0, int i1, int i2, int i3, int order)
+
+#include "Neoclassical.h"
+
+// ########################################################
+// 1D interpolation function with nonuniform monotonic grid
 // order = 0: Y(x)
 // order = 1: dY/dx
-// ##############################################
+// ########################################################
 double Neoclassical::Interpolate (int I, Array<double,1> X, Array<double,1> Y, double x, int order)
-{  
-  int i0 = 0;
-  for (int i = 1; i < I; i++)
-    if (x > X (i))
-      i0 = i;
-  if (i0 < 0 || i0 > I-1)
-    {
-      printf ("NEOCLASSICAL::Interpolate: Interpolation error: I = %3d i0 = %3d x = %11.4e X(0) = %11.4e X(I-1) = %11.4e\n",
-	      I, i0, x, X (0), X (I-1));
-      exit (1);
-    }
-  if (x - X (i0) > 0.5 * (X (i0+1) - X (i0)))
-    i0 += 1;
-  if (i0 == 0)
-    i0 += 1;
-  if (i0 == I-1)
-    i0 -= 1;
-
-  double val;
-  if (order == 0)
-    {
-      double sm = (x - X (i0  )) * (x - X (i0+1)) /(X (i0-1) - X (i0  )) /(X (i0-1) - X (i0+1));
-      double s0 = (x - X (i0-1)) * (x - X (i0+1)) /(X (i0  ) - X (i0-1)) /(X (i0  ) - X (i0+1));
-      double s1 = (x - X (i0-1)) * (x - X (i0  )) /(X (i0+1) - X (i0-1)) /(X (i0+1) - X (i0  ));
-      
-      val = sm * Y (i0-1) + s0 * Y (i0) + s1 * Y (i0+1);
-    }
-  else if (order == 1)
-    {
-      double sm = (2.*x - X (i0  ) - X (i0+1)) /(X (i0-1) - X (i0  )) /(X (i0-1) - X (i0+1));
-      double s0 = (2.*x - X (i0-1) - X (i0+1)) /(X (i0  ) - X (i0-1)) /(X (i0  ) - X (i0+1));
-      double s1 = (2.*x - X (i0-1) - X (i0  )) /(X (i0+1) - X (i0-1)) /(X (i0+1) - X (i0  ));
+{
+  int index, cntrl;
   
-      val = sm * Y (i0-1) + s0 * Y (i0) + s1 * Y (i0+1);
+  if (x < X(0))
+    {
+      index = 0;
+      cntrl = 2;
+    }
+  else if (x >= X(I-1))
+    {
+      index = I - 2;
+      cntrl = 3;
     }
   else
     {
-      printf ("NEOCLASSICAL::Interpolate: Error - order = %1d\n", order);
+      for (int i = 0; i < I-1; i++)
+	if (x >= X(i) && x < X(i+1))
+	  {
+	    index = i;
+
+	    if (index == 0)
+	      cntrl = 2;
+	    else if (index == I-2)
+	      cntrl = 3;
+	    else
+	      cntrl = 1;
+	  }
+    }
+
+  double val;
+  if (cntrl == 1)
+    val = InterpolateQuartic (X, Y, x, index-1, index, index+1, index+2, order);
+  else if (cntrl == 2)
+    val = InterpolateCubic   (X, Y, x,          index, index+1, index+2, order);
+  else if (cntrl == 3)
+    val = InterpolateCubic   (X, Y, x, index-1, index, index+1,          order);
+  
+  return val;
+}
+
+double Neoclassical::InterpolateCubic (Array<double,1> X, Array<double,1> Y, double x, int i0, int i1, int i2, int order)
+{  
+  double val;
+
+  if (order == 0)
+    {
+      double s0 = (x - X(i1)) * (x - X(i2)) /(X(i0) - X(i1)) /(X(i0) - X(i2));
+      double s1 = (x - X(i0)) * (x - X(i2)) /(X(i1) - X(i0)) /(X(i1) - X(i2));
+      double s2 = (x - X(i0)) * (x - X(i1)) /(X(i2) - X(i0)) /(X(i2) - X(i1));
+      
+      val = s0 * Y(i0) + s1 * Y(i1) + s2 * Y(i2);
+    }
+  else if (order == 1)
+    {
+      double s0 = ((x - X(i1)) + (x - X(i2))) /(X(i0) - X(i1)) /(X(i0) - X(i2));
+      double s1 = ((x - X(i0)) + (x - X(i2))) /(X(i1) - X(i0)) /(X(i1) - X(i2));
+      double s2 = ((x - X(i0)) + (x - X(i1))) /(X(i2) - X(i0)) /(X(i2) - X(i1));
+  
+      val = s0 * Y(i0) + s1 * Y(i1) + s2 * Y(i2);
+    }
+   else
+    {
+      printf ("NEOCLASSICAL::InterpolateCubic: Error - order = %1d\n", order);
       exit (1);
     }
 
   return val;
 }
 
-// ##############################################
-// 1D interpolation function with nonuniform grid
+double Neoclassical::InterpolateQuartic (Array<double,1> X, Array<double,1> Y, double x, int i0, int i1, int i2, int i3, int order)
+{  
+  double val;
+
+  if (order == 0)
+    {
+      double s0 = (x - X(i1)) * (x - X(i2)) * (x - X(i3)) /(X(i0) - X(i1)) /(X(i0) - X(i2)) /(X(i0) - X(i3));
+      double s1 = (x - X(i0)) * (x - X(i2)) * (x - X(i3)) /(X(i1) - X(i0)) /(X(i1) - X(i2)) /(X(i1) - X(i3));
+      double s2 = (x - X(i0)) * (x - X(i1)) * (x - X(i3)) /(X(i2) - X(i0)) /(X(i2) - X(i1)) /(X(i2) - X(i3));
+      double s3 = (x - X(i0)) * (x - X(i1)) * (x - X(i2)) /(X(i3) - X(i0)) /(X(i3) - X(i1)) /(X(i3) - X(i2));
+      
+      val = s0 * Y(i0)+ s1 * Y(i1) + s2 * Y(i2) + s3 * Y(i3);
+    }
+  else if (order == 1)
+    {
+      double s0 = ((x - X(i2)) * (x - X(i3)) + (x - X(i1)) * (x - X(i3)) + (x - X(i1)) * (x - X(i2))) /(X(i0) - X(i1)) /(X(i0) - X(i2)) /(X(i0) - X(i3));
+      double s1 = ((x - X(i2)) * (x - X(i3)) + (x - X(i0)) * (x - X(i3)) + (x - X(i0)) * (x - X(i2))) /(X(i1) - X(i0)) /(X(i1) - X(i2)) /(X(i1) - X(i3));
+      double s2 = ((x - X(i1)) * (x - X(i3)) + (x - X(i0)) * (x - X(i3)) + (x - X(i0)) * (x - X(i1))) /(X(i2) - X(i0)) /(X(i2) - X(i1)) /(X(i2) - X(i3));
+      double s3 = ((x - X(i1)) * (x - X(i2)) + (x - X(i0)) * (x - X(i2)) + (x - X(i0)) * (x - X(i1))) /(X(i3) - X(i0)) /(X(i3) - X(i1)) /(X(i3) - X(i2));
+      
+      val = s0 * Y(i0) + s1 * Y(i1) + s2 * Y(i2) + s3 * Y(i3);
+    }
+   else
+    {
+      printf ("NEOCLASSICAL::InterpolateQuartic: Error - order = %1d\n", order);
+      exit (1);
+    }
+
+  return val;
+}
+    
+// ########################################################
+// 1D interpolation function with nonuniform monotonic grid
 // order = 0: Y(x)
 // order = 1: dY/dx
-// ##############################################
+// #######################################################
 double Neoclassical::InterpolateField (Field& F, double x, int order)
 {
   double I = F.GetN ();
   
-  int i0 = 0;
-  for (int i = 1; i < I; i++)
-    if (x > F.GetX (i))
-      i0 = i;
-  if (i0 < 0 || i0 > I-1)
+  int index, cntrl;
+  
+  if (x < F.GetX(0))
     {
-      printf ("NEOCLASSICAL::InterpolateField - Interpolation error: I = %3d i0 = %3d x = %11.4e X(0) = %11.4e X(I-1) = %11.4e\n",
-	      I, i0, x, F.GetX (0), F.GetX (I-1));
-      exit (1);
+      index = 0;
+      cntrl = 2;
     }
-  if (x - F.GetX (i0) > 0.5 * (F.GetX (i0+1) - F.GetX (i0)))
-    i0 += 1;
-  if (i0 == 0)
-    i0 += 1;
-  if (i0 == I-1)
-    i0 -= 1;
+  else if (x >= F.GetX(I-1))
+    {
+      index = I - 2;
+      cntrl = 3;
+    }
+  else
+    {
+      for (int i = 0; i < I-1; i++)
+	if (x >= F.GetX(i) && x < F.GetX(i+1))
+	  {
+	    index = i;
+
+	    if (index == 0)
+	      cntrl = 2;
+	    else if (index == I-2)
+	      cntrl = 3;
+	    else
+	      cntrl = 1;
+	  }
+    }
 
   double val;
+  if (cntrl == 1)
+    val = InterpolateFieldQuartic (F, x, index-1, index, index+1, index+2, order);
+  else if (cntrl == 2)
+    val = InterpolateFieldCubic   (F, x,          index, index+1, index+2, order);
+  else if (cntrl == 3)
+    val = InterpolateFieldCubic   (F, x, index-1, index, index+1,          order);
+  
+  return val;
+}
+
+double Neoclassical::InterpolateFieldCubic (Field& F, double x, int i0, int i1, int i2, int order)
+{  
+  double val;
+
   if (order == 0)
     {
-      double sm = (x - F.GetX (i0  )) * (x - F.GetX (i0+1)) /(F.GetX (i0-1) - F.GetX (i0  )) /(F.GetX (i0-1) - F.GetX (i0+1));
-      double s0 = (x - F.GetX (i0-1)) * (x - F.GetX (i0+1)) /(F.GetX (i0  ) - F.GetX (i0-1)) /(F.GetX (i0  ) - F.GetX (i0+1));
-      double s1 = (x - F.GetX (i0-1)) * (x - F.GetX (i0  )) /(F.GetX (i0+1) - F.GetX (i0-1)) /(F.GetX (i0+1) - F.GetX (i0  ));
+      double s0 = (x - F.GetX(i1)) * (x - F.GetX(i2)) /(F.GetX(i0) - F.GetX(i1)) /(F.GetX(i0) - F.GetX(i2));
+      double s1 = (x - F.GetX(i0)) * (x - F.GetX(i2)) /(F.GetX(i1) - F.GetX(i0)) /(F.GetX(i1) - F.GetX(i2));
+      double s2 = (x - F.GetX(i0)) * (x - F.GetX(i1)) /(F.GetX(i2) - F.GetX(i0)) /(F.GetX(i2) - F.GetX(i1));
       
-      val = sm * F.GetY (i0-1) + s0 * F.GetY (i0) + s1 * F.GetY (i0+1);
+      val = s0 * F.GetY(i0) + s1 * F.GetY(i1) + s2 * F.GetY(i2);
     }
   else if (order == 1)
     {
-      double sm = (x - F.GetX (i0  )) * (x - F.GetX (i0+1)) /(F.GetX (i0-1) - F.GetX (i0  )) /(F.GetX (i0-1) - F.GetX (i0+1));
-      double s0 = (x - F.GetX (i0-1)) * (x - F.GetX (i0+1)) /(F.GetX (i0  ) - F.GetX (i0-1)) /(F.GetX (i0  ) - F.GetX (i0+1));
-      double s1 = (x - F.GetX (i0-1)) * (x - F.GetX (i0  )) /(F.GetX (i0+1) - F.GetX (i0-1)) /(F.GetX (i0+1) - F.GetX (i0  ));
-  
-      val = sm * F.GetdYdX (i0-1) + s0 * F.GetdYdX (i0) + s1 * F.GetdYdX (i0+1);
+      double s0 = (x - F.GetX(i1)) * (x - F.GetX(i2)) /(F.GetX(i0) - F.GetX(i1)) /(F.GetX(i0) - F.GetX(i2));
+      double s1 = (x - F.GetX(i0)) * (x - F.GetX(i2)) /(F.GetX(i1) - F.GetX(i0)) /(F.GetX(i1) - F.GetX(i2));
+      double s2 = (x - F.GetX(i0)) * (x - F.GetX(i1)) /(F.GetX(i2) - F.GetX(i0)) /(F.GetX(i2) - F.GetX(i1));
+      
+      val = s0 * F.GetdYdX(i0) + s1 * F.GetdYdX(i1) + s2 * F.GetdYdX(i2);
     }
    else
     {
-      printf ("NEOCLASSICAL::InterpolateField: Error - order = %1d\n", order);
+      printf ("NEOCLASSICAL::InterpolateFieldCubic: Error - order = %1d\n", order);
       exit (1);
     }
 
+  return val;
+}
+
+double Neoclassical::InterpolateFieldQuartic (Field& F, double x, int i0, int i1, int i2, int i3, int order)
+{  
+  double val;
+
+  if (order == 0)
+    { 
+      double s0 = (x - F.GetX(i1)) * (x - F.GetX(i2)) * (x - F.GetX(i3)) /(F.GetX(i0) - F.GetX(i1)) /(F.GetX(i0) - F.GetX(i2)) /(F.GetX(i0) - F.GetX(i3));
+      double s1 = (x - F.GetX(i0)) * (x - F.GetX(i2)) * (x - F.GetX(i3)) /(F.GetX(i1) - F.GetX(i0)) /(F.GetX(i1) - F.GetX(i2)) /(F.GetX(i1) - F.GetX(i3));
+      double s2 = (x - F.GetX(i0)) * (x - F.GetX(i1)) * (x - F.GetX(i3)) /(F.GetX(i2) - F.GetX(i0)) /(F.GetX(i2) - F.GetX(i1)) /(F.GetX(i2) - F.GetX(i3));
+      double s3 = (x - F.GetX(i0)) * (x - F.GetX(i1)) * (x - F.GetX(i2)) /(F.GetX(i3) - F.GetX(i0)) /(F.GetX(i3) - F.GetX(i1)) /(F.GetX(i3) - F.GetX(i2));
+      
+      val = s0 * F.GetY(i0)+ s1 * F.GetY(i1) + s2 * F.GetY(i2) + s3 * F.GetY(i3);
+    }
+  else if (order == 1)
+    {
+      double s0 = (x - F.GetX(i1)) * (x - F.GetX(i2)) * (x - F.GetX(i3)) /(F.GetX(i0) - F.GetX(i1)) /(F.GetX(i0) - F.GetX(i2)) /(F.GetX(i0) - F.GetX(i3));
+      double s1 = (x - F.GetX(i0)) * (x - F.GetX(i2)) * (x - F.GetX(i3)) /(F.GetX(i1) - F.GetX(i0)) /(F.GetX(i1) - F.GetX(i2)) /(F.GetX(i1) - F.GetX(i3));
+      double s2 = (x - F.GetX(i0)) * (x - F.GetX(i1)) * (x - F.GetX(i3)) /(F.GetX(i2) - F.GetX(i0)) /(F.GetX(i2) - F.GetX(i1)) /(F.GetX(i2) - F.GetX(i3));
+      double s3 = (x - F.GetX(i0)) * (x - F.GetX(i1)) * (x - F.GetX(i2)) /(F.GetX(i3) - F.GetX(i0)) /(F.GetX(i3) - F.GetX(i1)) /(F.GetX(i3) - F.GetX(i2));
+      
+      val = s0 * F.GetdYdX(i0)+ s1 * F.GetdYdX(i1) + s2 * F.GetdYdX(i2) + s3 * F.GetdYdX(i3);
+    }
+   else
+    {
+      printf ("NEOCLASSICAL::InterpolateFieldQuartic: Error - order = %1d\n", order);
+      exit (1);
+    }
 
   return val;
 }

@@ -11,6 +11,7 @@ psiz.asy     ... plots interpolated dPsi/dZ (R, Z)
 
 qr.asy       ... plots q(r) profile
 qredge.asy   ... plots q(r) profile close to plasma edge
+qedge.asy    ... plots q(r) profile close to plasma edge (no comparison w. gFile)
 pr.asy       ... plots p(r) profile
 g.asy        ... plots g(r) profile
 

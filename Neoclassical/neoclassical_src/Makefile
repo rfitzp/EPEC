@@ -2,8 +2,8 @@ F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90
 
 C_HEADER = Neoclassical.h
-C_OBJECT = main.o Neoclassical.o Field.o pFileRead.o Interpolate.o pFileInterpolate.o
-C_SOURCE = main.cpp Neoclassical.cpp Field.cpp pFileRead.cpp Interpolate.cpp pFileInterpolate.cpp
+C_OBJECT = main.o Neoclassical.o Field.o pFileRead.o Interpolate.o pFileInterpolate.o fFileInterpolate.o
+C_SOURCE = main.cpp Neoclassical.cpp Field.cpp pFileRead.cpp Interpolate.cpp pFileInterpolate.cpp fFileInterpolate.cpp
 
 UNAME := $(shell uname)
 

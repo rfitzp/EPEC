@@ -1,5 +1,12 @@
 // gFileInterpolate.cpp
 
+// PROGRAM ORGANIZATION:
+//
+// void Flux:: gFileInterp               (vector<string> gFileName,   vector<double> gFileTime,   int gFileNumber,  double time)
+// void Flux:: gFileInterpolateQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile,      double time)
+// void Flux:: gFileInterpolateCubic     (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,     double time3, char* gFile, double time)
+// void Flux:: gFileInterpolateQuartic   (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,     double time3,
+//				          char* gFile4, double time4, char* gFile,  double time)
 #include "Flux.h"
 
 // ###############################

@@ -1,6 +1,6 @@
 ! Function to read PHASE namelist
 
-subroutine NameListRead (NFLOW, STAGE2, INTP, OLD, DT, TIME, NCTRL, xTCTRL, xICTRL, xPCTRL) &
+subroutine NameListRead (NFLOW, STAGE2, INTF, INTN, INTU, OLD, DT, TIME, NCTRL, xTCTRL, xICTRL, xPCTRL) &
      bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -8,10 +8,12 @@ subroutine NameListRead (NFLOW, STAGE2, INTP, OLD, DT, TIME, NCTRL, xTCTRL, xICT
 
   integer (kind = c_int),    intent (inout) :: STAGE2
   integer (kind = c_int),    intent (inout) :: NFLOW
+  integer (kind = c_int),    intent (inout) :: INTF
+  integer (kind = c_int),    intent (inout) :: INTN
+  integer (kind = c_int),    intent (inout) :: INTU
+  integer (kind = c_int),    intent (inout) :: OLD
   real    (kind = c_double), intent (inout) :: DT
   real    (kind = c_double), intent (inout) :: TIME
-  integer (kind = c_int),    intent (inout) :: INTP
-  integer (kind = c_int),    intent (inout) :: OLD
   integer (kind = c_int),    intent (inout) :: NCTRL
   
   real (kind = c_double), dimension (*), intent (inout) :: xTCTRL 
@@ -25,17 +27,17 @@ subroutine NameListRead (NFLOW, STAGE2, INTP, OLD, DT, TIME, NCTRL, xTCTRL, xICT
   integer          :: i
   double precision :: pi
  
-  namelist /PhaseInputs/ STAGE2, NFLOW, DT, TIME, INTP, OLD
-  namelist /WaveForm/    NCTRL, TCTRL, ICTRL, PCTRL
+  namelist /PhaseInputs/ STAGE2, NFLOW, INTF, INTN, INTU, OLD, DT, TIME, NCTRL
+  namelist /WaveForm/    TCTRL, ICTRL, PCTRL
   
   open  (unit = 100, file = 'namelist.txt', status = 'old')
   read  (unit = 100, nml = PhaseInputs) 
   close (unit = 100)
-
+  
   allocate (TCTRL (NCTRL))
   allocate (ICTRL (NCTRL))
   allocate (PCTRL (NCTRL))
-  
+
   open  (unit = 100, file = 'namelist.txt', status = 'old')
   read  (unit = 100, nml = WaveForm) 
   close (unit = 100)

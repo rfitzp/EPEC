@@ -1,8 +1,8 @@
 F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90
 
-C_OBJECT = main.o 
-C_SOURCE = main.cpp
+C_OBJECT = IslandDynamics.o 
+C_SOURCE = IslandDynamics.cpp
 
 UNAME := $(shell uname)
 

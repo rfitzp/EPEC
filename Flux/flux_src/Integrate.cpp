@@ -1,5 +1,19 @@
 // Integrate.cpp
 
+// PROGRAM ORGANIZATION:
+//
+// void Flux:: CalcQGP               ()
+// void Flux:: CheckQP               ()
+// void Flux:: CalcrP                ()
+// void Flux:: CalcStraightAngle     ()
+// void Flux:: CalcGamma             ()
+// void Flux:: CalcNeoclassicalAngle ()
+// int  Flux:: Rhs1                  (double r, const double y[], double dydr[], void*)
+// int  Flux:: Rhs2                  (double r, const double y[], double dydr[], void*)
+// int  Flux:: Rhs3                  (double r, const double y[], double dydr[], void*)
+// int  Flux:: Rhs4                  (double r, const double y[], double dydr[], void*)
+// int  Flux:: Rhs5                  (double r, const double y[], double dydr[], void*)
+
 #include "Flux.h"
 
 // #######################################
@@ -36,6 +50,9 @@ void Flux::CalcQGP ()
       
       QGP[j] = y[2];
       QP [j] = QGP[j]*GP[j];
+
+      if (j%50 == 0)
+	printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
     }
 
   gsl_odeiv_evolve_free  (e);

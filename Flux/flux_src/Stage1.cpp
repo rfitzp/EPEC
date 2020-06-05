@@ -8,7 +8,7 @@
 void Flux::Stage1 ()
 {
   // Interpolate gFiles
-  if (INTP > 0 && TIME > 0.)
+  if (INTG > 0 && TIME > 0.)
     {
       system ("rm -rf gFile");
 

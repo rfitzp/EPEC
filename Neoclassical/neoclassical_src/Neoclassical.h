@@ -4,21 +4,30 @@
 // Class to calculate neoclassical flow-damping rates, neoclassical
 // phase velocities, and neoclassical resistivities, at rational 
 // surfaces in tokamak.
-//
+
 // Command line options:
+// -e INTF     - overrides INTF value from namelist files
+// -p INTP     - overrides INTP value from namelist files
 // -n NEUTRAL  - overrides NEUTRAL value from namelist file
 // -I IMPURITY - overrides IMPURITY value from namelist file
 // -f FREQ     - overrides FREQ value from namelist file
-// -t TIME     - sets experimental time
 // -y YN       - overrides YN value from namelist file
-// -i          - enables pFile iterpolation
-//
+// -t TIME     - sets experimental time
+
 // Intermediate data in folder /Stage1
 // Final data passed to program PHASE in file nFile
+
+// Version:
+
+// 1.0 - Initial version
+
 // ################################################################
 
 #ifndef NEOCLASSICAL
 #define NEOCLASSICAL
+
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
 
 #include <stdio.h>
 #include <math.h>
@@ -34,15 +43,13 @@
 
 #include "Field.h"
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 0
-
-#define MAXFILENAMELENGTH 100
+#define MAXFILENAMELENGTH 200
+#define MAXPFILELINELENGTH 200
 
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* INTP, double* CHI,
+extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* INTP, int* INTF, double* CHI,
 			       double* NN, double* LN, double* SVN, double* YN, double* EN, double* TIME, double* COULOMB);
 
 // ############
@@ -64,14 +71,15 @@ class Neoclassical
   int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
   int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
   int    FREQ;     // Frequency switch. If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency
+  int    INTP;     // If != 0 then use interpolated pFile
+  int    INTF;     // If != 0 then use interpolated fFile
   double NN;       // Flux-surface averaged majority neutral density at plasma boundary (PSI=1) (m^-3)
   double LN;       // Flux-surface averaged majority neutral density decay lengthscale (m)
   double SVN;      // Majority ion/neutral charge exchange rate constant (m^3 /s)
   double YN;       // Majority neutral peaking factor on flux-surfaces
   double EN;       // Ratio of majority neutral to ion temperatures
   double TIME;     // Experimental time
-  int    INTP;     // If INTP = 0/1 then profile read from pFile/interpolated pFile
-
+ 
   // ------------------
   // Physical constants
   // ------------------
@@ -278,30 +286,21 @@ class Neoclassical
   virtual ~Neoclassical () {}; // Destructor
 
   // Solve problem
-  void Solve  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, double _YN, double _TIME);            
+  void Solve  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME);            
  
   // -----------------------
   // Private class functions
   // -----------------------
  private:
 
-  // Read pFile
-  void pFileRead ();
-  // Interpolate pFiles
-  void pFileInterpolateCubic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile, double time);
-  void pFileInterpolateQuartic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3,  double time4, char* pFile4,
-				double time3, char* pFile, double time);
-  void pFileInterp (vector<string> pFileName, vector<double> pFileTime, int pFileNumber, double time);
-  // Interpolate Fields
-  void FieldInterpolateCubic (Field& Field1, Field& Field2, Field& Field3, Field& Field, double weight1, double weight2, double weight3);
-  void FieldInterpolateQuartic (Field& Field1, Field& Field2, Field& Field3, Field& Field4, Field& Field,
-				double weight1, double weight2, double weight3, double weight4);
   // Read discharge parameters
-  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, double _YN, double _TIME);
+  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME);
   // Read equilibrium data
   void Read_Equilibrium ();
   // Read profile data
   void Read_Profiles ();
+  // Read pFile
+  void pFileRead ();
   // Calculate derived quantities at rational surfaces
   void Get_Derived ();
   // Calculate neoclassical viscosities at sational surfacea
@@ -314,10 +313,35 @@ class Neoclassical
   void Get_Normalized ();
 
   // 1D interpolation function with nonuniform grid
-  double Interpolate      (int I, Array<double,1> X, Array<double,1> Y, double x, int order);
-  double InterpolateField (Field& F, double x, int order);
-  
-  // Chandrasekhar function
+  double Interpolate                (int I, Array<double,1> X, Array<double,1> Y, double x, int order);
+  double InterpolateCubic           (Array<double,1> X, Array<double,1> Y, double x, int i0, int i1, int i2,         int order);
+  double InterpolateQuartic         (Array<double,1> X, Array<double,1> Y, double x, int i0, int i1, int i2, int i3, int order);
+  double InterpolateField           (Field& F, double x, int order);
+  double InterpolateFieldCubic      (Field& F, double x, int i0, int i1, int i2,         int order);
+  double InterpolateFieldQuartic    (Field& F, double x, int i0, int i1, int i2, int i3, int order);
+
+  // Interpolate pFiles
+  void pFileInterp               (vector<string> pFileName, vector<double> pFileTime, int pFileNumber, double time);
+  void pFileInterpolateQuadratic (char* pFile1, double time1, char* pFile2, double time2, char* pFile, double time);
+  void pFileInterpolateCubic     (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile,  double time);
+  void pFileInterpolateQuartic   (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile4, double time4,
+				  char* pFile, double time);
+  // Interpolate Fields
+  void FieldInterpolateQuadratic (Field& Field1, Field& Field2, Field& Field,
+				  double weight1, double weight2);
+  void FieldInterpolateCubic     (Field& Field1, Field& Field2, Field& Field3, Field& Field,
+				  double weight1, double weight2, double weight3);
+  void FieldInterpolateQuartic   (Field& Field1, Field& Field2, Field& Field3, Field& Field4, Field& Field,
+				  double weight1, double weight2, double weight3, double weight4);
+
+  // Interpolate fFiles
+  void fFileInterp               (vector<string> fFileName, vector<double> fFileTime, int fFileNumber, double time);
+  void fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2, double time2, char* fFile, double time);
+  void fFileInterpolateCubic     (char* fFile1, double time1, char* fFile2, double time2, char* fFile3, double time3, char* fFile, double time);
+  void fFileInterpolateQuartic   (char* fFile1, double time1, char* fFile2, double time2, char* fFile3, double time3,
+				  char* fFile4, double time4, char* fFile, double time);
+ 
+   // Chandrasekhar function
   double psi_fun (double x);
   // Derivative of Chandrasekhar function
   double psi_fun_p (double x);

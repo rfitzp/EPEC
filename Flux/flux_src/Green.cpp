@@ -1,5 +1,14 @@
 // Green.cpp
 
+// PROGRAM ORGANIZATION:
+//
+// double Flux:: GreenPlasmaCos   (int i, int j, int ip, int jp)
+// double Flux:: GreenPlasmaSin   (int i, int j, int ip, int jp)
+// double Flux:: GreenInboardCos  (int i, int j)
+// double Flux:: GreenInboardSin  (int i, int j)
+// double Flux:: GreenOutboardCos (int i, int j)
+// double Flux:: GreenOutboardSin (int i, int j)
+
 #include "Flux.h"
 
 // ########################################

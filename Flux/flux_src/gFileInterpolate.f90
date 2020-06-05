@@ -1,8 +1,8 @@
 ! gFileInterpolate.f90
 
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-! Function to read three gFiles and write interpolated gFile
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Functions to read multiple gFiles and write interpolated gFile
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadratic')
 
@@ -610,10 +610,6 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   deallocate (ZLIM)
   
 endsubroutine gFileInterpolateCubic
-
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-! Function to read four gFiles and write interpolated gFile
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
 

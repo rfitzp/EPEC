@@ -1,5 +1,30 @@
 // Phase.cpp
 
+// PROGRAM ORGANIZATION:
+// 
+//       Phase:: Phase          ()
+// void  Phase:: Solve          (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
+// void  Phase:: Read_Data      (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
+// void  Phase:: Scan_Shift     ()
+// void  Phase:: Calc_Velocity  ()
+// void  Phase:: Initialize     ()
+// void  Phase:: Save           ()
+// void  Phase:: IslandDynamics ()
+// void  Phase:: CalcRMP        (double t)
+// void  Phase:: CalcChiZeta    (double t)
+// void  Phase:: Pack           (Array<double,1> y)
+// void  Phase:: Unpack         (Array<double,1> y)
+// void  Phase:: PackRhs        (Array<double,1> PsikRHS, Array<double,1> phikRHS,
+//		                 Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
+// void  Phase:: Rhs            (double t, Array<double,1>& y, Array<double,1>& dydt)
+// void  Phase:: RK4Adaptive    (double& x, Array<double,1>& y, double& h, 
+//			         double& t_err, double acc, double S, int& rept,
+//			         int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
+// void  Phase:: RK4Fixed       (double& x, Array<double,1>& y, double h)
+// FILE* Phase:: OpenFilew      (char* filename)
+// FILE* Phase:: OpenFilew      (char* filename)
+// FILE* Phase:: OpenFilea      (char* filename)
+
 #include "Phase.h"
 
 // ###########
@@ -29,10 +54,10 @@ Phase::Phase ()
 // #########################
 // Function to solve problem
 // #########################
-void Phase::Solve (int _STAGE2, int _INTP, int _OLD, double _TIME)
+void Phase::Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
 {
   // Read data
-  Read_Data (_STAGE2, _INTP, _OLD, _TIME);
+  Read_Data (_STAGE2, _INTF, _INTN, _INTU, _OLD, _TIME);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -58,14 +83,16 @@ void Phase::Solve (int _STAGE2, int _INTP, int _OLD, double _TIME)
 // #####################
 // Function to read data
 // #####################
-void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
+void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
 {
   // ......................................
   // Set default values of input parameters
   // ......................................
   NFLOW  = 200;
   STAGE2 = 1;
-  INTP   = 0;
+  INTF   = 0;
+  INTN   = 0;
+  INTU   = 0;
   OLD    = 0;
   DT     = 1.e-5;
   TIME   = 0.;
@@ -79,13 +106,17 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE2, &INTP, &OLD, &DT, &TIME, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE2, &INTF, &INTN, &INTU, &OLD, &DT, &TIME, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   // Override namelist values with command line options
   if (_STAGE2 > -1)
     STAGE2 = _STAGE2;
-  if (_INTP > 0.)
-    INTP = _INTP;
+  if (_INTF > 0.)
+    INTF = _INTF;
+  if (_INTN > 0.)
+    INTN = _INTN;
+  if (_INTU > 0.)
+    INTU = _INTU;
   if (_OLD > -1)
     OLD = _OLD;
   if (_TIME > 0.)
@@ -94,8 +125,8 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d  STAGE2 = %2d  INTP = %2d  OLD = %2d  DT = %11.4e  TIME = %11.4e  NCTRL = %4d\n",
-	  NFLOW, STAGE2, INTP, OLD, DT, TIME, NCTRL);
+  printf ("NFLOW = %4d STAGE2 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE2, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
 
   // ............
   // Sanity check
@@ -119,7 +150,7 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   // .................
   // Interpolate fFile
   // .................
-  if (INTP > 1 && TIME > 0.)
+  if (INTF > 1 && TIME > 0.)
     {
       system ("rm -rf ../Flux/fFile");
       
@@ -160,8 +191,8 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   double EIreal, EIimag, EOreal, EOimag; 
  
   FILE* file = OpenFiler ((char*) "../Flux/fFile");
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %d %d %d",
-	      &R_0, &B_0, &inr, &q95, &r95, &q0, &qa, &NPSI, &ini, &nres) != 10)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d",
+	      &R_0, &B_0, &inr, &q95, &r95, &qlim, &rlim, &q0, &qa, &NPSI, &ini, &nres) != 12)
     {
       printf ("PHASE::Error reading fFile (1)\n");
       exit (1);
@@ -272,7 +303,7 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   // .................
   // Interpolate nFile
   // .................
-  if (INTP > 1 && TIME > 0.)
+  if (INTN > 1 && TIME > 0.)
     {
       system ("rm -rf ../Neoclassical/nFile");
       
@@ -352,7 +383,7 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   // .............................
   // Interpolate uFiles and lFiles
   // .............................
-  if (INTP > 0  && TIME > 0.)
+  if (INTU > 0  && TIME > 0.)
     {
       system ("rm -rf uFile lFile");
 
@@ -361,81 +392,46 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
       vector<string> uFileName;
       double         ufiletime;
       vector<double> uFileTime;
-      int            uNtor;
-      vector<int>    uFileNtor;
-      int            uMmin;
-      vector<int>    uFileMmin;
-      int            uMmax;
-      vector<int>    uFileMmax;
       int            uFileNumber = 0;
       
       printf ("Reading uFile data:\n");
 
       file = OpenFiler ((char*) "uFileIndex");
  
-      while (fscanf (file, "%s %lf %d %d %d", &ufilename, &ufiletime, &uNtor, &uMmin, &uMmax) == 5)
+      while (fscanf (file, "%s %lf %d %d %d", &ufilename, &ufiletime) == 2)
 	{
 	  uFileName.push_back (ufilename);
 	  uFileTime.push_back (ufiletime);
-	  uFileNtor.push_back (uNtor);
-	  uFileMmin.push_back (uMmin);
-	  uFileMmax.push_back (uMmax);
 	}
       uFileNumber = uFileName.size ();
       
       fclose (file);
  
       // Interpolate uFiles
-      uFileInterp (uFileName, uFileTime, uFileNtor, uFileMmin, uFileMmax, uFileNumber, TIME, uNtor, uMmin, uMmax);
+      uFileInterp (uFileName, uFileTime, uFileNumber, TIME);
 
       // Read lFile data
       char           lfilename[MAXFILENAMELENGTH];
       vector<string> lFileName;
       double         lfiletime;
       vector<double> lFileTime;
-      int            lNtor;
-      vector<int>    lFileNtor;
-      int            lMmin;
-      vector<int>    lFileMmin;
-      int            lMmax;
-      vector<int>    lFileMmax;
       int            lFileNumber = 0;
       
       printf ("Reading lFile data:\n");
 
       file = OpenFiler ((char*) "lFileIndex");
       
-      while (fscanf (file, "%s %lf %d %d %d", &lfilename, &lfiletime, &lNtor, &lMmin, &lMmax) == 5)
+      while (fscanf (file, "%s %lf", &lfilename, &lfiletime) == 2)
 	{
 	  lFileName.push_back (lfilename);
 	  lFileTime.push_back (lfiletime);
-	  lFileNtor.push_back (lNtor);
-	  lFileMmin.push_back (lMmin);
-	  lFileMmax.push_back (lMmax);
 	}
       lFileNumber = lFileName.size ();
       
       fclose (file);
 
       // Interpolate lFiles
-      lFileInterp (lFileName, lFileTime, lFileNtor, lFileMmin, lFileMmax, lFileNumber, TIME, lNtor, lMmin, lMmax);
-
-      // Sanity check
-      if (uNtor != ntor(0) || uNtor != ntor(0))
-	{
-	  printf ("Error - toroidal mode number mismatch\n");
-	  exit (1);
-	}
-      if (uMmin != lMmin)
-	{
-	  printf ("Error - minimum poloidal mode number mismatch\n");
-	  exit (1);
-	}
-      if (uMmax != lMmax)
-	{
-	  printf ("Error - maximum poloidal mode number mismatch\n");
-	  exit (1);
-	}
+      lFileInterp (lFileName, lFileTime, lFileNumber, TIME);
     }
 
   // ...........................
@@ -574,7 +570,7 @@ void Phase::Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME)
   fclose (file);
 
   file = OpenFilea ((char*) "../IslandDynamics/Stage1/q.txt");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, TIME);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TIME);
   fclose (file);
 
   file = OpenFilea ((char*) "../IslandDynamics/Stage1/omega0.txt");

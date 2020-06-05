@@ -1,5 +1,17 @@
 // Stage2.cpp
 
+// PROGRAM ORGANIATION:
+//
+// void Flux:: Stage2                      ()
+// void Flux:: Stage2SetSimpsonWeights     ()
+// void Flux:: Stage2ReadData              ()
+// void Flux:: Stage2CalcQ                 ()
+// void Flux:: Stage2FindRational          ()
+// void Flux:: Stage2CalcStraightAngle     ()
+// void Flux:: Stage2CalcNeoclassicalAngle ()
+// void Flux:: Stage2CalcNeoclassicalPara  ()
+// void Flux:: Stage2CalcMatrices          ()
+
 #include "Flux.h"
 
 // ####################################################
@@ -51,8 +63,8 @@ void Flux::Stage2 ()
   // Output fFile
   // ............
   FILE* file = OpenFilew ((char*) "fFile");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
-	   R0, B0, ra * R0, q95, r95 /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
+	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
   for (int j = 0; j < NPSI; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
@@ -73,13 +85,13 @@ void Flux::Stage2 ()
 	     GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
   fclose (file);
 
-  if (INTP > 0 && TIME > 0.)
+  if (INTG > 0 && TIME > 0.)
     {
-      char* filename = new char[200];
+      char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "fFiles/f.%d", int (TIME));
       file = OpenFilew (filename);
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
-	       R0, B0, ra * R0, q95, r95 /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
+	       R0, B0, ra * R0, q95, r95 /ra, qlim, rlim/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
       for (int j = 0; j < NPSI; j++)
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
@@ -113,8 +125,6 @@ void Flux::Stage2 ()
   delete[] RPTS;  delete[] ZPTS;
   delete[] RBPTS; delete[] ZBPTS;
   delete[] RLPTS; delete[] ZLPTS;
-
-  gsl_matrix_free (PSIARRAY);
 
   delete[] PSIN; delete[] G;   delete[] Pr;
   delete[] GGp;  delete[] Prp; delete[] Q;
@@ -203,7 +213,7 @@ void Flux::Stage2ReadData ()
   FILE* file = OpenFiler ((char*) "Stage1/R0B0.txt");
   if (fscanf (file, "%lf %lf", &R0, &B0) != 2)
     {
-      printf ("FLUX: Error reading Stage1/R0B0.txt\n");
+      printf ("FLUX::Stage2ReadData: Error reading Stage1/R0B0.txt\n");
       exit (1);
     }
   fclose (file);
@@ -214,7 +224,7 @@ void Flux::Stage2ReadData ()
   file = OpenFiler ((char*) "Stage1/Points.txt");
   if (fscanf (file, "%d %d %d %d", &NRPTS, &NZPTS, &NBPTS, &NLPTS) != 4)
     {
-      printf ("FLUX: Error reading Stage1/Points.txt\n");
+      printf ("FLUX::Stage2ReadData: Error reading Stage1/Points.txt\n");
       exit (1);
     }
   fclose (file);
@@ -229,7 +239,7 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NRPTS; i++)
     if (fscanf (file, "%lf", &RPTS[i]) != 1)
       {
-	printf ("FLUX: Error reading Stage1/R.txt\n");
+	printf ("FLUX::Stage2ReadData: Error reading Stage1/R.txt\n");
 	exit (1);
       }
   fclose (file);
@@ -237,7 +247,7 @@ void Flux::Stage2ReadData ()
   for (int j = 0; j < NZPTS; j++)
     if (fscanf (file, "%lf", &ZPTS[j]) != 1)
       {
-	printf ("FLUX: Error reading Stage1/Z.txt\n");
+	printf ("FLUX::Stage2ReadData: Error reading Stage1/Z.txt\n");
 	exit (1);
       }
   fclose (file);
@@ -255,7 +265,7 @@ void Flux::Stage2ReadData ()
   file = OpenFiler ((char*) "Stage1/Axis.txt");
   if (fscanf (file, "%lf %lf %lf", &Raxis, &Zaxis) != 2)
     {
-      printf ("FLUX: Error reading Stage1/Axis.txt\n");
+      printf ("FLUX::Stage2ReadData: Error reading Stage1/Axis.txt\n");
       exit (1);
     }	
   fclose (file);
@@ -270,7 +280,7 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NBPTS; i++)
     if (fscanf (file, "%lf %lf", &RBPTS[i], &ZBPTS[i]) != 2)
       {
-	printf ("FLUX: Error reading Stage1/Boundary.txt\n");
+	printf ("FLUX::Stage2ReadData: Error reading Stage1/Boundary.txt\n");
 	exit (1);
       }
   fclose (file);
@@ -282,7 +292,7 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NLPTS; i++)
     if (fscanf (file, "%lf %lf", &RLPTS[i], &ZLPTS[i]) != 2)
       {
-	printf ("FLUX: Error reading Stage1/Limiter.txt\n");
+	printf ("FLUX::Stage2ReadData: Error reading Stage1/Limiter.txt\n");
 	exit (1);
       }
   fclose (file);
@@ -315,7 +325,7 @@ void Flux::Stage2ReadData ()
   // ........
   // Read Psi
   // ........
-  PSIARRAY = gsl_matrix_alloc (NRPTS, NZPTS);  // Psi (R, Z)
+  PSIARRAY.resize (NRPTS, NZPTS);  // Psi (R, Z)
 
   double val; int ival;
   file = OpenFiler ((char*) "Stage1/PsiSequential.txt");
@@ -324,10 +334,10 @@ void Flux::Stage2ReadData ()
       {	
 	if (fscanf (file, "%d %d %lf", &ival, &ival, &val) != 3)
 	  {
-	    printf ("FLUX: Error reading Stage1/PsiSequential.txt\n");
+	    printf ("FLUX::Stage2ReadData: Error reading Stage1/PsiSequential.txt\n");
 	    exit (1);
 	  }
-	gsl_matrix_set (PSIARRAY, i, j, val);
+	PSIARRAY (i, j) = val;
       }
   fclose (file);
 
@@ -340,8 +350,8 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NRPTS; i++)
     for (int j = 0; j < NZPTS; j++)
       {
-	double val = gsl_matrix_get (PSIARRAY, i, j) - PsiBoundary;
-	gsl_matrix_set (PSIARRAY, i, j, val);
+	double val = PSIARRAY (i, j) - PsiBoundary;
+	PSIARRAY (i, j) = val;
       }
 
   PsiAxis     = InterpolatePsi (Raxis,    Zaxis,    0);
@@ -351,8 +361,8 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NRPTS; i++)
     for (int j = 0; j < NZPTS; j++)
       {
-	double val = gsl_matrix_get (PSIARRAY, i, j) /PsiAxis;
-	gsl_matrix_set (PSIARRAY, i, j, val);
+	double val = PSIARRAY (i, j) /PsiAxis;
+	PSIARRAY (i, j) = val;
       }
 
   printf ("PsiAxis = %11.4e  PsiBoundary = %11.4e  PsiAxis /(R0*R0*B0) = %11.4e\n", PsiAxis, PsiBoundary, Psic);
@@ -364,7 +374,7 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NRPTS; i++)
     {
       for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ",  gsl_matrix_get (PSIARRAY, i, j));
+	fprintf (file, "%16.9e ",  PSIARRAY (i, j));
       fprintf (file, "\n");
     }
   fclose (file);
@@ -399,7 +409,7 @@ void Flux::Stage2ReadData ()
   for (int i = 0; i < NRPTS; i++)
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf", &PSIN[i], &G[i], &Pr[i], &GGp[i], &Prp[i], &Q[i]) != 6)
       {
-	printf ("FLUX: Error reading Stage1/Profiles.txt\n");
+	printf ("FLUX::Stage2ReadData: Error reading Stage1/Profiles.txt\n");
 	exit (1);
       }
   fclose (file);
@@ -428,11 +438,11 @@ void Flux::Stage2ReadData ()
   ia = 0;
   for (int i = 0; i <= ic; i++)
     {
-      if (gsl_matrix_get (PSIARRAY, i, jc) < 0.)
+      if (PSIARRAY (i, jc) < 0.)
 	ia++;
     }
-  Rbound = (RPTS[ia-1]*gsl_matrix_get (PSIARRAY, ia, jc) - RPTS[ia]*gsl_matrix_get (PSIARRAY, ia-1, jc))
-    /(gsl_matrix_get (PSIARRAY, ia, jc) - gsl_matrix_get (PSIARRAY, ia-1, jc));
+  Rbound = (RPTS[ia-1]*PSIARRAY (ia, jc) - RPTS[ia]*PSIARRAY (ia-1, jc))
+    /(PSIARRAY (ia, jc) - PSIARRAY (ia-1, jc));
 
   L = ic-ia+2;  // Number of points in Psi (R, Zaxis) array
 }
@@ -448,7 +458,7 @@ void Flux::Stage2CalcQ ()
   s = new double[L]; // Array of s = sqrt [1 - Psi (R, Zaxis)] values
 
   for (int l = 0; l < L-2; l++)
-    s[L-2-l] = sqrt (1. - gsl_matrix_get (PSIARRAY, l+ia, jc));
+    s[L-2-l] = sqrt (1. - PSIARRAY (l+ia, jc));
   s[0]   = 0.;
   s[L-1] = 1.;
 
@@ -528,19 +538,21 @@ void Flux::Stage2CalcQ ()
   rP[0] = 0.;
   ra    = rP[NPSI-1];
 
-  // ................
-  // Find q95 and r95
-  // ................
-  double g95, ga, qa, psiN95;
-  double sval = sqrt (0.95);
+  // .........................
+  // Find q95, r95, qlim, rlim
+  // .........................
+  double g95;
+  double s95  = sqrt (0.95);
+  double slim = sqrt (PSILIM);
   double sa   = 1.;
-  q95    = Interpolate (NPSI, S, QP, sval, 0);
-  r95    = Interpolate (NPSI, S, rP, sval, 0);
-  g95    = Interpolate (NPSI, S, GP, sval, 0);
-  ga     = Interpolate (NPSI, S, GP, sa,   0);
+  q95    = Interpolate (NPSI, S, QP, s95,  0);
+  r95    = Interpolate (NPSI, S, rP, s95,  0);
+  g95    = Interpolate (NPSI, S, GP, s95,  0);
+  qlim   = Interpolate (NPSI, S, QP, slim, 0);
+  rlim   = Interpolate (NPSI, S, rP, slim, 0);
   qa     = Interpolate (NPSI, S, QP, sa,   0);
-  psiN95 = 1. - Interpolate (NPSI, rP, P, r95, 0);
-  printf ("q95 = %11.4e  psiN95 = %11.4e  r95/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e\n", q95, psiN95, r95 /ra, qa, ra, ra*R0);
+  printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)\n",
+	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0);
 
   // ...................................................
   // If qflg = 1 rescale equilibrium such that q95 = Q95
@@ -567,17 +579,20 @@ void Flux::Stage2CalcQ ()
       ra    = rP[NPSI-1];
 
       // Confirm q95 and r95
-      q95 = Interpolate (NPSI, S, QP, sval, 0);
-      qa  = Interpolate (NPSI, S, QP, sa,   0);
-      r95 = Interpolate (NPSI, S, rP, sval, 0);
-      printf ("q95 = %11.4e  r95/ra = %11.4e  qa = %11.4e\n", q95, r95 /ra, qa);
+      q95  = Interpolate (NPSI, S, QP, s95, 0);
+      r95  = Interpolate (NPSI, S, rP, s95, 0);
+      qlim = Interpolate (NPSI, S, QP, slim, 0);
+      rlim = Interpolate (NPSI, S, rP, slim, 0);
+      qa   = Interpolate (NPSI, S, QP, sa,  0);
+      printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)\n",
+	      q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0);
     }
 
   // ..................
   // Output q95 and r95
   // ..................
   file = OpenFilew ((char*) "Stage2/q95.txt");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e\n", q95, r95 /ra, QP[0], QP[NPSI-1]);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", q95, r95 /ra, QP[0], QP[NPSI-1], qlim, rlim /ra);
   fclose (file);
 
   // ......................

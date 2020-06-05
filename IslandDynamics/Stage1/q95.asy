@@ -9,7 +9,7 @@ A          = transpose (A);
 real[] q0 = A[0];
 real[] q  = A[1];
 real[] qa = A[2];
-real[] t  = A[3];
+real[] t  = A[4];
 
 pen s = black + dotted + 1.;
 

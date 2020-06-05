@@ -1,15 +1,16 @@
-&ScanInputs
-	IMPURITY = 1      ! If != 0 then include single ion impurity species in calculation
-	NEUTRAL  = 1      ! If !=0  then include majority ion neutrals in calculation
-	FREQ     = 0      ! If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency
-	PHASE    = 1      ! If != 0 then PHASE calculation enabled
-	STAGE2   = 0      ! If != 0 then Stage2 PHASE calculation enabled
-	INTP     = 0      ! If == 0 then fFile/nfile/uFile/lFile used
-	                  ! If == 1 then fFile/nFile interpolated and uFile/lFile used
-			  ! If == 2 then all files interpolated
-	RESTART  = 1      ! If != 0 then delete all previous EPEC data
-	OLD      = 0      ! If != 0 then restart PHASE calculations from previous run
-	TSTART   = 2450.  ! Simulation experimental start time (ms)
-	TEND     = 4351.  ! Simulation experimental end time (ms)
-	DT       = 5.     ! Simulation experimental time step (ms)
+&IslandDynamicsInputs
+	FLUX_NTOR    = 3     ! Set toroidal mode number in FLUX
+	FLUX_MMIN    = 4     ! Set minimum poloidal mode number in FLUX
+	FLUX_MMAX    = 30    ! Set maximum poloidal mode number in fLUX
+	NEO_INTF     = 0     ! If != 0 then interpolate fFiles in NEOCLASSICAL
+	NEO_IMPURITY = 1     ! If != 0 then include single ion impurity species in calculation in NEOCLASSICAL
+	NEO_NEUTRAL  = 1     ! If != 0 then include majority ion neutrals in calculation in NEOCLASSICAL
+	NEO_FREQ     = 0     ! If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency in NEOCLASSICAL
+	NEO_YN       = 1.5   ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
+  	PHASE_INTN   = 0     ! If != 0 then interpolate nFiles in PHASE
+	PHASE_OLD    = 0     ! If != 0 then restart PHASE calculations from previous run
+	RESTART      = 1     ! If != 0 then delete all previous IslandDynamics data
+	TSTART       = 2450. ! Simulation experimental start time (ms)
+	TEND         = 4351. ! Simulation experimental end time (ms)
+	DT           = 5.    ! Simulation experimental time step (ms)
 &end	

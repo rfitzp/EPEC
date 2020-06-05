@@ -1,5 +1,27 @@
 // Neoclassical.cpp
 
+// PROGRAM ORGANIZATION:
+// 
+//        Neoclassical:: Neoclassical     ()
+// void   Neoclassical:: Solve            (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
+// void   Neoclassical:: Read_Parameters  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
+// void   Neoclassical:: Read_Equilibrium ()
+// void   Neoclassical:: Read_Profiles    ()
+// void   Neoclassical:: Get_Derived      ()
+// void   Neoclassical:: Get_Viscosities  ()
+// void   Neoclassical:: Get_Parameters   ()
+// void   Neoclassical:: Get_Frequencies  ()
+// void   Neoclassical:: Get_Normalized   ()
+// double Neoclassical:: psi_fun          (double x)
+// double Neoclassical:: psi_fun_p        (double x)
+// void   Neoclassical:: RK4Adaptive      (double& x, Array<double,1>& y, double& h, 
+//			                    double& t_err, double acc, double S, int& rept,
+//			                    int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
+// void  Neoclassical:: RK4Fixed          (double& x, Array<double,1>& y, double h)
+// FILE* Neoclassical:: OpenFilew         (char* filename)
+// FILE* Neoclassical:: OpenFilew         (char* filename)
+// FILE* Neoclassical:: OpenFilea         (char* filename)
+
 #include "Neoclassical.h"
 
 // ###########
@@ -31,10 +53,10 @@ Neoclassical::Neoclassical ()
 // ##############
 // Solve problem
 // ##############
-void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, double _YN, double _TIME)
+void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
 {
   // Read discharge parameters
-  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _YN, _TIME);
+  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _YN, _TIME);
   
   // Read equilibirum data
   Read_Equilibrium ();
@@ -61,13 +83,14 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, dou
 // ####################################
 // Read Neoclassical control parameters
 // ####################################
-void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, double _YN, double _TIME)
+void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
 {
   // Set default values of control parameters
   IMPURITY = 1;
   NEUTRAL  = 1;
   FREQ     = 0;
   INTP     = 0;
+  INTF     = 0;
   CHI      = 1.0;
   NN       = 0.;
   LN       = 1.;
@@ -78,7 +101,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   COULOMB  = 17.;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &CHI, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
+  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &CHI, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
 
   // Override namelist values with command line option values
   if (_NEUTRAL >= 0)
@@ -93,11 +116,13 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
      YN = _YN;
   if (_INTP > -1)
      INTP = _INTP;
+  if (_INTF > -1)
+     INTF = _INTF;
 
   // Output calculation parameters
   printf ("Reading parameters from namelist.txt:\n");
-  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d NN   = %11.4e LN  = %11.4e SVN = %11.4e YN  = %11.4e EN  = %11.4e TIME = %11.4e INTP = %2d Lambda = %11.4e\n",
-	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, NN, LN, SVN, YN, EN, TIME, COULOMB);
+  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NN, LN, SVN, YN, EN, TIME);
 
   // Sanity check
   if (CHI <= 0.)
@@ -112,14 +137,46 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
 // ###################################################
 void Neoclassical::Read_Equilibrium ()
 {
-  printf  ("Reading plasma equilibrium data:\n");
+  // .................
+  // Interpolate fFile
+  // .................
+  if (INTF > 1 && TIME > 0.)
+    {
+      system ("rm -rf ../Flux/fFile");
+      
+      // Read fFile data
+      char           filename[MAXFILENAMELENGTH];
+      vector<string> fFileName;
+      double         filetime;
+      vector<double> fFileTime;
+      int            fFileNumber = 0;
+      
+      printf ("Reading fFile data:\n");
+
+      FILE* file = OpenFiler ((char*) "../Flux/fFileIndex");
+
+      while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
+	{
+	  fFileName.push_back (filename);
+	  fFileTime.push_back (filetime);
+	}
+      fFileNumber = fFileName.size ();
+
+      fclose (file);
+      
+      // Interpolate fFiles
+      fFileInterp (fFileName, fFileTime, fFileNumber, TIME);
+    }
+  
+  printf  ("Reading fFile:\n");
   
   // Read parameters
   FILE* file = OpenFiler ((char*) "../Flux/fFile");
   double in;
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %d %d %d", &R_0, &B_0, &a, &in, &in, &in, &in, &NPSI, &ntor, &nres) != 10)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d",
+	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres) != 12)
     {
-      printf ("NEOCLASSICAL: Error reading fFile (1)\n");
+      printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (1)\n");
       exit (1);  
     }
   printf ("ntor = %3d  nres = %3d\n", ntor, nres);
@@ -133,7 +190,7 @@ void Neoclassical::Read_Equilibrium ()
     {
       if (fscanf (file, "%lf %lf %lf", &psi (j), &rr (j), &dpsidr (j)) != 3)
 	{
-	  printf ("NEOCLASSICAL: Error reading fFile (2)\n");
+	  printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (2)\n");
 	  exit (1);
 	}
     }
@@ -157,7 +214,7 @@ void Neoclassical::Read_Equilibrium ()
       if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j)) != 11)
 	{
-	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
+	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);
 	}
       qk (j) = double (mk (j)) /double (ntor);
@@ -809,7 +866,7 @@ void Neoclassical::Get_Normalized ()
 
    if (INTP > 0 && TIME > 0.)
      {
-      char* filename = new char[200];
+      char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "nFiles/n.%d", int (TIME));
       file = OpenFilew (filename);
       fprintf (file, "%d %16.9e\n", nres, tau_A);

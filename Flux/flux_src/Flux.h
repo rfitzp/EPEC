@@ -19,11 +19,11 @@
 // theta > 0 above midplane.
 //
 // Command line options:
+// -g INTG - overrides INTG value from namlist
 // -n NTOR - override NTOR value from namelist
 // -m MMIN - override MMIN value from namelist
 // -M MMAX - override MMAX value from namelist
 // -t TIME - sets experimental time
-// -i      - enables interpolation of gFiles
 //
 // Calculation control parameters in namelist.txt.
 //
@@ -31,10 +31,17 @@
 // Intermediate data in folder Stage1/
 // Final data in folder Stage2/
 // Data passed to programs NEOCLASSICAL and PHASE output to fFile
+
+// Version:
+//
+// 1.0 - Initial version
 // ############################################################################
 
 #ifndef FLUX
 #define FLUX
+
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
 
 #include <stdio.h>
 #include <math.h>
@@ -49,10 +56,7 @@
 #include <gsl/gsl_odeiv.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 0
-
-#define MAXFILENAMELENGTH 100
+#define MAXFILENAMELENGTH 200
 
 using namespace blitz;
 
@@ -64,7 +68,7 @@ extern "C" int pRhs4 (double, const double[], double[], void*);
 extern "C" int pRhs5 (double, const double[], double[], void*);
 
 // Namelist reading function
-extern "C" void NameListRead (int* INTP, int* NPSI, int* NTHETA, int* NNC, int* NTOR, int* QFLG, double* Q95, double* H0,
+extern "C" void NameListRead (int* INTG, int* NPSI, int* NTHETA, int* NNC, int* NTOR, int* QFLG, double* Q95, double* H0,
 			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME);
 
 // gFile reading function
@@ -98,34 +102,34 @@ class Flux
   double ETA;          // Regularization factor for Green's function
   double DR;           // Discritization parameter for simulated Mirnov data
   double TIME;         // Experimental time
-  int    INTP;         // INTP = 0/1 use gFile/intepolated gFile
+  int    INTG;         // If != 0 then use interpolated gFile
 
   // Toroidal Mirnov coil array locations
   double RIN;          // Limiter R coordinate at inboard miplane
   double ROUT;         // Limiter R coordinate at outboard miplane
   
   // Stage 1 parameters
-  double      R0;       // Scale major radius
-  double      B0;       // Scale toroidal magnetic field strength
-  int         NRPTS;    // Number of R points
-  double*     RPTS;     // R array
-  int         NZPTS;    // Number of Z points
-  double*     ZPTS;     // Z array
-  double      dR;       // R grid spacing
-  double      dZ;       // Z grid spacing
-  int         NBPTS;    // Number of boundary points
-  double*     RBPTS;    // R on plasma boundary
-  double*     ZBPTS;    // Z on plasma boundary
-  int         NLPTS;    // Number of limiter points
-  double*     RLPTS;    // R on limiter boundary
-  double*     ZLPTS;    // Z on limiter boundary
-  gsl_matrix* PSIARRAY; // Psi (R, Z) array 
-  double*     PSIN;     // PsiN array 
-  double*     G ;       // g(Psi)
-  double*     Pr;       // p(Psi)
-  double*     GGp;      // g dg/dPsi
-  double*     Prp;      // dp/dPsi
-  double*     Q;        // q(Psi)
+  double          R0;       // Scale major radius
+  double          B0;       // Scale toroidal magnetic field strength
+  int             NRPTS;    // Number of R points
+  double*         RPTS;     // R array
+  int             NZPTS;    // Number of Z points
+  double*         ZPTS;     // Z array
+  double          dR;       // R grid spacing
+  double          dZ;       // Z grid spacing
+  int             NBPTS;    // Number of boundary points
+  double*         RBPTS;    // R on plasma boundary
+  double*         ZBPTS;    // Z on plasma boundary
+  int             NLPTS;    // Number of limiter points
+  double*         RLPTS;    // R on limiter boundary
+  double*         ZLPTS;    // Z on limiter boundary
+  Array<double,2> PSIARRAY; // Psi (R, Z) array 
+  double*         PSIN;     // PsiN array 
+  double*         G ;       // g(Psi)
+  double*         Pr;       // p(Psi)
+  double*         GGp;      // g dg/dPsi
+  double*         Prp;      // dp/dPsi
+  double*         Q;        // q(Psi)
 
   double dR2, dZ2, dR3, dZ3;
  
@@ -140,9 +144,12 @@ class Flux
   int     L;           // Number of points in Psi(R,Zaxis) array
   double* s;           // Array of s = sqrt[1 - Psi(R,Zaxis)] values
   double* Rs;          // Array of R(s) values
-  double  ra;          // Radial coordinate of plasma boundary
   double  q95;         // Safety-factor on 95% flux surface
   double  r95;         // Radial coordinate of 95% flux surface
+  double  qlim;        // Safety-factor at PsiN = PSILIM flux surface
+  double  rlim;        // Radial coordinate at PsiN = PSILIM flux surface
+  double  qa;          // Safety-factor at plasma boundary
+  double  ra;          // Radial coordinate of plasma boundary
   double  qgp, qgp1;
 
   // Stage2 profile parameters
@@ -211,7 +218,7 @@ public:
   // Constructor
   Flux ();
   // Solve problem
-  void Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME);
+  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME);
 
   // Evaluate right-hand sides of q/g equation
   int Rhs1 (double r, const double y[], double dydr[], void*);
@@ -226,16 +233,8 @@ public:
 
 private:
 
-  // gFile interpolation routines
-  void gFileInterp          (vector<string> gFileName, vector<double> gFileTime, int gFileNumber, double time);
-  void gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile,  double time);
-  void gFileInterpCubic     (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
-			     char* gFile, double time);
-  void gFileInterpQuartic   (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
-			     char* gFile4, double time4, char* gFile, double time);
-  
   // Set global parameters
-  void SetParameters (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME);
+  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME);
   // Input gFile data and output Stage1 data
   void Stage1 ();
   // Input Stage1 data and output Stage2 data
@@ -271,19 +270,30 @@ private:
   // Calculate neoclassical angle data on rational surfaces
   void CalcNeoclassicalAngle ();
 
+  // gFile interpolation routines
+  void gFileInterp          (vector<string> gFileName,   vector<double> gFileTime,   int gFileNumber, double time);
+  void gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile,     double time);
+  void gFileInterpCubic     (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,    double time3,
+			     char* gFile,  double time);
+  void gFileInterpQuartic   (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,    double time3,
+			     char* gFile4, double time4, char* gFile,  double time);
+    
   // 1D interpolation function with nonuniform grid
   double Interpolate         (int I, double* X, double* Y, double x,                                 int order);
   double InterpolateCubic    (       double* X, double* Y, double x, int i0, int i1, int i2,         int order);
   double InterpolateQuartic  (       double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
+
   // 1D interpolation function with nonuniform grid and periodic function
   double InterpolatePeriodic         (int I, double* X, double* Y, double x,                                 int order);
   double InterpolatePeriodicQuartic  (int I, double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
+
   // Interpolate Psi on uniform 2D grid
   double InterpolatePsi               (double RR, double ZZ,                                                                 int order);
   double InterpolatePsiCubicCubic     (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2,                 int order);
   double InterpolatePsiQuarticCubic   (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2,         int order);
   double InterpolatePsiCubicQuartic   (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2, int j3,         int order);
   double InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2, int j3, int order);
+
   // Evaluate Psi (R, Z)
   double GetPsi (double r, double z);
   // Evaluate dPsi/dR (R, Z)
@@ -299,7 +309,7 @@ private:
   double GreenOutboardCos (int i, int j);
   double GreenOutboardSin (int i, int j);
 
-  // Calculate toroidal flunction
+  // Calculate toroidal P function
   double ToroidalP (int m, int n, double z);
 
   // Open new file for writing

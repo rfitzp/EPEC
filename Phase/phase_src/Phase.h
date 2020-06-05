@@ -2,22 +2,33 @@
 
 // #######################################################################
 // Class to calculate time evolution of magnetic island chains interacting
-// with resonant magnetic perturbations in toroidal tokamak plasma.
+// with resonant magnetic perturbation in toroidal tokamak plasma.
 // Read data from programs FLUX, NEOCLASSICAL, and GPEC.
-//
+
 // Command line options:
-// -i INTP   - overrides INTP value from namelist file
+// -f INTF   - overrides INTF value from namelist file
+// -n INTN   - overrides INTN value from namelist file
+// -u INTU   - overrides INTU value from namelist file
+// -o OLD    - overrides OLD value from namelist file
 // -s STAGE2 - overrides STAGE2 value from namelist file
 // -t TIME   - sets experimental time
-//
+
 // Stage 1 - Class reads FLUX/NEOCLASSICAL/GPEC data and plots error-field
 //           drive versus upper/lower RMP coil phase for 1kA currents
-//
+
 // Stage 2 - Class performs island dynamics simulation
+
+// Version:
+
+// 1.0 - Initial version
+
 // #######################################################################
 
 #ifndef PHASE
 #define PHASE
+
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
 
 #include <stdio.h>
 #include <math.h>
@@ -36,13 +47,10 @@
 #define MAXCONTROLPOINTNUMBER 100
 #define MAXULFILELINELENGTH 500
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 0
-
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTP, int* OLD, double* DT, double* TIME,
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, double* DT, double* TIME,
 			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
@@ -61,11 +69,11 @@ class Phase
   double   DT;     // Data recorded every DT seconds
   double   TIME;   // Experimental time
   int      STAGE2; // If != 0 then Stage2 calculation performed, otherwise calculation terminates after Stage1
-  int      INTP;   // If == 0 then use uFile and lFile.
-                   // If == 1 then use interpolated uFile and lFile.
-                   // If == 2 then use interpolated uFile and lFile and interpolated fFile and nfile.
-  int      OLD;    // If == 1 then initialize new calculation
- 
+  int      INTF;   // If != 0 then use interpolated fFile 
+  int      INTN;   // If != 0 then use interpolated nFile
+  int      INTU;   // If != 0 then use interpolated uFile and lFiles
+  int      OLD;    // If != 0 then initialize new calculation
+
   int      NCTRL;  // Number of control points
   double*  TCTRL;  // Control times (s)
   double*  ICTRL;  // Peak current flowing in upper and lower RMP coils (kA) at control times
@@ -80,6 +88,8 @@ class Phase
   double B_0;             // Scale toroidal field-strength
   double q95;             // Safety factor at 95% flux surface
   double r95;             // Normalized radius of 95% flux surface
+  double qlim;            // Safety factor at PSI = PSILIM flux surface
+  double rlim;            // Normalized radius of PSI = PSILIM flux surface
   double q0;              // Safety factor at magnetic axis
   double qa;              // Safety factor at plasma boundary
   int    nres;            // Number of resonant surfaces in plasma
@@ -196,7 +206,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTP, int _OLD, double _TIME);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME);        
 
   // -----------------------
   // Private class functions
@@ -204,31 +214,18 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTP, int _OLD, double _TIME);
-  // Interpolate uFiles
-  void uFileInterpolate (char* uFile1, double time1, char* uFile2, double time2, char* uFile3, double time3, char* uFile, double time);
-  void uFileInterp (vector<string> uFileName, vector<double> uFileTime, vector<int> uFileNtor, vector<int> uFileMmin, vector<int> uFileMmax, int uFileNumber,
-		    double time, int &Ntor, int& Mmin, int& Mmax);
-  // Interpolate lFiles
-  void lFileInterpolate (char* lFile1, double time1, char* lFile2, double time2, char* lFile3, double time3, char* lFile, double time);
-  void lFileInterp (vector<string> lFileName, vector<double> lFileTime, vector<int> lFileNtor, vector<int> lFileMmin, vector<int> lFileMmax, int lFileNumber,
-		    double time, int &Ntor, int& Mmin, int& Mmax);
-  // Interpolate fFiles
-  void fFileInterpolate (char* fFile1, double time1, char* fFile2, double time2, char* fFile3, double time3, char* fFile, double time);
-  void fFileInterp (vector<string> fFileName, vector<double> fFileTime, int fFilenumber, double TIME);
-  // Interpolate nFiles
-  void nFileInterpolate (char* nFile1, double time1, char* nFile2, double time2, char* nFile3, double time3, char* nFile, double time);
-  void nFileInterp (vector<string> nFileName, vector<double> nFileTime, int nFilenumber, double TIME);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME);
   // Calculate vacuum flux versus upper/lower coil phase shift
   void Scan_Shift ();
   // Calculate velocity factors
   void Calc_Velocity ();
   // Initialize island dynamics calculation
   void Initialize ();
-  // Save island dynamics calcuation
-  void Save ();
-  // Perform island dynamics simulation
+  // Perform island dynamics calculation
   void IslandDynamics ();
+  // Save island dynamics calculation
+  void Save ();
+  
   // Calculate Irmp and Prmp
   void CalcRMP (double t);
   // Calculate chi and zeta vectors
@@ -238,11 +235,10 @@ class Phase
   // Unpack simulation variables from single vector
   void Unpack (Array<double,1> y);
   // Pack right-hand sides into single vector
-  void PackRhs (Array<double,1> PsikRHS, Array<double,1> phikRHS,
+  void PackRhs (Array<double,1> PsikRHS,    Array<double,1> phikRHS,
 		Array<double,2> alphakpRHS, Array<double,2> betakpRHS,
 		Array<double,1> dydt);
-        
-  // Evaluate right-hand sides of differential equations
+   // Evaluate right-hand sides of differential equations
   void Rhs (double x, Array<double,1>& y, Array<double,1>& dydx);
   // Adaptive-step integration routine
   void RK4Adaptive (double& x, Array<double,1>& y, double& h, double& t_err, 
@@ -250,6 +246,32 @@ class Phase
 		    double h_min, double h_max, int flag, int diag, FILE* file);
   // Fixed step integration routine
   void RK4Fixed (double& x, Array<double,1>& y, double h);
+
+  // Interpolate uFiles
+  void uFileInterp               (vector<string> uFileName,   vector<double> uFileTime,   int uFilenumber, double TIME);
+  void uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2, double time2, char* uFile,     double time);
+  void uFileInterpolateCubic     (char* uFile1, double time1, char* uFile2, double time2, char* uFile3,    double time3, char* uFile, double time);
+  void uFileInterpolateQuartic   (char* uFile1, double time1, char* uFile2, double time2, char* uFile3,    double time3,
+				  char* uFile4, double time4, char* uFile,  double time);
+  // Interpolate lFiles
+  void lFileInterp               (vector<string> lFileName,   vector<double> lFileTime,   int lFilenumber, double TIME);
+  void lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2, double time2, char* lFile,     double time);
+  void lFileInterpolateCubic     (char* lFile1, double time1, char* lFile2, double time2, char* lFile3,    double time3, char* lFile, double time);
+  void lFileInterpolateQuartic   (char* lFile1, double time1, char* lFile2, double time2, char* lFile3,    double time3,
+				  char* lFile4, double time4, char* lFile,  double time);
+
+  // Interpolate fFiles
+  void fFileInterp               (vector<string> fFileName,   vector<double> fFileTime,   int fFilenumber, double TIME);
+  void fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2, double time2, char* fFile,     double time);
+  void fFileInterpolateCubic     (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,    double time3, char* fFile, double time);
+  void fFileInterpolateQuartic   (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,    double time3,
+				  char* fFile4, double time4, char* fFile,  double time);
+  // Interpolate nFiles
+  void nFileInterp               (vector<string> nFileName,   vector<double> nFileTime,   int nFilenumber, double TIME);
+  void nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2, double time2, char* nFile,     double time);
+  void nFileInterpolateCubic     (char* nFile1, double time1, char* nFile2, double time2, char* nFile3,    double time3, char* nFile, double time);
+  void nFileInterpolateQuartic   (char* nFile1, double time1, char* nFile2, double time2, char* nFile3,    double time3,
+				  char* nFile4, double time4, char* nFile,  double time);
 
   // Open file for reading
   FILE* OpenFiler (char* filename);

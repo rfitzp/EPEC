@@ -1,5 +1,20 @@
 // Interpolate.cpp
 
+// PROGRAM ORGANIZATION:
+//
+// double Flux:: Interpolate                  (int I, double* X, double* Y, double x, int order)
+// double Flux:: InterpolateCubic             (double* X, double* Y, double x, int i0, int i1, int i2, int order)
+// double Flux:: InterpolateQuartic           (double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order)
+// double Flux:: InterpolatePeriodic          (int I, double* X, double* Y, double x, int order)
+// double Flux:: InterpolatePeriodicQuartic   (int I, double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order)
+// double Flux:: InterpolatePsi               (double RR, double ZZ, int order)
+// double Flux:: InterpolatePsiCubicCubic     (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2, int order)
+// double Flux:: InterpolatePsiQuarticCubic   (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2, int order)
+// double Flux:: InterpolatePsiCubicQuartic   (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2, int j3, int order)
+// double Flux:: InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2, int j3, int order)
+// double Flux:: GetPsiR                      (double r, double z)
+// double Flux:: GetPsiZ                      (double r, double z)
+
 #include "Flux.h"
 
 // ########################################################
@@ -207,7 +222,7 @@ double Flux::InterpolatePeriodicQuartic (int I, double* X, double* Y, double x, 
     }
    else
     {
-      printf ("FLUX::InterpolateQuartic: Error - order = %1d\n", order);
+      printf ("FLUX::InterpolatePeriodicQuartic: Error - order = %1d\n", order);
       exit (1);
     }
 
@@ -323,9 +338,9 @@ double Flux::InterpolatePsiCubicCubic (double RR, double ZZ, int i0, int i1, int
       double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) /(-  dZ2);
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) /(2.*dZ2);
 
-      double val0 = z0 * gsl_matrix_get (PSIARRAY, i0, j0) + z1 * gsl_matrix_get (PSIARRAY, i0, j1) + z2 * gsl_matrix_get (PSIARRAY, i0, j2);
-      double val1 = z0 * gsl_matrix_get (PSIARRAY, i1, j0) + z1 * gsl_matrix_get (PSIARRAY, i1, j1) + z2 * gsl_matrix_get (PSIARRAY, i1, j2);
-      double val2 = z0 * gsl_matrix_get (PSIARRAY, i2, j0) + z1 * gsl_matrix_get (PSIARRAY, i2, j1) + z2 * gsl_matrix_get (PSIARRAY, i2, j2);
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
 
       val = r0 * val0 + r1 * val1 + r2 * val2;
     }
@@ -339,9 +354,9 @@ double Flux::InterpolatePsiCubicCubic (double RR, double ZZ, int i0, int i1, int
       double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) /(-  dZ2);
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) /(2.*dZ2);
 
-      double val0 = z0 * gsl_matrix_get (PSIARRAY, i0, j0) + z1 * gsl_matrix_get (PSIARRAY, i0, j1) + z2 * gsl_matrix_get (PSIARRAY, i0, j2);
-      double val1 = z0 * gsl_matrix_get (PSIARRAY, i1, j0) + z1 * gsl_matrix_get (PSIARRAY, i1, j1) + z2 * gsl_matrix_get (PSIARRAY, i1, j2);
-      double val2 = z0 * gsl_matrix_get (PSIARRAY, i2, j0) + z1 * gsl_matrix_get (PSIARRAY, i2, j1) + z2 * gsl_matrix_get (PSIARRAY, i2, j2);
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
 
       val = r0 * val0 + r1 * val1 + r2 * val2;
     }
@@ -355,9 +370,9 @@ double Flux::InterpolatePsiCubicCubic (double RR, double ZZ, int i0, int i1, int
       double z1 = ((ZZ - ZZ0) + (ZZ - ZZ2)) /(-  dZ2);
       double z2 = ((ZZ - ZZ0) + (ZZ - ZZ1)) /(2.*dZ2);
 
-      double val0 = z0 * gsl_matrix_get (PSIARRAY, i0, j0) + z1 * gsl_matrix_get (PSIARRAY, i0, j1) + z2 * gsl_matrix_get (PSIARRAY, i0, j2);
-      double val1 = z0 * gsl_matrix_get (PSIARRAY, i1, j0) + z1 * gsl_matrix_get (PSIARRAY, i1, j1) + z2 * gsl_matrix_get (PSIARRAY, i1, j2);
-      double val2 = z0 * gsl_matrix_get (PSIARRAY, i2, j0) + z1 * gsl_matrix_get (PSIARRAY, i2, j1) + z2 * gsl_matrix_get (PSIARRAY, i2, j2);
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
 
       val = r0 * val0 + r1 * val1 + r2 * val2;
     }
@@ -394,10 +409,10 @@ double Flux::InterpolatePsiQuarticCubic (double RR, double ZZ, int i0, int i1, i
       double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) /(-  dZ2);
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) /(2.*dZ2);
 
-      double val0 = z0 * gsl_matrix_get (PSIARRAY, i0, j0) + z1 * gsl_matrix_get (PSIARRAY, i0, j1) + z2 * gsl_matrix_get (PSIARRAY, i0, j2);
-      double val1 = z0 * gsl_matrix_get (PSIARRAY, i1, j0) + z1 * gsl_matrix_get (PSIARRAY, i1, j1) + z2 * gsl_matrix_get (PSIARRAY, i1, j2);
-      double val2 = z0 * gsl_matrix_get (PSIARRAY, i2, j0) + z1 * gsl_matrix_get (PSIARRAY, i2, j1) + z2 * gsl_matrix_get (PSIARRAY, i2, j2);
-      double val3 = z0 * gsl_matrix_get (PSIARRAY, i3, j0) + z1 * gsl_matrix_get (PSIARRAY, i3, j1) + z2 * gsl_matrix_get (PSIARRAY, i3, j2);
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+      double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
 
       val = r0 * val0 + r1 * val1 + r2 * val2 + r3 * val3;
     }
@@ -412,10 +427,10 @@ double Flux::InterpolatePsiQuarticCubic (double RR, double ZZ, int i0, int i1, i
       double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) /(-  dZ2);
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) /(2.*dZ2);
 
-      double val0 = z0 * gsl_matrix_get (PSIARRAY, i0, j0) + z1 * gsl_matrix_get (PSIARRAY, i0, j1) + z2 * gsl_matrix_get (PSIARRAY, i0, j2);
-      double val1 = z0 * gsl_matrix_get (PSIARRAY, i1, j0) + z1 * gsl_matrix_get (PSIARRAY, i1, j1) + z2 * gsl_matrix_get (PSIARRAY, i1, j2);
-      double val2 = z0 * gsl_matrix_get (PSIARRAY, i2, j0) + z1 * gsl_matrix_get (PSIARRAY, i2, j1) + z2 * gsl_matrix_get (PSIARRAY, i2, j2);
-      double val3 = z0 * gsl_matrix_get (PSIARRAY, i3, j0) + z1 * gsl_matrix_get (PSIARRAY, i3, j1) + z2 * gsl_matrix_get (PSIARRAY, i3, j2);
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+      double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
       
       val = r0 * val0 + r1 * val1 + r2 * val2 + r3 * val3;
     }
@@ -430,10 +445,10 @@ double Flux::InterpolatePsiQuarticCubic (double RR, double ZZ, int i0, int i1, i
       double z1 = ((ZZ - ZZ0) + (ZZ - ZZ2)) /(-  dZ2);
       double z2 = ((ZZ - ZZ0) + (ZZ - ZZ1)) /(2.*dZ2);
 
-      double val0 = z0 * gsl_matrix_get (PSIARRAY, i0, j0) + z1 * gsl_matrix_get (PSIARRAY, i0, j1) + z2 * gsl_matrix_get (PSIARRAY, i0, j2);
-      double val1 = z0 * gsl_matrix_get (PSIARRAY, i1, j0) + z1 * gsl_matrix_get (PSIARRAY, i1, j1) + z2 * gsl_matrix_get (PSIARRAY, i1, j2);
-      double val2 = z0 * gsl_matrix_get (PSIARRAY, i2, j0) + z1 * gsl_matrix_get (PSIARRAY, i2, j1) + z2 * gsl_matrix_get (PSIARRAY, i2, j2);
-      double val3 = z0 * gsl_matrix_get (PSIARRAY, i3, j0) + z1 * gsl_matrix_get (PSIARRAY, i3, j1) + z2 * gsl_matrix_get (PSIARRAY, i3, j2);
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+      double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
    
       val = r0 * val0 + r1 * val1 + r2 * val2 + r3 * val3;
     }
@@ -470,10 +485,10 @@ double Flux::InterpolatePsiCubicQuartic (double RR, double ZZ, int i0, int i1, i
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
       double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
  
-      double val0 = r0 * gsl_matrix_get (PSIARRAY, i0, j0) + r1 * gsl_matrix_get (PSIARRAY, i1, j0) + r2 * gsl_matrix_get (PSIARRAY, i2, j0);
-      double val1 = r0 * gsl_matrix_get (PSIARRAY, i0, j1) + r1 * gsl_matrix_get (PSIARRAY, i1, j1) + r2 * gsl_matrix_get (PSIARRAY, i2, j1);
-      double val2 = r0 * gsl_matrix_get (PSIARRAY, i0, j2) + r1 * gsl_matrix_get (PSIARRAY, i1, j2) + r2 * gsl_matrix_get (PSIARRAY, i2, j2);
-      double val3 = r0 * gsl_matrix_get (PSIARRAY, i0, j3) + r1 * gsl_matrix_get (PSIARRAY, i1, j3) + r2 * gsl_matrix_get (PSIARRAY, i2, j3);
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3);
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
@@ -488,10 +503,10 @@ double Flux::InterpolatePsiCubicQuartic (double RR, double ZZ, int i0, int i1, i
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
       double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
 
-      double val0 = r0 * gsl_matrix_get (PSIARRAY, i0, j0) + r1 * gsl_matrix_get (PSIARRAY, i1, j0) + r2 * gsl_matrix_get (PSIARRAY, i2, j0);
-      double val1 = r0 * gsl_matrix_get (PSIARRAY, i0, j1) + r1 * gsl_matrix_get (PSIARRAY, i1, j1) + r2 * gsl_matrix_get (PSIARRAY, i2, j1);
-      double val2 = r0 * gsl_matrix_get (PSIARRAY, i0, j2) + r1 * gsl_matrix_get (PSIARRAY, i1, j2) + r2 * gsl_matrix_get (PSIARRAY, i2, j2);
-      double val3 = r0 * gsl_matrix_get (PSIARRAY, i0, j3) + r1 * gsl_matrix_get (PSIARRAY, i1, j3) + r2 * gsl_matrix_get (PSIARRAY, i2, j3);
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3);
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
@@ -506,10 +521,10 @@ double Flux::InterpolatePsiCubicQuartic (double RR, double ZZ, int i0, int i1, i
       double z2 = ((ZZ - ZZ1) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(-2.*dZ3);
       double z3 = ((ZZ - ZZ1) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(+6.*dZ3);
 
-      double val0 = r0 * gsl_matrix_get (PSIARRAY, i0, j0) + r1 * gsl_matrix_get (PSIARRAY, i1, j0) + r2 * gsl_matrix_get (PSIARRAY, i2, j0);
-      double val1 = r0 * gsl_matrix_get (PSIARRAY, i0, j1) + r1 * gsl_matrix_get (PSIARRAY, i1, j1) + r2 * gsl_matrix_get (PSIARRAY, i2, j1);
-      double val2 = r0 * gsl_matrix_get (PSIARRAY, i0, j2) + r1 * gsl_matrix_get (PSIARRAY, i1, j2) + r2 * gsl_matrix_get (PSIARRAY, i2, j2);
-      double val3 = r0 * gsl_matrix_get (PSIARRAY, i0, j3) + r1 * gsl_matrix_get (PSIARRAY, i1, j3) + r2 * gsl_matrix_get (PSIARRAY, i2, j3);
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3);
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
@@ -548,10 +563,10 @@ double Flux::InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1,
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
       double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
  
-      double val0 = r0 * gsl_matrix_get (PSIARRAY, i0, j0) + r1 * gsl_matrix_get (PSIARRAY, i1, j0) + r2 * gsl_matrix_get (PSIARRAY, i2, j0) + r3 * gsl_matrix_get (PSIARRAY, i3, j0);
-      double val1 = r0 * gsl_matrix_get (PSIARRAY, i0, j1) + r1 * gsl_matrix_get (PSIARRAY, i1, j1) + r2 * gsl_matrix_get (PSIARRAY, i2, j1) + r3 * gsl_matrix_get (PSIARRAY, i3, j1);
-      double val2 = r0 * gsl_matrix_get (PSIARRAY, i0, j2) + r1 * gsl_matrix_get (PSIARRAY, i1, j2) + r2 * gsl_matrix_get (PSIARRAY, i2, j2) + r3 * gsl_matrix_get (PSIARRAY, i3, j2);
-      double val3 = r0 * gsl_matrix_get (PSIARRAY, i0, j3) + r1 * gsl_matrix_get (PSIARRAY, i1, j3) + r2 * gsl_matrix_get (PSIARRAY, i2, j3) + r3 * gsl_matrix_get (PSIARRAY, i3, j3);
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3) + r3 * PSIARRAY (i3, j3);
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
@@ -567,10 +582,10 @@ double Flux::InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1,
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
       double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
 
-      double val0 = r0 * gsl_matrix_get (PSIARRAY, i0, j0) + r1 * gsl_matrix_get (PSIARRAY, i1, j0) + r2 * gsl_matrix_get (PSIARRAY, i2, j0) + r3 * gsl_matrix_get (PSIARRAY, i3, j0);
-      double val1 = r0 * gsl_matrix_get (PSIARRAY, i0, j1) + r1 * gsl_matrix_get (PSIARRAY, i1, j1) + r2 * gsl_matrix_get (PSIARRAY, i2, j1) + r3 * gsl_matrix_get (PSIARRAY, i3, j1);
-      double val2 = r0 * gsl_matrix_get (PSIARRAY, i0, j2) + r1 * gsl_matrix_get (PSIARRAY, i1, j2) + r2 * gsl_matrix_get (PSIARRAY, i2, j2) + r3 * gsl_matrix_get (PSIARRAY, i3, j2);
-      double val3 = r0 * gsl_matrix_get (PSIARRAY, i0, j3) + r1 * gsl_matrix_get (PSIARRAY, i1, j3) + r2 * gsl_matrix_get (PSIARRAY, i2, j3) + r3 * gsl_matrix_get (PSIARRAY, i3, j3);
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3) + r3 * PSIARRAY (i3, j3);
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
@@ -586,10 +601,10 @@ double Flux::InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1,
       double z2 = ((ZZ - ZZ1) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(-2.*dZ3);
       double z3 = ((ZZ - ZZ1) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(+6.*dZ3);
 
-      double val0 = r0 * gsl_matrix_get (PSIARRAY, i0, j0) + r1 * gsl_matrix_get (PSIARRAY, i1, j0) + r2 * gsl_matrix_get (PSIARRAY, i2, j0) + r3 * gsl_matrix_get (PSIARRAY, i3, j0);
-      double val1 = r0 * gsl_matrix_get (PSIARRAY, i0, j1) + r1 * gsl_matrix_get (PSIARRAY, i1, j1) + r2 * gsl_matrix_get (PSIARRAY, i2, j1) + r3 * gsl_matrix_get (PSIARRAY, i3, j1);
-      double val2 = r0 * gsl_matrix_get (PSIARRAY, i0, j2) + r1 * gsl_matrix_get (PSIARRAY, i1, j2) + r2 * gsl_matrix_get (PSIARRAY, i2, j2) + r3 * gsl_matrix_get (PSIARRAY, i3, j2);
-      double val3 = r0 * gsl_matrix_get (PSIARRAY, i0, j3) + r1 * gsl_matrix_get (PSIARRAY, i1, j3) + r2 * gsl_matrix_get (PSIARRAY, i2, j3) + r3 * gsl_matrix_get (PSIARRAY, i3, j3);
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3) + r3 * PSIARRAY (i3, j3);
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
