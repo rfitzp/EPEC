@@ -612,6 +612,12 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
   printf ("pFile Interpolation:\n");
   printf ("%s %11.4e\n", pFile1, weight1);
   printf ("%s %11.4e\n", pFile2, weight2);
+
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (file, "pFile Interpolation:\n");
+  fprintf (file, "%s %11.4e\n", pFile1, weight1);
+  fprintf (file, "%s %11.4e\n", pFile2, weight2);
+  fclose (monitor);
 }
 
 void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile, double time)
@@ -1321,6 +1327,13 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   printf ("%s %11.4e\n", pFile1, weight1);
   printf ("%s %11.4e\n", pFile2, weight2);
   printf ("%s %11.4e\n", pFile3, weight3);
+
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (file, "pFile Interpolation:\n");
+  fprintf (file, "%s %11.4e\n", pFile1, weight1);
+  fprintf (file, "%s %11.4e\n", pFile2, weight2);
+  fprintf (file, "%s %11.4e\n", pFile3, weight3);
+  fclose (monitor);
 }
 
 void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pFile2, double time2, char* pFile3, double time3, char* pFile4,
@@ -2240,6 +2253,14 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   printf ("%s %11.4e\n", pFile2, weight2);
   printf ("%s %11.4e\n", pFile3, weight3);
   printf ("%s %11.4e\n", pFile4, weight4);
+
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (file, "pFile Interpolation:\n");
+  fprintf (file, "%s %11.4e\n", pFile1, weight1);
+  fprintf (file, "%s %11.4e\n", pFile2, weight2);
+  fprintf (file, "%s %11.4e\n", pFile3, weight3);
+  fprintf (file, "%s %11.4e\n", pFile4, weight4);
+  fclose (monitor);
 }
 
 // ###############################

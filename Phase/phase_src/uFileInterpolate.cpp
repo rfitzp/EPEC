@@ -270,6 +270,12 @@ void Phase::uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2,
   printf ("uFile Interpolation:\n");
   printf ("%s %11.4e\n", uFile1, weight1);
   printf ("%s %11.4e\n", uFile2, weight2);
+
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (monitor, "uFile Interpolation:\n");
+  fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
+  fprintf (monitor, "%s %11.4e\n", uFile2, weight2);
+  fclose (monitor);
  
   // ........
   // Clean up
@@ -499,6 +505,13 @@ void Phase::uFileInterpolateCubic (char* uFile1, double time1, char* uFile2, dou
   printf ("%s %11.4e\n", uFile1, weight1);
   printf ("%s %11.4e\n", uFile2, weight2);
   printf ("%s %11.4e\n", uFile3, weight3);
+
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (monitor, "uFile Interpolation:\n");
+  fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
+  fprintf (monitor, "%s %11.4e\n", uFile2, weight2);
+  fprintf (monitor, "%s %11.4e\n", uFile3, weight3);
+  fclose (monitor);
   
   // ........
   // Clean up
@@ -783,6 +796,14 @@ void Phase::uFileInterpolateQuartic (char* uFile1, double time1, char* uFile2, d
   printf ("%s %11.4e\n", uFile2, weight2);
   printf ("%s %11.4e\n", uFile3, weight3);
   printf ("%s %11.4e\n", uFile4, weight4);
+
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (monitor, "uFile Interpolation:\n");
+  fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
+  fprintf (monitor, "%s %11.4e\n", uFile2, weight2);
+  fprintf (monitor, "%s %11.4e\n", uFile3, weight3);
+  fprintf (monitor, "%s %11.4e\n", uFile4, weight4);
+  fclose (monitor);
   
   // ........
   // Clean up

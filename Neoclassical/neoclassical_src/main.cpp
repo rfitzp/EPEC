@@ -15,12 +15,17 @@ int main (int argc, char** argv)
   printf ("\n####################\nProgram NEOCLASSICAL\n####################\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
 
+  FILE* monitor = fopen ("../monitor.txt", "a");
+  fprintf (monitor, "\n####################\nProgram NEOCLASSICAL\n####################\n");
+  fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+  fclose (monitor);
+			   
   // ........................
   // Get command line options
   // ........................
   int c;
   char* nvalue = NULL; char* Ivalue = NULL; char* fvalue = NULL; char* tvalue = NULL;
-  char* yvalue = NULL; char* ivalue = NULL; char* evalue = NULL; 
+  char* yvalue = NULL; char* pvalue = NULL; char* evalue = NULL; 
   opterr = 0;
   
   while ((c = getopt (argc, argv, "e:f:hp:n:t:y:I:")) != -1)
@@ -43,8 +48,8 @@ int main (int argc, char** argv)
 	printf ("-y YN       - set neutral peaking factor YN\n");
 	printf ("-I IMPURITY - set impurity flag IMPURITY\n");
 	exit (0);
-      case 'i':
-	ivalue = optarg;
+      case 'p':
+	pvalue = optarg;
 	break;
       case 'n':
 	nvalue = optarg;
@@ -79,8 +84,8 @@ int main (int argc, char** argv)
     _IMPURITY = atoi (Ivalue);
   if (fvalue != NULL)
     _FREQ = atoi (fvalue);
-  if (ivalue != NULL)
-    _INTP = atoi (ivalue);
+  if (pvalue != NULL)
+    _INTP = atoi (pvalue);
   if (evalue != NULL)
     _INTF = atoi (evalue);
   if (yvalue != NULL)

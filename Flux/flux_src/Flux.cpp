@@ -85,6 +85,18 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
 	  H0, ACC, ETA, DR);
 
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (monitor, "Input Parameters (from namelist.txt):\n");
+  fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
+	  NPSI, NTHETA, NNC);
+  fprintf (monitor, "Q95  = %11.4e  QFLG   = %2d\n",
+	  Q95, QFLG, NTOR);
+  fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d\n",
+	  NTOR, MMIN, MMAX, PSILIM, TIME, INTG);
+  fprintf (monitor, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
+	  H0, ACC, ETA, DR);
+  fclose (monitor);
+
   // Sanity check
   if (NPSI < 1)
     {

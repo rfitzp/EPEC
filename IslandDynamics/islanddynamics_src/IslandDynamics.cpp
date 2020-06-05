@@ -44,7 +44,7 @@ void IslandDynamics ()
   // ...............
   printf ("\n#####################\n");
   printf ("Program IslandDyamics\n");
-  printf ("#####################\n\n");
+  printf ("#####################\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
 
   // .............
@@ -109,28 +109,46 @@ void IslandDynamics ()
   // Initialize output files
   // .......................
   if (RESTART)
-    system ("cd Stage1; rm *.txt");
-  
+    {
+      system ("cd Stage1; rm *.txt");
+      system ("cd ../; rm monitor.txt");
+    }
+
+  FILE* monitor = fopen ("../monitor.txt", "a");
+  fprintf (monitor, "\n#####################\n");
+  fprintf (monitor, "Program IslandDyamics\n");
+  fprintf (monitor, "#####################\n");
+  fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+
+  fprintf (monitor, "Reading namelist:\n");
+  fprintf (monitor, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX   = %2d\n",
+	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
+  fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL = %2d           NEO_FREQ = %2d  NEO_YN = %11.4e\n",
+	  NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_YN);
+  fprintf (monitor, "PHASE_INTN = %2d  PHASE_STAGE2 = %2d           PHASE_OLD   = %2d\n",
+	  PHASE_INTN, PHASE_STAGE2, PHASE_OLD);
+  fprintf (monitor, "RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
+	  RESTART, TSTART, TEND, DT);
+  fclose (monitor);
+
   // ..................
   // Perform simulation
   // ..................
   double time = TSTART;
   char   FLUXstring[MAXCOMMANDLINELENGTH], NEOstring[MAXCOMMANDLINELENGTH], PHASEstring[MAXCOMMANDLINELENGTH];
   
-  FILE* file = fopen ("Stage1/monitor.txt", "w");
-  
   do
     {
-      printf  ("\n$$$$$$$$$$$$$$$$$$\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n$$$$$$$$$$$$$$$$$$\n\n", time);
+      printf  ("\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n", time);
 
-      // Update monitor file
-      fprintf (file, "time = %11.4e\n", time);
-      fflush  (file);
+      monitor = fopen ("../monitor.txt", "a");
+      fprintf  (monitor, "\n$$$$$$$$$$$$$$$$$$\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n$$$$$$$$$$$$$$$$$$\n\n", time);
+      fclose (monitor);
 
       // Construct command strings
       sprintf (FLUXstring,  "cd ../Flux; ./flux -g %d -n %d -m %d -M %d -t %16.9e ",
 	       FLUX_INTG, FLUX_NTOR, FLUX_MMIN, FLUX_MMAX, time);
-      sprintf (NEOstring,   "cd ../Neoclassical; ./neoclassical -e %d -i %d -n %d -I %d -f %2d -y %16.9e -t %16.9e ",
+      sprintf (NEOstring,   "cd ../Neoclassical; ./neoclassical -e %d -p %d -n %d -I %d -f %2d -y %16.9e -t %16.9e ",
 	       NEO_INTF, NEO_INTP, NEO_NEUTRAL, NEO_IMPURITY, NEO_FREQ, NEO_YN, time);
       sprintf (PHASEstring, "cd ../Phase; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
 	       PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE2, PHASE_OLD, time);
@@ -138,7 +156,7 @@ void IslandDynamics ()
       // Call program FLUX
       if (NEO_INTF == 0)
 	{
-	  printf ("%s\n", FLUXstring);
+	  printf ("Executing:: %s\n", FLUXstring);
 	  if (system (FLUXstring) != 0)
 	    exit (1);
 	}
@@ -146,13 +164,13 @@ void IslandDynamics ()
       // Call program NEOCLASSICAL
       if (PHASE_INTN == 0)
 	{
-	  printf ("%s\n", NEOstring);
+	  printf ("Executing:: %s\n", NEOstring);
 	  if (system (NEOstring) != 0)
 	    exit (1);
 	}
 
       // Call program PHASE
-      printf ("%s\n", PHASEstring);
+      printf ("Executing:: %s\n", PHASEstring);
       if (system (PHASEstring) != 0)
 	exit (1);
 
@@ -160,6 +178,4 @@ void IslandDynamics ()
       time += DT;
     }
   while (time < TEND);
-
-  fclose (file);
 }

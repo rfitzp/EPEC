@@ -124,6 +124,11 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
 	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NN, LN, SVN, YN, EN, TIME);
 
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NN, LN, SVN, YN, EN, TIME);
+  fclose (monitor);
+
   // Sanity check
   if (CHI <= 0.)
     {
@@ -890,6 +895,10 @@ void Neoclassical::Get_Normalized ()
 
       file = OpenFilea ((char*) "nFiles/Index");
       fprintf (file, "%s %19.6e\n", filename, TIME);
+      fclose (file);
+
+      file = OpenFilea ((char*) "../monitor.txt");
+      fprintf (file, "Wrote nFile %s\n", filename);
       fclose (file);
       
       delete[] filename;

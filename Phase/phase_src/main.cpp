@@ -18,6 +18,11 @@ int main (int argc, char** argv)
   printf ("\n#############\nProgram PHASE\n#############\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
 
+  FILE* monitor = fopen ("../monitor.txt", "a");
+  fprintf (monitor, "\n#############\nProgram PHASE\n#############\n");
+  fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+  fclose (monitor);
+  
   // ........................
   // Get command line options
   // ........................

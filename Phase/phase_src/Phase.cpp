@@ -128,6 +128,11 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
   printf ("NFLOW = %4d STAGE2 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	  NFLOW, STAGE2, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
 
+  FILE* monitor = OpenFilea ((char*) "../monitor.txt");
+  fprintf (monitor, "NFLOW = %4d STAGE2 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE2, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
+  fclose (monitor);
+  
   // ............
   // Sanity check
   // ............

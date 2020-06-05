@@ -115,6 +115,10 @@ void Flux::Stage2 ()
       file = OpenFilea ((char*) "fFiles/Index");
       fprintf (file, "%s %19.6e\n", filename, TIME);
       fclose (file);
+
+      file = OpenFilea ((char*) "../monitor.txt");
+      fprintf (file, "Wrote fFile %s\n", filename);
+      fclose (file);
       
       delete[] filename;
     }
