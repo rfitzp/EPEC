@@ -1,0 +1,78 @@
+Sat Jun  6 15:15:23 2020
+
+
+#####################
+Program IslandDyamics
+#####################
+Version: 1.1
+
+Reading namelist:
+FLUX_NTOR  =  3  FLUX_MMIN    =  4           FLUX_MMAX   = 30
+NEO_INTF   =  1  NEO_IMPURITY =  0           NEO_NEUTRAL =  1           NEO_FREQ =  1  NEO_YN =  1.5000e+00
+PHASE_INTN =  0  PHASE_STAGE2 =  0           PHASE_OLD   =  0
+RESTART    =  1  TSTART       =  2.4500e+03  TEND        =  4.3510e+03  DT       =  5.0000e+00
+
+$$$$$$$$$$$$$$$$$$
+time =  2.4500e+03
+$$$$$$$$$$$$$$$$$$
+
+############
+Program FLUX
+############
+Version: 1.1
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4500e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+gFile Interpolation:
+../ExperimentalData/DIIID/145380/gFiles/g145380.02400 -0.000000000e+00
+../ExperimentalData/DIIID/145380/gFiles/g145380.02450  1.000000000e+00
+../ExperimentalData/DIIID/145380/gFiles/g145380.02500  0.000000000e+00
+../ExperimentalData/DIIID/145380/gFiles/g145380.02550 -0.000000000e+00
+Wrote fFile fFiles/f.2450
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.1
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  1 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  2.4500e+03
+pFile Interpolation:
+../ExperimentalData/DIIID/145380/pFiles/p145380.2400.0 -0.0000e+00
+../ExperimentalData/DIIID/145380/pFiles/p145380.2450.0  1.0000e+00
+../ExperimentalData/DIIID/145380/pFiles/p145380.2500.0  0.0000e+00
+../ExperimentalData/DIIID/145380/pFiles/p145380.2550.0 -0.0000e+00
+Wrote nFile nFiles/n.2450
+
+#############
+Program PHASE
+#############
+Version: 1.1
+
+NFLOW =  100 STAGE2 =  0 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4500e+03 NCTRL =    2
+uFile Interpolation:
+../ExperimentalData/DIIID/145380/uFiles/n3.145380.2500  1.8750e+00
+../ExperimentalData/DIIID/145380/uFiles/n3.145380.2600 -1.2500e+00
+../ExperimentalData/DIIID/145380/uFiles/n3.145380.2700  3.7500e-01
+
+$$$$$$$$$$$$$$$$$$
+time =  2.4550e+03
+$$$$$$$$$$$$$$$$$$
+
+############
+Program FLUX
+############
+Version: 1.1
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4550e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+gFile Interpolation:
+../ExperimentalData/DIIID/145380/gFiles/g145380.02400 -2.850000000e-02
+../ExperimentalData/DIIID/145380/gFiles/g145380.02450  9.405000000e-01
+../ExperimentalData/DIIID/145380/gFiles/g145380.02500  1.045000000e-01
+../ExperimentalData/DIIID/145380/gFiles/g145380.02550 -1.650000000e-02

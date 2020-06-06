@@ -1,0 +1,10 @@
+../ExperimentalData/DIIID/145380/gFiles/g145380.02400
+ 2.400000000e+03
+../ExperimentalData/DIIID/145380/gFiles/g145380.02450
+ 2.450000000e+03
+../ExperimentalData/DIIID/145380/gFiles/g145380.02500
+ 2.500000000e+03
+../ExperimentalData/DIIID/145380/gFiles/g145380.02550
+ 2.550000000e+03
+gFile
+ 2.455000000e+03
