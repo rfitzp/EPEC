@@ -112,6 +112,7 @@ void Flux::Stage2 ()
 		 GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
       fclose (file);
 
+      sprintf (filename, "f.%d", int (TIME));
       file = OpenFilea ((char*) "fFiles/Index");
       fprintf (file, "%s %19.6e\n", filename, TIME);
       fclose (file);

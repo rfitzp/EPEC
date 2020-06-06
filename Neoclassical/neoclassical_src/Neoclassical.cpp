@@ -132,7 +132,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   // Sanity check
   if (CHI <= 0.)
     {
-      printf ("NEOCLASSICAL:: CHI must be positive\n");
+      printf ("NEOCLASSICAL::Read_Parameters: Error CHI must be positive\n");
       exit (1);
     }
 }
@@ -150,19 +150,26 @@ void Neoclassical::Read_Equilibrium ()
       system ("rm -rf ../Flux/fFile");
       
       // Read fFile data
+      char           Basename[MAXFILENAMELENGTH];
+      char           Filename[MAXFILENAMELENGTH];
       char           filename[MAXFILENAMELENGTH];
       vector<string> fFileName;
       double         filetime;
       vector<double> fFileTime;
-      int            fFileNumber = 0;
+      int            fFileNumber;
       
       printf ("Reading fFile data:\n");
 
       FILE* file = OpenFiler ((char*) "../Flux/fFileIndex");
 
+      fscanf (file, "%s", &Basename);
+      
       while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
 	{
-	  fFileName.push_back (filename);
+	  strcpy (Filename, Basename);
+	  strcat (Filename, filename);
+	  
+	  fFileName.push_back (Filename);
 	  fFileTime.push_back (filetime);
 	}
       fFileNumber = fFileName.size ();
@@ -239,24 +246,30 @@ void Neoclassical::Read_Profiles ()
   if (INTP == 1 && TIME > 0.)
     {
       system ("rm -rf pFile");
-      
+
+      char           Basename[MAXFILENAMELENGTH];
+      char           Filename[MAXFILENAMELENGTH];
       char           filename[MAXFILENAMELENGTH];
       vector<string> pFileName;
       double         filetime;
       vector<double> pFileTime;
-      int            pFileNumber = 0;
+      int            pFileNumber;
   
       printf ("Reading pFile data:\n");
 
       FILE* file = OpenFiler ((char*) "pFileIndex");
 
+      fscanf (file, "%s", &Basename);
+      
       while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
 	{
-	  pFileName.push_back (filename);
+	  strcpy (Filename, Basename);
+	  strcat (Filename, filename);
+	  
+	  pFileName.push_back (Filename);
 	  pFileTime.push_back (filetime);
-	  pFileNumber++;
 	}
-      pFileNumber--;
+      pFileNumber = pFileTime.size ();
 
       fclose (file);
   
@@ -893,6 +906,7 @@ void Neoclassical::Get_Normalized ()
 	}
       fclose (file);
 
+      sprintf (filename, "n.%d", int (TIME));
       file = OpenFilea ((char*) "nFiles/Index");
       fprintf (file, "%s %19.6e\n", filename, TIME);
       fclose (file);

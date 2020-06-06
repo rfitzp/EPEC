@@ -160,19 +160,26 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
       system ("rm -rf ../Flux/fFile");
       
       // Read fFile data
+      char           Basename[MAXFILENAMELENGTH];
+      char           Filename[MAXFILENAMELENGTH];
       char           filename[MAXFILENAMELENGTH];
       vector<string> fFileName;
       double         filetime;
       vector<double> fFileTime;
-      int            fFileNumber = 0;
+      int            fFileNumber;
       
       printf ("Reading fFile data:\n");
 
       FILE* file = OpenFiler ((char*) "../Flux/fFileIndex");
 
+      fscanf (file, "%s", &Basename);
+
       while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
 	{
-	  fFileName.push_back (filename);
+	  strcpy (Filename, Basename);
+	  strcat (Filename, filename);
+	  
+	  fFileName.push_back (Filename);
 	  fFileTime.push_back (filetime);
 	}
       fFileNumber = fFileName.size ();
@@ -313,19 +320,26 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
       system ("rm -rf ../Neoclassical/nFile");
       
       // Read nFile data
+      char           Basename[MAXFILENAMELENGTH];
+      char           Filename[MAXFILENAMELENGTH];
       char           filename[MAXFILENAMELENGTH];
       vector<string> nFileName;
       vector<double> nFileTime;
       double         filetime;
-      int            nFileNumber = 0;
+      int            nFileNumber;
       
       printf ("Reading nFile data:\n");
 
       FILE* file = OpenFiler ((char*) "../Neoclassical/nFileIndex");
- 
+
+      fscanf (file, "%s", &Basename);
+
       while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
 	{
-	  nFileName.push_back (filename);
+          strcpy (Filename, Basename);
+	  strcat (Filename, filename);
+
+	  nFileName.push_back (Filename);
 	  nFileTime.push_back (filetime);
 	}
       nFileNumber = nFileName.size ();
@@ -393,19 +407,26 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
       system ("rm -rf uFile lFile");
 
       // Read uFile data
+      char           Basename [MAXFILENAMELENGTH];
+      char           Filename [MAXFILENAMELENGTH];
       char           ufilename[MAXFILENAMELENGTH];
       vector<string> uFileName;
       double         ufiletime;
       vector<double> uFileTime;
-      int            uFileNumber = 0;
+      int            uFileNumber;
       
       printf ("Reading uFile data:\n");
 
       file = OpenFiler ((char*) "uFileIndex");
- 
+
+      fscanf (file, "%s", &Basename);
+
       while (fscanf (file, "%s %lf %d %d %d", &ufilename, &ufiletime) == 2)
 	{
-	  uFileName.push_back (ufilename);
+          strcpy (Filename, Basename);
+	  strcat (Filename, ufilename);
+
+	  uFileName.push_back (Filename);
 	  uFileTime.push_back (ufiletime);
 	}
       uFileNumber = uFileName.size ();
@@ -420,15 +441,20 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
       vector<string> lFileName;
       double         lfiletime;
       vector<double> lFileTime;
-      int            lFileNumber = 0;
+      int            lFileNumber;
       
       printf ("Reading lFile data:\n");
 
       file = OpenFiler ((char*) "lFileIndex");
-      
+
+      fscanf (file, "%s", &Basename);
+
       while (fscanf (file, "%s %lf", &lfilename, &lfiletime) == 2)
 	{
-	  lFileName.push_back (lfilename);
+          strcpy (Filename, Basename);
+	  strcat (Filename, lfilename);
+
+	  lFileName.push_back (Filename);
 	  lFileTime.push_back (lfiletime);
 	}
       lFileNumber = lFileName.size ();

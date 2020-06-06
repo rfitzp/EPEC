@@ -20,6 +20,7 @@
 // Version:
 
 // 1.0 - Initial version
+// 1.1 - Improved indexing of pFiles and fFiles
 
 // ################################################################
 
@@ -27,7 +28,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 0
+#define VERSION_MINOR 1
 
 #include <stdio.h>
 #include <math.h>

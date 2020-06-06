@@ -12,23 +12,29 @@ void Flux::Stage1 ()
     {
       system ("rm -rf gFile");
 
+      char           Basename[MAXFILENAMELENGTH];
+      char           Filename[MAXFILENAMELENGTH];
       char           filename[MAXFILENAMELENGTH];
       vector<string> gFileName;
       double         filetime;
       vector<double> gFileTime;
-      int            gFileNumber = 0;
-      
+      int            gFileNumber;
+  
       printf ("Reading gFile data:\n");
 
       FILE* file = OpenFiler ((char*) "gFileIndex");
 
+      fscanf (file, "%s", &Basename);
+
       while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
 	{
-	  gFileName.push_back (filename);
+	  strcpy (Filename, Basename);
+	  strcat (Filename, filename);
+	  
+	  gFileName.push_back (Filename);
 	  gFileTime.push_back (filetime);
-	  gFileNumber++;
 	}
-      gFileNumber--;
+      gFileNumber = gFileTime.size ();
 
       fclose (file);
       

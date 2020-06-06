@@ -6,13 +6,19 @@
 // perturbation in time-evolving toroidal tokamak discharge.
 //
 // Uses FLUX/NEOCLASSICAL/PHASE codes.
+//
+// Version:
+//
+// 1.0 - Initial version
+// 1.1 - Added time to monitor.txt
 // ##############################################################
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 0
+#define VERSION_MINOR 1
 
 #define MAXCOMMANDLINELENGTH 500
 
@@ -114,7 +120,16 @@ void IslandDynamics ()
       system ("cd ../; rm monitor.txt");
     }
 
+  // .................
+  // Get date and time
+  // .................
+  time_t      rawtime;
+  struct tm * timeinfo;
+  time                 (&rawtime);
+  timeinfo = localtime (&rawtime);
+ 
   FILE* monitor = fopen ("../monitor.txt", "a");
+  fprintf (monitor, "%s\n",asctime (timeinfo));
   fprintf (monitor, "\n#####################\n");
   fprintf (monitor, "Program IslandDyamics\n");
   fprintf (monitor, "#####################\n");
@@ -134,24 +149,24 @@ void IslandDynamics ()
   // ..................
   // Perform simulation
   // ..................
-  double time = TSTART;
+  double Time = TSTART;
   char   FLUXstring[MAXCOMMANDLINELENGTH], NEOstring[MAXCOMMANDLINELENGTH], PHASEstring[MAXCOMMANDLINELENGTH];
   
   do
     {
-      printf  ("\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n", time);
+      printf  ("\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n", Time);
 
       monitor = fopen ("../monitor.txt", "a");
-      fprintf  (monitor, "\n$$$$$$$$$$$$$$$$$$\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n$$$$$$$$$$$$$$$$$$\n\n", time);
+      fprintf  (monitor, "\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n", Time);
       fclose (monitor);
 
       // Construct command strings
       sprintf (FLUXstring,  "cd ../Flux; ./flux -g %d -n %d -m %d -M %d -t %16.9e ",
-	       FLUX_INTG, FLUX_NTOR, FLUX_MMIN, FLUX_MMAX, time);
+	       FLUX_INTG, FLUX_NTOR, FLUX_MMIN, FLUX_MMAX, Time);
       sprintf (NEOstring,   "cd ../Neoclassical; ./neoclassical -e %d -p %d -n %d -I %d -f %2d -y %16.9e -t %16.9e ",
-	       NEO_INTF, NEO_INTP, NEO_NEUTRAL, NEO_IMPURITY, NEO_FREQ, NEO_YN, time);
+	       NEO_INTF, NEO_INTP, NEO_NEUTRAL, NEO_IMPURITY, NEO_FREQ, NEO_YN, Time);
       sprintf (PHASEstring, "cd ../Phase; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
-	       PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE2, PHASE_OLD, time);
+	       PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE2, PHASE_OLD, Time);
       
       // Call program FLUX
       if (NEO_INTF == 0)
@@ -175,7 +190,14 @@ void IslandDynamics ()
 	exit (1);
 
       // Increment time
-      time += DT;
+      Time += DT;
     }
-  while (time < TEND);
+  while (Time < TEND);
+
+  time                 (&rawtime);
+  timeinfo = localtime (&rawtime);
+
+  monitor = fopen ("../monitor.txt", "a");
+  fprintf (monitor, "%s\n",asctime (timeinfo));
+  fclose (monitor);
 }
