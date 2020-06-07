@@ -155,7 +155,7 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
   // .................
   // Interpolate fFile
   // .................
-  if (INTF > 1 && TIME > 0.)
+  if (INTF !=0  && TIME > 0.)
     {
       system ("rm -rf ../Flux/fFile");
       
@@ -315,7 +315,7 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
   // .................
   // Interpolate nFile
   // .................
-  if (INTN > 1 && TIME > 0.)
+  if (INTN != 0 && TIME > 0.)
     {
       system ("rm -rf ../Neoclassical/nFile");
       
@@ -402,7 +402,7 @@ void Phase::Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, d
   // .............................
   // Interpolate uFiles and lFiles
   // .............................
-  if (INTU > 0  && TIME > 0.)
+  if (INTU != 0  && TIME > 0.)
     {
       system ("rm -rf uFile lFile");
 

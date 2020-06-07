@@ -145,7 +145,7 @@ void Neoclassical::Read_Equilibrium ()
   // .................
   // Interpolate fFile
   // .................
-  if (INTF > 1 && TIME > 0.)
+  if (INTF != 0  && TIME > 0.)
     {
       system ("rm -rf ../Flux/fFile");
       
@@ -243,7 +243,7 @@ void Neoclassical::Read_Equilibrium ()
 void Neoclassical::Read_Profiles ()
 {
   // Interpolate pFiles
-  if (INTP == 1 && TIME > 0.)
+  if (INTP != 0 && TIME > 0.)
     {
       system ("rm -rf pFile");
 

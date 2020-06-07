@@ -2,10 +2,10 @@
 	FLUX_NTOR    = 3     ! Set toroidal mode number in FLUX
 	FLUX_MMIN    = 4     ! Set minimum poloidal mode number in FLUX
 	FLUX_MMAX    = 30    ! Set maximum poloidal mode number in fLUX
-	NEO_INTF     = 0     ! If != 0 then interpolate fFiles in NEOCLASSICAL
+	NEO_INTF     = 1     ! If != 0 then interpolate fFiles in NEOCLASSICAL
 	NEO_IMPURITY = 1     ! If != 0 then include single ion impurity species in calculation in NEOCLASSICAL
 	NEO_NEUTRAL  = 1     ! If != 0 then include majority ion neutrals in calculation in NEOCLASSICAL
-	NEO_FREQ     = 0     ! If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency in NEOCLASSICAL
+	NEO_FREQ     = -1    ! If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency in NEOCLASSICAL
 	NEO_YN       = 1.5   ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
   	PHASE_INTN   = 0     ! If != 0 then interpolate nFiles in PHASE
 	PHASE_OLD    = 0     ! If != 0 then restart PHASE calculations from previous run
