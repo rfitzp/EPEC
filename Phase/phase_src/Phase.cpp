@@ -750,6 +750,8 @@ void Phase::Initialize ()
   // Reinitialize from previous run
   if (OLD == 1)
     {
+      printf ("Loading previous calculation from file sFile\n");
+      
       FILE* file = OpenFiler ((char*) "sFile");
 
       int _nres, _NFLOW;
@@ -812,6 +814,8 @@ void Phase::Initialize ()
 // ############################################
 void Phase::Save ()
 {
+  printf ("Saving calculation in file sFile\n");
+  
   FILE* file = OpenFilew ("sFile");
 
   fprintf (file, "%d %d\n", nres, NFLOW);
@@ -1013,9 +1017,10 @@ void Phase::IslandDynamics ()
   // Save calculation
   Save ();
   
-  FILE* filew = OpenFilea ((char*) "../IslandDynamics/Stage1//omega.txt");
+  FILE* filew = OpenFilea ((char*) "../IslandDynamics/Stage1/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e\n", mk (j), rk (j), wk (j) /tau_A/1.e3, ww (j) /tau_A/1.e3, TIME);
+    fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mk (j), rk (j), wk (j) /tau_A/1.e3, ww (j) /tau_A/1.e3, TIME, 4. * fack (j) * sqrt (fabs (Psik (j)))/a(j));
   fclose (file);
 }
 

@@ -85,7 +85,7 @@ void IslandDynamics ()
   printf ("FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX   = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL = %2d           NEO_FREQ = %2d  NEO_YN = %11.4e\n",
-	  NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_YN);
+	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_YN);
   printf ("PHASE_INTN = %2d  PHASE_STAGE2 = %2d           PHASE_OLD   = %2d\n",
 	  PHASE_INTN, PHASE_STAGE2, PHASE_OLD);
   printf ("RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
@@ -139,7 +139,7 @@ void IslandDynamics ()
   fprintf (monitor, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX   = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL = %2d           NEO_FREQ = %2d  NEO_YN = %11.4e\n",
-	  NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_YN);
+	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_YN);
   fprintf (monitor, "PHASE_INTN = %2d  PHASE_STAGE2 = %2d           PHASE_OLD   = %2d\n",
 	  PHASE_INTN, PHASE_STAGE2, PHASE_OLD);
   fprintf (monitor, "RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
@@ -151,7 +151,8 @@ void IslandDynamics ()
   // ..................
   double Time = TSTART;
   char   FLUXstring[MAXCOMMANDLINELENGTH], NEOstring[MAXCOMMANDLINELENGTH], PHASEstring[MAXCOMMANDLINELENGTH];
-  
+
+  int lock = 0;
   do
     {
       printf  ("\n$$$$$$$$$$$$$$$$$$\ntime = %11.4e\n$$$$$$$$$$$$$$$$$$\n", Time);
@@ -165,8 +166,13 @@ void IslandDynamics ()
 	       FLUX_INTG, FLUX_NTOR, FLUX_MMIN, FLUX_MMAX, Time);
       sprintf (NEOstring,   "cd ../Neoclassical; ./neoclassical -e %d -p %d -n %d -I %d -f %2d -y %16.9e -t %16.9e ",
 	       NEO_INTF, NEO_INTP, NEO_NEUTRAL, NEO_IMPURITY, NEO_FREQ, NEO_YN, Time);
-      sprintf (PHASEstring, "cd ../Phase; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
-	       PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE2, PHASE_OLD, Time);
+      if (lock)
+	sprintf (PHASEstring, "cd ../Phase; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
+		 PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE2, PHASE_OLD, Time);
+      else
+	sprintf (PHASEstring, "cd ../Phase; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
+		 PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE2, lock, Time);
+      lock = 1;
       
       // Call program FLUX
       if (NEO_INTF == 0)
