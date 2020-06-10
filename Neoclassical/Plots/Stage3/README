@@ -1,0 +1,34 @@
+Asymptote scripts (see http://asymptote.sourceforge.net/)
+
+<filename>.asy
+Usage:	    ./asy <filename>
+Produces:   <filename>.eps
+..........................................................
+
+ne.asy      ... plots n_e(r)
+nep.asy     ... plots dn_e/dr 
+Te.asy      ... plots T_e(r)
+Tep.asy     ... plots dT_e/dr 
+ni.asy      ... plots n_i(r)
+nip.asy     ... plots dn_i/dr 
+Ti.asy      ... plots T_i(r)
+Tip.asy     ... plots dT_i/dr 
+nii.asy     ... plots n_I(r)
+niip.asy    ... plots dn_I/dr 
+Tii.asy     ... plots T_I(r)
+Tiip.asy    ... plots dT_I/dr 
+we.asy      ... plots w_E(r)
+nb.asy      ... plots n_b(r)
+
+quasi.asy   ... quasi-neutrality test
+zeff.asy    ... plots Z_eff (r)
+alpha.asy   ... plots alpha (r)
+
+dia.asy     ... plots w_E (black), w_ast_e (red), w_ast_i (blue) at rational surfaces
+time.asy    ... plots tau_A (black), tau_R (red), tau_M (blue), tau_theta (green) at rational surfaces
+gt.asy      ... plots (1-fc)/fc versus r, where fc is fraction of circulating particles, at rational surfaces
+nu.asy      ... plots nu_ast for electrons (red), ions (blue), impurities (green) at rational surfaces
+nn.asy      ... plots neutral densities at rational surfaces
+
+omega.asy   ... plots natural frequencies at rational surfacesc versus r
+omega1.asy  ... plots natural frequencies at rational surfaces versus PsiN

@@ -49,3 +49,72 @@ uFile Interpolation:
 /Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.2500  1.1550e+00
 /Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3000 -2.1000e-01
 /Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3500  5.5000e-02
+
+############
+Program FLUX
+############
+Version: 1.1
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+############
+Program FLUX
+############
+Version: 1.3
+
+
+############
+Program FLUX
+############
+Version: 1.3
+
+
+############
+Program FLUX
+############
+Version: 1.3
+
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   = 12           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  4.5000e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00

@@ -1,0 +1,8 @@
+#!/bin/csh
+rm -f *.aux >& /dev/null
+rm -f *.dvi >& /dev/null
+rm -f *.log >& /dev/null
+rm -f *.tmp >& /dev/null
+rm -f *~    >& /dev/null
+rm -f .*~   >& /dev/null
+rm -f *.bak >& /dev/null

@@ -1,0 +1,392 @@
+
+############
+Program FLUX
+############
+Version: 1.3
+
+
+############
+Program FLUX
+############
+Version: 1.3
+
+
+############
+Program FLUX
+############
+Version: 1.3
+
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+gFile Interpolation:
+g145380.02450  9.800671703e-01
+g145380.03000  3.310429091e-02
+g145380.03500 -1.548956735e-02
+g145380.04200  2.318106122e-03
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+gFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.02450  9.800671703e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.03000  3.310429091e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.03500 -1.548956735e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.04200  2.318106122e-03
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+gFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.02450  9.800671703e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.03000  3.310429091e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.03500 -1.548956735e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.04200  2.318106122e-03
+Wrote fFile f.2456
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  2.4560e+03  INTG =  1
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+gFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.02450  9.800671703e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.03000  3.310429091e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.03500 -1.548956735e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/gFiles/g145380.04200  2.318106122e-03
+Wrote fFile f.2456
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  1 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  2.4560e+03
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  1 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  2.4560e+03
+pFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.2450.0  9.8007e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3000.0  3.3104e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3500.0 -1.5490e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.4200.0  2.3181e-03
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  1 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  2.4560e+03
+pFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.2450.0  9.8007e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3000.0  3.3104e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3500.0 -1.5490e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.4200.0  2.3181e-03
+Wrote nFile n.2456
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  1 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  2.4560e+03
+pFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.2450.0  9.8007e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3000.0  3.3104e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3500.0 -1.5490e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.4200.0  2.3181e-03
+Wrote nFile n.2456
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  1 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  2.4560e+03
+pFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.2450.0  9.8007e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3000.0  3.3104e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.3500.0 -1.5490e-02
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/pFiles/p145380.4200.0  2.3181e-03
+Wrote nFile n.2456
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NN =  3.0000e+17 LN =  1.2000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  0 OLD =  0 DT =  1.0000e-05 TIME =  0.0000e+00 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  0 OLD =  0 DT =  1.0000e-05 TIME =  0.0000e+00 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  0 OLD =  0 DT =  1.0000e-05 TIME =  0.0000e+00 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  0 OLD =  0 DT =  1.0000e-05 TIME =  0.0000e+00 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  0 OLD =  0 DT =  1.0000e-05 TIME =  0.0000e+00 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4560e+03 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4560e+03 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4560e+03 NCTRL =    2
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4560e+03 NCTRL =    2
+uFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.2500  1.0880e+00
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3000 -8.8000e-02
+uFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.2500  1.1359e+00
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3000 -1.8374e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3500  4.7872e-02
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4560e+03 NCTRL =    2
+uFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.2500  1.0880e+00
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3000 -8.8000e-02
+uFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.2500  1.1359e+00
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3000 -1.8374e-01
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3500  4.7872e-02
+
+#############
+Program PHASE
+#############
+Version: 1.2
+
+NFLOW =  100 STAGE5 =  1 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  2.4560e+03 NCTRL =    2
+uFile Interpolation:
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.2500  1.0880e+00
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Results/07062020/sim1/uFiles/n3.145380.3000 -8.8000e-02
