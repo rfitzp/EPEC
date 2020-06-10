@@ -4,6 +4,7 @@
 *.sty
 *.gz
 #*
+.DS_Store
 Flux/flux
 Flux/fFile
 Flux/fFileIndex
