@@ -52,7 +52,7 @@ using namespace blitz;
 
 // Namelist funtion
 extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* INTP, int* INTF, double* CHI,
-			       double* NN, double* LN, double* SVN, double* YN, double* EN, double* TIME, double* COULOMB);
+			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN, double* TIME, double* COULOMB);
 
 // ############
 // Class header
@@ -75,6 +75,7 @@ class Neoclassical
   int    FREQ;     // Frequency switch. If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency
   int    INTP;     // If != 0 then use interpolated pFile
   int    INTF;     // If != 0 then use interpolated fFile
+  int    NTYPE;    // If == 0 then neutral density distribution exponential. If == 1 then neutral density distribution Lorentzian.
   double NN;       // Flux-surface averaged majority neutral density at plasma boundary (PSI=1) (m^-3)
   double LN;       // Flux-surface averaged majority neutral density decay lengthscale (m)
   double SVN;      // Majority ion/neutral charge exchange rate constant (m^3 /s)
@@ -288,7 +289,8 @@ class Neoclassical
   virtual ~Neoclassical () {}; // Destructor
 
   // Solve problem
-  void Solve  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME);            
+  void Solve  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
+	       int _NTYPE, double _NN, double _LN, double _YN, double _TIME);            
  
   // -----------------------
   // Private class functions
@@ -296,7 +298,8 @@ class Neoclassical
  private:
 
   // Read discharge parameters
-  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME);
+  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
+			int _NTYPE, double _NN, double _LN, double _YN, double _TIME);
   // Read equilibrium data
   void Read_Equilibrium ();
   // Read profile data

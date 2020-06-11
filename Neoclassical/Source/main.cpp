@@ -25,10 +25,11 @@ int main (int argc, char** argv)
   // ........................
   int c;
   char* nvalue = NULL; char* Ivalue = NULL; char* fvalue = NULL; char* tvalue = NULL;
-  char* yvalue = NULL; char* pvalue = NULL; char* evalue = NULL; 
+  char* yvalue = NULL; char* pvalue = NULL; char* evalue = NULL; char* lvalue = NULL;
+  char* Nvalue = NULL; char* Tvalue = NULL; 
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "e:f:hp:n:t:y:I:")) != -1)
+  while ((c = getopt (argc, argv, "e:f:hp:n:t:y:I:l:N:T:")) != -1)
     switch (c)
       {
       case 'e':
@@ -42,15 +43,21 @@ int main (int argc, char** argv)
 	printf ("-e INTF     - set interpolation flag INTF\n");
 	printf ("-f FREQ     - set frequency flag FREQ\n");
 	printf ("-h          - list options\n");
+	printf ("-l LN       - set neutral density distribution scalelength LN\n");
 	printf ("-n NEUTRAL  - set neutral flag NEUTRAL\n");
 	printf ("-p INTP     - set interpolation flag INTP\n");
 	printf ("-t TIME     - set experimental time to TIME\n");
-	printf ("-y YN       - set neutral peaking factor YN\n");
+	printf ("-y YN       - set neutral poloidal peaking factor YN\n");
 	printf ("-I IMPURITY - set impurity flag IMPURITY\n");
+	printf ("-N NN       - set boundary neutral density NN\n");
+	printf ("-T NTYPE    - set neutral density distribution type NTYPE\n");
 	exit (0);
       case 'p':
 	pvalue = optarg;
 	break;
+      case 'l':
+	lvalue = optarg;
+ 	break;
       case 'n':
 	nvalue = optarg;
  	break;
@@ -63,8 +70,15 @@ int main (int argc, char** argv)
       case 'I':
 	Ivalue = optarg;
 	break;
+      case 'N':
+	Nvalue = optarg;
+	break;
+      case 'T':
+	Tvalue = optarg;
+	break;
       case '?':
-	if (optopt == 'n' || optopt == 'I' || optopt == 'f' || optopt == 't' || optopt == 'y' || optopt == 'p' || optopt == 'e')
+	if (optopt == 'n' || optopt == 'I' || optopt == 'f' || optopt == 't' || optopt == 'y' || optopt == 'p' || optopt == 'e'
+	    || optopt == 'l' || optopt == 'N' || optopt == 'T')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -75,8 +89,9 @@ int main (int argc, char** argv)
 	abort ();
       }
 
-  int    _NEUTRAL = -1;  int    _IMPURITY = -1; int _FREQ = -999999; int _INTP = -1;
-  double _TIME    = -1.; double _YN       = -1.;int _INTF = -1;
+  int    _NEUTRAL = -1;  int    _IMPURITY = -1;  int _FREQ  = -999999; int _INTP = -1;
+  double _TIME    = -1.; double _YN       = -1.; int _INTF  = -1;
+  double _LN      = -1.; double _NN       = -1.; int _NTYPE = -1;
 
   if (nvalue != NULL)
     _NEUTRAL = atoi (nvalue);
@@ -92,12 +107,18 @@ int main (int argc, char** argv)
     _YN = double (atof (yvalue));
   if (tvalue != NULL)
     _TIME = double (atof (tvalue));
+  if (lvalue != NULL)
+    _LN = double (atof (lvalue));
+  if (Nvalue != NULL)
+    _NN = double (atof (Nvalue));
+  if (Tvalue != NULL)
+    _NTYPE = atoi (Tvalue);
 
   // .........................
   // Call program NEOCLASSICAL
   // .........................
   Neoclassical neoclassical;
-  neoclassical.Solve (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _YN, _TIME);
+  neoclassical.Solve (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _NTYPE, _NN, _LN, _YN, _TIME);
 
   return 0;
 }

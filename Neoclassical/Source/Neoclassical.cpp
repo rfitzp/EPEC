@@ -53,10 +53,11 @@ Neoclassical::Neoclassical ()
 // ##############
 // Solve problem
 // ##############
-void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
+void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
+			  int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
 {
   // Read discharge parameters
-  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _YN, _TIME);
+  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _NTYPE, _NN, _LN, _YN, _TIME);
   
   // Read equilibirum data
   Read_Equilibrium ();
@@ -83,7 +84,8 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int
 // ####################################
 // Read Neoclassical control parameters
 // ####################################
-void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
+void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
+				    int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
 {
   // Set default values of control parameters
   IMPURITY = 1;
@@ -92,6 +94,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   INTP     = 0;
   INTF     = 0;
   CHI      = 1.0;
+  NTYPE    = 0;
   NN       = 0.;
   LN       = 1.;
   SVN      = 0.;
@@ -101,7 +104,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   COULOMB  = 17.;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &CHI, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
+  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &CHI, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
 
   // Override namelist values with command line option values
   if (_NEUTRAL > -1)
@@ -112,6 +115,12 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
     FREQ = _FREQ;
   if (_TIME > 0.)
      TIME = _TIME;
+  if (_NTYPE > -1)
+     NTYPE = _NTYPE;
+  if (_NN > 0.)
+     NN = _NN;
+  if (_LN > 0.)
+     LN = _LN;
   if (_YN > 0.)
      YN = _YN;
   if (_INTP > -1)
@@ -121,12 +130,12 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
 
   // Output calculation parameters
   printf ("Reading parameters from Inputs/Neoclassical.in:\n");
-  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NN, LN, SVN, YN, EN, TIME);
+  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
 
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NN, LN, SVN, YN, EN, TIME);
+  fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
   fclose (monitor);
 
   // Sanity check
@@ -140,6 +149,31 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
       printf ("NEOCLASSICAL::Read_Parameters: Error YN must be positive\n");
       exit (1);
     }
+   if (NN < 0.)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error NN must be positive\n");
+      exit (1);
+    }
+   if (LN < 0.)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error LN must be positive\n");
+      exit (1);
+    }
+   if (SVN < 0.)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error SVN must be positive\n");
+      exit (1);
+    }
+   if (EN < 0.)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error EN must be positive\n");
+      exit (1);
+    }
+   if (NTYPE < 0 || NTYPE > 1)
+     {
+       printf ("NEOCLASSICAL::Read_Parameters: Error invalid NTYPE value\n");
+       exit (1);
+     }
 }
 
 // ###################################################
@@ -470,7 +504,10 @@ void Neoclassical::Get_Derived ()
       Zeffk  (j) = Interpolate (NPSI, rr, Z_eff,  rk (j), 0);
       alphak (j) = Interpolate (NPSI, rr, alpha,  rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
-      NNk    (j) = NN * exp ((rk(j) - 1.) /(LN /a));
+      if (NTYPE == 0)
+	NNk (j) = NN * exp ((rk(j) - 1.) /(LN /a));
+      else if (NTYPE == 1)
+	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
 
       printf ("m = %3d r = %11.4e ne = %11.4e Te = %11.4e ni = %11.4e Ti = %11.4e nI = %11.4e TI = %11.4e wE = %11.4e Z_eff = %11.4e NN = %11.4e rho = %11.4e\n",
 	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j));

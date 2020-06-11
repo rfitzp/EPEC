@@ -1,0 +1,40 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{\bf DIII-D Discharge 169466}
+\date{}
+\author{}
+
+\begin{document}
+\maketitle
+
+\section{Llama Data}
+Figure~\ref{fig1} shows the following fit to the Llama data:
+\begin{equation}
+n_n(R) = \frac{n_n}{1+(R-R_{\rm sep})^{\,2}/L^{\,2}},
+\end{equation}
+where $n_n = 1.4\times 10^{17}\,{\rm m}^{-3}$, $L= 0.015\,{\rm m}$, $R_{\rm sep}= 1.92\,{\rm m}$. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=4in]{neutral.eps}
+\caption{Fit to Llama data. Black: Data points. Red: Fit.}\label{fig1}
+\end{figure}
+
+\section{Natural Frequencies}
+\begin{figure}
+\centering
+\includegraphics[height=4in]{3200.eps}
+\caption{Natural frequencies at $t=3200$ ms. Red: Linear natural frequency. Blue: Nonlinear natural frequency. Black: ${\bf E}\times {\bf B}$ frequency.}\label{fig2}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[height=4in]{3600.eps}
+\caption{Natural frequencies at $t=3600$ ms. Red: Linear natural frequency. Blue: Nonlinear natural frequency. Black: ${\bf E}\times {\bf B}$ frequency.}\label{fig3}
+\end{figure}
+
+\end{document}
