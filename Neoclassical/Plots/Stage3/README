@@ -31,4 +31,4 @@ nu.asy      ... plots nu_ast for electrons (red), ions (blue), impurities (green
 nn.asy      ... plots neutral densities at rational surfaces
 
 omega.asy   ... plots natural frequencies at rational surfacesc versus r
-omega1.asy  ... plots natural frequencies at rational surfaces versus PsiN
+omegap.asy  ... plots natural frequencies at rational surfaces versus PsiN
