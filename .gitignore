@@ -1,4 +1,9 @@
+*.dvi
+*.ps
+*.aux
+*.log
 *.eps
+*.sty
 *.o
 *~
 *.sty
