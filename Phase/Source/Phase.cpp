@@ -108,6 +108,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &DT, &TIME, &NCTRL, TCTRL, ICTRL, PCTRL);
 
+  for (int i = 0; i < NCTRL; i++)
+    printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
+
+  TT.resize (NCTRL);
+  
   // Override namelist values with command line options
   if (_STAGE5 > -1)
     STAGE5 = _STAGE5;
@@ -121,17 +126,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
     OLD = _OLD;
   if (_TIME > 0.)
     TIME = _TIME;
- 
-  // .............................
-  // Output calculation parameters
-  // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
-  fclose (monitor);
   
   // ............
   // Sanity check
@@ -147,10 +141,24 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
       exit (1);
     }
 
-  for (int i = 0; i < NCTRL; i++)
-    printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
+  // .............................
+  // Output calculation parameters
+  // .............................
+  printf ("Input parameters (from Inputs/Phase.in and command line options):");
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
 
-  TT.resize (NCTRL);
+  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):");
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
+  fclose (namelist);
+  
+  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):");
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
+  fclose (monitor);
 
   // .................
   // Interpolate fFile

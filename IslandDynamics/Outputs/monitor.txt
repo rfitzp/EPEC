@@ -426,3 +426,180 @@ Program NEOCLASSICAL
 Version: 1.2
 
 Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from namelist.txt):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+18 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+16 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from Inputs/Flux.in and command line options):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+18 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+16 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.0000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+############
+Program FLUX
+############
+Version: 1.3
+
+Input Parameters (from Inputs/Flux.in and command line options):
+NPSI =  512         NTHETA =  513         NNC  =  20
+Q95  =  4.5000e+00  QFLG   =  0
+NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+18 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+16 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
+
+####################
+Program NEOCLASSICAL
+####################
+Version: 1.2
+
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+17 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.0000e+00 EN =  1.0000e+00 TIME =  0.0000e+00

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/MacPorts 2019.50896_2) (preloaded format=latex 2020.4.16)  11 JUN 2020 16:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/MacPorts 2019.50896_2) (preloaded format=latex 2020.4.16)  13 JUN 2020 15:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -125,20 +125,35 @@ LaTeX Font Info:    ... okay on input line 11.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
 LaTeX Font Info:    ... okay on input line 11.
 File: neutral.eps Graphic file (type eps)
- <neutral.eps>
-File: 3200.eps Graphic file (type eps)
- <3200.eps>
-File: 3600.eps Graphic file (type eps)
- <3600.eps> [1
+ <neutral.eps> [1
 
-] [2] [3] (./Report.aux) ) 
+]
+File: 3200_sim1.eps Graphic file (type eps)
+ <3200_sim1.eps>
+File: 3600_sim1.eps Graphic file (type eps)
+ <3600_sim1.eps>
+File: 3200_sim2.eps Graphic file (type eps)
+
+<3200_sim2.eps>
+File: 3600_sim2.eps Graphic file (type eps)
+ <3600_sim2.eps>
+File: 3200_sim3.eps Graphic file (type eps)
+ <3200_sim3.eps>
+File: 3600_sim3.eps Graphic file (type eps)
+ <3600_sim3.eps>
+File: 3200_sim4.eps Graphic file (type eps)
+
+<3200_sim4.eps>
+File: 3600_sim4.eps Graphic file (type eps)
+ <3600_sim4.eps> [2] [3] [4] [5] [6] [7] [8] [9] [10]
+(./Report.aux) ) 
 Here is how much of TeX's memory you used:
- 1231 strings out of 494485
- 14667 string characters out of 6175649
- 73003 words of memory out of 5000000
- 4931 multiletter control sequences out of 15000+600000
+ 1255 strings out of 494485
+ 15045 string characters out of 6175649
+ 78003 words of memory out of 5000000
+ 4949 multiletter control sequences out of 15000+600000
  10554 words of font info for 38 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 27i,4n,22p,280b,256s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 27i,4n,22p,574b,254s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on Report.dvi (3 pages, 1944 bytes).
+Output written on Report.dvi (10 pages, 9220 bytes).

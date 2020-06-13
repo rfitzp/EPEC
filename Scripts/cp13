@@ -1,0 +1,10 @@
+#!/bin/bash
+
+CWD="$(pwd)"
+cd ~rfitzp/EPEC
+tar  --dereference --exclude='*.eps' -c -v -z -f tarfile.tgz Flux/Inputs/* Flux/Outputs/* Flux/Plots/* Neoclassical/Inputs/* Neoclassical/Outputs/* Neoclassical/Plots/* 
+cd $CWD
+mv ~rfitzp/EPEC/tarfile.tgz .
+tar xvfz tarfile.tgz
+rm tarfile.tgz
+

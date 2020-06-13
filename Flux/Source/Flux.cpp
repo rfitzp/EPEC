@@ -77,7 +77,7 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
     PSILIM = _PSILIM;
 
   // Output calculation parameters
-  printf ("Input Parameters (from Inputs/Flux.in):\n");
+  printf ("Input Parameters (from Inputs/Flux.in and command line options):\n");
   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
 	  NPSI, NTHETA, NNC);
   printf ("Q95  = %11.4e  QFLG   = %2d\n",
@@ -87,8 +87,20 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
 	  H0, ACC, ETA, DR);
 
+  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  fprintf (namelist, "Input Parameters (from Inputs/Flux.in and command line options):\n");
+  fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
+	  NPSI, NTHETA, NNC);
+  fprintf (namelist, "Q95  = %11.4e  QFLG   = %2d\n",
+	  Q95, QFLG, NTOR);
+  fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d\n",
+	  NTOR, MMIN, MMAX, PSILIM, TIME, INTG);
+  fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
+	  H0, ACC, ETA, DR);
+  fclose (namelist);
+  
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "Input Parameters (from namelist.txt):\n");
+  fprintf (monitor, "Input Parameters (from Inputs/Flux.in and command line options):\n");
   fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
 	  NPSI, NTHETA, NNC);
   fprintf (monitor, "Q95  = %11.4e  QFLG   = %2d\n",

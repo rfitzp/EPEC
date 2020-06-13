@@ -1,0 +1,2 @@
+Input parameters (from Inputs/Neoclassical.in and command line options):
+Chi =  1.0000e+00 IMPURITY =  1 NEUTRAL =  1 FREQ =  0 INTP =  0 INTF =  0 NTYPE =  1 NN =  1.4000e+16 LN =  1.5000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00

@@ -129,11 +129,18 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
      INTF = _INTF;
 
   // Output calculation parameters
-  printf ("Reading parameters from Inputs/Neoclassical.in:\n");
+  printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
   printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
 	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
 
+  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  fprintf (namelist, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+  fprintf (namelist, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  fclose (namelist);
+  
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  fprintf (monitor, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
   fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
 	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
   fclose (monitor);
@@ -446,12 +453,12 @@ void Neoclassical::Read_Profiles ()
   // Output profiles
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/profiles.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     psi (j), rr (j),
 	     n_e (j) /1.e19, dn_edr (j) /1.e19, T_e (j) /1.e3/e, dT_edr (j) /1.e3/e,
 	     n_i (j) /1.e19, dn_idr (j) /1.e19, T_i (j) /1.e3/e, dT_idr (j) /1.e3/e,
 	     n_I (j) /1.e19, dn_Idr (j) /1.e19, T_I (j) /1.e3/e, dT_Idr (j) /1.e3/e,
-	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19);
+	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a);
   fclose (file);
 }
 
