@@ -128,23 +128,6 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   if (_INTF > -1)
      INTF = _INTF;
 
-  // Output calculation parameters
-  printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
-
-  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
-  fprintf (namelist, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  fprintf (namelist, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
-  fclose (namelist);
-  
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
-  fclose (monitor);
-
   // Sanity check
   if (CHI <= 0.)
     {
@@ -181,6 +164,23 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
        printf ("NEOCLASSICAL::Read_Parameters: Error invalid NTYPE value\n");
        exit (1);
      }
+
+   // Output input parameters
+   printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+   printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+   
+   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+   fprintf (namelist, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	    CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+   fclose (namelist);
+   
+   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+   fprintf (monitor, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+   fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	    CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+   fclose (monitor);
 }
 
 // ###################################################

@@ -1,4 +1,7 @@
 #!/bin/csh
+
+# Clean-up script
+
 rm -f *.aux >& /dev/null
 rm -f *.dvi >& /dev/null
 rm -f *.log >& /dev/null

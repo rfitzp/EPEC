@@ -17,27 +17,27 @@
 //
 // theta = 0 on inboard midplane.
 // theta > 0 above midplane.
-//
+
 // Command line options:
-// -g INTG   - overrides INTG value from namlist
+// -g INTG   - override INTG value from namlist
 // -n NTOR   - override NTOR value from namelist
 // -m MMIN   - override MMIN value from namelist
 // -M MMAX   - override MMAX value from namelist
 // -p PSILIM - override PSILIM value from namelist
 // -t TIME   - sets experimental time
-//
+
 // Calculation control parameters in namelist file INPUTS/Flux.in.
-//
-// Equilibrium in gFile.
+
+// Equilibrium in Inputs/gFile.
 // Intermediate data in folder Outputs/Stage1/
 // Final data in folder Outputs/Stage2/
 // Data passed to programs NEOCLASSICAL and PHASE output to Outputs/fFile
 
 // Version:
-//
 // 1.0 - Initial version
 // 1.2 - Improved gFile indexing
 // 1.3 - Major rearrangement of input and output files
+
 // ############################################################################
 
 #ifndef FLUX

@@ -1,0 +1,1 @@
+Input parameters (from Inputs/Phase.in and command line options):NFLOW =  100 STAGE5 =  0 INTF =  0 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  4.3500e+03 NCTRL =    2

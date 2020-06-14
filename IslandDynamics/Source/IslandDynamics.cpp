@@ -144,26 +144,26 @@ void IslandDynamics ()
   fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
 
   fprintf (monitor, "Input parameters (from Inputs/Island.in):\n");
-  fprintf (monitor, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX   = %2d\n",
-	   FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_FREQ = %2d  NEO_YN = %11.4e\n",
-	   NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  fprintf (monitor, "PHASE_INTN = %2d  PHASE_STAGE5 = %2d           PHASE_OLD   = %2d\n",
-	   PHASE_INTN, PHASE_STAGE5, PHASE_OLD);
-  fprintf (monitor, "RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
-	   RESTART, TSTART, TEND, DT);
+  fprintf (monitor, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
+  fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
+  fprintf (monitor, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD);
+  fprintf (monitor, "RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+	  RESTART, TSTART, TEND, DT);
   fclose (monitor);
 
   FILE* namelist = fopen ("Inputs/InputParameters", "w");
   fprintf (namelist, "Input parameters (from Inputs/Island.in):\n");
-  fprintf (namelist, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX   = %2d\n",
-	   FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  fprintf (namelist, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_FREQ = %2d  NEO_YN = %11.4e\n",
-	   NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  fprintf (namelist, "PHASE_INTN = %2d  PHASE_STAGE5 = %2d           PHASE_OLD   = %2d\n",
-	   PHASE_INTN, PHASE_STAGE5, PHASE_OLD);
-  fprintf (namelist, "RESTART    = %2d  TSTART       = %11.4e  TEND        = %11.4e  DT       = %11.4e\n",
-	   RESTART, TSTART, TEND, DT);
+  fprintf (namelist, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
+  fprintf (namelist, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
+  fprintf (namelist, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD);
+  fprintf (namelist, "RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+	  RESTART, TSTART, TEND, DT);
   fclose (namelist);
 
   // ..................

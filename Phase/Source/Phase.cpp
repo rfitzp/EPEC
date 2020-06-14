@@ -144,18 +144,18 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("Input parameters (from Inputs/Phase.in and command line options):");
+  printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
-  fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):");
+  fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):");
+  fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
   fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
   fclose (monitor);

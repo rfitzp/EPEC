@@ -6,19 +6,21 @@
 // surfaces in tokamak.
 
 // Command line options:
-// -e INTF     - overrides INTF value from namelist files
-// -p INTP     - overrides INTP value from namelist files
-// -n NEUTRAL  - overrides NEUTRAL value from namelist file
-// -I IMPURITY - overrides IMPURITY value from namelist file
-// -f FREQ     - overrides FREQ value from namelist file
-// -y YN       - overrides YN value from namelist file
+// -e INTF     - override INTF value from namelist files
+// -p INTP     - override INTP value from namelist files
+// -n NEUTRAL  - override NEUTRAL value from namelist file
+// -I IMPURITY - override IMPURITY value from namelist file
+// -f FREQ     - override FREQ value from namelist file
+// -y YN       - override YN value from namelist file
+// -N NN       - override NN value from namelist file
+// -l LN       - override LN value from namelist file
+// -T NTYPE    - override NTYPE value from namelist file
 // -t TIME     - sets experimental time
 
-// Intermediate data in folder /Stage3
+// Intermediate data in folder Outputs/Stage3
 // Final data passed to program PHASE in file Outputs/nFile
 
 // Version:
-
 // 1.0 - Initial version
 // 1.1 - Improved indexing of pFiles and fFiles
 // 1.2 - Major rearrangement of input and output files
@@ -108,7 +110,7 @@ class Neoclassical
   // Plasma equilibrium data
   // .......................
   
-  // From ../Flux/fFile
+  // From Inputs/fFile
   double          B_0;    // Toroidal magnetic field (T)
   double          R_0;    // Major radius (m)
   double          a;      // Minor radius (m)
