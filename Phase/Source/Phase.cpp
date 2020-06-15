@@ -144,17 +144,26 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   // .............................
   // Output calculation parameters
   // .............................
+  printf ("\nGit Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
+  fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
+  fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
+  fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
+  fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
   fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);

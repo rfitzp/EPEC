@@ -135,15 +135,38 @@ void IslandDynamics ()
   struct tm * timeinfo;
   time                 (&rawtime);
   timeinfo = localtime (&rawtime);
- 
+  
+  printf ("%s\n", asctime (timeinfo));
+  printf ("\n######################\n");
+  printf ("Program IslandDynamics\n");
+  printf ("######################\n");
+  printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+  
+  
+  printf ("Input parameters (from Inputs/Island.in):\n");
+  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
+  printf ("FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
+  printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
+  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD);
+  printf ("RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+	  RESTART, TSTART, TEND, DT);
+
   FILE* monitor = fopen ("Outputs/monitor.txt", "a");
   fprintf (monitor, "%s\n", asctime (timeinfo));
   fprintf (monitor, "\n######################\n");
   fprintf (monitor, "Program IslandDynamics\n");
   fprintf (monitor, "######################\n");
   fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
-
+  
   fprintf (monitor, "Input parameters (from Inputs/Island.in):\n");
+  fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
+  fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
+  fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
@@ -156,6 +179,9 @@ void IslandDynamics ()
 
   FILE* namelist = fopen ("Inputs/InputParameters", "w");
   fprintf (namelist, "Input parameters (from Inputs/Island.in):\n");
+  fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
+  fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
+  fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   fprintf (namelist, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",

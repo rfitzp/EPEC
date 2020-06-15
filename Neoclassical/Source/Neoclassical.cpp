@@ -114,19 +114,19 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   if (_FREQ != -999999)
     FREQ = _FREQ;
   if (_TIME > 0.)
-     TIME = _TIME;
+    TIME = _TIME;
   if (_NTYPE > -1)
-     NTYPE = _NTYPE;
+    NTYPE = _NTYPE;
   if (_NN > 0.)
-     NN = _NN;
+    NN = _NN;
   if (_LN > 0.)
-     LN = _LN;
+    LN = _LN;
   if (_YN > 0.)
-     YN = _YN;
+    YN = _YN;
   if (_INTP > -1)
-     INTP = _INTP;
+    INTP = _INTP;
   if (_INTF > -1)
-     INTF = _INTF;
+    INTF = _INTF;
 
   // Sanity check
   if (CHI <= 0.)
@@ -134,53 +134,62 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
       printf ("NEOCLASSICAL::Read_Parameters: Error CHI must be positive\n");
       exit (1);
     }
-   if (YN < 0.)
+  if (YN < 0.)
     {
       printf ("NEOCLASSICAL::Read_Parameters: Error YN must be positive\n");
       exit (1);
     }
-   if (NN < 0.)
-    {
-      printf ("NEOCLASSICAL::Read_Parameters: Error NN must be positive\n");
+  if (NN < 0.)
+     {
+       printf ("NEOCLASSICAL::Read_Parameters: Error NN must be positive\n");
+       exit (1);
+     }
+  if (LN < 0.)
+     {
+       printf ("NEOCLASSICAL::Read_Parameters: Error LN must be positive\n");
+       exit (1);
+     }
+  if (SVN < 0.)
+     {
+       printf ("NEOCLASSICAL::Read_Parameters: Error SVN must be positive\n");
       exit (1);
-    }
-   if (LN < 0.)
-    {
-      printf ("NEOCLASSICAL::Read_Parameters: Error LN must be positive\n");
+     }
+  if (EN < 0.)
+     {
+       printf ("NEOCLASSICAL::Read_Parameters: Error EN must be positive\n");
       exit (1);
-    }
-   if (SVN < 0.)
-    {
-      printf ("NEOCLASSICAL::Read_Parameters: Error SVN must be positive\n");
-      exit (1);
-    }
-   if (EN < 0.)
-    {
-      printf ("NEOCLASSICAL::Read_Parameters: Error EN must be positive\n");
-      exit (1);
-    }
-   if (NTYPE < 0 || NTYPE > 1)
+     }
+  if (NTYPE < 0 || NTYPE > 1)
      {
        printf ("NEOCLASSICAL::Read_Parameters: Error invalid NTYPE value\n");
        exit (1);
      }
 
-   // Output input parameters
-   printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-   printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+  // Output input parameters
+  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
+  printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+   
+  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
+  fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
+  fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
+  fprintf (namelist, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+  fprintf (namelist, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
 	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
-   
-   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
-   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-   fprintf (namelist, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	    CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
-   fclose (namelist);
-   
-   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-   fprintf (monitor, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-   fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	    CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
-   fclose (monitor);
+  fclose (namelist);
+  
+  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
+  fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
+  fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
+  fprintf (monitor, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+  fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  fclose (monitor);
 }
 
 // ###################################################

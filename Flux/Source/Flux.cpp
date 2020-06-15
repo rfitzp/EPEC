@@ -129,6 +129,9 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
     }
   
   // Output calculation parameters
+  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input Parameters (from Inputs/Flux.in and command line options):\n");
   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
 	  NPSI, NTHETA, NNC);
@@ -140,6 +143,9 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
 	  H0, ACC, ETA, DR);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
+  fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
+  fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input Parameters (from Inputs/Flux.in and command line options):\n");
   fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
 	  NPSI, NTHETA, NNC);
@@ -152,6 +158,9 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
+  fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
+  fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input Parameters (from Inputs/Flux.in and command line options):\n");
   fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d\n",
 	  NPSI, NTHETA, NNC);
