@@ -8,20 +8,21 @@
 void Flux::Stage1 ()
 {
   // Interpolate gFiles
-  if (INTG > 0 && TIME > 0.)
+  if (INTG != 0 && TIME > 0.)
     {
       // Save pwd
       char pwd[MAXFILENAMELENGTH];
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove gFile
-      chdir ("Inputs");
-      system ("rm -rf gFile");
+      system ("rm -rf Inputs/gFile");
 
       // Get gFiles directory
       char gFileDir[MAXFILENAMELENGTH];
-      readlink ("gFiles", gFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
+      system ("greadlink -f Inputs/gFiles > gFileDir");
+      FILE* gfd = OpenFiler ("gFileDir");
+      fscanf (gfd, "%s", gFileDir);
+      fclose (gfd);
 
       // Read gFile data
       char           Basename[MAXFILENAMELENGTH];

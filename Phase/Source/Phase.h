@@ -46,8 +46,8 @@
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_const_mksa.h>
 
-#define MAXFILENAMELENGTH 100
-#define MAXCONTROLPOINTNUMBER 100
+#define MAXFILENAMELENGTH 500
+#define MAXCONTROLPOINTNUMBER 500
 #define MAXULFILELINELENGTH 500
 
 using namespace blitz;

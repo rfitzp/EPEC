@@ -207,14 +207,16 @@ void Neoclassical::Read_Equilibrium ()
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove fFile
-      chdir ("Inputs");
-      system ("rm -rf fFile");
+      system ("rm -rf Inputs/fFile");
 
       // Get fFiles directory
       char fFileDir[MAXFILENAMELENGTH];
-      readlink ("fFiles", fFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
-      
+      system ("greadlink -f Inputs/fFiles > fFileDir");
+      FILE* ffd = OpenFiler ("fFileDir");
+      fscanf (ffd, "%s", fFileDir);
+      fclose (ffd);
+      system ("rm fFileDir");
+        
       // Read fFile data
       char           Basename[MAXFILENAMELENGTH];
       char           Filename[MAXFILENAMELENGTH];
@@ -324,14 +326,16 @@ void Neoclassical::Read_Profiles ()
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove pFile
-      chdir ("Inputs");
-      system ("rm -rf pFile");
+      system ("rm -rf Inputs/pFile");
 
       // Get pFiles directory
       char pFileDir[MAXFILENAMELENGTH];
-      readlink ("pFiles", pFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
-
+      system ("greadlink -f Inputs/pFiles > pFileDir");
+      FILE* pfd = OpenFiler ("pFileDir");
+      fscanf (pfd, "%s", pFileDir);
+      fclose (pfd);
+      system ("rm pFileDir");
+  
       // Read pFile data
       char           Basename[MAXFILENAMELENGTH];
       char           Filename[MAXFILENAMELENGTH];

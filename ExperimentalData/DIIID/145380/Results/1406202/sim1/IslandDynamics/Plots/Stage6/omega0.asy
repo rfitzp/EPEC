@@ -154,6 +154,14 @@ if (q4.length > 0)
    }
 
 s = dotted + black + 1;
+
+xequals (2840, s);
+xequals (2980, s);
+xequals (3320, s);
+xequals (3560, s);
+xequals (3880, s);
+xequals (4200, s);
+
 //ylimits (-20., 20., Crop);
 yequals (0., s);
 

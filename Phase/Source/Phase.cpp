@@ -172,21 +172,23 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   // .................
   // Interpolate fFile
   // .................
-  if (INTF !=0  && TIME > 0.)
+  if (INTF != 0  && TIME > 0.)
     {
       // Save pwd
       char pwd[MAXFILENAMELENGTH];
-
       getcwd (pwd, MAXFILENAMELENGTH);
+
       // Remove fFile
-      chdir ("Inputs");
-      system ("rm -rf fFile");
+      system ("rm -rf Inputs/fFile");
 
       // Get fFiles directory
       char fFileDir[MAXFILENAMELENGTH];
-      readlink ("fFiles", fFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
-      
+      system ("greadlink -f Inputs/fFiles > fFileDir");
+      FILE* ffd = OpenFiler ("fFileDir");
+      fscanf (ffd, "%s", fFileDir);
+      fclose (ffd);
+      system ("rm fFileDir");
+         
       // Read fFile data
       char           Basename[MAXFILENAMELENGTH];
       char           Filename[MAXFILENAMELENGTH];
@@ -357,13 +359,15 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove nFile
-      chdir ("Inputs");
-      system ("rm -rf nFile");
+      system ("rm -rf Inputs/nFile");
 
       // Get nFiles directory
       char nFileDir[MAXFILENAMELENGTH];
-      readlink ("pFiles", nFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
+      system ("greadlink -f Inputs/nFiles > nFileDir");
+      FILE* nfd = OpenFiler ("nFileDir");
+      fscanf (nfd, "%s", nFileDir);
+      fclose (nfd);
+      system ("rm nFileDir");
       
       // Read nFile data
       char           Basename[MAXFILENAMELENGTH];
@@ -462,14 +466,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove uFile
-      chdir ("Inputs");
-      system ("rm -rf uFile");
+      system ("rm -rf Inputs/uFile");
 
       // Get uFiles directory
       char uFileDir[MAXFILENAMELENGTH];
-      readlink ("uFiles", uFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
-      
+      system ("greadlink -f Inputs/uFiles > uFileDir");
+      FILE* ufd = OpenFiler ("uFileDir");
+      fscanf (ufd, "%s", uFileDir);
+      fclose (ufd);
+      system ("rm uFileDir");
+       
       // Read uFile data
       char           Basename [MAXFILENAMELENGTH];
       char           Filename [MAXFILENAMELENGTH];
@@ -484,7 +490,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
       chdir (uFileDir);
       getcwd (Basename, MAXFILENAMELENGTH);
       strcat (Basename, "/");
-
+      
       file = OpenFiler ((char*) "Index");
 
       while (fscanf (file, "%s %lf %d %d %d", &ufilename, &ufiletime) == 2)
@@ -504,14 +510,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
       uFileInterp (uFileName, uFileTime, uFileNumber, TIME);
 
       // Remove lFile
-      chdir ("Inputs");
-      system ("rm -rf lFile");
+      system ("rm -rf Inputs/lFile");
       
       // Get lFiles directory
       char lFileDir[MAXFILENAMELENGTH];
-      readlink ("lFiles", lFileDir, MAXFILENAMELENGTH);
-      chdir (pwd);
-      
+      system ("greadlink -f Inputs/lFiles > lFileDir");
+      FILE* lfd = OpenFiler ("lFileDir");
+      fscanf (lfd, "%s", lFileDir);
+      fclose (lfd);
+      system ("rm lFileDir");
+       
       // Read lFile data
       char           lfilename[MAXFILENAMELENGTH];
       vector<string> lFileName;

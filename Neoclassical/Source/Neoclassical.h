@@ -47,8 +47,8 @@
 
 #include "Field.h"
 
-#define MAXFILENAMELENGTH 200
-#define MAXPFILELINELENGTH 200
+#define MAXFILENAMELENGTH 500
+#define MAXPFILELINELENGTH 500
 
 using namespace blitz;
 

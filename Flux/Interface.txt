@@ -1,10 +1,10 @@
-/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/gFiles/g145380.02400
- 2.400000000e+03
-/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/gFiles/g145380.02450
- 2.450000000e+03
-/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/gFiles/g145380.02500
- 2.500000000e+03
-/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/gFiles/g145380.02550
- 2.550000000e+03
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Restricted/gFiles/g145380.04300
+ 4.300000000e+03
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Restricted/gFiles/g145380.04350
+ 4.350000000e+03
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Restricted/gFiles/g145380.04400
+ 4.400000000e+03
+/Users/rfitzp/EPEC/ExperimentalData/DIIID/145380/Restricted/gFiles/g145380.04450
+ 4.450000000e+03
 Inputs/gFile
- 2.450000000e+03
+ 4.350000000e+03
