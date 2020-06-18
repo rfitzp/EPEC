@@ -1,0 +1,17 @@
+&PHASE_CONTROL
+	NFLOW  = 100   ! Number of flow harmonics
+	STAGE5 = 1     ! Flag for Stage5 calculation
+	INTF   = 0     ! Flag for fFile interpolation
+	INTN   = 0     ! Flag for nFile interpolation
+	INTU   = 0     ! Flag for uFile/lFile interpolation
+	OLD    = 0     ! Flag for restarting old calculation
+	DT     = 1.e-5 ! Data recorded every DT seconds
+	TIME   = 0.    ! Experimental time
+	NCTRL  = 2     ! Number of control points
+&end
+&PHASE_WAVEFORM
+	TCTRL = 0.0, 0.05 ! Control times
+	ICTRL = 4.0, 4.0  ! Control currents (kA)
+	PCTRL = 1.5, 1.5  ! Phase of lower RMP currents relative to upper RMP currents (units of PI)
+&end	
+

@@ -1,0 +1,6 @@
+Git Hash     = 0361d312f49a83195eddd468bb62be78bd34cc5a
+Compile time = 2020-06-15 18:43:30 UTC
+Git Branch   = master
+
+Input parameters (from Inputs/Phase.in and command line options):
+NFLOW =  100 STAGE5 =  0 INTF =  1 INTN =  0 INTU =  1 OLD =  0 DT =  1.0000e-05 TIME =  4.3500e+03 NCTRL =    2
