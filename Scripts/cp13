@@ -3,7 +3,7 @@
 # Script to copy output from Stages 1 to 3 (i.e., FLUX and NEOCLASSICAL)
 # to pwd
 
-CWD = "$(pwd)"
+CWD="$(pwd)"
 cd /Users/rfitzp/EPEC
 tar  --dereference --exclude='*.eps' -c -v -z -f tarfile.tgz Flux/Inputs/* Flux/Outputs/* Flux/Plots/* Neoclassical/Inputs/* Neoclassical/Outputs/* Neoclassical/Plots/* 
 cd $CWD

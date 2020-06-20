@@ -24,6 +24,7 @@
 // 1.0 - Initial version
 // 1.1 - Improved indexing of pFiles and fFiles
 // 1.2 - Major rearrangement of input and output files
+// 1.3 - Added PsiNk to nFile
 
 // ################################################################
 
@@ -31,7 +32,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 2
+#define VERSION_MINOR 3
 
 #include <stdio.h>
 #include <math.h>

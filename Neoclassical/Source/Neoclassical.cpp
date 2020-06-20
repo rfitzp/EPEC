@@ -973,13 +973,13 @@ void Neoclassical::Get_Normalized ()
       printf ("m = %3d r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e w0 = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
 	      mk (j), rk (j), qk (j), rhok (j), a/R_0, Sk, wk, tm, th, dk);
 
-      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke,
-	       dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j));
+	       dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j), PsiNk(j));
     }
    fclose (file);
 
-   if (INTP > 0 && TIME > 0.)
+   if (INTP != 0 && TIME > 0.)
      {
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/nFiles/n.%d", int (TIME));
@@ -997,9 +997,9 @@ void Neoclassical::Get_Normalized ()
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 	  
-	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke,
-		   dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j));
+		   dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j), PsiNk(j));
 	}
       fclose (file);
 

@@ -23,6 +23,7 @@
 // 1.0 - Initial version
 // 1.1 - Improved indexing of fFiles, nFiles, uFiles, and lFiles
 // 1.2 - Major rearrangement of input and output files
+// 1.3 - Added PsiN and island width in PsiN to Stage6 output files
 
 // #######################################################################
 
@@ -30,7 +31,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 2
+#define VERSION_MINOR 3
 
 #include <stdio.h>
 #include <math.h>
@@ -114,28 +115,29 @@ class Phase
   // ------------------------------
  
   // Read from Inputs/nFile
-  double          tau_A;  // Alfven time
-  Array<int,1>    mk;     // Resonant poloidal mode numbers
-  Array<int,1>    ntor;   // Resonant toroidal mode number
-  Array<double,1> rk;     // Normalized minor radii of resonant surfaces
-  Array<double,1> qk;     // Safety-factors at resonant surfaces
-  Array<double,1> rhok;   // Normalized mass densities at resonant surfaces
-  Array<double,1> a;      // Normalized plasma minor radius
-  Array<double,1> Sk;     // Lundquist numbers at resonant surfaces
-  Array<double,1> wk;     // Normalized nonlinear natural frequencies at resonant surfaces
-  Array<double,1> wkl;    // Normalized linear natural frequencies at resonant surfaces
-  Array<double,1> wke;    // Normalized ExB frequencies at resonant surfaces
-  Array<double,1> taumk;  // Normalized momentum confinement timescales at resonant surfaces
-  Array<double,1> tautk;  // Normalized poloidal flow damping timescales at resonant surfaces
-  Array<double,1> fack;   // Island width factors at resonant surfaces
-  Array<double,1> delk;   // Normalized linear layer widths at resonant surfaces
-  Array<double,1> dnedrk; // Density gradients at resonant surfaces
-  Array<double,1> dTedrk; // Temperature gradients at resonant surfaces
-  Array<double,1> Wcrnek; // Critical island widths for density flattening at resonant surfaces
-  Array<double,1> WcrTek; // Critical island widths for temperature flattening at resonant surfaces
-  Array<double,1> akk;    // Metric elements at resonant surfaces
-  Array<double,1> gk;     // g values at resonant surfaces
-  Array<double,1> dPsidr; // dPsiN/dr values at resonant surfaces
+  double          tau_A;   // Alfven time
+  Array<int,1>    mk;      // Resonant poloidal mode numbers
+  Array<int,1>    ntor;    // Resonant toroidal mode number
+  Array<double,1> rk;      // Normalized minor radii of resonant surfaces
+  Array<double,1> qk;      // Safety-factors at resonant surfaces
+  Array<double,1> rhok;    // Normalized mass densities at resonant surfaces
+  Array<double,1> a;       // Normalized plasma minor radius
+  Array<double,1> Sk;      // Lundquist numbers at resonant surfaces
+  Array<double,1> wk;      // Normalized nonlinear natural frequencies at resonant surfaces
+  Array<double,1> wkl;     // Normalized linear natural frequencies at resonant surfaces
+  Array<double,1> wke;     // Normalized ExB frequencies at resonant surfaces
+  Array<double,1> taumk;   // Normalized momentum confinement timescales at resonant surfaces
+  Array<double,1> tautk;   // Normalized poloidal flow damping timescales at resonant surfaces
+  Array<double,1> fack;    // Island width factors at resonant surfaces
+  Array<double,1> delk;    // Normalized linear layer widths at resonant surfaces
+  Array<double,1> dnedrk;  // Density gradients at resonant surfaces
+  Array<double,1> dTedrk;  // Temperature gradients at resonant surfaces
+  Array<double,1> Wcrnek;  // Critical island widths for density flattening at resonant surfaces
+  Array<double,1> WcrTek;  // Critical island widths for temperature flattening at resonant surfaces
+  Array<double,1> akk;     // Metric elements at resonant surfaces
+  Array<double,1> gk;      // g values at resonant surfaces
+  Array<double,1> PsiN;    // PsiN values at rational surfaces
+  Array<double,1> dPsiNdr; // dPsiN/dr values at resonant surfaces
 
   // ----------------------
   // Data from program GPEC

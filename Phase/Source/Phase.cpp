@@ -433,19 +433,20 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
     TT (i) = TCTRL[i] /tau_A;
   dTT = DT /tau_A;
 
-  mk.resize     (nres); ntor.resize   (nres); rk.resize     (nres);
-  qk.resize     (nres); rhok.resize   (nres); a.resize      (nres);
-  Sk.resize     (nres); wk.resize     (nres); taumk.resize  (nres);
-  tautk.resize  (nres); fack.resize   (nres); delk.resize   (nres);
-  wkl.resize    (nres); wke.resize    (nres); dnedrk.resize (nres);
-  dTedrk.resize (nres); Wcrnek.resize (nres); WcrTek.resize (nres);
-  akk.resize    (nres); gk.resize     (nres); dPsidr.resize (nres);
+  mk.resize     (nres); ntor.resize   (nres); rk.resize      (nres);
+  qk.resize     (nres); rhok.resize   (nres); a.resize       (nres);
+  Sk.resize     (nres); wk.resize     (nres); taumk.resize   (nres);
+  tautk.resize  (nres); fack.resize   (nres); delk.resize    (nres);
+  wkl.resize    (nres); wke.resize    (nres); dnedrk.resize  (nres);
+  dTedrk.resize (nres); Wcrnek.resize (nres); WcrTek.resize  (nres);
+  akk.resize    (nres); gk.resize     (nres); dPsiNdr.resize (nres);
+  PsiN.resize   (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk(j), &ntor(j), &rk(j), &qk(j), &rhok(j), &a(j), &Sk(j),
 		&wk(j), &taumk(j), &tautk(j), &fack(j), &delk(j), &wkl(j),
-		&wke(j), &dnedrk(j), &dTedrk(j), &Wcrnek(j), &WcrTek(j), &akk(j), &gk(j), &dPsidr(j)) != 21)
+		&wke(j), &dnedrk(j), &dTedrk(j), &Wcrnek(j), &WcrTek(j), &akk(j), &gk(j), &dPsiNdr(j), &PsiN(j)) != 22)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -626,7 +627,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
 	gsl_vector_complex_set (ChiU,   i, gsl_complex_rect (CRE[i], CIM[i]));
 
 	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiU, i));
-	double WUNRE = 4. * fack(i) * sqrt (Psi) * dPsidr (i);
+	double WUNRE = 4. * fack(i) * sqrt (Psi) * dPsiNdr (i);
 	double WFULL = sqrt (FFh(i, i) * EEh(i, i)) * WUNRE;
 
 	printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
@@ -679,7 +680,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
 	gsl_vector_complex_set (ChiL,   i, gsl_complex_rect (CRE[i], CIM[i]));
 
 	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiL, i));
-	double WUNRE = 4. * fack(i) * sqrt (Psi) * dPsidr(i);
+	double WUNRE = 4. * fack(i) * sqrt (Psi) * dPsiNdr(i);
 	double WFULL = sqrt (FFh(i, i) * EEh(i, i)) * WUNRE;
 
 	printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
@@ -1106,8 +1107,16 @@ void Phase::IslandDynamics ()
   
   FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mk (j), rk (j), wk (j) /tau_A/1.e3, ww (j) /tau_A/1.e3, TIME, 4. * fack (j) * sqrt (fabs (Psik (j)))/a(j));
+    fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mk (j),
+	     rk (j),
+	     wk (j) /tau_A/1.e3,
+	     ww (j) /tau_A/1.e3,
+	     TIME,
+	     4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
+	     PsiN (j),
+	     4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j),
+	     4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j));
   fclose (file);
 }
 
