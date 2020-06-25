@@ -3,6 +3,7 @@
 // PROGRAM ORGANIZATION:
 //
 // void Phase:: lFileInterp               (vector<string> lFileName,   vector<double> lFileTime,   int lFileNumber, double time)
+// void Phase:: lFileInterpolateLinear    (char* lFile1, double time1, char* lFile,  double time)
 // void Phase:: lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2, double time2, char* lFile,     double time)
 // void Phase:: lFileInterpolateCubic     (char* lFile1, double time1, char* lFile2, double time2, char* lFile3,    double time3, char* lFile, double time)
 // void Phase:: lFileInterpolateQuartic   (char* lFile1, double time1, char* lFile2, double time2, char* lFile3,    double time3,
@@ -15,10 +16,17 @@
 // ###############################
 void Phase::lFileInterp (vector<string> lFileName, vector<double> lFileTime, int lFileNumber, double time)
 {
-  if (lFileNumber < 2)
+  if (lFileNumber < 1)
     {
-      printf ("PHASE::lFileInterp: Error - lFileNumber must be greater than unity\n");
+      printf ("PHASE::lFileInterp: Error - lFileNumber must be greater than zero\n");
       exit (1);
+    }
+  else if (lFileNumber == 1)
+    {
+      char* lFile = "Inputs/lFile";
+      char* file1 = (char*) lFileName[0].c_str();
+  
+      lFileInterpolateLinear (file1, lFileTime[0], lFile, time);
     }
   else if (lFileNumber == 2)
     {
@@ -110,10 +118,129 @@ void Phase::lFileInterp (vector<string> lFileName, vector<double> lFileTime, int
     }
 }
 
+void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, double time)
+{
+  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH],  line3[MAXULFILELINELENGTH],  line4[MAXULFILELINELENGTH], line5[MAXULFILELINELENGTH],
+       linea[MAXULFILELINELENGTH],  lineaa[MAXULFILELINELENGTH], linebb[MAXULFILELINELENGTH], line7[MAXULFILELINELENGTH], line8[MAXULFILELINELENGTH];
+  
+  // ................
+  // Read first lFile
+  // ................
+  FILE* file = OpenFiler (lFile1);
+
+  fgets (line1, MAXULFILELINELENGTH, file);
+  fgets (line2, MAXULFILELINELENGTH, file);
+  fgets (line3, MAXULFILELINELENGTH, file);
+  fgets (line4, MAXULFILELINELENGTH, file);
+  fgets (line5, MAXULFILELINELENGTH, file);
+  fgets (linea, MAXULFILELINELENGTH, file);
+  fgets (line7, MAXULFILELINELENGTH, file);
+  fgets (line8, MAXULFILELINELENGTH, file);
+  strcpy (lineaa, linea);
+
+  char* token;
+  token = strtok (linea, " "); 
+  token = strtok (NULL,  " "); 
+  token = strtok (NULL,  " ");
+  int nres_1 = atoi (token);
+
+  double* v01_1 = new double[nres_1];
+  double* v02_1 = new double[nres_1];
+  double* v03_1 = new double[nres_1];
+  double* v04_1 = new double[nres_1];
+  double* v05_1 = new double[nres_1];
+  double* v06_1 = new double[nres_1];
+  double* v07_1 = new double[nres_1];
+  double* v08_1 = new double[nres_1];
+  double* v09_1 = new double[nres_1];
+  double* v10_1 = new double[nres_1];
+  double* v11_1 = new double[nres_1];
+  double* v12_1 = new double[nres_1];
+
+  for (int i = 0; i < nres_1; i++)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
+      {
+	printf ("PHASE:lFileInterpolateLinear: Error reading lFile_1\n");
+	exit (1);
+      }
+
+  fclose (file);
+
+  // ......................
+  // Interpolate lFile data
+  // ......................
+  int nres = nres_1;
+
+  double* v01 = new double[nres];
+  double* v02 = new double[nres];
+  double* v03 = new double[nres];
+  double* v04 = new double[nres];
+  double* v05 = new double[nres];
+  double* v06 = new double[nres];
+  double* v07 = new double[nres];
+  double* v08 = new double[nres];
+  double* v09 = new double[nres];
+  double* v10 = new double[nres];
+  double* v11 = new double[nres];
+  double* v12 = new double[nres];
+
+  double weight1 = 1.;
+
+  for (int i = 0; i < nres; i++)
+    {
+      v01[i] = v01_1[i]; 
+      v02[i] = v02_1[i]; 
+      v03[i] = v03_1[i]; 
+      v04[i] = v04_1[i]; 
+      v05[i] = v05_1[i]; 
+      v06[i] = v06_1[i]; 
+      v07[i] = v07_1[i]; 
+      v08[i] = v08_1[i]; 
+      v09[i] = v09_1[i]; 
+      v10[i] = v10_1[i]; 
+      v11[i] = v11_1[i]; 
+      v12[i] = v12_1[i]; 
+    }
+
+  // ........................
+  // Write interpolated lFile
+  // ........................
+  file = OpenFilew (lFile);
+
+  fprintf (file, "%s", line1);
+  fprintf (file, "%s", line2);
+  fprintf (file, "%s", line3);
+  fprintf (file, "%s", line4);
+  fprintf (file, "%s", line5);
+  fprintf (file, "%s", lineaa);
+  fprintf (file, "%s", line7);
+  fprintf (file, "%s", line8);
+
+  for (int i = 0; i < nres; i++)
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i]);
+  
+  fclose (file);
+
+  printf ("lFile Interpolation:\n");
+  printf ("%s %11.4e\n", lFile1, weight1);
+ 
+  // ........
+  // Clean up
+  // ........
+  delete[] v01_1; delete[] v02_1; delete[] v03_1; delete[] v04_1;
+  delete[] v05_1; delete[] v06_1; delete[] v07_1; delete[] v08_1;
+  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1;
+  delete[] v01;   delete[] v02;   delete[] v03;   delete[] v04;
+  delete[] v05;   delete[] v06;   delete[] v07;   delete[] v08;
+  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12; 
+}
+
 void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2, double time2, char* lFile, double time)
 {
-  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH], line3[MAXULFILELINELENGTH], line4[MAXULFILELINELENGTH],  line5[MAXULFILELINELENGTH],
-       linea[MAXULFILELINELENGTH],  lineb[MAXULFILELINELENGTH], linec[MAXULFILELINELENGTH], lineaa[MAXULFILELINELENGTH], linebb[MAXULFILELINELENGTH],
+  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH], line3[MAXULFILELINELENGTH],  line4[MAXULFILELINELENGTH],  line5[MAXULFILELINELENGTH],
+       linea[MAXULFILELINELENGTH],  lineb[MAXULFILELINELENGTH], lineaa[MAXULFILELINELENGTH], linebb[MAXULFILELINELENGTH],
        line7[MAXULFILELINELENGTH],  line8[MAXULFILELINELENGTH];
   
   // ................

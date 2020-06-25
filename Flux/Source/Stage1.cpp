@@ -23,6 +23,7 @@ void Flux::Stage1 ()
       FILE* gfd = OpenFiler ("gFileDir");
       fscanf (gfd, "%s", gFileDir);
       fclose (gfd);
+      system ("rm gFileDir");
 
       // Read gFile data
       char           Basename[MAXFILENAMELENGTH];

@@ -2,8 +2,8 @@ F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90
 
 C_HEADER = Neoclassical.h
-C_OBJECT = main.o Neoclassical.o Field.o pFileRead.o Interpolate.o pFileInterpolate.o fFileInterpolate.o
-C_SOURCE = main.cpp Neoclassical.cpp Field.cpp pFileRead.cpp Interpolate.cpp pFileInterpolate.cpp fFileInterpolate.cpp
+C_OBJECT = main.o Neoclassical.o Field.o pFileRead.o Interpolate.o pFileInterpolate.o fFileInterpolate.o cFileRead.o cFileInterpolate.o
+C_SOURCE = main.cpp Neoclassical.cpp Field.cpp pFileRead.cpp Interpolate.cpp pFileInterpolate.cpp fFileInterpolate.cpp cFileRead.cpp cFileInterpolate.cpp
 
 GIT_HASH             = `git rev-parse HEAD`
 COMPILE_TIME         = `date -u +'%Y-%m-%d %H:%M:%S UTC'`

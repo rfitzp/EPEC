@@ -3,6 +3,7 @@
 // PROGRAM ORGANIZATION:
 //
 // void Flux:: gFileInterp               (vector<string> gFileName,   vector<double> gFileTime,   int gFileNumber,  double time)
+// void Flux:: gFileInterpolateLinearv   (char* gFile1, double time1, char* gFile,  double time)
 // void Flux:: gFileInterpolateQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile,      double time)
 // void Flux:: gFileInterpolateCubic     (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,     double time3, char* gFile, double time)
 // void Flux:: gFileInterpolateQuartic   (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,     double time3,
@@ -14,10 +15,17 @@
 // ###############################
 void Flux::gFileInterp (vector<string> gFileName, vector<double> gFileTime, int gFileNumber, double time)
 {
-  if (gFileNumber < 2)
+  if (gFileNumber < 1)
     {
-      printf ("FLUX::gFileInterp - gFileNumber must be greater than unity\n");
+      printf ("FLUX::gFileInterp - gFileNumber must be greater than zero\n");
       exit (1);
+    }
+  else if (gFileNumber == 1)
+    {
+      char* gFile = "Inputs/gFile";
+      char* file1 = (char*) gFileName[0].c_str();
+
+      gFileInterpLinear (file1, gFileTime[0], gFile, time);
     }
   else if (gFileNumber == 2)
     {
@@ -109,6 +117,27 @@ void Flux::gFileInterp (vector<string> gFileName, vector<double> gFileTime, int 
     }
 }
 
+void Flux::gFileInterpLinear (char* gFile1, double time1, char* gFile, double time)
+{
+  FILE* file = OpenFilew ("Interface.txt");
+
+  fprintf (file, "%s\n",     gFile1);
+  fprintf (file, "%16.9e\n", time1);
+  fprintf (file, "%s\n",     gFile);
+  fprintf (file, "%16.9e\n", time);
+
+  fclose (file);
+
+  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  double weight1 = 1.;
+  fprintf (monitor, "gFile Interpolation:\n");
+  fprintf (monitor, "%s %16.9e\n", gFile1, weight1);
+  fclose (monitor);
+  
+  gFileInterpolateLinear ();
+}
+
+
 void Flux::gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile, double time)
 {
   FILE* file = OpenFilew ("Interface.txt");
@@ -130,7 +159,7 @@ void Flux::gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, doubl
   fprintf (monitor, "%s %16.9e\n", gFile2, weight2);
   fclose (monitor);
   
- gFileInterpolateQuadratic ();
+  gFileInterpolateQuadratic ();
 }
 
 void Flux::gFileInterpCubic (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
@@ -159,7 +188,7 @@ void Flux::gFileInterpCubic (char* gFile1, double time1, char* gFile2, double ti
   fprintf (monitor, "%s %16.9e\n", gFile3, weight3);
   fclose (monitor);
 
- gFileInterpolateCubic ();
+  gFileInterpolateCubic ();
 }
 
 void Flux::gFileInterpQuartic (char* gFile1, double time1, char* gFile2, double time2, char* gFile3, double time3,
@@ -192,6 +221,6 @@ void Flux::gFileInterpQuartic (char* gFile1, double time1, char* gFile2, double 
   fprintf (monitor, "%s %16.9e\n", gFile4, weight4);
   fclose (monitor);
 
- gFileInterpolateQuartic ();
+  gFileInterpolateQuartic ();
 }
 

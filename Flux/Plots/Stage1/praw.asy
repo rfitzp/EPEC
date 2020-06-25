@@ -14,5 +14,5 @@ draw (graph (p, g), s, marker(scale(1.5mm)*polygon(4)));
 
 pen qq = fontsize (25.);
 defaultpen (qq);
-xaxis("$\psi_N$", BottomTop, LeftTicks);
+xaxis("${\mit\Psi}_N$", BottomTop, LeftTicks);
 yaxis("$P$",      LeftRight, RightTicks);

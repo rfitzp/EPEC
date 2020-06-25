@@ -24,6 +24,7 @@
 // 1.1 - Improved indexing of fFiles, nFiles, uFiles, and lFiles
 // 1.2 - Major rearrangement of input and output files
 // 1.3 - Added PsiN and island width in PsiN to Stage6 output files
+// 1.4 - Added linear iterpolation
 
 // #######################################################################
 
@@ -254,12 +255,14 @@ class Phase
 
   // Interpolate uFiles
   void uFileInterp               (vector<string> uFileName,   vector<double> uFileTime,   int uFilenumber, double TIME);
+  void uFileInterpolateLinear    (char* uFile1, double time1, char* uFile,  double time);
   void uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2, double time2, char* uFile,     double time);
   void uFileInterpolateCubic     (char* uFile1, double time1, char* uFile2, double time2, char* uFile3,    double time3, char* uFile, double time);
   void uFileInterpolateQuartic   (char* uFile1, double time1, char* uFile2, double time2, char* uFile3,    double time3,
 				  char* uFile4, double time4, char* uFile,  double time);
   // Interpolate lFiles
   void lFileInterp               (vector<string> lFileName,   vector<double> lFileTime,   int lFilenumber, double TIME);
+  void lFileInterpolateLinear    (char* uFile1, double time1, char* uFile,  double time);
   void lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2, double time2, char* lFile,     double time);
   void lFileInterpolateCubic     (char* lFile1, double time1, char* lFile2, double time2, char* lFile3,    double time3, char* lFile, double time);
   void lFileInterpolateQuartic   (char* lFile1, double time1, char* lFile2, double time2, char* lFile3,    double time3,
@@ -267,12 +270,14 @@ class Phase
 
   // Interpolate fFiles
   void fFileInterp               (vector<string> fFileName,   vector<double> fFileTime,   int fFilenumber, double TIME);
+  void fFileInterpolateLinear    (char* fFile1, double time1, char* fFile,  double time);
   void fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2, double time2, char* fFile,     double time);
   void fFileInterpolateCubic     (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,    double time3, char* fFile, double time);
   void fFileInterpolateQuartic   (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,    double time3,
 				  char* fFile4, double time4, char* fFile,  double time);
   // Interpolate nFiles
   void nFileInterp               (vector<string> nFileName,   vector<double> nFileTime,   int nFilenumber, double TIME);
+  void nFileInterpolateLinear    (char* nFile1, double time1, char* nFile,  double time);
   void nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2, double time2, char* nFile,     double time);
   void nFileInterpolateCubic     (char* nFile1, double time1, char* nFile2, double time2, char* nFile3,    double time3, char* nFile, double time);
   void nFileInterpolateQuartic   (char* nFile1, double time1, char* nFile2, double time2, char* nFile3,    double time3,

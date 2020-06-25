@@ -26,12 +26,15 @@ int main (int argc, char** argv)
   int c;
   char* nvalue = NULL; char* Ivalue = NULL; char* fvalue = NULL; char* tvalue = NULL;
   char* yvalue = NULL; char* pvalue = NULL; char* evalue = NULL; char* lvalue = NULL;
-  char* Nvalue = NULL; char* Tvalue = NULL; 
+  char* Nvalue = NULL; char* Tvalue = NULL; char* cvalue = NULL; 
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "e:f:hp:n:t:y:I:l:N:T:")) != -1)
+  while ((c = getopt (argc, argv, "c:e:f:hp:n:t:y:I:l:N:T:")) != -1)
     switch (c)
       {
+      case 'c':
+	cvalue = optarg;
+	break;
       case 'e':
 	evalue = optarg;
 	break;
@@ -40,6 +43,7 @@ int main (int argc, char** argv)
 	break;
       case 'h':
 	printf ("Options:\n");
+	printf ("-c INTC     - set interpolation flag INTC\n");
 	printf ("-e INTF     - set interpolation flag INTF\n");
 	printf ("-f FREQ     - set frequency flag FREQ\n");
 	printf ("-h          - list options\n");
@@ -78,7 +82,7 @@ int main (int argc, char** argv)
 	break;
       case '?':
 	if (optopt == 'n' || optopt == 'I' || optopt == 'f' || optopt == 't' || optopt == 'y' || optopt == 'p' || optopt == 'e'
-	    || optopt == 'l' || optopt == 'N' || optopt == 'T')
+	    || optopt == 'l' || optopt == 'N' || optopt == 'T' || optopt == 'c')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -90,7 +94,7 @@ int main (int argc, char** argv)
       }
 
   int    _NEUTRAL = -1;  int    _IMPURITY = -1;  int _FREQ  = -999999; int _INTP = -1;
-  double _TIME    = -1.; double _YN       = -1.; int _INTF  = -1;
+  double _TIME    = -1.; double _YN       = -1.; int _INTF  = -1;      int _INTC = -1.;
   double _LN      = -1.; double _NN       = -1.; int _NTYPE = -1;
 
   if (nvalue != NULL)
@@ -113,12 +117,14 @@ int main (int argc, char** argv)
     _NN = double (atof (Nvalue));
   if (Tvalue != NULL)
     _NTYPE = atoi (Tvalue);
+   if (cvalue != NULL)
+    _INTC = atoi (cvalue);
 
   // .........................
   // Call program NEOCLASSICAL
   // .........................
   Neoclassical neoclassical;
-  neoclassical.Solve (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _NTYPE, _NN, _LN, _YN, _TIME);
+  neoclassical.Solve (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME);
 
   return 0;
 }

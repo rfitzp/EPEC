@@ -19,7 +19,7 @@
 // theta > 0 above midplane.
 
 // Command line options:
-// -g INTG   - override INTG value from namlist
+// -g INTG   - override INTG value from namelist
 // -n NTOR   - override NTOR value from namelist
 // -m MMIN   - override MMIN value from namelist
 // -M MMAX   - override MMAX value from namelist
@@ -37,6 +37,7 @@
 // 1.0 - Initial version
 // 1.2 - Improved gFile indexing
 // 1.3 - Major rearrangement of input and output files
+// 1.4 - Added linear interpolation
 
 // ############################################################################
 
@@ -44,7 +45,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 3
+#define VERSION_MINOR 4
 
 #include <stdio.h>
 #include <math.h>
@@ -78,6 +79,7 @@ extern "C" void NameListRead (int* INTG, int* NPSI, int* NTHETA, int* NNC, int* 
 extern "C" void gFileRead ();
 
 // gFile interpolation functions
+extern "C" void gFileInterpolateLinear ();
 extern "C" void gFileInterpolateQuadratic ();
 extern "C" void gFileInterpolateCubic ();
 extern "C" void gFileInterpolateQuartic ();
@@ -275,6 +277,7 @@ private:
 
   // gFile interpolation routines
   void gFileInterp          (vector<string> gFileName,   vector<double> gFileTime,   int gFileNumber, double time);
+  void gFileInterpLinear    (char* gFile1, double time1, char* gFile,  double time);
   void gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, double time2, char* gFile,     double time);
   void gFileInterpCubic     (char* gFile1, double time1, char* gFile2, double time2, char* gFile3,    double time3,
 			     char* gFile,  double time);

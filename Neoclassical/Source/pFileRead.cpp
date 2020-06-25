@@ -1,7 +1,6 @@
 // pFileRead.cpp
 
 #include "Neoclassical.h"
-#include "Field.h"
 
 // ###############################
 // Function to read standard pfile

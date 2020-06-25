@@ -4,6 +4,187 @@
 ! Functions to read multiple gFiles and write interpolated gFile
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
+
+  implicit none
+
+  character (len = 100) :: gFile1, gFile
+  double precision      :: time1,  weight1, time
+  
+  character (len = 100) :: string
+  integer               :: i, j, i3
+  double precision      :: zero
+
+  integer                                         :: NRBOX1,   NZBOX1,   NBOUND1, NLIM1
+  double precision                                :: RBOXLEN1, ZBOXLEN1, RBOXLFT1
+  double precision                                :: RAXIS1,   ZAXIS1,   B01,     R01
+  double precision, dimension (:),    allocatable :: T1,       P1,       TTp1,    Pp1,  Q1
+  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,  RLIM1,   ZLIM1  
+  double precision, dimension (:, :), allocatable :: PSI1
+
+   integer                                         :: NRBOX,   NZBOX,   NBOUND, NLIM
+  double precision                                :: RBOXLEN, ZBOXLEN, RBOXLFT
+  double precision                                :: RAXIS,   ZAXIS,   B0,     R0
+  double precision, dimension (:),    allocatable :: T,       P,       TTp,    Pp,  Q
+  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,  RLIM,   ZLIM    
+  double precision, dimension (:, :), allocatable :: PSI
+
+  ! -----------------------
+  ! Read file and time data
+  ! -----------------------
+  open (unit = 100, file = 'Interface.txt', status = 'old')
+
+  read (100, '(a100)')  gFile1
+  read (100, '(e16.9)') time1
+  read (100, '(a100)')  gFile
+  read (100, '(e16.9)') time
+
+  close (unit = 100)
+  
+  ! ----------------
+  ! Read first gFile
+  ! ----------------
+  open (unit = 100, file = gFile1, status = 'old')
+  
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX1, NZBOX1
+  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,    RBOXLFT1,  zero
+  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   zero,   zero,      B01
+  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
+
+  allocate (T1   (NRBOX1))
+  allocate (P1   (NRBOX1))
+  allocate (TTp1 (NRBOX1))
+  allocate (Pp1  (NRBOX1))
+  allocate (Q1   (NRBOX1))
+  allocate (Psi1 (NRBOX1, NZBOX1))
+  
+  read (100, '(5e16.9)') (T1    (i),    i = 1, NRBOX1)
+  read (100, '(5e16.9)') (P1    (i),    i = 1, NRBOX1)
+  read (100, '(5e16.9)') (TTp1  (i),    i = 1, NRBOX1)
+  read (100, '(5e16.9)') (Pp1   (i),    i = 1, NRBOX1)
+  read (100, '(5e16.9)') ((PSI1 (i, j), i = 1, NRBOX1), j = 1, NZBOX1)
+  read (100, '(5e16.9)') (Q1    (i),    i = 1, NRBOX1)
+
+  read (100, '(2i5)') NBOUND1, NLIM1
+  
+  allocate (RBOUND1 (NBOUND1))
+  allocate (ZBOUND1 (NBOUND1))
+  allocate (RLIM1   (NLIM1))
+  allocate (ZLIM1   (NLIM1))
+
+  read (100, '(5e16.9)') (RBOUND1 (i), ZBOUND1 (i), i = 1, NBOUND1)
+  read (100, '(5e16.9)') (RLIM1   (i), ZLIM1   (i), i = 1, NLIM1)
+
+  close (unit = 100)
+
+  ! ......................
+  ! Interpolate gFile data
+  ! ......................
+  NRBOX  = NRBOX1
+  NZBOX  = NZBOX1
+  NBOUND = NBOUND1
+  NLIM   = NLIM1
+  
+  allocate (T      (NRBOX))
+  allocate (P      (NRBOX))
+  allocate (TTp    (NRBOX))
+  allocate (Pp     (NRBOX))
+  allocate (Q      (NRBOX))
+  allocate (Psi    (NRBOX, NZBOX))
+  allocate (RBOUND (NBOUND))
+  allocate (ZBOUND (NBOUND))
+  allocate (RLIM   (NLIM))
+  allocate (ZLIM   (NLIM))
+
+  weight1 = 1.;
+ 
+  R0      = R01
+  B0      = B01
+  RAXIS   = RAXIS1
+  ZAXIS   = ZAXIS1
+  RBOXLEN = RBOXLEN1
+  ZBOXLEN = ZBOXLEN1
+  RBOXLFT = RBOXLFT1
+ 
+  do i = 1, NRBOX
+     T   (i) = T1   (i)
+     P   (i) = P1   (i)
+     TTp (i) = TTp1 (i)
+     Pp  (i) = Pp1  (i)
+     Q   (i) = Q1   (i)
+  end do
+
+  do i = 1, NRBOX
+     do j = 1, NZBOX
+        Psi (i, j) = Psi1 (i, j)
+     end do
+  end do
+
+  do i = 1, NBOUND
+     RBOUND (i) = RBOUND1 (i)
+     ZBOUND (i) = ZBOUND1 (i)
+  end do
+
+  do i = 1, NLIM
+     RLIM (i) = RLIM1 (i)
+     ZLIM (i) = ZLIM1 (i)
+  end do
+
+  ! .............................
+  ! Write interpolated gFile data
+  ! .............................
+  open (unit = 100, file = gFile, status = 'replace')
+
+  write (100, '(a48, 3i4)') string,  i3,      NRBOX, NZBOX
+  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,    RBOXLFT, zero
+  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   zero,  zero,    B0
+  write (100, '(5e16.9)'  ) zero,    zero,    zero,  RAXIS,   zero
+  write (100, '(5e16.9)'  ) ZAXIS,   zero,    zero,  zero,    zero
+
+  write (100, '(5e16.9)') (T    (i),    i = 1, NRBOX)
+  write (100, '(5e16.9)') (P    (i),    i = 1, NRBOX)
+  write (100, '(5e16.9)') (TTp  (i),    i = 1, NRBOX)
+  write (100, '(5e16.9)') (Pp   (i),    i = 1, NRBOX)
+  write (100, '(5e16.9)') ((PSI (i, j), i = 1, NRBOX), j = 1, NZBOX)
+  write (100, '(5e16.9)') (Q    (i),    i = 1, NRBOX)
+
+  write (100, '(2i5)'   ) NBOUND, NLIM
+  write (100, '(5e16.9)') (RBOUND (i), ZBOUND (i), i = 1, NBOUND)
+  write (100, '(5e16.9)') (RLIM   (i), ZLIM   (i), i = 1, NLIM)
+
+  close (unit = 100)
+
+  write (*, *) "gFile Interpolation:"
+  write (*, "(A, E11.4)") gFile1, weight1
+  
+  ! ........
+  ! Clean up
+  ! ........
+  deallocate (T1)
+  deallocate (P1)
+  deallocate (TTp1)
+  deallocate (Pp1)
+  deallocate (Q1)
+  deallocate (PSI1)
+  deallocate (RBOUND1)
+  deallocate (ZBOUND1)
+  deallocate (RLIM1)
+  deallocate (ZLIM1)
+  
+  deallocate (T)
+  deallocate (P)
+  deallocate (TTp)
+  deallocate (Pp)
+  deallocate (Q)
+  deallocate (PSI)
+  deallocate (RBOUND)
+  deallocate (ZBOUND)
+  deallocate (RLIM)
+  deallocate (ZLIM)
+  
+endsubroutine gFileInterpolateLinear
+
 subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadratic')
 
   implicit none

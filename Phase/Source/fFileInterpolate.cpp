@@ -3,6 +3,7 @@
 // PROGRAM ORGANIZATION:
 //
 // void Phase:: fFileInterp               (vector<string> fFileName,   vector<double> fFileTime,   int fFileNumber,  double time)
+// void Phase:: fFileInterpolateLinear    (char* fFile1, double time1, char* fFile,  double time)
 // void Phase:: fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2, double time2, char* fFile,      double time)
 // void Phase:: fFileInterpolateCubic     (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,     double time3, char* fFile, double time)
 // void Phase:: fFileInterpolateQuartic   (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,     double time3,
@@ -15,10 +16,17 @@
 // ###############################
 void Phase::fFileInterp (vector<string> fFileName, vector<double> fFileTime, int fFileNumber, double time)
 {
-  if (fFileNumber < 2)
+  if (fFileNumber < 1)
     {
-      printf ("PHASE::fFileInterp: Error - fFileNumber must be greater than unity\n");
+      printf ("PHASE::fFileInterp: Error - fFileNumber must be greater than zero\n");
       exit (1);
+    }
+  else if (fFileNumber == 1)
+    {
+      char* fFile = "Inputs/fFile";
+      char* file1 = (char*) fFileName[0].c_str();
+
+      fFileInterpolateLinear (file1, fFileTime[0], fFile, time);
     }
   else if (fFileNumber == 2)
     {
@@ -108,6 +116,233 @@ void Phase::fFileInterp (vector<string> fFileName, vector<double> fFileTime, int
 	  fFileInterpolateCubic (file1, fFileTime[index-1], file2, fFileTime[index], file3, fFileTime[index+1], fFile, time);
 	}
     }
+}
+
+void Phase::fFileInterpolateLinear (char* fFile1, double time1, char* fFile, double time)
+{
+  int ini; double inr;
+
+  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1;
+  int             NPSI_1, NTOR_1, nres_1;
+  Array<double,1> v1_1, v2_1, v3_1;
+  Array<int, 1>   mres_1;
+  Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1;
+  Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
+  Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
+  
+  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0;
+  int             NPSI_0, NTOR_0, nres_0;
+  Array<double,1> v1_0, v2_0, v3_0;
+  Array<int, 1>   mres_0;
+  Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0;
+  Array<double,2> Freal_0, Fimag_0, Ereal_0, Eimag_0;
+  Array<double,1> EIreal_0, EIimag_0, EOreal_0, EOimag_0;
+
+  // ................
+  // Read first fFile
+  // ................
+  FILE* file = OpenFiler (fFile1);
+ 
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d",
+	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1) != 12)
+    {
+      printf ("PHASE::fFileInterpolateLinear: Error reading fFile_1 (1)\n");
+      exit (1);
+    }
+
+  v1_1.resize (NPSI_1);
+  v2_1.resize (NPSI_1);
+  v3_1.resize (NPSI_1);
+
+  for (int j = 0; j < NPSI_1; j++)
+    {
+      if (fscanf (file, "%lf %lf %lf", &v1_1(j), &v2_1(j), &v3_1(j)) != 3)
+	{
+	  printf ("PHASE::fFileInterpolateLinear: Error reading fFile_1 (2)\n");
+	  exit (1);
+	}
+    }
+
+  mres_1.resize (nres_1);
+  u1_1.resize   (nres_1);
+  u2_1.resize   (nres_1);
+  u3_1.resize   (nres_1);
+  u4_1.resize   (nres_1);
+  u5_1.resize   (nres_1);
+  u6_1.resize   (nres_1);
+  u7_1.resize   (nres_1);
+  u8_1.resize   (nres_1);
+  u9_1.resize   (nres_1);
+  u10_1.resize  (nres_1);
+
+  for (int j = 0; j < nres_1; j++)
+    {
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j)) != 11)
+	{
+	  printf ("PHASE::fFileInterpolateLinear: Error reading fFile_1 (3)\n");
+	  exit (1);
+	}
+    }
+
+  Freal_1.resize (nres_1, nres_1);
+  Fimag_1.resize (nres_1, nres_1);
+
+  for (int j = 0; j < nres_1; j++)
+    for (int k = 0; k < nres_1; k++)
+      {
+	if (fscanf (file, "%d %d %lf %lf", &ini, &ini, &Freal_1(j, k), &Fimag_1(j, k)) != 4)
+	  {
+	    printf ("PHASE::fFileInterpolateLinear: Error reading fFile_1 (4)\n");
+	    exit (1);
+	  }
+      }
+  
+  Ereal_1.resize (nres_1, nres_1);
+  Eimag_1.resize (nres_1, nres_1);
+
+  for (int j = 0; j < nres_1; j++)
+    for (int k = 0; k < nres_1; k++)
+      {
+	if (fscanf (file, "%d %d %lf %lf", &ini, &ini, &Ereal_1(j, k), &Eimag_1(j, k)) != 4)
+	  {
+	    printf ("PHASE::fFileInterpolateLinear: Error reading fFile_1 (5)\n");
+	    exit (1);
+	  }
+      }
+  
+  EIreal_1.resize (nres_1);
+  EIimag_1.resize (nres_1);
+  EOreal_1.resize (nres_1);
+  EOimag_1.resize (nres_1);
+
+  for (int j = 0; j < nres_1; j++)
+    {
+      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_1(j), &EIimag_1(j), &EOreal_1(j), &EOimag_1(j)) != 5)
+	{
+	  printf ("PHASE::fFileInterpolateLinear: Error reading fFile (6)\n");
+	  exit (1);
+	}
+    }
+  
+  fclose (file);
+
+  // ......................
+  // Interpolate fFile data
+  // ......................
+  NPSI_0 = NPSI_1;
+  NTOR_0 = NTOR_1;
+  nres_0 = nres_1;
+ 
+  v1_0.resize     (NPSI_0);
+  v2_0.resize     (NPSI_0);
+  v3_0.resize     (NPSI_0);
+  mres_0.resize   (nres_0);
+  u1_0.resize     (nres_0);
+  u2_0.resize     (nres_0);
+  u3_0.resize     (nres_0);
+  u4_0.resize     (nres_0);
+  u5_0.resize     (nres_0);
+  u6_0.resize     (nres_0);
+  u7_0.resize     (nres_0);
+  u8_0.resize     (nres_0);
+  u9_0.resize     (nres_0);
+  u10_0.resize    (nres_0);
+  Freal_0.resize  (nres_0, nres_0);
+  Fimag_0.resize  (nres_0, nres_0);
+  Ereal_0.resize  (nres_0, nres_0);
+  Eimag_0.resize  (nres_0, nres_0);
+  EIreal_0.resize (nres_0);
+  EIimag_0.resize (nres_0);
+  EOreal_0.resize (nres_0);
+  EOimag_0.resize (nres_0);
+
+  for (int i = 0; i < nres_0; i++)
+    mres_0(i) = mres_1(i);
+  
+  double weight1 = 1.;
+ 
+  r1_0 = r1_1; 
+  r2_0 = r2_1; 
+  r3_0 = r3_1; 
+  r4_0 = r4_1; 
+  r5_0 = r5_1; 
+  r6_0 = r6_1; 
+  r7_0 = r7_1; 
+  r8_0 = r8_1; 
+  r9_0 = r9_1; 
+
+  for (int j = 0; j < NPSI_0; j++)
+    {
+      v1_0(j) = v1_1(j); 
+      v2_0(j) = v2_1(j); 
+      v3_0(j) = v3_1(j); 
+    }
+
+  for (int j = 0; j < nres_0; j++)
+    {
+      u1_0 (j) = u1_1 (j); 
+      u2_0 (j) = u2_1 (j); 
+      u3_0 (j) = u3_1 (j); 
+      u4_0 (j) = u4_1 (j); 
+      u5_0 (j) = u5_1 (j); 
+      u6_0 (j) = u6_1 (j); 
+      u7_0 (j) = u7_1 (j); 
+      u8_0 (j) = u8_1 (j); 
+      u9_0 (j) = u9_1 (j); 
+      u10_0(j) = u10_1(j); 
+    }
+
+  for (int j = 0; j < nres_0; j++)
+    {
+      EIreal_0(j) = EIreal_1(j);
+      EIimag_0(j) = EIimag_1(j);
+      EOreal_0(j) = EOreal_1(j);
+      EOimag_0(j) = EOimag_1(j);
+      
+      for (int k = 0; k < nres_0; k++)
+	{
+	  Freal_0(j, k) = Freal_1(j, k);
+	  Fimag_0(j, k) = Fimag_1(j, k);
+	  Ereal_0(j, k) = Ereal_1(j, k);
+	  Eimag_0(j, k) = Eimag_1(j, k);
+	}
+    }
+
+  // ........................
+  // Write interpolated fFile
+  // ........................
+  file = OpenFilew (fFile);
+  
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
+	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0);
+  for (int j = 0; j < NPSI_0; j++)
+    fprintf (file, "%16.9e %16.9e %16.9e\n",
+	     v1_0(j), v2_0(j), v3_0(j));
+  for (int j = 0; j < nres_0; j++)
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j));
+  for (int j = 0; j < nres_0; j++)
+    for (int k = 0; k < nres_0; k++)
+      fprintf (file, "%d %d %16.9e %16.9e\n",
+	       mres_0(j), mres_0(k), Freal_0(j, k), Fimag_0(j, k));
+  for (int j = 0; j < nres_0; j++)
+    for (int k = 0; k < nres_0; k++)
+      fprintf (file, "%d %d %16.9e %16.9e\n",
+	       mres_0(j), mres_0(k), Ereal_0(j, k), Eimag_0(j, k));
+  for (int j = 0; j < nres_0; j++)
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n",
+	     mres_0(j), EIreal_0(j), EIimag_0(j), EOreal_0(j), EOimag_0(j));
+
+  fclose (file);
+  
+  printf ("fFile Interpolation:\n");
+  printf ("%s %11.4e\n", fFile1, weight1);
+
+  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+  fprintf (monitor, "fFile Interpolation:\n");
+  fprintf (monitor, "%s %11.4e\n", fFile1, weight1);
+  fclose (file);
 }
 
 void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2, double time2, char* fFile, double time)

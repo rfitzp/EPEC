@@ -4,6 +4,7 @@
 
 Field::Field ()
 {
+  N = 0;
 }
 
 Field::Field (int n)
@@ -16,9 +17,12 @@ Field::Field (int n)
 
 Field::~Field ()
 {
-  delete[] X;
-  delete[] Y;
-  delete[] dYdX;
+  if (N > 0)
+    {
+      delete[] X;
+      delete[] Y;
+      delete[] dYdX;
+    }
 }
 
 void Field::resize (int n)

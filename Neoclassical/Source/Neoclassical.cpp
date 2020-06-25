@@ -54,10 +54,10 @@ Neoclassical::Neoclassical ()
 // Solve problem
 // ##############
 void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
-			  int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+			  int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
 {
   // Read discharge parameters
-  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _NTYPE, _NN, _LN, _YN, _TIME);
+  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME);
   
   // Read equilibirum data
   Read_Equilibrium ();
@@ -85,7 +85,7 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int
 // Read Neoclassical control parameters
 // ####################################
 void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
-				    int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
 {
   // Set default values of control parameters
   IMPURITY = 1;
@@ -93,7 +93,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   FREQ     = 0;
   INTP     = 0;
   INTF     = 0;
-  CHI      = 1.0;
+  INTC     = 0;
   NTYPE    = 0;
   NN       = 0.;
   LN       = 1.;
@@ -104,7 +104,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   COULOMB  = 17.;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &CHI, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
+  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
 
   // Override namelist values with command line option values
   if (_NEUTRAL > -1)
@@ -127,13 +127,10 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
     INTP = _INTP;
   if (_INTF > -1)
     INTF = _INTF;
+  if (_INTC > -1)
+    INTC = _INTC;
 
   // Sanity check
-  if (CHI <= 0.)
-    {
-      printf ("NEOCLASSICAL::Read_Parameters: Error CHI must be positive\n");
-      exit (1);
-    }
   if (YN < 0.)
     {
       printf ("NEOCLASSICAL::Read_Parameters: Error YN must be positive\n");
@@ -170,16 +167,16 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  printf ("Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	  CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  printf ("IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	  IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
    
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  fprintf (namelist, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -187,8 +184,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  fprintf (monitor, "Chi = %11.4e IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   CHI, IMPURITY, NEUTRAL, FREQ, INTP, INTF, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
   fclose (monitor);
 }
 
@@ -437,7 +434,7 @@ void Neoclassical::Read_Profiles ()
   T_I    (NPSI-1) = Ti.GetY    (Ti.GetN()-1);
   dT_Idr (NPSI-1) = Ti.GetdYdX (Ti.GetN()-1) * fac1;
 
-  for (int j = 1; j  < NPSI-1; j++)
+  for (int j = 1; j < NPSI-1; j++)
     {
       n_e    (j) = InterpolateField (ne, psi (j), 0);
       dn_edr (j) = InterpolateField (ne, psi (j), 1) * dpsidr (j) /a;
@@ -473,6 +470,79 @@ void Neoclassical::Read_Profiles ()
 	     n_I (j) /1.e19, dn_Idr (j) /1.e19, T_I (j) /1.e3/e, dT_Idr (j) /1.e3/e,
 	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a);
   fclose (file);
+
+  // Interpolate cFiles
+  if (INTC != 0 && TIME > 0.)
+    {
+      // Save pwd
+      char pwd[MAXFILENAMELENGTH];
+      getcwd (pwd, MAXFILENAMELENGTH);
+
+      // Remove cFile
+      system ("rm -rf Inputs/cFile");
+
+      // Get cFiles directory
+      char cFileDir[MAXFILENAMELENGTH];
+      system ("greadlink -f Inputs/cFiles > cFileDir");
+      FILE* pfd = OpenFiler ("cFileDir");
+      fscanf (pfd, "%s", cFileDir);
+      fclose (pfd);
+      system ("rm cFileDir");
+  
+      // Read cFile data
+      char           Basename[MAXFILENAMELENGTH];
+      char           Filename[MAXFILENAMELENGTH];
+      char           filename[MAXFILENAMELENGTH];
+      vector<string> cFileName;
+      double         filetime;
+      vector<double> cFileTime;
+      int            cFileNumber;
+  
+      printf ("Reading cFile data:\n");
+
+      chdir (cFileDir);
+      getcwd (Basename, MAXFILENAMELENGTH);
+      strcat (Basename, "/");
+   
+      FILE* file = OpenFiler ((char*) "Index");
+   
+      while (fscanf (file, "%s %lf", &filename, &filetime) == 2)
+	{
+	  strcpy (Filename, Basename);
+	  strcat (Filename, filename);
+	  
+	  cFileName.push_back (Filename);
+	  cFileTime.push_back (filetime);
+	}
+      cFileNumber = cFileTime.size ();
+
+      fclose (file);
+      chdir (pwd);
+
+      // Interpolate cFiles
+      cFileInterp (cFileName, cFileTime, cFileNumber, TIME);
+    }
+  
+  // Read perpendicular momentum diffusivity data from cFile
+  printf ("Reading perpendicular momentum diffusivity data:\n");
+  cFileRead ();
+
+  // Interpolate perpendicular momentum diffusivity onto existing psi grid
+  chip.resize (NPSI);
+    
+  chip (0)      = Chip.GetY (0);
+  chip (NPSI-1) = Chip.GetY (Chip.GetN()-1);
+
+  for (int j = 1; j < NPSI-1; j++)
+    {
+      chip (j) = InterpolateField (Chip, psi (j), 0);
+    }
+
+  // Output perpendicular momentum diffusivity
+  file = OpenFilew ((char*) "Outputs/Stage3/chip.txt");
+  for (int j = 0; j < NPSI; j++)
+    fprintf (file, "%16.9e %16.9e %16.9e\n", psi (j), rr (j), chip (j));
+  fclose (file);
 }
 
 // #################################################
@@ -504,6 +574,7 @@ void Neoclassical::Get_Derived ()
   alphak.resize (nres);
   rhok.resize   (nres);
   NNk.resize    (nres);
+  chipk.resize  (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -523,14 +594,15 @@ void Neoclassical::Get_Derived ()
       nbk    (j) = Interpolate (NPSI, rr, n_b,    rk (j), 0);
       Zeffk  (j) = Interpolate (NPSI, rr, Z_eff,  rk (j), 0);
       alphak (j) = Interpolate (NPSI, rr, alpha,  rk (j), 0);
+      chipk  (j) = Interpolate (NPSI, rr, chip,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
-      if (NTYPE == 0)
+            if (NTYPE == 0)
 	NNk (j) = NN * exp ((rk(j) - 1.) /(LN /a));
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
-
-      printf ("m = %3d r = %11.4e ne = %11.4e Te = %11.4e ni = %11.4e Ti = %11.4e nI = %11.4e TI = %11.4e wE = %11.4e Z_eff = %11.4e NN = %11.4e rho = %11.4e\n",
-	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j));
+ 
+      printf ("m = %3d r = %11.4e ne = %11.4e Te = %11.4e ni = %11.4e Ti = %11.4e nI = %11.4e TI = %11.4e wE = %11.4e Z_eff = %11.4e NN = %11.4e rho = %11.4e chip = %11.4e\n",
+	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j));
     }
 
   if (IMPURITY == 0)
@@ -589,8 +661,8 @@ void Neoclassical::Get_Derived ()
 
   for (int j = 0; j < nres; j++)
     {
-      WcritTk (j) = pow (CHI /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
-      Wcritnk (j) = pow (CHI /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      WcritTk (j) = pow (chipk(j) /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      Wcritnk (j) = pow (chipk(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
     }
 
   // ------------------------------------------------------
@@ -638,7 +710,7 @@ void Neoclassical::Get_Derived ()
       
       tau_Hk  (j) = tau_A * sqrt (rhok(j)) * R_0 /a /gk(j) /sk(j) /double (ntor);
       tau_Rk  (j) = mu_0 * a*a * rk(j)*rk(j) * nek (j) * e*e /nu_eek (j) /m_e;
-      tau_Mk  (j) = a*a /CHI;
+      tau_Mk  (j) = a*a /chipk(j);
       tau_thk (j) = (rk(j) * a /qk(j) /R_0) * (rk(j) * a /qk(j) /R_0) /nu_iik (j);
 
       printf ("m = %3d  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e\n",
