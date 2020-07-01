@@ -1,5 +1,12 @@
 ! gFileInterpolate.f90
 
+! PROGRAM ORGANIZATION:
+
+! subroutine gFileInterpolateLinear
+! subroutine gFileInterpolateQuadratic
+! subroutine gFileInterpolateCubic
+! subroutine gFileInterpolateQuartic
+
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ! Functions to read multiple gFiles and write interpolated gFile
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

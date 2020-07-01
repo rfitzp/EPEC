@@ -18,7 +18,7 @@ void Phase::nFileInterp (vector<string> nFileName, vector<double> nFileTime, int
 {
   if (nFileNumber < 1)
     {
-      printf ("PHASE::nFileInterp: Error - nFileNumber must be greater than  zero\n");
+      printf ("PHASE::nFileInterp: Error - nFileNumber must be greater than zero\n");
       exit (1);
     }
   else if (nFileNumber == 1)

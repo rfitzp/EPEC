@@ -19,6 +19,7 @@ Tii.asy     ... plots T_I(r)
 Tiip.asy    ... plots dT_I/dr 
 we.asy      ... plots w_E(r)
 nb.asy      ... plots n_b(r)
+chip.asy    ... plots chi_perp(r)
 
 quasi.asy   ... quasi-neutrality test
 zeff.asy    ... plots Z_eff (r)
@@ -30,7 +31,6 @@ gt.asy      ... plots (1-fc)/fc versus r, where fc is fraction of circulating pa
 nu.asy      ... plots nu_ast for electrons (red), ions (blue), impurities (green) at rational surfaces versus r
 nn.asy      ... plots neutral densities at rational surfaces versus r
 omega.asy   ... plots natural frequencies at rational surfaces versus r
-
 
 nef.asy     ... plots n_e(PsiN)
 nepf.asy    ... plots dn_e/dPsiN 

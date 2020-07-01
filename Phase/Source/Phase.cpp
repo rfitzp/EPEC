@@ -1107,16 +1107,22 @@ void Phase::IslandDynamics ()
   
   FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mk (j),
-	     rk (j),
-	     wk (j) /tau_A/1.e3,
-	     ww (j) /tau_A/1.e3,
-	     TIME,
-	     4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
-	     PsiN (j),
-	     4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j),
-	     4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j));
+    {
+      double Wk       = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek(j) * Wcrnek(j));
+      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek(j) * WcrTek(j));
+      fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	       mk (j),
+	       rk (j),
+	       wk (j) /tau_A/1.e3,
+	       ww (j) /tau_A/1.e3,
+	       TIME,
+	       4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
+	       PsiN (j),
+	       4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j),
+	       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
+	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
+    }
   fclose (file);
 }
 

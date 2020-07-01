@@ -120,8 +120,8 @@ void Phase::lFileInterp (vector<string> lFileName, vector<double> lFileTime, int
 
 void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, double time)
 {
-  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH],  line3[MAXULFILELINELENGTH],  line4[MAXULFILELINELENGTH], line5[MAXULFILELINELENGTH],
-       linea[MAXULFILELINELENGTH],  lineaa[MAXULFILELINELENGTH], linebb[MAXULFILELINELENGTH], line7[MAXULFILELINELENGTH], line8[MAXULFILELINELENGTH];
+  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH],  line3[MAXULFILELINELENGTH], line4[MAXULFILELINELENGTH], line5[MAXULFILELINELENGTH],
+       linea[MAXULFILELINELENGTH],  lineaa[MAXULFILELINELENGTH], line7[MAXULFILELINELENGTH], line8[MAXULFILELINELENGTH];
   
   // ................
   // Read first lFile

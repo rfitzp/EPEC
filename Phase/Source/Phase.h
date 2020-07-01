@@ -3,7 +3,7 @@
 // #######################################################################
 // Class to calculate time evolution of magnetic island chains interacting
 // with resonant magnetic perturbation in toroidal tokamak plasma.
-// Read data from programs FLUX, NEOCLASSICAL, and GPEC.
+// Reads data from programs FLUX, NEOCLASSICAL, and GPEC.
 
 // Command line options:
 // -f INTF   - overrides INTF value from namelist file
@@ -32,7 +32,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 3
+#define VERSION_MINOR 4
 
 #include <stdio.h>
 #include <math.h>

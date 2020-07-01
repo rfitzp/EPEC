@@ -596,7 +596,7 @@ void Neoclassical::Get_Derived ()
       alphak (j) = Interpolate (NPSI, rr, alpha,  rk (j), 0);
       chipk  (j) = Interpolate (NPSI, rr, chip,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
-            if (NTYPE == 0)
+      if (NTYPE == 0)
 	NNk (j) = NN * exp ((rk(j) - 1.) /(LN /a));
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));

@@ -26,9 +26,9 @@
 // -p PSILIM - override PSILIM value from namelist
 // -t TIME   - sets experimental time
 
-// Calculation control parameters in namelist file INPUTS/Flux.in.
+// Calculation control parameters in namelist file INPUTS/Flux.in
 
-// Equilibrium in Inputs/gFile.
+// Equilibrium in Inputs/gFile
 // Intermediate data in folder Outputs/Stage1/
 // Final data in folder Outputs/Stage2/
 // Data passed to programs NEOCLASSICAL and PHASE output to Outputs/fFile

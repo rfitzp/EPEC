@@ -1,6 +1,6 @@
 import graph;
      
-size(750,500,IgnoreAspect);
+size(1000,500,IgnoreAspect);
 
 file    in = input("../../Outputs/Stage3/profiles.txt").line();
 real[][] A = in.dimension (0,0);
@@ -28,8 +28,11 @@ limits ((0.,0.),(1.,6.5),Crop);
 
 //yequals (0., s);
 
-pen qq = fontsize(25.);
+s = dotted + black + 2;
+
+xequals (0.925, s);
+
+pen qq = fontsize(30.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
-qq = fontsize(15.);
-yaxis("$\textcolor{green}{n_e}(10^{19}\,{\rm m}^{-3}), \textcolor{cyan}{n_I}(10^{18}\,{\rm m}^{-3}), \textcolor{red}{T_e}({\rm keV}), \textcolor{blue}{T_i}({\rm keV})$",LeftRight,RightTicks);
+yaxis("$n_{e,I}$, $T_{e,i}$",LeftRight,RightTicks);
