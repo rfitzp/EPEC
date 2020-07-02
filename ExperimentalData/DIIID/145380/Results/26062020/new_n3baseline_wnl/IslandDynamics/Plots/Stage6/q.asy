@@ -12,6 +12,10 @@ real[] qa = A[2];
 real[] ql = A[3];
 real[] t  = A[4];
 
+fill((2840,0.05)--(2980,0.05)--(2980,8.95)--(2840,8.95)--cycle, paleyellow);
+fill((3320,0.05)--(3560,0.05)--(3560,8.95)--(3320,8.95)--cycle, paleyellow);
+fill((3880,0.05)--(4200,0.05)--(4200,8.95)--(3880,8.95)--cycle, paleyellow);
+
 pen s = white + dashed + 1.;
 
 draw (graph (t, q0), s, marker (scale (0.5mm)*polygon (3),  red));

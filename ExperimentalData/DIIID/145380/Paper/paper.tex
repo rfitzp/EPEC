@@ -35,33 +35,33 @@ the last closed flux-surface) takes values that lie in certain narrow windows. \
 
 Numerical simulations made using the cylindrical,  nonlinear, two-fluid, reduced-magneto\-hydro\-dynamical (MHD), initial-value code, TM1\,\cite{tm1,tm2,tm3} have shed considerable light on the hitherto poorly understood  physical mechanism that underlies RMP-induced ELM
 suppression in H-mode tokamak discharges.\cite{hu} The simulations  in question make a plausible case  that the density  pump-out  phenomenon is associated with the formation of   locked (i.e., non-rotating) helical magnetic
-island chains at the bottom of the pedestal, whereas the ELM suppression phenomenon is associated with the formation of a locked helical magnetic island chain at the
+island chains at the bottom of the pedestal, whereas the ELM-suppression phenomenon is associated with the formation of a locked helical magnetic island chain at the
 top of the pedestal. The prevailing hypothesis is that such an island chain suppresses ELMs by limiting the expansion of the
 pedestal, and, thereby, preventing it from attaining a width sufficient to destabilize peeling-ballooning modes\,\cite{connor}  (which are thought to trigger ELMs).\cite{d3d}
 
 Recently, a toroidal generalization of the 
 cylindrical asymptotic matching model presented
 in Ref.~\onlinecite{rf1} was formulated and
-used to model  RMP-induced ELM suppression experiments performed on the DIII-D tokamak, \cite{rf2}
+used to model  RMP-induced ELM-suppression experiments performed on the DIII-D tokamak, \cite{rf2}
 leading to similar conclusions to the aforementioned TM1
 studies. The primary aim of this paper is to employ this
-new model to try to account for the  $q_{95}$ ELM
-suppression windows  that are apparent when the edge safety-factor is slowly ramped in
+new model to try to account for the  $q_{95}$
+ELM-suppression windows  that are apparent when the edge safety-factor is slowly ramped in
 a particular DIII-D discharge in which an $n=3$
 RMP is used to control ELMs.\cite{d3d,d3d2} 
 
-It is well-known that magnetic reconnection caused when a  (stable) tearing mode is driven by a static RMP that is resonant at a particular magnetic flux-surface in a tokamak plasma is
+It is well-known that magnetic reconnection driven when a  (stable) tearing mode interacts with a static RMP that is resonant at a particular magnetic flux-surface in a tokamak plasma is
 facilitated when the associated ``natural frequency'' is relatively small.\cite{rfa,rfb}  The natural frequency  of a  (stable) tearing mode is the
 helical phase velocity that the mode would possess were it naturally unstable (in the absence of the RMP).  Driven magnetic reconnection leads to the
 formation of a locked magnetic island chain at the resonant surface in question. 
 Hence, the prevailing hypothesis is that a $q_{95}$ window for
 RMP-induced ELM suppression occurs when $q_{95}$ is such that the natural frequency of a tearing mode resonant  at 
 the top of the pedestal is close to zero. 
-Unfortunately, there is currently some uncertainty in the fusion community regarding the form of the natural frequency. 
+However, there is currently some uncertainty in the fusion community regarding the form of the natural frequency. 
 
 According to
 linear tearing mode theory, a tearing mode is essentially convected by
-the local electron fluid at the resonant surface (see the discussion at the end of the Appendix).\cite{hender,cole} Hence, if the response of an H-mode tokamak plasma to an applied RMP
+the local electron fluid at the resonant surface (see the discussion in Sect.~\ref{natural}).\cite{hender,cole} Hence, if the response of an H-mode tokamak plasma to an applied RMP
 is governed by linear physics then we would expect the
 natural frequency to take the form\,\cite{lin1,lin2,lin3}
 \begin{equation}
@@ -88,7 +88,7 @@ takes the rational value $n/m$, where $m$ is a positive integer. Here, $m$ and $
 toroidal periods, respectively, of the helical magnetic island chain driven at the rational surface.  Furthermore, ${\mit\Psi}_t({\mit\Psi}_p)$ is the equilibrium toroidal magnetic flux (divided by $2\pi$).
 
 According to nonlinear tearing mode theory, a tearing mode is essentially convected by
-the local ion fluid at the rational surface (again, see the discussion at the end of the Appendix).\cite{nl1,nl2,nl3}
+the local ion fluid at the rational surface (again, see the discussion in Sect.~\ref{natural}).\cite{nl1,nl2,nl3}
 In fact, if the response of an H-mode tokamak plasma to an applied RMP
 is governed by nonlinear physics then we would expect the
 natural frequency to take the form\,\cite{rf2}
@@ -123,12 +123,12 @@ in which case we would expect the natural frequency to take the form
 As before, the right-hand side of Eq.~(\ref{e3}) is evaluated
 at the rational magnetic flux-surface. 
 
-The secondary aim of this paper is to determine which of the three aforementioned choices for the natural frequency can best account for the   $q_{95}$ ELM
-suppression windows  observed in DIII-D. 
+The secondary aim of this paper is to determine which of the three aforementioned choices for the natural frequency can best account for the   $q_{95}$ 
+ELM-suppression windows  observed in DIII-D discharge \#145380. 
 
 \section{Description of Theoretical Model}
-The theoretical model of the response of a tokamak plasma to an externally applied RMP that is employed in this
-paper is described in detail in Ref.~\onlinecite{rf2}. The model employs a standard asymptotic matching approch.\cite{fkr,am1,am2,am3}
+The theoretical model of the response of a tokamak plasma to an externally applied RMP that is used in this
+paper is described in detail in Ref.~\onlinecite{rf2}. The model employs a standard asymptotic matching approach.\cite{fkr,am1,am2,am3}
 According to this approach, the response of the plasma to the applied RMP is governed by a combination of flux-freezing and
 perturbed force balance (this combination is often referred to as ``marginally-stable ideal-MHD", which is a misnomer because MHD {\em per se}\/ plays no
 role) everywhere in the plasma apart from a number of relatively narrow (in the radial direction) regions in which the applied
@@ -147,13 +147,13 @@ formation of current sheets and magnetic island chains at various resonant surfa
 response type is known as the ``kink response''---this is an edge-localized ideal-MHD response that is associated
 with coupling to a stable non-resonant kink mode. For the case of the tearing response, our model employs an
 approximation in which the plasma response is assumed to be vacuum-like between the various resonant surfaces. On the other hand,
-the kink response of the plasma is calculated using the {\tt GPEC} code.\cite{ipec,gpec}
+the kink response of the plasma is calculated exactly using the {\tt GPEC} code.\cite{ipec,gpec}
 
 Our model has been implemented in the {\tt EPEC} (Extended Perturbed Equilibrium Code) code. The name
 of this code reflects the fact that the nonlinear evolution of tearing modes in a
 tokamak plasma has far more in common with the $1\tfrac{1}{2}$-D
 evolution of the global plasma equilibrium than it does with
-conventional linear tearing mode physics. (See the discussion in the Appendix.) In particular, the Alfv\'{e}n time is
+conventional linear tearing mode physics. (See the discussion in Sect.~\ref{general}.) In particular, the Alfv\'{e}n time is
 an irrelevant timescale in nonlinear tearing mode theory, and
 is also  very much shorter than the timescales on which
 physical quantities of interest actually evolve. (Note that all timescales are normalized to the Alfv\'{e}n time
@@ -162,6 +162,60 @@ have been better to normalize the timescales with respect to a diamagnetic times
 out of the final system of equations.)
 
 \section{Modeling of DIII-D Discharge \#145380}
+\subsection{Plasma Equilibrium}
+DIII-D discharge \#145380 is an ITER Similar Shape (ISS), ELMing, H-mode discharge with a toroidal magnetic field $B_T=-1.9\,{\rm T}$ in which the
+plasma current $I_p$ is slowly ramped over a 2 s interval to scan the magnetic safety-factor.\cite{d3d,d3d2} The majority ions are Deuterium, whereas the
+minority ions are Carbon~VI.
+Figure~\ref{fig1} gives an overview of this discharge. Note that the pedestal density is relatively high ($n_{e\,{\rm ped}}\sim 3\times 10^{19}\,{\rm m}^{-3}$). 
+A static RMP is applied to the plasma by running steady $n=3$ currents through the I-coil system.\cite{icoil}
+Three windows of ELM suppression are evident: the first extends from $t=2840$--$2980$ ms; the
+second extends from $t=3320$--$3560$ ms; and the third extends from $t=3880$--$4200$ ms.
+
+Figure~\ref{fig2} shows the measured plasma equilibrium at the start of the current ramp ($t=2500$ ms). Likewise,
+Fig.~\ref{fig3} shows the measured plasma profiles at the start of the current ramp. Here, ${\mit\Psi}_N$ is a
+normalized poloidal magnetic flux defined such that the magnetic axis corresponds to ${\mit\Psi}_N=0$, 
+and the last closed magnetic flux-surface (LCFS) to ${\mit\Psi}_N=1$. The perpendicular
+diffusivity data comes from {\tt TRANSP} modelling.\cite{transp}  
+
+Measured plasma equilibrium and
+plasma profile data is available every $50$ ms. The equilibrium and profile data at a given point in time is interpolated from
+the measured data. In fact, quantities that depend on the plasma equilibrium and profiles are recalculated every 1 ms.  Data from the
+{\tt GPEC} code is available every 100 ms. As before, the {\tt GPEC} data at a given point in time is interpolated from the
+available {\tt GPEC} data, and any quantity that depends on this data is recalculated every 1 ms. There is one major exception to
+the aforementioned scheme. The theoretical model used in this paper actually requires plasma equilibria and profiles that are unaffected
+by the applied RMP. However, there is clear evidence that the equilibria and the profiles (in particular) are significantly modified
+within the three ELM-suppression windows (presumably because wide magnetic island chains are driven in the pedestal). 
+Hence, we do not use the equilibrium, profile, or {\tt GPEC}, data within the three ELM-suppression windows. Instead, we
+interpolate across these windows using data taken on either side of the windows. 
+
+Figure~\ref{fig4} shows the safety-factor in DIII-D discharge \#145380 as a function of time. It can be seen
+that $q_{95}\equiv q({\mit\Psi}_N=0.95)$ varies from about 4.1 at the start of the current ramp to about 3.3
+at the end. However, the safety-factor at the magnetic axis, $q_0 \equiv q({\mit\Psi}_N=0.0)$, remains approximately
+constant at about 1.0. For the sake of practicality,  the {\tt GPEC} and {\tt EPEC} calculations described in this paper ignore rational
+surfaces that lie very close to the LCFS: in other words,  surfaces that lie in the region $0.997 < {\mit\Psi}_N\leq 1.000$. 
+
+Note that every quantity used in our theoretical model is derived from experimental measurements taken in DIII-D discharge \#145380, with one
+exception. The exception is the neutral particle data. Unfortunately, no neutral particle data is available for DIII-D discharge \#145380.
+Hence, we employ neutral particle data derived from a much earlier discharge (see Ref.~\onlinecite{rf2}).\cite{neutral}
+In future, data from the new {\tt LLAMA} (Lyman Alpha Measurement Apparatus) system will be available in DIII-D discharges.\cite{llama}
+Combining this data  with modeling from the SOLPS-ITER code\,\cite{solps} ought to generate sufficient information to fully determine the
+neutral particle parameters required by the {\tt EPEC} code.  
+
+\subsection{Case 1: $\varpi=\varpi_{\rm nonlinear}$}
+This first case that we shall consider is that in which the natural frequency is determined by nonlinear
+tearing mode theory: in other words, the natural frequency is specified by Eq.~(\ref{e2}). 
+
+The upper panel of Fig.~\ref{fig5} shows the natural frequencies of the various  $n=3$ tearing modes 
+ that are resonant in the pedestal. It can be seen that the natural frequency of the $m=11$ harmonic has its main zero crossing in the middle
+of the first ELM-suppression window. Likewise, the natural frequency of the $m=10$ harmonic has its main zero crossing in the middle of the
+second ELM-suppression window. However, the natural frequency of the $m=9$ harmonic has its main zero crossing slightly
+before the third ELM-suppression window. The lower panel of Fig.~\ref{fig5} shows the actual phase velocities of the various $n=3$
+tearing modes that are resonant in the pedestal. It can be seen that if the magnitude of the natural frequency falls below about
+$5\,{\rm krad/s}$ then the associated tearing mode locks to the RMP (i.e., its phase velocity becomes zero). 
+
+\subsection{Case 2: $\varpi=\varpi_{EB}$}
+
+\subsection{Case 3: $\varpi=\varpi_{\rm linear}$}
 
 \section{Summary and Discussion}
 
@@ -250,11 +304,11 @@ Nucl.\ Fusion {\bf 52}, 054003  (2012).
 \bibitem{lin3} F.~Orain, M.~B\'{e}coulet, G.~Dif-Pradalier, G.T.A.~Huysmans, S.~Pamela,   E.~Nardon, C.~Passeron, G.~Latu, V.~Grandgirard, A.~Fil, {\em et al.}, 
 Phys.\ Plasmas {\bf 20}, 102510 (2013). 
 
-\bibitem{nl1} R. Fitzpatrick, and F.L. Waelbroeck, Phys.\ Plasmas {\bf 12}, 022307 (2005).
+\bibitem{nl1} R.~Fitzpatrick, and F.L.~Waelbroeck, Phys.\ Plasmas {\bf 12}, 022307 (2005).
 
-\bibitem{nl2} R. Fitzpatrick, Phys.\ Plasmas {\bf 25}, 042503 (2018).
+\bibitem{nl2} R.~Fitzpatrick, Phys.\ Plasmas {\bf 25}, 042503 (2018).
 
-\bibitem{nl3} R. Fitzpatrick, Phys.\ Plasmas {\bf 25}, 112505 (2018).
+\bibitem{nl3} R.~Fitzpatrick, Phys.\ Plasmas {\bf 25}, 112505 (2018).
 
 \bibitem{heyn} M.F.~Heyn, I.B.~Ivanov, S.V.~Kasilov, W.~Kernbichler, I.~Joseph, R.A.~Moyer,  and A.M.~Runov, Nucl.\ Fusion {\bf 48}, 024005 (2008). 
 
@@ -276,8 +330,22 @@ Plasma Phys.\ Control.\ Fusion {\bf 57}, 095008 (2015).
 
 \bibitem{gpec} J.K.~Park, and N.C.~Logan, Phys.\ Plasmas {\bf 24}, 032505 (2017).
 
+\bibitem{icoil} G.L.~Jackson, P.M.~Anderson, J.~Bialek, W.P.~Cary, G.L.~Campbell, A.M.~Garofalo,  R.~Hatcher, A.G.~Kellman, R.J.~La\,Haye, A.~Nagy, {\em et al.},  
+Proc.\ 30th EPS Conf.\ on Controlled Fusion and Plasma Physics. (St.\ Petersburg, Russia, 2003) CD-ROM, P-4.47.
+
 \bibitem{transp} R.J.~Hawryluk, {\em Physics of Plasma Close to Thermonuclear Conditions: Vol.~1}. (Commission of the European Communities, Brussels, 1980.) 
 Internal Document DUR-FU-BRU-XII/476180.
+
+\bibitem{neutral} P.~Monier-Garbet, K.H.~Burrell, F.L.~Hinton, J.~Kim, X.~Garbet, and R.J.~Groebner,   
+Nucl.\ Fusion  {\bf 37}, 403 (1997).
+
+\bibitem{llama} A.~Rosenthal, and F.M.~Laggner, private communication (2020).
+
+\bibitem{solps} S~Wiesen, D.~Reiter, V.~Kotov, M.~Baelmans, W.~Dekeyser, A.S.~Kukushkin, S.W.~Lisgo, R.A.~Pitts, V.~Rozhansky, G.~Saibene I.~Veselova, and S.~Voskoboynikov,
+J.\ Nucl.\ Mat.\ {\bf 468}, 480 (2015).
+
+\bibitem{gim} R.~Fitzpatrick, C.G.~Gimblett, and R.J.~Hastie, 
+Plasma Phys.\ Control.\ Fusion {\bf 34}, 161 (1992).
 
 \bibitem{haz} R.D.~Hazeltine, and J.D.~Meiss, Rev.\ Mod.\ Phys.\ {\bf 121}, 1 (1985).
 
@@ -295,10 +363,12 @@ Internal Document DUR-FU-BRU-XII/476180.
 
 \appendix
 \section{Linear Versus Nonlinear Tearing Mode Theory in Tokamak Plasmas}\label{appa}
+\subsection{Introduction}
 The discussion in this Appendix outlines certain facts pertaining
 to tearing modes in tokamak plasmas that ought to be common knowledge in the 
 magnetic fusion community (but appear not to be). 
 
+\subsection{General Considerations}\label{general}
 Consider a conventional tokamak plasma equilibrium. To lowest order, the equilibrium is governed by force balance,
 \begin{equation}\label{ea}
 -\nabla p + {\bf j}\times {\bf B} \simeq {\bf 0},
@@ -318,9 +388,9 @@ we end up with a set of $1\tfrac{1}{2}$-D evolution equations,
 according to which the magnetic field and plasma current
 evolve on the relatively long resistive timescale, $\tau_R$,
 whereas the density and temperature evolve on a somewhat
-shorter transport timescale.\cite{transp}
+shorter transport timescale.\cite{transp,gim}
 
-A linear tearing mode is a helical instability of a tokamak plasma equilibrium that is related to a shear-Alfv\'{e}n wave.\cite{haz} The mode resonates with the plasma at
+A linear tearing mode is a helical instability of a tokamak plasma equilibrium that is related to a shear-Alfv\'{e}n wave.\cite{haz} The mode resonates with the equilibrium magnetic field at
 the so-called rational magnetic flux-surface at which the
 shear-Alfv\'{e}n velocity is zero. If $q$ is the safety-factor, $m$ the poloidal mode number, and $n$ the
 toroidal mode number, then the rational
@@ -349,7 +419,7 @@ at the rational surface has proceeded to such an extent that
 the magnetic island width exceeds the layer width then we enter the nonlinear regime. 
 
 Figure~\ref{fig14} also sketches the
-typical plasma current and vorticity patterns in the nonlinear regime. Observe that there is now a considerable distinction between an X-point and an O-point. The reason for this is that the island is sufficiently wide that the plasma cannot diffuse across it resistively sufficiently rapidly to
+typical plasma current and vorticity patterns in the nonlinear regime. Observe that there is now a considerable distinction between an X-point and an O-point. The reason for this is that the island is sufficiently wide that the plasma cannot diffuse across it resistively rapidly enough to
 avoid being trapped inside the magnetic separatrix. Indeed, both the regions inside and outside the magnetic separatrix
 are governed by a combination of flux-freezing and perturbed force balance, whereas the resistive
 layer, within which the plasma can easily slip through the magnetic field,  is diverted onto the magnetic separatrix. Moreover, as
@@ -375,9 +445,10 @@ conventional linear tearing mode physics. In particular, the Alfv\'{e}n time is
 an irrelevant timescale in nonlinear tearing mode theory, and
 is also  very much shorter than the timescales on which
 physical quantities of interest actually evolve. It should be noted that linear tearing layers in present-day tokamak plasmas are sufficiently thin that by the time a tearing mode is detectable it is already in the nonlinear regime (i.e., the island width exceeds the linear layer width).\cite{wesson} It, therefore, makes very little sense to
-attempt to model tearing mode evolution in tokamak plasmas using a toroidal nonlinear magnetohydrodynamical (MHD) code. The reason for this is obvious: employing  an MHD code necessarily introduces the very short Alfv\'{e}n time into the calculation,
+attempt to model nonlinear tearing mode evolution in tokamak plasmas using a toroidal, nonlinear, MHD code. The reason for this is obvious: employing  an MHD code necessarily introduces the very short Alfv\'{e}n time into the calculation,
 but this timescale is actually irrelevant to the problem in hand. In fact, this is exactly the same reason that MHD codes are not usually used to reconstruct global plasma equilibria, or to model their time evolution.
 
+\subsection{Natural Frequency}\label{natural}
 The natural frequency of a (stable) tearing mode is
 the helical phase velocity with which it would propagate
 were it actually unstable.\cite{rfa} The natural frequency
@@ -397,7 +468,7 @@ the ion fluid is not tied to the magnetic structure of the island chain. The sit
 As we have seen, the region inside the magnetic separatrix of a nonlinear magnetic island chain is governed by a combination of flux-freezing and perturbed force balance.
 This implies that both the electron and the ion fluids are trapped inside the separatrix, and are, therefore,  forced to co-rotate with the island chain. There
 is no such constraint outside the separatrix, so the electron and ion fluids rotate at different speeds in this region,
-as a consequence of diamagnetism.  Consequently, one or other of the electron and the ion fluid rotation profiles must exhibit a strong gradient across
+as a consequence of diamagnetism.  It follows that one or other of the electron and the ion fluid rotation profiles must exhibit a strong gradient across
 the separatrix. The island propagation velocity is determined by which of the two fluids is most resistant to the formation of such a gradient. 
 Of course, it is the ion fluid which is more resistant because of its much greater perpendicular viscosity,\cite{nl1,wat} as well as its much larger 
 neoclassical stress tensor.\cite{nl2} Hence, a nonlinear magnetic island chain is convected by the ion fluid in the vicinity of the rational
@@ -411,7 +482,7 @@ surface, because this choice of propagation speed minimizes the ion fluid veloci
 (a) Safety factor at  ${\mit\Psi}_N=0.95$. 
 (b) $D_\alpha$ (i.e., Deuterium Balmer-alpha) signal, as well as $n=3$ current flowing in upper and lower sections of I-coil. 
 (c) Pedestal (i.e., ${\mit\Psi}_N=0.94$)
-electron pressure. (The red curve is the running average over 10 ms.) (d) Pedestal electron number density. The common vertical yellow bands indicate the ELM suppression windows.}\label{fig1}
+electron pressure. (The red curve is the running average over 10 ms.) (d) Pedestal electron number density. The common vertical yellow bands indicate the ELM-suppression windows.}\label{fig1}
 \end{figure}
 
 \begin{figure}
@@ -438,7 +509,7 @@ of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig3}
 at the magnetic axis (${\mit\Psi}_N=0.00$),
 the $95\%$ flux surface (${\mit\Psi}_N=0.950$), the
 effective plasma boundary for the GPEC and EPEC calculations
-(${\mit\Psi}_N=0.997$), and the true plasma boundary (${\mit\Psi}_N=1.00$), respectively. The horizontal dotted lines indicate the safety-factors at the various $n=3$ rational surfaces. 
+(${\mit\Psi}_N=0.997$), and the true plasma boundary (${\mit\Psi}_N=1.00$), respectively. The yellow vertical bands indicate the ELM-suppression windows. The horizontal dotted lines indicate the safety-factors at the various $n=3$ rational surfaces. 
 } \label{fig4}
 \end{figure}
 
@@ -448,7 +519,7 @@ effective plasma boundary for the GPEC and EPEC calculations
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics.
 Bottom Panel:  $n=3$ island frequencies as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The red, green, blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows.} \label{fig5}
+purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig5}
 \end{figure}
 
 \begin{figure}
@@ -457,7 +528,7 @@ purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig6}
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig6}
 \end{figure}
 
 \begin{figure}
@@ -466,7 +537,7 @@ purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, res
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. The  horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig7}
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. The  horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig7}
 \end{figure}
 
 \begin{figure}
@@ -477,7 +548,7 @@ frequency.
 Bottom Panel:  $n=3$ island frequencies as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  coincident with the ${\bf E}\times {\bf B}$
 frequency. The red, green, blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows.} \label{fig8}
+purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig8}
 \end{figure}
 
 \begin{figure}
@@ -487,7 +558,7 @@ in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  coincident with the ${\bf E}\times {\bf B}$
 frequency. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig9}
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig9}
 \end{figure}
 
 \begin{figure}
@@ -498,7 +569,7 @@ frequency.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  coincident with the ${\bf E}\times {\bf B}$
 frequency. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$. } \label{fig10}
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$. } \label{fig10}
 \end{figure}
 
 \begin{figure}
@@ -506,7 +577,7 @@ purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, res
 \caption{Top Panel: $n=3$ natural frequencies as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics.
 Bottom Panel:  $n=3$ island frequencies as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The black, red, green, blue, yellow, cyan, magenta,  brown, purple, and orange curves correspond to $m=4$, 5, 6, 7, 8, 9, 10,  11, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. } \label{fig11}
+in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The black, red, green, blue, yellow, cyan, magenta,  brown, purple, and orange curves correspond to $m=4$, 5, 6, 7, 8, 9, 10,  11, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. } \label{fig11}
 \end{figure}
 
 \begin{figure}
@@ -515,7 +586,7 @@ in   DIII-D discharge \#145380, assuming that the natural frequency is determine
 in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig12}
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig12}
 \end{figure}
 
 \begin{figure}
@@ -524,7 +595,7 @@ purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, res
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM suppression windows. The horizontal dotted lines indicate  the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig13}
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. The horizontal dotted lines indicate  the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig13}
 \end{figure}
 
 \begin{figure}
