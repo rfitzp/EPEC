@@ -10,7 +10,7 @@ real[] psi = A[0];
 real[] r   = A[1];
 real[] q   = A[14];
 
-pen s = black + solid + 2.0;	
+pen s = black + solid + 3.0;	
 draw(graph(psi,q),s);
 
 s = dotted + black + 1;

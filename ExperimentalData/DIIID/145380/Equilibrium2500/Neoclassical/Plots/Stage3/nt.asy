@@ -13,13 +13,13 @@ real[] te  = A[4];
 real[] ti  = A[8];
 real[] nii = A[10]*10.;
 
-pen s = green + solid + 2.0;	
+pen s = red + solid + 3.0;	
 draw(graph(psi,ne),s);
-s = red + solid + 2.0;	
+s = green + solid + 3.0;	
 draw(graph(psi,te),s);
-s = blue + solid + 2.0;	
+s = blue + solid + 3.0;	
 draw(graph(psi,ti),s);
-s = cyan + solid + 2.0;	
+s = cyan + solid + 3.0;	
 draw(graph(psi,nii),s);
 
 s = dotted + black + 1;
