@@ -1,0 +1,9 @@
+Input parameters (from Inputs/Island.in):
+Git Hash     = 2f615a610ba795505a82f4fbc2c2b3705bede95e
+Compile time = 2020-07-10 18:45:57 UTC
+Git Branch   = master
+
+FLUX_NTOR  =  3  FLUX_MMIN    =  4           FLUX_MMAX    = 30
+NEO_INTF   =  1  NEO_IMPURITY =  1           NEO_NEUTRAL  =  1           NEO_FREQ  =  1           NEO_NTYPE =  0  NEO_NN =  3.0000e+17  NEO_LN =  1.2000e-02  NEO_YN =  1.5000e+00
+PHASE      =  1  PHASE_INTN   =  0           PHASE_STAGE5 =  1           PHASE_OLD =  1
+RESTART    =  1  TSTART       =  2.4500e+03  TEND         =  4.3510e+03  DT        =  1.0000e+00

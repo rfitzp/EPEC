@@ -24,7 +24,7 @@ In the second case, the natural frequencies are
 determined by the guiding center flows at the rational surfaces.
  In the third case, the natural frequencies   are 
 determined by the electron flows at the  rational surfaces, which is the prediction of linear theory.
-The second case gives  the best agreement between the simulations and the  experimental observations.   The third case gives the worst agreement between the simulations 
+The second case gives  the best agreement between the simulations and the  experimental observations.   The third case gives by far the worst agreement between the simulations 
 and the  observations. The first case only leads to partial agreement between  the  simulations and the  observations. However, this lack of complete agreement
 may be a consequence of using an inaccurate guess for the neutral particle distribution in the pedestal.  
 \end{abstract}
@@ -249,9 +249,10 @@ reconnection due to plasma flow. However, the shielding breaks down at various r
 Fig.~\ref{fig5}). In this situation, the driven island width is similar to the vacuum island width. 
 
 Figure~\ref{fig7} shows the widths of the regions of density and electron temperature flattening associated with the $n=3$ magnetic
-island chains driven by the RMP in the pedestal region as functions of time. (See Sect.~III.F in Ref.~\onlinecite{rf2}.) (The particle and energy perpendicular diffusivities are assumed to be the
-same as the momentum perpendicular diffusivity.) It can be seen that the driven magnetic island chains are generally too narrow
-to significantly flatten the density and electron temperature profiles,\cite{flat}  implying that there is actually very little degradation of the pedestal energy and particle confinement
+island chains driven by the RMP in the pedestal region as functions of time. (See Sect.~III.F in Ref.~\onlinecite{rf2}.) (Note that the energy diffusivity shown in Fig.~\ref{fig3}  is used to calculate the
+critical island width for electron temperature flattening, whereas the corresponding particle diffusivity is used to calculate
+the critical island width for density flattening.\cite{flat}) It can be seen that the driven magnetic island chains are generally too narrow
+to significantly flatten the density and electron temperature profiles,  implying that there is actually very little degradation of the pedestal energy and particle confinement
 due to the applied RMP. 
 However, in those situations in which the shielding of driven
 magnetic reconnection due to plasma flow breaks down (i.e., the true natural frequency becomes zero), locked magnetic island chains are generated that are
@@ -262,7 +263,8 @@ ELM-suppression windows in DIII-D discharge \#145380, according to the standard
 hypothesis of how RMP-induced ELM-suppression operates, we require the major regions of density and temperature
 flattening to correspond to the intersections of the yellow vertical bands and the horizontal dotted lines in Fig.~\ref{fig7}. If this is the case then
 the density and temperature profiles are locally flattened at the top of the pedestal (which corresponds to
-the horizontal dotted lines) during the ELM-suppression windows (which correspond to the yellow vertical bands). It can be seen
+the horizontal dotted lines) during the ELM-suppression windows (which correspond to the yellow vertical bands). (Note that the top of the pedestal
+is, somewhat arbitrarily, identified with the off-axis peak in the electron number density that is apparent in the top panel of Fig.~\ref{fig3}.) It can be seen
 that the region of density and temperature flattening associated with the $m=11$ (brown) tearing mode driven by the RMP lines up fairly well with the
 first ELM-suppression window. The region of density and temperature flattening associated with the $m=10$ (magenta) tearing mode 
 lines up somewhat less well with the second ELM-suppression window. To be more exact, the region is located at the top of the pedestal,
@@ -334,7 +336,8 @@ distribution in DIII-D discharge \#145380, it would be premature to write-off th
 
 \section*{Acknowledgements}
 This research was funded by the U.S.\ Department of Energy under contract DE-FG02-04ER-54742.
-The author would like to thank Q.M.~Hu and R.~Nazikian for providing the experimental data used in this paper. 
+The author would like to thank Q.M.~Hu and R.~Nazikian for providing the experimental data used in this paper. The
+author would also like to thank J.-K.~Park and N.C.~Logan for providing guidance on how to run the {\tt GPEC} code.
  
 \section*{Data Availabity Statement}
 The data that support the findings of this study are available from the corresponding author upon reasonable request.
@@ -544,7 +547,7 @@ avoid being trapped inside the magnetic separatrix. Indeed, both the regions ins
 are governed by a combination of flux-freezing and perturbed force balance, whereas the resistive
 layer, within which the plasma can easily slip through the magnetic field,  is diverted onto the magnetic separatrix. Moreover, as
 the island grows, the width of the separatrix layer becomes
-increasing negligible with respect to the island width. It
+increasing negligible with respect to the full island width. It
 turns out that the separatrix layer does not significantly affect the evolution of a nonlinear magnetic island chain. Indeed,
 the celebrated Rutherford island width evolution equation,
 which governs the evolution of the island width, is simply a
@@ -618,8 +621,9 @@ Upper-Right Panel: Safety-factor profile in DIII-D discharge \#145380 at time $t
 \caption{Top Panel: The red, green, blue, and cyan curves show the electron number density ($10^{19}\,{\rm m}^{-3}$),
 electron temperature (keV), (thermal) ion temperature (keV), and
  C-VI ion number density  ($10^{18}\,{\rm m}^{-3}$)  profiles, respectively,  in  DIII-D discharge \#145380 at time $t=2500$ ms. Middle Panel:  
- ${\bf E}\times {\bf B}$ frequency profile in  DIII-D discharge \#145380 at time $t=2500$. Bottom Panel: Perpendicular momentum diffusivity 
-profile in  DIII-D discharge \#145380 at time $t=2500$ ms.
+ ${\bf E}\times {\bf B}$ frequency profile in  DIII-D discharge \#145380 at time $t=2500$. Bottom Panel: The red, green, and blue curves show
+ the perpendicular momentum, energy, and particle diffusivity profiles, respectively, 
+ in  DIII-D discharge \#145380 at time $t=2500$ ms.
 The   common vertical dotted lines indicate the location of the top
 of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig3}
 \end{figure}

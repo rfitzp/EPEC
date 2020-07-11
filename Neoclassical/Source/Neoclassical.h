@@ -27,6 +27,7 @@
 // 1.2 - Major rearrangement of input and output files
 // 1.3 - Added PsiNk to nFile
 // 1.4 - Added cFile and linear interpolation
+// 1.5 - Added chie and chin
 
 // ################################################################
 
@@ -34,7 +35,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 4
+#define VERSION_MINOR 5
 
 #include <stdio.h>
 #include <math.h>
@@ -146,6 +147,8 @@ class Neoclassical
 
   // Read from Inputs/cFile
   Field Chip; // Perpendicular momentum diffusivity
+  Field Chie; // Perpendicular energy   diffusivity
+  Field Chin; // Perpendicular particle diffusivity
 
   // Profile data interpolated onto equilibrium grid
   Array<double,1> n_e;    // Electron number density (m^-3)
@@ -166,6 +169,8 @@ class Neoclassical
   Array<double,1> Z_eff;  // Effective ion charge number
   Array<double,1> alpha;  // Impurity strength parameter
   Array<double,1> chip;   // Perpendicular momentum diffusivity (m^2 s^-1)
+  Array<double,1> chie;   // Perpendicular energy   diffusivity (m^2 s^-1)
+  Array<double,1> chin;   // Perpendicular particle diffusivity (m^2 s^-1)
 
   // ---------------------------
   // Rational surface parameters
@@ -210,6 +215,8 @@ class Neoclassical
   Array<double,1> rhok;       // Relative mass densities
   Array<double,1> NNk;        // Flux-surfaced-averaged majority neutral number densities
   Array<double,1> chipk;      // Perpendicular momentum diffusivities
+  Array<double,1> chiek;      // Perpendicular energy   diffusivities
+  Array<double,1> chink;      // Perpendicular particle diffusivities
 
   Array<double,1> v_T_ek;     // Electron thermal velocities
   Array<double,1> v_T_ik;     // Majority ion thermal velocities

@@ -19,7 +19,9 @@ Tii.asy     ... plots T_I(r)
 Tiip.asy    ... plots dT_I/dr 
 we.asy      ... plots w_E(r)
 nb.asy      ... plots n_b(r)
-chip.asy    ... plots chi_perp(r)
+chip.asy    ... plots chi_perp (momentum) (r)
+chie.asy    ... plots chi_perp (energy) (r)
+chin.asy    ... plots chi_perp (particle) (r)
 
 quasi.asy   ... quasi-neutrality test
 zeff.asy    ... plots Z_eff (r)

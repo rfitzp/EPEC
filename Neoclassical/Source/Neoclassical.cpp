@@ -527,21 +527,29 @@ void Neoclassical::Read_Profiles ()
   printf ("Reading perpendicular momentum diffusivity data:\n");
   cFileRead ();
 
-  // Interpolate perpendicular momentum diffusivity onto existing psi grid
+  // Interpolate perpendicular diffusivity onto existing psi grid
   chip.resize (NPSI);
+  chie.resize (NPSI);
+  chin.resize (NPSI);
     
   chip (0)      = Chip.GetY (0);
+  chie (0)      = Chie.GetY (0);
+  chin (0)      = Chin.GetY (0);
   chip (NPSI-1) = Chip.GetY (Chip.GetN()-1);
+  chie (NPSI-1) = Chie.GetY (Chie.GetN()-1);
+  chin (NPSI-1) = Chin.GetY (Chin.GetN()-1);
 
   for (int j = 1; j < NPSI-1; j++)
     {
       chip (j) = InterpolateField (Chip, psi (j), 0);
+      chie (j) = InterpolateField (Chie, psi (j), 0);
+      chin (j) = InterpolateField (Chin, psi (j), 0);
     }
 
-  // Output perpendicular momentum diffusivity
+  // Output perpendicular diffusivity
   file = OpenFilew ((char*) "Outputs/Stage3/chip.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e\n", psi (j), rr (j), chip (j));
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", psi (j), rr (j), chip (j), chie (j), chin (j));
   fclose (file);
 }
 
@@ -575,6 +583,8 @@ void Neoclassical::Get_Derived ()
   rhok.resize   (nres);
   NNk.resize    (nres);
   chipk.resize  (nres);
+  chiek.resize  (nres);
+  chink.resize  (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -595,14 +605,16 @@ void Neoclassical::Get_Derived ()
       Zeffk  (j) = Interpolate (NPSI, rr, Z_eff,  rk (j), 0);
       alphak (j) = Interpolate (NPSI, rr, alpha,  rk (j), 0);
       chipk  (j) = Interpolate (NPSI, rr, chip,   rk (j), 0);
+      chiek  (j) = Interpolate (NPSI, rr, chie,   rk (j), 0);
+      chink  (j) = Interpolate (NPSI, rr, chin,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
       if (NTYPE == 0)
 	NNk (j) = NN * exp ((rk(j) - 1.) /(LN /a));
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
  
-      printf ("m = %3d r = %11.4e ne = %11.4e Te = %11.4e ni = %11.4e Ti = %11.4e nI = %11.4e TI = %11.4e wE = %11.4e Z_eff = %11.4e NN = %11.4e rho = %11.4e chip = %11.4e\n",
-	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j));
+      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e wE = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e\n",
+	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j));
     }
 
   if (IMPURITY == 0)
@@ -661,8 +673,8 @@ void Neoclassical::Get_Derived ()
 
   for (int j = 0; j < nres; j++)
     {
-      WcritTk (j) = pow (chipk(j) /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
-      Wcritnk (j) = pow (chipk(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      WcritTk (j) = pow (chiek(j) /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      Wcritnk (j) = pow (chink(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
     }
 
   // ------------------------------------------------------

@@ -86,10 +86,10 @@ int main (int argc, char** argv)
 	printf ("-h        - list options\n");
 	printf ("-g INTG   - set interpolation flag INTG\n");
 	printf ("-n NTOR   - set toroidal mode number to NTOR\n");
-	printf ("-m MMIN   - set minumum mode number to MMIN\n");
-	printf ("-p PSILIM - set maximum PSIN for rational surface PSILIM\n");
+	printf ("-m MMIN   - set minumum poloidal mode number to MMIN\n");
+	printf ("-p PSILIM - set maximum PSIN for rational surface, PSILIM\n");
 	printf ("-t TIME   - set experimental time to TIME\n");
-	printf ("-M MMAX   - set maximum mode number to MMAX\n");
+	printf ("-M MMAX   - set maximum poloidal mode number to MMAX\n");
 	exit (0);
      case 'g':
 	gvalue = optarg;

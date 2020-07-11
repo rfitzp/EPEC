@@ -9,9 +9,15 @@ A          = transpose(A);
 real[] psi = A[0];
 real[] r   = A[1];
 real[] q   = A[2];
+real[] x   = A[3];
+real[] y   = A[4];
 
-pen s = black + solid + 3.0;	
+pen s = red + solid + 3.0;	
 draw(graph(psi,q),s);
+s = green + solid + 3.0;	
+draw(graph(psi,x),s);
+s = blue + solid + 3.0;	
+draw(graph(psi,y),s);
 
 s = dotted + black + 1;
 

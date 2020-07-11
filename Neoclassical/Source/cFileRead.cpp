@@ -8,9 +8,9 @@
 void Neoclassical::cFileRead ()
 {
   int    n;
-  double x, y, dydx;
+  double x, y1, y2, y3, dydx;
  
-  // Check for existence of cfile
+  // Check for existence of cFile
   FILE* file = OpenFiler ((char*) "Inputs/cFile");
   if (file == NULL) 
     {
@@ -26,10 +26,12 @@ void Neoclassical::cFileRead ()
     }
 
   Chip.resize (n);
+  Chie.resize (n);
+  Chin.resize (n);
 
   for (int i = 0; i < n; i++)
     {
-      if (fscanf (file, "%lf %lf", &x, &y) != 2)
+      if (fscanf (file, "%lf %lf %lf %lf", &x, &y1, &y2, &y3) != 4)
 	{
 	  printf ("NEOCLASSICAL::cFileRead: Error reading cFile (2)\n");
 	  exit (1);
@@ -37,7 +39,9 @@ void Neoclassical::cFileRead ()
       else
 	{
 	  dydx = 0.;
-	  Chip.PushData (i, x, y, dydx);
+	  Chip.PushData (i, x, y1, dydx);
+	  Chie.PushData (i, x, y2, dydx);
+	  Chin.PushData (i, x, y3, dydx);
 	}
     }
   
