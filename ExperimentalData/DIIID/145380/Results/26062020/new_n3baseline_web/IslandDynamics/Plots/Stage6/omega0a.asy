@@ -13,6 +13,11 @@ real[] wnl = A[3];
 real[] web = A[4];
 real[] tt  = A[5];
 
+real alpha = 5.20603250270005;
+real beta  = -0.000445721197123001;
+
+real f(real x) {return -alpha-beta*x;}
+
 int N = m.length;
 real[] q4,  i4;
 real[] q5,  i5;
@@ -31,76 +36,76 @@ for (int j = 0; j < N; ++j)
   {
    if ((int) m[j] == 4)
       {
-	q4.push (tt[j]);
+	q4.push (f(tt[j]));
 	i4.push (wnl[j]);
       }
     if ((int) m[j] == 5)
       {
-	q5.push (tt[j]);
+	q5.push (f(tt[j]));
 	i5.push (wnl[j]);
       }
     if ((int) m[j] == 6)
       {
-	q6.push (tt[j]);
+	q6.push (f(tt[j]));
 	i6.push (wnl[j]);
       }
     if ((int) m[j] == 7)
       {
-	q7.push (tt[j]);
+	q7.push (f(tt[j]));
 	i7.push (wnl[j]);
       }
     if ((int) m[j] == 8)
       {
-	q8.push (tt[j]);
+	q8.push (f(tt[j]));
 	i8.push (wnl[j]);
       }
     if ((int) m[j] == 9)
       {
-	q9.push (tt[j]);
+	q9.push (f(tt[j]));
 	i9.push (wnl[j]);
       }
    if ((int) m[j] == 10)
       {
-	q10.push (tt[j]);
+	q10.push (f(tt[j]));
 	i10.push (wnl[j]);
       }
     if ((int) m[j] == 11)
       {
-	q11.push (tt[j]);
+	q11.push (f(tt[j]));
 	i11.push (wnl[j]);
       }
     if ((int) m[j] == 12)
       {
-	q12.push (tt[j]);
+	q12.push (f(tt[j]));
 	i12.push (wnl[j]);
       }
     if ((int) m[j] == 13)
       {
-	q13.push (tt[j]);
+	q13.push (f(tt[j]));
 	i13.push (wnl[j]);
       }
     if ((int) m[j] == 14)
       {
-	q14.push (tt[j]);
+	q14.push (f(tt[j]));
 	i14.push (wnl[j]);
       }
     if ((int) m[j] == 15)
       {
-	q15.push (tt[j]);
+	q15.push (f(tt[j]));
 	i15.push (wnl[j]);
       }
     if ((int) m[j] == 16)
       {
-	q16.push (tt[j]);
+	q16.push (f(tt[j]));
 	i16.push (wnl[j]);
       }
   }
 
 pen s;
 
-fill((2840,-49.5)--(2980,-49.5)--(2980,49.5)--(2840,49.5)--cycle, paleyellow);
-fill((3320,-49.5)--(3560,-49.5)--(3560,49.5)--(3320,49.5)--cycle, paleyellow);
-fill((3880,-49.5)--(4200,-49.5)--(4200,49.5)--(3880,49.5)--cycle, paleyellow);
+fill((f(2840),-49.5)--(f(2980),-49.5)--(f(2980),49.5)--(f(2840),49.5)--cycle, paleyellow);
+fill((f(3320),-49.5)--(f(3560),-49.5)--(f(3560),49.5)--(f(3320),49.5)--cycle, paleyellow);
+fill((f(3880),-49.5)--(f(4200),-49.5)--(f(4200),49.5)--(f(3880),49.5)--cycle, paleyellow);
 
 s = white + dotted + 0.5;
 if (q16.length > 0)
@@ -160,7 +165,9 @@ s = dotted + black + 1;
 ylimits (-50., 50., Crop);
 yequals (0., s);
 
+scale(Linear(-1),Linear);
+
 pen qq = fontsize (25.);
 defaultpen (qq);
-xaxis ("$t ({\rm ms})$", BottomTop, LeftTicks);
+xaxis ("$\overline{q_{95}}$", BottomTop, LeftTicks);
 yaxis ("$\varpi_0({\rm krad/s})$", LeftRight, RightTicks);

@@ -21,7 +21,7 @@ Three cases are considered.
 In the first case, the natural frequencies of tearing modes resonant in the plasma are 
 determined by the ion flows at the corresponding rational surfaces, which is the prediction of nonlinear theory.
 In the second case, the natural frequencies are 
-determined by the guiding center flows at the rational surfaces.
+determined by the guiding-center flows at the rational surfaces.
  In the third case, the natural frequencies   are 
 determined by the electron flows at the  rational surfaces, which is the prediction of linear theory.
 The second case gives  the best agreement between the simulations and the  experimental observations.   The third case gives by far the worst agreement between the simulations 
@@ -118,7 +118,7 @@ q({\mit\Psi}_p)= \frac{d{\mit\Psi}_t}{d{\mit\Psi}_p},
 takes the rational value $n/m$, where $m$ is a positive integer. Here, $m$ and $n$ are the numbers of poloidal and
 toroidal periods, respectively, of the helical magnetic island chain driven at the rational surface. Moreover, ${\mit\Psi}_t({\mit\Psi}_p)$ is the equilibrium toroidal magnetic flux (divided by $2\pi$).
 
-A second possibility is that a tearing mode is convected by the local guiding center fluid at the rational surface,\cite{heyn,paz1}
+A second possibility is that a tearing mode is convected by the local guiding-center fluid at the rational surface  (again, see the discussion in Sect.~\ref{natural}),\cite{heyn,paz1}
 in which case we would expect the natural frequency to take the form 
 \begin{equation}\label{e3}
 \varpi_{\perp\, EB} =-n\,\omega_E.
@@ -144,7 +144,6 @@ electron temperature.
 Finally,
 as before, the right-hand side of Eq.~(\ref{e1}) is evaluated
 at the rational magnetic flux-surface. 
-
 
 The secondary aim of this paper is to determine which of the three aforementioned choices for the natural frequency can best account for the   $q_{95}$ 
 ELM-suppression windows  observed in DIII-D discharge \#145380. 
@@ -215,8 +214,11 @@ Figure~\ref{fig4} shows the safety-factor in DIII-D discharge \#145380 as a func
 that $q_{95}\equiv q({\mit\Psi}_N=0.95)$ varies from about 4.1 at the start of the current ramp to about 3.3
 at the end. However, the safety-factor at the magnetic axis, $q_0 \equiv q({\mit\Psi}_N=0.0)$, remains approximately
 constant at about 1.0. For the sake of practicality,  the {\tt GPEC} and {\tt EPEC} calculations described in this paper ignore $n=3$ rational
-surfaces that lie very close to the LCFS: in other words,  surfaces that lie in the region $0.997 < {\mit\Psi}_N\leq 1.000$. The centers of the
-first, second, and third ELM-suppression windows correspond to $q_{95}\simeq 3.95$, 3.60, and 3.48, respectively. 
+surfaces that lie very close to the LCFS: in other words,  surfaces that lie in the region $0.997 < {\mit\Psi}_N\leq 1.000$. Let $\overline{q_{95}}\equiv 5.2060-0.4457\,t$ represent the
+least-squares linear fit to the $q_{95}$ versus time data shown in Fig.~\ref{fig4}. 
+It follows that the 
+first, second, and third ELM-suppression windows extend over the $\overline{q_{95}}$ ranges $3.88$--$3.94$, $3.62$--$3.73$,
+and $3.33$--$3.48$, respectively. 
 
 Note that all quantities used in our theoretical model are derived from experimental measurements taken in DIII-D discharge \#145380, with the exception of the neutral particle data. 
 Unfortunately, no neutral particle data is available for DIII-D discharge \#145380.
@@ -237,7 +239,8 @@ prior to the occurrence of the third ELM-suppression window. The lower panel of 
 tearing modes that are resonant in the pedestal. It is apparent that if the magnitude of the natural frequency in the absence of the RMP falls below about
 $5\,{\rm krad/s}$ then the associated tearing mode locks to the RMP (i.e., its true natural frequency becomes zero). 
 
-The upper panel of Fig.~\ref{fig6} shows the widths of the various vacuum magnetic island chains driven by the applied $n=3$ RMP in the pedestal region as functions of time.
+The upper panel of Fig.~\ref{fig6} shows the widths of the various vacuum magnetic island chains driven by the applied $n=3$ RMP in the pedestal region as functions of $
+\overline{q_{95}}$.
 The vacuum island widths are the  expected island widths in the absence of any shielding of driven magnetic reconnection due to
 plasma flow; in other words, they are the  widths of the island chains that would be driven if all of the natural frequencies were zero. It can be seen that
 the driven magnetic island chains extend over most of the pedestal, implying a very significant degradation in pedestal energy and particle confinement due to the
@@ -246,11 +249,12 @@ bottom of the pedestal overlap, implying that the magnetic field in this region 
 of Fig.~\ref{fig6} shows the actual widths of the various magnetic island chains driven by the applied $n=3$ RMP as functions of time. It is apparent 
 that the true island widths are generally much smaller than the vacuum island widths, as a consequence of the shielding of driven magnetic
 reconnection due to plasma flow. However, the shielding breaks down at various rational surfaces when the associated natural frequency is zero (see the lower panel of
-Fig.~\ref{fig5}). In this situation, the driven island width is similar to the vacuum island width. 
+Fig.~\ref{fig5}). In this situation, the driven island width is similar to the vacuum island width. Note that Fig.~\ref{fig6} is similar in conception to
+Fig.~23 of Ref.~\onlinecite{wade}. 
 
 Figure~\ref{fig7} shows the widths of the regions of density and electron temperature flattening associated with the $n=3$ magnetic
-island chains driven by the RMP in the pedestal region as functions of time. (See Sect.~III.F in Ref.~\onlinecite{rf2}.) (Note that the energy diffusivity shown in Fig.~\ref{fig3}  is used to calculate the
-critical island width for electron temperature flattening, whereas the corresponding particle diffusivity is used to calculate
+island chains driven by the RMP in the pedestal region as functions of $\overline{q_{95}}$ and time. (See Sect.~III.F in Ref.~\onlinecite{rf2}.) (Note that the energy diffusivity data shown in Fig.~\ref{fig3}  is used to calculate the
+critical island width for electron temperature flattening, whereas the corresponding particle diffusivity data is used to calculate
 the critical island width for density flattening.\cite{flat}) It can be seen that the driven magnetic island chains are generally too narrow
 to significantly flatten the density and electron temperature profiles,  implying that there is actually very little degradation of the pedestal energy and particle confinement
 due to the applied RMP. 
@@ -277,7 +281,7 @@ major zero-crossings of the $m=11$ and $m=10$ natural frequencies, which do take
 ELM-suppression windows, respectively). 
 
 \subsection{Case 2: $\varpi=\varpi_{\perp\,EB}$}
-The second case that we shall consider is that in which the natural frequency is determined by the local guiding center fluid; 
+The second case that we shall consider is that in which the natural frequency is determined by the local guiding-center fluid; 
 in other words, the natural frequency is specified by Eq.~(\ref{e3}). 
 
 Figures~\ref{fig8}--\ref{fig10} show analogous data to Figs.~\ref{fig5}--\ref{fig7}, respectively. It can be seen from the
@@ -313,7 +317,7 @@ derived from measurements taken in DIII-D discharge \#145380, apart from the neu
 Three cases are considered. In the first case, the natural frequencies of (stable) $n=3$ tearing modes, resonant in the plasma, are assumed to be
 determined by the ion flows at the corresponding rational surfaces, which is the prediction of nonlinear tearing mode theory.\cite{nl1,nl2,nl3}
 In the second case, the natural frequencies of (stable) $n=3$ tearing modes, resonant in the plasma, are assumed to be
-determined by the guiding center flows at the corresponding rational surfaces.\cite{heyn,paz1} 
+determined by the guiding-center flows at the corresponding rational surfaces.\cite{heyn,paz1} 
 In the third case, the natural frequencies of (stable) $n=3$ tearing modes, resonant in the plasma, are assumed to be
 determined by the electron flows at the corresponding rational surfaces, which is the prediction of linear tearing mode theory.\cite{lin1,lin2,lin3}
 
@@ -335,13 +339,15 @@ natural frequency is pulled in the electron diamagnetic direction, and vice vers
 distribution in DIII-D discharge \#145380, it would be premature to write-off the nonlinear prediction at this stage.  
 
 \section*{Acknowledgements}
-This research was funded by the U.S.\ Department of Energy under contract DE-FG02-04ER-54742.
 The author would like to thank Q.M.~Hu and R.~Nazikian for providing the experimental data used in this paper. The
 author would also like to thank J.-K.~Park and N.C.~Logan for providing guidance on how to run the {\tt GPEC} code.
+This research was directly funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences,  under contract DE-FG02-04ER54742, and
+incorporates work funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences, using the DIII-D National Fusion Facility, a DOE Office of Science user facility, under contract DE-FC02-04ER54698.  
+
+\section*{Disclaimer} This report was prepared as an account of work sponsored by an agency of the United States Government. Neither the United States Government nor any agency thereof, nor any of their employees, makes any warranty, express or implied, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights. Reference herein to any specific commercial product, process, or service by trade name, trademark, manufacturer, or otherwise does not necessarily constitute or imply its endorsement, recommendation, or favoring by the United States Government or any agency thereof. The views and opinions of authors expressed herein do not necessarily state or reflect those of the United States Government or any agency thereof. 
  
 \section*{Data Availabity Statement}
 The data that support the findings of this study are available from the corresponding author upon reasonable request.
- 
  
 \section*{References}
 \begin{thebibliography}{99}\baselineskip 5ex
@@ -424,7 +430,6 @@ Phys.\ Rev.\ Lett., to appear (2020).
 
 \bibitem{cole} A.~Cole, and R.~Fitzpatrick, Phys.\ Plasmas {\bf 13}, 032503 (2006).
 
-
 \bibitem{lin1} M.~B\'{e}coulet, F.~Orain, P.~Maget, N.~Mellet, X.~Garbet, E.~Nardon, G.T.A.~Huysmans, T.~Caspar, A.~Loarte,  P.~Cayna, {\em et al.}, 
 Nucl.\ Fusion {\bf 52}, 054003  (2012).
 
@@ -464,6 +469,9 @@ Nucl.\ Fusion  {\bf 37}, 403 (1997).
 
 \bibitem{solps} S~Wiesen, D.~Reiter, V.~Kotov, M.~Baelmans, W.~Dekeyser, A.S.~Kukushkin, S.W.~Lisgo, R.A.~Pitts, V.~Rozhansky, G.~Saibene I.~Veselova, and S.~Voskoboynikov,
 J.\ Nucl.\ Mat.\ {\bf 468}, 480 (2015).
+
+\bibitem{wade} M.R.~Wade, R.~Nazikian, J.D.~de\,Grassie, T.E.~Evans, N.M.~Ferraro, R.A.~Moyer, D.M.~Orlov, 
+R.J.~Buttery, M.E.~Fenstermacher, A.M.~Garofalo, {\em et al.}, Nucl.\ Fusion {\bf 55}, 023002 (2015). 
 
 \bibitem{flat} R.~Fitzpatrick,  Phys.\ Plasmas {\bf 2}, 825 (1995).
 
@@ -587,7 +595,9 @@ electron fluid in the immediate vicinity of the rational
 surface. This is indeed the case in the linear regime.\cite{ara} Of course, as a consequence of diamagnetic flows, if the island chain is
 convected by the electron fluid at the rational surface then it propagates with respect to the local ion fluid. However, this is not a
 problem because a linear layer is sufficiently thin that the magnetic field can diffuse through the plasma very rapidly, which implies that
-the ion fluid is not tied to the magnetic structure of the island chain. The situation is very different in the nonlinear regime. 
+the ion fluid is not tied to the magnetic structure of the island chain. 
+
+The situation is very different in the nonlinear regime. 
 As we have seen, the region inside the magnetic separatrix of a nonlinear magnetic island chain is governed by a combination of flux-freezing and perturbed force balance.
 This implies that both the electron and the ion fluids are trapped inside the separatrix, and are, therefore,  forced to co-rotate with the island chain. There
 is no such constraint outside the separatrix, so the electron and ion fluids rotate at different speeds in this region,
@@ -596,6 +606,11 @@ the separatrix. The island propagation velocity is determined by which of the tw
 Of course, it is the ion fluid which is more resistant because of its much greater perpendicular viscosity,\cite{nl1,wat} as well as its much larger 
 neoclassical stress tensor.\cite{nl2} Hence, a nonlinear magnetic island chain is convected by the ion fluid in the vicinity of the rational
 surface, because this choice of propagation speed minimizes the ion fluid velocity gradient across the separatrix.
+
+Finally, we could imagine that if the width of an island chain is neither much less than the linear layer width (which is the strict
+criterion for the validity of linear theory) nor much greater than the linear layer width (which is the strict criterion for
+the validity of nonlinear theory) then the chain lies in some sort of intermediate regime in which it is
+convected by the local guiding-center fluid (which is intermediate between the predictions of linear and nonlinear theory). 
 
 \newpage
 
@@ -640,7 +655,7 @@ The horizontal dotted lines indicate the safety-factors at the various $n=3$ rat
 
 \begin{figure}
 \includegraphics[height=6in]{fig5.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of time
+\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The red, green, blue, yellow, cyan, magenta, brown, pink,
@@ -649,7 +664,7 @@ purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 
 
 \begin{figure}
 \includegraphics[height=6in]{fig6.pdf}
-\caption{Top Panel: Full  $n=3$ vacuum island widths as functions of time
+\caption{Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The blue, yellow, cyan, magenta, brown, pink,
@@ -659,7 +674,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 
 \begin{figure}
 \includegraphics[height=6in]{fig7.pdf}
-\caption{Top Panel: Density flattening widths associated with induced $n=3$ magnetic island  chains as functions of time
+\caption{Top Panel: Density flattening widths associated with induced $n=3$ magnetic island  chains as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The blue, yellow, cyan, magenta, brown, pink,
@@ -669,7 +684,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 
 \begin{figure}
 \includegraphics[height=6in]{fig8.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of time
+\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
 frequency.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
@@ -680,7 +695,7 @@ purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 
 
 \begin{figure}
 \includegraphics[height=6in]{fig9.pdf}
-\caption{Top Panel: $n=3$ vacuum island widths as functions of time
+\caption{Top Panel: $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  determined by the ${\bf E}\times {\bf B}$
@@ -691,7 +706,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 
 \begin{figure}
 \includegraphics[height=6in]{fig10.pdf}
-\caption{Top Panel: Density flattening widths associated with induced $n=3$ magnetic island  chains as functions of time
+\caption{Top Panel: Density flattening widths associated with induced $n=3$ magnetic island  chains as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  determined by the ${\bf E}\times {\bf B}$
 frequency.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
@@ -703,7 +718,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 
 \begin{figure}
 \includegraphics[height=6in]{fig11.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of time
+\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The black, red, green, blue, yellow, cyan, magenta,  brown, 
@@ -712,7 +727,7 @@ purple, and orange curves correspond to $m=4$, 5, 6, 7, 8, 9, 10,  11, 13, and 1
 
 \begin{figure}
 \includegraphics[height=6in]{fig12.pdf}
-\caption{Top Panel: $n=3$ vacuum island widths as functions of time
+\caption{Top Panel: $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The blue, yellow, cyan, magenta, brown, pink,
@@ -722,7 +737,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 
 \begin{figure}
 \includegraphics[height=6in]{fig13.pdf}
-\caption{Top Panel: Density flattening widths associated with induced $n=3$ magnetic island  chains as functions of time
+\caption{Top Panel: Density flattening widths associated with induced $n=3$ magnetic island  chains as functions of the least-squares linear fit to $q_{95}$ versus time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The blue, yellow, cyan, magenta, brown, pink,

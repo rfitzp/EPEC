@@ -59,12 +59,11 @@ for (int j = 0; j < N; ++j)
 	q9.push (tt[j]);
 	i9.push (wnl[j]);
       }
-  if ((int) m[j] == 10)
+   if ((int) m[j] == 10)
       {
 	q10.push (tt[j]);
 	i10.push (wnl[j]);
       }
-  
     if ((int) m[j] == 11)
       {
 	q11.push (tt[j]);
