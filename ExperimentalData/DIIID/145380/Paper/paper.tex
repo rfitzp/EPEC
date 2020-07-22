@@ -26,7 +26,7 @@ determined by the guiding-center flows at the rational surfaces.
 determined by the electron flows at the  rational surfaces, which is the prediction of linear theory.
 The second case gives  the best agreement between the simulations and the  experimental observations.   The third case gives by far the worst agreement between the simulations 
 and the  observations. The first case only leads to partial agreement between  the  simulations and the  observations. However, this lack of complete agreement
-may be a consequence of using an inaccurate guess for the neutral particle distribution in the pedestal.  
+may be a consequence of using an inaccurate assumption for the neutral particle distribution in the pedestal.  
 \end{abstract}
  
 \maketitle
@@ -115,7 +115,7 @@ safety-factor
 \begin{equation}
 q({\mit\Psi}_p)= \frac{d{\mit\Psi}_t}{d{\mit\Psi}_p},
 \end{equation}
-takes the rational value $n/m$, where $m$ is a positive integer. Here, $m$ and $n$ are the numbers of poloidal and
+takes the rational value $m/n$, where $m$ is a positive integer. Here, $m$ and $n$ are the numbers of poloidal and
 toroidal periods, respectively, of the helical magnetic island chain driven at the rational surface. Moreover, ${\mit\Psi}_t({\mit\Psi}_p)$ is the equilibrium toroidal magnetic flux (divided by $2\pi$).
 
 A second possibility is that a tearing mode is convected by the local guiding-center fluid at the rational surface  (again, see the discussion in Sect.~\ref{natural}),\cite{heyn,paz1}
@@ -188,7 +188,7 @@ out of the final system of equations. See Sect.~E in Ref.~\onlinecite{rf2}.)
 DIII-D discharge \#145380 is an ITER-Similar-Shape (ISS), ELMing, H-mode discharge, with a toroidal magnetic field $B_T=-1.9\,{\rm T}$, in which the
 plasma current, $I_p$, is slowly ramped over a 2 second interval in order to scan the magnetic safety-factor.\cite{d3d,d3d2} The majority ions are Deuterium, whereas the
 minority ions are Carbon~VI.
-Figure~\ref{fig1} gives an overview of DIII-D discharge \#145380. Note that the pedestal electron number density is relatively high ($n_{e\,{\rm ped}}\sim 3\times 10^{19}\,{\rm m}^{-3}$). 
+Figure~\ref{fig1} gives an overview of DIII-D discharge \#145380. 
 A static RMP is applied to the plasma by running steady $n=3$ currents through the I-coil system.\cite{icoil}
 Three windows of ELM suppression are evident: the first extends from $t=2840$--$2980$ ms; the
 second extends from $t=3320$--$3560$ ms; and the third extends from $t=3880$--$4200$ ms.
@@ -200,10 +200,10 @@ and the last closed magnetic flux-surface (LCFS) to ${\mit\Psi}_N=1$. The perpen
 diffusivity data comes from {\tt TRANSP} modelling.\cite{transp}  
 
 Measured plasma equilibrium and
-plasma profiles are available every $50$ ms. The equilibrium and profiles  at a given point in time are interpolated from
-the measured equilibria and profiles. In fact, all quantities that depend on the plasma equilibrium and profiles are recalculated every 1 ms.  Data values from the
-{\tt GPEC} code are available every 100 ms. As before, the {\tt GPEC} data values at a given point in time are interpolated from the
-available {\tt GPEC} data values, and any quantity that depends on these values is recalculated every 1 ms. There is one major exception to
+plasma profiles are reconstructed every $50$ ms. The equilibrium and profiles  at a given point in time are interpolated from
+the reconstructed equilibria and profiles. In fact, all quantities that depend on the plasma equilibrium and profiles are recalculated every 1 ms.  Data values from the
+{\tt GPEC} code are calculated every 100 ms. As before, the {\tt GPEC} data values at a given point in time are interpolated from the
+calculated {\tt GPEC} data values, and any quantity that depends on these values is recalculated every 1 ms. There is one major exception to
 the aforementioned scheme. The theoretical model used in this paper actually requires plasma equilibria and profiles that are unaffected
 by the applied RMP. However, there is clear evidence that the equilibria and the profiles (in particular) are significantly modified
 within the three ELM-suppression windows (presumably because wide magnetic island chains are driven in the pedestal). [See Fig.~1(c).]
@@ -224,7 +224,7 @@ Note that all quantities used in our theoretical model are derived from experime
 Unfortunately, no neutral particle data is available for DIII-D discharge \#145380.
 Hence, we employ neutral particle data derived from a much earlier discharge (see Sect.~III.D of Ref.~\onlinecite{rf2}).\cite{neutral}
 In future, data from the new {\tt LLAMA} (Lyman Alpha Measurement Apparatus) system will be routinely available in DIII-D discharges.\cite{llama}
-Combining this data  with modeling from the SOLPS-ITER code\,\cite{solps} ought to generate sufficient information to fully determine the
+Combining this data  with modeling from a neutral particle simulation code such as, for example, the  SOLPS-ITER code\,\cite{solps} ought to generate sufficient information to fully determine the
 neutral particle data required by the {\tt EPEC} code.  
 
 \subsection{Case 1: $\varpi=\varpi_{\perp\,i}$}
@@ -340,7 +340,9 @@ distribution in DIII-D discharge \#145380, it would be premature to write-off th
 
 \section*{Acknowledgements}
 The author would like to thank Q.M.~Hu and R.~Nazikian for providing the experimental data used in this paper. The
-author would also like to thank J.-K.~Park and N.C.~Logan for providing guidance on how to run the {\tt GPEC} code.
+author would also like to thank J.-K.~Park and N.C.~Logan for providing guidance on how to run the {\tt GPEC} code. Finally, the
+author would like to thank C.~Paz-Solden and B.A.~Grierson for helpful comments during the preparation of this paper. 
+
 This research was directly funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences,  under contract DE-FG02-04ER54742, and
 incorporates work funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences, using the DIII-D National Fusion Facility, a DOE Office of Science user facility, under contract DE-FC02-04ER54698.  
 
