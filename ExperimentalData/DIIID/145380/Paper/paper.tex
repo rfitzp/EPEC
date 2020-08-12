@@ -41,7 +41,7 @@ unacceptably limit the lifetimes of these components.\cite{loarte} Consequently,
 methods for ELM control is a high priority for the international magnetic fusion program. 
 
 The most promising method for the control of ELMs in H-mode tokamak discharges is via the application of static   ``resonant magnetic perturbations'' (RMPs). Complete RMP-induced 
-ELM suppression was first demonstrated on the DIII-D tokamak.\cite{evans} Subsequently, either mitigation or compete suppression of
+ELM suppression was first demonstrated on the DIII-D tokamak.\cite{evans} Subsequently, either mitigation or complete suppression of
 ELMs has been demonstrated on the JET,\cite{jet} ASDEX-U,\cite{asdex} KSTAR,\cite{kstar} MAST\,\cite{mast}, and EAST\,\cite{east} tokamaks.
 
 The application of a static RMP, resonant in the pedestal region (i.e., the region of strong pressure and current density gradients characteristic of the edge region of an H-mode 
@@ -58,7 +58,7 @@ light on the hitherto poorly understood  physical mechanism that underlies RMP-i
 suppression in H-mode tokamak discharges.\cite{hu} The simulations  in question make a plausible case  that the density  pump-out  phenomenon is associated with the formation of   
 locked (i.e., non-rotating) helical magnetic
 island chains at the bottom of the pedestal, whereas the ELM-suppression phenomenon is associated with the formation of a locked helical magnetic island chain at the
-top of the pedestal. The prevailing hypothesis is that such an island chain suppresses ELMs by limiting the expansion of the
+top of the pedestal. The prevailing hypothesis is that such an island chain suppresses ELMs by limiting the radial expansion of the
 pedestal, and, thereby, preventing it from attaining a width sufficient to destabilize peeling-ballooning modes\,\cite{connor}  (which are thought to trigger ELMs).\cite{d3d}
 
 Recently, a toroidal generalization of the 
@@ -171,7 +171,7 @@ with coupling to a stable non-resonant kink mode. For the case of the tearing re
 approximation in which the plasma response is assumed to be vacuum-like between the various resonant surfaces. On the other hand,
 the kink response of the plasma is calculated exactly using the {\tt GPEC} code.\cite{ipec,gpec} (See Sect.~A.8 of Ref.~\onlinecite{rf2}.)
 
-Our model has been implemented in the {\tt EPEC} (Extended Perturbed Equilibrium Code) code. The name
+Our model has been implemented in the newly-developed {\tt EPEC} (Extended Perturbed Equilibrium Code) code. The name
 of this code reflects the fact that the nonlinear evolution of tearing modes in a
 tokamak plasma has far more in common with the $1\tfrac{1}{2}$-D
 evolution of the global plasma equilibrium than it does with
@@ -190,8 +190,10 @@ plasma current, $I_p$, is slowly ramped over a 2 second interval in order to sca
 minority ions are Carbon~VI.
 Figure~\ref{fig1} gives an overview of DIII-D discharge \#145380. 
 A static RMP is applied to the plasma by running steady $n=3$ currents through the I-coil system.\cite{icoil}
-Three windows of ELM suppression are evident: the first extends from $t=2840$--$2980$ ms; the
-second extends from $t=3320$--$3560$ ms; and the third extends from $t=3880$--$4200$ ms.
+Three windows of ELM suppression or mitigation are evident: the first (in which ELMs are mitigated, but not
+entirely suppressed) extends from $t=2840$--$2980$ ms; the
+second (in which ELM are entirely suppressed) extends from $t=3320$--$3560$ ms; and the third (in which ELMs are
+entirely suppressed) extends from $t=3880$--$4200$ ms.
 
 Figure~\ref{fig2} shows the measured plasma equilibrium at the start of the current ramp ($t=2500$ ms). Likewise,
 Fig.~\ref{fig3} shows the measured plasma profiles at the start of the current ramp. Here, ${\mit\Psi}_N$ is a
@@ -206,8 +208,8 @@ the reconstructed equilibria and profiles. In fact, all quantities that depend o
 calculated {\tt GPEC} data values, and any quantity that depends on these values is recalculated every 1 ms. There is one major exception to
 the aforementioned scheme. The theoretical model used in this paper actually requires plasma equilibria and profiles that are unaffected
 by the applied RMP. However, there is clear evidence that the equilibria and the profiles (in particular) are significantly modified
-within the three ELM-suppression windows (presumably because wide magnetic island chains are driven in the pedestal). [See Fig.~1(c).]
-Hence, we do not use the equilibrium, profile, or {\tt GPEC}, data within the three ELM-suppression windows. Instead, we
+within the three ELM-suppression/mitigation windows (presumably because wide magnetic island chains are driven in the pedestal). [See Fig.~1(c).]
+Hence, we do not use the equilibrium, profile, or {\tt GPEC}, data within the three ELM-suppression/mitigation windows. Instead, we
 interpolate across these windows using data taken on either side of the windows. 
 
 Figure~\ref{fig4} shows the safety-factor in DIII-D discharge \#145380 as a function of time. It can be seen
@@ -217,7 +219,7 @@ constant at about 1.0. For the sake of practicality,  the {\tt GPEC} and {\tt EP
 surfaces that lie very close to the LCFS: in other words,  surfaces that lie in the region $0.997 < {\mit\Psi}_N\leq 1.000$. Let $\overline{q_{95}}\equiv 5.2060-0.4457\,t$ represent the
 least-squares linear fit to the $q_{95}$ versus time data shown in Fig.~\ref{fig4}. 
 It follows that the 
-first, second, and third ELM-suppression windows extend over the $\overline{q_{95}}$ ranges $3.88$--$3.94$, $3.62$--$3.73$,
+first, second, and third ELM-suppression/mitigation windows extend over the $\overline{q_{95}}$ ranges $3.88$--$3.94$, $3.62$--$3.73$,
 and $3.33$--$3.48$, respectively. 
 
 Note that all quantities used in our theoretical model are derived from experimental measurements taken in DIII-D discharge \#145380, with the exception of the neutral particle data. 
@@ -233,9 +235,9 @@ in other words, the natural frequency is specified by Eq.~(\ref{e2}).
 
 The upper panel of Fig.~\ref{fig5} shows the natural frequencies, in the absence of the RMP, of the various  $n=3$ tearing modes 
  that are resonant in the pedestal. It can be seen that the natural frequency of the $m=11$ (brown) tearing mode has its main zero-crossing in the middle
-of the first ELM-suppression window. Likewise, the natural frequency of the $m=10$ (magenta) tearing mode has its main zero-crossing in the middle of the
-second ELM-suppression window. However, the natural frequency of the $m=9$ (cyan) tearing mode  has its main zero-crossing slightly
-prior to the occurrence of the third ELM-suppression window. The lower panel of Fig.~\ref{fig5} shows the natural frequencies, in the presence of the RMP, of the various $n=3$
+of the first ELM-suppression/mitigation window. Likewise, the natural frequency of the $m=10$ (magenta) tearing mode has its main zero-crossing in the middle of the
+second ELM-suppression/mitigation window. However, the natural frequency of the $m=9$ (cyan) tearing mode  has its main zero-crossing slightly
+prior to the occurrence of the third ELM-suppression/mitigation window. The lower panel of Fig.~\ref{fig5} shows the natural frequencies, in the presence of the RMP, of the various $n=3$
 tearing modes that are resonant in the pedestal. It is apparent that if the magnitude of the natural frequency in the absence of the RMP falls below about
 $5\,{\rm krad/s}$ then the associated tearing mode locks to the RMP (i.e., its true natural frequency becomes zero). 
 
@@ -263,22 +265,22 @@ magnetic reconnection due to plasma flow breaks down (i.e., the true natural fre
  wide enough to flatten both the density and the electron temperature profiles. 
  
  Ideally, in order to account for the
-ELM-suppression windows in DIII-D discharge \#145380, according to the standard
+ELM-suppression/mitigation windows in DIII-D discharge \#145380, according to the standard
 hypothesis of how RMP-induced ELM-suppression operates, we require the major regions of density and temperature
 flattening to correspond to the intersections of the yellow vertical bands and the horizontal dotted lines in Fig.~\ref{fig7}. If this is the case then
 the density and temperature profiles are locally flattened at the top of the pedestal (which corresponds to
-the horizontal dotted lines) during the ELM-suppression windows (which correspond to the yellow vertical bands). (Note that the top of the pedestal
+the horizontal dotted lines) during the ELM-suppression/mitigation windows (which correspond to the yellow vertical bands). (Note that the top of the pedestal
 is, somewhat arbitrarily, identified with the off-axis peak in the electron number density that is apparent in the top panel of Fig.~\ref{fig3}.) It can be seen
 that the region of density and temperature flattening associated with the $m=11$ (brown) tearing mode driven by the RMP lines up fairly well with the
-first ELM-suppression window. The region of density and temperature flattening associated with the $m=10$ (magenta) tearing mode 
-lines up somewhat less well with the second ELM-suppression window. To be more exact, the region is located at the top of the pedestal,
+first ELM-suppression/mitigation window. The region of density and temperature flattening associated with the $m=10$ (magenta) tearing mode 
+lines up somewhat less well with the second ELM-suppression/mitigation window. To be more exact, the region is located at the top of the pedestal,
 but occurs slightly too early. However, the 
 region of density and temperature flattening associated with the $m=9$ (cyan) tearing mode 
-lines up very poorly with the third ELM-suppression window. To be more exact, the region is not really located at the top of the pedestal, and occurs
+lines up very poorly with the third ELM-suppression/mitigation window. To be more exact, the region is not really located at the top of the pedestal, and occurs
 significantly too early. The ultimate reason for this poor alignment is that the major zero-crossing of the $m=9$ natural
-frequency in the upper panel of Fig.~\ref{fig5} does not take place within the third ELM-suppression window (unlike the
+frequency in the upper panel of Fig.~\ref{fig5} does not take place within the third ELM-suppression/mitigation window (unlike the
 major zero-crossings of the $m=11$ and $m=10$ natural frequencies, which do take place within the first and the second
-ELM-suppression windows, respectively). 
+ELM-suppression/mitigation windows, respectively). 
 
 \subsection{Case 2: $\varpi=\varpi_{\perp\,EB}$}
 The second case that we shall consider is that in which the natural frequency is determined by the local guiding-center fluid; 
@@ -286,14 +288,13 @@ in other words, the natural frequency is specified by Eq.~(\ref{e3}).
 
 Figures~\ref{fig8}--\ref{fig10} show analogous data to Figs.~\ref{fig5}--\ref{fig7}, respectively. It can be seen from the
 upper panel of Fig.~\ref{fig8} that, in the absence of the RMP,  the natural frequency of the $m=11$ (brown), the $m=10$ (magenta), and the $m=9$ (cyan), tearing modes have their
-zero-crossings in the middles
-of the first, second, and third, ELM-suppression window, respectively. As before, it is clear from the lower panel of Fig.~\ref{fig8} that these tearing modes lock
+zero-crossings in the  first, second, and third, ELM-suppression/mitigation window, respectively. As before, it is clear from the lower panel of Fig.~\ref{fig8} that these tearing modes lock
 to the RMP when the magnitudes of their unperturbed natural frequencies fall below about 5 krad/s. 
 Likewise, it is apparent from Fig.~\ref{fig9} that the true island widths driven in the pedestal by the applied
 RMP are much smaller than the corresponding vacuum island widths, except when the islands lock to the RMP.
 Furthermore, according to Fig.~\ref{fig10}, the regions of density and temperature flattening associated
 with the $m=11$ (brown), the $m=10$ (magenta), and the $m=9$ (cyan), tearing modes driven by the RMP line up
-very well with the first, second, and third, ELM-suppression windows, respectively. To be more exact, the regions are located at
+very well with the first, second, and third, ELM-suppression/mitigation windows, respectively. To be more exact, the regions are located at
 the top of the pedestal, and also occur at about the correct times. Note that overlapping island chains
 are also driven at the bottom of the pedestal. We associate these chains with the density pump-out phenomenon.\cite{hu,rf2} The chains at the bottom of the pedestal are more apparent
 in this particular case than in the other two cases considered in this paper because the diamagnetic contributions to the natural frequencies at the bottom of the pedestal (which are absent
@@ -305,12 +306,12 @@ in other words, the natural frequency is specified by Eq.~(\ref{e1}).
 
 Figures~\ref{fig11}--\ref{fig13} show analogous data to Figs.~\ref{fig5}--\ref{fig7} and Figs.~\ref{fig8}--\ref{fig10}, respectively.  
 It can be seen from Fig~\ref{fig13} that there is very little correlation between the major regions of density and temperature flattening associated
-with the $n=3$ tearing modes driven by the RMP and the  ELM-suppression windows. To be more exact, the 
+with the $n=3$ tearing modes driven by the RMP and the  ELM-suppression/mitigation windows. To be more exact, the 
 regions  are not really located at the top of the pedestal, and occur at completely the wrong times.  
 
 \section{Summary and Discussion}
 The toroidal asymptotic matching model of the response of a tokamak plasma to a static RMP that is described in Ref.~\onlinecite{rf2}
-has been implemented in the {\tt EPEC} code (Extended Perturbed Equilibrium Code). The {\tt EPEC} code has  been used to simulate the $n=3$ RMP-induced ELM-suppression
+has been implemented in the newly developed {\tt EPEC} code (Extended Perturbed Equilibrium Code). The {\tt EPEC} code has  been used to simulate the $n=3$ RMP-induced ELM-suppression/mitigation
 windows in $q_{95}$ that are evident when the plasma current is slowly ramped in DIII-D discharge \#145380. All quantities employed in the simulation are
 derived from measurements taken in DIII-D discharge \#145380, apart from the neutral particle data (which is taken from a much earlier discharge).
 
@@ -323,9 +324,9 @@ determined by the electron flows at the corresponding rational surfaces, which i
 
 The second case gives the best agreement between the {\tt EPEC} simulations and the  observations. To be more
 exact, the second case leads to the prediction that comparatively wide locked magnetic island chains, that locally flatten the density and temperature profiles, 
- are present at the top of the pedestal during the ELM-suppression
+ are present at the top of the pedestal during the ELM-suppression/mitigation 
 windows, and are absent otherwise. This prediction is in accordance with the prevailing hypothesis that ELM suppression is due to the appearance of locked
-magnetic island chains at the top of the pedestal that locally flatten the pressure profile, thereby preventing the pedestal width from growing and achieving a  
+magnetic island chains at the top of the pedestal that locally flatten the pressure profile, thereby preventing the pedestal width from growing radially and achieving a  
 large enough value to trigger peeling-ballooning modes.\cite{d3d}
 
  The third case gives by far the worst agreement between the {\tt EPEC} simulations and the  observations. This lack of agreement is hardly surprising, given
@@ -341,7 +342,7 @@ distribution in DIII-D discharge \#145380, it would be premature to write-off th
 \section*{Acknowledgements}
 The author would like to thank Q.M.~Hu and R.~Nazikian for providing the experimental data used in this paper. The
 author would also like to thank J.-K.~Park and N.C.~Logan for providing guidance on how to run the {\tt GPEC} code. Finally, the
-author would like to thank C.~Paz-Solden and B.A.~Grierson for helpful comments during the preparation of this paper. 
+author would like to thank C.~Paz-Solden, B.A.~Grierson, and W.M.~Solomon for helpful comments during the preparation of this paper. 
 
 This research was directly funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences,  under contract DE-FG02-04ER54742, and
 incorporates work funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences, using the DIII-D National Fusion Facility, a DOE Office of Science user facility, under contract DE-FC02-04ER54698.  
@@ -412,9 +413,8 @@ Nucl.\ Fusion {\bf 59}, 056012 (2019).
 
 \bibitem{rf2} R.~Fitzpatrick, and A.O.~Nelson, Phys.\ Plasmas {\bf 27}, 072501 (2020).
 
-\bibitem{d3d2} Q.M.~Hu, R.~Nazikian, B.A.~Grierson, N.C.~Logan, D.M.~Orlov, C.~Paz-Solden, and Q.~Yu,
-{\em The $q_{95}$ Windows of Edge-Localized-Mode Suppression using Resonant Magnetic Perturbations in the DIII-D Tokamak}, 
-Phys.\ Rev.\ Lett., to appear (2020).
+\bibitem{d3d2} Q.M.~Hu, R.~Nazikian, B.A.~Grierson, N.C.~Logan, D.M.~Orlov, C.~Paz-Solden, and Q.~Yu, 
+Phys.\ Rev.\ Lett.\ {\bf 125}, 045001 (2020).
 
 \bibitem{rfa} R.~Fitzpatrick, Nucl.\ Fusion {\bf 33}, 1049 (1993).
 
@@ -622,7 +622,7 @@ convected by the local guiding-center fluid (which is intermediate between the p
 (a) Safety factor at  ${\mit\Psi}_N=0.95$. 
 (b) $D_\alpha$ (i.e., Deuterium Balmer-alpha) signal, as well as $n=3$ current flowing in upper and lower sections of I-coil. 
 (c) Pedestal (i.e., ${\mit\Psi}_N=0.94$)
-electron pressure. (The red curve is the running average over 10 ms.) (d) Pedestal electron number density. The common vertical yellow bands indicate the ELM-suppression windows.}\label{fig1}
+electron pressure. (The red curve is the running average over 10 ms.) (d) Pedestal electron number density. The common vertical yellow bands indicate the ELM-suppression/mitigation windows.}\label{fig1}
 \end{figure}
 
 \begin{figure}
@@ -642,7 +642,7 @@ electron temperature (keV), (thermal) ion temperature (keV), and
  the perpendicular momentum, energy, and particle diffusivity profiles, respectively, 
  in  DIII-D discharge \#145380 at time $t=2500$ ms.
 The   common vertical dotted lines indicate the location of the top
-of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig3}
+of the pedestal, ${\mit\Psi}_N=0.925$. In all cases, the thickness of the curves indicate the uncertainties in the measurements.} \label{fig3}
 \end{figure}
 
 \begin{figure}
@@ -651,7 +651,7 @@ of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig3}
 at the magnetic axis (${\mit\Psi}_N=0.00$),
 the $95\%$ flux surface (${\mit\Psi}_N=0.950$), the
 effective plasma boundary for the GPEC and EPEC calculations
-(${\mit\Psi}_N=0.997$), and the true plasma boundary (${\mit\Psi}_N=1.00$), respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+(${\mit\Psi}_N=0.997$), and the true plasma boundary (${\mit\Psi}_N=1.00$), respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the safety-factors at the various $n=3$ rational surfaces.} \label{fig4}
 \end{figure}
 
@@ -670,7 +670,7 @@ purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig6}
 \end{figure}
 
@@ -680,7 +680,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by nonlinear island physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig7}
 \end{figure}
 
@@ -692,7 +692,7 @@ frequency.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  determined by the ${\bf E}\times {\bf B}$
 frequency. The red, green, blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig8}
+purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows.} \label{fig8}
 \end{figure}
 
 \begin{figure}
@@ -702,7 +702,7 @@ in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is  determined by the ${\bf E}\times {\bf B}$
 frequency. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig9}
 \end{figure}
 
@@ -714,7 +714,7 @@ frequency.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
 frequency. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig10}
 \end{figure}
 
@@ -724,7 +724,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The black, red, green, blue, yellow, cyan, magenta,  brown, 
-purple, and orange curves correspond to $m=4$, 5, 6, 7, 8, 9, 10,  11, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig11}
+purple, and orange curves correspond to $m=4$, 5, 6, 7, 8, 9, 10,  11, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows.} \label{fig11}
 \end{figure}
 
 \begin{figure}
@@ -733,7 +733,7 @@ purple, and orange curves correspond to $m=4$, 5, 6, 7, 8, 9, 10,  11, 13, and 1
 in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ island widths as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig12}
 \end{figure}
 
@@ -743,7 +743,7 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics.
 Bottom Panel:  Electron temperature flattening widths associated with induced $n=3$ magnetic island chains as functions of time
 in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear layer physics. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows. 
+purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate  the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig13}
 \end{figure}
 
