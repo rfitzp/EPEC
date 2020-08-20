@@ -1,0 +1,66 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{Relaxation of No-Slip Constraint}
+\author{Richard Fitzpatrick}
+
+\begin{document}
+\maketitle
+
+Fundamental equation:
+\begin{equation}\label{e1}
+S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\left(\frac{d}{d\hat{t}} + {\rm i}\,\hat{\varpi}_k\right){\mit\Psi}_k = \sum_{k'=1,K}E_{kk'}\,{\mit\Psi}_{k'}
++ \hat{E}_{kk}\,\chi_k,
+\end{equation}
+where
+\begin{align}
+{\mit\Psi}_k &= \hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k},\\[0.5ex]
+\chi_k &= \hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k},\\[0.5ex]
+E_{kk'} &=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}.
+\end{align}
+Follows from Eq.~(\ref{e1}) that
+\begin{align}
+S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\frac{d\hat{\mit\Psi}_k}{d\hat{t}}&= \sum_{k'=1,K}\hat{E}_{kk'}\,\hat{\mit\Psi}_{k'}\,\cos(\varphi_k-\varphi_{k'}-\xi_{kk'})
++ \hat{E}_{kk}\,\hat{\chi}_k\,\cos(\varphi_k-\zeta_k),\\[0.5ex]
+S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\hat{\mit\Psi}_k\left(\frac{d\varphi_k}{d\hat{t}}-\hat{\varpi}_k\right)&=- \sum_{k'=1,K}\hat{E}_{kk'}\,\hat{\mit\Psi}_{k'}\,\sin(\varphi_k-\varphi_{k'}-\xi_{kk'})-
+ \hat{E}_{kk}\,\hat{\chi}_k\,\sin(\varphi_k-\zeta_k).
+\end{align}
+
+Alternatively, let
+\begin{align}
+X_k &= \hat{\mit\Psi}_k\,\cos\varphi_k,\\[0.5ex]
+Y_k &= \hat{\mit\Psi}_k\,\sin\varphi_k.
+\end{align}
+So, Eq.~(\ref{e1}) gives
+\begin{align}
+S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\left(\frac{d}{d\hat{t}} + {\rm i}\,\hat{\varpi}_k\right)(X_k - {\rm i}\,Y_k)&=
+\sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'} - {\rm i}\,\sin\xi_{kk'})\,(X_{k'} - {\rm i}\,Y_{k'})\nonumber\\[0.5ex]
+&
++ \hat{E}_{kk}\,\hat{\chi}_k\,(\cos\zeta_k - {\rm i }\,\sin\zeta_k),
+\end{align}
+or
+\begin{align}
+&S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\left(\frac{dX_k}{d\hat{t}} - {\rm i}\,\frac{dY_k}{d\hat{t}} + {\rm i}\,\hat{\varpi}_k\,X_k
++\hat{\varpi}_k\,Y_k\right)&\nonumber\\[0.5ex]
+&= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'} -{\rm i}\,\cos\xi_{kk'}\,Y_{k'}
+-{\rm i}\,\sin\xi_{kk'}\,X_{k'} -\sin\xi_{kk'}\,Y_{k'})\nonumber\\[0.5ex]
+& + \hat{E}_{kk'}\,\hat{\chi}_k\,(\cos\zeta_k - {\rm i}\,\sin\zeta_k).
+\end{align}
+Follows that
+\begin{align}
+S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\left(\frac{dX_k}{d\hat{t}} 
++\hat{\varpi}_k\,Y_k\right)= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'}  -\sin\xi_{kk'}\,Y_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k,\\[0.5ex]
+S_k\left(\hat{\mit\Psi}_k^{\,1/2} +\hat{\delta}_k\right)\left(\frac{dY_k}{d\hat{t}} -\hat{\varpi}_k\,X_k\right)
+= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,Y_{k'}
++\sin\xi_{kk'}\,X_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k.
+\end{align}
+Finally,
+\begin{equation}
+\hat{\varpi}_k = \hat{\varpi}_{k\,{\rm ln}} + (\hat{\varpi}_{k\,{\rm nl}}- \hat{\varpi}_{k\,{\rm ln}})\tanh\!\left(\frac{\hat{\mit\Psi}_k^{\,1/2}}{\hat{\delta}_k}\right).
+\end{equation}
+
+\end{document}
+

@@ -1000,6 +1000,7 @@ void Neoclassical::Get_Frequencies ()
   w_linear.resize    (nres);
   w_nonlinear.resize (nres);
   w_EB.resize        (nres);
+  w_actual.resize    (nres);
   w_fac.resize       (nres);
 
   for (int j = 0; j < nres; j++)
@@ -1015,14 +1016,16 @@ void Neoclassical::Get_Frequencies ()
       w_EB        (j) = - double (ntor) * (wEk (j));
 
       if (FREQ < 0)
-	w_nonlinear (j) = w_linear (j);
-      if (FREQ > 0)
-	w_nonlinear (j) = w_EB     (j);
+	w_actual (j) = w_linear    (j);
+      else if (FREQ > 0)
+	w_actual (j) = w_EB        (j);
+      else
+	w_actual (j) = w_nonlinear (j);
 
-      w_fac (j) = (w_nonlinear (j)  - w_EB (j)) /(w_linear (j) - w_EB (j));
+      w_fac (j) = (w_actual (j)  - w_EB (j)) /(w_linear (j) - w_EB (j));
       
-      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e  fac = %11.4e\n",
-	      mk(j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_fac (j));
+      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e  w_actual = %11.4e  fac = %11.4e\n",
+	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_actual (j) /1.e3, w_fac (j));
     }
 
   // ..................
@@ -1030,7 +1033,7 @@ void Neoclassical::Get_Frequencies ()
   // ..................
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk(j));
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk(j), w_actual (j) /1.e3);
   fclose (file);
 }
 
@@ -1048,17 +1051,18 @@ void Neoclassical::Get_Normalized ()
       double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
 	/ (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
       double Sk  = (2.*0.8227 * R_0 /rk (j) /a) * sqrt (qk (j) /gk (j) /sk (j)) * tau_Rk (j) * Q_00 (j) /tau_A;
-      double wk  = w_nonlinear (j) * tau_A;
+      double wk  = w_actual (j) * tau_A;
       double wkl = w_linear (j) * tau_A;
       double wke = w_EB (j) * tau_A;
+      double wkn = w_nonlinear (j) * tau_A;
       double tm  = tau_Mk (j) /tau_A;
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
       printf ("m = %3d r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e w0 = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
 	      mk (j), rk (j), qk (j), rhok (j), a/R_0, Sk, wk, tm, th, dk);
 
-      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke,
+      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
 	       dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j), PsiNk(j));
     }
    fclose (file);
@@ -1073,16 +1077,17 @@ void Neoclassical::Get_Normalized ()
       for (int j = 0; j < nres; j++)
 	{
 	  double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
-	    / (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
+	    / (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j)) /0.8227;
 	  double Sk  = (2.*0.8227 * R_0 /rk (j) /a) * sqrt (qk (j) /gk (j) /sk (j)) * tau_Rk (j) * Q_00 (j) /tau_A;
-	  double wk  = w_nonlinear (j) * tau_A;
+	  double wk  = w_actual (j) * tau_A;
 	  double wkl = w_linear (j) * tau_A;
 	  double wke = w_EB (j) * tau_A;
+	  double wkn = w_nonlinear (j) * tau_A;
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 	  
-	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		   mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke,
+	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		   mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
 		   dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j), PsiNk(j));
 	}
       fclose (file);

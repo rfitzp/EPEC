@@ -28,6 +28,8 @@
 // 1.3 - Added PsiNk to nFile
 // 1.4 - Added cFile and linear interpolation
 // 1.5 - Added chie and chin
+// 1.6 - Divided normalized layer width by 0.8227
+// 1.7 - Output wnl 
 
 // ################################################################
 
@@ -35,7 +37,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 5
+#define VERSION_MINOR 7
 
 #include <stdio.h>
 #include <math.h>
@@ -290,6 +292,7 @@ class Neoclassical
   Array<double,1> w_linear;     // Neoclassical frequencies from linear theory
   Array<double,1> w_nonlinear;  // Neoclassical frequencies from nonlinear theory
   Array<double,1> w_EB;         // Neoclassical frequencies assuming convection by ExB fluid
+  Array<double,1> w_actual;     // Actual neoclassical frequencies
   Array<double,1> w_fac;        // Degree of island propagation in ion diamagnetic direction
   
   // ----
