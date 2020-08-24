@@ -695,11 +695,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TIME);
   fclose (file);
 
-  file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
-  for (int j = 0; j < nres; j++)
-     fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk(j), rk(j), wkl(j) /tau_A/1.e3, wk(j) /tau_A/1.e3, wke(j) /tau_A/1.e3, TIME);
-  fclose (file);
-
   delete[] QIN; delete[] DRE; delete[] DIM; delete[] CRE; delete[] CIM; delete[] WWW;
  }
 
@@ -945,6 +940,18 @@ void Phase::IslandDynamics ()
   ww.resize      (nres);
 
   Initialize ();
+
+  FILE* filex = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
+   for (int j = 0; j < nres; j++)
+    {
+      double wx;
+      if (FREQ)
+	wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j));
+      else
+	wx = wk (j);
+      fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk(j), rk(j), wkl(j) /tau_A/1.e3, wx /tau_A/1.e3, wke(j) /tau_A/1.e3, TIME);
+    }
+  fclose (filex);
 
   // Integrate equations of motion
   chi.resize  (nres);
