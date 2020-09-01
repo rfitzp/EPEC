@@ -29,9 +29,10 @@ int main (int argc, char** argv)
   int c;
   char* tvalue = NULL; char* svalue = NULL; char* fvalue = NULL; 
   char* nvalue = NULL; char* uvalue = NULL; char* ovalue = NULL;
+  char* Svalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:")) != -1)
     switch (c)
       {
       case 'f':
@@ -46,6 +47,7 @@ int main (int argc, char** argv)
 	printf ("-s STAGE5 - set Stage5 flag STAGE5\n");
 	printf ("-t TIME   - set experimental time to TIME\n");
 	printf ("-u INTU   - set interpolation flag INTU\n");
+	printf ("-S SCALE  - set GPEC scalefactor SCALE\n");
 	exit (0);
       case 'n':
 	nvalue = optarg;
@@ -62,8 +64,11 @@ int main (int argc, char** argv)
       case 'u':
 	uvalue = optarg;
  	break;
+      case 'S':
+	Svalue = optarg;
+ 	break;
       case '?':
-	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u')
+	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u' || optopt == 'S')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -74,8 +79,9 @@ int main (int argc, char** argv)
 	abort ();
       }
 
-  int _STAGE5 = -1; int _INTF = -1; int    _OLD  = -1; 
-  int _INTN   = -1; int _INTU = -1; double _TIME = -1.e6; float  __TIME; 
+  int    _STAGE5 = -1; int _INTF = -1; int    _OLD  = -1;    float __SCALE;
+  int    _INTN   = -1; int _INTU = -1; double _TIME = -1.e6; float __TIME;
+  double _SCALE  = -1.e6;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -92,12 +98,17 @@ int main (int argc, char** argv)
       __TIME = atof (tvalue);
       _TIME  = double (__TIME);
     }
+  if (Svalue != NULL)
+    {
+      __SCALE = atof (Svalue);
+      _SCALE  = double (__SCALE);
+    }
   
   // ..................
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _TIME);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _TIME, _SCALE);
 
   return 0;
 }

@@ -3,8 +3,8 @@
 // PROGRAM ORGANIZATION:
 // 
 //       Phase:: Phase          ()
-// void  Phase:: Solve          (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME)
-// void  Phase:: Read_Data      (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME)
+// void  Phase:: Solve          (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
+// void  Phase:: Read_Data      (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
 // void  Phase:: Scan_Shift     ()
 // void  Phase:: Calc_Velocity  ()
 // void  Phase:: Initialize     ()
@@ -54,10 +54,10 @@ Phase::Phase ()
 // #########################
 // Function to solve problem
 // #########################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
 {
   // Read data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _TIME);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _TIME, _SCALE);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -83,7 +83,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // #####################
 // Function to read data
 // #####################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
 {
   // ......................................
   // Set default values of input parameters
@@ -97,6 +97,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   FREQ   = 0;
   DT     = 1.e-5;
   TIME   = 0.;
+  SCALE  = 2.;
 
   // Read data from Inputs/Phase.in
   printf ("..................................\n");
@@ -107,7 +108,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &DT, &TIME, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &DT, &TIME, &SCALE, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -129,6 +130,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     FREQ = _FREQ;
   if (_TIME > 0.)
     TIME = _TIME;
+  if (_SCALE > 0.)
+    SCALE = _SCALE;
   
   // ............
   // Sanity check
@@ -151,16 +154,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, NCTRL);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, NCTRL);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -168,8 +171,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, NCTRL);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL);
   fclose (monitor);
 
   // .................
@@ -458,7 +461,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
   for (int j = 0; j < nres; j++)
     printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e\n",
-	    mk(j), rk(j), qk(j), gk(j), akk(j), rhok(j), a(j), Sk(j), wk(j), taumk(j), tautk(j), delk(j));
+	    mk(j), rk(j), qk(j), gk(j), akk(j), rhok(j), a(j), Sk(j), wk(j), taumk(j), tautk(j), delk(j) /(rk(j) * a(j) * R_0));
 
   // .............................
   // Interpolate uFiles and lFiles
@@ -576,7 +579,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ChiU   = gsl_vector_complex_calloc (nres);
   ChiL   = gsl_vector_complex_calloc (nres);
 
-  double SCALEFACTOR = 2.;
+  double SCALEFACTOR = SCALE;
   printf ("SCALEFACTOR = %11.4e\n", SCALEFACTOR);
   
   printf ("Upper coil:\n");
@@ -673,8 +676,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	DIM[i] = v10;
 	WWW[i] = 2.*v11;
 
-	DRE[i] /= 2.*M_PI * qk(i) / SCALEFACTOR/SCALEFACTOR;
-	DIM[i] /= 2.*M_PI * qk(i) / SCALEFACTOR/SCALEFACTOR;
+	DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
 
 	CRE[i] =   DIM[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
 	CIM[i] = - DRE[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
@@ -828,7 +831,7 @@ void Phase::Initialize ()
 
       double sum;
       if  (FREQ)
-	sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j));
+	sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
       else
 	sum = wk (j);
 	  
@@ -946,7 +949,7 @@ void Phase::IslandDynamics ()
     {
       double wx;
       if (FREQ)
-	wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j));
+	wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
       else
 	wx = wk (j);
       fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk(j), rk(j), wkl(j) /tau_A/1.e3, wx /tau_A/1.e3, wke(j) /tau_A/1.e3, TIME);
@@ -1010,7 +1013,7 @@ void Phase::IslandDynamics ()
 	{
 	  double sum;
 	  if (FREQ)
-	    sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j));
+	    sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
 	  else
 	    sum = wk (j);
 	  
@@ -1030,7 +1033,7 @@ void Phase::IslandDynamics ()
 		    mk (j), t*tau_A, irmp, prmp /M_PI);
 	    double wx;
 	    if (FREQ)
-	      wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j));
+	      wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
 	    else
 	      wx = wk (j);
 	    fprintf (file8, "%16.9e %3d %16.9e %16.9e %16.9e %16.9e %3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
@@ -1061,7 +1064,7 @@ void Phase::IslandDynamics ()
 
 	  fprintf (file3a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    fprintf (file3a, "%16.9e ", sqrt (fabs (Psik (j))) /delk (j));
+	    fprintf (file3a, "%16.9e ", sqrt (4. * R_0 * fack (j) * fabs (Psik (j))) /delk (j));
 	  fprintf (file3a, "\n");
 
 	  fprintf (file4, "%16.9e ", t*tau_A);
@@ -1072,7 +1075,7 @@ void Phase::IslandDynamics ()
 	  fprintf (file4a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    if (FREQ)
-	      fprintf (file4a, "%16.9e ",  (wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j))) /tau_A/1.e3);
+	      fprintf (file4a, "%16.9e ",  (wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j))) /tau_A/1.e3);
 	    else
 	      fprintf (file4a, "%16.9e ",  wk (j) /tau_A/1.e3);
 	  fprintf (file4a, "\n");
@@ -1315,7 +1318,7 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
     {
       double sum;
       if (FREQ)
-	sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (sqrt (fabs (Psik (j))) /delk (j));
+	sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
       else
 	sum = wk (j);
       
@@ -1323,8 +1326,11 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 	for (int i = 0; i < NFLOW; i++)
 	  sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
 
-      XkRHS (j) = - sum * Yk (j) + Cosk (j) /Sk (j) /(sqrt (fabs (Psik (j))) + delk (j));
-      YkRHS (j) = + sum * Xk (j) + Sink (j) /Sk (j) /(sqrt (fabs (Psik (j))) + delk (j));
+      double Wk = (0.8227/2.) * 4. * fack (j) * sqrt (fabs (Psik (j))) /a (j) /rk (j);
+      double dk = delk (j) /(R_0 * a (j)) /rk (j);
+
+      XkRHS (j) = - sum * Yk (j) + Cosk (j) /Sk (j) /(Wk + dk);
+      YkRHS (j) = + sum * Xk (j) + Sink (j) /Sk (j) /(Wk + dk);
       
       for (int i = 0; i < NFLOW; i++)
 	{

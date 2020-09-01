@@ -12,6 +12,7 @@
 // -o OLD    - overrides OLD value from namelist file
 // -F FREQ   - overrides FREQ value from namelist file
 // -s STAGE5 - overrides STAGE5 value from namelist file
+// -S SCALE  - overrides SCALE value from namelist file
 // -t TIME   - sets experimental time
 
 // Stage 4 - Class reads FLUX/NEOCLASSICAL/GPEC data and plots error-field
@@ -26,8 +27,13 @@
 // 1.2 - Major rearrangement of input and output files
 // 1.3 - Added PsiN and island width in PsiN to Stage6 output files
 // 1.4 - Added linear iterpolation
+// 1.5 - Added wnl
+// 1.6 - Redefined Sk. Corrected composite factor in Rutherford equation.
+// 1.7 - Added SCALE as input value
 
 // 2.0 - Relaxed no-slip constraint
+// 2.1 - Redefined Sk. Corrected composite factor in Rutherford equation.
+// 2.2 - Added SCALE as input value
 
 // #######################################################################
 
@@ -35,7 +41,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 0
+#define VERSION_MINOR 2
 
 #include <stdio.h>
 #include <math.h>
@@ -58,7 +64,7 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, double* DT, double* TIME,
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, double* DT, double* TIME, double* SCALE, 
 			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
@@ -82,6 +88,7 @@ class Phase
   int      INTU;   // If != 0 then use interpolated uFile and lFiles
   int      OLD;    // If != 0 then initialize new calculation
   int      FREQ;   // If != 0 then use island width dependent natural frequency
+  double   SCALE;  // GPEC scalefactor
   
   int      NCTRL;  // Number of control points
   double*  TCTRL;  // Control times (s)
@@ -126,7 +133,7 @@ class Phase
   Array<double,1> rk;      // Normalized minor radii of resonant surfaces
   Array<double,1> qk;      // Safety-factors at resonant surfaces
   Array<double,1> rhok;    // Normalized mass densities at resonant surfaces
-  Array<double,1> a;       // Normalized plasma minor radius
+  Array<double,1> a;       // Normalized (to R_0) plasma minor radius
   Array<double,1> Sk;      // Lundquist numbers at resonant surfaces
   Array<double,1> wk;      // Normalized actual natural frequencies at resonant surfaces
   Array<double,1> wkl;     // Normalized linear natural frequencies at resonant surfaces
@@ -135,7 +142,7 @@ class Phase
   Array<double,1> taumk;   // Normalized momentum confinement timescales at resonant surfaces
   Array<double,1> tautk;   // Normalized poloidal flow damping timescales at resonant surfaces
   Array<double,1> fack;    // Island width factors at resonant surfaces
-  Array<double,1> delk;    // Normalized linear layer widths at resonant surfaces
+  Array<double,1> delk;    // Linear layer widths at resonant surfaces
   Array<double,1> dnedrk;  // Density gradients at resonant surfaces
   Array<double,1> dTedrk;  // Temperature gradients at resonant surfaces
   Array<double,1> Wcrnek;  // Critical island widths for density flattening at resonant surfaces
@@ -219,7 +226,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE);        
 
   // -----------------------
   // Private class functions
@@ -227,7 +234,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE);
   // Calculate vacuum flux versus upper/lower coil phase shift
   void Scan_Shift ();
   // Calculate velocity factors

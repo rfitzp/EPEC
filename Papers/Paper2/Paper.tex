@@ -14,16 +14,204 @@ Constraint}
 \affiliation{Institute for Fusion Studies,  Department of Physics,  University of Texas at Austin,  Austin TX, 78712, USA}
 
 %\begin{abstract}
-
 %\end{abstract}
- 
-\maketitle
 
 \section{Introduction}
 
-\section{Cylindrical Model}
+\section{Cylindrical RMP Response Model}\label{s2}
+\subsection{Plasma Equilibrium}
+Consider a large aspect-ratio, low-$\beta$, tokamak plasma whose magnetic flux surfaces map out (almost)
+concentric circles in the poloidal plane.
+Such a plasma is well approximated as a periodic cylinder.  Suppose that the minor radius of the plasma
+is $a$. Standard cylindrical coordinates ($r$, $\theta$, $z$) are adopted. The system is assumed to
+be periodic in the $z$-direction, with periodicity length $2\pi\,R_0$, where $R_0\gg a$ is the simulated
+plasma major radius. It is convenient to define the simulated toroidal angle $\phi=z/R_0$. 
 
-\section{Toroidal Model}
+The equilibrium magnetic field is written ${\bf B} = [0,B_\theta(r), B_\phi]$. The associated equilibrium
+plasma current density takes the form ${\bf j} =[0,0,j_\phi(r)]$, where $\mu_0\,j_\phi= (1/r)\,d(r\,B_\theta)/dr$. The
+so-called {\em safety-factor}, $q(r)=r\,B_\phi/(R_0\,B_\theta)$, parameterizes the helical pitches of equilibrium magnetic
+field-lines. 
+
+\subsection{Plasma Response to RMP}
+Consider the response of the plasma to an externally generated, static, helical, resonant magnetic perturbation (RMP). 
+Suppose that the RMP has $m$ periods in the poloidal direction, and $n$ periods in the toroidal direction.
+It is convenient to express the perturbed magnetic field and the perturbed plasma current density in
+terms of a perturbed poloidal magnetic flux, $\psi(r,\theta,\phi,t)$. In fact, $\delta{\bf B} = \nabla\psi\times \nabla z$, 
+and $\mu_0\,\delta {\bf j} = - \nabla^2\psi\,\nabla z$,
+where $\psi(r,\theta,\phi,t) = \hat{\psi}(r,t)\,\exp[{\rm i}\,(m\,\theta-n\,\phi)]$, and $\hat{\psi}$ is real. This particular representation
+is valid provided that $m/n\gg a/R_0$.\cite{rfa}
+
+The response of the plasma to the RMP is governed by the equations of marginally stable, ideal-MHD everywhere in the
+plasma, apart from a relatively narrow (in $r$) region in the vicinity of the so-called {\em rational surface}, minor radius $r_s$, 
+at which $q(r_s)=m/n$.\cite{rfa}
+
+It is convenient to parameterize the RMP in terms of the so-called {\em vacuum magnetic flux}, ${\mit\Psi}_v(t) = |{\mit\Psi}_v|\,{\rm e}^{-{\rm i}\,\varphi_v}$,
+which is defined to be the value of $\hat{\psi}(r,t)$ at radius $r_s$ in the presence of the RMP, but in the absence of plasma. Here,
+$\varphi_v$ is the helical phase of the RMP. Likewise, the response of the plasma in the vicinity of the rational
+surface is parameterized in terms of the so-called {\em reconnected magnetic flux}, ${\mit\Psi}_s(t)=|{\mit\Psi}_s|\,{\rm e}^{\,{\rm i}\,\varphi_s}$, 
+which is the actual value of $\hat{\psi}(r,t)$ at radius $r_s$. Here, $\varphi_s$ is the helical phase of
+the reconnected magnetic flux.
+
+The intrinsic stability of the $m$, $n$ tearing mode is governed by the dimensionless parameter
+$E_{ss}= [d\hat{\psi}_s/d\ln r]_{r_{s-}}^{r_{s+}}$, where $\hat{\psi}_s(r)$
+is a solution of the marginally stable, ideal-MHD equations, for the case of an $m$, $n$ helical
+perturbation, that satisfies physical boundary conditions at $r=0$ and $r=a$, in the absence of the
+RMP, and is such that $\hat{\psi}_s(r_s)=1$.\cite{fkr,am1} According to resistive-MHD theory,\cite{fkr,ruth}
+if $E_{ss}>0$ then the $m$, $n$ tearing mode spontaneously reconnects magnetic flux at the rational
+surface to form a helical magnetic island chain. In this paper, it is assumed that $E_{ss}<0$, so that the
+$m$, $n$ tearing mode is intrinsically stable. In this case, any magnetic reconnection that takes place
+at the rational surface is due solely to the action of the RMP.
+
+The ideal-MHD response of the plasma to the RMP is governed by the dimensionless parameter
+$E_{sv}= [d\hat{\psi}_v/d\ln r]_{r_{s-}}^{r_{s+}}$, where $\hat{\psi}_v(r)$
+is a solution of the marginally stable, ideal-MHD equations, for the case of an $m$, $n$ helical
+perturbation, that satisfies physical boundary conditions at $r=0$ and $r=a$, in the presence of the
+RMP, and is such that $\hat{\psi}_v(r_s)=0$.\cite{am1} 
+
+\subsection{Linear Response Regime}
+In the linear response regime, the reconnected magnetic flux induced by the RMP at the
+rational surface is governed by\,\cite{rfa,rfb,rfc}
+\begin{equation}\label{e1}
+\frac{\delta_s}{r_s}\,\tau_R\left(\frac{d}{dt}+{\rm i}\,\omega_s\right){\mit\Psi}_s= E_{ss}\,{\mit\Psi}_s+E_{sv}\,{\mit\Psi}_v,
+\end{equation}
+where $\delta_s$ is the linear layer width, $\tau_R=\mu_0\,r_s^{\,2}\,\sigma(r_s)$ the global resistive diffusion timescale,
+ and
+\begin{equation}
+\omega_s (t)=m\,{\mit\Omega}_\theta(r_s,t)-n\,{\mit\Omega}_\phi(r_s,t).
+\end{equation}
+Here, $\sigma(r)$, ${\mit\Omega}_\theta(r,t)$, and ${\mit\Omega}_\phi(r,t)$ are the 
+plasma conductivity, poloidal angular velocity, and toroidal angular velocity profiles, respectively. 
+Note that, in this paper, we are assuming that the constant-$\psi$ approximation\,\cite{fkr} holds at the rational surface. (It is demonstrated in
+Ref.~\onlinecite{rf1} that the appropriate linear response regime for an RMP resonant in the pedestal of a typical DIII-D H-mode discharge
+is the so-called  {\em first semi-collisional regime}, which is indeed a constant-$\psi$ response regime. Moreover, if the appropriate linear response regime
+is constant-$\psi$ then so is the appropriate nonlinear response regime, because the constant-$\psi$ constraint is
+easier to satisfy in the nonlinear regime than in the linear regime.\cite{rfb,rffig})
+
+Equation~(\ref{e1}) can be rewritten as an {\em amplitude evolution equation},
+\begin{equation}\label{e3}
+\frac{\delta_s}{r_s}\,\tau_R\,\frac{d|{\mit\Psi}_s|}{dt}= E_{ss}\,|{\mit\Psi}_s| + E_{sv}\,|{\mit\Psi}_v|\,\cos(\varphi_s-\varphi_v),
+\end{equation}
+combined with a {\em phase evolution equation}, 
+\begin{equation}\label{e4}
+\frac{d\varphi_s}{dt} = \omega_s - \frac{E_{sv}}{\tau_R}\,\frac{r_s}{\delta_s}\,\frac{|{\mit\Psi}_v|}{|{\mit\Psi}_s|}\,\sin(\varphi_s-\varphi_v).
+\end{equation}
+The final term on the right-hand side of Eq.~(\ref{e4}) is termed the {\em slip frequency}, and is the difference between the helical phase velocity of
+the reconnected magnetic flux and that expected on the  assumption that the flux is convected by the plasma flow at the
+rational surface (i.e., $d\varphi_s/dt=\omega_s$). In general, the slip frequency is non-zero because the plasma in the vicinity of the rational surface is capable of diffusing resistively 
+through the linear layer structure. 
+
+\subsection{Nonlinear Response Regime}
+In the nonlinear response regime, Eq.~(\ref{e3}) generalizes to the {\em Rutherford island width evolution equation}:\,\cite{ruth,ruth1}
+\begin{equation}\label{e5}
+\frac{({\cal I}/2)\,W_s}{r_s}\,\tau_R\,\frac{d|{\mit\Psi}_s|}{dt} = E_{ss}\,|{\mit\Psi}_s| + E_{sv}\,|{\mit\Psi}_v|\,\cos(\varphi_s-\varphi_v),
+\end{equation}
+where
+\begin{equation}
+W_s = 4\left(\frac{|{\mit\Psi}_s|}{s_s\,r_s\,B_\theta(r_s)}\right)^{1/2} r_s
+\end{equation}
+is the full radial width of the magnetic island chain, ${\cal I} = 0.8227$, $s(r) = d\ln q/d\ln r$, and $s_s=s(r_s)$. The
+nonlinear regime holds when $W_s\gg \delta_s$, whereas the linear regime holds when $\delta_s\ll W_s$. 
+
+Equation~(\ref{e5}) is usually coupled with the so-called {\em no-slip constraint}:\,\cite{rfa}
+\begin{equation}\label{e6}
+\frac{d\varphi_s}{dt} = \omega_s.
+\end{equation}
+The reasoning behind the imposition of this constraint is that the plasma is trapped inside the
+magnetic separatrix of the magnetic island chain that forms in the vicinity of the rational surface,
+which forces the chain to co-rotate with the local plasma flow. However, in reality, the plasma
+is able to diffuse resistively across the separatrix to some extent. Hence, by analogy with Eqs.~(\ref{e3}), (\ref{e4}), and (\ref{e5}), and 
+in accordance with Refs.~\onlinecite{slip1} and \onlinecite{slip2}, in this paper we shall modify Eq.~(\ref{e6}) such that
+\begin{equation}\label{e7}
+\frac{d\varphi_s}{dt} = \omega_s - \frac{E_{sv}}{\tau_R}\,\frac{r_s}{({\cal I}/2)\,W_s}\,\frac{|{\mit\Psi}_v|}{|{\mit\Psi}_s|}\,\sin(\varphi_s-\varphi_v).
+\end{equation}
+The final term on the right-hand side of the previous equation is the {\em nonlinear slip frequency}. In general,
+we would expect this frequency to be relatively small (because it is generally the case that $|\omega_s|\,\tau_R\,(W_s/r_s)\gg 1$
+for fully-developed magnetic islands in high-temperature tokamak plasmas\,\cite{rf1,slip2}). Nevertheless, the
+nonlinear slip frequency may be non-negligible for developing island chains, which is why we are including it in our analysis.
+(Note that the nonlinear slip frequency does not appear in rigorous island calculations, such as
+that described in Ref.~\onlinecite{rfisland}, and references therein, because such calculations depend crucially on
+complicated hierarchical ordering assumptions, according to which the nonlinear slip frequency is negligible.)
+
+\subsection{Composite Model}
+We can combine Eqs.~(\ref{e3}), (\ref{e4}), (\ref{e5}), and (\ref{e7}) to give the following
+composite resonant response model that interpolates between the linear and the nonlinear
+regimes:
+\begin{align}\label{e9}
+\left(\frac{({\cal I}/2)\,W_s+\delta_s}{r_s}\right)\tau_R\,\frac{d|{\mit\Psi}_s|}{dt} &= E_{ss}\,|{\mit\Psi}_s| + E_{sv}\,|{\mit\Psi}_v|\,\cos(\varphi_s-\varphi_v),\\[0.5ex]
+\frac{d\varphi_s}{dt}& = \omega_s - \frac{E_{sv}}{\tau_R}\left(\frac{r_s}{({\cal I}/2)\,W_s+\delta_s}\right)\frac{|{\mit\Psi}_v|}{|{\mit\Psi}_s|}\,\sin(\varphi_s-\varphi_v).\label{e10}
+\end{align}
+If we define $X_s = |{\mit\Psi}_s|\,\cos\varphi_s$, $Y_s = |{\mit\Psi}_s|\,\sin\varphi_s$, $X_v = |{\mit\Psi}_v|\,\cos\varphi_v$, and $Y_v = |{\mit\Psi}_v|\,\sin\varphi_v$ 
+then the previous two equations are more conveniently written in the nonsingular (when $|{\mit\Psi}_s|=0$) forms:\,\cite{slip1,slip2,slip3}
+\begin{align}\label{e11}
+\left(\frac{({\cal I}/2)\,W_s+\delta_s}{r_s}\right)\tau_R\left(\frac{dX_s}{dt}+\omega_s\,Y_s\right)&= E_{ss}\,X_s + E_{sv}\,X_v,\\[0.5ex]
+\left(\frac{({\cal I}/2)\,W_s+\delta_s}{r_s}\right)\tau_R\left(\frac{dY_s}{dt}-\omega_s\,X_s\right)& = E_{ss}\,Y_s + E_{sv}\,Y_v,\label{e12}
+\end{align}
+where
+\begin{equation}
+W_s = 4\left(\frac{\sqrt{X_s^{\,2}+Y_s^{\,2}}}{s_s\,r_s\,B_\theta(r_s)}\right)^{1/2} r_s.
+\end{equation}
+With the benefit of hindsight, Eqs.~(\ref{e11}) and (\ref{e12}) could have been derived more directly from the
+following heuristic generalization of Eq.~(\ref{e1}):\,\cite{slip2}
+\begin{equation}
+\left(\frac{({\cal I}/2)\,W_s+\delta_s}{r_s}\right)\tau_R\left(\frac{d}{dt}+{\rm i}\,\omega_s\right){\mit\Psi}_s= E_{ss}\,{\mit\Psi}_s+E_{sv}\,{\mit\Psi}_v.
+\end{equation}
+
+\section{Modified Toroidal RMP Response Model}
+Our toroidal model of the response of a tokamak plasma to a static, externally generated, RMP is described in
+detail in Ref.~\onlinecite{rftor}. In the light of the composite model developed in Sect.~\ref{s2}, we shall
+modify the resonant plasma response component of our  toroidal response model; this component is described in Appendix~D of Ref.~\onlinecite{rftor}.
+
+Equations~(D1) and (D2) in Ref.~\onlinecite{rftor} are modified such that 
+\begin{align}\label{e15}
+\left(\hat{W}_k + \hat{\delta}_k\right){\cal S}_k\,\frac{d\hat{\mit\Psi}_k}{d\hat{t}} &= \sum_{k'=1,K}\hat{E}_{kk'}\hat{\mit\Psi}_{k'}\,\cos(\varphi_k-\varphi_{k'}-\xi_{kk'})
++\hat{E}_{kk}\,\hat{\chi}_k\,\cos(\varphi_k-\zeta_k),\\[0.5ex]
+{\cal S}_k&=\frac{\tau_R(\hat{r}_k)}{\tau_A},
+\end{align}
+respectively. Here, 
+\begin{align}
+\hat{W}_k &=\frac{2\,{\cal I}}{\hat{a}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)_{\hat{r}_k} |\hat{\mit\Psi}_k|^{\,1/2},\\[0.5ex]
+\hat{\delta}_k &= \frac{\delta_{\rm SC}(\hat{r}_k)}{R_0\,\hat{a}\,\hat{r}_k},
+\end{align}
+where $\delta_{\rm SC}(\hat{r})$ is the semi-collisional linear layer width specified in Ref.~\onlinecite{rf1}.
+
+In the previous expressions, $R_0$ is the major radius of the magnetic axis, $r$ is a magnetic flux surface label with dimensions of length (which, roughly speaking, is the average minor radius of the
+flux surface), $q(r)$ is the safety-factor profile, $s(r)=d\ln q/d\ln r$, 
+$g(r)\,B_0$ is the toroidal magnetic field-strength at major radius $R_0$, $B_0$ is the vacuum
+toroidal magnetic field-strength on the magnetic axis, $a$ is the value of $r$ on the last closed magnetic-flux surface, $r_k$ is the value of $r$ on the $k$th rational
+surface (resonant with poloidal mode number $m_k$, and toroidal mode number $n$), $\hat{a}=a/R_0$, $\hat{r}=r/a$, and $\hat{r}_k=r_k/a$. 
+Furthermore, $\tau_R(\hat{r})= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{\,ee}$, where $\sigma_{ee}$ is the classical plasma parallel electrical conductivity, and
+$Q_{00}^{\,ee}$ describes the corrections to this conductivity due to neoclassical effects and the presence of plasma impurities. Also, $\tau_A$ is a convenient
+scale time, and $\hat{t}=t/\tau_A$. Finally, ${\mit\Psi}_k = B_0\,R_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$ is the reconnected magnetic flux
+at the $k$th rational surface, ${\mit\chi}_k = B_0\,R_0\,\hat{\mit\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$ is a measure of the vacuum magnetic flux at the $k$th
+rational surface (in fact, $\hat{E}_{kk}\,\chi_k$ is equivalent to $E_{sv}\,{\mit\Psi}_v$ in Sect.~\ref{s2}), and $E_{kk'} =\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$ is the toroidal tearing stability matrix.\cite{am1} Here, $\hat{\mit\Psi}_k>0$, $\varphi_k$, $\hat{\chi}_k>0$,
+$\zeta_k$, $\hat{E}_{kk'}>0$, and $\xi_{kk'}$ are all real quantities.
+
+Equation~(\ref{e15}) represents a minor improvement to Eq.~(D1) of Ref.~\onlinecite{rftor} in which the interpolation between the
+linear and nonlinear regimes is performed in a more systematic manner. 
+
+Equation~(D6) of Ref.~\onlinecite{rftor} is modified such that
+\begin{align}\label{e19}
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{d\varphi_k}{d\hat{t}}-\hat{\varpi}_k\right)&=
+- \sum_{k'=1,K}\hat{E}_{kk'}\,\hat{\mit\Psi}_{k'}\,\sin(\varphi_k-\varphi_{k'}-\xi_{kk'})-\hat{E}_{kk}\,\hat{\chi}_k\,\sin(\varphi_k-\zeta_k),
+\end{align}
+where
+\begin{equation}
+\hat{\varpi}_k= m_k\,\hat{\mit\Omega}_\theta(\hat{r}_k,\hat{t})-n\,\hat{\mit\Omega}_\phi(\hat{r}_k,\hat{t}),
+\end{equation}
+and $\hat{\mit\Omega}_\theta= {\mit\Omega}_\theta\,\tau_A$, $\hat{\mit\Omega}_\phi= {\mit\Omega}_\phi\,\tau_A$. Equation~(\ref{e19}) represents
+a major improvement to Eq.~(D6) that takes into  account the finite slip frequencies of the magnetic island chains induced at
+the various rational surfaces in the plasma. 
+
+If we define $X_k = \hat{\mit\Psi}_k\,\cos\varphi_k$ and $Y_k=\hat{\mit\Psi}_k\,\sin\varphi_k$ then Eqs.~(\ref{e15}) and (\ref{e19}) are
+more conveniently written in the nonsingular (when $\hat{\mit\Psi}_k=0$) forms
+\begin{align}\label{e21}
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dX_k}{d\hat{t}} 
++\hat{\varpi}_k\,Y_k\right)= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'}  -\sin\xi_{kk'}\,Y_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k,\\[0.5ex]
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dY_k}{d\hat{t}} -\hat{\varpi}_k\,X_k\right)
+= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,Y_{k'}
++\sin\xi_{kk'}\,X_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k.\label{e22}
+\end{align}
+Equations (\ref{e15}), (\ref{e19}), (\ref{e21}), and (\ref{e22}) are the toroidal generalizations of Eqs.~(\ref{e9}), (\ref{e10}), (\ref{e11}), and (\ref{e12}), respectively.
 
 \section{Discussion and Conclusions}
 
@@ -39,39 +227,36 @@ The data that support the findings of this study are available from the correspo
 \section*{References}
 \begin{thebibliography}{99}\baselineskip 5ex
 
-%\bibitem{rf1} R.~Fitzpatrick, Phys.\ Plasmas {\bf 27}, 042506 (2020).
-
-%\bibitem{rf2} R.~Fitzpatrick, and A.O.~Nelson, Phys.\ Plasmas {\bf 27}, 072501 (2020).
-
 \bibitem{rfa} R.~Fitzpatrick, Nucl.\ Fusion {\bf 33}, 1049 (1993).
-
-%\bibitem{rfb} R.~Fitzpatrick, Phys.\ Plasmas {\bf 5}, 3325 (1998).
-
-%\bibitem{nl1} R.~Fitzpatrick, and F.L.~Waelbroeck, Phys.\ Plasmas {\bf 12}, 022307 (2005).
-
-%\bibitem{nl2} R.~Fitzpatrick, Phys.\ Plasmas {\bf 25}, 042503 (2018).
-
-%\bibitem{nl3} R.~Fitzpatrick, Phys.\ Plasmas {\bf 25}, 112505 (2018).
-
-%\bibitem{hender} R.~Fitzpatrick, and T.C.~Hender, Phys.\ Fluids B {\bf 3}, 644 (1991).
-
-%\bibitem{cole} A.~Cole, and R.~Fitzpatrick, Phys.\ Plasmas {\bf 13}, 032503 (2006).
 
 \bibitem{fkr} H.P.~Furth,  J.~Killeen, and M.N.~Rosenbluth,  Phys.\ Fluids {\bf 6}, 459 (1963).
 
-%\bibitem{am1} R.~Fitzpatrick, R.J.~Hastie, T.J.~Martin, and C.M.~Roach, Nucl.\ Fusion {\bf 33}, 1533 (1993).
-
-%\bibitem{am3} R.~Fitzpatrick, Phys.\ Plasmas {\bf 24}, 072506 (2017). 
-
-%\bibitem{flat} R.~Fitzpatrick,  Phys.\ Plasmas {\bf 2}, 825 (1995).
+\bibitem{am1} R.~Fitzpatrick, R.J.~Hastie, T.J.~Martin, and C.M.~Roach, Nucl.\ Fusion {\bf 33}, 1533 (1993).
 
 \bibitem{ruth} P.H.~Rutherford,  Phys.\ Fluids  {\bf 16}, 1903 (1973).
 
-%\bibitem{ara} G.~Ara,  B.~Basu, B.~Coppi, G.~Laval, M.N.~Rosenbluth, and B.V.~Waddell, Ann.\ Phys.\ (N.Y.) {\bf 112}, 443 (1978). 
+\bibitem{rfb} R.~Fitzpatrick, Phys.\ Plasmas {\bf 5}, 3325 (1998).
 
-%\bibitem{wat} R.~Fitzpatrick, P.G.~Watson, and F.L.~Waelbroeck, Phys.\ Plasmas {\bf 12}, 082510 (2005).
+\bibitem{rfc} R.~Fitzpatrick, Phys.\ Plasmas {\bf 21}, 092513 (2014).
 
-%\bibitem{rffig} R.~Fitzpatrick, Phys.\ Plasmas {\bf 10}, 2304 (2003).
+\bibitem{rf1} R.~Fitzpatrick, Phys.\ Plasmas {\bf 27}, 042506 (2020).
+
+\bibitem{rffig} R.~Fitzpatrick, Phys.\ Plasmas {\bf 10}, 2304 (2003).
+
+\bibitem{ruth1} P.H.~Rutherford, in  {\it Basic Physical Processes of
+Toroidal Fusion Plasmas}, Proc.\ Course and Workshop, Varenna, 1985. (Commission of the European Communities, Brussels, 1985.) Vol.~2, p.~531.
+
+\bibitem{slip1} L.G.~Eliseev, N.V.~Ivanov, A.M.~Kakurin, A.V.~Melnikov, and S.V.~Perfilov, Phys.\ Plasmas {\bf 22}, 052504 (2015). 
+
+\bibitem{slip2} W.~Huang, and P.~Zhu, Phys.\ Plasmas {\bf 27}, 022514 (2020).
+
+\bibitem{rfisland} R.~Fitzpatrick, Phys.\ Plasmas {\bf 25}, 082513 (2018);
+
+\bibitem{slip3} A.N.~Chudnovskiy, Y.V.~Gvozdkov, N.V.~Ivanov, A.M.~Kakurin,
+A.A.~Medvedev, I.I.~Orlovskiy, Y.D.~Pavlov, V.V.~Piterskiy, V.D.~Pustovitov,
+M.B.~Safonova, V.V.~Volkov, and the T-10 Team, Nucl.\ Fusion {\bf 43} 681 (2003).
+
+\bibitem{rftor} R.~Fitzpatrick, and A.O.~Nelson, Phys.\ Plasmas {\bf 27}, 072501 (2020).
 
 \end{thebibliography}
 

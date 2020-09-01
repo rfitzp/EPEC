@@ -1050,7 +1050,7 @@ void Neoclassical::Get_Normalized ()
     {
       double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
 	/ (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
-      double Sk  = (2.*0.8227 * R_0 /rk (j) /a) * sqrt (qk (j) /gk (j) /sk (j)) * tau_Rk (j) * Q_00 (j) /tau_A;
+      double Sk  = tau_Rk (j) * Q_00 (j) /tau_A;
       double wk  = w_actual (j) * tau_A;
       double wkl = w_linear (j) * tau_A;
       double wke = w_EB (j) * tau_A;
@@ -1059,11 +1059,11 @@ void Neoclassical::Get_Normalized ()
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
       printf ("m = %3d r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e w0 = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
-	      mk (j), rk (j), qk (j), rhok (j), a/R_0, Sk, wk, tm, th, dk);
+	      mk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, dk);
 
       fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-	       dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j), PsiNk(j));
+	       dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk (j), gk (j), dPsidr (j), PsiNk (j));
     }
    fclose (file);
 
@@ -1077,8 +1077,8 @@ void Neoclassical::Get_Normalized ()
       for (int j = 0; j < nres; j++)
 	{
 	  double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
-	    / (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j)) /0.8227;
-	  double Sk  = (2.*0.8227 * R_0 /rk (j) /a) * sqrt (qk (j) /gk (j) /sk (j)) * tau_Rk (j) * Q_00 (j) /tau_A;
+	    / (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
+	  double Sk  = tau_Rk (j) * Q_00 (j) /tau_A;
 	  double wk  = w_actual (j) * tau_A;
 	  double wkl = w_linear (j) * tau_A;
 	  double wke = w_EB (j) * tau_A;
@@ -1088,7 +1088,7 @@ void Neoclassical::Get_Normalized ()
 	  
 	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-		   dnedrk (j)/1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk(j), dPsidr(j), PsiNk(j));
+		   dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk (j), dPsidr (j), PsiNk (j));
 	}
       fclose (file);
 

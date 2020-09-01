@@ -3,8 +3,8 @@
 // PROGRAM ORGANIZATION:
 // 
 //       Phase:: Phase          ()
-// void  Phase:: Solve          (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
-// void  Phase:: Read_Data      (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
+// void  Phase:: Solve          (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME, double _SCALE)
+// void  Phase:: Read_Data      (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME, double _SCALE)
 // void  Phase:: Scan_Shift     ()
 // void  Phase:: Calc_Velocity  ()
 // void  Phase:: Initialize     ()
@@ -54,10 +54,10 @@ Phase::Phase ()
 // #########################
 // Function to solve problem
 // #########################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME, double _SCALE)
 {
   // Read data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _TIME);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _TIME, _SCALE);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -83,7 +83,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, doubl
 // #####################
 // Function to read data
 // #####################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, double _TIME, double _SCALE)
 {
   // ......................................
   // Set default values of input parameters
@@ -96,6 +96,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   OLD    = 0;
   DT     = 1.e-5;
   TIME   = 0.;
+  SCALE  = 2.;
 
   // Read data from Inputs/Phase.in
   printf ("..................................\n");
@@ -106,7 +107,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &DT, &TIME, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &DT, &TIME, &SCALE, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -126,6 +127,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
     OLD = _OLD;
   if (_TIME > 0.)
     TIME = _TIME;
+  if (_SCALE > 0.)
+    SCALE = _SCALE;
   
   // ............
   // Sanity check
@@ -148,16 +151,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, SCALE, NCTRL);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, SCALE, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -165,8 +168,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, NCTRL);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, DT, TIME, SCALE, NCTRL);
   fclose (monitor);
 
   // .................
@@ -455,7 +458,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
 
   for (int j = 0; j < nres; j++)
     printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e\n",
-	    mk(j), rk(j), qk(j), gk(j), akk(j), rhok(j), a(j), Sk(j), wk(j), taumk(j), tautk(j), delk(j));
+	    mk(j), rk(j), qk(j), gk(j), akk(j), rhok(j), a(j), Sk(j), wk(j), taumk(j), tautk(j), delk(j)/(rk(j) * a(j) * R_0));
 
   // .............................
   // Interpolate uFiles and lFiles
@@ -573,7 +576,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
   ChiU   = gsl_vector_complex_calloc (nres);
   ChiL   = gsl_vector_complex_calloc (nres);
 
-  double SCALEFACTOR = 2.;
+  double SCALEFACTOR = SCALE;
   printf ("SCALEFACTOR = %11.4e\n", SCALEFACTOR);
   
   printf ("Upper coil:\n");
@@ -670,8 +673,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, d
 	DIM[i] = v10;
 	WWW[i] = 2.*v11;
 
-	DRE[i] /= 2.*M_PI * qk(i) / SCALEFACTOR/SCALEFACTOR;
-	DIM[i] /= 2.*M_PI * qk(i) / SCALEFACTOR/SCALEFACTOR;
+	DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
 
 	CRE[i] =   DIM[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
 	CIM[i] = - DRE[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
@@ -1262,7 +1265,10 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 
   for (int j = 0; j < nres; j++)
     {
-      PsikRHS (j) = Cosk (j) /Sk (j) /(sqrt (fabs (Psik (j))) + delk (j));
+      double Wk = (0.8227/2.) * 4. * fack (j) * sqrt (fabs (Psik (j))) /a (j) /rk (j);
+      double dk = delk (j) /(R_0 * a (j)) /rk (j);
+      
+      PsikRHS (j) = Cosk (j) /Sk (j) /(Wk + dk);
 
       double sum = wk (j);
       for (int k = 0; k < nres; k++)

@@ -5,7 +5,7 @@
 
 CWD="$(pwd)"
 cd /Users/rfitzp/EPEC
-tar --dereference --exclude='*.eps' -c -v -z -f tarfile.tgz Flux/Inputs/* Flux/Outputs/* Flux/Plots/* Neoclassical/Inputs/* Neoclassical/Outputs/* Neoclassical/Plots/*xs Phase/Inputs/* Phase/Outputs/* Phase/Plots/* IslandDynamics/Inputs/* IslandDynamics/Outputs/* IslandDynamics/Plots/*  
+tar --dereference --exclude='*.eps' -c -v -z -f tarfile.tgz Flux/Inputs/* Flux/Outputs/* Flux/Plots/* Neoclassical/Inputs/* Neoclassical/Outputs/* Neoclassical/Plots/*xs Phase-*/Inputs/* Phase-*/Outputs/* Phase-*/Plots/* IslandDynamics/Inputs/* IslandDynamics/Outputs/* IslandDynamics/Plots/*  
 cd $CWD
 mv /Users/rfitzp/EPEC/tarfile.tgz .
 tar xvfz tarfile.tgz

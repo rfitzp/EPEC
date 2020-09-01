@@ -13,6 +13,7 @@
 // 1.1 - Added time to monitor.txt
 // 1.2 - Major rearrangement of input and output files
 // 1.3 - Added PHASE_FREQ flag
+// 1.4 - Added PHASE_SCALE flag
 
 // ##############################################################
 
@@ -21,13 +22,13 @@
 #include <time.h>
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 3
+#define VERSION_MINOR 4
 
 #define MAXCOMMANDLINELENGTH 500
 
 extern "C" void NameListRead (int* FLUX_NTOR, int* FLUX_MMIN, int* FLUX_MMAX,
 			      int* NEO_INTF, int* NEO_IMPURITY, int* NEO_NEUTRAL, int* NEO_FREQ, int* NEO_NTYPE, double* NEO_NN, double* NEO_LN, double* NEO_YN,
-			      int* PHASE, int* PHASE_INTN, int* PHASE_STAGE2, int* PHASE_OLD, int* PHASE_VER2, int* PHASE_FREQ, 
+			      int* PHASE, int* PHASE_INTN, int* PHASE_STAGE2, int* PHASE_OLD, int* PHASE_VER2, int* PHASE_FREQ, double* PHASE_SCALE, 
 			      int* RESTART, double* TSTART, double* TEND, double* DT); 
 
 void IslandDynamics ();
@@ -80,6 +81,7 @@ void IslandDynamics ()
   int	 PHASE_OLD;      // If != 0 then restart PHASE calculations from previous run
   int    PHASE_VER2;     // If != 0 then call Phase-2.x, else call Phase-1.x
   int    PHASE_FREQ;     // If != 0 then use island width dependent natural frequency (only applies to Phase-2.x, overrides NEO_FREQ)
+  double PHASE_SCALE;    // GPEC scalefactor
   int	 RESTART;        // If != 0 then delete all previous IslandDynamics data
   double TSTART;         // Simulation experimental start time (ms)
   double TEND;           // Simulation experimental end time (ms)
@@ -87,7 +89,7 @@ void IslandDynamics ()
 
   NameListRead (&FLUX_NTOR, &FLUX_MMIN, &FLUX_MMAX,
 		&NEO_INTF, &NEO_IMPURITY, &NEO_NEUTRAL, &NEO_FREQ, &NEO_NTYPE, &NEO_NN, &NEO_LN, &NEO_YN,
-		&PHASE, &PHASE_INTN, &PHASE_STAGE5, &PHASE_OLD, &PHASE_VER2, &PHASE_FREQ, 
+		&PHASE, &PHASE_INTN, &PHASE_STAGE5, &PHASE_OLD, &PHASE_VER2, &PHASE_FREQ, &PHASE_SCALE, 
 		&RESTART, &TSTART, &TEND, &DT);
 
   PHASE_INTF = NEO_INTF;
@@ -97,8 +99,8 @@ void IslandDynamics ()
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d\n",
-	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ);
+  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
   printf ("RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
 
@@ -153,8 +155,8 @@ void IslandDynamics ()
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d\n",
-	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ);
+  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
   printf ("RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
 
@@ -173,8 +175,8 @@ void IslandDynamics ()
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  fprintf (monitor, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d\n",
-	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ);
+  fprintf (monitor, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
+	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
   fprintf (monitor, "RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
   fclose (monitor);
@@ -188,8 +190,8 @@ void IslandDynamics ()
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
   fprintf (namelist, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  fprintf (namelist, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d\n",
-	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ);
+  fprintf (namelist, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
+	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
   fprintf (namelist, "RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
   fclose (namelist);
@@ -217,20 +219,20 @@ void IslandDynamics ()
       if (PHASE_VER2)
 	{
 	  if (lock)
-	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -t %16.9e ",
-		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, Time);
+	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -t %16.9e -S %16.2e ",
+		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, Time, PHASE_SCALE);
 	  else
-	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -t %16.9e ",
-		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_FREQ, Time);
+	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -t %16.9e -S %16.2e",
+		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_FREQ, Time, PHASE_SCALE);
 	}
       else
 	{
 	   if (lock)
-	    sprintf (PHASEstring, "cd ../Phase-1.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
-		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, Time);
+	    sprintf (PHASEstring, "cd ../Phase-1.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e -S %16.2e ",
+		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, Time, PHASE_SCALE);
 	  else
-	    sprintf (PHASEstring, "cd ../Phase-1.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e ",
-		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, Time);
+	    sprintf (PHASEstring, "cd ../Phase-1.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -t %16.9e -S %16.2e ",
+		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, Time, PHASE_SCALE);
 	}
       lock = 1;
       

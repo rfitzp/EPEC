@@ -29,7 +29,8 @@
 // 1.4 - Added cFile and linear interpolation
 // 1.5 - Added chie and chin
 // 1.6 - Divided normalized layer width by 0.8227
-// 1.7 - Output wnl 
+// 1.7 - Output wnl
+// 1.8 - Removed 0.8227 from layer width (which actually is not normalized), redefined S_k
 
 // ################################################################
 
@@ -37,7 +38,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 7
+#define VERSION_MINOR 8
 
 #include <stdio.h>
 #include <math.h>
@@ -232,8 +233,8 @@ class Neoclassical
   Array<double,1> nu_iik;     // Majority ion collision frequencies
   Array<double,1> nu_IIk;     // Impurity ion collision frequencies
 
-  Array<double,1> WcritTk;    // Normalized critical island width for temperature flattening
-  Array<double,1> Wcritnk;    // Normalized critical island width for density flattening
+  Array<double,1> WcritTk;    // Critical island width for temperature flattening
+  Array<double,1> Wcritnk;    // Critical island width for density flattening
 
   Array<double,1> eta_ek;     // Relative electron temperature gradients
   Array<double,1> eta_ik;     // Relative majority ion temperature gradients
@@ -243,7 +244,7 @@ class Neoclassical
   Array<double,1> w_ast_ik;   // Majority ion diamagnetic frequencies
   Array<double,1> w_ast_Ik;   // Impurity ion diamagnetic frequencies
 
-  Array<double,1> rho_sk;     // Normalized ion sound radii
+  Array<double,1> rho_sk;     // Ion sound radii
   
   Array<double,1> tau_Hk;     // Hydromagnetic timescales
   Array<double,1> tau_Rk;     // Classical resistive timescales
