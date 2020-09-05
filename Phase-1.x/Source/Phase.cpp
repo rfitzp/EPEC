@@ -1114,7 +1114,7 @@ void Phase::IslandDynamics ()
       double Wk       = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
       double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek(j) * Wcrnek(j));
       double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek(j) * WcrTek(j));
-      fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       wk (j) /tau_A/1.e3,
@@ -1126,7 +1126,7 @@ void Phase::IslandDynamics ()
 	       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
 	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
     }
-  fclose (file);
+  fclose (filew);
 }
 
 // ###################################

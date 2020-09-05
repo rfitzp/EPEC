@@ -20,7 +20,7 @@
 
 // Stage 5 - Class performs island dynamics simulation
 
-// Version:
+// Versions:
 
 // 1.0 - Initial version
 // 1.1 - Improved indexing of fFiles, nFiles, uFiles, and lFiles
@@ -34,6 +34,8 @@
 // 2.0 - Relaxed no-slip constraint
 // 2.1 - Redefined Sk. Corrected composite factor in Rutherford equation.
 // 2.2 - Added SCALE as input value
+// 2.3 - Separated waveform input data from main input data.
+//       Modified finite island-width natural frequency interpolation.
 
 // #######################################################################
 
@@ -41,7 +43,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 2
+#define VERSION_MINOR 3
 
 #include <stdio.h>
 #include <math.h>
@@ -258,6 +260,10 @@ class Phase
   void PackRhs (Array<double,1> XkRHS,      Array<double,1> YkRHS,
 		Array<double,2> alphakpRHS, Array<double,2> betakpRHS,
 		Array<double,1> dydt);
+  // Calculate natural freqeuncy
+  double GetNaturalFrequency (int j);
+  // Calculate actual freqeuncy
+  double GetActualFrequency (int j);
    // Evaluate right-hand sides of differential equations
   void Rhs (double x, Array<double,1>& y, Array<double,1>& dydx);
   // Adaptive-step integration routine

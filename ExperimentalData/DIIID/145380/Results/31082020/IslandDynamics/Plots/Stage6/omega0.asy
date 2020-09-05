@@ -1,6 +1,6 @@
 import graph;
      
-size (500, 500, IgnoreAspect);
+size (750, 500, IgnoreAspect);
 
 file    in = input ("../../Outputs/Stage6/omega0.txt").line();
 real[][] A = in.dimension (0, 0);
@@ -59,12 +59,11 @@ for (int j = 0; j < N; ++j)
 	q9.push (tt[j]);
 	i9.push (wnl[j]);
       }
-  if ((int) m[j] == 10)
+   if ((int) m[j] == 10)
       {
 	q10.push (tt[j]);
 	i10.push (wnl[j]);
       }
-  
     if ((int) m[j] == 11)
       {
 	q11.push (tt[j]);
@@ -99,14 +98,18 @@ for (int j = 0; j < N; ++j)
 
 pen s;
 
+fill((2840,-49.5)--(2980,-49.5)--(2980,49.5)--(2840,49.5)--cycle, paleyellow);
+fill((3320,-49.5)--(3560,-49.5)--(3560,49.5)--(3320,49.5)--cycle, paleyellow);
+fill((3880,-49.5)--(4200,-49.5)--(4200,49.5)--(3880,49.5)--cycle, paleyellow);
+
 s = white + dotted + 0.5;
 if (q16.length > 0)
    {  
-     draw (graph (q16, i16), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, palegreen));
+ //    draw (graph (q16, i16), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, palegreen));
    }	
 if (q15.length > 0)
    {  
-    draw (graph (q15, i15), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, grey));
+ //   draw (graph (q15, i15), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, grey));
    }	
 if (q14.length > 0)
    {  

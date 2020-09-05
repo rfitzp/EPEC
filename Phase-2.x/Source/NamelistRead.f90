@@ -29,19 +29,23 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, S
   integer          :: i
   double precision :: pi
  
-  namelist /PHASE_CONTROL/  STAGE5, NFLOW, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL
-  namelist /PHASE_WAVEFORM/ TCTRL, ICTRL, PCTRL
+  namelist /PHASE_CONTROL/   STAGE5, NFLOW, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE
+  namelist /PHASE_WAVEFORM/  NCTRL
+  namelist /PHASE_WAVEFORM1/ TCTRL, ICTRL, PCTRL
   
   open  (unit = 100, file = 'Inputs/Phase.in', status = 'old')
   read  (unit = 100, nml  = PHASE_CONTROL) 
   close (unit = 100)
   
+  open  (unit = 100, file = 'Inputs/Waveform.in', status = 'old')
+  read  (unit = 100, nml  = PHASE_WAVEFORM)
+
   allocate (TCTRL (NCTRL))
   allocate (ICTRL (NCTRL))
   allocate (PCTRL (NCTRL))
 
-  open  (unit = 100, file = 'Inputs/Phase.in', status = 'old')
-  read  (unit = 100, nml  = PHASE_WAVEFORM) 
+  read  (unit = 100, nml  = PHASE_WAVEFORM1)
+
   close (unit = 100)
   
   pi = 4.*atan(1.)

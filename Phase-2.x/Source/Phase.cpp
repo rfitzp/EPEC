@@ -1,29 +1,33 @@
 // Phase.cpp
 
+// #####################
 // PROGRAM ORGANIZATION:
-// 
-//       Phase:: Phase          ()
-// void  Phase:: Solve          (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
-// void  Phase:: Read_Data      (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
-// void  Phase:: Scan_Shift     ()
-// void  Phase:: Calc_Velocity  ()
-// void  Phase:: Initialize     ()
-// void  Phase:: Save           ()
-// void  Phase:: IslandDynamics ()
-// void  Phase:: CalcRMP        (double t)
-// void  Phase:: CalcChiZeta    (double t)
-// void  Phase:: Pack           (Array<double,1> y)
-// void  Phase:: Unpack         (Array<double,1> y)
-// void  Phase:: PackRhs        (Array<double,1> XkRHS, Array<double,1> YkRHS,
-//		                 Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
-// void  Phase:: Rhs            (double t, Array<double,1>& y, Array<double,1>& dydt)
-// void  Phase:: RK4Adaptive    (double& x, Array<double,1>& y, double& h, 
-//			         double& t_err, double acc, double S, int& rept,
-//			         int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
-// void  Phase:: RK4Fixed       (double& x, Array<double,1>& y, double h)
-// FILE* Phase:: OpenFilew      (char* filename)
-// FILE* Phase:: OpenFilew      (char* filename)
-// FILE* Phase:: OpenFilea      (char* filename)
+// $####################
+
+//        Phase:: Phase               ()
+// void   Phase:: Solve               (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
+// void   Phase:: Read_Data           (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
+// void   Phase:: Scan_Shift          ()
+// void   Phase:: Calc_Velocity       ()
+// void   Phase:: Initialize          ()
+// void   Phase:: Save                ()
+// void   Phase:: IslandDynamics      ()
+// void   Phase:: CalcRMP             (double t)
+// void   Phase:: CalcChiZeta         (double t)
+// void   Phase:: Pack                (Array<double,1> y)
+// void   Phase:: Unpack              (Array<double,1> y)
+// void   Phase:: PackRhs             (Array<double,1> XkRHS, Array<double,1> YkRHS,
+//		                       Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
+// double Phase:: GetNaturalFrequency (int j)
+// double Phase:: GetActualFrequency  (int j)
+// void   Phase:: Rhs                 (double t, Array<double,1>& y, Array<double,1>& dydt)
+// void   Phase:: RK4Adaptive         (double& x, Array<double,1>& y, double& h, 
+//			               double& t_err, double acc, double S, int& rept,
+//			               int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
+// void   Phase:: RK4Fixed            (double& x, Array<double,1>& y, double h)
+// FILE*  Phase:: OpenFilew           (char* filename)
+// FILE*  Phase:: OpenFiler           (char* filename)
+// FILE*  Phase:: OpenFilea           (char* filename)
 
 #include "Phase.h"
 
@@ -32,9 +36,9 @@
 // ###########
 Phase::Phase ()
 {
-  // --------------------------------------------------
-  // Set default values adaptive integration parameters
-  // --------------------------------------------------
+  // -----------------------------------------------------
+  // Set default values of adaptive integration parameters
+  // -----------------------------------------------------
   h0       = 1.e-4;
   acc      = 1.e-11;
   hmin     = 1.e-10;
@@ -51,12 +55,12 @@ Phase::Phase ()
   m_e       = GSL_CONST_MKSA_MASS_ELECTRON;
 }
 
-// #########################
-// Function to solve problem
-// #########################
+// ##############################
+// Function to perform simulation
+// ##############################
 void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
 {
-  // Read data
+  // Read input data
   Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _TIME, _SCALE);
 
   // Scan RMP phase shift
@@ -80,9 +84,9 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
   gsl_vector_complex_free (ChiU);    gsl_vector_complex_free (ChiL);
 }
 
-// #####################
-// Function to read data
-// #####################
+// ###########################
+// Function to read input data
+// ###########################
 void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
 {
   // ......................................
@@ -99,7 +103,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   TIME   = 0.;
   SCALE  = 2.;
 
-  // Read data from Inputs/Phase.in
+  // Read input data from namelist (Inputs/Phase.in)
   printf ("..................................\n");
   printf ("Reading data from Inputs/Phase.in:\n");
   printf ("..................................\n");
@@ -450,9 +454,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
   for (int j = 0; j < nres; j++)
     if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&mk(j), &ntor(j), &rk(j), &qk(j), &rhok(j), &a(j), &Sk(j),
-		&wk(j), &taumk(j), &tautk(j), &fack(j), &delk(j), &wkl(j),
-		&wke(j), &wkn(j), &dnedrk(j), &dTedrk(j), &Wcrnek(j), &WcrTek(j), &akk(j), &gk(j), &dPsiNdr(j), &PsiN(j)) != 23)
+		&mk (j), &ntor (j), &rk (j), &qk (j), &rhok (j), &a (j), &Sk (j),
+		&wk (j), &taumk (j), &tautk (j), &fack (j), &delk (j), &wkl (j),
+		&wke (j), &wkn (j), &dnedrk (j), &dTedrk (j), &Wcrnek (j), &WcrTek (j), &akk (j), &gk (j), &dPsiNdr (j), &PsiN (j)) != 23)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -461,7 +465,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
   for (int j = 0; j < nres; j++)
     printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e\n",
-	    mk(j), rk(j), qk(j), gk(j), akk(j), rhok(j), a(j), Sk(j), wk(j), taumk(j), tautk(j), delk(j) /(rk(j) * a(j) * R_0));
+	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0));
 
   // .............................
   // Interpolate uFiles and lFiles
@@ -626,15 +630,17 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
 	DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
 
-	CRE[i] =   DIM[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
-	CIM[i] = - DRE[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
+	CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
+	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
+	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
 
 	gsl_vector_complex_set (DeltaU, i, gsl_complex_rect (DRE[i], DIM[i]));
 	gsl_vector_complex_set (ChiU,   i, gsl_complex_rect (CRE[i], CIM[i]));
 
 	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiU, i));
-	double WUNRE = 4. * fack(i) * sqrt (Psi) * dPsiNdr (i);
-	double WFULL = sqrt (FFh(i, i) * EEh(i, i)) * WUNRE;
+	double WUNRE = 4. * fack (i) * sqrt (Psi) * dPsiNdr (i);
+	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
 	printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
 		QIN[i], DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
@@ -676,18 +682,20 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	DIM[i] = v10;
 	WWW[i] = 2.*v11;
 
-	DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
-	DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	DRE[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+	DIM[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
 
-	CRE[i] =   DIM[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
-	CIM[i] = - DRE[i] * (rk(i) * a(i)) * (rk(i) * a(i)) * gk(i) /double (mk(i)) /(akk(i) + rk(i) * rk(i) * a(i) * a(i) /qk(i) /qk(i)) /EEh(i, i);
+	CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
+	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+ 	CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
+	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
 
 	gsl_vector_complex_set (DeltaL, i, gsl_complex_rect (DRE[i], DIM[i]));
 	gsl_vector_complex_set (ChiL,   i, gsl_complex_rect (CRE[i], CIM[i]));
 
 	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiL, i));
-	double WUNRE = 4. * fack(i) * sqrt (Psi) * dPsiNdr(i);
-	double WFULL = sqrt (FFh(i, i) * EEh(i, i)) * WUNRE;
+	double WUNRE = 4. * fack (i) * sqrt (Psi) * dPsiNdr(i);
+	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
 	printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
 		QIN[i], DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
@@ -828,18 +836,7 @@ void Phase::Initialize ()
   for (int j = 0; j < nres; j++)
     {
       lock (j) = 0;
-
-      double sum;
-      if  (FREQ)
-	sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
-      else
-	sum = wk (j);
-	  
-      for (int k = 0; k < nres; k++)
-	for (int i = 0; i < NFLOW; i++)
-	  sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
-      
-      ww (j) = sum;
+      ww   (j) = GetActualFrequency (j);
     }
 
   // Reinitialize from previous run
@@ -866,7 +863,7 @@ void Phase::Initialize ()
 
       int in;
       for (int j = 0; j < _nres; j++)
-	if (fscanf (file, "%d %lf %lf %d %lf\n", &in, &_Psik(j), &_phik(j), &_lock(j), &_ww(j)) != 5)
+	if (fscanf (file, "%d %lf %lf %d %lf\n", &in, &_Psik (j), &_phik (j), &_lock (j), &_ww (j)) != 5)
 	  {
 	    printf ("PHASE: Error reading sFile (2)\n");
 	    exit (1);
@@ -944,18 +941,6 @@ void Phase::IslandDynamics ()
 
   Initialize ();
 
-  FILE* filex = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
-   for (int j = 0; j < nres; j++)
-    {
-      double wx;
-      if (FREQ)
-	wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
-      else
-	wx = wk (j);
-      fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk(j), rk(j), wkl(j) /tau_A/1.e3, wx /tau_A/1.e3, wke(j) /tau_A/1.e3, TIME);
-    }
-  fclose (filex);
-
   // Integrate equations of motion
   chi.resize  (nres);
   zeta.resize (nres);
@@ -1010,20 +995,8 @@ void Phase::IslandDynamics ()
       dt += h;
 
       for (int j = 0; j < nres; j++)
-	{
-	  double sum;
-	  if (FREQ)
-	    sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
-	  else
-	    sum = wk (j);
-	  
-	  for (int k = 0; k < nres; k++)
-	    for (int i = 0; i < NFLOW; i++)
-	      sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
-	  
-	  ww (j) = sum;
-	}
-
+	ww (j) = GetActualFrequency (j);
+      
       for (int j = 0; j < nres; j++)
 	if (ww (j) * wwo (j) < 0. && lock (j) == 0)
 	  {
@@ -1031,14 +1004,10 @@ void Phase::IslandDynamics ()
 
 	    printf ("m = %3d locks at t = %11.4e s  irmp = %11.4e kA  prmp/pi = %11.4e\n",
 		    mk (j), t*tau_A, irmp, prmp /M_PI);
-	    double wx;
-	    if (FREQ)
-	      wx = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
-	    else
-	      wx = wk (j);
+	 
 	    fprintf (file8, "%16.9e %3d %16.9e %16.9e %16.9e %16.9e %3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		     q95, mk (j), rk (j), t*tau_A, irmp, prmp /M_PI, nres, q0, qa,
-		     wx/tau_A/1.e3, wkl(j)/tau_A/1.e3, wke(j)/tau_A/1.e3, TIME, wkn(j)/tau_A/1.e3);
+		     GetNaturalFrequency (j)/tau_A/1.e3, wkl (j)/tau_A/1.e3, wke (j)/tau_A/1.e3, TIME, wkn (j)/tau_A/1.e3);
 
 	    lock (j) = 1;
 	  }
@@ -1074,10 +1043,7 @@ void Phase::IslandDynamics ()
 
 	  fprintf (file4a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    if (FREQ)
-	      fprintf (file4a, "%16.9e ",  (wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j))) /tau_A/1.e3);
-	    else
-	      fprintf (file4a, "%16.9e ",  wk (j) /tau_A/1.e3);
+	    fprintf (file4a, "%16.9e ",  GetNaturalFrequency (j) /tau_A/1.e3);
 	  fprintf (file4a, "\n");
 	  
 	  CalcRMP (t);
@@ -1110,20 +1076,20 @@ void Phase::IslandDynamics ()
 	  for (int j = 0; j < nres; j++)
 	    {
 	      double Wk       = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
-	      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek(j) * Wcrnek(j));
-	      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek(j) * WcrTek(j));
+	      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
+	      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));
 	      double dnek     = dnedrk (j) * deltanek;
 	      double dTek     = dTedrk (j) * deltaTek;
 	      fprintf (file9,  "%16.9e ", deltanek);
 	      fprintf (file10, "%16.9e ", deltaTek);
 	      fprintf (file11, "%16.9e ", dnek);
 	      fprintf (file12, "%16.9e ", dTek);
-	      fprintf (file13, "%16.9e ", rk(j) - Wk /2./a(j)/R_0);
-	      fprintf (file14, "%16.9e ", rk(j) + Wk /2./a(j)/R_0);
-	      fprintf (file15, "%16.9e ", rk(j) - deltanek /2./a(j)/R_0);
-	      fprintf (file16, "%16.9e ", rk(j) + deltanek /2./a(j)/R_0);
-	      fprintf (file17, "%16.9e ", rk(j) - deltaTek /2./a(j)/R_0);
-	      fprintf (file18, "%16.9e ", rk(j) + deltaTek /2./a(j)/R_0);
+	      fprintf (file13, "%16.9e ", rk (j) - Wk /2./a (j)/R_0);
+	      fprintf (file14, "%16.9e ", rk (j) + Wk /2./a (j)/R_0);
+	      fprintf (file15, "%16.9e ", rk (j) - deltanek /2./a (j)/R_0);
+	      fprintf (file16, "%16.9e ", rk (j) + deltanek /2./a (j)/R_0);
+	      fprintf (file17, "%16.9e ", rk (j) - deltaTek /2./a (j)/R_0);
+	      fprintf (file18, "%16.9e ", rk (j) + deltaTek /2./a (j)/R_0);
 	    }
 	  fprintf (file9,  "\n"); fprintf (file10, "\n"); fprintf (file11, "\n"); fprintf (file12, "\n");
 	  fprintf (file13, "\n"); fprintf (file14, "\n"); fprintf (file15, "\n"); fprintf (file16, "\n");
@@ -1147,24 +1113,30 @@ void Phase::IslandDynamics ()
   fclose (file4);  fclose (file5);  fclose (file6);
   fclose (file8);  fclose (file9);  fclose (file10);
   fclose (file11); fclose (file12); fclose (file13);
-  fclose (file14); fclose (file15); fclose (file17);
+  fclose (file14); fclose (file15); fclose (file16);
   fclose (file17); fclose (file18); fclose (file3a);
   fclose (file4a);
 
   // Save calculation
   Save ();
-  
+
+  FILE* filex = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
+  for (int j = 0; j < nres; j++)
+    fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mk (j), rk (j), wkl (j) /tau_A/1.e3, wke (j) /tau_A/1.e3, wkn (j) /tau_A/1.e3, GetNaturalFrequency (j) /tau_A/1.e3, TIME);
+  fclose (filex);
+
   FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
   for (int j = 0; j < nres; j++)
     {
       double Wk       = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
-      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek(j) * Wcrnek(j));
-      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek(j) * WcrTek(j));
-      fprintf (file, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
+      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));
+      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
-	       wk (j) /tau_A/1.e3,
-	       ww (j) /tau_A/1.e3,
+	       GetNaturalFrequency (j) /tau_A/1.e3,
+	       GetActualFrequency (j) /tau_A/1.e3,
 	       TIME,
 	       4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
 	       PsiN (j),
@@ -1172,7 +1144,7 @@ void Phase::IslandDynamics ()
 	       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
 	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
     }
-  fclose (file);
+  fclose (filew);
 }
 
 // ###################################
@@ -1283,6 +1255,36 @@ void Phase::PackRhs (Array<double,1> XkRHS, Array<double,1> YkRHS,
     }
 }
 
+// #######################################
+// Function to calculate natural frequency
+// #######################################
+double Phase::GetNaturalFrequency (int j)
+{
+  if (FREQ)
+    {
+      double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
+      double w2 = w*w;
+      
+      return (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w2 + wkn (j) * w2*w2) /(1. - w2 + w2*w2);
+    }
+  else
+    return wk (j);
+}
+
+// ######################################
+// Function to calculate actual frequency
+// ######################################
+double Phase::GetActualFrequency (int j)
+{
+  double sum = GetNaturalFrequency (j);
+
+  for (int k = 0; k < nres; k++)
+    for (int i = 0; i < NFLOW; i++)
+      sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
+
+  return sum;
+}
+
 // ###############################################################
 // Function to evaluate right-hand sides of differential equations
 // ###############################################################
@@ -1316,21 +1318,12 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 
   for (int j = 0; j < nres; j++)
     {
-      double sum;
-      if (FREQ)
-	sum = wkl (j) + (wkn (j) - wkl (j)) * tanh (4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j));
-      else
-	sum = wk (j);
-      
-      for (int k = 0; k < nres; k++)
-	for (int i = 0; i < NFLOW; i++)
-	  sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
+      double omega = GetActualFrequency (j);
+      double Wk    = (0.8227/2.) * 4. * fack (j) * sqrt (fabs (Psik (j))) /a (j) /rk (j);
+      double dk    = delk (j) /(R_0 * a (j)) /rk (j);
 
-      double Wk = (0.8227/2.) * 4. * fack (j) * sqrt (fabs (Psik (j))) /a (j) /rk (j);
-      double dk = delk (j) /(R_0 * a (j)) /rk (j);
-
-      XkRHS (j) = - sum * Yk (j) + Cosk (j) /Sk (j) /(Wk + dk);
-      YkRHS (j) = + sum * Xk (j) + Sink (j) /Sk (j) /(Wk + dk);
+      XkRHS (j) = - omega * Yk (j) + Cosk (j) /Sk (j) /(Wk + dk);
+      YkRHS (j) = + omega * Xk (j) + Sink (j) /Sk (j) /(Wk + dk);
       
       for (int i = 0; i < NFLOW; i++)
 	{
