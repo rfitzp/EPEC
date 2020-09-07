@@ -28,7 +28,7 @@
 
 extern "C" void NameListRead (int* FLUX_NTOR, int* FLUX_MMIN, int* FLUX_MMAX,
 			      int* NEO_INTF, int* NEO_IMPURITY, int* NEO_NEUTRAL, int* NEO_FREQ, int* NEO_NTYPE, double* NEO_NN, double* NEO_LN, double* NEO_YN,
-			      int* PHASE, int* PHASE_INTN, int* PHASE_STAGE2, int* PHASE_OLD, int* PHASE_VER2, int* PHASE_FREQ, double* PHASE_SCALE, 
+			      int* PHASE, int* PHASE_INTN, int* PHASE_STAGE2, int* PHASE_OLD, int* PHASE_VER2, int* PHASE_FREQ, int* PHASE_LIN, double* PHASE_SCALE, 
 			      int* RESTART, double* TSTART, double* TEND, double* DT); 
 
 void IslandDynamics ();
@@ -81,6 +81,7 @@ void IslandDynamics ()
   int	 PHASE_OLD;      // If != 0 then restart PHASE calculations from previous run
   int    PHASE_VER2;     // If != 0 then call Phase-2.x, else call Phase-1.x
   int    PHASE_FREQ;     // If != 0 then use island width dependent natural frequency (only applies to Phase-2.x, overrides NEO_FREQ)
+  int    PHASE_LIN ;     // If != 0 then perform purely linear calculation (only applies to Phase-2.x)
   double PHASE_SCALE;    // GPEC scalefactor
   int	 RESTART;        // If != 0 then delete all previous IslandDynamics data
   double TSTART;         // Simulation experimental start time (ms)
@@ -89,19 +90,19 @@ void IslandDynamics ()
 
   NameListRead (&FLUX_NTOR, &FLUX_MMIN, &FLUX_MMAX,
 		&NEO_INTF, &NEO_IMPURITY, &NEO_NEUTRAL, &NEO_FREQ, &NEO_NTYPE, &NEO_NN, &NEO_LN, &NEO_YN,
-		&PHASE, &PHASE_INTN, &PHASE_STAGE5, &PHASE_OLD, &PHASE_VER2, &PHASE_FREQ, &PHASE_SCALE, 
+		&PHASE, &PHASE_INTN, &PHASE_STAGE5, &PHASE_OLD, &PHASE_VER2, &PHASE_FREQ, &PHASE_LIN, &PHASE_SCALE, 
 		&RESTART, &TSTART, &TEND, &DT);
 
   PHASE_INTF = NEO_INTF;
 
   printf ("Reading Inputs/Island.in:\n");
-  printf ("FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+  printf ("FLUX_NTOR = %2d  FLUX_MMIN = %2d  FLUX_MMAX = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+  printf ("NEO_INTF = %2d  NEO_IMPURITY = %2d  NEO_NEUTRAL = %2d  NEO_FREQ = %2d  NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
-	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
-  printf ("RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+  printf ("PHASE = %2d  PHASE_INTN = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_VER2 = %2d  PHASE_FREQ = %2d  PHASE_LIN = %2d  PHASE_SCALE = %11.4e\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE);
+  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
 
   // ............
@@ -151,13 +152,13 @@ void IslandDynamics ()
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+  printf ("FLUX_NTOR = %2d  FLUX_MMIN = %2d  FLUX_MMAX = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  printf ("NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+  printf ("NEO_INTF = %2d  NEO_IMPURITY = %2d  NEO_NEUTRAL = %2d  NEO_FREQ = %2d  NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  printf ("PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
-	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
-  printf ("RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+  printf ("PHASE = %2d  PHASE_INTN = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_VER2 = %2d  PHASE_FREQ = %2d  PHASE_LIN = %2d  PHASE_SCALE = %11.4e\n",
+	  PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE);
+  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
 
   FILE* monitor = fopen ("Outputs/monitor.txt", "a");
@@ -171,13 +172,13 @@ void IslandDynamics ()
   fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-  fprintf (monitor, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+  fprintf (monitor, "FLUX_NTOR = %2d  FLUX_MMIN  = %2d  FLUX_MMAX = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  fprintf (monitor, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+  fprintf (monitor, "NEO_INTF = %2d  NEO_IMPURITY = %2d  NEO_NEUTRAL = %2d  NEO_FREQ = %2d  NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  fprintf (monitor, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
+  fprintf (monitor, "PHASE = %2d  PHASE_INTN = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_VER2 = %2d  PHASE_FREQ = %2d  PHASE_SCALE = %11.4e\n",
 	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
-  fprintf (monitor, "RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+  fprintf (monitor, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
   fclose (monitor);
 
@@ -186,13 +187,13 @@ void IslandDynamics ()
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-  fprintf (namelist, "FLUX_NTOR  = %2d  FLUX_MMIN    = %2d           FLUX_MMAX    = %2d\n",
+  fprintf (namelist, "FLUX_NTOR = %2d  FLUX_MMIN = %2d  FLUX_MMAX = %2d\n",
 	  FLUX_NTOR, FLUX_MMIN, FLUX_MMAX);
-  fprintf (namelist, "NEO_INTF   = %2d  NEO_IMPURITY = %2d           NEO_NEUTRAL  = %2d           NEO_FREQ  = %2d           NEO_NTYPE  = %2d  NEO_NN     = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
+  fprintf (namelist, "NEO_INTF = %2d  NEO_IMPURITY = %2d  NEO_NEUTRAL = %2d  NEO_FREQ = %2d  NEO_NTYPE = %2d  NEO_NN = %11.4e  NEO_LN = %11.4e  NEO_YN = %11.4e\n",
 	  NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
-  fprintf (namelist, "PHASE      = %2d  PHASE_INTN   = %2d           PHASE_STAGE5 = %2d           PHASE_OLD = %2d           PHASE_VER2 = %2d  PHASE_FREQ = %2d     PHASE_SCALE = %11.4e\n",
-	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE);
-  fprintf (namelist, "RESTART    = %2d  TSTART       = %11.4e  TEND         = %11.4e  DT        = %11.4e\n",
+  fprintf (namelist, "PHASE = %2d  PHASE_INTN = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_VER2 = %2d  PHASE_FREQ = %2d  PHASE_LIN = %2d  PHASE_SCALE = %11.4e\n",
+	   PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE);
+  fprintf (namelist, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
 	  RESTART, TSTART, TEND, DT);
   fclose (namelist);
 
@@ -219,11 +220,11 @@ void IslandDynamics ()
       if (PHASE_VER2)
 	{
 	  if (lock)
-	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -t %16.9e -S %16.2e ",
-		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, Time, PHASE_SCALE);
+	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -l %2d -t %16.9e -S %16.9e ",
+		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_LIN, Time, PHASE_SCALE);
 	  else
-	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -t %16.9e -S %16.2e",
-		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_FREQ, Time, PHASE_SCALE);
+	    sprintf (PHASEstring, "cd ../Phase-2.x; ./phase -f %d -n %d -u %d -s %2d -o %2d -F %2d -l %2d -t %16.9e -S %16.9e",
+		     PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_FREQ, PHASE_LIN, Time, PHASE_SCALE);
 	}
       else
 	{

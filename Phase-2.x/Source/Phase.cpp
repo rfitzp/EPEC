@@ -58,10 +58,10 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _TIME, _SCALE);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _TIME, _SCALE);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -87,7 +87,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE)
 {
   // ......................................
   // Set default values of input parameters
@@ -99,6 +99,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   INTU   = 0;
   OLD    = 0;
   FREQ   = 0;
+  LIN    = 0;
   DT     = 1.e-5;
   TIME   = 0.;
   SCALE  = 2.;
@@ -112,7 +113,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &DT, &TIME, &SCALE, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &DT, &TIME, &SCALE, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -132,6 +133,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     OLD = _OLD;
   if (_FREQ > -1)
     FREQ = _FREQ;
+  if (_LIN > -1)
+    LIN = _LIN;
   if (_TIME > 0.)
     TIME = _TIME;
   if (_SCALE > 0.)
@@ -158,16 +161,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -175,8 +178,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL);
   fclose (monitor);
 
   // .................
@@ -1260,15 +1263,22 @@ void Phase::PackRhs (Array<double,1> XkRHS, Array<double,1> YkRHS,
 // #######################################
 double Phase::GetNaturalFrequency (int j)
 {
-  if (FREQ)
+  if (LIN)
     {
-      double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
-      double w2 = w*w;
-      
-      return (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w2 + wkn (j) * w2*w2) /(1. - w2 + w2*w2);
+      return wkl (j);
     }
   else
-    return wk (j);
+    {
+      if (FREQ)
+	{
+	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
+	  double w2 = w*w;
+	  
+	  return (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w2 + wkn (j) * w2*w2) /(1. - w2 + w2*w2);
+	}
+      else
+	return wk (j);
+    }
 }
 
 // ######################################
@@ -1322,8 +1332,16 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
       double Wk    = (0.8227/2.) * 4. * fack (j) * sqrt (fabs (Psik (j))) /a (j) /rk (j);
       double dk    = delk (j) /(R_0 * a (j)) /rk (j);
 
-      XkRHS (j) = - omega * Yk (j) + Cosk (j) /Sk (j) /(Wk + dk);
-      YkRHS (j) = + omega * Xk (j) + Sink (j) /Sk (j) /(Wk + dk);
+      if (LIN)
+	{
+	  XkRHS (j) = - omega * Yk (j) + Cosk (j) /Sk (j) /dk;
+	  YkRHS (j) = + omega * Xk (j) + Sink (j) /Sk (j) /dk;
+	}
+      else
+	{
+	  XkRHS (j) = - omega * Yk (j) + Cosk (j) /Sk (j) /(Wk + dk);
+	  YkRHS (j) = + omega * Xk (j) + Sink (j) /Sk (j) /(Wk + dk);
+	}
       
       for (int i = 0; i < NFLOW; i++)
 	{

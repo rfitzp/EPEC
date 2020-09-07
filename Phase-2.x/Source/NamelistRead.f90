@@ -1,6 +1,6 @@
 ! Function to read PHASE namelist
 
-subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE, NCTRL, xTCTRL, xICTRL, xPCTRL) &
+subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL, xTCTRL, xICTRL, xPCTRL) &
      bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -13,6 +13,7 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, S
   integer (kind = c_int),    intent (inout) :: INTU
   integer (kind = c_int),    intent (inout) :: OLD
   integer (kind = c_int),    intent (inout) :: FREQ
+  integer (kind = c_int),    intent (inout) :: LIN
   real    (kind = c_double), intent (inout) :: DT
   real    (kind = c_double), intent (inout) :: TIME
   real    (kind = c_double), intent (inout) :: SCALE
@@ -29,7 +30,7 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, DT, TIME, S
   integer          :: i
   double precision :: pi
  
-  namelist /PHASE_CONTROL/   STAGE5, NFLOW, INTF, INTN, INTU, OLD, FREQ, DT, TIME, SCALE
+  namelist /PHASE_CONTROL/   STAGE5, NFLOW, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE
   namelist /PHASE_WAVEFORM/  NCTRL
   namelist /PHASE_WAVEFORM1/ TCTRL, ICTRL, PCTRL
   

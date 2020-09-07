@@ -36,6 +36,7 @@
 // 2.2 - Added SCALE as input value
 // 2.3 - Separated waveform input data from main input data.
 //       Modified finite island-width natural frequency interpolation.
+// 2.4 - Added LIN flag
 
 // #######################################################################
 
@@ -43,7 +44,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 3
+#define VERSION_MINOR 4
 
 #include <stdio.h>
 #include <math.h>
@@ -66,7 +67,7 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, double* DT, double* TIME, double* SCALE, 
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, double* DT, double* TIME, double* SCALE, 
 			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
@@ -90,6 +91,7 @@ class Phase
   int      INTU;   // If != 0 then use interpolated uFile and lFiles
   int      OLD;    // If != 0 then initialize new calculation
   int      FREQ;   // If != 0 then use island width dependent natural frequency
+  int      LIN;    // If != 0 then perform purely linear calculation
   double   SCALE;  // GPEC scalefactor
   
   int      NCTRL;  // Number of control points
@@ -228,7 +230,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE);        
 
   // -----------------------
   // Private class functions
@@ -236,7 +238,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE);
   // Calculate vacuum flux versus upper/lower coil phase shift
   void Scan_Shift ();
   // Calculate velocity factors

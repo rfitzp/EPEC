@@ -29,10 +29,10 @@ int main (int argc, char** argv)
   int c;
   char* tvalue = NULL; char* svalue = NULL; char* fvalue = NULL; 
   char* nvalue = NULL; char* uvalue = NULL; char* ovalue = NULL;
-  char* Fvalue = NULL; char* Svalue = NULL;
+  char* Fvalue = NULL; char* Svalue = NULL; char* lvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:")) != -1)
     switch (c)
       {
       case 'f':
@@ -42,6 +42,7 @@ int main (int argc, char** argv)
  	printf ("Options:\n");
 	printf ("-f INTF   - set interpolation flag INTF\n");
 	printf ("-h        - list options\n");
+	printf ("-l LIN    - set linear flag LIN\n");
 	printf ("-n INTN   - set interpolation flag INTN\n");
 	printf ("-o OLD    - set old calculation flag OLD\n");
 	printf ("-s STAGE5 - set Stage5 flag STAGE5\n");
@@ -65,6 +66,9 @@ int main (int argc, char** argv)
       case 'u':
 	uvalue = optarg;
  	break;
+      case 'l':
+	lvalue = optarg;
+ 	break;
       case 'F':
 	Fvalue = optarg;
  	break;
@@ -72,7 +76,7 @@ int main (int argc, char** argv)
 	Svalue = optarg;
  	break;
       case '?':
-	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u' || optopt == 'F' || optopt == 'S')
+	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u' || optopt == 'F' || optopt == 'S' || optopt == 'l')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -83,9 +87,9 @@ int main (int argc, char** argv)
 	abort ();
       }
 
-  int    _STAGE5 = -1;    int   _INTF = -1; int    _OLD  = -1;    int _FREQ = -1;
+  int    _STAGE5 = -1;    int   _INTF = -1; int    _OLD  = -1;    int    _FREQ = -1;
   int    _INTN   = -1;    int   _INTU = -1; double _TIME = -1.e6; float  __TIME;
-  double _SCALE  = -1.e6; float __SCALE;
+  double _SCALE  = -1.e6; float __SCALE;    int    _LIN  = -1.;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -97,6 +101,8 @@ int main (int argc, char** argv)
     _INTU= atoi (uvalue);
   if (ovalue != NULL)
      _OLD = atoi (ovalue);
+  if (lvalue != NULL)
+    _LIN = atoi (lvalue);
   if (Fvalue != NULL)
      _FREQ = atoi (Fvalue);
   if (tvalue != NULL)
@@ -114,7 +120,7 @@ int main (int argc, char** argv)
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _TIME, _SCALE);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _TIME, _SCALE);
 
   return 0;
 }

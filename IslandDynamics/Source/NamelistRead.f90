@@ -6,7 +6,7 @@
 
 subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
      NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN,&
-     PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE,&
+     PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE,&
      RESTART, TSTART, TEND, DT) &
      bind (c, name = 'NameListRead')
 
@@ -30,6 +30,7 @@ subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
   integer (kind = c_int),    intent (inout) :: PHASE_OLD
   integer (kind = c_int),    intent (inout) :: PHASE_VER2
   integer (kind = c_int),    intent (inout) :: PHASE_FREQ
+  integer (kind = c_int),    intent (inout) :: PHASE_LIN
   real    (kind = c_double), intent (inout) :: PHASE_SCALE
   integer (kind = c_int),    intent (inout) :: RESTART
   real    (kind = c_double), intent (inout) :: TSTART
@@ -38,7 +39,7 @@ subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
   
   namelist /ISLANDDYNAMICS_CONTROL/ FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
        NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN,&
-       PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_SCALE,&
+       PHASE, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE,&
        RESTART, TSTART, TEND, DT
   
   open  (unit = 100, file = 'Inputs/Island.in', status = 'old')
