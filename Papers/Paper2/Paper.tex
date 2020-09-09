@@ -16,9 +16,9 @@
 An improved resonant plasma response model that describes the interaction between a tokamak plasma and a resonant magnetic perturbation  (RMP) is developed. 
 The model interpolates between the linear and the nonlinear response regimes, and takes into account the fact that the slip-frequency
 is non-zero in the nonlinear regime. The improved model is incorporated into the {\tt EPEC} toroidal asymptotic matching code.
-The modified {\tt EPEC} code is used to model RMP-induced edge-localized-modr mitigation/suppression in DIII-D H-mode discharge \#145380. 
+The modified {\tt EPEC} code is used to investigate RMP-induced edge-localized-mode (ELM) mitigation/suppression in DIII-D H-mode discharge \#145380. 
 Allowing for a finite slip-frequency (i.e., relaxing the so-called no-slip constraint) is found to slightly facilitate the locking of
-driven magnetic island chains to the RMP. The previously obtained conclusion 
+driven magnetic island chains to the RMP, and, hence, to slightly facilitate RMP-induced ELM mitigation/suppression.  The previously obtained conclusion 
 that the response of a typical H-mode tokamak plasma to an RMP cannot be accurately modeled by linear theory is confirmed. The previously obtained conclusion that the best agreement between theory and observations is achieved by assuming that the
 natural frequencies of tearing modes, in the absence of the RMP, are determined by the local equilibrium ${\bf E}\times{\bf B}$ frequency is also confirmed.
 \end{abstract}
@@ -28,7 +28,7 @@ natural frequencies of tearing modes, in the absence of the RMP, are determined 
 \section{Introduction}
 In the context of tokamak plasmas, a resonant magnetic perturbation (RMP) refers to an externally
 generated, (usually) static, helical magnetic perturbation that resonates at
-one or more ``rational'' magnetic flux surfaces within the plasma. Resonant magnetic perturbations have been successfully
+one or more ``rational'' magnetic flux-surfaces within the plasma. Resonant magnetic perturbations have been successfully
 employed to compensate error fields (i.e., accidentally produced RMPs), and, thereby,  to prevent the associated formation of
 locked modes, in a wide variety of different types of tokamak discharge. \cite{error1,error2,error3} RMPs have also been  successfully used to either  
 mitigate or completely suppress  edge-localized-modes (ELMs) in H-mode tokamak discharges.\cite{elm1,elm2,elm3,elm4,elm5,elm6}
@@ -50,7 +50,7 @@ magnetic separatrix of the island chain,
 which forces the chain to co-rotate with the local plasma flow. In reality, however, the plasma
 is able to diffuse resistively across the separatrix to some extent.\cite{slip1,slip2} 
 
-The recently developed, toroidal, asymptotic matching code {\tt EPEC} has been used to simulate 
+The recently developed, toroidal, asymptotic matching code {\tt EPEC} (Extended Perturbed Equilibrium Code) has been used to simulate 
 RMP-induced ELM mitigation/suppression in DIII-D H-mode plasmas.\cite{rftor,rftor1}
 The original {\tt EPEC} model incorporates the no-slip constraint.
 The first aim of this paper is to investigate 
@@ -64,7 +64,7 @@ For the sake of simplicity, and also to make a better connection with previous r
 the resonant response of a tokamak plasma to an RMP in cylindrical geometry. 
 
 \subsection{Plasma Equilibrium}
-Consider a large aspect-ratio, low-$\beta$, tokamak plasma whose magnetic flux surfaces map out (almost)
+Consider a large aspect-ratio, low-$\beta$, tokamak plasma whose magnetic flux-surfaces map out (almost)
 concentric circles in the poloidal plane.
 Such a plasma is well approximated as a periodic cylinder.  Suppose that the minor radius of the plasma
 is $a$. Standard cylindrical coordinates ($r$, $\theta$, $z$) are adopted. The system is assumed to
@@ -80,7 +80,7 @@ field-lines.
 Consider the response of the plasma to an externally generated, static, helical, RMP. 
 Suppose that the RMP has $m$ periods in the poloidal direction, and $n$ periods in the toroidal direction.
 It is convenient to express the perturbed magnetic field and the perturbed plasma current density in
-terms of a perturbed poloidal magnetic flux, $\psi(r,\theta,\phi,t)$. In fact, $\delta{\bf B} = \nabla\psi\times \nabla z$, 
+terms of a perturbed poloidal magnetic flux (divided by $2\pi\,R_0$), $\psi(r,\theta,\phi,t)$. In fact, $\delta{\bf B} = \nabla\psi\times \nabla z$, 
 and $\mu_0\,\delta {\bf j} = - \nabla^2\psi\,\nabla z$,
 where $\psi(r,\theta,\phi,t) = \hat{\psi}(r,t)\,\exp[{\rm i}\,(m\,\theta-n\,\phi)]$, and $\hat{\psi}$ is real. This particular representation
 is valid provided that $m/n\gg a/R_0$.\cite{rfa}
@@ -169,7 +169,7 @@ in accordance with Refs.~\onlinecite{slip1} and \onlinecite{slip2}, in this pape
 \frac{d\varphi_s}{dt} = \omega_s - \frac{E_{sv}}{\tau_R}\,\frac{r_s}{({\cal I}/2)\,W_s}\,\frac{|{\mit\Psi}_v|}{|{\mit\Psi}_s|}\,\sin(\varphi_s-\varphi_v).
 \end{equation}
 The final term on the right-hand side of the previous equation is the ``nonlinear slip-frequency''. In general,
-we would expect this frequency to be relatively small (because it is generally the case that $|\omega_s|\,\tau_R\,(W_s/r_s)\gg 1$
+we would expect this frequency to be relatively small (because it is usually the case that $|\omega_s|\,\tau_R\,(W_s/r_s)\gg 1$
 for fully-developed magnetic islands in high-temperature tokamak plasmas\,\cite{rf1,slip2}). Nevertheless, the
 nonlinear slip-frequency may be non-negligible for developing island chains, which is why we are including it in our analysis.
 (Note that the nonlinear slip-frequency does not appear in rigorous island calculations, such as
@@ -220,10 +220,10 @@ respectively. Here,
 \end{align}
 where $\delta_{\rm SC}(\hat{r})$ is the semi-collisional linear layer width specified in Ref.~\onlinecite{rf1}.
 
-In the previous expressions, $R_0$ is the major radius of the magnetic axis, $r$ is a magnetic flux surface label with dimensions of length (which, roughly speaking, is the average minor radius of the
-flux surface), $q(r)$ is the safety-factor profile, $s(r)=d\ln q/d\ln r$, 
+In the previous expressions, $R_0$ is the major radius of the magnetic axis, $r$ is a magnetic flux-surface label with dimensions of length (which, roughly speaking, is the average minor radius of the
+flux-surface), $q(r)$ is the safety-factor profile, $s(r)=d\ln q/d\ln r$, 
 $g(r)\,B_0$ is the toroidal magnetic field-strength at major radius $R_0$, $B_0$ is the vacuum
-toroidal magnetic field-strength on the magnetic axis, $a$ is the value of $r$ on the last closed magnetic-flux surface, $r_k$ is the value of $r$ on the $k$th rational
+toroidal magnetic field-strength on the magnetic axis, $a$ is the value of $r$ on the last closed magnetic flux-surface, $r_k$ is the value of $r$ on the $k$th rational
 surface (resonant with poloidal mode number $m_k$, and toroidal mode number $n$), $\hat{a}=a/R_0$, $\hat{r}=r/a$, and $\hat{r}_k=r_k/a$. 
 Furthermore, $\tau_R(\hat{r})= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{\,ee}$, where $\sigma_{ee}$ is the classical plasma parallel electrical conductivity, and
 $Q_{00}^{\,ee}$ describes the corrections to this conductivity due to neoclassical effects and the presence of plasma impurities. Also, $\tau_A$ is a convenient
@@ -233,7 +233,7 @@ rational surface (in fact, $\hat{E}_{kk}\,\chi_k$ is equivalent to $E_{sv}\,{\mi
 $\zeta_k$, $\hat{E}_{kk'}>0$, and $\xi_{kk'}$ are all real quantities.
 
 Equation~(\ref{e15}) represents a minor improvement to Eq.~(D1) of Ref.~\onlinecite{rftor} in which the interpolation between the
-linear and nonlinear regimes is performed in a more systematic manner. 
+linear and nonlinear regimes is performed in a slightly more accurate manner. 
 
 Equation~(D6) of Ref.~\onlinecite{rftor} is modified such that
 \begin{align}\label{e19}
@@ -247,9 +247,9 @@ where
 and $\hat{\varpi}_{k\,0}= \varpi_{k\,0}\,\tau_A$, $\hat{\mit\Omega}_\theta= {\mit\Delta}{\mit\Omega}_\theta\,\tau_A$, and $\hat{\mit\Omega}_\phi= {\mit\Delta}{\mit\Omega}_\phi\,\tau_A$. Here, $\varpi_{k\,0}$
 is the so-called ``natural frequency'' at the $k$th rational surface; this quantity is defined as the helical phase velocity of a naturally unstable island chain, resonant at the surface, in the
 absence of an RMP (or any other island chains). On the other hand,  ${\mit\Delta}{\mit\Omega}_\theta$ and ${\mit\Delta}{\mit\Omega}_\phi$ are the changes in the plasma
-poloidal and toroidal velocity profiles, respectively, induced by the electromagnetic torques that develop in the vicinities of the various rational surfaces in the plasma.
+poloidal and toroidal velocity profiles, respectively, induced by the electromagnetic torques that develop in the vicinities of the various rational surfaces in the plasma in response to the RMP.
 Equation~(\ref{e19}) represents
-a major improvement to Eq.~(D6) that takes into  account the finite slip-frequencies of the magnetic island chains induced at
+a major improvement to Eq.~(D6) of Ref.~\onlinecite{rftor} that takes into  account the finite slip-frequencies of the magnetic island chains induced at
 the various rational surfaces in the plasma. In the absence of a finite slip-frequency, the right-hand side of Eq.~(\ref{e19}) would be zero. 
 
 If we define $X_k = \hat{\mit\Psi}_k\,\cos\varphi_k$ and $Y_k=\hat{\mit\Psi}_k\,\sin\varphi_k$ then Eqs.~(\ref{e15}) and (\ref{e19}) are
@@ -267,7 +267,7 @@ where
 \end{equation}
 Equations (\ref{e15}), (\ref{e19}), (\ref{e21}), (\ref{e22}) and (\ref{e23}) are the toroidal generalizations of Eqs.~(\ref{e9}), (\ref{e10}), (\ref{e11}), (\ref{e12}), and (\ref{e23x}), respectively.
 
-\section{EPEC Modeling of DIII-D Discharge \#145380}\label{s4}
+\section{{\tt EPEC} Modeling of DIII-D Discharge \#145380}\label{s4}
 \subsection{Introduction}
 DIII-D discharge \#145380 is an ITER-Similar-Shape (ISS), ELMing, H-mode discharge, with a toroidal magnetic field $B_T=-1.9\,{\rm T}$, in which the
 plasma current, $I_p$, is slowly ramped over a 2 second interval in order to scan the magnetic safety-factor.\cite{d3d,d3d2} The majority ions are Deuterium, whereas the
@@ -279,7 +279,7 @@ entirely suppressed) extends from $t=2840$--$2980$ ms; the
 second (in which ELM are entirely suppressed) extends from $t=3320$--$3560$ ms; and the third (in which ELMs are
 entirely suppressed) extends from $t=3880$--$4200$ ms. The 
 first, second, and third ELM-suppression/mitigation windows extend over the $\overline{q_{95}}$ ranges $3.88$--$3.94$, $3.62$--$3.73$,
-and $3.33$--$3.48$, respectively. Here, $\overline{q_{95}}$ is least-squares linear fit to the variation of the safety-factor at the ${\mit\Psi}_N = 0.95$ flux surface with time. 
+and $3.33$--$3.48$, respectively. Here, $\overline{q_{95}}$ is least-squares linear fit to the variation of the safety-factor at the ${\mit\Psi}_N = 0.95$ flux-surface with time. 
 
 \subsection{Relaxation of No-Slip Constraint}\label{s4a}
 As is discussed in Ref.~\onlinecite{rftor1}, the best agreement between the predictions of the {\tt EPEC} code and experimental observations is
@@ -432,20 +432,20 @@ islands widths and the actual island widths.
 It can be seen, by a comparison of Figs.~\ref{fig7}--\ref{fig10}, that the linear calculation very significantly overestimates how easy it is for magnetic
 island chains to lock to the RMP. The reason for this is that the linear slip-frequency is comparatively high, because the linear layer width is
 comparatively narrow. The true slip-frequency becomes less than the linear slip-frequency as soon as the island width exceeds the
-linear layer width. [See Eq.~(\ref{e10}).] The fact that that linear calculation is highly inaccurate confirms the conclusion reached in Ref.~\onlinecite{rf1}
+linear layer width. [See Eq.~(\ref{e10}).] The fact that the linear calculation is highly inaccurate confirms the conclusion reached in Ref.~\onlinecite{rf1}
 that the response of a typical H-mode tokamak plasma to an RMP is not governed by linear theory, because the driven
 island widths exceed the very narrow linear layer widths, even when driven reconnection is strongly suppressed by plasma flow. 
 
 Intriguingly, the composite linear/nonlinear model fairly accurately predicts the temporal extends of the three ELM mitigation/suppression windows (assuming that the
 windows correspond to the formation of wide locked magnetic island chains at the top of the pedestal). 
-However, the windows do not occur at the correct times. We conclude that Eq.~(\ref{eeb}) gives a more accurate prediction for the
+However, the windows do not occur in the correct time intervals. We conclude that Eq.~(\ref{eeb}) gives a more accurate prediction for the
 natural frequencies, in the absence of the RMP, than Eq.~(\ref{ecomp}). However, the reason for this is, as yet, unclear. 
 
-\section{Discussion and Conclusions}
+\section{Summary}
 We have developed an improved resonant plasma response model that describes the interaction between a tokamak plasma and an RMP. 
 The model interpolates between the linear and the nonlinear response regimes, and takes into account the fact that the slip-frequency
 is non-zero in the nonlinear regime. Our improved model has been incorporated into the {\tt EPEC} toroidal asymptotic matching code.\cite{rftor1}
-The moidifed {\tt EPEC} code is used to model RMP-induced ELM mitigation/suppression in DIII-D discharge \#145380. 
+The modified {\tt EPEC} code is used to model RMP-induced ELM mitigation/suppression in DIII-D H-mode discharge \#145380. 
 
 We find that allowing for a finite slip-frequency (i.e., relaxing the so-called no-slip constraint) slightly facilitates the locking of
 driven magnetic island chains to the RMP. (Here, by locking, we mean the reduction of the true natural frequency of a given chain to
@@ -516,7 +516,7 @@ Toroidal Fusion Plasmas}, Proc.\ Course and Workshop, Varenna, 1985. (Commission
 
 \bibitem{rftor} R.~Fitzpatrick, and A.O.~Nelson, Phys.\ Plasmas {\bf 27}, 072501 (2020).
 
-\bibitem{rftor1} R.~Fitzpatrick,  ``Modelling $q_{95}$ Windows for the Suppression of Edge Localized
+\bibitem{rftor1} R.~Fitzpatrick,  ``Modeling $q_{95}$ Windows for the Suppression of Edge Localized
 Modes by Resonant Magnetic Perturbations in the DIII-D Tokamak", submitted to Physics of Plasmas (2020).
 
 \bibitem{rfb} R.~Fitzpatrick, Phys.\ Plasmas {\bf 5}, 3325 (1998).
@@ -577,44 +577,47 @@ electron pressure. (The red curve is the running average over 10 ms.) (d) Pedest
 
 \begin{figure}
 \includegraphics[height=6in]{fig2.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
+\caption{Composite linear/nonlinear calculation with the no-slip constraint imposed at all rational surfaces, and the natural frequencies
+in the absence of the RMP determined by the local  ${\bf E}\times {\bf B}$
 frequency.
-Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
-frequency. The red, green, blue, yellow, cyan, magenta, brown, pink,
+Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
+in   DIII-D discharge \#145380. Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
+in   DIII-D discharge \#145380. The red, green, blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig2}
 \end{figure}
 
 \begin{figure}
 \includegraphics[height=6in]{fig3.pdf}
-\caption{Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
+\caption{Composite linear/nonlinear calculation with the no-slip constraint imposed at all rational surfaces, and the natural frequencies
+in the absence of the RMP determined by the local  ${\bf E}\times {\bf B}$
+frequency. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by  the ${\bf E}\times {\bf B}$
-frequency. The blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig3}
 \end{figure}
 
 \begin{figure}
 \includegraphics[height=6in]{fig4.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
+\caption{Composite linear/nonlinear calculation with the no-slip constraint relaxed at all rational surfaces, and the natural frequencies
+in the absence of the RMP determined by the local  ${\bf E}\times {\bf B}$
 frequency.
+Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
+in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
-frequency. The red, green, blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The red, green, blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig4}
 \end{figure}
 
 \begin{figure}
 \includegraphics[height=6in]{fig5.pdf}
-\caption{Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
+\caption{Composite linear/nonlinear calculation with the no-slip constraint relaxed at all rational surfaces, and the natural frequencies
+in the absence of the RMP determined by the local  ${\bf E}\times {\bf B}$
+frequency. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by the ${\bf E}\times {\bf B}$
-frequency. The blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig5}
 \end{figure}
@@ -626,38 +629,43 @@ The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.92
 
 \begin{figure}
 \includegraphics[height=6in]{fig7.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear theory.
+\caption{Linear calculation with the no-slip constraint relaxed at all rational surfaces, and  the natural frequencies
+in the absence of the RMP determined by linear theory. 
+ Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
+in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear theory. The red, green, blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The red, green, blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig7}
 \end{figure}
 
 \begin{figure}
 \includegraphics[height=6in]{fig8.pdf}
-\caption{Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
+\caption{Linear calculation with the no-slip constraint relaxed at all rational surfaces, and  the natural frequencies
+in the absence of the RMP determined by linear theory. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by linear theory. The blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig8}
 \end{figure}
 
 \begin{figure}
 \includegraphics[height=6in]{fig9.pdf}
-\caption{Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by composite linear/nonlinear theory.
+\caption{Composite linear/nonlinear calculation with the no-slip constraint relaxed at all rational surfaces, and  the natural frequencies
+in the absence of the RMP determined by composite linear/nonlinear theory. Top Panel: $n=3$ natural frequencies, in absence of RMP, as functions of the least-squares linear fit to $q_{95}$ versus time
+in   DIII-D discharge \#145380.
 Bottom Panel:  $n=3$ natural frequencies, in presence of RMP, as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by composite linear/nonlinear theory. The red, green, blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The red, green, blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression windows.} \label{fig9}
 \end{figure}
 
 \begin{figure}
 \includegraphics[height=6in]{fig10.pdf}
-\caption{Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
+\caption{Composite linear/nonlinear calculation with the no-slip constraint relaxed at all rational surfaces, and  the natural frequencies
+in the absence of the RMP determined by composite linear/nonlinear theory. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380, assuming that the natural frequency is determined by composite linear/nonlinear theory. The blue, yellow, cyan, magenta, brown, pink,
+in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
 purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig10}
 \end{figure}
