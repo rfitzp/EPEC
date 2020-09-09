@@ -97,9 +97,9 @@ for (int j = 0; j < N; ++j)
 
 pen s;
 
-fill((2840,-49.5)--(2980,-49.5)--(2980,49.5)--(2840,49.5)--cycle, paleyellow);
-fill((3320,-49.5)--(3560,-49.5)--(3560,49.5)--(3320,49.5)--cycle, paleyellow);
-fill((3880,-49.5)--(4200,-49.5)--(4200,49.5)--(3880,49.5)--cycle, paleyellow);
+fill((2840,-9.95)--(2980,-9.95)--(2980,9.95)--(2840,9.95)--cycle, paleyellow);
+fill((3320,-9.95)--(3560,-9.95)--(3560,9.95)--(3320,9.95)--cycle, paleyellow);
+fill((3880,-9.95)--(4200,-9.95)--(4200,9.95)--(3880,9.95)--cycle, paleyellow);
 
 s = white + dotted + 0.5;
 if (q16.length > 0)
@@ -156,7 +156,7 @@ if (q4.length > 0)
    }
 
 s = dotted + black + 1;
-ylimits (-50., 50., Crop);
+ylimits (-10., 10., Crop);
 yequals (0., s);
 
 pen qq = fontsize (25.);

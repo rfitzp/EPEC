@@ -1,6 +1,6 @@
 import graph;
      
-size (500, 500, IgnoreAspect);
+size (750, 500, IgnoreAspect);
 
 file    in = input ("../../Outputs/Stage6/omega.txt").line();
 real[][] A = in.dimension (0, 0);
@@ -135,38 +135,34 @@ for (int j = 0; j < N; ++j)
 
 pen s;
 
+fill((2840,0.8505)--(2980,0.8505)--(2980,0.9995)--(2840,0.9995)--cycle, paleyellow);
+fill((3320,0.8505)--(3560,0.8505)--(3560,0.9995)--(3320,0.9995)--cycle, paleyellow);
+fill((3880,0.8505)--(4200,0.8505)--(4200,0.9995)--(3880,0.9995)--cycle, paleyellow);
+
 if (t16.length > 0)
    {
      s = palegreen + solid + 0.5;
-     draw (graph (t16, wl16), s);
-     draw (graph (t16, wu16), s);
-     draw (graph (t16, wx16), s);
-     draw (graph (t16, wy16), s);
+     //draw (graph (t16, wl16), s);
+     //draw (graph (t16, wu16), s);
+     //draw (graph (t16, wx16), s);
+     //draw (graph (t16, wy16), s);
    }
 if (t15.length > 0)
    {
      s = grey + solid + 0.5;
-     draw (graph (t15, wl15), s);
-     draw (graph (t15, wu15), s);
-     draw (graph (t15, wx15), s);
-     draw (graph (t15, wy15), s);
+    // draw (graph (t15, wl15), s);
+     //draw (graph (t15, wu15), s);
+     //draw (graph (t15, wx15), s);
+    // draw (graph (t15, wy15), s);
     }	
-if (t14.length > 0)
+if (t11.length > 0)
    {
-     s = orange + solid + 0.5;
-     draw (graph (t14, wl14), s);
-     draw (graph (t14, wu14), s);
-     draw (graph (t14, wx14), s);
-     draw (graph (t14, wy14), s);
+     s = brown + solid + 0.5;
+     draw (graph (t11, wl11), s);
+     draw (graph (t11, wu11), s);
+     draw (graph (t11, wx11), s);
+     draw (graph (t11, wy11), s);
    }	
-if (t13.length > 0)
-   {
-     s = purple + solid + 0.5;
-     draw (graph (t13, wl13), s);
-     draw (graph (t13, wu13), s);
-     draw (graph (t13, wx13), s);
-     draw (graph (t13, wy13), s);
-   }
 if (t12.length > 0)
    {
      s = pink + solid + 0.5;
@@ -175,13 +171,21 @@ if (t12.length > 0)
      draw (graph (t12, wx12), s);
      draw (graph (t12, wy12), s);
   } 	
-if (t11.length > 0)
+if (t13.length > 0)
    {
-     s = brown + solid + 0.5;
-     draw (graph (t11, wl11), s);
-     draw (graph (t11, wu11), s);
-     draw (graph (t11, wx11), s);
-     draw (graph (t11, wy11), s);
+     s = purple + solid + 0.5;
+     draw (graph (t13, wl13), s);
+     draw (graph (t13, wu13), s);
+     draw (graph (t13, wx13), s);
+     draw (graph (t13, wy13), s);
+   }
+if (t14.length > 0)
+   {
+     s = orange + solid + 0.5;
+     draw (graph (t14, wl14), s);
+     draw (graph (t14, wu14), s);
+     draw (graph (t14, wx14), s);
+     draw (graph (t14, wy14), s);
    }	
 if (t10.length > 0)
    {
@@ -241,7 +245,11 @@ if (t4.length > 0)
    }
 
 s = dotted + black + 1;
-ylimits (0.8, 1., Crop);
+ylimits (0.85, 1., Crop);
+
+s = dotted + black + 2;
+yequals (0.925, s);
+
 //yequals (0., s);
 
 pen qq = fontsize (25.);

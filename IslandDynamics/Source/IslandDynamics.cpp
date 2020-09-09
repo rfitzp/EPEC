@@ -14,6 +14,7 @@
 // 1.2 - Major rearrangement of input and output files
 // 1.3 - Added PHASE_FREQ flag
 // 1.4 - Added PHASE_SCALE flag
+// 1.5 - Added PHASE_LIN flag
 
 // ##############################################################
 
@@ -22,7 +23,7 @@
 #include <time.h>
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 4
+#define VERSION_MINOR 5
 
 #define MAXCOMMANDLINELENGTH 500
 
