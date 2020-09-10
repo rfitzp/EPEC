@@ -160,7 +160,7 @@ Equation~(\ref{e5}) is usually coupled with the so-called ``no-slip constraint''
 \begin{equation}\label{e6}
 \frac{d\varphi_s}{dt} = \omega_s.
 \end{equation}
-The reasoning behind the imposition of this constraint is that the plasma is trapped inside the
+The reasoning behind the imposition of this constraint is that  plasma is trapped inside the
 magnetic separatrix of the  island chain that forms in the vicinity of the rational surface,
 which forces the chain to co-rotate with the local plasma flow. However, in reality, the plasma
 is able to diffuse resistively across the separatrix to some extent. Hence, by analogy with Eqs.~(\ref{e3}), (\ref{e4}), and (\ref{e5}), and 
@@ -245,7 +245,7 @@ where
 \hat{\varpi}_k= \hat{\varpi}_{k\,0}+m_k\,{\mit\Delta}\hat{\mit\Omega}_\theta(\hat{r}_k,\hat{t})-n\,{\mit\Delta}\hat{\mit\Omega}_\phi(\hat{r}_k,\hat{t}),
 \end{equation}
 and $\hat{\varpi}_{k\,0}= \varpi_{k\,0}\,\tau_A$, $\hat{\mit\Omega}_\theta= {\mit\Delta}{\mit\Omega}_\theta\,\tau_A$, and $\hat{\mit\Omega}_\phi= {\mit\Delta}{\mit\Omega}_\phi\,\tau_A$. Here, $\varpi_{k\,0}$
-is the so-called ``natural frequency'' at the $k$th rational surface; this quantity is defined as the helical phase velocity of a naturally unstable island chain, resonant at the surface, in the
+is the so-called ``natural frequency''  (in the absence of the RMP) at the $k$th rational surface; this quantity is defined as the helical phase velocity of a naturally unstable island chain, resonant at the surface, in the
 absence of an RMP (or any other island chains). On the other hand,  ${\mit\Delta}{\mit\Omega}_\theta$ and ${\mit\Delta}{\mit\Omega}_\phi$ are the changes in the plasma
 poloidal and toroidal velocity profiles, respectively, induced by the electromagnetic torques that develop in the vicinities of the various rational surfaces in the plasma in response to the RMP.
 Equation~(\ref{e19}) represents
@@ -283,7 +283,7 @@ and $3.33$--$3.48$, respectively. Here, $\overline{q_{95}}$ is least-squares lin
 
 \subsection{Relaxation of No-Slip Constraint}\label{s4a}
 As is discussed in Ref.~\onlinecite{rftor1}, the best agreement between the predictions of the {\tt EPEC} code and experimental observations is
-obtained by assuming that the natural frequencies at the various rational surfaces in the plasma are determined by the
+obtained by assuming that the unperturbed natural frequencies at the various rational surfaces in the plasma are determined by the
 local equilibrium ${\bf E}\times {\bf B}$ frequencies. In other words, 
 \begin{equation}\label{e24}
 \varpi_{k\,0} =-n\,\omega_E({\mit\Psi}_{p\,k}),
@@ -292,7 +292,7 @@ where
 \begin{equation}
 \omega_E({\mit\Psi}_p) = -\frac{d{\mit\Phi}}{d{\mit\Psi}_p}.
 \end{equation}
-Here, ${\mit\Phi}({\mit\Psi}_p)$ is the equilibrium scalar electric potential, ${\mit\Psi}_p$ the equilibrium poloidal magnetic flux (divided by $2\pi$), 
+Here, ${\mit\Phi}({\mit\Psi}_p)$ is the equilibrium scalar electric potential (in the absence of the RMP), ${\mit\Psi}_p$ the equilibrium poloidal magnetic flux (divided by $2\pi$), 
 and ${\mit\Psi}_{p\,k}$  the value of ${\mit\Psi}_p$ at the $k$th rational surface.  Equation~(\ref{e24}) holds at
 every rational surface in all of the simulations discussed in Sect.~\ref{s4a}. 
 
@@ -357,7 +357,7 @@ relaxation of the no-slip constraint clearly weakens the coupling between a give
 for the shielding of driven magnetic reconnection). 
 It can be seen from Fig.~\ref{fig6} that if the no-slip constraint is imposed then the RMP-modified natural frequencies of locked magnetic
 island chains are exactly zero. On the other hand, if the no-slip constraint is relaxed then locked magnetic island chains possess
- small but finite RMP-modified natural frequencies, because the local plasma flow is able to slip through the  chains to some
+ small but finite RMP-modified natural frequencies, because the local plasma flow is able to slip through the  stationary chains to some
  extent. However, the degree of slippage for a fully developed locked magnetic island chain is comparatively small (i.e., no more than
  $0.5\,{\rm krad/s}$), which helps explain
  why the no-slip constraint can be used to accurately predict the dynamics of wide magnetic island chains in tokamaks and reversed field pinches.\cite{rfp} 
@@ -379,7 +379,7 @@ where
 \begin{align}
 \omega_{\ast\,e}({\mit\Psi}_p) &=\frac{T_e}{e}\,\frac{d\ln p_e}{d{\mit\Psi}_p}.
 \end{align}
- Here,  $e$ is the magnitude of the electron charge,  $p_e({\mit\Psi}_p)$  the equilibrium
+ Here,  $e$ is the magnitude of the electron charge,  $p_e({\mit\Psi}_p)$  the equilibrium (i.e., in the absence of the RMP)
 electron pressure, and $T_e({\mit\Psi}_p)$ the equilibrium
 electron temperature.
 
