@@ -1,0 +1,74 @@
+\documentclass{article}[12pt]
+\usepackage{fullpage}
+
+\begin{document}
+\begin{center}
+{\em Modeling $q_{95}$ Windows for the Suppression of Edge Localized Modes by Resonant Magnetic}\\[0.5ex]
+{\em Perturbations in the DIII-D tokamak}\\[1ex]
+by Richard Fitzpatrick\\[1ex]
+{\bf Reply to Referees' Comments}
+\end{center}
+
+First, let me thanks both referees for their careful reading of the paper, and their helpful comments. In response to these 
+comments, I have made the following major changes to the paper.
+\begin{enumerate}
+\item I have taken the material in the Appendix relating to the natural frequency, and have converted it into a
+preliminary section in the main text. The remainder of the Appendix has been discarded, because it was
+not germane to the argument of the paper. The new section allows me to state the first and second aims of
+the paper right next to one another (at the end of the Introduction), and also helps to frame the discussion of the three calculations 
+that are described in the paper. 
+\item I have improved the figures, in that  I have  make the axes labels larger, and
+have added legends to Figs.~4--13. 
+\item I have added the neutral particle profile to Fig.~3.
+\item I have added a summary figure (Fig.~14) that helps to compare and
+contrast the results of the three calculations that are described in the paper.
+\item The new summary figure makes it apparent that the results of the calculation with the linear natural frequency are
+not as bad as I had originally thought. Hence, I have amended the discussion in the paper relating to this calculation.
+\item I have tried to make it clear throughout the paper that, in the absence of the RMP,  the  {\tt EPEC} code uses profile information to reconstruct the natural frequencies
+of tearing modes that are unmodified by RMP-induced electromagnetic torques in the plasma. In the presence of the RMP, the {\tt EPEC} code
+calculates how these frequencies are modified by the torques. 
+ Because it is clear, from a comparison of {\tt EPEC} simulations made with and without the RMP, that
+the natural frequencies are not appreciably modified by the torques, except in those relatively short time intervals
+in which a mode locks to the RMP, it is not unreasonable to use the profiles outside these intervals as inputs to the code. 
+\end{enumerate}
+
+The following gives responses to specific queries from Referee 1 that are not covered by the previous discussion (all reference numbers refer to references in the
+original manuscript):
+\begin{enumerate}
+\item p.~3: I have made it clear that the maximum practical currents that can be driven in RMP coils render
+the coils incapable of locking tearing modes except when the natural frequencies of the modes are
+comparatively small (i.e., 5 krad/s, instead of the usual 100 krad/s, in DIII-D).
+\item p.~4: I have replaced references to the ``guiding-center fluid" by references to the ${\bf E}\times {\bf B}$ velocity.
+\item p.~4: I have add the Lyons (2017) reference. 
+\item p.~5: I have added more asymptotic matching references. 
+\item p.~5: I have made it clear that the observation that the driven widths of non-locked magnetic
+island chains exceed the linear layer widths actually applies to DIII-D discharge 158115, and have argued
+that it is not unreasonable to assume that the same holds true in discharge 145380. I have also explained
+why I think that this state of affairs will persist in ITER.
+\item p.~5: I did mean Ref.~12 instead of 14.
+\item  p.~7: If the density pump-out modifies profiles in a manner that is not associated with the generation of
+electromagnetic torques at the various rational surfaces in the plasma then the pump-out modified 
+profiles would be the appropriate profiles to use as the starting point of the calculation. 
+\item p.~7: {\tt EPEC} does not modify the plasma equilibrium. 
+\item p.~8: I have replaced ``actual widths" by ``shielded widths". 
+\item p.~9: The 1/3 power is correct in Ref.~22. If you read the final section of Ref.~49 you will see that
+when you take into account the fact that parallel transport in high-temperature tokamak plasmas is
+convective, rather than conductive, then the critical island width scales as $\chi_\perp^{1/3}$, rather than
+$\chi_\perp^{1/4}$. I have added an additional reference to make this clear. I have also made it clear that the
+generic $\chi_\perp$ used in Ref.~22 has been replaced by separate diffusivities for momentum, energy, and particles
+in the present paper. 
+\item p.~10: Because the $m=11$ ELM suppression window only differs from the other two windows by the presence of
+a single ELM in the middle of the window, I do not think that it makes sense to make a significant distinction between the $m=11$
+window and the other two. 
+\item p.~12: Unfortunately, I do not know how to run the {\tt EPED} model. 
+\item Fig.~1: The thin grey line seems to be a ``feature'' of the interaction of obsolete versions of Powerpoint and the Mac operating system.
+Because the line does not actually occur in the figure, I cannot delete it. (I also cannot redraw the figure, because I did not generate it in the first place. I think that it is a pretty old figure.) I can only hope that the line does not appear in the published version of the paper. 
+\end{enumerate}
+
+The following gives responses to specific queries from Referee 2 that are not covered by the previous discussion:
+\begin{enumerate}
+\item {\tt EPEC}, like {\tt GPEC}, uses a flux-coordinate system, and is essentially spectral in the poloidal and toroidal directions. Thus,
+{\tt EPEC} cannot treat an X-point exactly, but it can get asymptotically close to an X-point by making the cutoff surface arbitrarily close to
+the LCFS. 
+\end{enumerate}
+\end{document}

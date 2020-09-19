@@ -86,7 +86,10 @@ yequals (8.66666, s);
 
 ylimits (0.,9., Crop);
 
-pen qq = fontsize (25.);
+pen qq = fontsize (35.);
 defaultpen (qq);
 xaxis ("$t({\rm ms})$",           BottomTop, LeftTicks);
 yaxis ("$q$", LeftRight, RightTicks ("$% #.1f$", Step = 1.0, step = 0.1));
+
+pen pp = fontsize(35.);
+label(Label("\textcolor{red}{$q(0)$}, \textcolor{green}{$q(0.95)$}, \textcolor{blue}{$q(0.997)$}, $q(1)$",(3400.,9.5)));

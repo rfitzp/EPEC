@@ -34,10 +34,15 @@ x3.push ( chip_1[j] * fabs(cos(j*pi/2.)) + chip_2[j] * fabs(cos((j+1.)*pi/2.)) )
 
 pen s = red + solid + 4.0;	
 draw(graph(psi,x3),s);
+draw ((0.7,10.5)--(0.8,10.5),s);
+
 s = green + solid + 4.0;	
 draw(graph(psi,x2),s);
+draw ((0.7,9.)--(0.8,9.),s);
+
 s = blue + solid + 4.0;	
 draw(graph(psi,x1),s);
+draw ((0.7,7.5)--(0.8,7.5),s);
 
 s = dotted + black + 1;
 
@@ -49,7 +54,12 @@ s = dotted + black + 2;
 
 xequals (0.925, s);
 
-pen qq = fontsize(30.);
+pen pp = fontsize(30.);
+label(Label("$\chi_\phi$",(0.83,10.5)));
+label(Label("$\chi_E$",(0.83,9.)));
+label(Label("$D_\perp$",(0.83,7.5)));
+
+pen qq = fontsize(50.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
-yaxis("$\chi_\perp ({\rm m^{\,2}/s})$",LeftRight,RightTicks);
+yaxis("$\chi_\phi,\chi_E,D_\perp ({\rm m^{\,2}/s})$",LeftRight,RightTicks);

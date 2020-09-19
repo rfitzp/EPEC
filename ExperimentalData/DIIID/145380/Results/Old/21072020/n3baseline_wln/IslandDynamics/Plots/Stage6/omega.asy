@@ -159,7 +159,7 @@ s = dotted + black + 1;
 ylimits (-50., 50., Crop);
 yequals (0., s);
 
-pen qq = fontsize (25.);
+pen qq = fontsize (50.);
 defaultpen (qq);
 xaxis ("$t ({\rm ms})$", BottomTop, LeftTicks);
 yaxis ("$\varpi({\rm krad/s})$", LeftRight, RightTicks);

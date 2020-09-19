@@ -30,7 +30,7 @@ xequals (0.925, s);
 
 xlimits (0.,1.0,Crop);
 
-pen qq = fontsize(30.);
+pen qq = fontsize(50.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
 yaxis("$\omega_E ({\rm krad/s})$",LeftRight,RightTicks);

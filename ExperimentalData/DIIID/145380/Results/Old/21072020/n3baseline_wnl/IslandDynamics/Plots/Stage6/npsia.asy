@@ -1,6 +1,6 @@
 import graph;
      
-size (750, 500, IgnoreAspect);
+size (750, 510, IgnoreAspect);
 
 file    in = input ("../../Outputs/Stage6/omega.txt").line();
 real[][] A = in.dimension (0, 0);
@@ -259,7 +259,18 @@ yequals (0.925, s);
 
 scale(Linear(-1),Linear);
 
-pen qq = fontsize (25.);
+pen qq = fontsize (50.);
 defaultpen (qq);
-xaxis ("$\overline{q_{95}}$", BottomTop, LeftTicks);
+xaxis ("$\overline{q_{95}}$", BottomTop, LeftTicks("$% #.1f$",Step=0.1));
 yaxis ("${\mit\Psi}_N$", LeftRight, RightTicks);
+
+pen pp = fontsize(40.);
+defaultpen (pp);
+label(Label("m = "),  (-3.98-0.05+0.16, 1.006),  black);
+label(Label("8,"),    (-3.85-0.05+0.1-0.03+0.01, 1.006),  yellow);
+label(Label("9,"),    (-3.82-0.05+0.1-0.03+0.02, 1.006),  cyan);
+label(Label("10,"),   (-3.79-0.05+0.1-0.03+0.03, 1.006),  magenta);
+label(Label("11,"),   (-3.75-0.05+0.1-0.03+0.04, 1.006),  brown);
+label(Label("12,"),   (-3.71-0.05+0.1-0.03+0.05, 1.006),  pink);
+label(Label("13,"),   (-3.67-0.05+0.1-0.03+0.06, 1.006),  purple);
+label(Label("14\phantom{,}"),    (-3.63-0.05+0.1-0.03+0.07, 1.0056),  orange);

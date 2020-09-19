@@ -12,7 +12,7 @@ real[] g  = A[5];
 pen s = solid + 1.5;
 draw (graph (p, g), s, marker(scale(1.5mm)*polygon(4)));
 
-pen qq = fontsize (30.);
+pen qq = fontsize (50.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$", BottomTop, LeftTicks);
 yaxis("$q$",      LeftRight, RightTicks);

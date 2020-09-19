@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 double Interpolate        (int I, double* X, double* Y, double x, int order);
 double InterpolateCubic   (double* X, double* Y, double x, int i0, int i1, int i2, int order);
@@ -13,15 +14,21 @@ int main ()
   double c;
 
   double* psi = new double [I];
+  double* r   = new double [I];
   double* ne  = new double [I];
   double* te  = new double [I];
   double* ti  = new double [I];
   double* ni  = new double [I];
   double* we  = new double [I];
+  double* nn  = new double [I];
+
+  double nna = 3.e17;
+  double ln  = 1.2e-2;
+  double a   = 0.855;
 
   for (int i = 0; i < I; i++)
     fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-	    &psi[i], &c, &ne[i], &c, &te[i], &c, &c, &c, &ti[i], &c, &ni[i], &c, &c, &c, &we[i], &c,
+	    &psi[i], &r[i], &ne[i], &c, &te[i], &c, &c, &c, &ti[i], &c, &ni[i], &c, &c, &c, &we[i], &c,
 	    &c, &c, &c, &c);
   
   fclose (file);
@@ -29,8 +36,12 @@ int main ()
   printf ("\nProfile data:\n\n");
   
   for (int i = 0; i < I; i++)
-    printf ("PsiN = %11.4e  n_e = %11.4e  T_e = %11.4e  T_i = %11.4e  n_I = %11.4e  w_E = %11.4e\n",
-	    psi[i], ne[i], te[i], ti[i], ni[i], we[i]);
+    {
+      nn [i] = nna * exp ((r[i]-1.)*a/ln) /1.e19;
+
+      printf ("PsiN = %11.4e  n_e = %11.4e  T_e = %11.4e  T_i = %11.4e  n_I = %11.4e  w_E = %11.4e  n_n = %11.4e\n",
+	      psi[i], ne[i], te[i], ti[i], ni[i], we[i], nn[i]);        
+    }
 
   file = fopen ("145380_2500_uncertainty.txt", "r");
 
@@ -92,9 +103,9 @@ int main ()
 
   file = fopen ("profiles.out", "w");
   for (int i = 0; i < I; i++)
-    fprintf (file, "%e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e\n",
+    fprintf (file, "%e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e %e\n",
 	     psi[i], ne_1[i], ne[i], ne_2[i], te_1[i], te[i], te_2[i], ti_1[i], ti[i], ti_2[i],
-	     ni_1[i], ni[i], ni_2[i], we_1[i], we[i], we_2[i]);
+	     ni_1[i], ni[i], ni_2[i], we_1[i], we[i], we_2[i], nn[i]);
   fclose (file);
 
   delete[] psi;  delete[] ne;  delete[] te;  delete[] ti;  delete[] ni;  delete[] we;
