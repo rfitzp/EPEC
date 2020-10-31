@@ -8,8 +8,8 @@ A          = transpose (A);
      
 real[] m   = A[0];
 real[] r   = A[1];
-real[] wnl = A[2];
-real[] tt  = A[4];
+real[] wnl = A[3];
+real[] tt  = A[5];
 
 int N = m.length;
 real[] q4,  i4;

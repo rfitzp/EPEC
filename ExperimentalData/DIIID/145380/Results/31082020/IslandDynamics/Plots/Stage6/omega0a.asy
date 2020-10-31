@@ -1,6 +1,6 @@
 import graph;
      
-size (750, 500, IgnoreAspect);
+size (750, 510, IgnoreAspect);
 
 file    in = input ("../../Outputs/Stage6/omega0.txt").line();
 real[][] A = in.dimension (0, 0);
@@ -167,7 +167,22 @@ yequals (0., s);
 
 scale(Linear(-1),Linear);
 
-pen qq = fontsize (25.);
+pen qq = fontsize (50.);
 defaultpen (qq);
-xaxis ("$\overline{q_{95}}$", BottomTop, LeftTicks);
+xaxis ("$\overline{q_{95}}$", BottomTop, LeftTicks("$% #.1f$",Step=0.1));
 yaxis ("$\varpi_0({\rm krad/s})$", LeftRight, RightTicks);
+
+pen pp = fontsize(40.);
+defaultpen (pp);
+label(Label("m = "),  (-3.98-0.05+0.1, 55),  black);
+label(Label("5,"),    (-3.94-0.05+0.1+0.01, 55),  red);
+label(Label("6,"),    (-3.91-0.05+0.1+0.02, 55),  green);
+label(Label("7,"),    (-3.88-0.05+0.1+0.03, 55),  blue);
+label(Label("8,"),    (-3.85-0.05+0.1+0.04, 55),  yellow);
+label(Label("9,"),    (-3.82-0.05+0.1+0.05, 55),  cyan);
+label(Label("10,"),   (-3.79-0.05+0.1+0.06, 55),  magenta);
+label(Label("11,"),   (-3.75-0.05+0.1+0.07, 55),  brown);
+label(Label("12,"),   (-3.71-0.05+0.1+0.08, 55),  pink);
+label(Label("13,"),   (-3.67-0.05+0.1+0.09, 55),  purple);
+label(Label("14\phantom{,}"),    (-3.63-0.05+0.1+0.1, 55),  orange);
+

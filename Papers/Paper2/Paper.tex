@@ -33,7 +33,7 @@ employed to compensate error fields (i.e., accidentally produced RMPs), and, the
 locked modes, in a wide variety of different types of tokamak discharge. \cite{error1,error2,error3} RMPs have also been  successfully used to either  
 mitigate or completely suppress  edge-localized-modes (ELMs) in H-mode tokamak discharges.\cite{elm1,elm2,elm3,elm4,elm5,elm6}
 
-``Asymptotic matching'' is by far the most efficient method for modeling the response of a tokamak plasma to an RMP.\cite{fkr,rfa, am1,am2,am3} 
+``Asymptotic matching'' is by far the most efficient method for modeling the response of a tokamak plasma to an RMP.\cite{fkr,coppi,ruth,ara,pletz,rfa, am1,tokuda,brennan,am2,am3} 
 According to the asymptotic matching approach, the response of the plasma to the applied RMP is governed by a combination of flux-freezing and
 perturbed force balance---this combination is usually referred to as ``marginally-stable ideal-magnetohydrodynamics (MHD)"---everywhere in the plasma apart from a number of relatively narrow (in the radial direction) regions in which the applied
 perturbation resonates with the equilibrium magnetic field. Magnetic reconnection can take place within the resonant regions to
@@ -124,7 +124,7 @@ where $\delta_s$ is the linear layer width, $\tau_R=\mu_0\,r_s^{\,2}\,\sigma(r_s
 \omega_s (t)=m\,{\mit\Omega}_\theta(r_s,t)-n\,{\mit\Omega}_\phi(r_s,t).
 \end{equation}
 Here, $\sigma(r)$, ${\mit\Omega}_\theta(r,t)$, and ${\mit\Omega}_\phi(r,t)$ are the 
-plasma conductivity, poloidal angular velocity, and toroidal angular velocity profiles, respectively. 
+plasma electrical conductivity, poloidal angular velocity, and toroidal angular velocity profiles, respectively. 
 Note that, in this paper, we are assuming that the constant-$\psi$ approximation\,\cite{fkr} holds at the rational surface. (It is demonstrated in
 Ref.~\onlinecite{rf1} that the appropriate linear response regime for an RMP resonant in the pedestal of a typical DIII-D H-mode discharge
 is the so-called  ``first semi-collisional regime'', which is indeed a constant-$\psi$ response regime. Moreover, if the appropriate linear response regime
@@ -316,8 +316,8 @@ plasma flow; in other words, they are the  widths of the island chains that woul
 the driven magnetic island chains extend over most of the pedestal, implying a very significant degradation in pedestal energy and particle confinement due to the
 expected flattening of the density and temperature profiles across the chains.\cite{flat} Moreover, the driven island chains at the
 bottom of the pedestal overlap, implying that the magnetic field in this region is rendered stochastic. The lower panel
-of Fig.~\ref{fig3} shows the actual widths of the various magnetic island chains driven by the applied $n=3$ RMP as functions of time. It is apparent 
-that the true island widths are generally much smaller than the vacuum island widths, as a consequence of the shielding of driven magnetic
+of Fig.~\ref{fig3} shows the predicted widths of the various magnetic island chains driven by the applied $n=3$ RMP as functions of time. It is apparent 
+that the predicted island widths are generally much smaller than the vacuum island widths, as a consequence of the shielding of driven magnetic
 reconnection due to plasma flow. However, the shielding breaks down at various rational surfaces when the associated natural frequency is zero (see the lower panel of
 Fig.~\ref{fig3}). In this situation, the driven island width is similar to the vacuum island width.
 
@@ -406,7 +406,7 @@ Furthermore, $L_{00}^{ii}({\mit\Psi}_p)$, $L_{01}^{ii}({\mit\Psi}_p)$,  $L_{00}^
 in Sect.~B of Ref.~\onlinecite{rftor}. 
 
 Finally, the best agreement between theory and experiment is obtained by assuming that, in the absence of the RMP, the 
- natural frequency of the tearing mode resonant at the $k$th rational surface is given by\,\cite{rftor1}
+ natural frequency of the tearing mode resonant at the $k$th rational surface is given by\,\cite{rftor1,heyn}
 \begin{equation}\label{eeb}
 \varpi_{k\,0} = \varpi_{{\rm eb}\,k}\equiv -n\,(\omega_E)_{{\mit\Psi}_{p\,k}}.
 \end{equation}
@@ -497,15 +497,26 @@ Phys.\ Rev.\ Lett.\  {\bf 117}, 115001 (2016).
 
 \bibitem{fkr} H.P.~Furth,  J.~Killeen, and M.N.~Rosenbluth,  Phys.\ Fluids {\bf 6}, 459 (1963).
 
+\bibitem{coppi} B.~Coppi, J.M.~Greene, and J.L.~Johnson, Nucl.\ Fusion {\bf 6}, 101 (1966).
+
+\bibitem{ruth} P.H.~Rutherford,  Phys.\ Fluids  {\bf 16}, 1903 (1973).
+
+\bibitem{ara} G.~Ara,  B.~Basu, B.~Coppi, G.~Laval, M.N.~Rosenbluth, and B.V.~Waddell, Ann.\ Phys.\ (N.Y.) {\bf 112}, 443 (1978). 
+
+\bibitem{pletz} A.~Pletzer, and R.L.~Dewar, J.\ Plasma Physics {\bf 45}, 427 (1991).
+
 \bibitem{rfa} R.~Fitzpatrick, Nucl.\ Fusion {\bf 33}, 1049 (1993).
 
 \bibitem{am1} R.~Fitzpatrick, R.J.~Hastie, T.J.~Martin, and C.M.~Roach, Nucl.\ Fusion {\bf 33}, 1533 (1993).
 
+\bibitem{tokuda} S.~Tokuda, Nucl.\ Fusion {\bf 41}, 1037 (2001).
+
+\bibitem{brennan} D.P.~Brennan, R.J.~La Haye, A.D.~Turnbull, M.S.~Chu, T.H.~Jensen, L.L.~Lao, T.C.~Luce, P.A.~Politzer, and E.J.~Strait,
+Phys.\ Plasmas {\bf 10}, 1643 (2003).
+
 \bibitem{am2} A.H.~Glasser, Z.R.~Wang, and J.-K.~Park, Phys.\ Plasmas {\bf 23}, 112506 (2016).
 
 \bibitem{am3} R.~Fitzpatrick, Phys.\ Plasmas {\bf 24}, 072506 (2017). 
-
-\bibitem{ruth} P.H.~Rutherford,  Phys.\ Fluids  {\bf 16}, 1903 (1973).
 
 \bibitem{ruth1} P.H.~Rutherford, in  {\it Basic Physical Processes of
 Toroidal Fusion Plasmas}, Proc.\ Course and Workshop, Varenna, 1985. (Commission of the European Communities, Brussels, 1985.) Vol.~2, p.~531.
@@ -516,8 +527,7 @@ Toroidal Fusion Plasmas}, Proc.\ Course and Workshop, Varenna, 1985. (Commission
 
 \bibitem{rftor} R.~Fitzpatrick, and A.O.~Nelson, Phys.\ Plasmas {\bf 27}, 072501 (2020).
 
-\bibitem{rftor1} R.~Fitzpatrick,  ``Modeling $q_{95}$ Windows for the Suppression of Edge Localized
-Modes by Resonant Magnetic Perturbations in the DIII-D Tokamak", submitted to Physics of Plasmas (2020).
+\bibitem{rftor1} R.~Fitzpatrick,  Phys.\ Plasmas {\bf 27}, 102511 (2020).
 
 \bibitem{rfb} R.~Fitzpatrick, Phys.\ Plasmas {\bf 5}, 3325 (1998).
 
@@ -552,8 +562,6 @@ Proc.\ 30th EPS Conf.\ on Controlled Fusion and Plasma Physics. (St.\ Petersburg
 
 \bibitem{pulse} R.~Fitzpatrick, Phys.\ Plasmas {\bf 25}, 112505 (2018).
 
-\bibitem{ara} G.~Ara,  B.~Basu, B.~Coppi, G.~Laval, M.N.~Rosenbluth, and B.V.~Waddell, Ann.\ Phys.\ (N.Y.) {\bf 112}, 443 (1978). 
-
 \bibitem{lin1} M.~B\'{e}coulet, F.~Orain, P.~Maget, N.~Mellet, X.~Garbet, E.~Nardon, G.T.A.~Huysmans, T.~Caspar, A.~Loarte,  P.~Cayna, {\em et al.}, 
 Nucl.\ Fusion {\bf 52}, 054003  (2012).
 
@@ -561,6 +569,8 @@ Nucl.\ Fusion {\bf 52}, 054003  (2012).
 
 \bibitem{lin3} F.~Orain, M.~B\'{e}coulet, G.~Dif-Pradalier, G.T.A.~Huysmans, S.~Pamela,   E.~Nardon, C.~Passeron, G.~Latu, V.~Grandgirard, A.~Fil, {\em et al.}, 
 Phys.\ Plasmas {\bf 20}, 102510 (2013). 
+
+\bibitem{heyn} M.F.~Heyn, I.B.~Ivanov, S.V.~Kasilov, W.~Kernbichler, I.~Joseph, R.A.~Moyer,  and A.M.~Runov, Nucl.\ Fusion {\bf 48}, 024005 (2008). 
 
 \end{thebibliography}
 
@@ -593,8 +603,8 @@ in the absence of the RMP determined by the local  ${\bf E}\times {\bf B}$
 frequency. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
+in   DIII-D discharge \#145380. The yellow, cyan, magenta, brown, pink,
+purple, and orange  areas correspond to $m=8$, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig3}
 \end{figure}
 
@@ -617,8 +627,8 @@ in the absence of the RMP determined by the local  ${\bf E}\times {\bf B}$
 frequency. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
+in   DIII-D discharge \#145380. The yellow, cyan, magenta, brown, pink,
+purple, and orange  areas correspond to $m=8$, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig5}
 \end{figure}
 
@@ -644,8 +654,8 @@ purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 
 in the absence of the RMP determined by linear theory. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
+in   DIII-D discharge \#145380. The yellow, cyan, magenta, brown, pink,
+purple, and orange  areas correspond to $m=8$, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig8}
 \end{figure}
 
@@ -665,8 +675,8 @@ purple, and orange  curves correspond to $m=5$, 6, 7, 8, 9, 10, 11, 12, 13, and 
 in the absence of the RMP determined by composite linear/nonlinear theory. Top Panel: Full  $n=3$ vacuum island widths as functions of the least-squares linear fit to $q_{95}$ versus time 
 in   DIII-D discharge \#145380.
 Bottom Panel:  Full $n=3$ island widths as functions of time
-in   DIII-D discharge \#145380. The blue, yellow, cyan, magenta, brown, pink,
-purple, and orange  areas correspond to $m=7$, 8, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
+in   DIII-D discharge \#145380. The yellow, cyan, magenta, brown, pink,
+purple, and orange  areas correspond to $m=8$, 9, 10, 11, 12, 13, and 14, respectively. The yellow vertical bands indicate the ELM-suppression/mitigation windows. 
 The horizontal dotted lines indicate the top of the pedestal, ${\mit\Psi}_N=0.925$.} \label{fig10}
 \end{figure}
 \end{document}

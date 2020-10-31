@@ -252,7 +252,7 @@ yequals (0.925, s);
 
 //yequals (0., s);
 
-pen qq = fontsize (25.);
+pen qq = fontsize (50.);
 defaultpen (qq);
 xaxis ("$t ({\rm ms})$", BottomTop, LeftTicks);
 yaxis ("${\mit\Psi}_N$", LeftRight, RightTicks);
