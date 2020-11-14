@@ -59,7 +59,7 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int
   // Read discharge parameters
   Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME);
   
-  // Read equilibirum data
+  // Read equilibrium data
   Read_Equilibrium ();
 
   // Read profile data

@@ -1,9 +1,9 @@
-Git Hash     = b2dae8dd4ac8320bbb80d86f666365792b0065a6
-Compile time = 2020-06-20 20:14:49 UTC
+Git Hash     = f4a4bfcaca9e431bba298d4f334671ec378f4f64
+Compile time = 2020-11-14 20:00:49 UTC
 Git Branch   = master
 
 Input Parameters (from Inputs/Flux.in and command line options):
 NPSI =  512         NTHETA =  513         NNC  =  20
 Q95  =  4.5000e+00  QFLG   =  0
-NTOR =  3           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
+NTOR =  2           MMIN   =  4           MMAX =  30          PSILIM =  9.9700e-01  TIME =  0.0000e+00  INTG =  0
 H0   =  1.0000e-06  ACC    =  1.0000e-14  ETA  =  1.0000e-08      DR =  1.0000e-02

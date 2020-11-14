@@ -21,12 +21,12 @@
 // #######################################
 void Flux::CalcQGP ()
 {
-  gsl_odeiv_system           sys1 = {pRhs1, NULL, 3, this};
+  gsl_odeiv_system           sys1 = {pRhs1, NULL, 6, this};
   const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 3);
+  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 6);
   gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (3);
-  double*                    y    = new double [3]; 
+  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (6);
+  double*                    y    = new double [6]; 
   double                     r, h;
   
   for (int j = 1; j < NPSI-1; j++)
@@ -36,6 +36,21 @@ void Flux::CalcQGP ()
       y[0] = RP[j];
       y[1] = ZPTS[jc];
       y[2] = 0.;
+      y[3] = 0.;
+      y[4] = 0.;
+      y[5] = 0.;
+
+      while (r < M_PI)
+	{
+	  int status = gsl_odeiv_evolve_apply (e, c, sss, &sys1, &r, M_PI, &h, y);
+
+	  if (status != GSL_SUCCESS)
+	    {
+	      printf ("Profile: status != GSL_SUCCESS\n");
+	      exit (1);
+	    }
+	}
+      RP1[j] = y[0];
 
       while (r < 2.*M_PI)
 	{
@@ -50,6 +65,7 @@ void Flux::CalcQGP ()
       
       QGP[j] = y[2];
       QP [j] = QGP[j]*GP[j];
+      B2v[j] = (GP[j]*GP[j] * y[3] + Psic*Psic * y[4]) /y[5];
 
       if (j%50 == 0)
 	printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
@@ -66,12 +82,12 @@ void Flux::CalcQGP ()
 // ################################################
 void Flux::CheckQP ()
 {
-  gsl_odeiv_system           sys1 = {pRhs1, NULL, 3, this};
+  gsl_odeiv_system           sys1 = {pRhs1, NULL, 6, this};
   const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 3);
+  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 6);
   gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (3);
-  double*                    y    = new double [3]; 
+  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (6);
+  double*                    y    = new double [6]; 
   double                     r, h;
   
   for (int j = 0; j < nres; j++)
@@ -81,6 +97,9 @@ void Flux::CheckQP ()
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
       y[2] = 0.;
+      y[3] = 0.;
+      y[4] = 0.;
+      y[5] = 0.;
 
       while (r < 2.*M_PI)
 	{
@@ -290,6 +309,9 @@ int Flux::Rhs1 (double r, const double y[], double dydr[], void*)
   // y[0] - R     
   // y[1] - Z
   // y[2] - q/g
+  // y[3] - upper B^2 integral
+  // y[4] - upper B^2 integral
+  // y[5] - lower B^2 integral
   
   double PsiR = GetPsiR (y[0], y[1]);
   double PsiZ = GetPsiZ (y[0], y[1]);
@@ -300,6 +322,9 @@ int Flux::Rhs1 (double r, const double y[], double dydr[], void*)
   dydr[0] = - PsiZ * fac;
   dydr[1] = + PsiR * fac;
   dydr[2] = (1./2./M_PI /fabs(Psic)) * fac /y[0];
+  dydr[3] = fac /y[0];
+  dydr[4] = (PsiR*PsiR + PsiZ*PsiZ) * fac /y[0];
+  dydr[5] = fac * y[0];
     
   return GSL_SUCCESS;
 }

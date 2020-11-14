@@ -66,8 +66,8 @@ void Flux::Stage2 ()
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
 	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e\n",
-	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1), GP[j], RP1[j], Bp1[j], B2v[j]);
   for (int i = 0; i < nres; i++)
     fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i]);
@@ -138,7 +138,9 @@ void Flux::Stage2 ()
 
   delete[] P;   delete[] RP; delete[] rP;  delete[] GP;
   delete[] QGP; delete[] QP; delete[] PP;  delete[] GPP;
-  delete[] PPP; delete[] S;  delete[] QX;
+  delete[] PPP; delete[] S;  delete[] QX;  delete[] RP1;
+  delete[] B2v; delete[] Bt; delete[] Bt1; delete[] Bp;
+  delete[] Bp1;
 
   delete[] mres; delete[] qres; delete[] rres;  delete[] sres;
   delete[] gres; delete[] Rres; delete[] gmres; delete[] fcres;
@@ -450,6 +452,18 @@ void Flux::Stage2ReadData ()
     /(PSIARRAY (ia, jc) - PSIARRAY (ia-1, jc));
 
   L = ic-ia+2;  // Number of points in Psi (R, Zaxis) array
+
+  // ..........................................................................
+  // Find closest equilibrium grid-point to outer magnetic boundary on midplane
+  // ..........................................................................
+  int ia1 = ic;
+  for (int i = ic; i < NRPTS; i++)
+    {
+      if (PSIARRAY (i, jc) > 0.)
+	ia1++;
+    }
+  Rbound1 = (RPTS[ia1+1]*PSIARRAY (ia1, jc) - RPTS[ia1]*PSIARRAY (ia1+1, jc))
+    /(PSIARRAY (ia1, jc) - PSIARRAY (ia1+1, jc));
 }
 
 // ######################################
@@ -486,10 +500,16 @@ void Flux::Stage2CalcQ ()
   // Set up Stage2 Psi grid
   // ......................
   P   = new double[NPSI];  // Psi array
-  RP  = new double[NPSI];  // R(Psi)
+  RP  = new double[NPSI];  // R(Psi) on inboard midplane
+  RP1 = new double[NPSI];  // R(Psi) on outboard midplane
+  Bt  = new double[NPSI];  // B_toroidal(Psi) on inboard midplane
+  Bt1 = new double[NPSI];  // B_toroidal(Psi) on outboard midplane
+  Bp  = new double[NPSI];  // B_poloidal(Psi) on inboard midplane
+  Bp1 = new double[NPSI];  // B_poloidal(Psi) on outboard midplane
+  B2v = new double[NPSI];  // <B^2>(Psi)
   rP  = new double[NPSI];  // r(Psi)
   GP  = new double[NPSI];  // g(Psi)
-  QGP = new double[NPSI];  // q(psi)/g(psi) 
+  QGP = new double[NPSI];  // q(Psi)/g(Psi) 
   QP  = new double[NPSI];  // q(Psi)
   PP  = new double[NPSI];  // P(Psi)
   GPP = new double[NPSI];  // dg/dPsi
@@ -530,10 +550,33 @@ void Flux::Stage2CalcQ ()
   // ......................................
   printf ("Calculating q(Psi)/g(Psi) profile:\n");
   CalcQGP ();
+  RP1[0]      = Raxis;
+  RP1[NPSI-1] = Rbound1;
   QGP[0]      = Q[0] /G[0];
   QP[0]       = Q[0];
   QGP[NPSI-1] = Q[NRPTS-1] /G[NRPTS-1];
   QP[NPSI-1]  = Q[NRPTS-1];
+  B2v[0]      = GP[0]*GP[0] /Raxis/Raxis;
+  B2v[NPSI-1] = 2.*B2v[NPSI-2] - B2v[NPSI-3];
+
+  // ...........................................
+  // Calculate B_tor, B_pol profiles on midplane
+  // ...........................................
+  for (int j = 0; j < NPSI; j++)
+    {
+      Bt[j]  = GP[j] /RP[j];
+      Bt1[j] = GP[j] /RP1[j];
+
+      double PsiR = GetPsiR (RP[j], Zaxis);
+      double PsiZ = GetPsiZ (RP[j], Zaxis);
+
+      Bp[j] = fabs(Psic) * sqrt (PsiR*PsiR + PsiZ*PsiZ) /RP[j];
+
+      PsiR = GetPsiR (RP1[j], Zaxis);
+      PsiZ = GetPsiZ (RP1[j], Zaxis);
+
+      Bp1[j] = fabs(Psic) * sqrt (PsiR*PsiR + PsiZ*PsiZ) /RP1[j];
+    }
 
   // .............................
   // Calculate Stage2 r(P) profile
@@ -605,8 +648,8 @@ void Flux::Stage2CalcQ ()
   // ......................
   file = OpenFilew ((char*) "Outputs/Stage2/qr.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
-	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j]);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
+	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], B2v[j]);
   fclose (file);
 }
 

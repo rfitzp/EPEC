@@ -541,6 +541,23 @@ where
 F = \frac{(R_{\rm axis}-R)^{\,2} + (Z-Z_{\rm axis})^{\,2}}{-(Z-Z_{\rm axis})\,{\mit\Psi}_Z + (R_{\rm axis}-R)\,{\mit\Psi}_R}.
 \end{equation}
 
+Note that
+\begin{equation}
+\frac{d\theta}{d\zeta} = \frac{g}{q\,|\psi_c|}\,\frac{F}{R}.
+\end{equation}
+Hence, [from~(\ref{e140})]
+\begin{equation}
+\langle A\rangle = \left.\oint R^{\,2}\,A\,d\theta\right/\oint R^{\,2}\,d\theta = \left.\oint F\,R\,A\,d\zeta\right/\oint F\,R\,d\zeta.
+\end{equation}
+In particular, because
+\begin{equation}
+B^{\,2} = \frac{\psi_c^{\,2}\,|\nabla{\mit\Psi}|^{\,2}}{R^{\,2}} + \frac{g^{\,2}}{R^{\,2}}
+\end{equation}
+it follows that
+\begin{equation}
+\langle B^{\,2}\rangle = \left.\oint \frac{F}{R}\left[\psi_c^{\,2}\left({\mit\Psi}_R^{\,2}+ {\mit\Psi}_Z^{\,2}\right) + g^{\,2}\right]d\zeta\right/\oint F\,R\,d\zeta.
+\end{equation}
+
 It is helpful to define the length-like flux-surface coordinate $r$, according to
 \begin{equation}
 \nabla r\times \nabla\theta\cdot\nabla \phi = \frac{1}{r\,R^{\,2}}.
@@ -697,7 +714,7 @@ properties:
 \langle {\bf B}\cdot\nabla A\rangle &= 0.
 \end{align}
 It follows that
-\begin{equation}
+\begin{equation}\label{e140}
 \langle A\rangle =\left.\oint R^{\,2}\,A\,\frac{d\theta}{2\pi}\right/\oint R^{\,2}\,\frac{d\theta}{2\pi}=\left.\oint
 \frac{A}{B}\,\frac{d{\mit\Theta}}{2\pi}\right/\oint
 \frac{1}{B}\,\frac{d{\mit\Theta}}{2\pi}.
@@ -711,7 +728,7 @@ I_2 &=\oint B\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
 I_3 &=\oint\left(\frac{\partial B}{\partial{\mit\Theta}}\right)^2\frac{1}{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
 I_{4,k}&= \sqrt{\frac{2}{k}}\oint \frac{\sin(k\,{\mit\Theta})}{B^{\,2}}\,\frac{\partial B}{\partial{\mit\Theta}}\,\frac{d{\mit\Theta}}{2\pi}=\oint\frac{\sqrt{2\,k}\,\cos(k\,{\mit\Theta})}{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
 I_{5,k} &= \sqrt{\frac{2}{k}}\oint \frac{\sin(k\,{\mit\Theta})}{B^{\,3}}\,\frac{\partial B}{\partial{\mit\Theta}}\,\frac{d{\mit\Theta}}{2\pi}=\oint\frac{\sqrt{2\,k}\,\cos(k\,{\mit\Theta})}{2\,B^{\,2}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
-I_6(\lambda) &=\oint \frac{\sqrt{1-\lambda\,B/B_{\rm max}}}{B}\,\frac{d{\mit\Theta}}{2\pi}
+I_6(\lambda) &=\oint \frac{\sqrt{1-\lambda\,B/B_{\rm max}}}{B}\,\frac{d{\mit\Theta}}{2\pi}.
 \end{align}
 It follows that
 \begin{align}

@@ -44,7 +44,7 @@ u_{\theta\,j}^{\,a} = \frac{u_{\parallel\,j}^{\,a}}{B} - \frac{V_{\psi\,j}^{\,a}
 \end{equation}
 where
 \begin{align}
-u_{\theta\,j}^{\,a} &= \frac{\vec{u}_j^{\,a}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta},\\[0.5ex]
+u_{\theta\,j}^{\,a}(\psi) &= \frac{\vec{u}_j^{\,a}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta},\\[0.5ex]
 V_{\psi\,0}^{\,a}(\psi) &=-\left( \frac{\vec{u}_{\perp\,0}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta}\right)B^{\,2}=
 - \frac{I\,T_a}{e_a}\left(\frac{d \ln p_a}{d\psi}+\frac{e_a}{T_a}\,\frac{d{\mit\Phi}}{d\psi}\right),\\[0.5ex]
 V_{\psi\,1}^{\,a}(\psi) &= -\left(\frac{\vec{u}_{\perp\,1}\cdot\vec{\nabla}\theta}{\vec{B}\cdot\vec{\nabla}\theta}\right)B^{\,2}=
@@ -516,16 +516,16 @@ where we have made use of the fact that $n_i\,e_i+n_I\,e_I+n_e\,e_e=0$.
 \section{Velocities and Current Density}
 Let
 \begin{align}
-\omega_E &=-\frac{d{\mit\Phi}}{d\psi},\\[0.5ex]
-\omega_{\ast\,a} &= -\frac{T_a}{e_a}\,\frac{d\ln p_a}{d\psi},\\[0.5ex]
-\eta_a &= \frac{d\ln T_a}{d\ln n_a}.
+\omega_E(\psi) &=-\frac{d{\mit\Phi}}{d\psi},\\[0.5ex]
+\omega_{\ast\,a}(\psi) &= -\frac{T_a}{e_a}\,\frac{d\ln p_a}{d\psi},\\[0.5ex]
+\eta_a(\psi) &= \frac{d\ln T_a}{d\ln n_a}.
 \end{align}
 It follows that
 \begin{align}
-V_{\ast\,0}^{\,a}&= I\,\omega_{\ast\,a},\\[0.5ex]
-V_{\ast\,1}^{\,a} &=-I\left(\frac{\eta_a}{1+\eta_a}\right)\omega_{\ast\,a},\\[0.5ex]
-V_{E\,0}&= I\,\omega_{E},\\[0.5ex]
-V_{E\,1} &=0.
+V_{\ast\,0}^{\,a}(\psi)&= I\,\omega_{\ast\,a},\\[0.5ex]
+V_{\ast\,1}^{\,a}(\psi) &=-I\left(\frac{\eta_a}{1+\eta_a}\right)\omega_{\ast\,a},\\[0.5ex]
+V_{E\,0}(\psi)&= I\,\omega_{E},\\[0.5ex]
+V_{E\,1}(\psi) &=0.
 \end{align}
 
 We have $e_e=-e$, $e_i=e$, $e_I= Z_I\,e$. 
@@ -533,17 +533,28 @@ Thus,
 \begin{align}
 \frac{V_\theta^{\,i}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -L^{\,ii}_{00}\,\omega_{\ast\,i}-
 L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]\phantom{=}
-&+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
+&\phantom{=}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
 \frac{V_\theta^{\,I}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -L^{\,II}_{00}\,\omega_{\ast\,I}-
 L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\nonumber\\[0.5ex]\phantom{=}
-&+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i},\\[0.5ex]
+&\phantom{=}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i},\\[0.5ex]
 \frac{\langle V_\parallel^{\,i}\,B\rangle}{I} &=\omega_E +\omega_{\ast\,i}-L^{\,ii}_{00}\,\omega_{\ast\,i}-
 L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]\phantom{=}
-&+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
+&\phantom{=}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
 \frac{\langle V_\parallel^{\,I} B\rangle}{I} &= \omega_E +\omega_{\ast\,I}-L^{\,II}_{00}\,\omega_{\ast\,I}-
 L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\nonumber\\[0.5ex]\phantom{=}
-&+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
+&\phantom{=}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
 \end{align}
+
+Also,
+\begin{align}
+\frac{V_\phi^{\,i}}{R}&=\omega_E +\omega_{\ast\,i} +\frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle}\left[-L^{\,ii}_{00}\,\omega_{\ast\,i}-
+L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\right.\nonumber\\[0.5ex]\phantom{=}
+&\left.\phantom{=}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\right],\\[0.5ex]
+\frac{V_\phi^{\,I}}{R}&= \omega_E +\omega_{\ast\,I}+\frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle}\left[-L^{\,II}_{00}\,\omega_{\ast\,I}-
+L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\right.\nonumber\\[0.5ex]\phantom{=}
+&\left.\phantom{=}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\right].
+\end{align}
+
 
 Can write
 \begin{equation}

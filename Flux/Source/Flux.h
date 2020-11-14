@@ -38,6 +38,7 @@
 // 1.2 - Improved gFile indexing
 // 1.3 - Major rearrangement of input and output files
 // 1.4 - Added linear interpolation
+// 1.5 - Added RP1, Bt, Bt1, Bp., Bp1, and B2v
 
 // ############################################################################
 
@@ -45,7 +46,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 4
+#define VERSION_MINOR 5
 
 #include <stdio.h>
 #include <math.h>
@@ -143,12 +144,13 @@ class Flux
   double  Raxis;       // R coordinate of magnetic axis
   double  Zaxis;       // Z coordinate of magnetic axis
   double  Rbound;      // R coordinate of plasma boundary on inboard midplane
-  int     ia;          // R grid index of inboard plasma boundary at Z=Z_axis
+  double  Rbound1;     // R coordinate of plasma boundary on outboard midplane
+  int     ia;          // R grid index of inboard plasma boundary at Z = Z_axis
   int     ic;          // R grid index of magnetic axis
   int     jc;          // Z grid index of magnetic axis
   int     L;           // Number of points in Psi(R,Zaxis) array
   double* s;           // Array of s = sqrt[1 - Psi(R,Zaxis)] values
-  double* Rs;          // Array of R(s) values
+  double* Rs;          // Array of R(s) values, where R is major radius on inboard midplane
   double  q95;         // Safety-factor on 95% flux surface
   double  r95;         // Radial coordinate of 95% flux surface
   double  qlim;        // Safety-factor at PsiN = PSILIM flux surface
@@ -158,8 +160,14 @@ class Flux
   double  qgp, qgp1;
 
   // Stage2 profile parameters
-  double* P ;          // Psi array
-  double* RP;          // R(Psi)
+  double* P;           // Psi array
+  double* RP;          // R(Psi) on inboard midplane
+  double* RP1;         // R(Psi) on outboard midplane 
+  double* Bt;          // B_toroidal(Psi) on inboard midplane
+  double* Bt1;         // B_toroidal(Psi) on outboard midplane
+  double* Bp;          // B_poloidal(Psi) on inboard midplane
+  double* Bp1;         // B_poloidal(Psi) on outboard midplane
+  double* B2v;         // <B^2>(Psi) (normalized) 
   double* rP;          // r(Psi)
   double* GP;          // g(Psi)
   double* QGP;         // q(Psi)/g(Psi) 
