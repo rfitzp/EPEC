@@ -126,6 +126,10 @@ class Neoclassical
   Array<double,1> psi;    // Normalized poloidal magnetic flux
   Array<double,1> rr;     // Normalized flux-surface minor radius
   Array<double,1> dpsidr; // Normalized dpsi/dr
+  Array<double,1> g;      // g(r)
+  Array<double,1> R;      // Normalized R on outboard midplane
+  Array<double,1> Bp;     // Normalized Bp on outboard midplane
+  Array<double,1> B2av;   // Normalized <B^2> on outboard midplane
 
   // -------------------
   // Plasma profile data
@@ -139,6 +143,8 @@ class Neoclassical
   Field nI;   // Impurity ion number density (m^-3)
   Field nb;   // Fast majority ion number density (m^-3)
   Field wE;   // ExB frequency (rad/s)
+  Field wt;   // Impurity ion toroidal angular frequency (rad/s)
+  Field wp;   // Impurity ion poloidal angular frequency (rad/s)
   Field NZA;  // Ion data
 
   int    NI;  // Charge number of majority ions
@@ -168,6 +174,8 @@ class Neoclassical
   Array<double,1> T_I;    // Impurity ion temperature (J)
   Array<double,1> dT_Idr; // Impurity ion temperature gradient (J m^-1)
   Array<double,1> w_E;    // ExB frequency (rad/s)
+  Array<double,1> w_t;    // Impurity ion toroidal angular frequency (rad/s)
+  Array<double,1> w_p;    // Impurity ion poloidal angular frequency (rad/s)
   Array<double,1> Quasi;  // Quasi-nuetrality check
   Array<double,1> Z_eff;  // Effective ion charge number
   Array<double,1> alpha;  // Impurity strength parameter

@@ -17,7 +17,6 @@ g.asy        ... plots g(r) profile
 r.asy        ... plots R(r) profile on midplane
 bt.asy       ... plots B_toroidal(r) on midplane
 bp.asy       ... plots B_poloidal(r) on midplane
-b2av         ... plots <B^2>(r)
 
 rational.asy ... plots rational surfaces
 

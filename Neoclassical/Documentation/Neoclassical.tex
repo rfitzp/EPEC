@@ -513,7 +513,7 @@ Finally,
 \end{align}
 where we have made use of the fact that $n_i\,e_i+n_I\,e_I+n_e\,e_e=0$. 
 
-\section{Velocities and Current Density}
+\section{Fluid Velocities}
 Let
 \begin{align}
 \omega_E(\psi) &=-\frac{d{\mit\Phi}}{d\psi},\\[0.5ex]
@@ -555,7 +555,49 @@ L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right
 &\left.\phantom{=}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\right].
 \end{align}
 
+\section{Fluid Angular Rotation Frequencies}
+Let
+\begin{align}
+\omega_{\theta\,i}(\psi)&=\frac{V_\theta^{\,i}}{B_\theta}\,\frac{I}{R^{\,2}},\\[0.5ex]
+\omega_{\theta\,I}(\psi)&=\frac{V_\theta^{\,I}}{B_\theta}\,\frac{I}{R^{\,2}},\\[0.5ex]
+\omega_{\phi\,i}(\psi) &= \frac{V_\phi^{\,i}}{R},\\[0.5ex]
+\omega_{\phi\,I}(\psi) &= \frac{V_\phi^{\,I}}{R},
+\end{align}
+where the right-hand sides are evaluated on the outboard mid-plane.
+It follows that
+\begin{align}
+\omega_{\theta\,i}&= K_\theta\,\omega_{{\rm nc}\,i},\\[0.5ex]
+\omega_{\theta\,I} &= K_\theta\,\omega_{{\rm nc}\,I},\\[0.5ex]
+\omega_{\phi\,i} &= \omega_E+\omega_{\ast\,i} +K_\theta\, \omega_{{\rm nc}\,i},\\[0.5ex]
+\omega_{\phi\,I} &= \omega_E+\omega_{\ast\,I} + K_\theta\,\omega_{{\rm nc}\,I},
+\end{align}
+where
+\begin{equation}
+K_\theta = \frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle},
+\end{equation}
+and 
+\begin{align}
+\omega_{{\rm nc}\,i}&= -L^{\,ii}_{00}\,\omega_{\ast\,i}-
+L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
+\omega_{{\rm nc}\,I}&= -L^{\,II}_{00}\,\omega_{\ast\,I}-
+L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
+\end{align}
 
+\section{Natural Frequencies}
+Let
+\begin{align}
+\omega_{0\,{\rm ln}} &=\omega_E+\omega_{\ast\,e},\\[0.5ex]
+\omega_{0\,{\rm eb}} &= \omega_E,\\[0.5ex]
+\omega_{0\,{\rm nl}} &=\omega_E+\omega_{\ast\,i}+ \omega_{{\rm nc}\,i}.
+\end{align}
+The corresponding natural frequencies are
+\begin{align}
+\varpi_{0\,{\rm ln}} &=-n\,\omega_{0\,{\rm ln}} ,\\[0.5ex]
+\varpi_{0\,{\rm eb}} &= -n\,\omega_{0\,{\rm eb}} ,\\[0.5ex]
+\varpi_{0\,{\rm nl}} &=-n\,\omega_{0\,{\rm nl}} .
+\end{align}
+
+\section{Current Densities}
 Can write
 \begin{equation}
 j_\parallel = j_{\rm bootstrap} + j_{\rm ohmic},

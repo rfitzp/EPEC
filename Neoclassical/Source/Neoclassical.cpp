@@ -270,10 +270,14 @@ void Neoclassical::Read_Equilibrium ()
   psi.resize    (NPSI);
   rr.resize     (NPSI);
   dpsidr.resize (NPSI);
+  g.resize      (NPSI);
+  R.resize      (NPSI);
+  Bp.resize     (NPSI);
+  B2av.resize   (NPSI);
 
   for (int j = 0; j < NPSI; j++)
     {
-      if (fscanf (file, "%lf %lf %lf", &psi (j), &rr (j), &dpsidr (j)) != 3)
+      if (fscanf (file, "%lf %lf %lf", &psi (j), &rr (j), &dpsidr (j), &g (j), &R (j), &Bp (j), &B2av (j)) != 7)
 	{
 	  printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (2)\n");
 	  exit (1);

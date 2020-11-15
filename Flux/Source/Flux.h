@@ -38,7 +38,7 @@
 // 1.2 - Improved gFile indexing
 // 1.3 - Major rearrangement of input and output files
 // 1.4 - Added linear interpolation
-// 1.5 - Added RP1, Bt, Bt1, Bp., Bp1, and B2v
+// 1.5 - Added RP1, Bt, Bt1, Bp, Bp1, and K_theta
 
 // ############################################################################
 
@@ -167,7 +167,6 @@ class Flux
   double* Bt1;         // B_toroidal(Psi) on outboard midplane
   double* Bp;          // B_poloidal(Psi) on inboard midplane
   double* Bp1;         // B_poloidal(Psi) on outboard midplane
-  double* B2v;         // <B^2>(Psi) (normalized) 
   double* rP;          // r(Psi)
   double* GP;          // g(Psi)
   double* QGP;         // q(Psi)/g(Psi) 
@@ -186,10 +185,12 @@ class Flux
   double* rres;        // Minor radii of rational surfaces
   double* sres;        // Magnetic shears at rational surfaces
   double* gres;        // g values at rational surfaces
-  double* Rres;        // R coordinates of rational surfaces on midplane
+  double* Rres;        // R coordinates of rational surfaces on inboard midplane
+  double* Rres1;       // R coordinates of rational surfaces on outboard midplane
   double* gmres;       // gamma values on rational surfaces
   double* Ktres;       // K_t values at rational surfaces
   double* Kares;       // K_ast values at rational surfaces
+  double* Khres;       // K_theta values at rational surfaces
   double* fcres;       // Fraction of circulating particles at rational surfaces
   double* ajj;         // Metric elements at rational surfaces
   double* dPsidr;      // dPsi/dr at rational surfaces
