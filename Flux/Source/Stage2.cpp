@@ -981,7 +981,7 @@ void Flux::Stage2CalcNeoclassicalPara ()
 	  gsl_matrix_set (I5, i, k, sum);
 	}
 
-      // Calcuate Kt and Ka
+      // Calcuate Kt, Ka, and Kh
       sum = 0.;
       for (int k = 0; k < NNC; k++)
 	sum += gsl_matrix_get (I4, i, k) * gsl_matrix_get (I5, i, k);

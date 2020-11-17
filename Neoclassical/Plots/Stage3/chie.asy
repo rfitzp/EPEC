@@ -22,4 +22,4 @@ yequals (0., s);
 pen qq = fontsize(25.);
 defaultpen (qq);
 xaxis("$r/a$",BottomTop,LeftTicks);
-yaxis("$\chi_\perp ({\rm m^{\,2}/s})$",LeftRight,RightTicks);
+yaxis("$\chi_{T_e} ({\rm m^{\,2}/s})$",LeftRight,RightTicks);

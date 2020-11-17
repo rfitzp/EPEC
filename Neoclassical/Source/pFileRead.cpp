@@ -22,7 +22,7 @@ void Neoclassical::pFileRead ()
   // Read data from pFile
   int ne_flag = 0; int Te_flag = 0; int ni_flag = 0; int Ti_flag = 0;
   int nb_flag = 0; int wE_flag = 0; int nI_flag = 0; int NZ_flag = 0;
-  int wt_flag = 0; int wp_flag = 0;
+  int wt_flag = 0; 
   
   do
     {
@@ -38,7 +38,7 @@ void Neoclassical::pFileRead ()
 	}
 
       
-      if (strstr (s, "ne") != NULL)
+      if (strstr (s, "ne(") != NULL)
 	{
 	  // Read ne field (assumed units - 10^20 m^-3)
 	  ne_flag = 1;
@@ -59,7 +59,7 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-      else if (strstr (s, "te") != NULL)
+      else if (strstr (s, "te(") != NULL)
 	{
 	  // Read Te field (assumed units - keV)
 	  Te_flag = 1;
@@ -80,7 +80,7 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-      else if (strstr (s, "ni") != NULL)
+      else if (strstr (s, "ni(") != NULL)
 	{
 	  // Read ni field (assumed units - 10^20 m^-3)
 	  ni_flag = 1;
@@ -101,7 +101,7 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-      else if (strstr (s, "ti") != NULL)
+      else if (strstr (s, "ti(") != NULL)
 	{
 	  // Read Ti field (assumed units - keV)
 	  Ti_flag = 1;
@@ -122,7 +122,7 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-      else if (strstr (s, "nb") != NULL)
+      else if (strstr (s, "nb(") != NULL)
 	{
 	  // Read nb field (assumed units - 10^20 m^-3)
 	  nb_flag = 1;
@@ -143,7 +143,7 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-      else if (strstr (s, "omgeb") != NULL)
+      else if (strstr (s, "omgeb(") != NULL)
 	{
 	  // Read omgeb field (assumed units krad/s)
 	  wE_flag = 1;
@@ -164,11 +164,11 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-       else if (strstr (s, "omeg") != NULL)
+       else if (strstr (s, "omeg(") != NULL)
 	{
 	  // Read omeg field (assumed units krad/s)
 	  wt_flag = 1;
-	  printf ("Reading omeg from pFile - n = %4d:\n", n);
+	  printf ("Reading  omeg from pFile - n = %4d:\n", n);
 	  wt.resize (n);
 	  for (int i = 0; i < n; i++)
 	    {
@@ -185,28 +185,7 @@ void Neoclassical::pFileRead ()
 		}
 	    }
 	}
-       else if (strstr (s, "omegp") != NULL)
-	{
-	  // Read omegp field (assumed units krad/s)
-	  wp_flag = 1;
-	  printf ("Reading omegp from pFile - n = %4d:\n", n);
-	  wp.resize (n);
-	  for (int i = 0; i < n; i++)
-	    {
-	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
-		{
-		  printf ("NEOCLASSICAL::pFileRead: Error reading omegp\n");
-		  exit (1);
-		}
-	      else
-		{
-		  y    *= 1.e3;
-		  dydx *= 1.e3;
-		  wp.PushData (i, x, y, dydx);
-		}
-	    }
-	}
-      else if (strstr (s, "nz1") != NULL)
+      else if (strstr (s, "nz1(") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
 	  nI_flag = 1;
@@ -268,7 +247,7 @@ void Neoclassical::pFileRead ()
   
   fclose (file);
 
-  if (ne_flag * Te_flag * ni_flag * Ti_flag * nb_flag * (wE_flag + wt_flag + wp_flag) * nI_flag * NZ_flag == 0)
+  if (ne_flag * Te_flag * ni_flag * Ti_flag * nb_flag * wE_flag * wt_flag * nI_flag * NZ_flag == 0)
     {
       printf ("NEOCLASSICAL::pFileRead: Missing field in pFile\n");
       exit (1);

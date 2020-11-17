@@ -31,6 +31,7 @@
 // 1.6 - Divided normalized layer width by 0.8227
 // 1.7 - Output wnl
 // 1.8 - Removed 0.8227 from layer width (which actually is not normalized), redefined S_k
+// 1.9 - Minor changes for KSTAR data
 
 // ################################################################
 
@@ -38,7 +39,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 8
+#define VERSION_MINOR 9
 
 #include <stdio.h>
 #include <math.h>
@@ -126,10 +127,6 @@ class Neoclassical
   Array<double,1> psi;    // Normalized poloidal magnetic flux
   Array<double,1> rr;     // Normalized flux-surface minor radius
   Array<double,1> dpsidr; // Normalized dpsi/dr
-  Array<double,1> g;      // g(r)
-  Array<double,1> R;      // Normalized R on outboard midplane
-  Array<double,1> Bp;     // Normalized Bp on outboard midplane
-  Array<double,1> B2av;   // Normalized <B^2> on outboard midplane
 
   // -------------------
   // Plasma profile data
@@ -144,7 +141,6 @@ class Neoclassical
   Field nb;   // Fast majority ion number density (m^-3)
   Field wE;   // ExB frequency (rad/s)
   Field wt;   // Impurity ion toroidal angular frequency (rad/s)
-  Field wp;   // Impurity ion poloidal angular frequency (rad/s)
   Field NZA;  // Ion data
 
   int    NI;  // Charge number of majority ions
@@ -175,7 +171,6 @@ class Neoclassical
   Array<double,1> dT_Idr; // Impurity ion temperature gradient (J m^-1)
   Array<double,1> w_E;    // ExB frequency (rad/s)
   Array<double,1> w_t;    // Impurity ion toroidal angular frequency (rad/s)
-  Array<double,1> w_p;    // Impurity ion poloidal angular frequency (rad/s)
   Array<double,1> Quasi;  // Quasi-nuetrality check
   Array<double,1> Z_eff;  // Effective ion charge number
   Array<double,1> alpha;  // Impurity strength parameter
@@ -199,6 +194,7 @@ class Neoclassical
   Array<double,1> gmk;    // gamma values
   Array<double,1> Ktk;    // Kt values
   Array<double,1> Kastk;  // Kast values
+  Array<double,1> Kthek;  // Ktheta values
   Array<double,1> fck;    // Fractions of circulating particles
   Array<double,1> akk;    // Metric elements
   Array<double,1> dPsidr; // dPsiN/dr
@@ -221,6 +217,7 @@ class Neoclassical
   Array<double,1> TIk;        // Impurity ion temperatures
   Array<double,1> dTIdrk;     // Impurity ion temperature gradients
   Array<double,1> wEk;        // ExB frequencies
+  Array<double,1> wtk;        // Impurity ion toroidal rotation frequencies
   Array<double,1> Zeffk;      // Effective ion charge numbers
   Array<double,1> alphak;     // Impurity strength parameters
   Array<double,1> rhok;       // Relative mass densities
@@ -251,6 +248,9 @@ class Neoclassical
   Array<double,1> w_ast_ek;   // Electron diamagnetic frequencies
   Array<double,1> w_ast_ik;   // Majority ion diamagnetic frequencies
   Array<double,1> w_ast_Ik;   // Impurity ion diamagnetic frequencies
+  Array<double,1> w_nc_ik;    // Majority ion neoclassical frequencies
+  Array<double,1> w_nc_Ik;    // Impurity ion neoclassical frequencies
+  Array<double,1> w_E_Ik;     // ExB frequencies inferred from toroidal impurity ion rotation frequency
 
   Array<double,1> rho_sk;     // Ion sound radii
   

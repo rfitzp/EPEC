@@ -270,14 +270,10 @@ void Neoclassical::Read_Equilibrium ()
   psi.resize    (NPSI);
   rr.resize     (NPSI);
   dpsidr.resize (NPSI);
-  g.resize      (NPSI);
-  R.resize      (NPSI);
-  Bp.resize     (NPSI);
-  B2av.resize   (NPSI);
 
   for (int j = 0; j < NPSI; j++)
     {
-      if (fscanf (file, "%lf %lf %lf", &psi (j), &rr (j), &dpsidr (j), &g (j), &R (j), &Bp (j), &B2av (j)) != 7)
+      if (fscanf (file, "%lf %lf %lf", &psi (j), &rr (j), &dpsidr (j)) != 3)
 	{
 	  printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (2)\n");
 	  exit (1);
@@ -293,6 +289,7 @@ void Neoclassical::Read_Equilibrium ()
   gmk.resize    (nres);
   Ktk.resize    (nres);
   Kastk.resize  (nres);
+  Kthek.resize  (nres);
   fck.resize    (nres);
   akk.resize    (nres);
   PsiNk.resize  (nres);
@@ -300,15 +297,15 @@ void Neoclassical::Read_Equilibrium ()
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j)) != 11)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j), &Kthek (j)) != 12)
 	{
 	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);
 	}
       qk (j) = double (mk (j)) /double (ntor);
-      printf ("m = %3d  r = %11.4e  s = %11.4e  g = %11.4e  gm = %11.4e  Kt = %11.4e  Kast = %11.4e  fc = %11.4e  akk = %11.4e  PsiN = %11.4e\n",
-	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), fck (j), akk (j), PsiNk (j));
+      printf ("m = %3d  r = %11.4e  s = %11.4e  g = %11.4e  gm = %11.4e  Kt = %11.4e  Kast = %11.4e  Kthe = %11.4e  fc = %11.4e  akk = %11.4e  PsiN = %11.4e\n",
+	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j));
     }
 
   fclose (file);
@@ -400,6 +397,7 @@ void Neoclassical::Read_Profiles ()
   dT_idr.resize (NPSI);
   n_b.resize    (NPSI);
   w_E.resize    (NPSI);
+  w_t.resize    (NPSI);
   n_I.resize    (NPSI);
   dn_Idr.resize (NPSI);
   T_I.resize    (NPSI);
@@ -418,6 +416,7 @@ void Neoclassical::Read_Profiles ()
   dT_idr (0)      = Ti.GetdYdX (0) * fac0;
   n_b    (0)      = nb.GetY    (0);
   w_E    (0)      = wE.GetY    (0);
+  w_t    (0)      = wt.GetY    (0);
   n_I    (0)      = nI.GetY    (0);
   dn_Idr (0)      = nI.GetdYdX (0) * fac0;
   T_I    (0)      = Ti.GetY    (0);
@@ -433,6 +432,7 @@ void Neoclassical::Read_Profiles ()
   dT_idr (NPSI-1) = Ti.GetdYdX (Ti.GetN()-1) * fac1;
   n_b    (NPSI-1) = nb.GetY    (nb.GetN()-1);
   w_E    (NPSI-1) = wE.GetY    (wE.GetN()-1);
+  w_t    (NPSI-1) = wt.GetY    (wt.GetN()-1);
   n_I    (NPSI-1) = nI.GetY    (nI.GetN()-1);
   dn_Idr (NPSI-1) = nI.GetdYdX (nI.GetN()-1) * fac1;
   T_I    (NPSI-1) = Ti.GetY    (Ti.GetN()-1);
@@ -450,6 +450,7 @@ void Neoclassical::Read_Profiles ()
       dT_idr (j) = InterpolateField (Ti, psi (j), 1) * dpsidr (j) /a;
       n_b    (j) = InterpolateField (nb, psi (j), 0);
       w_E    (j) = InterpolateField (wE, psi (j), 0);
+      w_t    (j) = InterpolateField (wt, psi (j), 0);
       n_I    (j) = InterpolateField (nI, psi (j), 0);
       dn_Idr (j) = InterpolateField (nI, psi (j), 1) * dpsidr (j) /a;
       T_I    (j) = InterpolateField (Ti, psi (j), 0);
@@ -467,12 +468,12 @@ void Neoclassical::Read_Profiles ()
   // Output profiles
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/profiles.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     psi (j), rr (j),
 	     n_e (j) /1.e19, dn_edr (j) /1.e19, T_e (j) /1.e3/e, dT_edr (j) /1.e3/e,
 	     n_i (j) /1.e19, dn_idr (j) /1.e19, T_i (j) /1.e3/e, dT_idr (j) /1.e3/e,
 	     n_I (j) /1.e19, dn_Idr (j) /1.e19, T_I (j) /1.e3/e, dT_Idr (j) /1.e3/e,
-	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a);
+	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a, w_t (j) /1.e3);
   fclose (file);
 
   // Interpolate cFiles
@@ -581,6 +582,7 @@ void Neoclassical::Get_Derived ()
   TIk.resize    (nres);
   dTIdrk.resize (nres);
   wEk.resize    (nres);
+  wtk.resize    (nres);
   nbk.resize    (nres);
   Zeffk.resize  (nres);
   alphak.resize (nres);
@@ -605,6 +607,7 @@ void Neoclassical::Get_Derived ()
       TIk    (j) = Interpolate (NPSI, rr, T_I,    rk (j), 0);
       dTIdrk (j) = Interpolate (NPSI, rr, dT_Idr, rk (j), 0);
       wEk    (j) = Interpolate (NPSI, rr, w_E,    rk (j), 0);
+      wtk    (j) = Interpolate (NPSI, rr, w_t,    rk (j), 0);
       nbk    (j) = Interpolate (NPSI, rr, n_b,    rk (j), 0);
       Zeffk  (j) = Interpolate (NPSI, rr, Z_eff,  rk (j), 0);
       alphak (j) = Interpolate (NPSI, rr, alpha,  rk (j), 0);
@@ -617,8 +620,8 @@ void Neoclassical::Get_Derived ()
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
  
-      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e wE = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e\n",
-	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j));
+      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e wE = %10.3e wt = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e\n",
+	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, wtk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j));
     }
 
   if (IMPURITY == 0)
@@ -1006,17 +1009,26 @@ void Neoclassical::Get_Frequencies ()
   w_EB.resize        (nres);
   w_actual.resize    (nres);
   w_fac.resize       (nres);
+  w_nc_ik.resize     (nres);
+  w_nc_Ik.resize     (nres);
+  w_E_Ik.resize      (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
+      w_nc_ik (j) = - L_ii_00 (j) * w_ast_ik (j)
+		    - L_iI_00 (j) * w_ast_Ik (j)
+		    + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	            + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 
-      w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j)
-					   - L_ii_00 (j) * w_ast_ik (j)
-					   - L_iI_00 (j) * w_ast_Ik (j)
-					   + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
-					   + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j));
+      w_nc_Ik (j) = - L_II_00 (j) * w_ast_Ik (j)
+		    - L_Ii_00 (j) * w_ast_ik (j)
+		    + L_II_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j)
+	            + L_Ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j);
+
+      w_E_Ik (j) = wtk (j) - w_ast_Ik (j) - Kthek (j) * w_nc_Ik (j);
       
+      w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
+      w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j) + w_nc_ik (j));
       w_EB        (j) = - double (ntor) * (wEk (j));
 
       if (FREQ < 0)
@@ -1037,7 +1049,9 @@ void Neoclassical::Get_Frequencies ()
   // ..................
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk(j), w_actual (j) /1.e3);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk(j), w_actual (j) /1.e3, wEk(j) /1.e3, w_E_Ik(j) /1.e3,
+	     wtk(j) /1.e3, w_ast_Ik(j) /1.e3, Kthek(j) * w_nc_Ik(j) /1.e3);
   fclose (file);
 }
 
