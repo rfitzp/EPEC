@@ -1,5 +1,5 @@
-Git Hash     = 472e33a6522121324b49424067dfa71242fa4ad5
-Compile time = 2020-11-17 18:02:44 UTC
+Git Hash     = 710d13f712e587cf209a0c391cc671415b68448b
+Compile time = 2020-11-19 12:09:11 UTC
 Git Branch   = master
 
 Input parameters (from Inputs/Neoclassical.in and command line options):
