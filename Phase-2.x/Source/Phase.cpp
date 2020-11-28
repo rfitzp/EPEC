@@ -58,10 +58,10 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TIME, double _SCALE)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _TIME, _SCALE);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TIME, _SCALE);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -81,13 +81,14 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
   gsl_matrix_complex_free (EE);      gsl_matrix_complex_free (FF);
   gsl_vector_complex_free (EI);      gsl_vector_complex_free (EO);  
   gsl_vector_complex_free (DeltaU);  gsl_vector_complex_free (DeltaL);
-  gsl_vector_complex_free (ChiU);    gsl_vector_complex_free (ChiL);
+  gsl_vector_complex_free (DeltaM);  gsl_vector_complex_free (ChiU);
+  gsl_vector_complex_free (ChiL);    gsl_vector_complex_free (ChiM);
 }
 
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TIME, double _SCALE)
 {
   // ......................................
   // Set default values of input parameters
@@ -100,9 +101,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   OLD    = 0;
   FREQ   = 0;
   LIN    = 0;
+  MID    = 0;
   DT     = 1.e-5;
   TIME   = 0.;
   SCALE  = 2.;
+  PMAX   = 4.;
 
   // Read input data from namelist (Inputs/Phase.in)
   printf ("..................................\n");
@@ -113,7 +116,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &DT, &TIME, &SCALE, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TIME, &SCALE, &PMAX, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -135,6 +138,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     FREQ = _FREQ;
   if (_LIN > -1)
     LIN = _LIN;
+  if (_MID > -1)
+    MID = _MID;
   if (_TIME > 0.)
     TIME = _TIME;
   if (_SCALE > 0.)
@@ -161,16 +166,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TIME, SCALE, PMAX, NCTRL);
 
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TIME, SCALE, PMAX, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -178,8 +183,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, DT, TIME, SCALE, NCTRL);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TIME = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TIME, SCALE, PMAX, NCTRL);
   fclose (monitor);
 
   // .................
@@ -271,8 +276,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr) != 11)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr) != 12)
 	{
 	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
 	  exit (1);
@@ -470,10 +475,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e\n",
 	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0));
 
-  // .............................
-  // Interpolate uFiles and lFiles
-  // .............................
-  if (INTU != 0  && TIME > 0.)
+  // ......................................
+  // Interpolate uFiles, mFiles, and lFiles
+  // ......................................
+  if (INTU != 0 && TIME > 0.)
     {
       // Save pwd
       char pwd[MAXFILENAMELENGTH];
@@ -507,7 +512,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       
       file = OpenFiler ((char*) "Index");
 
-      while (fscanf (file, "%s %lf %d %d %d", &ufilename, &ufiletime) == 2)
+      while (fscanf (file, "%s %lf", &ufilename, &ufiletime) == 2)
 	{
           strcpy (Filename, Basename);
 	  strcat (Filename, ufilename);
@@ -522,6 +527,53 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
  
       // Interpolate uFiles
       uFileInterp (uFileName, uFileTime, uFileNumber, TIME);
+
+      if (MID != 0)
+	{
+	  // Remove mFile
+	  system ("rm -rf Inputs/mFile");
+	  
+	  // Get mFiles directory
+	  char mFileDir[MAXFILENAMELENGTH];
+	  system ("greadlink -f Inputs/mFiles > mFileDir");
+	  FILE* ufd = OpenFiler ("mFileDir");
+	  fscanf (ufd, "%s", mFileDir);
+	  fclose (ufd);
+	  system ("rm mFileDir");
+	  
+	  // Read mFile data
+	  char           Basename [MAXFILENAMELENGTH];
+	  char           Filename [MAXFILENAMELENGTH];
+	  char           mfilename[MAXFILENAMELENGTH];
+	  vector<string> mFileName;
+	  double         mfiletime;
+	  vector<double> mFileTime;
+	  int            mFileNumber;
+	  
+	  printf ("Reading mFile data:\n");
+	  
+	  chdir (mFileDir);
+	  getcwd (Basename, MAXFILENAMELENGTH);
+	  strcat (Basename, "/");
+	  
+	  file = OpenFiler ((char*) "Index");
+	  
+	  while (fscanf (file, "%s %lf", &mfilename, &mfiletime) == 2)
+	    {
+	      strcpy (Filename, Basename);
+	      strcat (Filename, mfilename);
+	      
+	      mFileName.push_back (Filename);
+	      mFileTime.push_back (mfiletime);
+	    }
+	  mFileNumber = mFileName.size ();
+	  
+	  fclose (file);
+	  chdir (pwd);
+	  
+	  // Interpolate mFiles
+	  mFileInterp (mFileName, mFileTime, mFileNumber, TIME);
+	}
 
       // Remove lFile
       system ("rm -rf Inputs/lFile");
@@ -583,8 +635,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   double* WWW = new double[nres];
   DeltaU = gsl_vector_complex_calloc (nres);
   DeltaL = gsl_vector_complex_calloc (nres);
+  DeltaM = gsl_vector_complex_calloc (nres);
   ChiU   = gsl_vector_complex_calloc (nres);
   ChiL   = gsl_vector_complex_calloc (nres);
+  ChiM   = gsl_vector_complex_calloc (nres);
 
   double SCALEFACTOR = SCALE;
   printf ("SCALEFACTOR = %11.4e\n", SCALEFACTOR);
@@ -651,6 +705,63 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       }
   fclose (file);
 
+  if (MID != 0)
+    {
+      printf ("Middle coil:\n");
+      file = OpenFiler ((char*) "Inputs/mFile");
+      
+      for (int i = 0; i < 5; i++)
+	fgets (line, MAXULFILELINELENGTH, file);
+      fgets (line1, MAXULFILELINELENGTH, file);
+      for (int i = 0; i < 2; i++)
+	fgets (line, MAXULFILELINELENGTH, file);
+      
+      token = strtok (line1, " "); 
+      token = strtok (NULL, " "); 
+      token = strtok (NULL, " ");
+      int nsingl = atoi (token);
+      
+      if (nsingl != nsingu)
+	{
+	  printf ("PHASE:: Error - nsingl != nsingu\n");
+	  exit (1);
+	}
+      
+      for (int i = 0; i < nres1; i++)
+	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
+	  {
+	    printf ("Error reading mFile\n");
+	    exit (1);
+	  }
+	else
+	  {
+	    QIN[i] = v1;
+	    DRE[i] = v9;
+	    DIM[i] = v10;
+	    WWW[i] = 2.*v11;
+	    
+	    DRE[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+	    DIM[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+	    
+	    CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
+	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	    CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
+	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	    
+	    gsl_vector_complex_set (DeltaM, i, gsl_complex_rect (DRE[i], DIM[i]));
+	    gsl_vector_complex_set (ChiM,   i, gsl_complex_rect (CRE[i], CIM[i]));
+	    
+	    double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiM, i));
+	    double WUNRE = 4. * fack (i) * sqrt (Psi) * dPsiNdr(i);
+	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
+	    
+	    printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		    QIN[i], DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	  }
+      fclose (file);
+    }
+
   printf ("Lower coil:\n");
   file = OpenFiler ((char*) "Inputs/lFile");
   
@@ -712,9 +823,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   delete[] QIN; delete[] DRE; delete[] DIM; delete[] CRE; delete[] CIM; delete[] WWW;
  }
 
-// #####################################################################
-// Function to calculate vacuum flux versus upper/lower coil phase-shift
-// #####################################################################
+// ########################################################################
+// Function to calculate vacuum flux versus relative RMP coil current phase
+// ########################################################################
 void Phase::Scan_Shift ()
 {
   FILE* file1 = OpenFilew ((char*) "Outputs/Stage4/chi.txt");
@@ -725,7 +836,7 @@ void Phase::Scan_Shift ()
   double one = 1.;
   for (int i = 0; i <= I; i++)
     {
-      double      pha = double (i) * 4.*M_PI /double (I);
+      double      pha = double (i) * PMAX*M_PI /double (I);
       gsl_complex eik = gsl_complex_polar (one, pha);
 
       fprintf (file1, "%e", pha/M_PI);
@@ -734,9 +845,25 @@ void Phase::Scan_Shift ()
       for (int j = 0; j < nres; j++)
 	{
 	  gsl_complex hu = gsl_vector_complex_get (ChiU, j);
+	  gsl_complex hm;
+	  if (MID != 0)
+	    hm = gsl_vector_complex_get (ChiM, j);
 	  gsl_complex hl = gsl_vector_complex_get (ChiL, j);
-	  hl             = gsl_complex_mul (hl, eik);
-	  gsl_complex h  = gsl_complex_add (hu, hl);
+	  gsl_complex h;
+	  if (MID == 0)
+	    {
+	      hl = gsl_complex_mul (hl, eik);
+	      h  = gsl_complex_add (hu, hl);
+	    }
+	  else
+	    {
+	      hm = gsl_complex_mul (hm, eik);
+	      h  = gsl_complex_add (hu, hm);
+
+	      hl = gsl_complex_mul (hl, eik);
+	      hl = gsl_complex_mul (hl, eik);
+	      h  = gsl_complex_add (hu, hl);
+	    }
 
 	  double chi     =   gsl_complex_abs (h);
 	  double zeta    = - gsl_complex_arg (h);
@@ -760,12 +887,24 @@ void Phase::Scan_Shift ()
   for (int j = 0; j < nres; j++)
     {
       gsl_complex hu = gsl_vector_complex_get (ChiU, j);
+      gsl_complex hm;
+      if (MID != 0)
+	hm = gsl_vector_complex_get (ChiM, j);
       gsl_complex hl = gsl_vector_complex_get (ChiL, j);
-      gsl_complex h  = gsl_complex_add (hu, hl);
+      gsl_complex h;
+      if (MID == 0)
+	{
+	  h = gsl_complex_add (hu, hl);
+	}
+      else
+	{
+	  h = gsl_complex_add (hu, hm);
+	  h = gsl_complex_add (hu, hl);
+	}
       
-      double chi     =   gsl_complex_abs (h);
-      double zeta    = - gsl_complex_arg (h);
-      double wv      = 4. * fack (j) * sqrt (chi) /a (j);
+      double chi  =   gsl_complex_abs (h);
+      double zeta = - gsl_complex_arg (h);
+      double wv   = 4. * fack (j) * sqrt (chi) /a (j);
       
       fprintf (file4, "%3d %16.9e %16.9e %16.9e\n", mk (j), rk (j), wv, TIME);
     }
@@ -1191,10 +1330,26 @@ void Phase::CalcChiZeta (double t)
   for (int j = 0; j < nres; j++)
     {
       gsl_complex hu = gsl_vector_complex_get (ChiU, j);
+      gsl_complex hm;
+      if (MID != 0)
+	hm = gsl_vector_complex_get (ChiM, j);
       gsl_complex hl = gsl_vector_complex_get (ChiL, j);
-      hl             = gsl_complex_mul (hl, eik);
-      gsl_complex h  = gsl_complex_add (hu, hl);
+      gsl_complex h;
+      if (MID == 0)
+	{
+	  hl = gsl_complex_mul (hl, eik);
+	  h  = gsl_complex_add (hu, hl);
+	}
+      else
+	{
+	  hm = gsl_complex_mul (hm, eik);
+	  h  = gsl_complex_add (hu, hm);
 
+	  hl = gsl_complex_mul (hl, eik);
+	  hl = gsl_complex_mul (hl, eik);
+	  h  = gsl_complex_add (hu, hl);
+	}
+    
       chi  (j) =   gsl_complex_abs (h) * irmp;
       zeta (j) = - gsl_complex_arg (h);
     }

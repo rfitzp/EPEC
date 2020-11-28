@@ -3,12 +3,14 @@
 	STAGE5 = 1     ! Flag for Stage5 calculation
 	INTF   = 0     ! Flag for fFile interpolation
 	INTN   = 0     ! Flag for nFile interpolation
-	INTU   = 0     ! Flag for uFile/lFile interpolation
+	INTU   = 0     ! Flag for uFile/mFile/lFile interpolation
 	OLD    = 0     ! Flag for restarting old calculation
-	FREQ   = 1     ! Flag for island width dependent natural frequency
+	FREQ   = 0     ! Flag for island width dependent natural frequency
 	LIN    = 0     ! Flag for purely linear calculation
+	MID    = 1     ! Flag for inclusion of mFiles
 	DT     = 1.e-5 ! Data recorded every DT seconds
 	TIME   = 0.    ! Experimental time
 	SCALE  = 2.    ! GPEC scalefactor
+	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
 &end
 

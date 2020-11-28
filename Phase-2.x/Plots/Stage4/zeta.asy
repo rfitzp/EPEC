@@ -22,7 +22,7 @@ for (int i = 0; i < nres; i += 1)
 	s = blue;
     draw (graph (p, A[i+1]), s);
   }
-xlimits (0., 4.0, Crop);
+//xlimits (0., 4.0, Crop);
 
 s = dotted + black + 1;
 yequals (0., s);

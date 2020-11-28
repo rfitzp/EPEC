@@ -13,10 +13,11 @@
 // -F FREQ   - overrides FREQ value from namelist file
 // -s STAGE5 - overrides STAGE5 value from namelist file
 // -S SCALE  - overrides SCALE value from namelist file
+// -m MID    - overrides MID value from namelist file
 // -t TIME   - sets experimental time
 
 // Stage 4 - Class reads FLUX/NEOCLASSICAL/GPEC data and plots error-field
-//           drive versus upper/lower RMP coil phase for 1kA currents
+//           drive versus relative phases of RMP coil currents for 1kA currents
 
 // Stage 5 - Class performs island dynamics simulation
 
@@ -37,6 +38,7 @@
 // 2.3 - Separated waveform input data from main input data.
 //       Modified finite island-width natural frequency interpolation.
 // 2.4 - Added LIN flag
+// 2.5 - Added middle coil set
 
 // #######################################################################
 
@@ -44,7 +46,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 4
+#define VERSION_MINOR 5
 
 #include <stdio.h>
 #include <math.h>
@@ -67,8 +69,8 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, double* DT, double* TIME, double* SCALE, 
-			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TIME, double* SCALE, 
+			      double* PMAX, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -88,16 +90,18 @@ class Phase
   int      STAGE5; // If != 0 then Stage5 calculation performed, otherwise calculation terminates after Stage4
   int      INTF;   // If != 0 then use interpolated fFile 
   int      INTN;   // If != 0 then use interpolated nFile
-  int      INTU;   // If != 0 then use interpolated uFile and lFiles
+  int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
   int      OLD;    // If != 0 then initialize new calculation
   int      FREQ;   // If != 0 then use island width dependent natural frequency
   int      LIN;    // If != 0 then perform purely linear calculation
+  int      MID;    // If != 0 then include mFiles 
   double   SCALE;  // GPEC scalefactor
+  double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
   
   int      NCTRL;  // Number of control points
   double*  TCTRL;  // Control times (s)
-  double*  ICTRL;  // Peak current flowing in upper and lower RMP coils (kA) at control times
-  double*  PCTRL;  // Phase of lower RMP coil current relative to upper RMP current (units of pi) at control times
+  double*  ICTRL;  // Peak current flowing in RMP coils (kA) at control times
+  double*  PCTRL;  // Relative phases of RMP coil currents (units of pi) at control times
 
   // ----------------------
   // Data from program FLUX
@@ -164,6 +168,10 @@ class Phase
   gsl_vector_complex* DeltaU; // Delta values for 1kA in upper RMP coil
   gsl_vector_complex* ChiU;   // Chi values for 1kA in upper RMP coil
 
+  // Read from Inputs/mFile
+  gsl_vector_complex* DeltaM; // Delta values for 1kA in middle RMP coil
+  gsl_vector_complex* ChiM;   // Chi values for 1kA in middle RMP coil
+
   // Read from Inputs/lFile
   gsl_vector_complex* DeltaL; // Delta values for 1kA in lower RMP coil
   gsl_vector_complex* ChiL;   // Chi values for 1kA in lower RMP coil
@@ -183,8 +191,8 @@ class Phase
   // ---------------
   Array<double,1> TT;      // Normalized control times
   double          dTT;     // Normalized recording time interval
-  double          irmp;    // Peak current flowing in upper and lower RMP coils (kA) at current time
-  double          prmp;    // Phase of lower RMP coil current relative to upper RMP current (radians) at current time
+  double          irmp;    // Peak current flowing in RMP coils (kA) at current time
+  double          prmp;    // Relative phases of RMP coil currents (radians) at current time
   Array<double,1> Psik;    // Normalized magnitutudes of reconnected fluxes at resonant surfaces
   Array<double,1> phik;    // Helical phases of reconnected fluxes at resonant surfaces
   Array<double,1> Xk;      // Cartesian components of reconnected fluxes at resonant surfaces
@@ -230,7 +238,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TIME, double _SCALE);        
 
   // -----------------------
   // Private class functions
@@ -238,8 +246,8 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, double _TIME, double _SCALE);
-  // Calculate vacuum flux versus upper/lower coil phase shift
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TIME, double _SCALE);
+  // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors
   void Calc_Velocity ();
@@ -282,6 +290,15 @@ class Phase
   void uFileInterpolateCubic     (char* uFile1, double time1, char* uFile2, double time2, char* uFile3,    double time3, char* uFile, double time);
   void uFileInterpolateQuartic   (char* uFile1, double time1, char* uFile2, double time2, char* uFile3,    double time3,
 				  char* uFile4, double time4, char* uFile,  double time);
+
+  // Interpolate mFiles
+  void mFileInterp               (vector<string> mFileName,   vector<double> mFileTime,   int mFilenumber, double TIME);
+  void mFileInterpolateLinear    (char* uFile1, double time1, char* uFile,  double time);
+  void mFileInterpolateQuadratic (char* mFile1, double time1, char* mFile2, double time2, char* mFile,     double time);
+  void mFileInterpolateCubic     (char* mFile1, double time1, char* mFile2, double time2, char* mFile3,    double time3, char* mFile, double time);
+  void mFileInterpolateQuartic   (char* mFile1, double time1, char* mFile2, double time2, char* mFile3,    double time3,
+				  char* mFile4, double time4, char* mFile,  double time);
+
   // Interpolate lFiles
   void lFileInterp               (vector<string> lFileName,   vector<double> lFileTime,   int lFilenumber, double TIME);
   void lFileInterpolateLinear    (char* uFile1, double time1, char* uFile,  double time);
