@@ -18,4 +18,4 @@ yequals (0., s);
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$", BottomTop, LeftTicks);
-yaxis("$J_\phi$",      LeftRight, RightTicks);
+yaxis("$J_\phi ({\rm SI})$",      LeftRight, RightTicks);

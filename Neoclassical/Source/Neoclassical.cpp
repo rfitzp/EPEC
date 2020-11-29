@@ -402,6 +402,7 @@ void Neoclassical::Read_Profiles ()
   dn_Idr.resize (NPSI);
   T_I.resize    (NPSI);
   dT_Idr.resize (NPSI);
+  n_n.resize    (NPSI);
   Quasi.resize  (NPSI);
   Z_eff.resize  (NPSI);
   alpha.resize  (NPSI);
@@ -463,17 +464,21 @@ void Neoclassical::Read_Profiles ()
       Quasi (j) = (ZI * (n_i (j) + n_b (j)) + ZII * n_I (j) - n_e (j)) /n_e (j);
       Z_eff (j) = (ZI*ZI * n_i (j) + ZII*ZII * n_I (j)) /n_e (j);
       alpha (j) = ZII*ZII * n_I (j) /ZI/ZI /n_i (j);
+      if (NTYPE == 0)
+	n_n (j) = NN * exp ((rr(j) - 1.) /(LN /a));
+      else if (NTYPE == 1)
+	n_n (j) = NN / (1. + (rr(j) - 1.) * (rr(j) - 1.) /(LN /a) /(LN /a));
     }
   
   // Output profiles
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/profiles.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     psi (j), rr (j),
 	     n_e (j) /1.e19, dn_edr (j) /1.e19, T_e (j) /1.e3/e, dT_edr (j) /1.e3/e,
 	     n_i (j) /1.e19, dn_idr (j) /1.e19, T_i (j) /1.e3/e, dT_idr (j) /1.e3/e,
 	     n_I (j) /1.e19, dn_Idr (j) /1.e19, T_I (j) /1.e3/e, dT_Idr (j) /1.e3/e,
-	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a, w_t (j) /1.e3);
+	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a, w_t (j) /1.e3, n_n (j) /1.e19);
   fclose (file);
 
   // Interpolate cFiles

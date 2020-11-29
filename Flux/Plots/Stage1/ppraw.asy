@@ -17,5 +17,5 @@ yequals (0., s);
 
 pen qq = fontsize (25.);
 defaultpen (qq);
-xaxis("$\psi_N$",  BottomTop, LeftTicks);
-yaxis("$dP/d\psi$", LeftRight, RightTicks);
+xaxis("${\mit\Psi}_N$",  BottomTop, LeftTicks);
+yaxis("$dP/d\psi ({\rm SI})$", LeftRight, RightTicks);

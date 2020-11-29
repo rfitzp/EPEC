@@ -18,4 +18,4 @@ yequals (0., s);
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",      BottomTop, LeftTicks);
-yaxis("$T\,dT/d{\mit\Psi}_N$", LeftRight, RightTicks);
+yaxis("$T\,dT/d\psi ({\rm SI})$", LeftRight, RightTicks);

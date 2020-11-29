@@ -34,3 +34,9 @@ outpha.asy	plots phase of outboard Mirnov signal versus time
 
 mirnovin.asy	plots reconstructed inboard Mirnov signal versus time
 mirnovout.asy	plots reconstructed outboard Mirnov signal versus time
+
+wvpsi.asy       plots vacuum island widths (in PsiN) versus time
+wpsi.asy        plots island widths (in PsiN) versus time
+npsi.asy        plots density flattened regions (in PsiN) versus time
+tpsi.asy        plots electron temperature flattened regions (in PsiN) versus time
+omegapsi.asy    plots frequencies versus time with color coding of *psi.asy

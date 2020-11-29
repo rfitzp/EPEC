@@ -18,4 +18,4 @@ s = dotted + 1.5;
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$", BottomTop, LeftTicks);
-yaxis("$T$",      LeftRight,  RightTicks);
+yaxis("$T ({\rm SI})$",      LeftRight,  RightTicks);

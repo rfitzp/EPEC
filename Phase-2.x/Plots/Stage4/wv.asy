@@ -34,6 +34,9 @@ for (int i = 0; i < nres; i += 1)
       s = purple;
     else if (i == 10)
       s = orange;
+    else
+      s = gray;
+
     draw (graph (p, A[i+1]), s);
   }
 //xlimits (0., 4.0, Crop);
@@ -43,5 +46,5 @@ yequals (0., s);
 
 pen qq = fontsize(25.);
 defaultpen (qq);
-xaxis("${\mit\Delta}\phi_{UL}/\pi$",BottomTop,LeftTicks);
+xaxis("${\mit\Delta}\phi/\pi$",BottomTop,LeftTicks);
 yaxis("$W_k({\rm m})$",LeftRight,RightTicks);

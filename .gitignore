@@ -10,6 +10,8 @@
 *.gz
 #*
 .DS_Store
+*.txt
+*.eps
 Flux/flux
 Flux/fFile
 Flux/fFileIndex

@@ -628,6 +628,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   char line[MAXULFILELINELENGTH]; char line1[MAXULFILELINELENGTH];
   double v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12;
   double* QIN = new double[nres];
+  double* PSI = new double[nres];
   double* DRE = new double[nres];
   double* DIM = new double[nres];
   double* CRE = new double[nres];
@@ -680,6 +681,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     else
       {
 	QIN[i] = v1;
+	PSI[i] = v2;
 	DRE[i] = v9;
 	DIM[i] = v10;
 	WWW[i] = 2.*v11;
@@ -699,8 +701,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	double WUNRE = 4. * fack (i) * sqrt (Psi) * dPsiNdr (i);
 	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
-	printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		QIN[i], DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 
       }
   fclose (file);
@@ -737,6 +739,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	else
 	  {
 	    QIN[i] = v1;
+	    PSI[i] = v2;
 	    DRE[i] = v9;
 	    DIM[i] = v10;
 	    WWW[i] = 2.*v11;
@@ -756,8 +759,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	    double WUNRE = 4. * fack (i) * sqrt (Psi) * dPsiNdr(i);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 	    
-	    printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		    QIN[i], DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	    printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
     }
@@ -792,6 +795,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     else
       {
 	QIN[i] = v1;
+	PSI[i] = v2;
 	DRE[i] = v9;
 	DIM[i] = v10;
 	WWW[i] = 2.*v11;
@@ -811,8 +815,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	double WUNRE = 4. * fack (i) * sqrt (Psi) * dPsiNdr(i);
 	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
-	printf ("q = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		QIN[i], DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
       }
   fclose (file);
 
@@ -820,7 +824,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TIME);
   fclose (file);
 
-  delete[] QIN; delete[] DRE; delete[] DIM; delete[] CRE; delete[] CIM; delete[] WWW;
+  delete[] QIN; delete[] DRE; delete[] DIM; delete[] CRE; delete[] CIM; delete[] WWW; delete[] PSI;
  }
 
 // ########################################################################
@@ -1119,6 +1123,7 @@ void Phase::IslandDynamics ()
   FILE*  file16 = OpenFilew ((char*) "Outputs/Stage5/rkplusne.txt");
   FILE*  file17 = OpenFilew ((char*) "Outputs/Stage5/rkminusTe.txt");
   FILE*  file18 = OpenFilew ((char*) "Outputs/Stage5/rkplusTe.txt");
+  FILE*  file19 = OpenFilew ((char*) "Outputs/Stage5/results.txt");
 
   fprintf (file, "%d\n", ntor (0));
   fclose (file);
@@ -1232,6 +1237,18 @@ void Phase::IslandDynamics ()
 	      fprintf (file16, "%16.9e ", rk (j) + deltanek /2./a (j)/R_0);
 	      fprintf (file17, "%16.9e ", rk (j) - deltaTek /2./a (j)/R_0);
 	      fprintf (file18, "%16.9e ", rk (j) + deltaTek /2./a (j)/R_0);
+
+	      fprintf (file19, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		       mk (j),
+		       rk (j),
+		       GetNaturalFrequency (j) /tau_A/1.e3,
+		       GetActualFrequency (j) /tau_A/1.e3,
+		       t*tau_A,
+		       4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
+		       PsiN (j),
+		       4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j),
+		       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
+		       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
 	    }
 	  fprintf (file9,  "\n"); fprintf (file10, "\n"); fprintf (file11, "\n"); fprintf (file12, "\n");
 	  fprintf (file13, "\n"); fprintf (file14, "\n"); fprintf (file15, "\n"); fprintf (file16, "\n");
@@ -1247,7 +1264,7 @@ void Phase::IslandDynamics ()
 	  fflush (file11); fflush (file12); fflush (file13);
 	  fflush (file14); fflush (file15); fflush (file16);
 	  fflush (file17); fflush (file18); fflush (file3a);
-	  fflush (file4a);
+	  fflush (file4a); fflush (file19);
 	}
     }
   while (t < TT (NCTRL-1));
@@ -1257,7 +1274,7 @@ void Phase::IslandDynamics ()
   fclose (file11); fclose (file12); fclose (file13);
   fclose (file14); fclose (file15); fclose (file16);
   fclose (file17); fclose (file18); fclose (file3a);
-  fclose (file4a);
+  fclose (file4a); fclose (file19);
 
   // Save calculation
   Save ();

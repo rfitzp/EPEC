@@ -43,5 +43,5 @@ yequals (0., s);
 
 pen qq = fontsize (25.);
 defaultpen (qq);
-xaxis("${\mit\Delta}\phi_{UL}/\pi$", BottomTop, LeftTicks);
+xaxis("${\mit\Delta}\phi/\pi$", BottomTop, LeftTicks);
 yaxis("$\chi_k$", LeftRight, RightTicks);

@@ -169,6 +169,7 @@ class Neoclassical
   Array<double,1> dn_Idr; // Impurity ion number density gradient (m^-4)
   Array<double,1> T_I;    // Impurity ion temperature (J)
   Array<double,1> dT_Idr; // Impurity ion temperature gradient (J m^-1)
+  Array<double,1> n_n;    // Neutral number density (m^-3)
   Array<double,1> w_E;    // ExB frequency (rad/s)
   Array<double,1> w_t;    // Impurity ion toroidal angular frequency (rad/s)
   Array<double,1> Quasi;  // Quasi-nuetrality check
