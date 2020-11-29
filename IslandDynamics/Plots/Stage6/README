@@ -16,7 +16,7 @@ r.asy           plots rational surface radii of penetrated island chains versus 
 rs.asy          plots rational surface radii (in r) versus time
 wv.asy          plots vacuum island widths (in r) versus time
 w.asy           plots island widths (in r) versus time
-wvpsi.asy       plots vacuumisland widths (in PsiN) versus time
+wvpsi.asy       plots vacuum island widths (in PsiN) versus time
 wpsi.asy        plots island widths (in PsiN) versus time
 npsi.asy        plots density flattened regions (in PsiN) versus time
 tpsi.asy        plots electron temperature flattened regions (in PsiN) versus time
