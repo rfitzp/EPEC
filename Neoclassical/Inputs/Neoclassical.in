@@ -1,7 +1,7 @@
 &NEOCLASSICAL_CONTROL
 	IMPURITY = 1       ! Flag for impurities
 	NEUTRAL  = 1       ! Flag for neutrals
-	FREQ     = 0       ! Flag for selecting natural freqeuncy
+	FREQ     = -3    ! Flag for selecting natural frequency
 	INTP     = 0       ! Flag for pFile interpolation
 	INTF     = 0       ! Flag for fFile interpolation
 	INTC     = 0       ! Flag for cFile interpolation

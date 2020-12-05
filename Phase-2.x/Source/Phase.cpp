@@ -1222,7 +1222,17 @@ void Phase::IslandDynamics ()
 	  fprintf (file18, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
-	      double Wk       = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+	      double Wk = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+
+	      if (j == 0 && Wk/2. > rk (j))
+		Wk = 2. * rk (j);
+	      if (j > 0 && Wk/2. > rk (j) - rk (j-1))
+		Wk = 2. * (rk (j) - rk (j-1));
+	      if (j < nres-1 && Wk/2. > rk (j+1) - rk (j))
+		Wk = 2. * (rk (j+1) - rk (j));
+	      if (j == nres-1 && Wk/2. > 1. - rk (j))
+		Wk = 2. * (1. - rk (j));
+	      
 	      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
 	      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));
 	      double dnek     = dnedrk (j) * deltanek;
@@ -1244,9 +1254,9 @@ void Phase::IslandDynamics ()
 		       GetNaturalFrequency (j) /tau_A/1.e3,
 		       GetActualFrequency (j) /tau_A/1.e3,
 		       t*tau_A,
-		       4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
+		       (Wk /R_0) /a (j),
 		       PsiN (j),
-		       4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j),
+		       (Wk /R_0) * dPsiNdr (j),
 		       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
 		       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
 	    }
@@ -1288,7 +1298,17 @@ void Phase::IslandDynamics ()
   FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
   for (int j = 0; j < nres; j++)
     {
-      double Wk       = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+      double Wk = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+
+      if (j == 0 && Wk/2. > rk (j))
+	Wk = 2. * rk (j);
+      if (j > 0 && Wk/2. > rk (j) - rk (j-1))
+	Wk = 2. * (rk (j) - rk (j-1));
+      if (j < nres-1 && Wk/2. > rk (j+1) - rk (j))
+	Wk = 2. * (rk (j+1) - rk (j));
+      if (j == nres-1 && Wk/2. > 1. - rk (j))
+	Wk = 2. * (1. - rk (j));
+
       double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
       double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));
       fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
@@ -1297,9 +1317,9 @@ void Phase::IslandDynamics ()
 	       GetNaturalFrequency (j) /tau_A/1.e3,
 	       GetActualFrequency (j) /tau_A/1.e3,
 	       TIME,
-	       4. * fack (j) * sqrt (fabs (Psik (j))) /a (j),
+	       (Wk /R_0) /a (j),
 	       PsiN (j),
-	       4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j),
+	       (Wk /R_0) * dPsiNdr (j),
 	       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
 	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
     }

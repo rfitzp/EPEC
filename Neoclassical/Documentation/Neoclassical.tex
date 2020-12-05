@@ -16,7 +16,8 @@
 \begin{document}
 \maketitle
 
-\section{Lowest-Order Force Balance}
+
+\section{Plasma Equilibrium}
 Let
 \begin{align}
 \vec{B} &= I(\psi)\,\vec{\nabla} \zeta + \vec{\nabla}\zeta\times \vec{\nabla}\psi,\\[0.5ex]
@@ -24,6 +25,25 @@ Let
 \end{align}
 where $\vec{b}=\vec{B}/B$.
 Expect $n_a=n_a(\psi)$, $p_a=p_a(\psi)$, and $T_a= T_a(\psi)$.
+Follows that
+\begin{equation}
+\mu_0\,\vec{j} \equiv \vec{\nabla}\times \vec{B} = \vec{\nabla}I \times \vec{\nabla}\zeta + R^{\,2}\,\vec{\nabla}\cdot\left(\frac{\vec{\nabla}\psi}{R^{\,2}}\right)\nabla\zeta.
+\end{equation}
+Force balance implies that
+\begin{equation}
+\vec{j}\times \vec{B} = \vec{\nabla} p,
+\end{equation}
+which yields the Grad-Shafranov equation:
+\begin{equation}
+R^{\,2}\,\vec{\nabla}\cdot\left(\frac{\vec{\nabla}\psi}{R^{\,2}}\right) = - I\,\frac{dI}{d\psi} -\mu_0\,R^{\,2}\,\frac{dp}{d\psi}.
+\end{equation}
+Finally,
+\begin{equation}
+\mu_0\,\vec{j}\cdot\vec{B} = -\left(\frac{I^{\,2}}{R^{\,2}} + \frac{|\vec{\nabla}\psi|^{\,2}}{R^{\,2}}\right)\frac{dI}{d\psi}
+-\mu_0\, I\,\frac{dp}{d\psi}.
+\end{equation}
+
+\section{Fluid Velocities and Heat Fluxes}
 We can write
 \begin{equation}
 \vec{u}_j^{\,a} = u_{\parallel\,j}^{\,a}\,\vec{b} + \vec{u}_{\perp\,j}^{\,a},
@@ -410,8 +430,8 @@ Follows that
 \begin{equation}
 \left[\begin{array}{rr} [F^{\,ii}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
 \left[\begin{array}{c}(u_\parallel^{\,i}) \\[0.5ex] (u_\parallel^{\,I})\end{array}\right]
-= -\left[\begin{array}{c} [\mu^{\,i}]\,(u_\theta^{\,i}) \\[0.5ex]
-[\tilde{\mu}^{\,I}]\,(u_\theta^{\,I})\end{array}\right]+\left[\begin{array}{c}{\tau_{ii}\,\langle\sigma\,v\rangle_i^{\,cx}\,[X^{\,i}]\,(\tilde{u})_{\parallel\,i}},\\[0.5ex] 0\end{array}\right]\\[0.5ex],
+\simeq -\left[\begin{array}{c} [\mu^{\,i}]\,(u_\theta^{\,i}) \\[0.5ex]
+[\tilde{\mu}^{\,I}]\,(u_\theta^{\,I})\end{array}\right]-\left[\begin{array}{c}{\tau_{ii}\,\langle\sigma\,v\rangle_i^{\,cx}\,[X^{\,i}]\,(\tilde{u}_{\parallel\,i})}\\[0.5ex] 0\end{array}\right],
 \end{equation}
 and
 \begin{equation}\label{e173}
@@ -420,25 +440,32 @@ and
 
 Follows from Eq.~(\ref{e24x}) that
 \begin{equation}
- (u_{\parallel}^{\,a})  = (u_\theta^{\,a}) + (V_\psi^{\,a}).
+ (u_{\parallel}^{\,a})  = (u_\theta^{\,a}) + (V_\psi^{\,a}),
+\end{equation}
+and
+\begin{equation}
+ (\tilde{u}_{\parallel}^{\,a})  = \frac{\langle n_n\rangle}{y}\,(u_\theta^{\,a}) + \langle n_n\rangle\,(V_\psi^{\,a}),
 \end{equation}
 where
 \begin{equation}
 V_\psi^{\,a} = \left(\begin{array}{c}V_{\psi\,0}^{\,a}\\[1ex]
-V_{\psi\,1}^{\,a}\end{array}\right).
+V_{\psi\,1}^{\,a}\end{array}\right),
+\end{equation}
+and\
+\begin{equation}
+y = \frac{\langle n_n\rangle\,\langle B^{\,2}\rangle}{\langle n_n\,B^{\,2}\rangle}.
 \end{equation}
 Thus, 
-\begin{equation}\label{emode}
+\begin{align}\label{emode}
 \left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]
 \left[\begin{array}{c}(u_\theta^{\,i}) \\[0.5ex] (u_\theta^{\,I})\end{array}\right]
-= -\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
+&= -\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
 \left[\begin{array}{c} (V_\psi^{\,i})\\[0.5ex]
 (V_\psi^{\,I})\end{array}\right],
-\end{equation}
+\end{align}
 where
 \begin{align}
-[Y^{\,i}] &= \tau_{ii}\,\langle\sigma v\rangle_i^{\,cx}\,\langle n_n\rangle \,[X^{\,i}],\\[0.5ex]
-y &= \frac{\langle n_n\rangle\,\langle B^{\,2}\rangle}{\langle n_n\,B^{\,2}\rangle}.
+[Y^{\,i}] &= \tau_{ii}\,\langle\sigma v\rangle_i^{\,cx}\,\langle n_n\rangle \,[X^{\,i}].
 \end{align}
 Can write
 \begin{equation}
@@ -454,37 +481,43 @@ V_{E\,0}(\psi) &=- I\,\frac{d{\mit\Phi}}{d\psi}
 V_{E\,1}(\psi) &= 0.
 \end{align}
 Fact that $F^{\,ii}_{j0} =F^{\,iI}_{j0}$ and $F^{\,Ii}_{j0}=F^{\,II}_{j0}$ means that we can rewrite Eq.~(\ref{emode}) as
-\begin{equation}
+\begin{align}
 \left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]
 \left[\begin{array}{c}(u_\theta^{\,i}) \\[0.5ex] (u_\theta^{\,I})\end{array}\right]
-= -\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
+&= -\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right]
 \left[\begin{array}{c} (V_\ast^{\,i})\\[0.5ex]
-(V_\ast^{\,I})\end{array}\right].
-\end{equation}
+(V_\ast^{\,I})\end{array}\right]\nonumber\\[0.5ex]&-\tau_{ii}\,\langle\sigma\,v\rangle_i^{\,cx}\,\langle n_n\rangle\left[\begin{array}{c} (V_E)\\[0.5ex]
+(0)\end{array}\right].
+\end{align}
 Let
 \begin{equation}
 \left[\begin{array}{rr} [L^{\,ii}], & [L^{\,iI}]\\[0.5ex] [L^{\,Ii}],& [L^{\,II}]\end{array}\right]=\left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]^{\,-1}
 \,
-\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right].
+\left[\begin{array}{rr} [F^{\,ii}+Y^{\,i}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right],
+\end{equation}
+and
+\begin{equation}
+\left[\begin{array}{rr} [G^{\,ii}], & [G^{\,iI}]\\[0.5ex] [G^{\,Ii}],& [G^{\,II}]\end{array}\right]=\tau_{ii}\,\langle\sigma\,v\rangle_i^{\,cx}\,\langle n_n\rangle\left[\begin{array}{rr} [F^{\,ii}+\mu^{\,i}+Y^{\,i}/y], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right]^{\,-1}.
 \end{equation}
 Follows that
 \begin{align}
-(u_\theta^{\,i}) &= -[L^{\,ii}]\,(V_\ast^{\,i})-[L^{\,iI}]\,(V_\ast^{\,I}),\\[0.5ex]
+(u_\theta^{\,i}) &= -[G^{\,ii}]\,(V_E)-[L^{\,ii}]\,(V_\ast^{\,i})-[L^{\,iI}]\,(V_\ast^{\,I}),\\[0.5ex]
 (u_\theta^{\,I}) &= - [L^{\,II}]\,(V_\ast^{\,I}) - [L^{\,Ii}]\,(V_\ast^{\,i}),\\[0.5ex]
-(u_\parallel^{\,i}) &= (V_E) + (1-[L^{\,ii}])\,(V_\ast^{\,i}) -[L^{\,iI}]\,(V_\ast^{\,I}),\\[0.5ex]
+(u_\parallel^{\,i}) &= ([1]-[G^{\,ii}])\,(V_E) + (1-[L^{\,ii}])\,(V_\ast^{\,i}) -[L^{\,iI}]\,(V_\ast^{\,I}),\\[0.5ex]
 (u_\parallel^{\,I}) &= (V_E) + (1-[L^{\,II}])\,(V_\ast^{\,I}) -[L^{\,Ii}]\,(V_\ast^{\,i}).
 \end{align}
 
 Equation~(\ref{e173}) becomes 
 \begin{align}
-[F^{\,ee}+\mu^{\,e}]\,(u_\theta^{\,e})& = -\left([F^{\,ee}]-[F^{\,ei}]-[F^{eI}]\right)(V_E)-[F^{\,ee}]\,(V_\ast^{\,e})\nonumber\\[0.5ex]&
-+ \left\{[F^{ei}]\,(1-[L^{\,ii}])-[F^{eI}]\,[L^{\,Ii}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
+[F^{\,ee}+\mu^{\,e}]\,(u_\theta^{\,e})& = -\left([F^{\,ee}]-[F^{\,ei}]-[F^{eI}]\right)(V_E)-[F^{\,ei}]\,[G^{\,ii}]\,(V_E)\nonumber\\[0.5ex]&
+\phantom{=}-[F^{\,ee}]\,(V_\ast^{\,e})+ \left\{[F^{ei}]\,(1-[L^{\,ii}])-[F^{eI}]\,[L^{\,Ii}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
 &\phantom{=}
 + \left\{[F^{\,eI}]\,(1-[L^{\,II}])-[F^{\,ei}]\,[L^{\,iI}]\right\}(V_\ast^{\,I})+{\mit\Omega}_{ee}\,\tau_{ee}\,(E_\parallel).
 \end{align}
 However, because $F^{\,ee}_{j0}=F^{ei}_{j0}+F^{\,eI}_{j0}$, the previous equation becomes
 \begin{align}
-[F^{\,ee}+\mu^{\,e}]\,(u_\theta^{\,e})& =-[F^{\,ee}]\,(V_\ast^{\,e})
+[F^{\,ee}+\mu^{\,e}]\,(u_\theta^{\,e})& =-[F^{\,ei}]\,[G^{\,ii}]\,(V_E)-[F^{\,ee}]\,(V_\ast^{\,e})\nonumber\\[0.5ex]
+&\phantom{=}
 + \left\{[F^{\,eI}]\,(1-[L^{\,ii}])-[F^{\,II}]\,[L^{\,Ii}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
 &\phantom{=}
 + \left\{[F^{eI}\,]\,(1-[L^{\,II}])-[F^{\,ei}]\,[L^{\,iI}]\right\}(V_\ast^{\,I})+{\mit\Omega}_{ee}\,\tau_{ee}\,(E_\parallel).
@@ -492,22 +525,26 @@ However, because $F^{\,ee}_{j0}=F^{ei}_{j0}+F^{\,eI}_{j0}$, the previous equatio
 Let
 \begin{align}
 [Q^{\,ee}] &= [F^{\,ee}+\mu^{\,e}]^{\,-1},\\[0.5ex]
+[P^{\,ei}] &= [Q^{\,ee}]\,[F^{\,ei}]\,[G^{\,ii}],\\[0.5ex]
 [L^{\,ee}] &= [Q^{\,ee}]\,[F^{\,ee}],\\[0.5ex]
 [L^{\,ei}] &= -[Q^{\,ee}]\left\{[F^{\,ei}\,]\,(1-[L^{\,ii}])-[F^{\,eI}]\,[L^{\,Ii}]\right\},\\[0.5ex]
 [L^{\,eI}] &= -[Q^{\,ee}]\left\{[F^{\,eI}]\,(1-[L^{\,II}])-[F^{\,ei}]\,[L^{\,iI}]\right\}.
 \end{align}
 Follows that
 \begin{align}
-(u_\theta^{\,e}) &=-[L^{\,ee}]\,(V_{\ast}^{\,e})- [L^{\,ei}]\,(V_{\ast}^{\,i}) -[L^{\,eI}]\,(V_\ast^{\,I}) 
-+ {\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),\\[0.5ex]
-(u_\parallel^{\,e}) &= (V_E) + (1-[L^{\,ee}])\,(V_{\ast}^{\,e}) - [L^{\,ei}]\,(V_{\ast}^{\,i}) -[L^{\,eI}]\,(V_\ast^{\,I})
+(u_\theta^{\,e}) &=-[P^{\,ei}]\,(V_E)-[L^{\,ee}]\,(V_{\ast}^{\,e})- [L^{\,ei}]\,(V_{\ast}^{\,i}) -[L^{\,eI}]\,(V_\ast^{\,I}) 
+\nonumber\\[0.5ex]
+&\phantom{=}+ {\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),\\[0.5ex]
+(u_\parallel^{\,e}) &= ([1]-[P^{\,ei}])\,(V_E) + (1-[L^{\,ee}])\,(V_{\ast}^{\,e}) - [L^{\,ei}]\,(V_{\ast}^{\,i}) -[L^{\,eI}]\,(V_\ast^{\,I})\nonumber\\[0.5ex]&\phantom{=}
 + {\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),
 \end{align}
 
 Finally,
 \begin{align}
-(j_\parallel) &=\sum_a n_a\,e_a\,(u_\parallel^{\,a})\nonumber\\[0.5ex]
-&=\left\{n_i\,e_i\,(1-[L^{\,ii}]) - n_I\,e_I\,[L^{\,Ii}] - n_e\,e_e\,[L^{\,ei}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
+(j_\parallel) &\equiv \sum_a n_a\,e_a\,(u_\parallel^{\,a})\nonumber\\[0.5ex]
+&=-\left(n_i\,e_i\,[G^{\,ii}]+n_e\,e_e\,[P^{\,ei}]\right)(V_E)
+\nonumber\\[0.5ex]
+&\phantom{=}+\left\{n_i\,e_i\,(1-[L^{\,ii}]) - n_I\,e_I\,[L^{\,Ii}] - n_e\,e_e\,[L^{\,ei}]\right\}(V_\ast^{\,i})\nonumber\\[0.5ex]
 &\phantom{=}+\left\{n_I\,e_I\,(1-[L^{\,II}]) - n_i\,e_i\,[L^{\,iI}]-n_e\,e_e\,[L^{\,eI}]\right\}(V_\ast^{\,I})\nonumber\\[0.5ex]
 &\phantom{=}+n_e\,e_e\,(1-[L^{\,ee}])\,(V_\ast^{\,e}) +n_e\,e_e\,{\mit\Omega}_e\,\tau_{ee}\,[Q^{\,ee}]\,(E_\parallel),
 \end{align}
@@ -530,14 +567,14 @@ V_{E\,1}(\psi) &=0.
 
 We have $e_e=-e$, $e_i=e$, $e_I= Z_I\,e$. 
 Thus,
-\begin{align}
-\frac{V_\theta^{\,i}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -L^{\,ii}_{00}\,\omega_{\ast\,i}-
+\begin{align}\label{vtnc}
+\frac{V_\theta^{\,i}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -G_{00}^{\,ii}\,\omega_E-L^{\,ii}_{00}\,\omega_{\ast\,i}-
 L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]\phantom{=}
 &\phantom{=}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
 \frac{V_\theta^{\,I}}{B_\theta}\,\frac{\langle B^{\,2}\rangle}{I} &= -L^{\,II}_{00}\,\omega_{\ast\,I}-
 L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\nonumber\\[0.5ex]\phantom{=}
 &\phantom{=}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i},\\[0.5ex]
-\frac{\langle V_\parallel^{\,i}\,B\rangle}{I} &=\omega_E +\omega_{\ast\,i}-L^{\,ii}_{00}\,\omega_{\ast\,i}-
+\frac{\langle V_\parallel^{\,i}\,B\rangle}{I} &=(1-G_{00}^{\,ii})\,\omega_E +\omega_{\ast\,i}-L^{\,ii}_{00}\,\omega_{\ast\,i}-
 L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]\phantom{=}
 &\phantom{=}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
 \frac{\langle V_\parallel^{\,I} B\rangle}{I} &= \omega_E +\omega_{\ast\,I}-L^{\,II}_{00}\,\omega_{\ast\,I}-
@@ -547,7 +584,7 @@ L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right
 
 Also,
 \begin{align}
-\frac{V_\phi^{\,i}}{R}&=\omega_E +\omega_{\ast\,i} +\frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle}\left[-L^{\,ii}_{00}\,\omega_{\ast\,i}-
+\frac{V_\phi^{\,i}}{R}&=\omega_E +\omega_{\ast\,i} +\frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle}\left[-G_{00}^{\,ii}\,\omega_E-L^{\,ii}_{00}\,\omega_{\ast\,i}-
 L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\right.\nonumber\\[0.5ex]\phantom{=}
 &\left.\phantom{=}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}\right],\\[0.5ex]
 \frac{V_\phi^{\,I}}{R}&= \omega_E +\omega_{\ast\,I}+\frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle}\left[-L^{\,II}_{00}\,\omega_{\ast\,I}-
@@ -577,7 +614,7 @@ K_\theta = \frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle},
 \end{equation}
 and 
 \begin{align}
-\omega_{{\rm nc}\,i}&= -L^{\,ii}_{00}\,\omega_{\ast\,i}-
+\omega_{{\rm nc}\,i}&= -G^{\,ii}_{00}\,\omega_E-L^{\,ii}_{00}\,\omega_{\ast\,i}-
 L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
 \omega_{{\rm nc}\,I}&= -L^{\,II}_{00}\,\omega_{\ast\,I}-
 L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
@@ -604,7 +641,8 @@ j_\parallel = j_{\rm bootstrap} + j_{\rm ohmic},
 \end{equation}
 where
 \begin{align}
-\frac{\langle j_{\rm bootstrap}\,B\rangle}{I}&= -\left\{1-L^{\,ii}_{00} - \left(\frac{Z_{\rm eff}-1}{Z_I-Z_{\rm eff}}\right)L^{\,Ii}_{00}
+\frac{\langle j_{\rm bootstrap}\,B\rangle}{I}&=-\left\{P_{00}^{\,ei}-\left(\frac{Z_I-Z_{\rm eff}}{Z_{\rm eff}-1}\right)G^{\,ii}_{00}\right\}n_e\,e\,\frac{d{\mit\Phi}}{d\psi}\nonumber\\[0.5ex]
+&\phantom{=} -\left\{1-L^{\,ii}_{00} - \left(\frac{Z_{\rm eff}-1}{Z_I-Z_{\rm eff}}\right)L^{\,Ii}_{00}
 + \left(\frac{Z_I-1}{Z_I-Z_{\rm eff}}\right)L^{\,ei}_{00}\right\}\frac{dp_i}{d\psi}\nonumber\\[0.5ex]
 &\phantom{=}
 - \left\{1-L^{\,II}_{00} - \left(\frac{Z_I-Z_{\rm eff}}{Z_{\rm eff}-1}\right)L^{\,iI}_{00}
@@ -628,6 +666,16 @@ where
 \sigma_{ee} = \frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e}.
 \end{equation}
 
+\section{Model Poloidal Flow Damping Term}
+Our model poloidal flow damping force density in the plasma equation of motion takes the form
+\begin{equation}
+\frac{m_i\,n_i}{\tau_\theta}\,(V_\theta - V_\theta^{\,nc})\,{\bf e}_\theta,
+\end{equation}
+where		
+\begin{equation}
+\frac{1}{\tau_\theta} = \left(\frac{I^{\,2}}{\langle |\nabla\psi|^{\,2}\rangle}\right)\frac{\mu_{00}^{\,i}}{\tau_{ii}},
+\end{equation}
+and $V_\theta^{\,nc}$ is specified in Eq.~(\ref{vtnc}).
 
 \end{document}
 

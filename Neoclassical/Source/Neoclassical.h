@@ -3,7 +3,7 @@
 // ################################################################
 // Class to calculate neoclassical flow-damping rates, neoclassical
 // phase velocities, and neoclassical resistivities, at rational 
-// surfaces in tokamak.
+// surfaces in tokamak plasma.
 
 // Command line options:
 // -e INTF     - override INTF value from namelist file
@@ -22,16 +22,18 @@
 // Final data passed to program PHASE in file Outputs/nFile
 
 // Version:
-// 1.0 - Initial version
-// 1.1 - Improved indexing of pFiles and fFiles
-// 1.2 - Major rearrangement of input and output files
-// 1.3 - Added PsiNk to nFile
-// 1.4 - Added cFile and linear interpolation
-// 1.5 - Added chie and chin
-// 1.6 - Divided normalized layer width by 0.8227
-// 1.7 - Output wnl
-// 1.8 - Removed 0.8227 from layer width (which actually is not normalized), redefined S_k
-// 1.9 - Minor changes for KSTAR data
+// 1.0  - Initial version
+// 1.1  - Improved indexing of pFiles and fFiles
+// 1.2  - Major rearrangement of input and output files
+// 1.3  - Added PsiNk to nFile
+// 1.4  - Added cFile and linear interpolation
+// 1.5  - Added chie and chin
+// 1.6  - Divided normalized layer width by 0.8227
+// 1.7  - Output wnl
+// 1.8  - Removed 0.8227 from layer width (which actually is not normalized), redefined S_k
+// 1.9  - Minor changes for KSTAR data
+// 1.10 - Changed operation of FREQ switch
+// 1.11 - Added missing extra term associated with chanrge exchange
 
 // ################################################################
 
@@ -39,7 +41,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 9
+#define VERSION_MINOR 11
 
 #include <stdio.h>
 #include <math.h>
@@ -81,7 +83,13 @@ class Neoclassical
   // Read from Inputs/Neoclassical.in
   int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
   int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
-  int    FREQ;     // Frequency switch. If < 0 || == 0 || > 0 then use linear/nonlinear/ExB natural frequency
+  int    FREQ;     // Natural frequency switch:
+                   //                 If == +1 then use linear frequency derived from given ExB profile
+                   //                 If == +2 then use ExB frequency derived from given ExB profile
+                   //                 If == +3 then use nonlinear frequency derived from given ExB profile
+                   //                 If == -1 then use linear frequency derived from inferred ExB profile
+                   //                 If == -2 then use ExB frequency derived from inferred ExB profile
+                   //                 If == -3 then use nonlinear derived frequency from inferred ExB profile
   int    INTP;     // If != 0 then use interpolated pFile
   int    INTF;     // If != 0 then use interpolated fFile
   int    INTC;     // If != 0 then use interpolated cFile
@@ -294,6 +302,7 @@ class Neoclassical
   Array<double,1> L_Ii_01;  // Neoclassical ion flow parameter
   Array<double,1> L_II_00;  // Neoclassical ion flow parameter
   Array<double,1> L_II_01;  // Neoclassical ion flow parameter
+  Array<double,1> G_ii_00;  // Neoclassical ion flow parameter
   Array<double,1> Q_00;     // Neoclassical electron flow parameter
 
   // ........................

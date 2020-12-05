@@ -161,6 +161,11 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
        printf ("NEOCLASSICAL::Read_Parameters: Error invalid NTYPE value\n");
        exit (1);
      }
+  if (abs (FREQ) > 3 || FREQ == 0)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error invalid FREQ value\n");
+      exit (1);
+    }
 
   // Output input parameters
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -620,6 +625,7 @@ void Neoclassical::Get_Derived ()
       chiek  (j) = Interpolate (NPSI, rr, chie,   rk (j), 0);
       chink  (j) = Interpolate (NPSI, rr, chin,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
+
       if (NTYPE == 0)
 	NNk (j) = NN * exp ((rk(j) - 1.) /(LN /a));
       else if (NTYPE == 1)
@@ -849,6 +855,7 @@ void Neoclassical::Get_Parameters ()
   L_Ii_01.resize (nres);
   L_II_00.resize (nres);
   L_II_01.resize (nres);
+  G_ii_00.resize (nres);
   Q_00.resize    (nres); 
  
   // ........................
@@ -958,6 +965,7 @@ void Neoclassical::Get_Parameters ()
       L_Ii_01 (j) = gsl_matrix_get (L, 2, 1);
       L_II_00 (j) = gsl_matrix_get (L, 2, 2);
       L_II_01 (j) = gsl_matrix_get (L, 2, 3);
+      G_ii_00 (j) = gsl_matrix_get (invH, 0, 0) * SVN * NNk (j) /nu_iik (j);
             
       gsl_matrix_free      (H);
       gsl_matrix_free      (G);
@@ -988,16 +996,16 @@ void Neoclassical::Get_Parameters ()
       gsl_matrix_free (Q);
       gsl_permutation_free (pp);
       
-     printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  Q_00 = %10.3e\n",
-	     mk (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),  L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), Q_00 (j));
+     printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  G_ii = %10.3e  zasQ_00 = %10.3e\n",
+	     mk (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),  L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), Q_00 (j));
     }
 
   // Output parameters
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/parameters.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     rk (j), eta_ik (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),
-	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), Q_00 (j));
+	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), Q_00 (j));
   fclose (file);
 }
 
@@ -1020,25 +1028,39 @@ void Neoclassical::Get_Frequencies ()
 
   for (int j = 0; j < nres; j++)
     {
-      w_nc_ik (j) = - L_ii_00 (j) * w_ast_ik (j)
-		    - L_iI_00 (j) * w_ast_Ik (j)
-		    + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
-	            + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
-
       w_nc_Ik (j) = - L_II_00 (j) * w_ast_Ik (j)
 		    - L_Ii_00 (j) * w_ast_ik (j)
 		    + L_II_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j)
 	            + L_Ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j);
 
       w_E_Ik (j) = wtk (j) - w_ast_Ik (j) - Kthek (j) * w_nc_Ik (j);
-      
-      w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
-      w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j) + w_nc_ik (j));
-      w_EB        (j) = - double (ntor) * (wEk (j));
 
-      if (FREQ < 0)
+      if (FREQ > 0)
+	{
+	  w_nc_ik (j) = - G_ii_00 (j) * wEk (j) - L_ii_00 (j) * w_ast_ik (j)
+	    - L_iI_00 (j) * w_ast_Ik (j)
+	    + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	    + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+	  
+	  w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
+	  w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j) + w_nc_ik (j));
+	  w_EB        (j) = - double (ntor) * (wEk (j));
+	}
+      else
+	{
+	  w_nc_ik (j) = - G_ii_00 (j) * w_E_Ik (j) - L_ii_00 (j) * w_ast_ik (j)
+	    - L_iI_00 (j) * w_ast_Ik (j)
+	    + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	    + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+	  
+	  w_linear    (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ek (j));
+	  w_nonlinear (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ik (j) + w_nc_ik (j));
+	  w_EB        (j) = - double (ntor) * (w_E_Ik (j));
+	}
+
+      if (abs (FREQ) == 1)
 	w_actual (j) = w_linear    (j);
-      else if (FREQ > 0)
+      else if (abs (FREQ) == 2)
 	w_actual (j) = w_EB        (j);
       else
 	w_actual (j) = w_nonlinear (j);

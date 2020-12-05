@@ -1,6 +1,6 @@
 import graph;
      
-size(500,500,IgnoreAspect);
+size(1000,500,IgnoreAspect);
 
 file    in = input("../../Outputs/Stage3/omega.txt").line();
 real[][] A = in.dimension (0,0);
@@ -18,7 +18,7 @@ draw(graph(r,wnl),s,marker(scale(1.5mm)*polygon(4)));
 s = black + dotted + 1.5;	
 draw(graph(r,wEB),s,marker(scale(1.5mm)*polygon(4)));
 
-xlimits (0.7,1.0,Crop);
+xlimits (0.5,1.0,Crop);
 
 s = dotted + black + 1;
 yequals (0., s);

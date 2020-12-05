@@ -47,7 +47,7 @@ limits ((0.,0.),(1.,6.5),Crop);
 
 s = dotted + black + 2;
 
-//xequals (0.945, s);
+xequals (0.945, s);
 
 pen pp = fontsize(30.);
 label(Label("$n_e$",(0.83,6.)));

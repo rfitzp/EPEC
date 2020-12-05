@@ -39,6 +39,7 @@
 //       Modified finite island-width natural frequency interpolation.
 // 2.4 - Added LIN flag
 // 2.5 - Added middle coil set
+// 2.6 - Limited island width to stop them extending beyond neighbouring rational surfaces
 
 // #######################################################################
 
@@ -46,7 +47,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 5
+#define VERSION_MINOR 6
 
 #include <stdio.h>
 #include <math.h>
