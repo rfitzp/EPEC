@@ -12,6 +12,7 @@
 .DS_Store
 *.txt
 *.fig
+*.fig.bak
 Flux/flux
 Flux/Outputs/fFile
 Flux/Outputs/fFiles
@@ -43,7 +44,7 @@ Phase-2.x/Inputs/uFiles
 Phase-2.x/Inputs/mFile
 Phase-2.x/Inputs/mFiles
 Phase-2.x/Outputs/sFile
-Phase-1.x/Inputs/nFile
+Phase-2.x/Inputs/nFile
 IslandDynamics/island
 Rescale/rescale
 Rescale/Inputs/gFile
@@ -54,4 +55,5 @@ Talks
 Flux/Interface.txt
 Flux/Inputs/InputParameters.txt
 Neoclassical/Inputs/InputParameters.txt
+Phase-2.x/Inputs/InputParameters.txt
 

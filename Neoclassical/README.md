@@ -13,7 +13,7 @@
       Latex description of program algorithm
 	  
  ### /Source
-     - Makefile
+    - Makefile
 	 GNU Makefile
 	- *.f90
 	 Fortran_90 source files
