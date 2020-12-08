@@ -5,7 +5,14 @@
    Program to read FLUX data from fFile(s), profile data from pFile(s) and cFiles(s), and write neoclassical data needed by PHASE to nFile
    - Stage 3:
      Read input files, calculate neoclassical data at rational surfaces, and output nFile
-   
+
+## Requirements
+
+   - blitz++ library (https://github.com/blitzpp/blitz)
+   - gsl library (https://www.gnu.org/software/gsl)
+   - BLAS library (http://www.netlib.org/blas)
+   - asymptote (for plots) (https://asymptote.sourceforge.io)
+
 ## Contents
 
  ### /Documentation

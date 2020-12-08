@@ -3,7 +3,11 @@
 ## Description
     Rescales equilibrium gFile to change q_95 by modifying toroidal plasma current 
     while keeping B_toroidal the same
-	
+
+## Requirements
+
+   - asymptote (for plots) (https://asymptote.sourceforge.io)	
+   
 ## Contents	
 
  ### /Documentation

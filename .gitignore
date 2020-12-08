@@ -14,18 +14,22 @@
 *.fig
 *.fig.bak
 Flux/flux
-Flux/Outputs/fFile
-Flux/Outputs/fFiles
+Flux/Interface.txt
+Flux/Inputs/InputParameters.txt
 Flux/Inputs/gFile
 Flux/Inputs/gFiles
+Flux/Outputs/fFile
+Flux/Outputs/fFiles
 Neoclassical/neoclassical
-Neoclassical/Outputs/nFile
-Neoclassical/Outputs/nFiles
+Neoclassical/Inputs/InputParameters.txt
 Neoclassical/Inputs/pFile
 Neoclassical/Inputs/pFiles
 Neoclassical/Inputs/fFile
 Neoclassical/Inputs/cFile
+Neoclassical/Outputs/nFile
+Neoclassical/Outputs/nFiles
 Phase-1.x/phase
+Phase-1.x/Inputs/InputParameters.txt
 Phase-1.x/Inputs/fFile
 Phase-1.x/Inputs/lFile
 Phase-1.x/Inputs/lFiles
@@ -36,6 +40,7 @@ Phase-1.x/Inputs/mFiles
 Phase-1.x/Inputs/nFile
 Phase-1.x/Outputs/sFile
 Phase-2.x/phase
+Phase-2.x/Inputs/InputParameters.txt
 Phase-2.x/Inputs/fFile
 Phase-2.x/Inputs/lFile
 Phase-2.x/Inputs/lFiles
@@ -43,8 +48,8 @@ Phase-2.x/Inputs/uFile
 Phase-2.x/Inputs/uFiles
 Phase-2.x/Inputs/mFile
 Phase-2.x/Inputs/mFiles
-Phase-2.x/Outputs/sFile
 Phase-2.x/Inputs/nFile
+Phase-2.x/Outputs/sFile
 IslandDynamics/island
 Rescale/rescale
 Rescale/Inputs/gFile
@@ -52,8 +57,4 @@ Rescale/Outputs/gFile
 ExperimentalData
 Papers
 Talks
-Flux/Interface.txt
-Flux/Inputs/InputParameters.txt
-Neoclassical/Inputs/InputParameters.txt
-Phase-2.x/Inputs/InputParameters.txt
 

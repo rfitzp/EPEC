@@ -8,6 +8,13 @@
    - Stage 2:
      Construct flux coordinate system. Calculate metric quantities. Locate rational surfaces.
      Calculate tearing stability matrix. 
+	 
+## Requirements
+
+   - blitz++ library (https://github.com/blitzpp/blitz)
+   - gsl library (https://www.gnu.org/software/gsl)
+   - BLAS library (http://www.netlib.org/blas)
+   - asymptote (for plots) (https://asymptote.sourceforge.io)
    
 ## Contents
 
@@ -16,7 +23,7 @@
       Latex description of program algorithm
 	  
  ### /Source
-     - Makefile
+    - Makefile
 	 GNU Makefile
 	- *.f90
 	 Fortran_90 source files

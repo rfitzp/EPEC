@@ -9,7 +9,14 @@
 	  Read data and calculate vacuum island widths as function of RMP coil phase
 	- Stage 5
 	  Perform island dynamics simulation
-	  
+
+## Requirements
+
+   - blitz++ library (https://github.com/blitzpp/blitz)
+   - gsl library (https://www.gnu.org/software/gsl)
+   - BLAS library (http://www.netlib.org/blas)
+   - asymptote (for plots) (https://asymptote.sourceforge.io)	
+   
 ## Contents
 
  ### /Documentation
