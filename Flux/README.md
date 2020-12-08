@@ -3,9 +3,9 @@
 ## Description
 
    Program to read gFile(s) and write equilibrium data needed by NEOCLASSICAL and PHASE to fFile.
-   - Stage 1
+   - Stage 1:
      Read gFile and output equilibrium data for Stage 2
-   - Stage 2
+   - Stage 2:
      Construct flux coordinate system. Calculate metric quantities. Locate rational surfaces.
      Calculate tearing stability matrix. 
    
@@ -37,7 +37,7 @@
     - fFile
 	  File containing data for NEOCLASSICAL and PHASE
 	- /fFiles
-      Directory of containing precalculated fFiles
+      Directory containing precalculated fFiles
 	- /Stage1
 	  Data files from Stage 1 calculation
 	- /Stage2

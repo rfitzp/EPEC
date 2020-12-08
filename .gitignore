@@ -11,6 +11,7 @@
 #*
 .DS_Store
 *.txt
+*.fig
 Flux/flux
 Flux/Outputs/fFile
 Flux/Outputs/fFiles
@@ -50,5 +51,7 @@ Rescale/Outputs/gFile
 ExperimentalData
 Papers
 Talks
-
+Flux/Interface.txt
+Flux/Inputs/InputParameters.txt
+Neoclassical/Inputs/InputParameters.txt
 

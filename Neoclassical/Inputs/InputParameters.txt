@@ -1,6 +1,0 @@
-Git Hash     = 6cc5030c84888ad550890f531a469947c3015db6
-Compile time = 2020-12-05 17:31:29 UTC
-Git Branch   = master
-
-Input parameters (from Inputs/Neoclassical.in and command line options):
-IMPURITY =  1 NEUTRAL =  1 FREQ = -3 INTP =  0 INTF =  0 INTC =  0 NTYPE =  1 NN =  3.0000e+17 LN =  1.0000e-02 SVN =  4.0000e-14 YN =  1.5000e+00 EN =  1.0000e+00 TIME =  0.0000e+00
