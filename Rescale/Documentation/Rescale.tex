@@ -1,0 +1,118 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\def\vecsign{\mathchar"017E}
+\def\dvecsign{\smash{\stackon[-2.3pt]{\vecsign}{\rotatebox{180}{$\vecsign$}}}}
+\def\dvec#1{\def\useanchorwidth{T}\stackon[-4.2pt]{#1}{\,\dvecsign}}
+\usepackage{stackengine}
+\stackMath
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{\bf Rescaling of Plasma Equilibrium}
+\date{\today}
+\author{Richard Fitzpatrick}
+
+\begin{document}
+\maketitle
+
+\section{Grad-Shafranov Equation}
+The Grad-Shafranov equation takes the form
+\begin{equation}
+\frac{\partial^{\,2}\psi}{\partial R^{\,2}}-\frac{1}{R}\,\frac{\partial\psi}{\partial R} + \frac{\partial^{\,2}\psi}{\partial Z^{\,2}} = -R^{\,2}\,\frac{dP}{d\psi} - \frac{1}{2}\,\frac{dT^{\,2}}{d\psi},
+\end{equation}
+where
+\begin{align}
+j_\phi &= -R\,\frac{dP}{d\psi}- \frac{1}{2\,R}\,\frac{dT^{\,2}}{d\psi},\\[0.5ex]
+q &= \frac{T}{2\pi}\oint_\psi \frac{dl}{R\,|\nabla \psi|}.
+\end{align}
+
+\section{Type I Rescaling}
+The following rescaling of variables leaves the Grad-Shafranov equation invariant:
+\begin{align}
+R_{\rm new}&=R_{\rm old},\\[0.5ex]
+Z_{\rm new}&=Z_{\rm old},\\[0.5ex]
+\psi_{\rm new} &= a_1\,\psi_{\rm old},\\[0.5ex]
+T_{\rm new} &=a_1\,T_{\rm old},\\[0.5ex]
+P_{\rm new} &=a_1^{\,2}\,P_{\rm old}.
+\end{align}
+It follows that
+\begin{align}
+I_{\phi\,{\rm new}} &= a_1\,I_{\phi\,{\rm old}},\\[0.5ex]
+q_{\rm new} &= q_{\rm old}.
+\end{align} 
+
+\section{Type II Rescaling}
+The following rescaling of variable also leaves the Grad-Shafranov equation invariant:
+\begin{align}
+R_{\rm new}&=R_{\rm old},\\[0.5ex]
+Z_{\rm new}&=Z_{\rm old},\\[0.5ex]
+\psi_{\rm new} &=\psi_{\rm old},\\[0.5ex]
+T_{\rm new} &={\rm sgn}(T_{\rm old})\sqrt{T_{\rm old}^{\,2}+a_2},\\[0.5ex]
+P_{\rm new} &=P_{\rm old}.
+\end{align}
+It follows that
+\begin{align}
+I_{\phi\,{\rm new}} &=I_{\phi\,{\rm old}},\\[0.5ex]
+q_{\rm new} &= \frac{T_{\rm new}}{T_{\rm old}}\,q_{\rm old}.
+\end{align} 
+
+\section{Program {\sc RESCALE}}
+Let
+\begin{equation}
+{\mit\Psi} = \frac{\psi - \psi_{\rm axis}}{\psi_{\rm separatrix}-\psi_{\rm axis}}.
+\end{equation}
+
+Program {\sc RESCALE} first performs a type II rescaling such that 
+\begin{equation}
+a_2 = \left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)T_{95\,{\rm old}}^{\,2},
+\end{equation}
+where
+\begin{align}
+q_{95} &\equiv q({\mit\Psi}=0.95),\\[0.5ex]
+T_{95}&\equiv T({\mit\Psi}=0.95).
+\end{align}
+It follows that
+\begin{align}
+\psi_{\rm new} &= \psi_{\rm old},\\[0.5ex]
+T_{\rm new} & =T_{\rm old}\sqrt{1 +\left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)\frac{T_{95\,{\rm old}}^{\,2}}{T_{\rm old}^{\,2}}},\\[0.5ex]
+P_{\rm new} &= P_{\rm old},
+\end{align}
+and
+\begin{align}
+I_{\phi\,{\rm new}} &=I_{\phi\,{\rm old}},\\[0.5ex]
+q_{\rm new} &= q_{\rm old}\sqrt{1 +\left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)\frac{T_{95\,{\rm old}}^{\,2}}{T_{\rm old}^{\,2}}}.
+\end{align} 
+
+Program {\sc RESCALE} then performs a type I rescaling such that 
+\begin{equation}
+a_1 = \frac{T_{1\,{\rm old}}}{T_{1\,{\rm new}}},
+\end{equation}
+where 
+\begin{equation}
+T_{1}\equiv  T({\mit\Psi}=1).
+\end{equation}
+It follows that 
+\begin{align}
+\psi_{\rm new\,new} &= a_1\,\psi_{\rm old},\\[0.5ex]
+T_{\rm new\,new} &=a_1\,T_{\rm new} = T_{1\,{\rm old}}
+\sqrt{
+\frac{T_{\rm old}^{\,2} + (q_{95\,{\rm target}}^{\,2}/q_{95\,{\rm old}}^{\,2}-1)\,T_{95\,{\rm old}}^{\,2}}
+{T_{1\,{\rm old}}^{\,2} + (q_{95\,{\rm target}}^{\,2}/q_{95\,{\rm old}}^{\,2}-1)\,T_{95\,{\rm old}}^{\,2}}
+},
+\\[0.5ex]
+P_{\rm new\,new} &=a_1^{\,2}\,P_{\rm old},
+\end{align}
+and
+\begin{align}
+I_{\phi\,{\rm new\,new}} &= a_1\,I_{\phi\,{\rm old}},\\[0.5ex]
+q_{\rm new\,new} &= q_{\rm new}= q_{\rm old}\sqrt{1 +\left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)\frac{T_{95\,{\rm old}}^{\,2}}{T_{\rm old}^{\,2}}}.
+\end{align}
+Note that
+\begin{align}
+q_{95\,{\rm new\,new}} &= q_{95\,{\rm target}},\\[0.5ex]
+T_{1\,{\rm new\,new}} &= T_{1\,{\rm old}}.
+\end{align}
+
+\end{document}
+

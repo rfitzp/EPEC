@@ -40,7 +40,12 @@ R^{\,2}\,\vec{\nabla}\cdot\left(\frac{\vec{\nabla}\psi}{R^{\,2}}\right) = - I\,\
 Finally,
 \begin{equation}
 \mu_0\,\vec{j}\cdot\vec{B} = -\left(\frac{I^{\,2}}{R^{\,2}} + \frac{|\vec{\nabla}\psi|^{\,2}}{R^{\,2}}\right)\frac{dI}{d\psi}
--\mu_0\, I\,\frac{dp}{d\psi}.
+-\mu_0\, I\,\frac{dp}{d\psi},
+\end{equation}
+which implies that
+\begin{equation}
+\frac{\langle \vec{j}\cdot\vec{B}\rangle}{I} = -\frac{1}{\mu_0}\left(I\,\left\langle\frac{1}{R^{\,2}}\right\rangle + \frac{1}{I}\left\langle
+\frac{|\vec{\nabla}\psi|^{\,2}}{R^{\,2}}\right\rangle\right)\frac{dI}{d\psi}-\frac{dp}{d\psi}.
 \end{equation}
 
 \section{Fluid Velocities and Heat Fluxes}
@@ -641,7 +646,7 @@ j_\parallel = j_{\rm bootstrap} + j_{\rm ohmic},
 \end{equation}
 where
 \begin{align}
-\frac{\langle j_{\rm bootstrap}\,B\rangle}{I}&=-\left\{P_{00}^{\,ei}-\left(\frac{Z_I-Z_{\rm eff}}{Z_{\rm eff}-1}\right)G^{\,ii}_{00}\right\}n_e\,e\,\frac{d{\mit\Phi}}{d\psi}\nonumber\\[0.5ex]
+\frac{\langle j_{\rm bootstrap}\,B\rangle}{I}&=-\left\{P_{00}^{\,ei}-\left(\frac{Z_I-Z_{\rm eff}}{Z_I-1}\right)G^{\,ii}_{00}\right\}n_e\,e\,\frac{d{\mit\Phi}}{d\psi}\nonumber\\[0.5ex]
 &\phantom{=} -\left\{1-L^{\,ii}_{00} - \left(\frac{Z_{\rm eff}-1}{Z_I-Z_{\rm eff}}\right)L^{\,Ii}_{00}
 + \left(\frac{Z_I-1}{Z_I-Z_{\rm eff}}\right)L^{\,ei}_{00}\right\}\frac{dp_i}{d\psi}\nonumber\\[0.5ex]
 &\phantom{=}
@@ -664,6 +669,41 @@ and
 where 
 \begin{equation}
 \sigma_{ee} = \frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e}.
+\end{equation}
+
+Let
+\begin{equation}
+\omega_\parallel = \frac{\langle j_\parallel\,B\rangle}{n_e\,e\,I}.
+\end{equation}
+It follows that
+\begin{equation}
+\omega_\parallel =\omega_{\parallel\,{\rm bootstrap}}+\omega_{\parallel\,{\rm ohmic}},
+\end{equation}
+where
+\begin{align}
+\omega_{\parallel\,{\rm bootstrap}}&=\left\{P_{00}^{\,ei}-\left(\frac{Z_I-Z_{\rm eff}}{Z_I-1}\right)G^{\,ii}_{00}\right\}\omega_E\nonumber\\[0.5ex]
+&\phantom{=} +\left\{\left(\frac{Z_I-Z_{\rm eff}}{Z_I-1}\right)(1-L^{\,ii}_{00}) - \left(\frac{Z_{\rm eff}-1}{Z_I-1}\right)L^{\,Ii}_{00}
++ L^{\,ei}_{00}\right\}\omega_{\ast\,i}\nonumber\\[0.5ex]
+&\phantom{=}
++ \left\{\left(\frac{Z_{\rm eff}-1}{Z_I-1}\right)(1-L^{\,II}_{00}) - \left(\frac{Z_I-Z_{\rm eff}}{Z_I-1}\right)L^{\,iI}_{00}
++ L^{\,eI}_{00}\right\}\omega_{\ast\,I}
+\nonumber\\[0.5ex]
+&\phantom{=}-(1-L^{\,ee}_{00})\,\omega_{\ast\,e}\nonumber\\[0.5ex]
+&\phantom{=}+\left\{\left(\frac{Z_I-Z_{\rm eff}}{Z_I-1}\right)L^{\,ii}_{01} + \left(\frac{Z_{\rm eff}-1}{Z_I-1}\right)L^{\,Ii}_{01}
+- L^{\,ei}_{01}\right\}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]
+&\phantom{=}
++ \left\{\left(\frac{Z_{\rm eff}-1}{Z_I-1}\right)L^{\,II}_{01} + \left(\frac{Z_I-Z_{\rm eff}}{Z_I-1}\right)L^{\,iI}_{01}
+- L^{\,eI}_{01}\right\}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}
+\nonumber\\[0.5ex]
+&\phantom{=}-L^{\,ee}_{01}\left(\frac{\eta_e}{1+\eta_e}\right)\omega_{\ast\,e},
+\end{align}
+and
+\begin{equation}
+\omega_{\parallel\,{\rm ohmic}}= Q^{\,ee}_{00}\,|{\mit\Omega}_e|\,\tau_{ee}\,\omega_{\rm loop},
+\end{equation}
+with
+\begin{equation}
+\omega_{\rm loop} = \frac{\langle E_\parallel\,B\rangle}{I\,\langle B\rangle}= \frac{V_{\rm loop}}{2\pi}\,\frac{\langle B/R\rangle}{I\,\langle B\rangle}.
 \end{equation}
 
 \section{Model Poloidal Flow Damping Term}

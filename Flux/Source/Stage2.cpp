@@ -136,11 +136,11 @@ void Flux::Stage2 ()
 
   delete[] s; delete[] Rs;
 
-  delete[] P;   delete[] RP; delete[] rP;  delete[] GP;
-  delete[] QGP; delete[] QP; delete[] PP;  delete[] GPP;
-  delete[] PPP; delete[] S;  delete[] QX;  delete[] RP1;
-  delete[] Bt; delete[] Bt1; delete[] Bp;  delete[] Bp1;
-
+  delete[] P;     delete[] RP;     delete[] rP;   delete[] GP;
+  delete[] QGP;   delete[] QP;     delete[] PP;   delete[] GPP;
+  delete[] PPP;   delete[] S;      delete[] QX;   delete[] RP1;
+  delete[] Bt;    delete[] Bt1;    delete[] Bp;   delete[] Bp1;
+  
   delete[] mres;    delete[] qres; delete[] rres;  delete[] sres;
   delete[] gres;    delete[] Rres; delete[] gmres; delete[] fcres;
   delete[] PsiNres; delete[] Rres1; 
@@ -515,7 +515,7 @@ void Flux::Stage2CalcQ ()
   PPP = new double[NPSI];  // dP/dPsi
   S   = new double[NPSI];  // sqrt (1 - Psi)
   QX  = new double[NPSI];  // q(Psi) from gFile
-
+ 
   for (int j = 0; j < NPSI; j++)
     {
       double s = double (j) /double (NPSI-1);
@@ -624,11 +624,11 @@ void Flux::Stage2CalcQ ()
       ra    = rP[NPSI-1];
 
       // Confirm q95 and r95
-      q95  = Interpolate (NPSI, S, QP, s95, 0);
-      r95  = Interpolate (NPSI, S, rP, s95, 0);
+      q95  = Interpolate (NPSI, S, QP, s95,  0);
+      r95  = Interpolate (NPSI, S, rP, s95,  0);
       qlim = Interpolate (NPSI, S, QP, slim, 0);
       rlim = Interpolate (NPSI, S, rP, slim, 0);
-      qa   = Interpolate (NPSI, S, QP, sa,  0);
+      qa   = Interpolate (NPSI, S, QP, sa,   0);
       printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)\n",
 	      q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0);
     }

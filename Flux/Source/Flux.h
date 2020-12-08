@@ -19,10 +19,10 @@
 // theta > 0 above midplane.
 
 // Command line options:
-// -g INTG   - override INTG value from namelist
-// -n NTOR   - override NTOR value from namelist
-// -m MMIN   - override MMIN value from namelist
-// -M MMAX   - override MMAX value from namelist
+// -g INTG   - override INTG   value from namelist
+// -n NTOR   - override NTOR   value from namelist
+// -m MMIN   - override MMIN   value from namelist
+// -M MMAX   - override MMAX   value from namelist
 // -p PSILIM - override PSILIM value from namelist
 // -t TIME   - sets experimental time
 
@@ -80,10 +80,10 @@ extern "C" void NameListRead (int* INTG, int* NPSI, int* NTHETA, int* NNC, int* 
 extern "C" void gFileRead ();
 
 // gFile interpolation functions
-extern "C" void gFileInterpolateLinear ();
+extern "C" void gFileInterpolateLinear    ();
 extern "C" void gFileInterpolateQuadratic ();
-extern "C" void gFileInterpolateCubic ();
-extern "C" void gFileInterpolateQuartic ();
+extern "C" void gFileInterpolateCubic     ();
+extern "C" void gFileInterpolateQuartic   ();
 
 // ############
 // Class header
@@ -93,26 +93,26 @@ class Flux
  private:
   
   // Control parameters read from Inputs/Flux.in
-  int    NPSI;         // Number of points in PsiN grid
-  int    NTHETA;       // Number of points in theta grid
-  int    NNC;          // Number of neoclassical harmonics
-  int    QFLG;         // QFLG = 0 - use q95 from gFile
-                       // QFLG = 1 - rescale q95 to Q95 by adding constant to gg'
-  double Q95;          // Target Q95 (QFLG = 1)
-  int    NTOR;         // Toroidal mode number
-  int    MMIN;         // Minimum poloidal mode number
-  int    MMAX;         // Maximum poloidal mode number
-  double PSILIM;       // Maximum PsiN for rational surface
-  double H0;           // Initial integration step-length for equilibirum flux surface integrals 
-  double ACC;          // Integration accuracy for equilibrium flux surface integrals
-  double ETA;          // Regularization factor for Green's function
-  double DR;           // Discritization parameter for simulated Mirnov data
-  double TIME;         // Experimental time
-  int    INTG;         // If != 0 then use interpolated gFile
+  int    NPSI;    // Number of points in PsiN grid
+  int    NTHETA;  // Number of points in theta grid
+  int    NNC;     // Number of neoclassical harmonics
+  int    QFLG;    // QFLG = 0 - use q95 from gFile
+                  // QFLG = 1 - rescale q95 to Q95 by adding constant to gg'
+  double Q95;     // Target Q95 (QFLG = 1)
+  int    NTOR;    // Toroidal mode number
+  int    MMIN;    // Minimum poloidal mode number
+  int    MMAX;    // Maximum poloidal mode number
+  double PSILIM;  // Maximum PsiN for rational surface
+  double H0;      // Initial integration step-length for equilibirum flux surface integrals 
+  double ACC;     // Integration accuracy for equilibrium flux surface integrals
+  double ETA;     // Regularization factor for Green's function
+  double DR;      // Discritization parameter for simulated Mirnov data
+  double TIME;    // Experimental time
+  int    INTG;    // If != 0 then use interpolated gFile
 
   // Toroidal Mirnov coil array locations
-  double RIN;          // Limiter R coordinate at inboard miplane
-  double ROUT;         // Limiter R coordinate at outboard miplane
+  double RIN;     // Limiter R coordinate at inboard miplane
+  double ROUT;    // Limiter R coordinate at outboard miplane
   
   // Stage 1 parameters
   double          R0;       // Scale major radius
@@ -137,7 +137,7 @@ class Flux
   double*         Prp;      // dp/dPsi
   double*         Q;        // q(Psi)
 
-  double dR2, dZ2, dR3, dZ3;
+  double          dR2, dZ2, dR3, dZ3;
  
   // Flux coordinate construction parameters
   double  Psic;        // Psi on magnetic axis
@@ -222,7 +222,7 @@ class Flux
   gsl_vector_complex* EO;  // Response vector for outboard toroidal Mirnov array
 
   // Weights for Simpson's rule
-  double hh;
+  double          hh;
   Array<double,1> Weight1D;
   Array<double,1> weight1D;
   Array<double,2> Weight2D;

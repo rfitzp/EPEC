@@ -1,14 +1,32 @@
-# EPEC
-Program to simulate multi-harmonic magnetic island dynamics in presence of resonant magnetic perturbation 
-in time-varying toroidal tokamak equilibrium.
+# EPEC 
 
-RESCALE        - rescales equilibrium gFile to modify q_95, keeping Btor the same
+## Description
 
-FLUX           - reads gFile(s) and generates equilibrium data needed by NEOCLASSICAL and PHASE
+    Suite of programs to simulate multi-harmonic magnetic island dynamics in presence of resonant magnetic perturbation 
+    in time-varying toroidal tokamak equilibrium.
 
-NEOCLASSICAL   - reads pFile(s) and generates neoclassical data needed by PHASE
+## Contents
 
-PHASE          - reads GPEC data (uFile(s) and lFile(s)) and performs island dynamics simulation in fixed equilibrium
+ ### Makefile
+    GNU makefile for entire package
 
-ISLANDDYNAMICS - performs island dynamics simulation in time-varying equilibrium
+ ### /SCRIPTS
+    Useful shell scripts
 
+ ### /RESCALE  
+    Program to rescale equilibrium gFile to modify q_95 by modifying toroidal plasma current while keeping B_toroidal the same
+
+ ### /FLUX                     
+    Program to read gFile(s) and write equilibrium data needed by NEOCLASSICAL and PHASE to fFile
+
+ ### /NEOCLASSICAL  
+    Program to read FLUX data from fFile(s), profile data from pFile(s) and cFiles(s), and write neoclassical data needed by PHASE to nFile
+
+ ### /PHASE          
+    Program to read FLUX data from fFile(s), NEOCLASSICAL data from nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), 
+    and perform island dynamics simulation in fixed equilibrium. Final state of plasma saved in sFile.
+
+ ### /ISLANDDYNAMICS 
+    Program to perform island dynamics simulation in time-varying equilibrium by calling FLUX, NEOCLASSICAL, and PHASE
+
+		
