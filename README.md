@@ -13,16 +13,16 @@
  ### /SCRIPTS
     Useful shell scripts
 
- ### /RESCALE  
+ ### /RESCALE 
     Program to rescale equilibrium gFile to modify q_95 by modifying toroidal plasma current while keeping B_toroidal the same
 
- ### /FLUX                     
+ ### /FLUX 
     Program to read gFile(s) and write equilibrium data needed by NEOCLASSICAL and PHASE to fFile
 
- ### /NEOCLASSICAL  
+ ### /NEOCLASSICAL 
     Program to read FLUX data from fFile(s), profile data from pFile(s) and cFiles(s), and write neoclassical data needed by PHASE to nFile
 
- ### /PHASE          
+ ### /PHASE 
     Program to read FLUX data from fFile(s), NEOCLASSICAL data from nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), 
     and perform island dynamics simulation in fixed equilibrium. Final state of plasma saved in sFile.
 
