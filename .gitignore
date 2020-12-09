@@ -20,6 +20,7 @@ Flux/Inputs/gFile
 Flux/Inputs/gFiles
 Flux/Outputs/fFile
 Flux/Outputs/fFiles
+Flux/Source/Test/test
 Neoclassical/neoclassical
 Neoclassical/Inputs/InputParameters.txt
 Neoclassical/Inputs/pFile

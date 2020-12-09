@@ -60,5 +60,5 @@
     read (100, '(5e16.9)') (RBOUND (i), ZBOUND (i), i = 1, NBOUND)
     read (100, '(5e16.9)') (RLIM (i), ZLIM (i), i = 1, NLIM)
   
-    *Anything after this is ignored*
+  *Anything after this is ignored*
   

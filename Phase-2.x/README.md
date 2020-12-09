@@ -2,12 +2,11 @@
 
 ## Description
  
-	Program to read FLUX data from fFile(s), NEOCLASSICAL data from nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), 
-	and perform island dynamics simulation in fixed equilibrium. Final state of plasma saved in sFile.
-	
-	- Stage 4
+ Program to read FLUX data from fFile(s), NEOCLASSICAL data from nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), 
+ and perform island dynamics simulation in fixed equilibrium. Final state of plasma saved in sFile.
+ - Stage 4:
 	  Read data and calculate vacuum island widths as function of RMP coil phase
-	- Stage 5
+ - Stage 5:
 	  Perform island dynamics simulation
 
 ## Requirements
