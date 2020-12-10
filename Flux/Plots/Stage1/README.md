@@ -1,4 +1,4 @@
-# Asymptote scripts (see http://asymptote.sourceforge.net/)
+# Asymptote scripts (see http://asymptote.sourceforge.net)
 
 ## filename.asy
 - Usage:	    asy filename
