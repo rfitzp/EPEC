@@ -15,44 +15,29 @@
 
 ## Contents
 
- ### /Documentation
-    - Neoclassical.tex
-      Latex description of program algorithm
+### /Documentation
+- Neoclassical.tex: Latex description of program algorithm
 	  
- ### /Source
-    - Makefile
-	 GNU Makefile
-	- *.f90
-	 Fortran_90 source files
-	- *.h
-	 C++ header files
-	- *.cpp
-	 C++ source files
+### /Source
+- Makefile: GNU makefile
+- *.f90: Fortran_90 source files
+- *.h: C++ header files
+- *.cpp: C++ source files
 	 
- ### /Inputs
-	- Neoclassical.in
-	  Fortran_90 namelist control file
-	- fFile
-	  Data from PHASE
-	- pFile
-	  Profile data
-	- cFile
-	  Perpendicular diffusivity data
+### /Inputs
+- Neoclassical.in: Fortran_90 namelist control file
+- fFile: Data from PHASE
+- pFile: Profile data
+- cFile: Perpendicular diffusivity data
 	  
- ### /Outputs
-    - nFile
-	  File containing data for PHASE
-	- /nFiles
-      Directory containing precalculated nFiles
-	- /Stage3
-	  Data files from Stage 3 calculation
+### /Outputs
+- nFile: File containing data for PHASE
+- /nFiles: Directory containing interpolated nFiles 
+- /Stage3: Data files from Stage 3 calculation
 	  
- ### /Plots
-    - /Stage3
-	 -- README
-	    Description of Asymptote scripts
-	 -- *.asy
-	    Asymtptote scripts to plot Stage 3 data
+### /Plots
+- /Stage3
+  - *.asy: Asymtptote scripts to plot Stage 3 data
 
 ## pFile Format
 
@@ -90,8 +75,21 @@
 	
 	n "N Z A of ION SPECIES"
 	for (int i = 0; i < n; i++)
-	N, Z, A
-	
+	N, Z, A (i=0 impurity, i=1 majority; i=2 fast)
+
+ - PSI: Normalized poloidal flux
+ - NE: Electron number density (10^20/m^3)
+ - TE: Electron temperature (keV)
+ - NI: Thermal ion number density (10^20/m^3)
+ - TI: Thermal ion temperature (keV)
+ - NB: Fast ion number density (10^20/m^3)
+ - OMEG: Impurity ion toroidal angular velocity on outboard midplane (krad/s)
+ - OMGEB: ExB frequency (krad/s)
+ - NZ1: Impurity ion number density (10^20/m^3)
+ - N: Ion atomic number
+ - Z: Ion charge (units of e)
+ - A: Ion mass number
+ 
  *Fields can occur in any order. Additional fields are ignored.*
  
  ## cFile Format
@@ -99,3 +97,8 @@
     n
     for (int i = 0; i < n; i++)
     PSI, CHI_PHI, CHI_E, D_PERP
+	
+ - PSI: Normalized poloidal flux	
+ - CHI_PSI: Perpendicular toroidal momentum diffusivity (m^2/s)
+ - CHI_E: Perpendiocular energy diffusivity (m^2/s)
+ - D_perp: Perpendicular particle diffusivity (m^2/s)

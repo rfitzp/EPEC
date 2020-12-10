@@ -134,9 +134,10 @@ void Neoclassical::pFileInterpolateLinear (char* pFile1, double time1, char* pFi
   // ################
  
   Field ne_1;          Field Te_1;        Field ni_1;        Field Ti_1;
-  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1;
+  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1; Field wt_1;
   int   ne_flag_1 = 0; int Te_flag_1 = 0; int ni_flag_1 = 0; int Ti_flag_1 = 0;
   int   nb_flag_1 = 0; int wE_flag_1 = 0; int nI_flag_1 = 0; int NZ_flag_1 = 0;
+  int   wt_flag_1 = 0;
 
   FILE* file = OpenFiler (pFile1);
  
@@ -267,6 +268,25 @@ void Neoclassical::pFileInterpolateLinear (char* pFile1, double time1, char* pFi
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_1 = 1;
+	  printf ("Reading  omeg from pFile_1 - n = %4d:\n", n);
+	  wt_1.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateLinear: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_1.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -327,7 +347,7 @@ void Neoclassical::pFileInterpolateLinear (char* pFile1, double time1, char* pFi
   
   fclose (file);
 
-  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 == 0)
+  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 * wt_flag_1 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateLinear: Missing field in pFile_1\n");
       exit (1);
@@ -350,6 +370,8 @@ void Neoclassical::pFileInterpolateLinear (char* pFile1, double time1, char* pFi
   FieldInterpolateLinear (nb_1,  nb,  weight1);
   Field wE;
   FieldInterpolateLinear (wE_1,  wE,  weight1);
+  Field wt;
+  FieldInterpolateLinear (wt_1,  wt,  weight1);
   Field nI;
   FieldInterpolateLinear (nI_1,  nI,  weight1);
   Field NZA;
@@ -396,6 +418,12 @@ void Neoclassical::pFileInterpolateLinear (char* pFile1, double time1, char* pFi
       wE.PullData (i, x, y, dydx);
       fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
     }
+  fprintf (file, "%3d %s %s %s", wt.GetN (), "PsiN", " omeg(kRad/s)", " domeg/dpsiN\n");
+  for (int i = 0; i < wt.GetN (); i++)
+    {
+      wt.PullData (i, x, y, dydx);
+      fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
+    }
   fprintf (file, "%3d %s %s %s", nI.GetN (), "PsiN", " nz1(10^20/m^3)", " dnz1/dpsiN\n");
   for (int i = 0; i < nI.GetN (); i++)
     {
@@ -431,10 +459,11 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
   // ################
  
   Field ne_1;          Field Te_1;        Field ni_1;        Field Ti_1;
-  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1;
+  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1; Field wt_1;
   int   ne_flag_1 = 0; int Te_flag_1 = 0; int ni_flag_1 = 0; int Ti_flag_1 = 0;
   int   nb_flag_1 = 0; int wE_flag_1 = 0; int nI_flag_1 = 0; int NZ_flag_1 = 0;
-
+  int   wt_flag_1 = 0;
+  
   FILE* file = OpenFiler (pFile1);
  
   do
@@ -564,6 +593,25 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_1 = 1;
+	  printf ("Reading  omeg from pFile_1 - n = %4d:\n", n);
+	  wt_1.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateQuadratic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_1.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -624,7 +672,7 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
   
   fclose (file);
 
-  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 == 0)
+  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 * wt_flag_1 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateQuadratic: Missing field in pFile_1\n");
       exit (1);
@@ -635,10 +683,11 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
   // #################
  
   Field ne_2;          Field Te_2;        Field ni_2;        Field Ti_2;
-  Field nb_2;          Field wE_2;        Field nI_2;        Field NZA_2;
+  Field nb_2;          Field wE_2;        Field nI_2;        Field NZA_2; Field wt_2;
   int   ne_flag_2 = 0; int Te_flag_2 = 0; int ni_flag_2 = 0; int Ti_flag_2 = 0;
   int   nb_flag_2 = 0; int wE_flag_2 = 0; int nI_flag_2 = 0; int NZ_flag_2 = 0;
-
+  int   wt_flag_2 = 0;
+  
   file = OpenFiler (pFile2);
 
   do
@@ -768,6 +817,25 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_2 = 1;
+	  printf ("Reading  omeg from pFile_2 - n = %4d:\n", n);
+	  wt_2.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateQuadratic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_2.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -828,7 +896,7 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
   
   fclose (file);
 
-  if (ne_flag_2 * Te_flag_2 * ni_flag_2 * Ti_flag_2 * nb_flag_2 * wE_flag_2 * nI_flag_2 * NZ_flag_2 == 0)
+  if (ne_flag_2 * Te_flag_2 * ni_flag_2 * Ti_flag_2 * nb_flag_2 * wE_flag_2 * nI_flag_2 * NZ_flag_2 * wt_flag_2 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateQuadratic: Missing field in pFile_2\n");
       exit (1);
@@ -852,6 +920,8 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
   FieldInterpolateQuadratic (nb_1,  nb_2,  nb,  weight1, weight2);
   Field wE;
   FieldInterpolateQuadratic (wE_1,  wE_2,  wE,  weight1, weight2);
+  Field wt;
+  FieldInterpolateQuadratic (wt_1,  wt_2,  wt,  weight1, weight2);
   Field nI;
   FieldInterpolateQuadratic (nI_1,  nI_2,  nI,  weight1, weight2);
   Field NZA;
@@ -898,6 +968,12 @@ void Neoclassical::pFileInterpolateQuadratic (char* pFile1, double time1, char* 
       wE.PullData (i, x, y, dydx);
       fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
     }
+  fprintf (file, "%3d %s %s %s", wt.GetN (), "PsiN", " omeg(kRad/s)", " domeg/dpsiN\n");
+  for (int i = 0; i < wt.GetN (); i++)
+    {
+      wt.PullData (i, x, y, dydx);
+      fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
+    }
   fprintf (file, "%3d %s %s %s", nI.GetN (), "PsiN", " nz1(10^20/m^3)", " dnz1/dpsiN\n");
   for (int i = 0; i < nI.GetN (); i++)
     {
@@ -935,10 +1011,11 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   // ################
  
   Field ne_1;          Field Te_1;        Field ni_1;        Field Ti_1;
-  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1;
+  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1; Field wt_1;
   int   ne_flag_1 = 0; int Te_flag_1 = 0; int ni_flag_1 = 0; int Ti_flag_1 = 0;
   int   nb_flag_1 = 0; int wE_flag_1 = 0; int nI_flag_1 = 0; int NZ_flag_1 = 0;
-
+  int   wt_flag_1 = 0;
+  
   FILE* file = OpenFiler (pFile1);
  
   do
@@ -1068,6 +1145,25 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_1 = 1;
+	  printf ("Reading  omeg from pFile_1 - n = %4d:\n", n);
+	  wt_1.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateCubic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_1.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -1128,7 +1224,7 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   
   fclose (file);
 
-  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 == 0)
+  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 * wt_flag_1 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateCubic: Missing field in pFile_1\n");
       exit (1);
@@ -1139,10 +1235,11 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   // #################
  
   Field ne_2;          Field Te_2;        Field ni_2;        Field Ti_2;
-  Field nb_2;          Field wE_2;        Field nI_2;        Field NZA_2;
+  Field nb_2;          Field wE_2;        Field nI_2;        Field NZA_2; Field wt_2;
   int   ne_flag_2 = 0; int Te_flag_2 = 0; int ni_flag_2 = 0; int Ti_flag_2 = 0;
   int   nb_flag_2 = 0; int wE_flag_2 = 0; int nI_flag_2 = 0; int NZ_flag_2 = 0;
-
+  int   wt_flag_2 = 0;
+  
   file = OpenFiler (pFile2);
 
   do
@@ -1272,6 +1369,25 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_2 = 1;
+	  printf ("Reading  omeg from pFile_2 - n = %4d:\n", n);
+	  wt_2.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateCubic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_2.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -1332,7 +1448,7 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   
   fclose (file);
 
-  if (ne_flag_2 * Te_flag_2 * ni_flag_2 * Ti_flag_2 * nb_flag_2 * wE_flag_2 * nI_flag_2 * NZ_flag_2 == 0)
+  if (ne_flag_2 * Te_flag_2 * ni_flag_2 * Ti_flag_2 * nb_flag_2 * wE_flag_2 * nI_flag_2 * NZ_flag_2 * wt_flag_2 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateCubic: Missing field in pFile_2\n");
       exit (1);
@@ -1343,10 +1459,11 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   // ################
  
   Field ne_3;          Field Te_3;        Field ni_3;        Field Ti_3;
-  Field nb_3;          Field wE_3;        Field nI_3;        Field NZA_3;
+  Field nb_3;          Field wE_3;        Field nI_3;        Field NZA_3; Field wt_3;
   int   ne_flag_3 = 0; int Te_flag_3 = 0; int ni_flag_3 = 0; int Ti_flag_3 = 0;
   int   nb_flag_3 = 0; int wE_flag_3 = 0; int nI_flag_3 = 0; int NZ_flag_3 = 0;
-
+  int   wt_flag_3 = 0;
+  
   file = OpenFiler (pFile3);
 
   do
@@ -1476,6 +1593,25 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_3 = 1;
+	  printf ("Reading  omeg from pFile_3 - n = %4d:\n", n);
+	  wt_3.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateCubic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_3.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -1536,7 +1672,7 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   
   fclose (file);
 
-  if (ne_flag_3 * Te_flag_3 * ni_flag_3 * Ti_flag_3 * nb_flag_3 * wE_flag_3 * nI_flag_3 * NZ_flag_3 == 0)
+  if (ne_flag_3 * Te_flag_3 * ni_flag_3 * Ti_flag_3 * nb_flag_3 * wE_flag_3 * nI_flag_3 * NZ_flag_3 * wt_flag_3 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateCubic: Missing field in pFile_3\n");
       exit (1);
@@ -1563,6 +1699,8 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
   FieldInterpolateCubic (nb_1,  nb_2,  nb_3,  nb,  weight1, weight2, weight3);
   Field wE;
   FieldInterpolateCubic (wE_1,  wE_2,  wE_3,  wE,  weight1, weight2, weight3);
+  Field wt;
+  FieldInterpolateCubic (wt_1,  wt_2,  wt_3,  wt,  weight1, weight2, weight3);
   Field nI;
   FieldInterpolateCubic (nI_1,  nI_2,  nI_3,  nI,  weight1, weight2, weight3);
   Field NZA;
@@ -1609,6 +1747,12 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
       wE.PullData (i, x, y, dydx);
       fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
     }
+  fprintf (file, "%3d %s %s %s", wt.GetN (), "PsiN", " omeg(kRad/s)", " domeg/dpsiN\n");
+  for (int i = 0; i < wt.GetN (); i++)
+    {
+      wt.PullData (i, x, y, dydx);
+      fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
+    }
   fprintf (file, "%3d %s %s %s", nI.GetN (), "PsiN", " nz1(10^20/m^3)", " dnz1/dpsiN\n");
   for (int i = 0; i < nI.GetN (); i++)
     {
@@ -1649,10 +1793,11 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   // ################
  
   Field ne_1;          Field Te_1;        Field ni_1;        Field Ti_1;
-  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1;
+  Field nb_1;          Field wE_1;        Field nI_1;        Field NZA_1; Field wt_1;
   int   ne_flag_1 = 0; int Te_flag_1 = 0; int ni_flag_1 = 0; int Ti_flag_1 = 0;
   int   nb_flag_1 = 0; int wE_flag_1 = 0; int nI_flag_1 = 0; int NZ_flag_1 = 0;
-
+  int   wt_flag_1 = 0;
+  
   FILE* file = OpenFiler (pFile1);
  
   do
@@ -1782,6 +1927,25 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_1 = 1;
+	  printf ("Reading  omeg from pFile_1 - n = %4d:\n", n);
+	  wt_1.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateQuartic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_1.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -1842,7 +2006,7 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   
   fclose (file);
 
-  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 == 0)
+  if (ne_flag_1 * Te_flag_1 * ni_flag_1 * Ti_flag_1 * nb_flag_1 * wE_flag_1 * nI_flag_1 * NZ_flag_1 * wt_flag_1 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateQuartic: Missing field in pFile_1\n");
       exit (1);
@@ -1853,10 +2017,11 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   // #################
  
   Field ne_2;          Field Te_2;        Field ni_2;        Field Ti_2;
-  Field nb_2;          Field wE_2;        Field nI_2;        Field NZA_2;
+  Field nb_2;          Field wE_2;        Field nI_2;        Field NZA_2; Field wt_2;
   int   ne_flag_2 = 0; int Te_flag_2 = 0; int ni_flag_2 = 0; int Ti_flag_2 = 0;
   int   nb_flag_2 = 0; int wE_flag_2 = 0; int nI_flag_2 = 0; int NZ_flag_2 = 0;
-
+  int   wt_flag_2 = 0;
+    
   file = OpenFiler (pFile2);
 
   do
@@ -1986,6 +2151,25 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_2 = 1;
+	  printf ("Reading  omeg from pFile_2 - n = %4d:\n", n);
+	  wt_2.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateQuartic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_2.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -2046,7 +2230,7 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   
   fclose (file);
 
-  if (ne_flag_2 * Te_flag_2 * ni_flag_2 * Ti_flag_2 * nb_flag_2 * wE_flag_2 * nI_flag_2 * NZ_flag_2 == 0)
+  if (ne_flag_2 * Te_flag_2 * ni_flag_2 * Ti_flag_2 * nb_flag_2 * wE_flag_2 * nI_flag_2 * NZ_flag_2 * wt_flag_2 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateQuartic: Missing field in pFile_2\n");
       exit (1);
@@ -2057,10 +2241,11 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   // ################
  
   Field ne_3;          Field Te_3;        Field ni_3;        Field Ti_3;
-  Field nb_3;          Field wE_3;        Field nI_3;        Field NZA_3;
+  Field nb_3;          Field wE_3;        Field nI_3;        Field NZA_3; Field wt_3;
   int   ne_flag_3 = 0; int Te_flag_3 = 0; int ni_flag_3 = 0; int Ti_flag_3 = 0;
   int   nb_flag_3 = 0; int wE_flag_3 = 0; int nI_flag_3 = 0; int NZ_flag_3 = 0;
-
+  int   wt_flag_3 = 0;
+  
   file = OpenFiler (pFile3);
 
   do
@@ -2190,6 +2375,25 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_3 = 1;
+	  printf ("Reading  omeg from pFile_3 - n = %4d:\n", n);
+	  wt_3.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateQuartic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_3.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -2250,7 +2454,7 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   
   fclose (file);
 
-  if (ne_flag_3 * Te_flag_3 * ni_flag_3 * Ti_flag_3 * nb_flag_3 * wE_flag_3 * nI_flag_3 * NZ_flag_3 == 0)
+  if (ne_flag_3 * Te_flag_3 * ni_flag_3 * Ti_flag_3 * nb_flag_3 * wE_flag_3 * nI_flag_3 * NZ_flag_3 * wt_flag_3 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateQuartic: Missing field in pFile_3\n");
       exit (1);
@@ -2263,10 +2467,11 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   // #################
  
   Field ne_4;          Field Te_4;        Field ni_4;        Field Ti_4;
-  Field nb_4;          Field wE_4;        Field nI_4;        Field NZA_4;
+  Field nb_4;          Field wE_4;        Field nI_4;        Field NZA_4; Field wt_4;
   int   ne_flag_4 = 0; int Te_flag_4 = 0; int ni_flag_4 = 0; int Ti_flag_4 = 0;
   int   nb_flag_4 = 0; int wE_flag_4 = 0; int nI_flag_4 = 0; int NZ_flag_4 = 0;
-
+  int   wt_flag_4 = 0;
+  
   file = OpenFiler (pFile4);
 
   do
@@ -2396,6 +2601,25 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
 		}
 	    }
 	}
+      else if (strstr (s, "omeg(") != NULL)
+	{
+	  // Read omeg field (assumed units krad/s)
+	  wt_flag_4 = 1;
+	  printf ("Reading  omeg from pFile_4 - n = %4d:\n", n);
+	  wt_4.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateQuartic: Error reading omeg\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wt_4.PushData (i, x, y, dydx);
+		}
+	    }
+	}
       else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
@@ -2456,7 +2680,7 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   
   fclose (file);
 
-  if (ne_flag_4 * Te_flag_4 * ni_flag_4 * Ti_flag_4 * nb_flag_4 * wE_flag_4 * nI_flag_4 * NZ_flag_4 == 0)
+  if (ne_flag_4 * Te_flag_4 * ni_flag_4 * Ti_flag_4 * nb_flag_4 * wE_flag_4 * nI_flag_4 * NZ_flag_4 * wt_flag_4 == 0)
     {
       printf ("NEOCLASSICAL::pFileInterpolateQuartic: Missing field in pFile_4\n");
       exit (1);
@@ -2484,6 +2708,8 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   FieldInterpolateQuartic (nb_1,  nb_2,  nb_3,  nb_4,  nb,  weight1, weight2, weight3, weight4);
   Field wE;
   FieldInterpolateQuartic (wE_1,  wE_2,  wE_3,  wE_4,  wE,  weight1, weight2, weight3, weight4);
+  Field wt;
+  FieldInterpolateQuartic (wt_1,  wt_2,  wt_3,  wt_4,  wt,  weight1, weight2, weight3, weight4);
   Field nI;
   FieldInterpolateQuartic (nI_1,  nI_2,  nI_3,  nI_4,  nI,  weight1, weight2, weight3, weight4);
   Field NZA;
@@ -2528,6 +2754,12 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
   for (int i = 0; i < wE.GetN (); i++)
     {
       wE.PullData (i, x, y, dydx);
+      fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
+    }
+  fprintf (file, "%3d %s %s %s", wt.GetN (), "PsiN", " omeg(kRad/s)", " domeg/dpsiN\n");
+  for (int i = 0; i < wt.GetN (); i++)
+    {
+      wt.PullData (i, x, y, dydx);
       fprintf (file, "%16.9e %16.9e %16.9e\n", x, y, dydx);
     }
   fprintf (file, "%3d %s %s %s", nI.GetN (), "PsiN", " nz1(10^20/m^3)", " dnz1/dpsiN\n");
