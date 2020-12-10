@@ -20,7 +20,7 @@ ifeq ($(UNAME), Darwin)
 	C_COMPILER = clang++ -O3
 	C_FLAGS    = -w $(VERSION_FLAGS)
 	C_INCLUDE  = -I/opt/local/include
-	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas
+	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 #-lgsl -lgslcblas
 else ifeq ($(UNAME), Linux)
 	F_COMPILER = gfortran
 	F_FLAGS    =
@@ -29,7 +29,7 @@ else ifeq ($(UNAME), Linux)
 	C_COMPILER = clang++ -O3
 	C_FLAGS    = -w $(VERSION_FLAGS)
 	C_INCLUDE  = -lgsl -lgslblas
-	C_LIBS	   = -lgfortran -lgsl -lgslcblas
+	C_LIBS	   = -lgfortran #-lgsl -lgslcblas
 endif
 
 EXECUTABLE = ../rescale

@@ -47,11 +47,9 @@
 ### /Plots
 
 - /Stage1
- - README: Description of asymptote scripts
  - *.asy: Asymptote scripts to plot Stage 1 data
 - /Stage2
- - README: Description of asymptote scripts
- - *.asy: Asymptote scripts to plot Stage 2 data
+  - *.asy: Asymptote scripts to plot Stage 2 data
 
 ## gFile Format
 

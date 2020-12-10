@@ -56,14 +56,10 @@
 	  
  ### /Plots
     - /Stage4
-	 -- README
-	    Description of Asymptote scripts
-	 -- *.asy
+	 - *.asy
 	    Asymtptote scripts to plot Stage 4 data	
 	- /Stage5
-	 -- README
-	    Description of Asymptote scripts
-	 -- *.asy
+	 - *.asy
 	    Asymtptote scripts to plot Stage 5 data		
 
 ## uFile, mFile, lFile Format

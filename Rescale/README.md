@@ -10,33 +10,22 @@
    
 ## Contents	
 
- ### /Documentation
-     - Rescale.tex
-       Latex description of program algorithm
+### /Documentation
+- Rescale.tex: Latex description of program algorithm
 
- ### /Source 
-     - Makefile
-	   GNU makefile 
-     - *.f90
-       Fortran_90 source files
+### /Source 
+- Makefile: GNU makefile 
+- *.f90: Fortran_90 source files
  
- ### /Inputs
-     - gFile
-       Initial gFile
-     - q_95 
-       Contains target q_95
+### /Inputs
+- gFile: Initial gFile
+- q_95: Contains target q_95
 	
- ### /Outputs
-     - gFile
-       Rescaled gFile
-     - *.txt
-       Data on rescaled equilibrium for plots
-	
- ### /Plots 
-     - README
-       Description of Asymptote scripts
-     - *.asy
-       Asymptote scripts to plot rescaled equilibrium
+### /Outputs
+- gFile: Rescaled gFile
+ 	
+### /Plots 
+- *.asy: Asymptote scripts to plot rescaled equilibrium
 
 ## gFile Format
 
