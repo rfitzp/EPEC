@@ -18,49 +18,50 @@
    
 ## Contents
 
- ### /Documentation
-    - Phase.tex
-      Latex description of program algorithm
+### /Documentation
+
+- Phase.tex: Latex description of program algorithm
 	  
- ### /Source
-    - Makefile
-	 GNU Makefile
-	- *.f90
-	 Fortran_90 source files
-	- *.h
-	 C++ header files
-	- *.cpp
-	 C++ source files
+### /Source
+
+- Makefile: GNU makefile
+- *.f90: Fortran_90 source files
+- *.h: C++ header files
+- *.cpp: C++ source files
 	 
- ### /Inputs
-	- Phase.in
-	  Fortran_90 namelist control file
-	- Waveform.in
-	  Fortran_90 namelist file specifing RMP coil current waveform
-	- nFile
-	  Data from NEOCLASSICAL
-	- uFile
-	  GPEC data for upper RMP coil set
-	- mFile
-	  GPEC data for (optional) middle RMP coil set
-	- uFile
-	  GPEC data for lower RMP coil set
+### /Inputs
+
+- Phase.in: Fortran_90 namelist control file
+- Waveform.in: Fortran_90 namelist file specifing RMP coil current waveform
+- nFile: Data from NEOCLASSICAL\
+- /nFiles: Contains nFiles for interpolation
+  - Index: List of nFile names and experimental times
+  - nFiles: Actual nFiles
+- uFile: GPEC data for upper RMP coil set
+- /uFiles: Contains uFiles for interpolation
+  - Index: List of uFile names and experimental times
+  - uFiles: Actual uFiles
+- mFile: GPEC data for (optional) middle RMP coil set
+- /mFiles: Contains mFiles for interpolation
+  - Index: List of mFile names and experimental times
+  - mFiles: Actual mFiles
+- uFile: GPEC data for lower RMP coil set
+- /uFiles: Contains uFiles for interpolation
+  - Index: List of uFile names and experimental times
+  - mFiles: Actual uFiles
 	  
- ### /Outputs
-    - sFile
-	  File specifying final plasma state (use for restarting calculation)
-	- /Stage4
-      Date files from Stage 4 calculation
-	- /Stage5
-	  Data files from Stage 5 calculation
+### /Outputs
+
+- sFile: File specifying final plasma state (use for restarting calculation)
+- /Stage4: Date files from Stage 4 calculation
+- /Stage5: Data files from Stage 5 calculation
 	  
- ### /Plots
-    - /Stage4
-	 - *.asy
-	    Asymtptote scripts to plot Stage 4 data	
-	- /Stage5
-	 - *.asy
-	    Asymtptote scripts to plot Stage 5 data		
+### /Plots
+
+- /Stage4
+  - *.asy: Asymtptote scripts to plot Stage 4 data	
+- /Stage5
+  - *.asy: Asymtptote scripts to plot Stage 5 data		
 
 ## uFile, mFile, lFile Format
 

@@ -19,23 +19,38 @@
 - Neoclassical.tex: Latex description of program algorithm
 	  
 ### /Source
+
 - Makefile: GNU makefile
 - *.f90: Fortran_90 source files
 - *.h: C++ header files
 - *.cpp: C++ source files
 	 
 ### /Inputs
+
 - Neoclassical.in: Fortran_90 namelist control file
 - fFile: Data from PHASE
+- /fFiles: Contains fFiles for interpolation
+  - Index: List of fFile names and experimental times
+  - fFiles: Actual fFiles
 - pFile: Profile data
+- /pFiles: Contains pFiles for interpolation
+  - Index: List of pFile names and experimental times
+  - pFiles: Actual pFiles
 - cFile: Perpendicular diffusivity data
+- /cFiles: Contains cFiles for interpolation
+  - Index: List of cFile names and experimental times
+  - cFiles: Actual cFiles
 	  
 ### /Outputs
+
 - nFile: File containing data for PHASE
 - /nFiles: Directory containing interpolated nFiles 
+  - Index: List of nFile names and experimental times
+  - nFiles: Actual nFiles
 - /Stage3: Data files from Stage 3 calculation
 	  
 ### /Plots
+
 - /Stage3
   - *.asy: Asymtptote scripts to plot Stage 3 data
 
