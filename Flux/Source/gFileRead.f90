@@ -128,6 +128,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
 
   read (100, '(5e16.9)') (RBOUND (i), ZBOUND (i), i = 1, NBOUND)
   read (100, '(5e16.9)') (RLIM   (i), ZLIM   (i), i = 1, NLIM)
+  close (unit = 100)
 
   open  (unit = 101, file = 'Outputs/Stage1/Boundary.txt')
   write (101, '(2e17.9)') (RBOUND (i)/R0, ZBOUND (i)/R0, i = 1, NBOUND)
@@ -147,7 +148,5 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   deallocate (ZBOUND)
   deallocate (RLIM)
   deallocate (ZLIM)
-  
-  close (unit = 100)
 
 endsubroutine gFileRead

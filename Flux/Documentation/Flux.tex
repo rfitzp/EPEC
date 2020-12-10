@@ -237,7 +237,7 @@ We can write
 {\cal J}\,\mu_0\,\delta J^{\,\phi} = \frac{\partial\,\delta B_\theta}{\partial r} -\frac{\partial \,\delta B_r}{\partial\theta}.
 \end{align}
 Normally, all three components are zero. However, at $k$th resonant 
-surface (at which $r=r_k$, where $q(r-k)=m_k/n$) $\psi_k$, $\psi_{j\neq k}$, and $\chi_{j\neq k}$ are continuous, whereas $\chi_k$ is discontinuous. Hence,
+surface (at which $r=r_k$, where $q(r_k)=m_k/n$) $\psi_k$, $\psi_{j\neq k}$, and $\chi_{j\neq k}$ are continuous, whereas $\chi_k$ is discontinuous. Hence,
 \begin{align}
 {\cal J}\,\mu_0\,\delta J^{\,r}(r,\theta,\phi) &= 0,\\[0.5ex]
 {\cal J}\,\mu_0\,\delta J^{\,\theta}(r,\theta,\phi) &=-\sum_k \frac{n}{m_k}\,\left[\chi_k
@@ -461,7 +461,7 @@ E_{kk'} &= \hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}},
 where $\hat{\mit\Psi}_k$, $\hat{\chi}_{k}$, and $\hat{E}_{kk'}$
 are real and positive, whereas $\varphi_k$, $\zeta_k$, and
 $\xi_{kk'}$ are real. 
-(Note that all hatted quantities in this paper are dimensionless.)
+(Note that all hatted quantities in this report are dimensionless.)
 It follows from Eqs.~(\ref{et1}), (\ref{et2}), and (\ref{e68})
 that
 \begin{align}
@@ -556,8 +556,9 @@ Hence,
 \end{equation}
 which implies that
 \begin{equation}
-\frac{\chi_j}{B_0\,R_0} = -{\rm i}\,\frac{{\mit\Delta}_j}{|E_{jj}|}\left(\frac{r_j}{R_0}\right)^2\frac{g_j}{m_j\,[a_{jj}+ (r_k/R_0\,q_j)^2]},
+\frac{\chi_j}{B_0\,R_0} = -{\rm i}\,\frac{{\mit\Delta}_j}{|E_{jj}|}\left(\frac{r_j}{R_0}\right)^2\frac{g_j}{m_j\,[a_{jj}+ (r_k/R_0\,q_j)^2]}.
 \end{equation}
+(Note: This is what is actually implemated in EPEC.)
 As before, the ${\mit\Delta}_j$ values can be determined from the GPEC code. 
 
 \subsection{Island Width (in $r$)}

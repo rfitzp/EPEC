@@ -21,6 +21,7 @@
 // 1D interpolation function with nonuniform monotonic grid
 // order = 0: Y(x)
 // order = 1: dY/dx
+// order = 2: d^2Y/dx^2
 // ########################################################
 double Flux::Interpolate (int I, double* X, double* Y, double x, int order)
 {
@@ -83,7 +84,15 @@ double Flux::InterpolateCubic (double* X, double* Y, double x, int i0, int i1, i
   
       val = s0 * Y[i0] + s1 * Y[i1] + s2 * Y[i2];
     }
-   else
+  else if (order == 2)
+    {
+      double s0 = 2. /(X[i0] - X[i1]) /(X[i0] - X[i2]);
+      double s1 = 2. /(X[i1] - X[i0]) /(X[i1] - X[i2]);
+      double s2 = 2. /(X[i2] - X[i0]) /(X[i2] - X[i1]);
+  
+      val = s0 * Y[i0] + s1 * Y[i1] + s2 * Y[i2];
+    }
+  else
     {
       printf ("FLUX::InterpolateCubic: Error - order = %1d\n", order);
       exit (1);
@@ -111,6 +120,15 @@ double Flux::InterpolateQuartic (double* X, double* Y, double x, int i0, int i1,
       double s1 = ((x - X[i2]) * (x - X[i3]) + (x - X[i0]) * (x - X[i3]) + (x - X[i0]) * (x - X[i2])) /(X[i1] - X[i0]) /(X[i1] - X[i2]) /(X[i1] - X[i3]);
       double s2 = ((x - X[i1]) * (x - X[i3]) + (x - X[i0]) * (x - X[i3]) + (x - X[i0]) * (x - X[i1])) /(X[i2] - X[i0]) /(X[i2] - X[i1]) /(X[i2] - X[i3]);
       double s3 = ((x - X[i1]) * (x - X[i2]) + (x - X[i0]) * (x - X[i2]) + (x - X[i0]) * (x - X[i1])) /(X[i3] - X[i0]) /(X[i3] - X[i1]) /(X[i3] - X[i2]);
+      
+      val = s0 * Y[i0] + s1 * Y[i1] + s2 * Y[i2] + s3 * Y[i3];
+    }
+  else if (order == 2)
+    {
+      double s0 = 2. * ((x - X[i1]) + (x - X[i2]) + (x - X[i3])) /(X[i0] - X[i1]) /(X[i0] - X[i2]) /(X[i0] - X[i3]);
+      double s1 = 2. * ((x - X[i0]) + (x - X[i2]) + (x - X[i3])) /(X[i1] - X[i0]) /(X[i1] - X[i2]) /(X[i1] - X[i3]);
+      double s2 = 2. * ((x - X[i0]) + (x - X[i1]) + (x - X[i3])) /(X[i2] - X[i0]) /(X[i2] - X[i1]) /(X[i2] - X[i3]);
+      double s3 = 2. * ((x - X[i0]) + (x - X[i1]) + (x - X[i2])) /(X[i3] - X[i0]) /(X[i3] - X[i1]) /(X[i3] - X[i2]);
       
       val = s0 * Y[i0] + s1 * Y[i1] + s2 * Y[i2] + s3 * Y[i3];
     }

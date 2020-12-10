@@ -697,14 +697,24 @@ void Flux::Stage2FindRational ()
 	}
 
       // Correct rres values
+      /*
       for (int ii = 0; ii < 4; ii++)
 	{
 	  double qqq = Interpolate (NPSI, rP, QP, rres[i], 0);
-	  rres[i]   += (double (mres[i]) /double (NTOR) /qqq - 1.) * rres[i] /sres[i];
+	  rres[i]   += (qres[i]/qqq - 1.) * rres[i] /sres[i];
 	  sres[i]    = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
 	}
+      */
+      for (int ii = 0; ii < 4; ii++)
+	{
+	  double qqq = Interpolate (NPSI, rP, QP, rres[i], 0);
+	  double qqp = Interpolate (NPSI, rP, QP, rres[i], 1);
+	  double qpp = Interpolate (NPSI, rP, QP, rres[i], 2);
+	  rres[i] += (- qqp + sqrt (qqp*qqp - 2.*qpp * (qqq - qres[i]))) /qpp;
+	}
+      
       gmres[i] = Interpolate (NPSI, rP, QP, rres[i], 0) - qres[i];
-
+      sres[i]    = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
       gres[i]    = Interpolate (NPSI, rP, GP,  rres[i], 0);
       Rres[i]    = Interpolate (NPSI, rP, RP,  rres[i], 0);
       Rres1[i]   = Interpolate (NPSI, rP, RP1, rres[i], 0);

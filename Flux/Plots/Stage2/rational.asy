@@ -26,8 +26,8 @@ real[] cc   = A2[2];
 real rmax   = (real) cc[0]; 
 real[] dd   = A2[3];
 real zmax   = (real) dd[0]; 
-real zsize  = 500;
-real rsize  = 500*(rmax-rmin)/(zmax-zmin);
+real zsize  = 1000;
+real rsize  = 1000*(rmax-rmin)/(zmax-zmin);
 
 file    in4 = input("../../Outputs/Stage1/Boundary.txt").line();
 real[][] A4 = in4.dimension (0,0);
@@ -48,7 +48,7 @@ size (rsize, zsize, (rmin, zmin), (rmax, zmax));
 pen s = black+3.;
 //draw ((rmin,zmin)--(rmax,zmin)--(rmax,zmax)--(rmin,zmax)--(rmin,zmin),s);
 
-s = blue+0.25;
+s = blue+1.;
 draw(graph(rb,zb),s);
 
 s = blue;

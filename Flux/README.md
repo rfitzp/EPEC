@@ -7,7 +7,7 @@
      Read gFile and output equilibrium data for Stage 2
    - Stage 2:
      Construct flux coordinate system. Calculate metric quantities. Locate rational surfaces.
-     Calculate tearing stability matrix. 
+     Caculate neoclassical data. Calculate tearing stability matrix. 
 	 
 ## Requirements
 
@@ -23,7 +23,7 @@
 	  
 ### /Source
 
-- Makefile: GNU Makefile
+- Makefile: GNU makefile
 - *.f90: Fortran_90 source files
 - *.h: C++ header files
 - *.cpp: C++ source files
@@ -33,22 +33,25 @@
 
 - Flux.in: Fortran_90 namelist control file
 - gFile: Equilibrium gFile
+- /gFiles: Contains equilibrium gFiles for interpolation
+  - Index: List of gFile names and experimental times
+  - gFiles: Actual gFiles
 	  
 ### /Outputs
 
 - fFile: File containing data for NEOCLASSICAL and PHASE
-- /fFiles: Directory containing precalculated fFiles
+- /fFiles: Directory containing fFiles associated with interpolated gFiles
 - /Stage1: Data files from Stage 1 calculation
 - /Stage2: Data files from Stage 2 calculation
 	  
 ### /Plots
 
 - /Stage1
--- README: Description of Asymptote scripts
--- *.asy: Asymtptote scripts to plot Stage 1 data
+ - README: Description of asymptote scripts
+ - *.asy: Asymptote scripts to plot Stage 1 data
 - /Stage2
--- README: Description of Asymptote scripts
--- *.asy: Asymtptote scripts to plot Stage 2 data
+ - README: Description of asymptote scripts
+ - *.asy: Asymptote scripts to plot Stage 2 data
 
 ## gFile Format
 
