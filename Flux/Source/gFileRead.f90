@@ -24,10 +24,11 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   implicit none
   
   character (len = 100) :: string
-  integer               :: i,       j,       i3,      NRBOX,   NZBOX, NBOUND, NLIM
-  double precision      :: RBOXLEN, ZBOXLEN, R0,      RBOXLFT, zero,  RMAX
-  double precision      :: RAXIS,   ZAXIS,   B0,      MU0,     ZMAX
-  double precision      :: RLEFT,   RRIGHT,  ZLOW,    ZHIGH
+  integer               :: i,       j,        i3,      NRBOX,   NZBOX, NBOUND, NLIM
+  double precision      :: RBOXLEN, ZBOXLEN,  R0,      RBOXLFT, zero,  RMAX
+  double precision      :: RAXIS,   ZAXIS,    B0,      MU0,     ZMAX
+  double precision      :: RLEFT,   RRIGHT,   ZLOW,    ZHIGH
+  double precision      :: PSIAXIS, PSIBOUND, CURRENT
 
   double precision, dimension (:),    allocatable :: T,      P,      TTp,  Pp,  Q
   double precision, dimension (:),    allocatable :: RBOUND, ZBOUND, RLIM, ZLIM  
@@ -39,8 +40,8 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   
   read (100, '(a48, 3i4)') string,  i3,      NRBOX,   NZBOX
   read (100, '(5e16.9  )') RBOXLEN, ZBOXLEN, R0,      RBOXLFT,  zero
-  read (100, '(5e16.9  )') RAXIS,   ZAXIS,   zero,    zero,     B0
-  read (100, '(5e16.9  )') zero,    zero,    zero,    zero,     zero
+  read (100, '(5e16.9  )') RAXIS,   ZAXIS,   PSIAXIS, PSIBOUND, B0
+  read (100, '(5e16.9  )') CURRENT, zero,    zero,    zero,     zero
   read (100, '(5e16.9  )') zero,    zero,    zero,    zero,     zero
 
   allocate (T   (NRBOX))

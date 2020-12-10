@@ -18,49 +18,37 @@
    
 ## Contents
 
- ### /Documentation
-    - Flux.tex
-      Latex description of program algorithm
+### /Documentation
+- Flux.tex: Latex description of program algorithm
 	  
- ### /Source
-    - Makefile
-	 GNU Makefile
-	- *.f90
-	 Fortran_90 source files
-	- *.h
-	 C++ header files
-	- *.cpp
-	 C++ source files
-	- /Test
-	 Test routine for toroidal functions
+### /Source
+
+- Makefile: GNU Makefile
+- *.f90: Fortran_90 source files
+- *.h: C++ header files
+- *.cpp: C++ source files
+- /Test: Test routine for toroidal functions
 	 
- ### /Inputs
-	- Flux.in
-	  Fortran_90 namelist control file
-	- gFile
-	  Equilibrium gFile
+### /Inputs
+
+- Flux.in: Fortran_90 namelist control file
+- gFile: Equilibrium gFile
 	  
- ### /Outputs
-    - fFile
-	  File containing data for NEOCLASSICAL and PHASE
-	- /fFiles
-      Directory containing precalculated fFiles
-	- /Stage1
-	  Data files from Stage 1 calculation
-	- /Stage2
-	  Data files from Stage 2 calculation
+### /Outputs
+
+- fFile: File containing data for NEOCLASSICAL and PHASE
+- /fFiles: Directory containing precalculated fFiles
+- /Stage1: Data files from Stage 1 calculation
+- /Stage2: Data files from Stage 2 calculation
 	  
- ### /Plots
-    - /Stage1
-	 -- README
-	    Description of Asymptote scripts
-	 -- *.asy
-	    Asymtptote scripts to plot Stage 1 data
-     - /Stage2
-	  -- README
-	    Description of Asymptote scripts
-	  -- *.asy
-	    Asymtptote scripts to plot Stage 2 data
+### /Plots
+
+- /Stage1
+-- README: Description of Asymptote scripts
+-- *.asy: Asymtptote scripts to plot Stage 1 data
+- /Stage2
+-- README: Description of Asymptote scripts
+-- *.asy: Asymtptote scripts to plot Stage 2 data
 
 ## gFile Format
 
@@ -84,4 +72,4 @@
     read (100, '(5e16.9)') (RBOUND (i), ZBOUND (i), i = 1, NBOUND)
     read (100, '(5e16.9)') (RLIM (i), ZLIM (i), i = 1, NLIM)
   
-    *Anything after this is ignored*
+  *Anything after this is ignored*

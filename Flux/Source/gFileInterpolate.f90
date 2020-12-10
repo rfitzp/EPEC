@@ -22,18 +22,20 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
   integer               :: i, j, i3
   double precision      :: zero
 
-  integer                                         :: NRBOX1,   NZBOX1,   NBOUND1, NLIM1
-  double precision                                :: RBOXLEN1, ZBOXLEN1, RBOXLFT1
-  double precision                                :: RAXIS1,   ZAXIS1,   B01,     R01
-  double precision, dimension (:),    allocatable :: T1,       P1,       TTp1,    Pp1,  Q1
-  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,  RLIM1,   ZLIM1  
-  double precision, dimension (:, :), allocatable :: PSI1
+  integer                                         :: NRBOX1,   NZBOX1,    NBOUND1,  NLIM1
+  double precision                                :: RBOXLEN1, ZBOXLEN1,  RBOXLFT1
+  double precision                                :: RAXIS1,   ZAXIS1,    B01,      R01
+  double precision                                :: PSIAXIS1, PSIBOUND1, CURRENT1
+  double precision, dimension (:),    allocatable :: T1,       P1,        TTp1,     Pp1,  Q1
+  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,   RLIM1,    ZLIM1  
+  double precision, dimension (:, :), allocatable :: PSI1    
 
-   integer                                         :: NRBOX,   NZBOX,   NBOUND, NLIM
-  double precision                                :: RBOXLEN, ZBOXLEN, RBOXLFT
-  double precision                                :: RAXIS,   ZAXIS,   B0,     R0
-  double precision, dimension (:),    allocatable :: T,       P,       TTp,    Pp,  Q
-  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,  RLIM,   ZLIM    
+  integer                                         :: NRBOX,   NZBOX,    NBOUND,  NLIM
+  double precision                                :: RBOXLEN, ZBOXLEN,  RBOXLFT
+  double precision                                :: RAXIS,   ZAXIS,    B0,      R0
+  double precision                                :: PSIAXIS, PSIBOUND, CURRENT
+  double precision, dimension (:),    allocatable :: T,       P,        TTp,     Pp,  Q
+  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,   RLIM,    ZLIM    
   double precision, dimension (:, :), allocatable :: PSI
 
   ! -----------------------
@@ -53,11 +55,11 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
   ! ----------------
   open (unit = 100, file = gFile1, status = 'old')
   
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX1, NZBOX1
-  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,    RBOXLFT1,  zero
-  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   zero,   zero,      B01
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX1,   NZBOX1
+  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,      RBOXLFT1,  zero
+  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   PSIAXIS1, PSIBOUND1, B01
+  read (100, '(5e16.9  )') CURRENT1, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T1   (NRBOX1))
   allocate (P1   (NRBOX1))
@@ -106,13 +108,16 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
 
   weight1 = 1.;
  
-  R0      = R01
-  B0      = B01
-  RAXIS   = RAXIS1
-  ZAXIS   = ZAXIS1
-  RBOXLEN = RBOXLEN1
-  ZBOXLEN = ZBOXLEN1
-  RBOXLFT = RBOXLFT1
+  R0       = R01
+  B0       = B01
+  RAXIS    = RAXIS1
+  ZAXIS    = ZAXIS1
+  RBOXLEN  = RBOXLEN1
+  ZBOXLEN  = ZBOXLEN1
+  RBOXLFT  = RBOXLFT1
+  PSIAXIS  = PSIAXIS1
+  PSIBOUND = PSIBOUND1
+  CURRENT  = CURRENT1
  
   do i = 1, NRBOX
      T   (i) = T1   (i)
@@ -143,11 +148,11 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
   ! .............................
   open (unit = 100, file = gFile, status = 'replace')
 
-  write (100, '(a48, 3i4)') string,  i3,      NRBOX, NZBOX
-  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,    RBOXLFT, zero
-  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   zero,  zero,    B0
-  write (100, '(5e16.9)'  ) zero,    zero,    zero,  RAXIS,   zero
-  write (100, '(5e16.9)'  ) ZAXIS,   zero,    zero,  zero,    zero
+  write (100, '(a48, 3i4)') string,  i3,      NRBOX,    NZBOX
+  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,       RBOXLFT,  zero
+  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   PSIAXIS,  PSIBOUND, B0
+  write (100, '(5e16.9)'  ) CURRENT, PSIAXIS, zero,     RAXIS,    zero
+  write (100, '(5e16.9)'  ) ZAXIS,   zero,    PSIBOUND, zero,     zero
 
   write (100, '(5e16.9)') (T    (i),    i = 1, NRBOX)
   write (100, '(5e16.9)') (P    (i),    i = 1, NRBOX)
@@ -203,27 +208,31 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   integer               :: i, j, i3
   double precision      :: zero
 
-  integer                                         :: NRBOX1,   NZBOX1,   NBOUND1, NLIM1
-  double precision                                :: RBOXLEN1, ZBOXLEN1, RBOXLFT1
-  double precision                                :: RAXIS1,   ZAXIS1,   B01,     R01
-  double precision, dimension (:),    allocatable :: T1,       P1,       TTp1,    Pp1,  Q1
-  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,  RLIM1,   ZLIM1  
+  integer                                         :: NRBOX1,   NZBOX1,    NBOUND1,  NLIM1
+  double precision                                :: RBOXLEN1, ZBOXLEN1,  RBOXLFT1
+  double precision                                :: RAXIS1,   ZAXIS1,    B01,      R01
+  double precision                                :: PSIAXIS1, PSIBOUND1, CURRENT1
+  double precision, dimension (:),    allocatable :: T1,       P1,        TTp1,     Pp1,  Q1
+  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,   RLIM1,    ZLIM1  
   double precision, dimension (:, :), allocatable :: PSI1
 
-  integer                                         :: NRBOX2,   NZBOX2,   NBOUND2, NLIM2
-  double precision                                :: RBOXLEN2, ZBOXLEN2, RBOXLFT2
-  double precision                                :: RAXIS2,   ZAXIS2,   B02,     R02
-  double precision, dimension (:),    allocatable :: T2,       P2,       TTp2,    Pp2,  Q2
-  double precision, dimension (:),    allocatable :: RBOUND2,  ZBOUND2,  RLIM2,   ZLIM2
-  double precision, dimension (:, :), allocatable :: PSI2
-  
-  integer                                         :: NRBOX,   NZBOX,   NBOUND, NLIM
-  double precision                                :: RBOXLEN, ZBOXLEN, RBOXLFT
-  double precision                                :: RAXIS,   ZAXIS,   B0,     R0
-  double precision, dimension (:),    allocatable :: T,       P,       TTp,    Pp,  Q
-  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,  RLIM,   ZLIM    
+  integer                                         :: NRBOX2,   NZBOX2,    NBOUND2,  NLIM2
+  double precision                                :: RBOXLEN2, ZBOXLEN2,  RBOXLFT2
+  double precision                                :: RAXIS2,   ZAXIS2,    B02,      R02
+  double precision                                :: PSIAXIS2, PSIBOUND2, CURRENT2
+  double precision, dimension (:),    allocatable :: T2,       P2,        TTp2,     Pp2,  Q2
+  double precision, dimension (:),    allocatable :: RBOUND2,  ZBOUND2,   RLIM2,    ZLIM2  
+  double precision, dimension (:, :), allocatable :: PSI2    
+
+  integer                                         :: NRBOX,   NZBOX,    NBOUND,  NLIM
+  double precision                                :: RBOXLEN, ZBOXLEN,  RBOXLFT
+  double precision                                :: RAXIS,   ZAXIS,    B0,      R0
+  double precision                                :: PSIAXIS, PSIBOUND, CURRENT
+  double precision, dimension (:),    allocatable :: T,       P,        TTp,     Pp,  Q
+  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,   RLIM,    ZLIM    
   double precision, dimension (:, :), allocatable :: PSI
 
+  
   ! -----------------------
   ! Read file and time data
   ! -----------------------
@@ -242,13 +251,13 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   ! Read first gFile
   ! ----------------
   open (unit = 100, file = gFile1, status = 'old')
-  
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX1, NZBOX1
-  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,    RBOXLFT1,  zero
-  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   zero,   zero,      B01
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
 
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX1,   NZBOX1
+  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,      RBOXLFT1,  zero
+  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   PSIAXIS1, PSIBOUND1, B01
+  read (100, '(5e16.9  )') CURRENT1, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
+  
   allocate (T1   (NRBOX1))
   allocate (P1   (NRBOX1))
   allocate (TTp1 (NRBOX1))
@@ -279,12 +288,12 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   ! Read second gFile
   ! -----------------
   open (unit = 100, file = gFile2, status = 'old')
-  
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX2,  NZBOX2
-  read (100, '(5e16.9  )') RBOXLEN2, ZBOXLEN2, R02,     RBOXLFT2, zero
-  read (100, '(5e16.9  )') RAXIS2,   ZAXIS2,   zero,    zero,     B02
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
+
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX2,   NZBOX2
+  read (100, '(5e16.9  )') RBOXLEN2, ZBOXLEN2, R02,      RBOXLFT2,  zero
+  read (100, '(5e16.9  )') RAXIS2,   ZAXIS2,   PSIAXIS2, PSIBOUND2, B02
+  read (100, '(5e16.9  )') CURRENT2, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T2   (NRBOX2))
   allocate (P2   (NRBOX2))
@@ -364,13 +373,16 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   weight1 = (time - time2) /(time1 - time2);
   weight2 = (time - time1) /(time2 - time1);
  
-  R0      = R01      * weight1 + R02      * weight2
-  B0      = B01      * weight1 + B02      * weight2
-  RAXIS   = RAXIS1   * weight1 + RAXIS2   * weight2
-  ZAXIS   = ZAXIS1   * weight1 + ZAXIS2   * weight2
-  RBOXLEN = RBOXLEN1 * weight1 + RBOXLEN2 * weight2
-  ZBOXLEN = ZBOXLEN1 * weight1 + ZBOXLEN2 * weight2
-  RBOXLFT = RBOXLFT1 * weight1 + RBOXLFT2 * weight2
+  R0       = R01       * weight1 + R02       * weight2
+  B0       = B01       * weight1 + B02       * weight2
+  RAXIS    = RAXIS1    * weight1 + RAXIS2    * weight2
+  ZAXIS    = ZAXIS1    * weight1 + ZAXIS2    * weight2
+  RBOXLEN  = RBOXLEN1  * weight1 + RBOXLEN2  * weight2
+  ZBOXLEN  = ZBOXLEN1  * weight1 + ZBOXLEN2  * weight2
+  RBOXLFT  = RBOXLFT1  * weight1 + RBOXLFT2  * weight2
+  PSIAXIS  = PSIAXIS1  * weight1 + PSIAXIS2  * weight2
+  PSIBOUND = PSIBOUND1 * weight1 + PSIBOUND2 * weight2
+  CURRENT  = CURRENT1  * weight1 + CURRENT2  * weight2
  
   do i = 1, NRBOX
      T   (i) = T1   (i) * weight1 + T2   (i) * weight2
@@ -401,12 +413,12 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   ! .............................
   open (unit = 100, file = gFile, status = 'replace')
 
-  write (100, '(a48, 3i4)') string,  i3,      NRBOX, NZBOX
-  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,    RBOXLFT, zero
-  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   zero,  zero,    B0
-  write (100, '(5e16.9)'  ) zero,    zero,    zero,  RAXIS,   zero
-  write (100, '(5e16.9)'  ) ZAXIS,   zero,    zero,  zero,    zero
-
+  write (100, '(a48, 3i4)') string,  i3,      NRBOX,    NZBOX
+  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,       RBOXLFT,  zero
+  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   PSIAXIS,  PSIBOUND, B0
+  write (100, '(5e16.9)'  ) CURRENT, PSIAXIS, zero,     RAXIS,    zero
+  write (100, '(5e16.9)'  ) ZAXIS,   zero,    PSIBOUND, zero,     zero
+  
   write (100, '(5e16.9)') (T    (i),    i = 1, NRBOX)
   write (100, '(5e16.9)') (P    (i),    i = 1, NRBOX)
   write (100, '(5e16.9)') (TTp  (i),    i = 1, NRBOX)
@@ -473,32 +485,36 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   integer               :: i, j, i3
   double precision      :: zero
 
-  integer                                         :: NRBOX1,   NZBOX1,   NBOUND1, NLIM1
-  double precision                                :: RBOXLEN1, ZBOXLEN1, RBOXLFT1
-  double precision                                :: RAXIS1,   ZAXIS1,   B01,     R01
-  double precision, dimension (:),    allocatable :: T1,       P1,       TTp1,    Pp1,  Q1
-  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,  RLIM1,   ZLIM1  
+  integer                                         :: NRBOX1,   NZBOX1,    NBOUND1,  NLIM1
+  double precision                                :: RBOXLEN1, ZBOXLEN1,  RBOXLFT1
+  double precision                                :: RAXIS1,   ZAXIS1,    B01,      R01
+  double precision                                :: PSIAXIS1, PSIBOUND1, CURRENT1
+  double precision, dimension (:),    allocatable :: T1,       P1,        TTp1,     Pp1,  Q1
+  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,   RLIM1,    ZLIM1  
   double precision, dimension (:, :), allocatable :: PSI1
 
-  integer                                         :: NRBOX2,   NZBOX2,   NBOUND2, NLIM2
-  double precision                                :: RBOXLEN2, ZBOXLEN2, RBOXLFT2
-  double precision                                :: RAXIS2,   ZAXIS2,   B02,     R02
-  double precision, dimension (:),    allocatable :: T2,       P2,       TTp2,    Pp2,  Q2
-  double precision, dimension (:),    allocatable :: RBOUND2,  ZBOUND2,  RLIM2,   ZLIM2
-  double precision, dimension (:, :), allocatable :: PSI2
+  integer                                         :: NRBOX2,   NZBOX2,    NBOUND2,  NLIM2
+  double precision                                :: RBOXLEN2, ZBOXLEN2,  RBOXLFT2
+  double precision                                :: RAXIS2,   ZAXIS2,    B02,      R02
+  double precision                                :: PSIAXIS2, PSIBOUND2, CURRENT2
+  double precision, dimension (:),    allocatable :: T2,       P2,        TTp2,     Pp2,  Q2
+  double precision, dimension (:),    allocatable :: RBOUND2,  ZBOUND2,   RLIM2,    ZLIM2  
+  double precision, dimension (:, :), allocatable :: PSI2    
 
-  integer                                         :: NRBOX3,   NZBOX3,   NBOUND3, NLIM3
-  double precision                                :: RBOXLEN3, ZBOXLEN3, RBOXLFT3
-  double precision                                :: RAXIS3,   ZAXIS3,   B03,     R03
-  double precision, dimension (:),    allocatable :: T3,       P3,       TTp3,    Pp3,  Q3
-  double precision, dimension (:),    allocatable :: RBOUND3,  ZBOUND3,  RLIM3,   ZLIM3
-  double precision, dimension (:, :), allocatable :: PSI3
+  integer                                         :: NRBOX3,   NZBOX3,    NBOUND3,  NLIM3
+  double precision                                :: RBOXLEN3, ZBOXLEN3,  RBOXLFT3
+  double precision                                :: RAXIS3,   ZAXIS3,    B03,      R03
+  double precision                                :: PSIAXIS3, PSIBOUND3, CURRENT3
+  double precision, dimension (:),    allocatable :: T3,       P3,        TTp3,     Pp3,  Q3
+  double precision, dimension (:),    allocatable :: RBOUND3,  ZBOUND3,   RLIM3,    ZLIM3  
+  double precision, dimension (:, :), allocatable :: PSI3    
   
-  integer                                         :: NRBOX,   NZBOX,   NBOUND, NLIM
-  double precision                                :: RBOXLEN, ZBOXLEN, RBOXLFT
-  double precision                                :: RAXIS,   ZAXIS,   B0,     R0
-  double precision, dimension (:),    allocatable :: T,       P,       TTp,    Pp,  Q
-  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,  RLIM,   ZLIM    
+  integer                                         :: NRBOX,   NZBOX,    NBOUND,  NLIM
+  double precision                                :: RBOXLEN, ZBOXLEN,  RBOXLFT
+  double precision                                :: RAXIS,   ZAXIS,    B0,      R0
+  double precision                                :: PSIAXIS, PSIBOUND, CURRENT
+  double precision, dimension (:),    allocatable :: T,       P,        TTp,     Pp,  Q
+  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,   RLIM,    ZLIM    
   double precision, dimension (:, :), allocatable :: PSI
 
   ! -----------------------
@@ -521,12 +537,12 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   ! Read first gFile
   ! ----------------
   open (unit = 100, file = gFile1, status = 'old')
-  
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX1, NZBOX1
-  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,    RBOXLFT1,  zero
-  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   zero,   zero,      B01
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
+ 
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX1,   NZBOX1
+  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,      RBOXLFT1,  zero
+  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   PSIAXIS1, PSIBOUND1, B01
+  read (100, '(5e16.9  )') CURRENT1, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T1   (NRBOX1))
   allocate (P1   (NRBOX1))
@@ -559,11 +575,11 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   ! -----------------
   open (unit = 100, file = gFile2, status = 'old')
   
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX2,  NZBOX2
-  read (100, '(5e16.9  )') RBOXLEN2, ZBOXLEN2, R02,     RBOXLFT2, zero
-  read (100, '(5e16.9  )') RAXIS2,   ZAXIS2,   zero,    zero,     B02
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX2,   NZBOX2
+  read (100, '(5e16.9  )') RBOXLEN2, ZBOXLEN2, R02,      RBOXLFT2,  zero
+  read (100, '(5e16.9  )') RAXIS2,   ZAXIS2,   PSIAXIS2, PSIBOUND2, B02
+  read (100, '(5e16.9  )') CURRENT2, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T2   (NRBOX2))
   allocate (P2   (NRBOX2))
@@ -596,11 +612,11 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   ! ----------------
   open (unit = 100, file = gFile3, status = 'old')
   
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX3,  NZBOX3
-  read (100, '(5e16.9  )') RBOXLEN3, ZBOXLEN3, R03,     RBOXLFT3, zero
-  read (100, '(5e16.9  )') RAXIS3,   ZAXIS3,   zero,    zero,     B03
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX3,   NZBOX3
+  read (100, '(5e16.9  )') RBOXLEN3, ZBOXLEN3, R03,      RBOXLFT3,  zero
+  read (100, '(5e16.9  )') RAXIS3,   ZAXIS3,   PSIAXIS3, PSIBOUND3, B03
+  read (100, '(5e16.9  )') CURRENT3, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T3   (NRBOX3))
   allocate (P3   (NRBOX3))
@@ -689,13 +705,16 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   weight2 = (time - time1) * (time - time3) /(time2 - time1) /(time2 - time3)
   weight3 = (time - time1) * (time - time2) /(time3 - time1) /(time3 - time2)
 
-  R0      = R01      * weight1 + R02      * weight2 + R03      * weight3
-  B0      = B01      * weight1 + B02      * weight2 + B03      * weight3
-  RAXIS   = RAXIS1   * weight1 + RAXIS2   * weight2 + RAXIS3   * weight3
-  ZAXIS   = ZAXIS1   * weight1 + ZAXIS2   * weight2 + ZAXIS3   * weight3
-  RBOXLEN = RBOXLEN1 * weight1 + RBOXLEN2 * weight2 + RBOXLEN3 * weight3
-  ZBOXLEN = ZBOXLEN1 * weight1 + ZBOXLEN2 * weight2 + ZBOXLEN3 * weight3
-  RBOXLFT = RBOXLFT1 * weight1 + RBOXLFT2 * weight2 + RBOXLFT3 * weight3
+  R0       = R01       * weight1 + R02       * weight2 + R03       * weight3
+  B0       = B01       * weight1 + B02       * weight2 + B03       * weight3
+  RAXIS    = RAXIS1    * weight1 + RAXIS2    * weight2 + RAXIS3    * weight3
+  ZAXIS    = ZAXIS1    * weight1 + ZAXIS2    * weight2 + ZAXIS3    * weight3
+  RBOXLEN  = RBOXLEN1  * weight1 + RBOXLEN2  * weight2 + RBOXLEN3  * weight3
+  ZBOXLEN  = ZBOXLEN1  * weight1 + ZBOXLEN2  * weight2 + ZBOXLEN3  * weight3
+  RBOXLFT  = RBOXLFT1  * weight1 + RBOXLFT2  * weight2 + RBOXLFT3  * weight3
+  PSIAXIS  = PSIAXIS1  * weight1 + PSIAXIS2  * weight2 + PSIAXIS3  * weight3
+  PSIBOUND = PSIBOUND1 * weight1 + PSIBOUND2 * weight2 + PSIBOUND3 * weight3
+  CURRENT  = CURRENT1  * weight1 + CURRENT2  * weight2 + CURRENT3  * weight3
  
   do i = 1, NRBOX
      T   (i) = T1   (i) * weight1 + T2   (i) * weight2 + T3   (i) * weight3
@@ -726,12 +745,12 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   ! .............................
   open (unit = 100, file = gFile, status = 'replace')
 
-  write (100, '(a48, 3i4)') string,  i3,      NRBOX, NZBOX
-  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,    RBOXLFT, zero
-  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   zero,  zero,    B0
-  write (100, '(5e16.9)'  ) zero,    zero,    zero,  RAXIS,   zero
-  write (100, '(5e16.9)'  ) ZAXIS,   zero,    zero,  zero,    zero
-
+  write (100, '(a48, 3i4)') string,  i3,      NRBOX,    NZBOX
+  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,       RBOXLFT,  zero
+  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   PSIAXIS,  PSIBOUND, B0
+  write (100, '(5e16.9)'  ) CURRENT, PSIAXIS, zero,     RAXIS,    zero
+  write (100, '(5e16.9)'  ) ZAXIS,   zero,    PSIBOUND, zero,     zero
+  
   write (100, '(5e16.9)') (T    (i),    i = 1, NRBOX)
   write (100, '(5e16.9)') (P    (i),    i = 1, NRBOX)
   write (100, '(5e16.9)') (TTp  (i),    i = 1, NRBOX)
@@ -810,41 +829,46 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   integer               :: i, j, i3
   double precision      :: zero
 
-  integer                                         :: NRBOX1,   NZBOX1,   NBOUND1, NLIM1
-  double precision                                :: RBOXLEN1, ZBOXLEN1, RBOXLFT1
-  double precision                                :: RAXIS1,   ZAXIS1,   B01,     R01
-  double precision, dimension (:),    allocatable :: T1,       P1,       TTp1,    Pp1,  Q1
-  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,  RLIM1,   ZLIM1  
+  integer                                         :: NRBOX1,   NZBOX1,    NBOUND1,  NLIM1
+  double precision                                :: RBOXLEN1, ZBOXLEN1,  RBOXLFT1
+  double precision                                :: RAXIS1,   ZAXIS1,    B01,      R01
+  double precision                                :: PSIAXIS1, PSIBOUND1, CURRENT1
+  double precision, dimension (:),    allocatable :: T1,       P1,        TTp1,     Pp1,  Q1
+  double precision, dimension (:),    allocatable :: RBOUND1,  ZBOUND1,   RLIM1,    ZLIM1  
   double precision, dimension (:, :), allocatable :: PSI1
 
-  integer                                         :: NRBOX2,   NZBOX2,   NBOUND2, NLIM2
-  double precision                                :: RBOXLEN2, ZBOXLEN2, RBOXLFT2
-  double precision                                :: RAXIS2,   ZAXIS2,   B02,     R02
-  double precision, dimension (:),    allocatable :: T2,       P2,       TTp2,    Pp2,  Q2
-  double precision, dimension (:),    allocatable :: RBOUND2,  ZBOUND2,  RLIM2,   ZLIM2
-  double precision, dimension (:, :), allocatable :: PSI2
+  integer                                         :: NRBOX2,   NZBOX2,    NBOUND2,  NLIM2
+  double precision                                :: RBOXLEN2, ZBOXLEN2,  RBOXLFT2
+  double precision                                :: RAXIS2,   ZAXIS2,    B02,      R02
+  double precision                                :: PSIAXIS2, PSIBOUND2, CURRENT2
+  double precision, dimension (:),    allocatable :: T2,       P2,        TTp2,     Pp2,  Q2
+  double precision, dimension (:),    allocatable :: RBOUND2,  ZBOUND2,   RLIM2,    ZLIM2  
+  double precision, dimension (:, :), allocatable :: PSI2    
 
-  integer                                         :: NRBOX3,   NZBOX3,   NBOUND3, NLIM3
-  double precision                                :: RBOXLEN3, ZBOXLEN3, RBOXLFT3
-  double precision                                :: RAXIS3,   ZAXIS3,   B03,     R03
-  double precision, dimension (:),    allocatable :: T3,       P3,       TTp3,    Pp3,  Q3
-  double precision, dimension (:),    allocatable :: RBOUND3,  ZBOUND3,  RLIM3,   ZLIM3
-  double precision, dimension (:, :), allocatable :: PSI3
+  integer                                         :: NRBOX3,   NZBOX3,    NBOUND3,  NLIM3
+  double precision                                :: RBOXLEN3, ZBOXLEN3,  RBOXLFT3
+  double precision                                :: RAXIS3,   ZAXIS3,    B03,      R03
+  double precision                                :: PSIAXIS3, PSIBOUND3, CURRENT3
+  double precision, dimension (:),    allocatable :: T3,       P3,        TTp3,     Pp3,  Q3
+  double precision, dimension (:),    allocatable :: RBOUND3,  ZBOUND3,   RLIM3,    ZLIM3  
+  double precision, dimension (:, :), allocatable :: PSI3    
 
-  integer                                         :: NRBOX4,   NZBOX4,   NBOUND4, NLIM4
-  double precision                                :: RBOXLEN4, ZBOXLEN4, RBOXLFT4
-  double precision                                :: RAXIS4,   ZAXIS4,   B04,     R04
-  double precision, dimension (:),    allocatable :: T4,       P4,       TTp4,    Pp4,  Q4
-  double precision, dimension (:),    allocatable :: RBOUND4,  ZBOUND4,  RLIM4,   ZLIM4
-  double precision, dimension (:, :), allocatable :: PSI4
-  
-  integer                                         :: NRBOX,   NZBOX,   NBOUND, NLIM
-  double precision                                :: RBOXLEN, ZBOXLEN, RBOXLFT
-  double precision                                :: RAXIS,   ZAXIS,   B0,     R0
-  double precision, dimension (:),    allocatable :: T,       P,       TTp,    Pp,  Q
-  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,  RLIM,   ZLIM    
+  integer                                         :: NRBOX4,   NZBOX4,    NBOUND4,  NLIM4
+  double precision                                :: RBOXLEN4, ZBOXLEN4,  RBOXLFT4
+  double precision                                :: RAXIS4,   ZAXIS4,    B04,      R04
+  double precision                                :: PSIAXIS4, PSIBOUND4, CURRENT4
+  double precision, dimension (:),    allocatable :: T4,       P4,        TTp4,     Pp4,  Q4
+  double precision, dimension (:),    allocatable :: RBOUND4,  ZBOUND4,   RLIM4,    ZLIM4  
+  double precision, dimension (:, :), allocatable :: PSI4    
+    
+  integer                                         :: NRBOX,   NZBOX,    NBOUND,  NLIM
+  double precision                                :: RBOXLEN, ZBOXLEN,  RBOXLFT
+  double precision                                :: RAXIS,   ZAXIS,    B0,      R0
+  double precision                                :: PSIAXIS, PSIBOUND, CURRENT
+  double precision, dimension (:),    allocatable :: T,       P,        TTp,     Pp,  Q
+  double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,   RLIM,    ZLIM    
   double precision, dimension (:, :), allocatable :: PSI
-
+  
   ! -----------------------
   ! Read file and time data
   ! -----------------------
@@ -868,11 +892,11 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   ! ----------------
   open (unit = 100, file = gFile1, status = 'old')
   
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX1, NZBOX1
-  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,    RBOXLFT1,  zero
-  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   zero,   zero,      B01
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,   zero,      zero
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX1,   NZBOX1
+  read (100, '(5e16.9  )') RBOXLEN1, ZBOXLEN1, R01,      RBOXLFT1,  zero
+  read (100, '(5e16.9  )') RAXIS1,   ZAXIS1,   PSIAXIS1, PSIBOUND1, B01
+  read (100, '(5e16.9  )') CURRENT1, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T1   (NRBOX1))
   allocate (P1   (NRBOX1))
@@ -904,12 +928,12 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   ! Read second gFile
   ! -----------------
   open (unit = 100, file = gFile2, status = 'old')
-  
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX2,  NZBOX2
-  read (100, '(5e16.9  )') RBOXLEN2, ZBOXLEN2, R02,     RBOXLFT2, zero
-  read (100, '(5e16.9  )') RAXIS2,   ZAXIS2,   zero,    zero,     B02
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
+
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX2,   NZBOX2
+  read (100, '(5e16.9  )') RBOXLEN2, ZBOXLEN2, R02,      RBOXLFT2,  zero
+  read (100, '(5e16.9  )') RAXIS2,   ZAXIS2,   PSIAXIS2, PSIBOUND2, B02
+  read (100, '(5e16.9  )') CURRENT2, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T2   (NRBOX2))
   allocate (P2   (NRBOX2))
@@ -942,11 +966,11 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   ! ----------------
   open (unit = 100, file = gFile3, status = 'old')
   
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX3,  NZBOX3
-  read (100, '(5e16.9  )') RBOXLEN3, ZBOXLEN3, R03,     RBOXLFT3, zero
-  read (100, '(5e16.9  )') RAXIS3,   ZAXIS3,   zero,    zero,     B03
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX3,   NZBOX3
+  read (100, '(5e16.9  )') RBOXLEN3, ZBOXLEN3, R03,      RBOXLFT3,  zero
+  read (100, '(5e16.9  )') RAXIS3,   ZAXIS3,   PSIAXIS3, PSIBOUND3, B03
+  read (100, '(5e16.9  )') CURRENT3, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T3   (NRBOX3))
   allocate (P3   (NRBOX3))
@@ -979,11 +1003,11 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   ! -----------------
   open (unit = 100, file = gFile4, status = 'old')
   
-  read (100, '(a48, 3i4)') string,   i3,       NRBOX4,  NZBOX4
-  read (100, '(5e16.9  )') RBOXLEN4, ZBOXLEN4, R04,     RBOXLFT4, zero
-  read (100, '(5e16.9  )') RAXIS4,   ZAXIS4,   zero,    zero,     B04
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
-  read (100, '(5e16.9  )') zero,     zero,     zero,    zero,     zero
+  read (100, '(a48, 3i4)') string,   i3,       NRBOX4,   NZBOX4
+  read (100, '(5e16.9  )') RBOXLEN4, ZBOXLEN4, R04,      RBOXLFT4,  zero
+  read (100, '(5e16.9  )') RAXIS4,   ZAXIS4,   PSIAXIS4, PSIBOUND4, B04
+  read (100, '(5e16.9  )') CURRENT4, zero,     zero,     zero,      zero
+  read (100, '(5e16.9  )') zero,     zero,     zero,     zero,      zero
 
   allocate (T4   (NRBOX4))
   allocate (P4   (NRBOX4))
@@ -1081,13 +1105,16 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   weight3 = (time - time1) * (time - time2) * (time - time4) /(time3 - time1) /(time3 - time2) /(time3 - time4)
   weight4 = (time - time1) * (time - time2) * (time - time3) /(time4 - time1) /(time4 - time2) /(time4 - time3)
 
-  R0      = R01      * weight1 + R02      * weight2 + R03      * weight3 + R04      * weight4 
-  B0      = B01      * weight1 + B02      * weight2 + B03      * weight3 + B04      * weight4
-  RAXIS   = RAXIS1   * weight1 + RAXIS2   * weight2 + RAXIS3   * weight3 + RAXIS4   * weight4
-  ZAXIS   = ZAXIS1   * weight1 + ZAXIS2   * weight2 + ZAXIS3   * weight3 + ZAXIS4   * weight4
-  RBOXLEN = RBOXLEN1 * weight1 + RBOXLEN2 * weight2 + RBOXLEN3 * weight3 + RBOXLEN4 * weight4
-  ZBOXLEN = ZBOXLEN1 * weight1 + ZBOXLEN2 * weight2 + ZBOXLEN3 * weight3 + ZBOXLEN4 * weight4
-  RBOXLFT = RBOXLFT1 * weight1 + RBOXLFT2 * weight2 + RBOXLFT3 * weight3 + RBOXLFT4 * weight4
+  R0       = R01       * weight1 + R02       * weight2 + R03       * weight3 + R04       * weight4 
+  B0       = B01       * weight1 + B02       * weight2 + B03       * weight3 + B04       * weight4
+  RAXIS    = RAXIS1    * weight1 + RAXIS2    * weight2 + RAXIS3    * weight3 + RAXIS4    * weight4
+  ZAXIS    = ZAXIS1    * weight1 + ZAXIS2    * weight2 + ZAXIS3    * weight3 + ZAXIS4    * weight4
+  RBOXLEN  = RBOXLEN1  * weight1 + RBOXLEN2  * weight2 + RBOXLEN3  * weight3 + RBOXLEN4  * weight4
+  ZBOXLEN  = ZBOXLEN1  * weight1 + ZBOXLEN2  * weight2 + ZBOXLEN3  * weight3 + ZBOXLEN4  * weight4
+  RBOXLFT  = RBOXLFT1  * weight1 + RBOXLFT2  * weight2 + RBOXLFT3  * weight3 + RBOXLFT4  * weight4
+  PSIAXIS  = PSIAXIS1  * weight1 + PSIAXIS2  * weight2 + PSIAXIS3  * weight3 + PSIAXIS4  * weight4
+  PSIBOUND = PSIBOUND1 * weight1 + PSIBOUND2 * weight2 + PSIBOUND3 * weight3 + PSIBOUND4 * weight4
+  CURRENT  = CURRENT1  * weight1 + CURRENT2  * weight2 + CURRENT3  * weight3 + CURRENT4  * weight4
  
   do i = 1, NRBOX
      T   (i) = T1   (i) * weight1 + T2   (i) * weight2 + T3   (i) * weight3 + T4   (i) * weight4
@@ -1118,11 +1145,11 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   ! .............................
   open (unit = 100, file = gFile, status = 'replace')
 
-  write (100, '(a48, 3i4)') string,  i3,      NRBOX, NZBOX
-  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,    RBOXLFT, zero
-  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   zero,  zero,    B0
-  write (100, '(5e16.9)'  ) zero,    zero,    zero,  RAXIS,   zero
-  write (100, '(5e16.9)'  ) ZAXIS,   zero,    zero,  zero,    zero
+  write (100, '(a48, 3i4)') string,  i3,      NRBOX,    NZBOX
+  write (100, '(5e16.9)'  ) RBOXLEN, ZBOXLEN, R0,       RBOXLFT,  zero
+  write (100, '(5e16.9)'  ) RAXIS,   ZAXIS,   PSIAXIS,  PSIBOUND, B0
+  write (100, '(5e16.9)'  ) CURRENT, PSIAXIS, zero,     RAXIS,    zero
+  write (100, '(5e16.9)'  ) ZAXIS,   zero,    PSIBOUND, zero,     zero
 
   write (100, '(5e16.9)') (T    (i),    i = 1, NRBOX)
   write (100, '(5e16.9)') (P    (i),    i = 1, NRBOX)

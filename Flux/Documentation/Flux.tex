@@ -11,7 +11,8 @@
 \begin{document}
 \maketitle
 
-\section{Coordinate Systems}
+\section{Preliminarly Analysis}
+\subsection{Coordinate Systems}
 \begin{itemize}
 \item Cartesian coordinates: $X$, $Y$, $Z$.
 \item Cylindrical coordinates: $R\equiv (X^{\,2}+Y^{\,2})^{1/2}$, $\phi\equiv \tan^{-1}(Y/X)$, $Z$,
@@ -27,7 +28,7 @@ so
 where $R_0$ is a convenient scale major radius.
 \end{itemize}
 
-\section{Useful Identities}\label{s2}
+\subsection{Useful Identities}\label{s2}
 Easily demonstrated that:
 \begin{align}
 {\bf A} &= A^{\,r}\,{\cal J}\,\nabla\theta\times\nabla\phi
@@ -52,7 +53,7 @@ Easily demonstrated that:
 -\frac{\partial A_r}{\partial \theta}.
 \end{align}
 
-\section{Equilibrium Magnetic Field}
+\subsection{Equilibrium Magnetic Field}
 Equilibrium magnetic field:
 \begin{align}
 {\bf B}& =B_0\,R_0\left[ f(r)\,\nabla\phi\times \nabla r + g(r)\,\nabla\phi\right],\\[0.5ex]
@@ -74,7 +75,7 @@ and
 \frac{f}{r\,R^{\,2}}\left(\frac{\partial}{\partial \theta}+q\,\frac{\partial}{\partial\phi}\right).
 \end{equation}
 
-\section{Equilibrium Current}
+\subsection{Equilibrium Plasma Current}
 The relation $\mu_0\,{\bf J} = \nabla\times{\bf B}$ yields 
 \begin{align}
 \mu_0\,{\cal J}\,J^{\,r}&= 0,\\[0.5ex]
@@ -82,8 +83,8 @@ The relation $\mu_0\,{\bf J} = \nabla\times{\bf B}$ yields
 \mu_0\,{\cal J}\,J^{\,\phi} &= B_0\,\frac{\partial}{\partial r}\!\left(r\,f\,|\nabla r|^{\,2}\right) +B_0\,\frac{\partial}{\partial\theta}\!\left(r\,f\,\nabla r\cdot\nabla\theta\right).
 \end{align} 
 
-\section{Grad-Shafranov Equation}
-The force balance relation
+\subsection{Grad-Shafranov Equation}
+The equilibrium force balance relation
 \begin{equation}
 {\bf J}\times{\bf B} = \nabla P
 \end{equation}
@@ -91,12 +92,13 @@ yields
 \begin{equation}
 {\cal J}\,(J^{\,\theta}\,B^{\,\phi}- J^{\,\phi}\,B^{\,\theta})= \frac{dP}{dr},
 \end{equation}
-which reduces to
+which reduces to the Grad-Shafranov equation, 
 \begin{equation} 
 \frac{f}{r}\,\frac{\partial}{\partial r}\!\left(r\,f\,|\nabla r|^{\,2}\right) + \frac{f}{r}\,\frac{\partial}{\partial \theta}\!\left(r\,f\,\nabla r\cdot\nabla\theta\right) + g\,\frac{dg}{dr} + \frac{\mu_0}{B_0^{\,2}}\left(\frac{R}{R_0}\right)^2\frac{dP}{dr} = 0.
 \end{equation}
 
-\section{High-$q$ Limit}
+\subsection{Inhomogeneous Tearing Mode Dispersion Relation}
+\subsection{High-$q$ Limit}
 Now,
 \begin{equation}
 \nabla \cdot \delta{\bf B}=0
@@ -234,8 +236,8 @@ We can write
 {\cal J}\,\mu_0\,\delta J^{\,\theta} = \frac{\partial\,\delta B_r}{\partial\phi} -\frac{\partial \,\delta B_\phi}{\partial r},\\[0.5ex]
 {\cal J}\,\mu_0\,\delta J^{\,\phi} = \frac{\partial\,\delta B_\theta}{\partial r} -\frac{\partial \,\delta B_r}{\partial\theta}.
 \end{align}
-Normally, all three components are zero. However, at $k$th rational 
-surface $\psi_k$, $\psi_{j\neq k}$, and $\chi_{j\neq k}$ are continuous, whereas $\chi_k$ is discontinuous. Hence,
+Normally, all three components are zero. However, at $k$th resonant 
+surface (at which $r=r_k$, where $q(r-k)=m_k/n$) $\psi_k$, $\psi_{j\neq k}$, and $\chi_{j\neq k}$ are continuous, whereas $\chi_k$ is discontinuous. Hence,
 \begin{align}
 {\cal J}\,\mu_0\,\delta J^{\,r}(r,\theta,\phi) &= 0,\\[0.5ex]
 {\cal J}\,\mu_0\,\delta J^{\,\theta}(r,\theta,\phi) &=-\sum_k \frac{n}{m_k}\,\left[\chi_k
@@ -264,11 +266,11 @@ where $\delta{\bf T}(r)\,dr$ is the net electromagnetic torque acting on the pla
 ${\bf e}_\phi = R\,\nabla\phi$. 
 Follows that
 \begin{align}
-\delta T_{\theta\,k} &= -\frac{2\pi^{\,2}\,R_0\,m_k}{\mu_0}\,{\rm Im}\left({\mit\Psi}_k^{\,\ast}\,{\mit\Delta\Psi}_k\right),\\[0.5ex]
-\delta T_{\phi\,k} &= \frac{2\pi^{\,2}\,R_0\,n}{\mu_0}\,{\rm Im}\left({\mit\Psi}_k^{\,\ast}\,{\mit\Delta\Psi}_k\right).
+\delta T_{\theta\,k} &= -\frac{2\pi^{\,2}\,R_0\,m_k}{\mu_0}\,{\rm Im}\left({\mit\Psi}_k^{\,\ast}\,{\mit\Delta\Psi}_k\right),\label{et1}\\[0.5ex]
+\delta T_{\phi\,k} &= \frac{2\pi^{\,2}\,R_0\,n}{\mu_0}\,{\rm Im}\left({\mit\Psi}_k^{\,\ast}\,{\mit\Delta\Psi}_k\right).\label{et2}
 \end{align}
 
-\section{Homogeneous Solution}
+\subsection{Homogeneous Solution}
 We can write
 \begin{equation}
 \delta {\bf B} = \nabla \times \delta {\bf A}.
@@ -286,7 +288,6 @@ The previous three expressions are consistent with (\ref{e86}), (\ref{e90}), and
 \begin{equation}
 \delta A_\phi(r,\theta,\phi) \simeq R_0\sum_j\frac{\psi_j(r)}{m_j} \,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}.\label{e112}
 \end{equation}
-
 
 According to the Biot-Savart law:
 \begin{equation}
@@ -312,24 +313,24 @@ Now,
 \end{equation}
 so
 \begin{equation}
-\delta A_\phi(r,\theta,0)= \frac{1}{4\pi}\int_0^\infty
-\oint\oint \frac{R\,R'\,\mu_0\,\delta J^{\,\phi}(r',\theta',0)\,{\rm e}^{-{\rm i}\,n\,\phi'}\,\cos\phi'\,{\cal J}'\,dr'\,d\theta'\,d\phi'}{\left[R^{\,2}+R'^{\,2} +(Z-Z')^{\,2} -2\,R\,R'\,\cos\phi'\right]^{\,1/2}},
+\delta A_\phi(R,0,Z)= \frac{1}{4\pi}\int_0^\infty
+\oint\oint \frac{R\,R'\,\mu_0\,\delta J^{\,\phi}(R',0,Z')\,{\rm e}^{-{\rm i}\,n\,\phi'}\,\cos\phi'\,{\cal J}'\,dr'\,d\theta'\,d\phi'}{\left[R^{\,2}+R'^{\,2} +(Z-Z')^{\,2} -2\,R\,R'\,\cos\phi'\right]^{\,1/2}},
 \end{equation}
 which can be written
 \begin{equation}
-\delta A_\phi(r,\theta,0)= \frac{1}{4\pi}\int_0^\infty
-\oint R\,R'\,\mu_0\,\delta J^{\,\phi}(r',\theta',0)\,G(r,\theta;r',\theta')\,{\cal J}'\,dr'\,d\theta',
+\delta A_\phi(R,0,Z)= \frac{1}{4\pi}\int_0^\infty
+\oint R\,R'\,\mu_0\,\delta J^{\,\phi}(R',0,Z')\,G(R,Z;R',Z')\,{\cal J}'\,dr'\,d\theta',
 \end{equation}
 where
 \begin{equation}
-G(r,\theta;r',\theta') = \oint \frac{\cos \phi'\,\cos(n\,\phi')\,d\phi'}{\left[R^{\,2}+R'^{\,2} +(Z-Z')^{\,2} -2\,R\,R'\,\cos\phi'\right]^{\,1/2}},
+G(R,Z;R',Z') = \oint \frac{\cos \phi'\,\cos(n\,\phi')\,d\phi'}{\left[R^{\,2}+R'^{\,2} +(Z-Z')^{\,2} -2\,R\,R'\,\cos\phi'\right]^{\,1/2}},
 \end{equation}
 or
 \begin{equation}
-G(r,\theta;r',\theta') = \frac{1}{2}\oint \frac{\left(\cos[(n-1)\,\phi']+\cos[(n+1)\,\phi']\right)\,d\phi'}{\left[R^{\,2}+R'^{\,2} +(Z-Z')^{\,2} -2\,R\,R'\,\cos\phi'\right]^{\,1/2}}.
+G(R,Z;R',Z') = \frac{1}{2}\oint \frac{\left(\cos[(n-1)\,\phi']+\cos[(n+1)\,\phi']\right)\,d\phi'}{\left[R^{\,2}+R'^{\,2} +(Z-Z')^{\,2} -2\,R\,R'\,\cos\phi'\right]^{\,1/2}}.
 \end{equation}
 
-Now (GR 8.85.1), 
+Now, 
 \begin{align}
 P^{\,n}_{-1/2}(\cosh\eta) &= \frac{(-1)^{\,n}}{2\pi}\,\frac{\Gamma(1/2)}{\Gamma(1/2-n)}\oint \frac{\cos(n\,\varphi)\,d\varphi}{(\cosh\eta+\sinh\eta\,\cos\varphi)^{\,1/2}}\nonumber\\[0.5ex]
  &=\frac{1}{2\pi}\,\frac{\Gamma(1/2)}{\Gamma(1/2-n)}\oint \frac{\cos(n\,\varphi)\,d\varphi}{(\cosh\eta-\sinh\eta\,\cos\varphi)^{\,1/2}}\nonumber\\[0.5ex]
@@ -351,7 +352,7 @@ and
 \end{equation}
 It follows that
 \begin{align}
-G(r,\theta;r',\theta')&=\pi\left[\frac{\cosh\eta}{R^{\,2}+R'^{\,2}+(Z-Z')^{\,2}}\right]^{1/2}\nonumber\\[0.5ex]
+G(R,Z;R',Z')&=\pi\left[\frac{\cosh\eta}{R^{\,2}+R'^{\,2}+(Z-Z')^{\,2}}\right]^{1/2}\nonumber\\[0.5ex]
 &
 \times\left[\frac{\Gamma(3/2-n)}{\Gamma(1/2)}\,P_{-1/2}^{\,n-1}(\cosh\eta)
 + \frac{\Gamma(-1/2-n)}{\Gamma(1/2)}\,P_{-1/2}^{\,n+1}(\cosh\eta)\right].
@@ -363,7 +364,7 @@ However,
 \end{align}
 so
 \begin{align}
-G(r,\theta;r',\theta')&= \frac{(-1)^{\,n+1}\,\pi^{\,2}}{\Gamma(1/2)\,\Gamma(n+1/2)}
+G(R,Z;R',Z')&= \frac{(-1)^{\,n+1}\,\pi^{\,2}}{\Gamma(1/2)\,\Gamma(n+1/2)}
 \left[\frac{\cosh\eta}{R^{\,2}+R'^{\,2}+(Z-Z')^{\,2}}\right]^{1/2}\nonumber\\[0.5ex]
 &\times\left[(n-1/2)\,P_{-1/2}^{\,n-1}(\cosh\eta)+
 \frac{P_{-1/2}^{\,n+1}(\cosh\eta)}{n+1/2}\right].
@@ -377,32 +378,33 @@ Furthermore, from (\ref{e102}) and (\ref{e112}),
 \begin{equation}
 {\mit\Psi}_k = \frac{1}{R_0}\oint \delta A_{\phi}(r_k,\theta,0)\,{\rm e}^{-{\rm i}\,m_k\,\theta}\,\frac{d\theta}{2\pi}.
 \end{equation}
-Hence,
+Hence, we obtain the homogeneous tearing mode dispersion relation, 
 \begin{equation}
 {\mit\Psi}_k = \sum_{k'} F_{kk'}\,{\mit\Delta\Psi}_{k'},
 \end{equation}
 where
 \begin{equation}
 F_{kk'} = \oint\oint 
-{\cal G}(r_k,\theta;r_{k'},\theta')\,{\rm e}^{-{\rm i}\,(m_k\,\theta-m_{k'}\,\theta')}\,\frac{d\theta}{2\pi}\,\frac{d\theta'}{2\pi},
+{\cal G}(R_k,Z_k;R_k',Z_k')\,{\rm e}^{-{\rm i}\,(m_k\,\theta-m_{k'}\,\theta')}\,\frac{d\theta}{2\pi}\,\frac{d\theta'}{2\pi},
 \end{equation}
 and
 \begin{align}
-{\cal G}(r,\theta;r',\theta')&= \frac{(-1)^{\,n}\,\pi^{\,2}\,R\,R'/R_0}{2\,\Gamma(1/2)\,\Gamma(n+1/2)}
+{\cal G}(R,Z;R',Z')&= \frac{(-1)^{\,n}\,\pi^{\,2}\,R\,R'/R_0}{2\,\Gamma(1/2)\,\Gamma(n+1/2)}
 \left[\frac{\cosh\eta}{R^{\,2}+R'^{\,2}+(Z-Z')^{\,2}}\right]^{1/2}\nonumber\\[0.5ex]
 &\times\left[(n-1/2)\,P_{-1/2}^{\,n-1}(\cosh\eta)+
 \frac{P_{-1/2}^{\,n+1}(\cosh\eta)}{n+1/2}\right].
 \end{align}
+Here, $R_k$, $Z_k$ are the $R$. $Z$ coordinates of the $k$th resonant surface in the plane $\phi=0$. 
 Note that
 \begin{equation}
-{\cal G} (r',\theta';r,\theta) = {\cal G}(r,\theta;r',\theta'),
+{\cal G} (R',Z';R,Z) = {\cal G}(R,Z;R',Z'),
 \end{equation}
 which implies that
 \begin{equation}
 F_{k'k} = F_{kk'}^{\,\ast}.
 \end{equation}
 
-\section{Inomogeneous Solution}
+\subsection{Inhomogeneous Solution}
 Suppose that there are currents flowing in a number of external poloidal field
 coils. Let $I_l$, $R_l$, and $Z_l$ be the peak current, and coordinates of the
 $l$th field coil. The currents are assumed to modulate like ${\rm e}^{-{\rm i}\,n\,\phi}$. It follows that
@@ -417,9 +419,9 @@ where
 \begin{equation}
 g_{kj} = \frac{1}{2\pi}\oint {\cal G}(r_k,\theta;R_j,Z_j)\,{\rm e}^{-{\rm i}\,m_k\,\theta}\,\frac{d\theta}{2\pi}.
 \end{equation}
-It follows that
+Thus, we obtain the inhomogeneous tearing mode dispersion relation, 
 \begin{equation}
-{\mit\Delta\Psi}_k =\sum_{k'} E_{kk'}\,{\mit\Psi}_{k'}+ |E_{kk}|\,\chi_k
+{\mit\Delta\Psi}_k =\sum_{k'} E_{kk'}\,{\mit\Psi}_{k'}+ |E_{kk}|\,\chi_k, \label{e68}
 \end{equation}
 where $E_{kk'}$ is the inverse of the $F_{kk'}$ matrix, 
 and 
@@ -428,7 +430,137 @@ and
 h_{kl} &= \sum_{k'} E_{kk'} \,g_{k'l}. 
 \end{align}
 
-\section{Island Width}
+\subsection{Perturbed Poloidal Magnetic Field}
+The perturbed poloidal magnetic field generated by the
+current sheets inside the plasma and the currents flowing
+in the external field coils can be expressed as 
+\begin{equation}
+\delta {\bf B}_p = \nabla \delta A_\phi\times\nabla\phi,
+\end{equation}
+where
+\begin{equation}
+\frac{\delta A_\phi(R,\phi,Z)}{R_0} = {\rm Re}\left[
+\sum_{k=1,K} e_k(R,Z)\,{\mit\Delta\Psi}_k\,{\rm e}^{-{\rm i}\,n\,\phi}
+-\sum_{l=1,L} f_l(R,Z)\,\mu_0\,I_l\,{\rm e}^{-{\rm i}\,n\,\phi}\right],
+\end{equation}
+and
+\begin{align}
+e_k(R,Z) &= \oint {\cal G}(R,Z;R_k;Z_k)\,{\rm e}^{\,{\rm i}\,m_k\,\theta_k}\,\frac{d\theta_k}{2\pi},\label{e65a}\\[0.5ex]
+f_l(R,Z) &=  \frac{1}{2\pi}\,{\cal G}(R,Z;R_l,Z_l).
+\end{align}
+As before, $k$ indexes the resonant surfaces within the plasma, whereas $l$ indexes the external current filaments.  Moreover, the integral in Eq.~(\ref{e65a}) is taken around the
+$k$th resonant surface.
+
+\subsection{Electromagnetic Torques in Presence of External Currents}
+Suppose that
+\begin{align}
+{\mit\Psi}_k &= B_0\,R_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k},\\[0.5ex]
+\chi_k &= B_0\,R_0\,\hat{\chi}_{k}\,{\rm e}^{-{\rm i}\,\zeta_k},\\[0.5ex]
+E_{kk'} &= \hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}},
+\end{align}
+where $\hat{\mit\Psi}_k$, $\hat{\chi}_{k}$, and $\hat{E}_{kk'}$
+are real and positive, whereas $\varphi_k$, $\zeta_k$, and
+$\xi_{kk'}$ are real. 
+(Note that all hatted quantities in this paper are dimensionless.)
+It follows from Eqs.~(\ref{et1}), (\ref{et2}), and (\ref{e68})
+that
+\begin{align}
+\delta T_{\theta\,k} &=-\left(\frac{2\pi^{\,2}\,B_0^{\,2}\,R_0^{\,3}}{\mu_0}\right)m_k\,\delta \hat{T}_k,\\[0.5ex]
+\delta T_{\phi\,k}&= \left(\frac{2\pi^{\,2}\,B_0^{\,2}\,R_0^{\,3}}{\mu_0}\right)n\,\delta \hat{T}_k,
+\end{align}
+where
+\begin{equation}
+\delta \hat{T}_k= \sum_{k'=1,K}\hat{E}_{kk'}\,\hat{\mit\Psi}_k\,\hat{\mit\Psi}_{k'}\,\sin(\varphi_k-\varphi_{k'}-\xi_{kk'}) + \hat{E}_{kk}\,\hat{\mit\Psi}_k\,\hat{\chi}_{k}\,\sin(\varphi_k-\zeta_k).
+\end{equation}
+
+\subsection{GPEC Coupling}
+\subsubsection{PRL Derivation}
+We have
+\begin{align}
+\frac{d\psi_p}{dr} &= B_0\,R_0\,f(r),\\[0.5ex]
+{\bf B}\cdot\nabla \phi &= \frac{B_0\,R_0}{R^{\,2}}\,g(r),\\[0.5ex]
+\delta B^{\,r}&= \frac{{\rm i}}{r}\left(\frac{R_0}{R}\right)^2\sum_j \psi_j\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}.
+\end{align}
+According to PRL {\bf 99}, 195003 (2007),
+\begin{equation}
+{\mit\Delta}_j\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)} =\left[\frac{\partial}{\partial\psi_p}\,\frac{\delta {\bf B}\cdot\nabla\psi_p}{{\bf B}\cdot\nabla\phi}\right]_{r_j}=
+\left[\frac{\partial}{\partial r}\,\frac{\delta {\bf B}\cdot\nabla r}{{\bf B}\cdot\nabla\phi}\right]_{r_j} = \left[\frac{\partial}{\partial r}\,\frac{\delta B^{\,r}}{{\bf B}\cdot\nabla\phi}\right]_{r_j} .
+\end{equation}
+It follows that
+\begin{equation}
+{\mit\Delta}_j = \frac{{\rm i}}{r_j}\left(\frac{R_0}{R}\right)^2\frac{R^{\,2}}{B_0\,R_0\,g_j}\left[\frac{d\psi_j}{dr}\right]_{r_j},
+\end{equation}
+But,
+\begin{equation}
+\left[r\,\frac{d\psi_j}{dr}\right]_{r_j} = m_j\,a_{jj}\,[\chi_j]_{r_j} =  m_j\,a_{jj}\,{\mit\Delta\Psi}_j,
+\end{equation}
+and
+\begin{equation}
+\chi_j =\frac{{\mit\Delta\Psi}_j}{|E_{jj}|},
+\end{equation}
+which implies that
+\begin{align}
+{\mit\Delta}_j ={\rm i}\left(\frac{R_0}{r_j}\right)^2 \frac{m_j\,a_{jj}}{g_j}\,\frac{{\mit\Delta\Psi}_j}{B_0\,R_0},
+\end{align}
+or
+\begin{align}
+\frac{\chi_j}{R_0\,B_0} = -{\rm i}\left(\frac{r_j}{R_0}\right)^2 \frac{g_j}{m_j\,a_{jj}}\,\frac{{\mit\Delta}_j}{|E_{jj}|}.
+\end{align}
+Here, the ${\mit\Delta}_j$ values can be determined from the GPEC code. 
+
+\subsubsection{PoP Derivation}
+Now, $d\psi_p/dr = B_0\,R_0\,f$. It follows that
+\begin{equation}
+(\nabla\psi_p\times\nabla\theta\cdot\nabla\phi)^{-1}=\frac{R^{\,2}\,q}{B_0\,R_0\,g}.
+\end{equation}
+Hence,
+\begin{equation}
+{\bf B} = \nabla\phi\times\nabla\psi_p + B_0\,R_0\,g\,\nabla\phi = \nabla\phi\times\nabla\psi_p + q\,\nabla\psi_p\times\nabla\theta.
+\end{equation}
+Let ${\mit\Psi}_p = 2\pi\,\psi_p$ and $d{\mit\Psi}_p/d{\mit\Psi}_t = 1/q$. 
+Hence,
+\begin{align}
+\frac{d{\mit\Psi}_p}{dr} &= 2\pi\,B_0\,R_0\,f,\\[0.5ex]
+\frac{d{\mit\Psi}_t}{dr} &= 2\pi\,B_0\,r\,g,
+\end{align}
+and [cf.\ PoP {\bf 13}, 102501 (2006), Eq.~(41)]
+\begin{equation}
+2\pi\,{\bf B} = q^{-1}\,\nabla\phi\times\nabla{\mit\Psi}_t + \nabla{\mit\Psi}_t\times\nabla\theta.
+\end{equation}
+
+We have
+\begin{align}
+\delta J^{\,r} &= 0,\\[0.5ex]
+{\cal J}\,\mu_0\,\delta J^{\,\theta} &= -\sum_j \frac{{\mit\Delta\Psi}_j}{q_j}\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}\,\delta(r-r_j),\\[0.5ex]
+{\cal J}\,\mu_0\,\delta J^{\,\phi} &= -\sum_j {\mit\Delta\Psi}_k\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}\,\delta(r-r_j),
+\end{align}
+which implies that
+\begin{equation}
+\mu_0\,\delta{\bf J} = -2\pi\sum_j{\mit\Delta\Psi}_j,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}\,\delta(\psi_t-\psi_{t\,j})\,{\bf B}.
+\end{equation}
+However, according to PoP {\bf 13}, 102501 (2006),
+\begin{equation}
+{\mit\Delta\Psi}_j =- {\rm i}\,\frac{\mu_0\,J_c\,{\mit\Delta}_j}{2\pi\,m_j},
+\end{equation}
+where
+\begin{equation}
+\frac{1}{\mu_0\,J_c} = \left(\oint \frac{B^{\,2}}{|\nabla\psi_t|^{\,2}}\,\frac{d\theta\,d\phi}{2\pi\,{\bf B}\cdot\nabla\phi}\right)_{r_j}.
+\end{equation}
+It is easily demonstrated that
+\begin{equation}
+\frac{1}{\mu_0\,J_c} = \left(\frac{R_0}{r_j}\right)^2\,\frac{1}{2\pi\,B_0\,R_0\,g_j}\left[a_{jj} + \left(\frac{r_k}{R_0\,q_j}\right)^2\right].
+\end{equation}
+Hence,
+\begin{equation}
+\frac{{\mit\Delta\Psi}_j}{B_0\,R_0} = -{\rm i}\,{\mit\Delta}_j\left(\frac{r_j}{R_0}\right)^2\frac{g_j}{m_j\,[a_{jj}+ (r_k/R_0\,q_j)^2]},
+\end{equation}
+which implies that
+\begin{equation}
+\frac{\chi_j}{B_0\,R_0} = -{\rm i}\,\frac{{\mit\Delta}_j}{|E_{jj}|}\left(\frac{r_j}{R_0}\right)^2\frac{g_j}{m_j\,[a_{jj}+ (r_k/R_0\,q_j)^2]},
+\end{equation}
+As before, the ${\mit\Delta}_j$ values can be determined from the GPEC code. 
+
+\subsection{Island Width (in $r$)}
 We have
 \begin{align}
 {\cal J}\,\delta B^{\,r} &\simeq \frac{\partial \,\delta A_\phi}{\partial\theta},\\[0.5ex]
@@ -444,7 +576,7 @@ Suppose that
 \delta A_\phi (r,\theta,\phi)\simeq \delta \hat{A}_\phi\,{\rm e}^{\,{\rm i}\,(
 m_k\,\theta - n\,\phi)}
 \end{equation}
-in the vicinity of the $k$th rational surface. It follows that
+in the vicinity of the $k$th resonant surface. It follows that
 \begin{equation}
 {\bf B}\cdot\nabla \delta A_\phi = {\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,\delta\hat{A}_\phi\,{\rm e}^{\,{\rm i}\,(
 m_k\,\theta - n\,\phi)}.
@@ -471,8 +603,9 @@ which implies that
 \end{equation}
 or
 \begin{equation}
-F_0(r) \simeq \frac{B_0}{2}\left(\frac{g\,s}{q}\right)_{r_k} (r-r_k)^{\,2}.
+F_0(r) \simeq \frac{B_0}{2}\left(\frac{g\,s}{q}\right)_{r_k} (r-r_k)^{\,2},
 \end{equation}
+where $s=r\,q'/q$. 
 Hence,
 \begin{equation}
 F(r,\theta,\phi) = \frac{B_0}{2}\left(\frac{g\,s}{q}\right)_{r_k}(r-r_k)^{\,2}
@@ -491,9 +624,10 @@ and
 \begin{equation}
 \frac{W_k}{4\,R_0} = \left[\left(\frac{q}{g\,s}\right)_{r_k}\,\frac{|{\mit\Psi}_k|}{B_0\,R_0}\right]^{1/2}.
 \end{equation}
-It follows that $W_k$ is the full radial island width (which is constant in $r$).
+It follows that $W_k$ is the full radial island width  in $r$ (which is not a function of $\theta$).
 
-\section{Flux Coordinate System}
+\section{Technical Details}
+\subsection{Flux Coordinate System}
 Let all lengths be normalized to $R_0$, and all magnetic field-strengths to $B_0$. 
 We have
 \begin{equation}
@@ -571,88 +705,13 @@ Note that
 \frac{d{\mit\Psi}_N}{dr} =\frac{r\,g(r)}{|\psi_c|\,q(r)}.
 \end{equation}
 Hence, if $\overline{W}_k$ is the full magnetic island width in ${\mit\Psi}_N$ at the 
-$k$th rational surface then
+$k$th resonant surface then
 \begin{equation}
-\overline{W}_k = \frac{W_k}{R_0}\,\frac{d{\mit\Psi}_N}{dr}.
+\overline{W}_k = \frac{W_k}{R_0}\,\frac{d{\mit\Psi}_N(r_k)}{dr},
 \end{equation}
+where $W_k$ is the full island width in $r$. 
 
-\section{GPEC Coupling}
-We have
-\begin{align}
-\frac{d\psi_p}{dr} &= B_0\,R_0\,f(r),\\[0.5ex]
-{\bf B}\cdot\nabla \phi &= \frac{B_0\,R_0}{R^{\,2}}\,g(r),\\[0.5ex]
-\delta B^{\,r}&= \frac{{\rm i}}{r}\left(\frac{R_0}{R}\right)^2\sum_j \psi_j\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}.
-\end{align}
-According to PRL {\bf 99}, 195003 (2007),
-\begin{equation}
-{\mit\Delta}_j\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)} =\left[\frac{\partial}{\partial\psi_p}\,\frac{\delta {\bf B}\cdot\nabla\psi_p}{{\bf B}\cdot\nabla\phi}\right]_{r_j}=
-\left[\frac{\partial}{\partial r}\,\frac{\delta {\bf B}\cdot\nabla r}{{\bf B}\cdot\nabla\phi}\right]_{r_j} = \left[\frac{\partial}{\partial r}\,\frac{\delta B^{\,r}}{{\bf B}\cdot\nabla\phi}\right]_{r_j} .
-\end{equation}
-It follows that
-\begin{equation}
-{\mit\Delta}_j = \frac{{\rm i}}{r_j}\left(\frac{R_0}{R}\right)^2\frac{R^{\,2}}{B_0\,R_0\,g_j}\left[\frac{d\psi_j}{dr}\right]_{r_j},
-\end{equation}
-But,
-\begin{equation}
-\left[r\,\frac{d\psi_j}{dr}\right]_{r_j} = m_j\,a_{jj}\,[\chi_j]_{r_j} =  m_j\,a_{jj}\,{\mit\Delta\Psi}_j,
-\end{equation}
-and
-\begin{equation}
-\chi_j =\frac{{\mit\Delta\Psi}_j}{|E_{jj}|},
-\end{equation}
-which implies that
-\begin{align}
-{\mit\Delta}_j &={\rm i}\left(\frac{R_0}{r_j}\right)^2 \frac{m_j\,a_{jj}}{g_j}\,\frac{{\mit\Delta\Psi}_j}{B_0\,R_0},\\[0.5ex]
-\frac{\chi_j}{R_0\,B_0} &= -{\rm i}\left(\frac{r_j}{R_0}\right)^2 \frac{g_j}{m_j\,a_{jj}}\,\frac{{\mit\Delta}_j}{|E_{jj}|}.
-\end{align}
-
-Now, $d\psi_p/dr = B_0\,R_0\,f$. It follows that
-\begin{equation}
-(\nabla\psi_p\times\nabla\theta\cdot\nabla\phi)^{-1}=\frac{R^{\,2}\,q}{B_0\,R_0\,g}.
-\end{equation}
-Hence,
-\begin{equation}
-{\bf B} = \nabla\phi\times\nabla\psi_p + B_0\,R_0\,g\,\nabla\phi = \nabla\phi\times\nabla\psi_p + q\,\nabla\psi_p\times\nabla\theta.
-\end{equation}
-Let ${\mit\Psi}_p = 2\pi\,\psi_p$ and $d{\mit\Psi}_p/d{\mit\Psi}_t = 1/q$. 
-Hence,
-\begin{align}
-\frac{d{\mit\Psi}_p}{dr} &= 2\pi\,B_0\,R_0\,f,\\[0.5ex]
-\frac{d{\mit\Psi}_t}{dr} &= 2\pi\,B_0\,r\,g,
-\end{align}
-and [cf.\ PoP {\bf 13}, 102501 (2006), Eq.~(41)]
-\begin{equation}
-2\pi\,{\bf B} = q^{-1}\,\nabla\phi\times\nabla{\mit\Psi}_t + \nabla{\mit\Psi}_t\times\nabla\theta.
-\end{equation}
-
-We have
-\begin{align}
-\delta J^{\,r} &= 0,\\[0.5ex]
-{\cal J}\,\mu_0\,\delta J^{\,\theta} &= -\sum_j \frac{{\mit\Delta\Psi}_j}{q_j}\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}\,\delta(r-r_j),\\[0.5ex]
-{\cal J}\,\mu_0\,\delta J^{\,\phi} &= -\sum_j {\mit\Delta\Psi}_k\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}\,\delta(r-r_j),
-\end{align}
-which implies that
-\begin{equation}
-\mu_0\,\delta{\bf J} = -2\pi\sum_j{\mit\Delta\Psi}_j,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)}\,\delta(\psi_t-\psi_{t\,j})\,{\bf B}.
-\end{equation}
-However, according to PoP {\bf 13}, 102501 (2006),
-\begin{equation}
-{\mit\Delta\Psi}_j =- {\rm i}\,\frac{\mu_0\,J_c\,{\mit\Delta}_j}{2\pi\,m_j},
-\end{equation}
-where
-\begin{equation}
-\frac{1}{\mu_0\,J_c} = \left(\oint \frac{B^{\,2}}{|\nabla\psi_t|^{\,2}}\,\frac{d\theta\,d\phi}{2\pi\,{\bf B}\cdot\nabla\phi}\right)_{r_j}.
-\end{equation}
-It is easily demonstrated that
-\begin{equation}
-\frac{1}{\mu_0\,J_c} = \left(\frac{R_0}{r_j}\right)^2\,\frac{1}{2\pi\,B_0\,R_0\,g_j}\left[a_{jj} + \left(\frac{r_k}{R_0\,q_j}\right)^2\right].
-\end{equation}
-Hence,
-\begin{equation}
-\frac{{\mit\Delta\Psi}_j}{B_0\,R_0} = -{\rm i}\,{\mit\Delta}_j\left(\frac{r_j}{R_0}\right)^2\frac{g_j}{m_j\,[a_{jj}+ (r_k/R_0\,q_j)^2]}.
-\end{equation}
-
-\section{Neoclassical Coordinate System}
+\subsection{Neoclassical Coordinate System}
 It is also helpful to define the geometric poloidal angle
 \begin{equation}
 {\bf b}\cdot\nabla {\mit\Theta} = \gamma(r).
@@ -683,7 +742,7 @@ Thus,
 \frac{1}{\gamma} = \frac{q}{g}\oint B\,R^{\,2}\,\frac{d\theta}{2\pi}.
 \end{equation}
 
-\section{Neoclassical Parameters}
+\subsection{Neoclassical Parameters}
 The flux-surface average operator has the following
 properties:
 \begin{align}
@@ -705,15 +764,13 @@ I_2 &=\oint B\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
 I_3 &=\oint\left(\frac{\partial B}{\partial{\mit\Theta}}\right)^2\frac{1}{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
 I_{4,k}&= \sqrt{\frac{2}{k}}\oint \frac{\sin(k\,{\mit\Theta})}{B^{\,2}}\,\frac{\partial B}{\partial{\mit\Theta}}\,\frac{d{\mit\Theta}}{2\pi}=\oint\frac{\sqrt{2\,k}\,\cos(k\,{\mit\Theta})}{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
 I_{5,k} &= \sqrt{\frac{2}{k}}\oint \frac{\sin(k\,{\mit\Theta})}{B^{\,3}}\,\frac{\partial B}{\partial{\mit\Theta}}\,\frac{d{\mit\Theta}}{2\pi}=\oint\frac{\sqrt{2\,k}\,\cos(k\,{\mit\Theta})}{2\,B^{\,2}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
-I_6(\lambda) &=\oint \frac{\sqrt{1-\lambda\,B/B_{\rm max}}}{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
-I_7 &=\oint\frac{1}{R}\,\frac{d{\mit\Theta}}{2\pi}.
+I_6(\lambda) &=\oint \frac{\sqrt{1-\lambda\,B/B_{\rm max}}}{B}\,\frac{d{\mit\Theta}}{2\pi}.
 \end{align}
 It follows that
 \begin{align}
 \langle B\rangle &= \frac{1}{I_1},\\[0.5ex]
 \left\langle \frac{1}{R^{\,2}}\right\rangle&= \frac{\gamma\,q}{I_1\,g},\\[0.5ex]
 \langle B^{\,2}\rangle &= \frac{I_2}{I_1},\\[0.5ex]
-\left\langle \frac{B}{R}\right\rangle &= \frac{I_7}{I_1},\\[0.5ex]
 \langle ({\bf b}\cdot\nabla B)^{\,2}\rangle&= \gamma^{\,2}\,\frac{I_3}{I_1},\\[0.5ex]
 |\langle {\bf B}\cdot \nabla \theta\rangle|&= \frac{g}{|q|}\,\frac{I_0}{I_1} = \frac{|\gamma|}{I_1},
 \\[0.5ex]
