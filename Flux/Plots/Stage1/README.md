@@ -1,8 +1,8 @@
 # Asymptote scripts (see http://asymptote.sourceforge.net/)
 
-<filename>.asy
-Usage:	    asy <filename>
-Produces:   <filename>.eps
+filename.asy
+Usage:	    asy filename
+Produces:   filename.eps
 ---
 
 	psi.asy  ... plots psi(R,Z)
