@@ -3,4 +3,4 @@
 ## Contents
 
 - Island.in: Fortran_90 namelist file
-- Waveform.in: Fortran namelist file specifying RMP coil current waveform
+- Waveform.in: Fortran_90 namelist file specifying RMP coil current waveform

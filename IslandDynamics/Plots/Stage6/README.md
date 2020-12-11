@@ -6,10 +6,10 @@
 ---
 
 	q.asy        ... plots q(0), q(0.95), and q(1) versus experimental time
-	q95.asy		 ... plots q(0.95) versus experimental time
+	q95.asy      ... plots q(0.95) versus experimental time
 
-	omega0.asy	 ... plots nonlinear natural frequencies versus experimental time
-	omega0e.asy	 ... plots linear natural frequencies versus experimental time
+	omega0.asy   ... plots nonlinear natural frequencies versus experimental time
+	omega0e.asy  ... plots linear natural frequencies versus experimental time
 	omega0eb.asy ... plots ExB frequencies versus experimental time
 	omega.asy    ... plots island frequencies versus experimental time
 

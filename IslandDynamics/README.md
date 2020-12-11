@@ -20,13 +20,12 @@
 
 - Makefile: GNU makefile
 - *.f90: Fortran_90 source files
-- *.h: C++ header files
 - *.cpp: C++ source files
 	 
 ### /Inputs
 
 - Island.in: Fortran_90 namelist file
-- Waveform.in: Fortran namelist file specifying RMP coil current waveform
+- Waveform.in: Fortran_90 namelist file specifying RMP coil current waveform
 	  
 ### /Outputs
 
@@ -35,4 +34,4 @@
 ### /Plots
 
 - /Stage6
- - *.asy: Asymptote scripts to plot Stage 6 data
+  - *.asy: Asymptote scripts to plot Stage 6 data
