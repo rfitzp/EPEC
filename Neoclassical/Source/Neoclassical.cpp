@@ -377,7 +377,7 @@ void Neoclassical::Read_Profiles ()
   printf ("Reading profile data:\n");
   pFileRead ();
 
-  // Determine ion data
+  // Determine ion data (impurities = 0; majority = 1)
   NI  = int (NZA.GetX (1) + 1.e-6);
   ZI  = NZA.GetY      (1);
   AI  = NZA.GetdYdX   (1);

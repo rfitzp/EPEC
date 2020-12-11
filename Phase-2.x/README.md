@@ -33,7 +33,7 @@
 
 - Phase.in: Fortran_90 namelist control file
 - Waveform.in: Fortran_90 namelist file specifing RMP coil current waveform
-- nFile: Data from NEOCLASSICAL\
+- nFile: Data from NEOCLASSICAL
 - /nFiles: Contains nFiles for interpolation
   - Index: List of nFile names and experimental times
   - nFiles: Actual nFiles
@@ -53,7 +53,7 @@
 ### /Outputs
 
 - sFile: File specifying final plasma state (use for restarting calculation)
-- /Stage4: Date files from Stage 4 calculation
+- /Stage4: Data files from Stage 4 calculation
 - /Stage5: Data files from Stage 5 calculation
 	  
 ### /Plots

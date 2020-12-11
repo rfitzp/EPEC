@@ -5,18 +5,18 @@
 - Produces:   filename>eps
 ---
 
-	irmp.asy	... plots RMP current versus time
+	irmp.asy    ... plots RMP current versus time
 	prmp.asy    ... plots RMP phase versus time
 
-	W.asy		... plots all island widths versus time
-	Wav.asy		... plots averaged island widths versus time
+	W.asy       ... plots all island widths versus time
+	Wav.asy     ... plots averaged island widths versus time
 	Wav1.asy    ... plots averaged inner and outer radii of island seperatrices versus time
 	Wdel.asy    ... plots island width/linear layer width versus time
-	phi.asy		... plots all island phases versus time
-	phin.asy	... plots island phase at single resonant surface versus time
-	psi.asy		... plots all reconnected fluxes versus time
+	phi.asy     ...  plots all island phases versus time
+	phin.asy    ... plots island phase at single resonant surface versus time
+	psi.asy     ... plots all reconnected fluxes versus time
 	omega.asy   ... plots all frequencies versus time
-	omegan.asy	... plots frequency at single rational surface versus time
+	omegan.asy  ... plots frequency at single rational surface versus time
 	omega0.asy  ... plots natural frequencies versus time
 
 	dne.asy     ... plots density reduction at rational surfaces versus time
@@ -24,8 +24,8 @@
 	dte.asy     ... plots temperature reduction at rational surfaces versus time
 	dte1.asy    ... plots temperature flattened regions versus time
 
-	in.asy		... plots inboard Mirnov signals versus time
-	inamp.asy   ...	plots magnitude of inboard Mirnov signal versus time
+	in.asy      ... plots inboard Mirnov signals versus time
+	inamp.asy   ... plots magnitude of inboard Mirnov signal versus time
 	inpha.asy	... plots phase of inboard Mirnov signal versus time
 
 	out.asy		... plots outboard Mirnov signals versus time
