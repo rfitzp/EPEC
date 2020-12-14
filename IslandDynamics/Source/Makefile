@@ -9,27 +9,7 @@ COMPILE_TIME         = `date -u +'%Y-%m-%d %H:%M:%S UTC'`
 GIT_BRANCH           = `git branch | grep "^\*" | sed 's/^..//'`
 export VERSION_FLAGS=-DGIT_HASH="\"$(GIT_HASH)\"" -DCOMPILE_TIME="\"$(COMPILE_TIME)\"" -DGIT_BRANCH="\"$(GIT_BRANCH)\""\
 
-UNAME := $(shell uname)
-
-ifeq ($(UNAME), Darwin)
-	F_COMPILER = gfortran
-	F_FLAGS    =
-	F_INCLUDE  =
-
-	C_COMPILER = clang++ -O3
-	C_FLAGS    = -w $(VERSION_FLAGS)
-	C_INCLUDE  = -I/opt/local/include
-	C_LIBS	   = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas
-else ifeq ($(UNAME), Linux)
-	F_COMPILER = gfortran
-	F_FLAGS    =
-	F_INCLUDE  =
-
-	C_COMPILER = clang++ -O3
-	C_FLAGS    = -w $(VERSION_FLAGS)
-	C_INCLUDE  = -lgsl -lgslblas
-	C_LIBS	   = -lgfortran -lgsl -lgslcblas
-endif
+include ../../Machines.in
 
 EXECUTABLE = ../island
 
