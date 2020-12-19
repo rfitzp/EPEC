@@ -109,7 +109,7 @@ int main (int argc, char** argv)
   if (lvalue != NULL)
     _LIN = atoi (lvalue);
   if (mvalue != NULL)
-    _MID = atoi (lvalue);
+    _MID = atoi (mvalue);
   if (Fvalue != NULL)
      _FREQ = atoi (Fvalue);
   if (tvalue != NULL)

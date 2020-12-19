@@ -1264,7 +1264,7 @@ void Phase::IslandDynamics ()
 	  fprintf (file13, "\n"); fprintf (file14, "\n"); fprintf (file15, "\n"); fprintf (file16, "\n");
 	  fprintf (file17, "\n"); fprintf (file18, "\n");
 
-	  if (cnt%100 == 0)
+	  if (cnt%10 == 0)
 	    printf ("t = %11.4e  irmp = %11.4e  prmp/pi = %11.4e\n", t*tau_A, irmp, prmp /M_PI);
 	  cnt++;
 	  
@@ -1291,23 +1291,59 @@ void Phase::IslandDynamics ()
 
   FILE* filex = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mk (j), rk (j), wkl (j) /tau_A/1.e3, wke (j) /tau_A/1.e3, wkn (j) /tau_A/1.e3, GetNaturalFrequency (j) /tau_A/1.e3, TIME);
   fclose (filex);
 
   FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
   for (int j = 0; j < nres; j++)
     {
-      double Wk = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+      double Wk = 4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j);
 
-      if (j == 0 && Wk/2. > rk (j))
-	Wk = 2. * rk (j);
-      if (j > 0 && Wk/2. > rk (j) - rk (j-1))
-	Wk = 2. * (rk (j) - rk (j-1));
-      if (j < nres-1 && Wk/2. > rk (j+1) - rk (j))
-	Wk = 2. * (rk (j+1) - rk (j));
-      if (j == nres-1 && Wk/2. > 1. - rk (j))
-	Wk = 2. * (1. - rk (j));
+      if (j == 0)
+	{
+	  double Pminus = PsiN (j);
+	  double Pplus  = PsiN (j+1) - PsiN (j);
+	  double dP;
+
+	  if (Pminus < Pplus)
+	    dP = Pminus;
+	  else
+	    dP = Pplus;
+
+	  if (Wk/2. > dP)
+	    Wk = 2.*dP;
+	}
+      else if (j == nres-1)
+	{
+	  double Pminus = PsiN (j);
+	  double Pplus  = 1. - PsiN (j);
+	  double dP;
+
+	  if (Pminus < Pplus)
+	    dP = Pminus;
+	  else
+	    dP = Pplus;
+
+	  if (Wk/2. > dP)
+	    Wk = 2.*dP;
+	}
+      else
+	{
+	  double Pminus = PsiN (j)   - PsiN (j-1);
+	  double Pplus  = PsiN (j+1) - PsiN (j);
+	  double dP;
+
+	  if (Pminus < Pplus)
+	    dP = Pminus;
+	  else
+	    dP = Pplus;
+
+	  if (Wk/2. > dP)
+	    Wk = 2.*dP;
+	}
+
+      Wk *= R_0 /dPsiNdr (j);
 
       double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
       double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));

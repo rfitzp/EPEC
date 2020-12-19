@@ -9,9 +9,9 @@ A          = transpose (A);
 real[] m   = A[0];
 real[] r   = A[1];
 real[] wl  = A[2];
-real[] wnl = A[3];
-real[] web = A[4];
-real[] tt  = A[5];
+real[] web = A[3];
+real[] wnl = A[4];
+real[] tt  = A[6];
 
 int N = m.length;
 real[] q4,  i4;

@@ -32,68 +32,68 @@ for (int j = 0; j < N; ++j)
    if ((int) m[j] == 4)
       {
 	q4.push (tt[j]);
-	i4.push (wl[j]);
+	i4.push (wnl[j]);
       }
     if ((int) m[j] == 5)
       {
 	q5.push (tt[j]);
-	i5.push (wl[j]);
+	i5.push (wnl[j]);
       }
     if ((int) m[j] == 6)
       {
 	q6.push (tt[j]);
-	i6.push (wl[j]);
+	i6.push (wnl[j]);
       }
     if ((int) m[j] == 7)
       {
 	q7.push (tt[j]);
-	i7.push (wl[j]);
+	i7.push (wnl[j]);
       }
     if ((int) m[j] == 8)
       {
 	q8.push (tt[j]);
-	i8.push (wl[j]);
+	i8.push (wnl[j]);
       }
     if ((int) m[j] == 9)
       {
 	q9.push (tt[j]);
-	i9.push (wl[j]);
+	i9.push (wnl[j]);
       }
   if ((int) m[j] == 10)
       {
 	q10.push (tt[j]);
-	i10.push (wl[j]);
+	i10.push (wnl[j]);
       }
   
     if ((int) m[j] == 11)
       {
 	q11.push (tt[j]);
-	i11.push (wl[j]);
+	i11.push (wnl[j]);
       }
     if ((int) m[j] == 12)
       {
 	q12.push (tt[j]);
-	i12.push (wl[j]);
+	i12.push (wnl[j]);
       }
     if ((int) m[j] == 13)
       {
 	q13.push (tt[j]);
-	i13.push (wl[j]);
+	i13.push (wnl[j]);
       }
     if ((int) m[j] == 14)
       {
 	q14.push (tt[j]);
-	i14.push (wl[j]);
+	i14.push (wnl[j]);
       }
     if ((int) m[j] == 15)
       {
 	q15.push (tt[j]);
-	i15.push (wl[j]);
+	i15.push (wnl[j]);
       }
     if ((int) m[j] == 16)
       {
 	q16.push (tt[j]);
-	i16.push (wl[j]);
+	i16.push (wnl[j]);
       }
   }
 
@@ -160,4 +160,4 @@ yequals (0., s);
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis ("$t ({\rm ms})$", BottomTop, LeftTicks);
-yaxis ("$\varpi_{\perp\,e}({\rm krad/s})$", LeftRight, RightTicks);
+yaxis ("$\varpi_{\perp\,i}({\rm krad/s})$", LeftRight, RightTicks);

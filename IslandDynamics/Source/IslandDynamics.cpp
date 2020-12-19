@@ -76,7 +76,7 @@ void IslandDynamics ()
   double NEO_LN;         // Set neutral density scalelength in NEOCLASSICAL
   double NEO_YN;         // Set neutral poloidal asymmetry parameter in NEOCLASSICAL
   int    PHASE;          // If != 0 then call PHASE
-  int	PHASE_MID;       // If != 0 then middle RMP coils included in calculation
+  int	 PHASE_MID;      // If != 0 then middle RMP coils included in calculation
   int	 PHASE_INTF;     // If != 0 then interpolate fFiles in PHASE
   int	 PHASE_INTN;     // If != 0 then interpolate nFiles in PHASE
   int	 PHASE_INTU = 1; // If != 0 then interpolate uFiles/mFiles/lFiles in PHASE

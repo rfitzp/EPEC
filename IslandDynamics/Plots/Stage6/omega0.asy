@@ -8,8 +8,8 @@ A          = transpose (A);
      
 real[] m   = A[0];
 real[] r   = A[1];
-real[] wnl = A[2];
-real[] tt  = A[4];
+real[] wnl = A[5];
+real[] tt  = A[6];
 
 int N = m.length;
 real[] q4,  i4;
@@ -152,7 +152,7 @@ if (q4.length > 0)
    }
 
 s = dotted + black + 1;
-ylimits (-50., 50., Crop);
+//ylimits (-50., 50., Crop);
 yequals (0., s);
 
 pen qq = fontsize (25.);
