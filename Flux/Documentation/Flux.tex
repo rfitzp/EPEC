@@ -562,7 +562,8 @@ which implies that
 (Note: This is what is actually implemated in EPEC.)
 As before, the ${\mit\Delta}_j$ values can be determined from the GPEC code. 
 
-\subsection{Island Width (in $r$)}
+\subsection{Magnetic Island Width}
+\subsubsection{Island Width in $r$}
 We have
 \begin{align}
 {\cal J}\,\delta B^{\,r} &\simeq \frac{\partial \,\delta A_\phi}{\partial\theta},\\[0.5ex]
@@ -573,14 +574,14 @@ It follows that
 \begin{equation}
 \delta {\bf B}\cdot\nabla\delta A_\phi = \delta B^{\,r}\,\frac{\partial\,\delta A_\phi}{\partial r}+  \delta B^{\,\theta}\,\frac{\partial\,\delta A_\phi}{\partial \theta}+  \delta B^{\,\phi}\,\frac{\partial\,\delta A_\phi}{\partial \phi}\simeq 0. 
 \end{equation}
-Suppose that
+We have
 \begin{equation}
-\delta A_\phi (r,\theta,\phi)\simeq \delta \hat{A}_\phi\,{\rm e}^{\,{\rm i}\,(
+\delta A_\phi (r,\theta,\phi)\simeq R_0\,{\mit\Psi}_k\,{\rm e}^{\,{\rm i}\,(
 m_k\,\theta - n\,\phi)}
 \end{equation}
 in the vicinity of the $k$th resonant surface. It follows that
 \begin{equation}
-{\bf B}\cdot\nabla \delta A_\phi = {\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,\delta\hat{A}_\phi\,{\rm e}^{\,{\rm i}\,(
+{\bf B}\cdot\nabla \delta A_\phi = {\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,R_0\,{\mit\Psi}_k\,{\rm e}^{\,{\rm i}\,(
 m_k\,\theta - n\,\phi)}.
 \end{equation}
 Let us search for a function,
@@ -593,11 +594,15 @@ which is such that
 \end{equation}
 It follows that
 \begin{equation}
-\delta B^{\,r}\,\frac{dF_0}{dr} +{\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,\delta\hat{A}_\phi\,{\rm e}^{\,{\rm i}\,(m_k\,\theta - n\,\phi)}=0,
+\delta B^{\,r}\,\frac{dF_0}{dr} +{\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,R_0\,{\mit\Psi}_k\,{\rm e}^{\,{\rm i}\,(m_k\,\theta - n\,\phi)}=0.
 \end{equation}
-or
+However,
 \begin{equation}
-{\rm i}\,m_k\,\frac{R_0}{r\,R^{\,2}}\,\delta \hat{A}_\phi \,\frac{dF_0}{dr}+{\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,\delta\hat{A}_\phi=0,
+\delta B^{\,r} = \frac{R_0^{\,2}}{r\,R^{\,2}}\,{\rm i}\,m_k\,{\mit\Psi}_k\,{\rm e}^{\,{\rm i}\,(m_k\,\theta - n\,\phi)},
+\end{equation}
+so
+\begin{equation}
+{\rm i}\,m_k\,\frac{R_0}{r\,R^{\,2}}\,R_0\,{\mit\Psi}_k\,\frac{dF_0}{dr}+{\rm i}\,B_0\,R_0^{\,2}\,\frac{f}{r\,R^{\,2}}\,(m_k-n\,q)\,R_0\,{\mit\Psi}_k=0,
 \end{equation}
 which implies that
 \begin{equation}
@@ -627,6 +632,43 @@ and
 \frac{W_k}{4\,R_0} = \left[\left(\frac{q}{g\,s}\right)_{r_k}\,\frac{|{\mit\Psi}_k|}{B_0\,R_0}\right]^{1/2}.
 \end{equation}
 It follows that $W_k$ is the full radial island width  in $r$. Moreover, $W_k$ has no dependence on $\theta$.
+
+\subsubsection{Island Width in ${\mit\Psi}_N$}
+We have
+\begin{align}
+\frac{d{\mit\Psi}_N}{dr} &= \frac{f}{R_0\,|\psi_c|},\\[0.5ex]
+\frac{dF_0}{dr} &= -\frac{B_0\,R_0}{m_k}\,f\,(m_k-n\,q).
+\end{align}
+Hence,
+\begin{equation}
+\frac{dF_0}{d{\mit\Psi}_N} = -B_0\,R_0^{\,2}\,|\psi_c|\,(1-q/q_k).
+\end{equation}
+Let
+\begin{equation}
+q = q_k + q_k'\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})+ \frac{1}{2}\,q_k''\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^2+ \frac{1}{6}\,q_k'''\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^3,
+\end{equation}
+where $'\equiv d/d{\mit\Psi}_N$. Follows that
+\begin{equation}
+F_0({\mit\Psi}_N) = B_0\,R_0^{\,2}\,|\psi_c|\left\{\frac{1}{2}\,\frac{q_k'}{q_k}({\mit\Psi}_N-{\mit\Psi}_{N\,k})^2+  \frac{1}{6}\,\frac{q_k''}{q_k}\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^3+ \frac{1}{24}\,
+\frac{q_k'''}{q_k}\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^4\right\}.
+\end{equation}
+Hence, the island extends from  ${\mit\Psi}_{N\,k}-X_{k-}$ to ${\mit\Psi}_{N\,k}+X_{k+}$, where $X_{k-}$ and $X_{k+}$ are the
+positive and negative roots, respectively, of 
+\begin{equation}
+X_k^{\,2}+  A_k^{(2)}\,X_k^{\,3}+ A_k^{(3)}\,X_k^{\,4} = \frac{\overline{W}_k^{\,2}}{4},
+\end{equation}
+where
+\begin{equation}
+\overline{W}_k=4\left(A_k^{(1)}\,\frac{|{\mit\Psi}_k|}{R_0\,B_0}\right)^{1/2},
+\end{equation}
+and
+\begin{align}
+A_k^{(1)} &= \frac{q_k}{q_k'\,|\psi_c|},\\[0.5ex]
+A_k^{(2)}& =  \frac{1}{3}\,\frac{q_k''}{q_k'},\\[0.5ex]
+A_k^{(3)}&= 
+\frac{1}{12}\,
+\frac{q_k'''}{q_k'}.
+\end{align}
 
 \section{Technical Details}
 \subsection{Flux Coordinate System}

@@ -69,8 +69,8 @@ void Flux::Stage2 ()
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i]);
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], A3res[i]);
   for (int i = 0; i < nres; i++)
     for (int j = 0; j < nres; j++)
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
@@ -96,8 +96,8 @@ void Flux::Stage2 ()
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
       for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i]);
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], A3res[i]);
       for (int i = 0; i < nres; i++)
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
@@ -140,10 +140,15 @@ void Flux::Stage2 ()
   delete[] QGP;   delete[] QP;     delete[] PP;   delete[] GPP;
   delete[] PPP;   delete[] S;      delete[] QX;   delete[] RP1;
   delete[] Bt;    delete[] Bt1;    delete[] Bp;   delete[] Bp1;
+
+  delete[] PsiN; delete[] QPN; delete[] QPPN; delete[] QPPPN;
+  delete[] A1;   delete[] A2;  delete[] A3;   
   
   delete[] mres;    delete[] qres; delete[] rres;  delete[] sres;
   delete[] gres;    delete[] Rres; delete[] gmres; delete[] fcres;
-  delete[] PsiNres; delete[] Rres1; 
+  delete[] PsiNres; delete[] Rres1;
+
+  delete[] A1res; delete[] A2res; delete[] A3res;
 
   delete[] th; 
   gsl_matrix_free (Rst); gsl_matrix_free (Zst);
@@ -515,13 +520,25 @@ void Flux::Stage2CalcQ ()
   PPP = new double[NPSI];  // dP/dPsi
   S   = new double[NPSI];  // sqrt (1 - Psi)
   QX  = new double[NPSI];  // q(Psi) from gFile
- 
+
+  PsiN     = new double[NPSI];  // PsiN array
+  QPN      = new double[NPSI];  // dQ/dPsiN array
+  QPPN     = new double[NPSI];  // d^Q/dPsiN^2 array
+  QPPPN    = new double[NPSI];  // d^3Q/dPsiN^3 array
+
+  A1 = new double[NPSI];  // QP/QPN/fabs(Psic) array
+  A2 = new double[NPSI];  // QPPN/QPN/3 array
+  A3 = new double[NPSI];  // QPPPN/QPN/12 array
+
+  double OFFSET = 0.05;
+  
   for (int j = 0; j < NPSI; j++)
     {
       double s = double (j) /double (NPSI-1);
 
-      P[j] = 1. - s;
-      S[j] = sqrt (1. - P[j]);
+      PsiN[j] = 1. - pow (1. - s, PACK);
+      P[j]    = 1. - PsiN[j];
+      S[j]    = sqrt (1. - P[j]);
     }
 
   // .......................................
@@ -549,13 +566,62 @@ void Flux::Stage2CalcQ ()
   // ......................................
   printf ("Calculating q(Psi)/g(Psi) profile:\n");
   CalcQGP ();
+  
   RP1[0]      = Raxis;
   RP1[NPSI-1] = Rbound1;
-  QGP[0]      = Q[0] /G[0];
-  QP[0]       = Q[0];
-  QGP[NPSI-1] = Q[NRPTS-1] /G[NRPTS-1];
-  QP[NPSI-1]  = Q[NRPTS-1];
 
+  QGP[0] = Q[0] /G[0];
+  QP [0] = Q[0];
+
+  // Extrapolate q profile
+  QGP[NPSI-1] = InterpolateQ (NPSI-1, PsiN, QGP, 1., 0, 4);
+  QP [NPSI-1] = QGP[NPSI-1] * G[NRPTS-1];
+
+  // ..................................................
+  // Calculate and smooth QPN, QPPN, and QPPPN profiles
+  // ..................................................
+  int NSMOOTH = 8; 
+  double* QPSmooth = new double[NPSI];
+
+  // Generated smoothed QP profile
+  for (int i = 0; i < NPSI; i++)
+    QPSmooth[i] = QP[i];
+
+  for (int i = 0; i < NSMOOTH; i++)
+    Smoothing (NPSI, QPSmooth);
+
+  // Calculate raw QPN profile (quartic interpolation)
+  for (int j = 0; j < NPSI; j++)
+    QPN [j] = InterpolateQ (NPSI, PsiN, QPSmooth, PsiN[j], 1, 4);
+
+  // Smooth QPN profile
+  for (int i = 0; i < NSMOOTH; i++)
+    Smoothing (NPSI, QPN);
+
+  // Calculate raw QPPN profile (cubic interpolation)
+  for (int j = 0; j < NPSI; j++)
+    QPPN [j] = InterpolateQ (NPSI, PsiN, QPN, PsiN[j], 1, 3);
+
+  // Smooth QPPN profile
+  for (int i = 0; i < NSMOOTH; i++)
+    Smoothing (NPSI, QPPN);
+
+  // Calculate raw QPPPN profile (quadratic interpolation)
+  for (int j = 0; j < NPSI; j++)
+    QPPPN[j] = InterpolateQ (NPSI, PsiN, QPPN, PsiN[j], 1, 2);
+
+  delete[] QPSmooth;
+  
+  // .................................
+  // Calculate A1, A2, and A3 profiles
+  // .................................
+  for (int j = 0; j < NPSI; j++)
+    {
+      A1[j] = QP[j]    /QPN[j] /fabs(Psic);
+      A2[j] = QPPN[j]  /QPN[j] /3.;
+      A3[j] = QPPPN[j] /QPN[j] /12.;
+    }
+    
   // ...........................................
   // Calculate B_tor, B_pol profiles on midplane
   // ...........................................
@@ -599,40 +665,6 @@ void Flux::Stage2CalcQ ()
   printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)\n",
 	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0);
 
-  // ...................................................
-  // If qflg = 1 rescale equilibrium such that q95 = Q95
-  // ...................................................
-  if (QFLG == 1)
-    {
-      // Modify gg'
-      double shft = (Q95*Q95 /q95/q95 - 1.) * g95*g95;
-      for (int j = 0; j < NPSI; j++)
-	GP[j] = sqrt (GP[j]*GP[j] + shft);
-      
-      // Recalculate Stage2 q(Psi)/g(Psi) profile
-      printf ("Recalculating q(Psi)/g(Psi) profile:\n");
-      CalcQGP ();
-      QGP[0]      = QGP[0] * G[0] /GP[0];
-      QP[0]       = QP[0]  * GP[0] /G[0];
-      QGP[NPSI-1] = QGP[NRPTS-1] * G[NRPTS-1]  /GP[NRPTS-1];
-      QP[NPSI-1]  = QP[NRPTS-1]  * GP[NRPTS-1] /G[NRPTS-1];
-      
-      // Recalculate Stage2 r(P) profile
-      printf ("Recalculating r(Psi) profile:\n");
-      CalcrP ();
-      rP[0] = 0.;
-      ra    = rP[NPSI-1];
-
-      // Confirm q95 and r95
-      q95  = Interpolate (NPSI, S, QP, s95,  0);
-      r95  = Interpolate (NPSI, S, rP, s95,  0);
-      qlim = Interpolate (NPSI, S, QP, slim, 0);
-      rlim = Interpolate (NPSI, S, rP, slim, 0);
-      qa   = Interpolate (NPSI, S, QP, sa,   0);
-      printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)\n",
-	      q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0);
-    }
-
   // ..................
   // Output q95 and r95
   // ..................
@@ -645,8 +677,12 @@ void Flux::Stage2CalcQ ()
   // ......................
   file = OpenFilew ((char*) "Outputs/Stage2/qr.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
-	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j]);
+    {
+      if (1. - P[j] < PSILIM)
+	fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
+		 rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], QPPN[j], QPPPN[j],
+		 A1[j], A2[j], A3[j]);
+    }
   fclose (file);
 }
 
@@ -667,6 +703,12 @@ void Flux::Stage2FindRational ()
     mmax = MMAX;
   nres = mmax - mmin + 1;
 
+  if (nres <= 0)
+    {
+      printf ("FLUX::Stage2FindRational: Error no rational surfaces in plasma\n");
+      exit (1);
+    }
+
   // .....................................
   // Calculate rational surface quantities
   // .....................................
@@ -680,6 +722,9 @@ void Flux::Stage2FindRational ()
   gmres   = new double[nres];
   fcres   = new double[nres];
   PsiNres = new double[nres];
+  A1res   = new double[nres];
+  A2res   = new double[nres];
+  A3res   = new double[nres];
   for (int i = 0; i < nres; i++)
     {
       mres[i] = mmin + i;
@@ -697,14 +742,6 @@ void Flux::Stage2FindRational ()
 	}
 
       // Correct rres values
-      /*
-      for (int ii = 0; ii < 4; ii++)
-	{
-	  double qqq = Interpolate (NPSI, rP, QP, rres[i], 0);
-	  rres[i]   += (qres[i]/qqq - 1.) * rres[i] /sres[i];
-	  sres[i]    = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
-	}
-      */
       for (int ii = 0; ii < 4; ii++)
 	{
 	  double qqq = Interpolate (NPSI, rP, QP, rres[i], 0);
@@ -713,19 +750,22 @@ void Flux::Stage2FindRational ()
 	  rres[i] += (- qqp + sqrt (qqp*qqp - 2.*qpp * (qqq - qres[i]))) /qpp;
 	}
       
-      gmres[i] = Interpolate (NPSI, rP, QP, rres[i], 0) - qres[i];
-      sres[i]    = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
-      gres[i]    = Interpolate (NPSI, rP, GP,  rres[i], 0);
-      Rres[i]    = Interpolate (NPSI, rP, RP,  rres[i], 0);
-      Rres1[i]   = Interpolate (NPSI, rP, RP1, rres[i], 0);
-      PsiNres[i] = 1. - Interpolate (NPSI, rP, P, rres[i], 0);
+      gmres  [i] = Interpolate (NPSI, rP, QP, rres[i], 0) - qres[i];
+      sres   [i] = rres[i] /Interpolate (NPSI, QP, rP, qres[i], 1) /qres[i];
+      gres   [i] = Interpolate (NPSI, rP, GP,   rres[i], 0);
+      Rres   [i] = Interpolate (NPSI, rP, RP,   rres[i], 0);
+      Rres1  [i] = Interpolate (NPSI, rP, RP1,  rres[i], 0);
+      PsiNres[i] = Interpolate (NPSI, rP, PsiN, rres[i], 0);
+      A1res  [i] = Interpolate (NPSI, rP, A1,   rres[i], 0);
+      A2res  [i] = Interpolate (NPSI, rP, A2,   rres[i], 0);
+      A3res  [i] = Interpolate (NPSI, rP, A3,   rres[i], 0);
     }
 
   printf ("Rational surface data:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e\n",
-	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i]);
-
+    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  A2 = %11.4e  A3 = %11.4e\n",
+	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], A2res[i], A3res[i]);
+   
   // .....................................
   // Confirm q values at rational surfaces
   // .....................................

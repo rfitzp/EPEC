@@ -34,6 +34,7 @@
 // 1.9  - Minor changes for KSTAR data
 // 1.10 - Changed operation of FREQ switch
 // 1.11 - Added missing extra term associated with chanrge exchange
+// 1.12 - Updated fFile input for additonal terms
 
 // ################################################################
 
@@ -41,7 +42,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 11
+#define VERSION_MINOR 12
 
 #include <stdio.h>
 #include <math.h>

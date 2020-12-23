@@ -1,6 +1,6 @@
 // Flux.h
 
-// ############################################################################
+// ##################################################################################
 // Class to input gFile equilibrium data and output perturbed equilibrium data. 
 //
 // Radial grid in PsiN = 1. - Psi/Psi_axis (assuming Psi = 0 on boundary) is 
@@ -39,14 +39,15 @@
 // 1.3 - Major rearrangement of input and output files
 // 1.4 - Added linear interpolation
 // 1.5 - Added RP1, Bt, Bt1, Bp, Bp1, and K_theta
+// 1.6 - Removed QFLAG and Q95 functionality. Added calculation of A1, A2, A3 parameters
 
-// ############################################################################
+// #####################################################################################
 
 #ifndef FLUX
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 5
+#define VERSION_MINOR 6
 
 #include <stdio.h>
 #include <math.h>
@@ -73,7 +74,7 @@ extern "C" int pRhs4 (double, const double[], double[], void*);
 extern "C" int pRhs5 (double, const double[], double[], void*);
 
 // Namelist reading function
-extern "C" void NameListRead (int* INTG, int* NPSI, int* NTHETA, int* NNC, int* NTOR, int* QFLG, double* Q95, double* H0,
+extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
 			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME);
 
 // gFile reading function
@@ -94,11 +95,9 @@ class Flux
   
   // Control parameters read from Inputs/Flux.in
   int    NPSI;    // Number of points in PsiN grid
+  double PACK;    // Packing index for PsiN grid
   int    NTHETA;  // Number of points in theta grid
   int    NNC;     // Number of neoclassical harmonics
-  int    QFLG;    // QFLG = 0 - use q95 from gFile
-                  // QFLG = 1 - rescale q95 to Q95 by adding constant to gg'
-  double Q95;     // Target Q95 (QFLG = 1)
   int    NTOR;    // Toroidal mode number
   int    MMIN;    // Minimum poloidal mode number
   int    MMAX;    // Maximum poloidal mode number
@@ -131,7 +130,7 @@ class Flux
   double*         ZLPTS;    // Z on limiter boundary
   Array<double,2> PSIARRAY; // Psi (R, Z) array 
   double*         PSIN;     // PsiN array 
-  double*         G ;       // g(Psi)
+  double*         G;        // g(Psi)
   double*         Pr;       // p(Psi)
   double*         GGp;      // g dg/dPsi
   double*         Prp;      // dp/dPsi
@@ -177,6 +176,14 @@ class Flux
   double* S;           // sqrt(1 - Psi)
   double* QX;          // q(Psi) from gFile
 
+  double* PsiN;        // PsiN array
+  double* QPN;         // dQ/dPsiN array
+  double* QPPN;        // d^Q/dPsiN^2 array
+  double* QPPPN;       // d^3Q/dPsiN^3 array
+  double* A1;          // QP/QPN/fabs(Psic) array
+  double* A2;          // QPPN/QPN/3 array
+  double* A3;          // QPPPN/QPN/12 array
+
   // Rational surface data
   int     nres;        // Number of rational surfaces
   int*    mres;        // Poloidal mode numbers at rational surfaces
@@ -194,6 +201,9 @@ class Flux
   double* fcres;       // Fraction of circulating particles at rational surfaces
   double* ajj;         // Metric elements at rational surfaces
   double* dPsidr;      // dPsi/dr at rational surfaces
+  double* A1res;       // A1 values at rational surfaces
+  double* A2res;       // A2 values at rational surfaces
+  double* A3res;       // A3 values at rational surfaces
   
   // Straight angle flux coordinate data
   double*     th;      // theta array
@@ -298,6 +308,12 @@ private:
   double InterpolateCubic    (       double* X, double* Y, double x, int i0, int i1, int i2,         int order);
   double InterpolateQuartic  (       double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
 
+  // 1D interpolation function with nonuniform grid for interpolating q/g profile
+  double InterpolateQ          (int I, double* X, double* Y, double x,                                 int order, int method);
+  double InterpolateQQuadratic (       double* X, double* Y, double x, int i0, int i1,                 int order);
+  double InterpolateQCubic     (       double* X, double* Y, double x, int i0, int i1, int i2,         int order);
+  double InterpolateQQuartic   (       double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
+
   // 1D interpolation function with nonuniform grid and periodic function
   double InterpolatePeriodic         (int I, double* X, double* Y, double x,                                 int order);
   double InterpolatePeriodicQuartic  (int I, double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order);
@@ -315,7 +331,10 @@ private:
   double GetPsiR (double r, double z);
   // Evaluate dPsi/dZ (R, Z)
   double GetPsiZ (double r, double z);
- 
+
+  // Savitsky-Gorlay smoothing algorithm
+  void Smoothing (int N, double *y);
+   
   // Calculate Green's functions
   double GreenPlasmaCos   (int i, int j, int ip, int jp);
   double GreenPlasmaSin   (int i, int j, int ip, int jp);

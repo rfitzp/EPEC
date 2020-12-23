@@ -3,9 +3,9 @@ F_SOURCE = NameListRead.f90 gFileRead.f90 gFileInterpolate.f90
 
 C_HEADER = Flux.h
 C_OBJECT = main.o Flux.o Stage1.o Stage2.o Integrate.o\
-	Interpolate.o Green.o ToroidalP.o gFileInterp.o 
+	Interpolate.o Green.o ToroidalP.o gFileInterp.o Smoothing.o
 C_SOURCE = main.cpp Flux.cpp Stage1.cpp Stage2.cpp Integrate.cpp\
-	Interpolate.cpp Green.cpp ToroidalP.cpp gFileInterp.cpp
+	Interpolate.cpp Green.cpp ToroidalP.cpp gFileInterp.cpp Smoothing.cpp
 
 GIT_HASH             = `git rev-parse HEAD`
 COMPILE_TIME         = `date -u +'%Y-%m-%d %H:%M:%S UTC'`

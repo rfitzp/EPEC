@@ -40,4 +40,7 @@
 	npsi.asy     ... plots density flattened regions (in PsiN) versus time
 	tpsi.asy     ... plots electron temperature flattened regions (in PsiN) versus time
 	omegapsi.asy ... plots frequencies versus time with color coding of *psi.asy
+	
+	islandt.asy  ... plots magnetic islands in PsiN-theta plane
+	islandp.asy  ... plots magnetic islands in PsiN-phi plane (on outboard midplane)
 

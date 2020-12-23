@@ -274,10 +274,13 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	}
     }
 
+  A1.resize (nres);
+  A2.resize (nres);
+  A3.resize (nres);
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr) != 12)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &A2(j), &A3(j)) != 15)
 	{
 	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
 	  exit (1);
@@ -472,8 +475,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fclose (file);
 
   for (int j = 0; j < nres; j++)
-    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e\n",
-	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0));
+    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e A2 = %10.3e A3 = %10.3e\n",
+	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j), A2 (j), A3 (j));
 
   // ......................................
   // Interpolate uFiles, mFiles, and lFiles
@@ -1135,12 +1138,14 @@ void Phase::IslandDynamics ()
     {
       for (int j = 0; j < nres; j++)
 	wwo (j) = ww (j);
-
+      
+      // Take time step
       RK4Adaptive (t, y, h, t_err, acc, 2., rept, maxrept, hmin, hmax, 2, 0, NULL);
       Unpack (y);
 
       dt += h;
 
+      // Output Stage6 mode locking data for IslandDynamics
       for (int j = 0; j < nres; j++)
 	ww (j) = GetActualFrequency (j);
       
@@ -1158,44 +1163,53 @@ void Phase::IslandDynamics ()
 
 	    lock (j) = 1;
 	  }
-      	  
+
+      // Output Stage5 data
       if (dt > dTT)
 	{
 	  dt = 0.;
 
+	  // Output reconnected fluxes
 	  fprintf (file1, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    fprintf (file1, "%16.9e ", Psik (j));
 	  fprintf (file1, "\n");
 
+	  // Output phases of reconnected fluxes
 	  fprintf (file2, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    fprintf (file2, "%16.9e ", atan2 (sin (phik (j) - zeta (j)), cos (phik (j) - zeta (j))) /M_PI);
 	  fprintf (file2, "\n");
 
+	  // Output island widths in r
 	  fprintf (file3, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    fprintf (file3, "%16.9e ", 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))));
+	    fprintf (file3, "%16.9e ", GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j)) * R_0 /dPsiNdr (j));
 	  fprintf (file3, "\n");
 
+	  // Output ratios of island widths to linear layer widths
 	  fprintf (file3a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    fprintf (file3a, "%16.9e ", sqrt (4. * R_0 * fack (j) * fabs (Psik (j))) /delk (j));
+	    fprintf (file3a, "%16.9e ", GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j)) * R_0 /dPsiNdr (j) /delk (j));
 	  fprintf (file3a, "\n");
 
+	  // Output modified natural frequencies
 	  fprintf (file4, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    fprintf (file4, "%16.9e ", ww (j) /tau_A/1.e3);
 	  fprintf (file4, "\n");
 
+	  // Output unmodified natural frequencies
 	  fprintf (file4a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    fprintf (file4a, "%16.9e ",  GetNaturalFrequency (j) /tau_A/1.e3);
+	    fprintf (file4a, "%16.9e ", GetNaturalFrequency (j) /tau_A/1.e3);
 	  fprintf (file4a, "\n");
-	  
+
+	  // Output RMP data
 	  CalcRMP (t);
 	  fprintf (file5, "%16.9e %16.9e %16.9e\n", t*tau_A, irmp, prmp /M_PI);
 
+	  // Calculate and output simulated Mirnov data
 	  double sumci = 0., sumsi = 0., sumco = 0., sumso = 0.;
 
 	  for (int j = 0; j < nres; j++)
@@ -1222,27 +1236,77 @@ void Phase::IslandDynamics ()
 	  fprintf (file18, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
-	      double Wk = 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+	      // Calculate island width in PsiN
+	      double Wpk = GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j));
 
-	      if (j == 0 && Wk/2. > rk (j))
-		Wk = 2. * rk (j);
-	      if (j > 0 && Wk/2. > rk (j) - rk (j-1))
-		Wk = 2. * (rk (j) - rk (j-1));
-	      if (j < nres-1 && Wk/2. > rk (j+1) - rk (j))
-		Wk = 2. * (rk (j+1) - rk (j));
-	      if (j == nres-1 && Wk/2. > 1. - rk (j))
-		Wk = 2. * (1. - rk (j));
-	      
-	      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
-	      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));
-	      double dnek     = dnedrk (j) * deltanek;
-	      double dTek     = dTedrk (j) * deltaTek;
+	      // Limit island widths to prevent island overlap in PsiN
+	      if (j == 0)
+		{
+		  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+		  double Pplus  = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
+		    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+		  double dP;
+		  
+		  if (Pminus < Pplus)
+		    dP = Pminus;
+		  else
+		    dP = Pplus;
+		  
+		  if (Wpk/2. > dP)
+		    Wpk = 2.*dP;
+		}
+	      else if (j == nres-1)
+		{
+		  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+		  double Pplus  = 1. - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+		  double dP;
+		  
+		  if (Pminus < Pplus)
+		    dP = Pminus;
+		  else
+		    dP = Pplus;
+		  
+		  if (Wpk/2. > dP)
+		    Wpk = 2.*dP;
+		}
+	      else
+		{
+		  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j))
+		    - PsiN (j-1) - GetIslandOffset (A1 (j-1), A2 (j-1), A3 (j-1), Psik (j-1));
+		  double Pplus = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
+		    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+		  double dP;
+		  
+		  if (Pminus < Pplus)
+		    dP = Pminus;
+		  else
+		    dP = Pplus;
+		  
+		  if (Wpk/2. > dP)
+		    Wpk = 2.*dP;
+		}
+
+	      // Calculate island width in r
+	      double Wrk = R_0 * Wpk /dPsiNdr (j);
+
+	      // Calculate vacuum island width in PsiN
+	      double Wvk = GetIslandWidth (A1 (j), A2 (j), A3 (j), chi (j));
+
+	      // Calculate density and temperature flattening widths in r
+	      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
+	      double deltaTek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
+
+	      // Calculate density and temperature reductions
+	      double dnek = dnedrk (j) * deltanek;
+	      double dTek = dTedrk (j) * deltaTek;
+
+	      // Output data
 	      fprintf (file9,  "%16.9e ", deltanek);
 	      fprintf (file10, "%16.9e ", deltaTek);
 	      fprintf (file11, "%16.9e ", dnek);
 	      fprintf (file12, "%16.9e ", dTek);
-	      fprintf (file13, "%16.9e ", rk (j) - Wk /2./a (j)/R_0);
-	      fprintf (file14, "%16.9e ", rk (j) + Wk /2./a (j)/R_0);
+	      fprintf (file13, "%16.9e ", rk (j) - Wrk /2./a (j)/R_0);
+	      fprintf (file14, "%16.9e ", rk (j) + Wrk /2./a (j)/R_0);
 	      fprintf (file15, "%16.9e ", rk (j) - deltanek /2./a (j)/R_0);
 	      fprintf (file16, "%16.9e ", rk (j) + deltanek /2./a (j)/R_0);
 	      fprintf (file17, "%16.9e ", rk (j) - deltaTek /2./a (j)/R_0);
@@ -1254,10 +1318,10 @@ void Phase::IslandDynamics ()
 		       GetNaturalFrequency (j) /tau_A/1.e3,
 		       GetActualFrequency (j) /tau_A/1.e3,
 		       t*tau_A,
-		       (Wk /R_0) /a (j),
-		       PsiN (j),
-		       (Wk /R_0) * dPsiNdr (j),
-		       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
+		       (Wrk /R_0) /a (j),
+		       PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j)),
+		       Wpk,
+		       Wvk,
 		       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
 	    }
 	  fprintf (file9,  "\n"); fprintf (file10, "\n"); fprintf (file11, "\n"); fprintf (file12, "\n");
@@ -1268,27 +1332,22 @@ void Phase::IslandDynamics ()
 	    printf ("t = %11.4e  irmp = %11.4e  prmp/pi = %11.4e\n", t*tau_A, irmp, prmp /M_PI);
 	  cnt++;
 	  
-	  fflush (file1);  fflush (file2);  fflush (file3);
-	  fflush (file4);  fflush (file5);  fflush (file6);
-	  fflush (file8);  fflush (file9);  fflush (file10);
-	  fflush (file11); fflush (file12); fflush (file13);
-	  fflush (file14); fflush (file15); fflush (file16);
-	  fflush (file17); fflush (file18); fflush (file3a);
-	  fflush (file4a); fflush (file19);
+	  fflush (file1);  fflush (file2);  fflush (file3);  fflush (file4);  fflush (file5);
+	  fflush (file6);  fflush (file8);  fflush (file9);  fflush (file10); fflush (file11);
+	  fflush (file12); fflush (file13); fflush (file14); fflush (file15); fflush (file16);
+	  fflush (file17); fflush (file18); fflush (file3a); fflush (file4a); fflush (file19);
 	}
     }
   while (t < TT (NCTRL-1));
-  fclose (file1);  fclose (file2);  fclose (file3);
-  fclose (file4);  fclose (file5);  fclose (file6);
-  fclose (file8);  fclose (file9);  fclose (file10);
-  fclose (file11); fclose (file12); fclose (file13);
-  fclose (file14); fclose (file15); fclose (file16);
-  fclose (file17); fclose (file18); fclose (file3a);
-  fclose (file4a); fclose (file19);
+  fclose (file1);  fclose (file2);  fclose (file3);  fclose (file4);  fclose (file5);
+  fclose (file6);  fclose (file8);  fclose (file9);  fclose (file10); fclose (file11);
+  fclose (file12); fclose (file13); fclose (file14); fclose (file15); fclose (file16);
+  fclose (file17); fclose (file18); fclose (file3a); fclose (file4a); fclose (file19);
 
-  // Save calculation
+  // Save calculation for restart
   Save ();
 
+  // Output Stage6 data
   FILE* filex = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
   for (int j = 0; j < nres; j++)
     fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
@@ -1298,68 +1357,110 @@ void Phase::IslandDynamics ()
   FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
   for (int j = 0; j < nres; j++)
     {
-      double Wk = 4. * fack (j) * sqrt (fabs (Psik (j))) * dPsiNdr (j);
+      // Calculate island width in PsiN
+      double Wpk = GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j));
 
+      // Limit island widths to prevent island overlap in PsiN
       if (j == 0)
 	{
-	  double Pminus = PsiN (j);
-	  double Pplus  = PsiN (j+1) - PsiN (j);
+	  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+	  double Pplus  = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
+	    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
 	  double dP;
-
+	  
 	  if (Pminus < Pplus)
 	    dP = Pminus;
 	  else
 	    dP = Pplus;
-
-	  if (Wk/2. > dP)
-	    Wk = 2.*dP;
+	  
+	  if (Wpk/2. > dP)
+	    Wpk = 2.*dP;
 	}
       else if (j == nres-1)
 	{
-	  double Pminus = PsiN (j);
-	  double Pplus  = 1. - PsiN (j);
+	  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
+	  double Pplus  = 1. - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
 	  double dP;
-
+	  
 	  if (Pminus < Pplus)
 	    dP = Pminus;
 	  else
 	    dP = Pplus;
-
-	  if (Wk/2. > dP)
-	    Wk = 2.*dP;
+	  
+	  if (Wpk/2. > dP)
+	    Wpk = 2.*dP;
 	}
       else
 	{
-	  double Pminus = PsiN (j)   - PsiN (j-1);
-	  double Pplus  = PsiN (j+1) - PsiN (j);
+	  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j))
+	    - PsiN (j-1) - GetIslandOffset (A1 (j-1), A2 (j-1), A3 (j-1), Psik (j-1));
+	  double Pplus = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
+	    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));;
 	  double dP;
-
+	  
 	  if (Pminus < Pplus)
 	    dP = Pminus;
 	  else
 	    dP = Pplus;
-
-	  if (Wk/2. > dP)
-	    Wk = 2.*dP;
+	  
+	  if (Wpk/2. > dP)
+	    Wpk = 2.*dP;
 	}
+       
+      // Calculate island width in r
+      double Wrk = R_0 * Wpk /dPsiNdr (j);
 
-      Wk *= R_0 /dPsiNdr (j);
+      // Calculate vacuum island width in PsiN
+      double Wvk = GetIslandWidth (A1 (j), A2 (j), A3 (j), chi (j));
 
-      double deltanek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + Wcrnek (j) * Wcrnek (j));
-      double deltaTek = (2./M_PI) * Wk *Wk*Wk /(Wk*Wk + WcrTek (j) * WcrTek (j));
+      // Calculate density and temperature flattening widths in r
+      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
+      double deltaTek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
+
       fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
 	       GetActualFrequency (j) /tau_A/1.e3,
 	       TIME,
-	       (Wk /R_0) /a (j),
-	       PsiN (j),
-	       (Wk /R_0) * dPsiNdr (j),
-	       4. * fack (j) * sqrt (fabs (chi (j)))  * dPsiNdr (j),
+	       (Wrk /R_0) /a (j),
+	       PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j)),
+	       Wpk,
+	       Wvk,
 	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
     }
   fclose (filew);
+
+  // Output magnetic island chains versus theta
+  FILE* filep = OpenFilew ((char*) "Outputs/Stage5/islandt.txt");
+  int IMAX = 2000;
+  for (int i = 0; i < IMAX; i++)
+    {
+      double theta = 2.*M_PI * double (i) /double (IMAX - 1);
+
+      double Xminus, Xplus;
+      for (int j = 0; j < nres; j++)
+	{
+	  GetIslandLimits (A1 (j), A2 (j), A3 (j), Psik (j) * cos (double (mk (j)) * theta - zeta (j)), Xminus, Xplus);
+	  fprintf (filep, "%d %e %e %e\n", mk (j), theta/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
+	}
+    }
+  fclose (filep);
+
+  // Output magnetic island chains versus phi
+  FILE* fileq = OpenFilew ((char*) "Outputs/Stage5/islandp.txt");
+  for (int i = 0; i < IMAX; i++)
+    {
+      double phi = 2.*M_PI * double (i) /double (IMAX - 1);
+
+      double Xminus, Xplus;
+      for (int j = 0; j < nres; j++)
+	{
+	  GetIslandLimits (A1 (j), A2 (j), A3 (j), Psik (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - zeta (j)), Xminus, Xplus);
+	  fprintf (fileq, "%d %e %e %e\n", mk (j), phi/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
+	}
+    }
+  fclose (fileq);
 }
 
 // ###################################

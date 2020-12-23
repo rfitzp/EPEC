@@ -2,8 +2,8 @@ F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90
 
 C_HEADER = Phase.h
-C_OBJECT = main.o Phase.o uFileInterpolate.o lFileInterpolate.o fFileInterpolate.o nFileInterpolate.o mFileInterpolate.o
-C_SOURCE = main.cpp Phase.cpp uFileInterpolate.cpp lFileInterpolate.cpp fFileInterpolate.cpp nFileInterpolate.cpp mFileInterpolate.cpp
+C_OBJECT = main.o Phase.o uFileInterpolate.o lFileInterpolate.o fFileInterpolate.o nFileInterpolate.o mFileInterpolate.o IslandRoot.o
+C_SOURCE = main.cpp Phase.cpp uFileInterpolate.cpp lFileInterpolate.cpp fFileInterpolate.cpp nFileInterpolate.cpp mFileInterpolate.cpp IslandRoot.cpp
 
 GIT_HASH             = `git rev-parse HEAD`
 COMPILE_TIME         = `date -u +'%Y-%m-%d %H:%M:%S UTC'`

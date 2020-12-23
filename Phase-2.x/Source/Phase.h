@@ -40,6 +40,7 @@
 // 2.4 - Added LIN flag
 // 2.5 - Added middle coil set
 // 2.6 - Limited island width to stop them extending beyond neighbouring rational surfaces
+// 2.7 - Improved calculation of island widths
 
 // #######################################################################
 
@@ -47,7 +48,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 6
+#define VERSION_MINOR 7
 
 #include <stdio.h>
 #include <math.h>
@@ -62,6 +63,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_const_mksa.h>
+#include <gsl/gsl_poly.h>
 
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
@@ -160,7 +162,10 @@ class Phase
   Array<double,1> gk;      // g values at resonant surfaces
   Array<double,1> PsiN;    // PsiN values at rational surfaces
   Array<double,1> dPsiNdr; // dPsiN/dr values at resonant surfaces
-
+  Array<double,1> A1;      // A1 values at rational surfaces
+  Array<double,1> A2;      // A2 values at rational surfaces
+  Array<double,1> A3;      // A3 values at rational surfaces
+  
   // ----------------------
   // Data from program GPEC
   // ----------------------
@@ -322,6 +327,13 @@ class Phase
   void nFileInterpolateCubic     (char* nFile1, double time1, char* nFile2, double time2, char* nFile3,    double time3, char* nFile, double time);
   void nFileInterpolateQuartic   (char* nFile1, double time1, char* nFile2, double time2, char* nFile3,    double time3,
 				  char* nFile4, double time4, char* nFile,  double time);
+
+  // Find width in PsiN of magnetic island chain
+  double GetIslandWidth (double A1, double A2, double A3, double Psi);
+  // Find offset in PsiN of magnetic island chain
+  double GetIslandOffset (double A1, double A2, double A3, double Psi);
+  // Find limits of magnetic island chains in PsiN
+  void GetIslandLimits (double A1, double A2, double A3, double Psi, double& Xminus, double& Xplus);
 
   // Open file for reading
   FILE* OpenFiler (char* filename);

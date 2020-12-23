@@ -11,7 +11,7 @@
 	omega0.asy   ... plots actual natural frequencies versus experimental time
 	omega0e.asy  ... plots linear natural frequencies versus experimental time
 	omega0eb.asy ... plots ExB frequencies versus experimental time
-    omeg0i.asy   ... plots nonlinear natural frequencies versus experimental time
+	omeg0i.asy   ... plots nonlinear natural frequencies versus experimental time
 	omega.asy    ... plots island frequencies versus experimental time
 
 	i.asy        ... plots critical RMP currents for mode locking versus experimental time
