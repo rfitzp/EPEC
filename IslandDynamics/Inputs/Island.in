@@ -2,17 +2,21 @@
 	FLUX_NTOR    = 2       ! Set toroidal mode number in FLUX
 	FLUX_MMIN    = 3       ! Set minimum poloidal mode number in FLUX
 	FLUX_MMAX    = 30      ! Set maximum poloidal mode number in fLUX
+	NEO_INTP     = 1       ! If != 0 then interpolate pFiles in NEOCLASSICAL
 	NEO_INTF     = 1       ! If != 0 then interpolate fFiles in NEOCLASSICAL
+!	NEO_INTF     = 0       ! If != 0 then interpolate fFiles in NEOCLASSICAL
 	NEO_IMPURITY = 1       ! If != 0 then include single ion impurity species in calculation in NEOCLASSICAL
 	NEO_NEUTRAL  = 1       ! If != 0 then include majority ion neutrals in calculation in NEOCLASSICAL
-	NEO_FREQ     = -2       ! Set natural frequency type (see NEOCLASSICAL/Inputs/Neoclassical.in)
+	NEO_FREQ     = -3      ! Set natural frequency type (see NEOCLASSICAL/Inputs/Neoclassical.in)
 	NEO_NTYPE    = 1       ! If 0/1 then neutral density distribution exponential/Lorentzian in NEOCLASSICAL
 	NEO_NN       = 3.0e17; ! Set neutral density at boundary in NEOCLASSICAL
 	NEO_LN       = 0.01;   ! Set neutral density scalelength in NEOCLASSICAL
 	NEO_YN       = 1.5     ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
+!	PHASE        = 0       ! If != 0 then call PHASE
 	PHASE        = 1       ! If != 0 then call PHASE
 	PHASE_MID    = 1       ! If != 0 then middle RMP coils included in calculation
-  	PHASE_INTN   = 1       ! If != 0 then interpolate nFiles in PHASE
+  	PHASE_INTN   = 0       ! If != 0 then interpolate nFiles in PHASE
+	PHASE_INTU   = 0       ! If != 0 then interpolate uFiles/mFiles/lFiles in PHASE	
 	PHASE_STAGE5 = 1       ! If != 0 then Stage5 calculation enabled in PHASE
 	PHASE_OLD    = 1       ! If != 0 then restart PHASE calculations from previous run
 	PHASE_VER2   = 1       ! If != 0 then call Phase-2.x, else call Phase-1.x
@@ -20,7 +24,7 @@
 	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation (only applies to Phase-2.x)
 	PHASE_SCALE  = 2.      ! Set GPEC scalefactor
 	RESTART      = 1       ! If != 0 then delete all previous IslandDynamics data
-	TSTART       = 1.   ! Simulation experimental start time (ms)
+	TSTART       = 0.      ! Simulation experimental start time (ms)
 	TEND         = 2100.   ! Simulation experimental end time (ms)
-	DT           = 1.      ! Simulation experimental time step (ms)
+	DT           = 1.      ! Simulation experimental time step (ms) *** Needs to match last control time in Waveform.in ***
 &end	

@@ -151,7 +151,7 @@ if (q4.length > 0)
    }
 
 s = dotted + black + 1;
-ylimits (0.6, 1., Crop);
+ylimits (0.8, 1., Crop);
 
 pen qq = fontsize (25.);
 defaultpen (qq);

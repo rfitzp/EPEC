@@ -85,7 +85,7 @@ void Flux::Stage2 ()
 	     GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
   fclose (file);
 
-  if (INTG > 0 && TIME > 0.)
+  if (INTG > 0)
     {
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
@@ -489,7 +489,7 @@ void Flux::Stage2CalcQ ()
   // .........................
   // Setup R (Z=Zaxis) profile
   // .........................
-  Rs = new double[L]; // Array of R (s) values
+  Rs = new double[L]; // Array of R(s) values
 
   for (int l = 0; l < L-2; l++)
     Rs[L-2-l] = RPTS[l+ia];
@@ -521,10 +521,10 @@ void Flux::Stage2CalcQ ()
   S   = new double[NPSI];  // sqrt (1 - Psi)
   QX  = new double[NPSI];  // q(Psi) from gFile
 
-  PsiN     = new double[NPSI];  // PsiN array
-  QPN      = new double[NPSI];  // dQ/dPsiN array
-  QPPN     = new double[NPSI];  // d^Q/dPsiN^2 array
-  QPPPN    = new double[NPSI];  // d^3Q/dPsiN^3 array
+  PsiN  = new double[NPSI];  // PsiN array
+  QPN   = new double[NPSI];  // dQ/dPsiN array
+  QPPN  = new double[NPSI];  // d^Q/dPsiN^2 array
+  QPPPN = new double[NPSI];  // d^3Q/dPsiN^3 array
 
   A1 = new double[NPSI];  // QP/QPN/fabs(Psic) array
   A2 = new double[NPSI];  // QPPN/QPN/3 array
@@ -560,7 +560,7 @@ void Flux::Stage2CalcQ ()
   // ...............................
   for (int j = 0; j < NPSI; j++)
     RP[j] = Interpolate (L, s, Rs, S[j], 0);
-
+  
   // ......................................
   // Calculate Stage2 q(Psi)/g(Psi) profile
   // ......................................
@@ -648,6 +648,11 @@ void Flux::Stage2CalcQ ()
   CalcrP ();
   rP[0] = 0.;
   ra    = rP[NPSI-1];
+
+  // Perform diagnostic integration check (passes!)
+  //for (int j = 1; j < NPSI; j++)
+  //  printf ("r/a = %11.4e  PsiN = %11.4e  dPsiN/dr = %11.4e  r*g/|psi_c|/q = %11.4e  ratio = %11.4e\n",
+  //	    rP[j]/ra, PsiN[j], Interpolate (NPSI, rP, PsiN, rP[j], 1), rP[j]*GP[j]/fabs(Psic)/QP[j], rP[j]*GP[j]/fabs(Psic)/QP[j] /Interpolate (NPSI, rP, PsiN, rP[j], 1));
 
   // .........................
   // Find q95, r95, qlim, rlim
@@ -763,8 +768,8 @@ void Flux::Stage2FindRational ()
 
   printf ("Rational surface data:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  A2 = %11.4e  A3 = %11.4e\n",
-	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], A2res[i], A3res[i]);
+    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  A2 = %11.4e  A3 = %11.4e  (A1 = %11.4e)\n",
+	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], A2res[i], A3res[i], (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic);
    
   // .....................................
   // Confirm q values at rational surfaces

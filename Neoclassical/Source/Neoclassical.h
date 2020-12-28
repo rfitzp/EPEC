@@ -16,7 +16,7 @@
 // -y YN       - override YN value from namelist file
 // -N NN       - override NN value from namelist file
 // -l LN       - override LN value from namelist file
-// -t TIME     - sets experimental time
+// -t TIME     - sets experimental time (ms)
 
 // Intermediate data in folder Outputs/Stage3
 // Final data passed to program PHASE in file Outputs/nFile
@@ -35,6 +35,7 @@
 // 1.10 - Changed operation of FREQ switch
 // 1.11 - Added missing extra term associated with chanrge exchange
 // 1.12 - Updated fFile input for additonal terms
+// 1.13 - Corrected error in fFile interpolation. Improved system calls.
 
 // ################################################################
 
@@ -42,7 +43,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 12
+#define VERSION_MINOR 13
 
 #include <stdio.h>
 #include <math.h>
@@ -100,7 +101,7 @@ class Neoclassical
   double SVN;      // Majority ion/neutral charge exchange rate constant (m^3 /s)
   double YN;       // Majority neutral peaking factor on flux-surfaces
   double EN;       // Ratio of majority neutral to ion temperatures
-  double TIME;     // Experimental time
+  double TIME;     // Experimental time (ms)
  
   // ------------------
   // Physical constants
@@ -420,6 +421,8 @@ class Neoclassical
   FILE* OpenFilew (char* filename);
   // Open file for appending
   FILE* OpenFilea (char* filename);
+  // Call operating system 
+  void CallSystem (char* command);
 };
 
 #endif //NEOCLASSICAL

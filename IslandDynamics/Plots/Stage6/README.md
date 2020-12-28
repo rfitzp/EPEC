@@ -21,6 +21,7 @@
 	w.asy        ... plots island widths (in r) versus time
 
 	wvpsi.asy    ... plots vacuum island widths (in PsiN) versus time
+	rpsi.asy     ... plots rational surface radii (in PsiB) plus offset versus time
 	wpsi.asy     ... plots island widths (in PsiN) versus time
 	npsi.asy     ... plots density flattened regions (in PsiN) versus time
 	tpsi.asy     ... plots electron temperature flattened regions (in PsiN) versus time

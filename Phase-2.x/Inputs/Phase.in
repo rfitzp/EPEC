@@ -9,7 +9,8 @@
 	LIN    = 0     ! Flag for purely linear calculation
 	MID    = 1     ! Flag for inclusion of mFiles
 	DT     = 1.e-5 ! Data recorded every DT seconds
-	TIME   = 0.    ! Experimental time
+	TSTART = 0.    ! Simulation start time (ms)
+	TEND   = 1.e6  ! Simulation end time (ms)
 	SCALE  = 2.    ! GPEC scalefactor
 	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
 &end

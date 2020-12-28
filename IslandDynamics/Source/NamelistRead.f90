@@ -5,8 +5,8 @@
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
-     NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN,&
-     PHASE, PHASE_MID, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE,&
+     NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN,&
+     PHASE, PHASE_MID, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE,&
      RESTART, TSTART, TEND, DT) &
      bind (c, name = 'NameListRead')
 
@@ -16,6 +16,7 @@ subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
   integer (kind = c_int),    intent (inout) :: FLUX_NTOR
   integer (kind = c_int),    intent (inout) :: FLUX_MMIN
   integer (kind = c_int),    intent (inout) :: FLUX_MMAX
+  integer (kind = c_int),    intent (inout) :: NEO_INTP
   integer (kind = c_int),    intent (inout) :: NEO_INTF
   integer (kind = c_int),    intent (inout) :: NEO_IMPURITY
   integer (kind = c_int),    intent (inout) :: NEO_NEUTRAL
@@ -28,6 +29,7 @@ subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
   integer (kind = c_int),    intent (inout) :: PHASE_MID
   integer (kind = c_int),    intent (inout) :: PHASE_STAGE5
   integer (kind = c_int),    intent (inout) :: PHASE_INTN
+  integer (kind = c_int),    intent (inout) :: PHASE_INTU
   integer (kind = c_int),    intent (inout) :: PHASE_OLD
   integer (kind = c_int),    intent (inout) :: PHASE_VER2
   integer (kind = c_int),    intent (inout) :: PHASE_FREQ
@@ -39,8 +41,8 @@ subroutine NameListRead (FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
   real    (kind = c_double), intent (inout) :: DT
   
   namelist /ISLANDDYNAMICS_CONTROL/ FLUX_NTOR, FLUX_MMIN, FLUX_MMAX,&
-       NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN,&
-       PHASE, PHASE_MID, PHASE_INTN, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE,&
+       NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN,&
+       PHASE, PHASE_MID, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_VER2, PHASE_FREQ, PHASE_LIN, PHASE_SCALE,&
        RESTART, TSTART, TEND, DT
   
   open  (unit = 100, file = 'Inputs/Island.in', status = 'old')

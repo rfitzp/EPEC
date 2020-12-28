@@ -26,7 +26,7 @@ so
 {\cal J} &=\frac{r\,R^{\,2}}{R_0},\label{e2}
 \end{align}
 where $R_0$ is a convenient scale major radius, flux-surface label $r$ has units of length, and $\theta$ is
-a poloidal angle.
+a poloidal angle. $\theta=0$ on inboard midplane. $\theta>0$ above midplane. 
 \end{itemize}
 
 \subsection{Useful Identities}\label{s2}
@@ -669,6 +669,15 @@ A_k^{(3)}&=
 \frac{1}{12}\,
 \frac{q_k'''}{q_k'}.
 \end{align}
+
+Alternatively, we can say that $X_{k\,\pm}$ satisfy 
+\begin{equation}
+F_k(X_k) = \frac{|{\mit\Psi}_k|}{R_0\,B_0},
+\end{equation}
+where
+\begin{equation}
+\frac{dF_k}{dX_k} = \frac{|\psi_c|}{2}\left[\frac{q(X_k)}{q_k}-1\right].
+\end{equation}
 
 \section{Technical Details}
 \subsection{Flux Coordinate System}

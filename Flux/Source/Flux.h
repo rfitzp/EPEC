@@ -24,7 +24,7 @@
 // -m MMIN   - override MMIN   value from namelist
 // -M MMAX   - override MMAX   value from namelist
 // -p PSILIM - override PSILIM value from namelist
-// -t TIME   - sets experimental time
+// -t TIME   - sets experimental time (ms)
 
 // Calculation control parameters in namelist file INPUTS/Flux.in
 
@@ -40,6 +40,7 @@
 // 1.4 - Added linear interpolation
 // 1.5 - Added RP1, Bt, Bt1, Bp, Bp1, and K_theta
 // 1.6 - Removed QFLAG and Q95 functionality. Added calculation of A1, A2, A3 parameters
+// 1.7 - Improved system calls
 
 // #####################################################################################
 
@@ -106,7 +107,7 @@ class Flux
   double ACC;     // Integration accuracy for equilibrium flux surface integrals
   double ETA;     // Regularization factor for Green's function
   double DR;      // Discritization parameter for simulated Mirnov data
-  double TIME;    // Experimental time
+  double TIME;    // Experimental time (ms)
   int    INTG;    // If != 0 then use interpolated gFile
 
   // Toroidal Mirnov coil array locations
@@ -352,6 +353,8 @@ private:
   FILE* OpenFiler (char* filename);
   // Open existing file for appending
   FILE* OpenFilea (char* filename);
+  // Call operating system 
+  void CallSystem (char* command);
 };
 
 #endif //FLUX

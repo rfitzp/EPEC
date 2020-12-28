@@ -323,7 +323,7 @@ int Flux::Rhs2 (double r, const double y[], double dydr[], void*)
 {
   // y[0] - (rP)^2    
 
-  double qg = Interpolate (NPSI, S, QGP, 1.-r*r, 0);
+  double qg = Interpolate (NPSI, PsiN, QGP, 1.-r, 0);
 
   dydr[0] = 2.*fabs(Psic) * qg;
 

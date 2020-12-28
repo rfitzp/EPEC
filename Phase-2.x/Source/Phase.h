@@ -5,6 +5,9 @@
 // with resonant magnetic perturbation in toroidal tokamak plasma.
 // Reads data from programs FLUX, NEOCLASSICAL, and GPEC.
 
+// Simulation start time is lesser of 0, TSTART, and TCTRL (0)
+// Simulation end time is lesser of TEND and TCTRL (NCTRL-1)
+
 // Command line options:
 // -f INTF   - overrides INTF value from namelist file
 // -n INTN   - overrides INTN value from namelist file
@@ -14,7 +17,8 @@
 // -s STAGE5 - overrides STAGE5 value from namelist file
 // -S SCALE  - overrides SCALE value from namelist file
 // -m MID    - overrides MID value from namelist file
-// -t TIME   - sets experimental time
+// -t TSTART - sets simulation start time (s)
+// -T TEND   - sets simulation end time (s)
 
 // Stage 4 - Class reads FLUX/NEOCLASSICAL/GPEC data and plots error-field
 //           drive versus relative phases of RMP coil currents for 1kA currents
@@ -41,6 +45,7 @@
 // 2.5 - Added middle coil set
 // 2.6 - Limited island width to stop them extending beyond neighbouring rational surfaces
 // 2.7 - Improved calculation of island widths
+// 2.8 - Replaced TIME by TSTART and TEND
 
 // #######################################################################
 
@@ -48,7 +53,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 7
+#define VERSION_MINOR 8
 
 #include <stdio.h>
 #include <math.h>
@@ -64,6 +69,7 @@
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_poly.h>
+#include <gsl/gsl_errno.h>
 
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
@@ -72,8 +78,8 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TIME, double* SCALE, 
-			      double* PMAX, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TSTART, double* TEND,
+			      double* SCALE, double* PMAX, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -89,7 +95,8 @@ class Phase
   // Read from Inputs/Phase.in
   int      NFLOW;  // Number of flow harmonics in model
   double   DT;     // Data recorded every DT seconds
-  double   TIME;   // Experimental time
+  double   TSTART; // Simulation start time (ms)
+  double   TEND;   // Simulation end time (ms)
   int      STAGE5; // If != 0 then Stage5 calculation performed, otherwise calculation terminates after Stage4
   int      INTF;   // If != 0 then use interpolated fFile 
   int      INTN;   // If != 0 then use interpolated nFile
@@ -195,6 +202,9 @@ class Phase
   // ---------------
   // Simulation data
   // ---------------
+  double          TIME;    // Time in ms
+  double          Tstart;  // Normalized simulation start time
+  double          Tend;    // Normalized simulation end time
   Array<double,1> TT;      // Normalized control times
   double          dTT;     // Normalized recording time interval
   double          irmp;    // Peak current flowing in RMP coils (kA) at current time
@@ -244,7 +254,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TIME, double _SCALE);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE);        
 
   // -----------------------
   // Private class functions
@@ -252,7 +262,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TIME, double _SCALE);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors
@@ -341,6 +351,8 @@ class Phase
   FILE* OpenFilew (char* filename);
   // Open file for appending
   FILE* OpenFilea (char* filename);
+  // Call operating system 
+  void CallSystem (char* command);
 };
 
 #endif //PHASE

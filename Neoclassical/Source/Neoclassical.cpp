@@ -77,7 +77,7 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int
   // Calculcate neoclassical frequencies at rational surfaces
   Get_Frequencies ();
 
-  // Calculate normalized quantites at rational surface
+  // Calculate normalized quantites at rational surface and output nFile
   Get_Normalized ();
 }
 
@@ -130,6 +130,14 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   if (_INTC > -1)
     INTC = _INTC;
 
+  // Output input parameters
+  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
+  printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
+  printf ("IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
+	  IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
+
   // Sanity check
   if (YN < 0.)
     {
@@ -166,14 +174,6 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
       printf ("NEOCLASSICAL::Read_Parameters: Error invalid FREQ value\n");
       exit (1);
     }
-
-  // Output input parameters
-  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
-  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
-  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("Input parameters (from Inputs/Neoclassical.in and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	  IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
    
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
@@ -202,22 +202,22 @@ void Neoclassical::Read_Equilibrium ()
   // .................
   // Interpolate fFile
   // .................
-  if (INTF != 0  && TIME > 0.)
+  if (INTF != 0)
     {
       // Save pwd
       char pwd[MAXFILENAMELENGTH];
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove fFile
-      system ("rm -rf Inputs/fFile");
-
+      CallSystem ("rm -rf Inputs/fFile");
+      
       // Get fFiles directory
       char fFileDir[MAXFILENAMELENGTH];
-      system ("greadlink -f Inputs/fFiles > fFileDir");
+      CallSystem ("greadlink -f Inputs/fFiles > fFileDir");
       FILE* ffd = OpenFiler ("fFileDir");
       fscanf (ffd, "%s", fFileDir);
       fclose (ffd);
-      system ("rm fFileDir");
+      CallSystem ("rm fFileDir");
         
       // Read fFile data
       char           Basename[MAXFILENAMELENGTH];
@@ -254,7 +254,7 @@ void Neoclassical::Read_Equilibrium ()
     }
   else
     {
-      system ("cd Inputs; rm -rf fFile; ln -s ../../Flux/Outputs/fFile fFile");
+      CallSystem ("cd Inputs; rm -rf fFile; ln -s ../../Flux/Outputs/fFile fFile");
     }
 
   // Read fFile
@@ -322,22 +322,22 @@ void Neoclassical::Read_Equilibrium ()
 void Neoclassical::Read_Profiles ()
 {
   // Interpolate pFiles
-  if (INTP != 0 && TIME > 0.)
+  if (INTP != 0)
     {
       // Save pwd
       char pwd[MAXFILENAMELENGTH];
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove pFile
-      system ("rm -rf Inputs/pFile");
+      CallSystem ("rm -rf Inputs/pFile");
 
       // Get pFiles directory
       char pFileDir[MAXFILENAMELENGTH];
-      system ("greadlink -f Inputs/pFiles > pFileDir");
+      CallSystem ("greadlink -f Inputs/pFiles > pFileDir");
       FILE* pfd = OpenFiler ("pFileDir");
       fscanf (pfd, "%s", pFileDir);
       fclose (pfd);
-      system ("rm pFileDir");
+      CallSystem ("rm pFileDir");
   
       // Read pFile data
       char           Basename[MAXFILENAMELENGTH];
@@ -487,22 +487,22 @@ void Neoclassical::Read_Profiles ()
   fclose (file);
 
   // Interpolate cFiles
-  if (INTC != 0 && TIME > 0.)
+  if (INTC != 0)
     {
       // Save pwd
       char pwd[MAXFILENAMELENGTH];
       getcwd (pwd, MAXFILENAMELENGTH);
 
       // Remove cFile
-      system ("rm -rf Inputs/cFile");
+      CallSystem ("rm -rf Inputs/cFile");
 
       // Get cFiles directory
       char cFileDir[MAXFILENAMELENGTH];
-      system ("greadlink -f Inputs/cFiles > cFileDir");
+      CallSystem ("greadlink -f Inputs/cFiles > cFileDir");
       FILE* pfd = OpenFiler ("cFileDir");
       fscanf (pfd, "%s", cFileDir);
       fclose (pfd);
-      system ("rm cFileDir");
+      CallSystem ("rm cFileDir");
   
       // Read cFile data
       char           Basename[MAXFILENAMELENGTH];
@@ -1082,9 +1082,9 @@ void Neoclassical::Get_Frequencies ()
   fclose (file);
 }
 
-// ######################################################################
-// Calculate normalized quantities at rational surfaces for program PHASE
-// ######################################################################
+// #######################################################################################
+// Calculate normalized quantities at rational surfaces for program PHASE and output nFile
+// #######################################################################################
 void Neoclassical::Get_Normalized ()
 {
   FILE* file = OpenFilew ((char*) "Outputs/nFile");
@@ -1112,7 +1112,7 @@ void Neoclassical::Get_Normalized ()
     }
    fclose (file);
 
-   if (INTP != 0 && TIME > 0.)
+   if (INTP != 0)
      {
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/nFiles/n.%d", int (TIME));
@@ -1425,4 +1425,16 @@ FILE* Neoclassical::OpenFilea (char* filename)
       exit (1);
     }
   return file;
+}
+
+// #################################
+// Function to call operating system
+// #################################
+void Neoclassical::CallSystem (char* command)
+{
+  if (system (command) != 0)
+    {
+      printf ("NEOCLASSICAL: Operating system call error executing %s\n", command);
+      exit (1);
+    }
 }

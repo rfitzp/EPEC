@@ -207,3 +207,14 @@ FILE* Flux::OpenFilea (char* filename)
   return file;
 }
 
+// #################################
+// Function to call operating system
+// #################################
+void Flux::CallSystem (char* command)
+{
+  if (system (command) != 0)
+    {
+      printf ("FLUX: Operating system call error executing %s\n", command);
+      exit (1);
+    }
+}

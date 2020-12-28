@@ -2,14 +2,13 @@ import graph;
      
 size (500, 500, IgnoreAspect);
 
-file    in = input ("../../Outputs/Stage6/omega0.txt").line();
+file    in = input ("../../Outputs/Stage6/omega.txt").line();
 real[][] A = in.dimension (0, 0);
 A          = transpose (A);
      
 real[] m   = A[0];
-real[] r   = A[1];
-real[] wnl = A[5];
-real[] tt  = A[6];
+real[] wnl = A[6];
+real[] tt  = A[4];
 
 int N = m.length;
 real[] q4,  i4;
@@ -100,62 +99,61 @@ pen s;
 s = white + dotted + 0.5;
 if (q16.length > 0)
    {  
-     draw (graph (q16, i16), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, palegreen));
+     draw (graph (q16, i16), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, palegreen));
    }
 if (q15.length > 0)
    {  
-    draw (graph (q15, i15), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, grey));
+    draw (graph (q15, i15), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, grey));
    }	
 if (q14.length > 0)
    {  
-   draw (graph (q14, i14), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, orange));
+   draw (graph (q14, i14), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, orange));
    }	
 if (q13.length > 0)
    {  
-    draw (graph (q13, i13), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, purple));
+    draw (graph (q13, i13), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, purple));
    }
 if (q12.length > 0)
    {  
-    draw (graph (q12, i12), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, pink));
+    draw (graph (q12, i12), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, pink));
   }	
 if (q11.length > 0)
    {  
-    draw (graph (q11, i11), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, brown));
+    draw (graph (q11, i11), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, brown));
    }	
 if (q10.length > 0)
    {  
-   draw (graph (q10, i10), s, marker (scale(0.5mm)*polygon(3), filltype=Fill, magenta));
+   draw (graph (q10, i10), s, marker (scale(1.0mm)*polygon(3), filltype=Fill, magenta));
    }	
 if (q9.length > 0)
    {  
-     draw (graph (q9, i9),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, cyan));
+     draw (graph (q9, i9),   s, marker (scale(1.0mm)*polygon(3),  filltype=Fill, cyan));
    }
 if (q8.length > 0)
    {  
-     draw (graph (q8, i8),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, yellow));
+     draw (graph (q8, i8),   s, marker (scale(1.0mm)*polygon(3),  filltype=Fill, yellow));
    }
 if (q7.length > 0)
    {  
-     draw (graph (q7, i7),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, blue));
+     draw (graph (q7, i7),   s, marker (scale(1.0mm)*polygon(3),  filltype=Fill, blue));
    }
 if (q6.length > 0)
    {  
-     draw (graph (q6, i6),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, green));
+     draw (graph (q6, i6),   s, marker (scale(1.0mm)*polygon(3),  filltype=Fill, green));
    }
 if (q5.length > 0)
    {  
-     draw (graph (q5, i5),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, red));
+     draw (graph (q5, i5),   s, marker (scale(1.0mm)*polygon(3),  filltype=Fill, red));
    }
 if (q4.length > 0)
    {  
-     draw (graph (q4, i4),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, black));
+     draw (graph (q4, i4),   s, marker (scale(1.0mm)*polygon(3),  filltype=Fill, black));
    }
 
 s = dotted + black + 1;
-//ylimits (-50., 50., Crop);
-yequals (0., s);
+ylimits (0.8, 1., Crop);
 
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis ("$t ({\rm ms})$", BottomTop, LeftTicks);
-yaxis ("$\varpi_0({\rm krad/s})$", LeftRight, RightTicks);
+yaxis ("${\mit\Psi}_k$", LeftRight, RightTicks);

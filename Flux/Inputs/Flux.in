@@ -12,5 +12,5 @@
 	MMIN    = 3	 ! Minimum poloidal mode number
 	MMAX    = 30     ! Maximum toroidal mode number
 	PSILIM  = 0.998  ! Ignore rational surfaces for PsiN > PSILIM
-	TIME    = 0.     ! Experimental time
+	TIME    = 0.     ! Experimental time (ms)
 &end

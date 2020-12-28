@@ -19,6 +19,12 @@ draw (graph (t, q),  s, marker (scale (1.mm)*polygon (10), green));
 draw (graph (t, ql), s, marker (scale (1.mm)*polygon (4),  blue));
 draw (graph (t, qa), s, marker (scale (1.mm)*polygon (4),  black));
 
+//s = black + 0.5;
+//draw (graph (t, q0), s);
+//draw (graph (t, q),  s);
+//draw (graph (t, ql), s);
+//draw (graph (t, qa), s);
+
 s = dotted + black + 1;
 
 yequals (0.00000, s);

@@ -31,18 +31,18 @@ double Phase::GetIslandOffset (double A1, double A2, double A3, double Psi)
 // ########################################################
 void Phase::GetIslandLimits (double A1, double A2, double A3, double Psi, double& Xminus, double& Xplus)
 {
-  if (fabs (Psi) < 1.e-15)
-    {
-      Xminus = 0.;
-      Xplus  = 0.;
-
-      return;
-    }
-  
   double LARGE = 1.e6;
+  double SMALL = 1.e-15;
 
   // Calculate basis island width
   double W0 = 4. * sqrt (A1 * fabs (Psi));
+  if (W0 < 1.e-4)
+    {
+      Xminus = - sqrt (W0) /2.;
+      Xplus  = + sqrt (W0) /2.;
+
+      return;
+    }
   double c = W0*W0/4.;
   
   // Find maximum allowed value of c
@@ -78,12 +78,20 @@ void Phase::GetIslandLimits (double A1, double A2, double A3, double Psi, double
     c = 0.99*cmax;
 
   // Solve polynomial equation
+  int    status;
   double a[5] = {-c, 0., 1., A2, A3};
   double z[8];
 
   gsl_poly_complex_workspace* w = gsl_poly_complex_workspace_alloc (5);
 
-  gsl_poly_complex_solve (a, 5, w, z);
+  gsl_set_error_handler_off ();
+ 
+  status = gsl_poly_complex_solve (a, 5, w, z);
+  if (status != 0)
+    {
+      printf ("FLUX::IslandRoot: Warning: gsl_poly_complex_solve lack of convergence - Psi = %10.3e A1 = %10.3e A2 = %10.3e A3 = %10.3e W0 = %10.3e c = %10.3e cmax = %10.3e status = %2d\n",
+	      Psi, A1, A2, A3, W0, c, cmax, status);
+    }
 
   gsl_poly_complex_workspace_free (w);
 
@@ -92,18 +100,23 @@ void Phase::GetIslandLimits (double A1, double A2, double A3, double Psi, double
   double x[4];
 
   for (int i = 0; i < 4; i++)
-    if (fabs (z[2*i+1]) < 1.e-15)
+    if (fabs (z[2*i+1]) < SMALL)
       {
-	x[i] = z[2*i];
+	x[nroot] = z[2*i];
 	nroot++;
       }
 
   if (nroot < 2)
     {
-      printf ("FLUX::IslandRoot: Error - nroot = %1d\n", nroot);
+      printf ("FLUX::IslandRoot: Error - Psi = %10.3e A1 = %10.3e A2 = %10.3e A3 = %10.3e W0 = %10.3e: nroot = %1d\n",
+	      A1, A2, A3, c, cmax, nroot);
+      for (int i = 0; i < 4; i++)
+	printf ("i = %2d  z[i] = (%10.3e, %10.3e)\n", i, z[2*i], z[2*i+1]);
       exit (1);
     }
 
+  // Xminus is largest negative real root of polynomial
+  // Xplus is smallest positive real root of polynomial
   Xminus = -LARGE;
   Xplus  = +LARGE;
   for (int i = 0; i < nroot; i++)
@@ -120,12 +133,22 @@ void Phase::GetIslandLimits (double A1, double A2, double A3, double Psi, double
   
   if (Xminus == -LARGE)
     {
-      printf ("FLUX::IslandRoot: Error - Xminus = %10.4e\n", Xminus);
+      printf ("FLUX::IslandRoot: Error - A1 = %10.3e A2 = %10.3e A3 = %10.3e W0 = %10.3e c = %10.3e cmax = %10.3e: Xminus = %10.3e Xplus = %10.3e\n",
+	      A1, A2, A3, W0, c, cmax, Xminus, Xplus);
+      for (int i = 0; i < 4; i++)
+	printf ("i = %2d  z[i] = (%10.3e, %10.3e)\n", i, z[2*i], z[2*i+1]);
+      for (int i = 0; i < nroot; i++)
+	printf ("i = %2d  x[i] = %10.3e\n", i, x[i]);
       exit (1);
     }
   if (Xplus == LARGE)
     {
-      printf ("FLUX::IslandRoot: Error - Xminus = %10.4e\n", Xplus);
+      printf ("FLUX::IslandRoot: Error - A1 = %10.3e A2 = %10.3e A3 = %10.3e W0 = %10.3e c = %10.3e cmax = %10.3e: Xplus = %10.3e Xminus = %10.3e\n",
+	      A1, A2, A3, W0, c, cmax, Xplus, Xminus);
+      for (int i = 0; i < 4; i++)
+	printf ("i = %2d  z[i] = (%10.3e, %10.3e)\n", i, z[2*i], z[2*i+1]);
+      for (int i = 0; i < nroot; i++)
+	printf ("i = %2d  x[i] = %10.3e\n", i, x[i]);
       exit (1);
     }
 }

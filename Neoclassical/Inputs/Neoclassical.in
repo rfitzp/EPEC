@@ -11,6 +11,6 @@
 	YN       = 1.5     ! Neutral peaking factor at X-point
 	SVN      = 4.e-14  ! Charge exchange rate constant (m^3/s)
 	EN       = 1.      ! Neutral energy/ion energy
-	TIME     = 0.      ! Experimental time
+	TIME     = 0.      ! Experimental time (ms)
 	COULOMB  = 17.     ! Coulomb logarithm
 &end	

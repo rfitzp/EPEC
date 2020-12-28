@@ -708,7 +708,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
 	     v1_0(j), v2_0(j), v3_0(j));
   for (int j = 0; j < nres_0; j++)
     fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u10_0(j), u11_0(j), u12_0(j), u13_0(j), u14_0(j));
+	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u11_0(j), u12_0(j), u13_0(j), u14_0(j));
   for (int j = 0; j < nres_0; j++)
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
@@ -1202,7 +1202,7 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
 	     v1_0(j), v2_0(j), v3_0(j));
   for (int j = 0; j < nres_0; j++)
     fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u10_0(j), u11_0(j), u12_0(j), u13_0(j), u14_0(j));
+	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u11_0(j), u12_0(j), u13_0(j), u14_0(j));
   for (int j = 0; j < nres_0; j++)
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
@@ -1324,7 +1324,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   for (int j = 0; j < nres_1; j++)
     {
       if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j), &u11_0(j), &u12_0(j), &u13_0(j), &u14_0(j)) != 15)
+		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j), &u11_1(j), &u12_1(j), &u13_1(j), &u14_1(j)) != 15)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateQuartic: Error reading fFile_1 (3)\n");
 	  exit (1);
@@ -1417,7 +1417,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   for (int j = 0; j < nres_2; j++)
     {
       if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &mres_2(j), &u1_2(j), &u2_2(j), &u3_2(j), &u4_2(j), &u5_2(j), &u6_2(j), &u7_2(j), &u8_2(j), &u9_2(j), &u10_2(j), &u10_2(j), &u11_2(j), &u12_2(j), &u13_2(j), &u14_2(j)) != 15)
+		  &mres_2(j), &u1_2(j), &u2_2(j), &u3_2(j), &u4_2(j), &u5_2(j), &u6_2(j), &u7_2(j), &u8_2(j), &u9_2(j), &u10_2(j), &u11_2(j), &u12_2(j), &u13_2(j), &u14_2(j)) != 15)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateQuartic: Error reading fFile_2 (3)\n");
 	  exit (1);
@@ -1810,7 +1810,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 	     v1_0(j), v2_0(j), v3_0(j));
   for (int j = 0; j < nres_0; j++)
     fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u10_0(j), u11_0(j), u12_0(j), u13_0(j), u14_0(j));
+	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u11_0(j), u12_0(j), u13_0(j), u14_0(j));
   for (int j = 0; j < nres_0; j++)
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
