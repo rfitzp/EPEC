@@ -36,6 +36,7 @@
 // 1.11 - Added missing extra term associated with chanrge exchange
 // 1.12 - Updated fFile input for additonal terms
 // 1.13 - Corrected error in fFile interpolation. Improved system calls.
+// 1.14 - Renamed Namelist. Adjusted for new fFile format
 
 // ################################################################
 
@@ -43,7 +44,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 13
+#define VERSION_MINOR 14
 
 #include <stdio.h>
 #include <math.h>
@@ -82,7 +83,7 @@ class Neoclassical
   // Control parameters
   // ------------------
 
-  // Read from Inputs/Neoclassical.in
+  // Read from Inputs/Neoclassical.nml
   int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
   int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
   int    FREQ;     // Natural frequency switch:

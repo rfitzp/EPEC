@@ -19,9 +19,8 @@
 	PHASE_INTU   = 0       ! If != 0 then interpolate uFiles/mFiles/lFiles in PHASE	
 	PHASE_STAGE5 = 1       ! If != 0 then Stage5 calculation enabled in PHASE
 	PHASE_OLD    = 1       ! If != 0 then restart PHASE calculations from previous run
-	PHASE_VER2   = 1       ! If != 0 then call Phase-2.x, else call Phase-1.x
-	PHASE_FREQ   = 0       ! If != 0 then use island width dependent natural frequency (only applies to Phase-2.x, overrides NEO_FREQ)
-	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation (only applies to Phase-2.x)
+	PHASE_FREQ   = 0       ! If != 0 then use island width dependent natural frequency 
+	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation 
 	PHASE_SCALE  = 2.      ! Set GPEC scalefactor
 	RESTART      = 1       ! If != 0 then delete all previous IslandDynamics data
 	TSTART       = 0.      ! Simulation experimental start time (ms)

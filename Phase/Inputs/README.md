@@ -2,8 +2,8 @@
 
 ## Contents
 
-- Phase.in: Fortran_90 namelist file
-- Waveform.in: Fortran_90 namelist file specifying RMP coil current waveform
+- Phase.nml: Fortran_90 namelist file
+- Waveform.nml: Fortran_90 namelist file specifying RMP coil current waveform
 - fFile: fFile (usually symbolic link)
 - /fFiles: Directory containing fFiles used for interpolated equilibria (usually symbolic link)
 - nFile: nFile (usually symbolic link)

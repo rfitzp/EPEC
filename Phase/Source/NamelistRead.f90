@@ -37,11 +37,11 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, D
   namelist /PHASE_WAVEFORM/  NCTRL
   namelist /PHASE_WAVEFORM1/ TCTRL, ICTRL, PCTRL
   
-  open  (unit = 100, file = 'Inputs/Phase.in', status = 'old')
+  open  (unit = 100, file = 'Inputs/Phase.nml', status = 'old')
   read  (unit = 100, nml  = PHASE_CONTROL) 
   close (unit = 100)
   
-  open  (unit = 100, file = 'Inputs/Waveform.in', status = 'old')
+  open  (unit = 100, file = 'Inputs/Waveform.nml', status = 'old')
   read  (unit = 100, nml  = PHASE_WAVEFORM)
 
   allocate (TCTRL (NCTRL))

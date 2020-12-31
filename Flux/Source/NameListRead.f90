@@ -27,7 +27,7 @@ subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, 
   
   namelist /FLUX_CONTROL/ NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, MMIN, MMAX, PSILIM, TIME, INTG
   
-  open  (unit = 100, file = 'Inputs/Flux.in', status = 'old')
+  open  (unit = 100, file = 'Inputs/Flux.nml', status = 'old')
   read  (unit = 100, nml  = FLUX_CONTROL)
   close (unit = 100)
 

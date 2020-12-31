@@ -66,6 +66,7 @@ void Flux::CalcQGP ()
       if (j%50 == 0)
 	printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
     }
+  printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", NPSI-2, 1.-P[NPSI-2], QP[NPSI-2]);
 
   gsl_odeiv_evolve_free  (e);
   gsl_odeiv_control_free (c);

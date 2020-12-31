@@ -5,7 +5,7 @@
 //
 // Radial grid in PsiN = 1. - Psi/Psi_axis (assuming Psi = 0 on boundary) is 
 //
-// PsiN_j = s  for j = 0, NPSI-1
+// PsiN_j = 1. - (1. - s)^PACK  for j = 0, NPSI-1
 //
 //  where s = j /(NPSI-1),
 //
@@ -41,6 +41,7 @@
 // 1.5 - Added RP1, Bt, Bt1, Bp, Bp1, and K_theta
 // 1.6 - Removed QFLAG and Q95 functionality. Added calculation of A1, A2, A3 parameters
 // 1.7 - Improved system calls
+// 1.8 - Renamed Namelist. Removed A2 and A3 parameters (too much noise)
 
 // #####################################################################################
 
@@ -48,7 +49,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 6
+#define VERSION_MINOR 8
 
 #include <stdio.h>
 #include <math.h>
@@ -94,7 +95,7 @@ class Flux
 {
  private:
   
-  // Control parameters read from Inputs/Flux.in
+  // Control parameters read from Inputs/Flux.nml
   int    NPSI;    // Number of points in PsiN grid
   double PACK;    // Packing index for PsiN grid
   int    NTHETA;  // Number of points in theta grid
@@ -179,11 +180,7 @@ class Flux
 
   double* PsiN;        // PsiN array
   double* QPN;         // dQ/dPsiN array
-  double* QPPN;        // d^Q/dPsiN^2 array
-  double* QPPPN;       // d^3Q/dPsiN^3 array
   double* A1;          // QP/QPN/fabs(Psic) array
-  double* A2;          // QPPN/QPN/3 array
-  double* A3;          // QPPPN/QPN/12 array
 
   // Rational surface data
   int     nres;        // Number of rational surfaces
@@ -203,8 +200,6 @@ class Flux
   double* ajj;         // Metric elements at rational surfaces
   double* dPsidr;      // dPsi/dr at rational surfaces
   double* A1res;       // A1 values at rational surfaces
-  double* A2res;       // A2 values at rational surfaces
-  double* A3res;       // A3 values at rational surfaces
   
   // Straight angle flux coordinate data
   double*     th;      // theta array

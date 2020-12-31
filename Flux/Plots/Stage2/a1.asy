@@ -7,7 +7,7 @@ real[][] A = in.dimension (0,0);
 A          = transpose(A);
      
 real[] p  = A[3];
-real[] q  = A[18];
+real[] q  = A[16];
 
 real[] psi = 1. - p;
 

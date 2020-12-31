@@ -43,7 +43,7 @@
 - fFile: File containing data for NEOCLASSICAL and PHASE
 - /fFiles: Directory containing fFiles associated with interpolated gFiles
  - Index: List of fFile names and experimental times
- - fFiles: Actual cFiles
+ - fFiles: Actual fFiles
 - /Stage1: Data files from Stage 1 calculation
 - /Stage2: Data files from Stage 2 calculation
 	  

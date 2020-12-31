@@ -5,9 +5,6 @@
 // with resonant magnetic perturbation in toroidal tokamak plasma.
 // Reads data from programs FLUX, NEOCLASSICAL, and GPEC.
 
-// Simulation start time is lesser of 0, TSTART, and TCTRL (0)
-// Simulation end time is lesser of TEND and TCTRL (NCTRL-1)
-
 // Command line options:
 // -f INTF   - overrides INTF value from namelist file
 // -n INTN   - overrides INTN value from namelist file
@@ -17,8 +14,8 @@
 // -s STAGE5 - overrides STAGE5 value from namelist file
 // -S SCALE  - overrides SCALE value from namelist file
 // -m MID    - overrides MID value from namelist file
-// -t TSTART - sets simulation start time (s)
-// -T TEND   - sets simulation end time (s)
+// -t TSTART - sets simulation start time (ms)
+// -T TEND   - sets simulation end time (ms)
 
 // Stage 4 - Class reads FLUX/NEOCLASSICAL/GPEC data and plots error-field
 //           drive versus relative phases of RMP coil currents for 1kA currents
@@ -46,6 +43,7 @@
 // 2.6 - Limited island width to stop them extending beyond neighbouring rational surfaces
 // 2.7 - Improved calculation of island widths
 // 2.8 - Replaced TIME by TSTART and TEND
+// 2.9 - Renamed Namelist. Modified island width calculation.
 
 // #######################################################################
 
@@ -53,7 +51,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 8
+#define VERSION_MINOR 9
 
 #include <stdio.h>
 #include <math.h>
@@ -139,6 +137,7 @@ class Phase
   Array<double,1> sigi; // Response phases for inboard toroidal Mirnov coil array
   Array<double,1> epso; // Response amplitudes for outboard toroidal Mirnov coil array
   Array<double,1> sigo; // Response phases for outboard toroidal Mirnov coil array
+  Array<double,1> A1;   // A1 values at rational surfaces
 
   // ------------------------------
   // Data from program NEOCLASSICAL
@@ -169,9 +168,8 @@ class Phase
   Array<double,1> gk;      // g values at resonant surfaces
   Array<double,1> PsiN;    // PsiN values at rational surfaces
   Array<double,1> dPsiNdr; // dPsiN/dr values at resonant surfaces
-  Array<double,1> A1;      // A1 values at rational surfaces
-  Array<double,1> A2;      // A2 values at rational surfaces
-  Array<double,1> A3;      // A3 values at rational surfaces
+  Array<double,1> Deltakp; // Delta_k+ values at rational surfaces
+  Array<double,1> Deltakm; // Delta_k- values at rational surfaces
   
   // ----------------------
   // Data from program GPEC
@@ -339,11 +337,13 @@ class Phase
 				  char* nFile4, double time4, char* nFile,  double time);
 
   // Find width in PsiN of magnetic island chain
-  double GetIslandWidth (double A1, double A2, double A3, double Psi);
-  // Find offset in PsiN of magnetic island chain
-  double GetIslandOffset (double A1, double A2, double A3, double Psi);
+  double GetIslandWidth (int j);
+  // Find offset in PsiN of vacuum magnetic island chain
+  double GetVacuumIslandWidth (int j);
   // Find limits of magnetic island chains in PsiN
-  void GetIslandLimits (double A1, double A2, double A3, double Psi, double& Xminus, double& Xplus);
+  void GetIslandLimits (int j, double Psi, double& Xminus, double& Xplus);
+  // Solve island width equation
+  double GetIslandRoot (double c);
 
   // Open file for reading
   FILE* OpenFiler (char* filename);

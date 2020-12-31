@@ -2,7 +2,7 @@
 
 ## Contents
 
-- Neoclassical.in: Fortran_90 namelist file
+- Neoclassical.nml: Fortran_90 namelist file
 - fFile: fFile (usually symbolic link)
 - /fFiles: Directory containing fFiles used for interpolated equilibria (usually symbolic link)
 - pFile: pFile (usually symbolic link)

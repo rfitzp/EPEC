@@ -27,7 +27,7 @@ subroutine NameListRead (IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, L
   
   namelist /NEOCLASSICAL_CONTROL/ IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB
   
-  open  (unit = 100, file = 'Inputs/Neoclassical.in', status = 'old')
+  open  (unit = 100, file = 'Inputs/Neoclassical.nml', status = 'old')
   read  (unit = 100, nml = NEOCLASSICAL_CONTROL) 
   close (unit = 100)
   

@@ -91,6 +91,11 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // ###########################
 void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE)
 {
+  // Output version information
+  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
+  
   // ......................................
   // Set default values of input parameters
   // ......................................
@@ -109,19 +114,16 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   SCALE  = 2.;
   PMAX   = 4.;
 
-  // Read input data from namelist (Inputs/Phase.in)
-  printf ("..................................\n");
-  printf ("Reading data from Inputs/Phase.in:\n");
-  printf ("..................................\n");
+  // Read input data from namelists (Inputs/Phase.nml, Inputs/Waveform.nml)
+  printf ("........................................................................................\n");
+  printf ("Input parameters (from Inputs/Phase.nml, Inputs/Waveform.nml, and command line options):\n");
+  printf ("........................................................................................\n");
 
   TCTRL = new double[MAXCONTROLPOINTNUMBER];
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TSTART, &TEND, &SCALE, &PMAX, &NCTRL, TCTRL, ICTRL, PCTRL);
-
-  for (int i = 0; i < NCTRL; i++)
-    printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
 
   TT.resize (NCTRL);
   
@@ -152,10 +154,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("\nGit Hash     = "); printf (GIT_HASH);     printf ("\n");
-  printf ("Compile time = ");   printf (COMPILE_TIME); printf ("\n");
-  printf ("Git Branch   = ");   printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("Input parameters (from Inputs/Phase.in and command line options):\n");
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, NCTRL);
 
@@ -178,11 +176,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       exit (1);
     }
 
+  for (int i = 0; i < NCTRL; i++)
+    printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
+
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-  fprintf (namelist, "Input parameters (from Inputs/Phase.in and command line options):\n");
+  fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, NCTRL);
   fclose (namelist);
@@ -191,7 +192,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-  fprintf (monitor, "Input parameters (from Inputs/Phase.in and command line options):\n");
+  fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
   fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, NCTRL);
   fclose (monitor);
@@ -284,12 +285,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     }
 
   A1.resize (nres);
-  A2.resize (nres);
-  A3.resize (nres);
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &A2(j), &A3(j)) != 15)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
 	  exit (1);
@@ -461,19 +460,20 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
   // Normalize times
   for (int i = 0; i < NCTRL; i++)
-    TT (i) = TCTRL[i] /tau_A;
-  dTT    = DT           /tau_A;
-  Tstart = TSTART*1.e-3 /tau_A;
-  Tend   = TEND  *1.e-3 /tau_A;
+    TT (i) = TCTRL[i] *1.e-3/tau_A;
+  dTT    = DT         *1.e-3/tau_A;
+  Tstart = TSTART     *1.e-3/tau_A;
+  Tend   = TEND       *1.e-3/tau_A;
 
-  mk.resize     (nres); ntor.resize   (nres); rk.resize      (nres);
-  qk.resize     (nres); rhok.resize   (nres); a.resize       (nres);
-  Sk.resize     (nres); wk.resize     (nres); taumk.resize   (nres);
-  tautk.resize  (nres); fack.resize   (nres); delk.resize    (nres);
-  wkl.resize    (nres); wke.resize    (nres); dnedrk.resize  (nres);
-  dTedrk.resize (nres); Wcrnek.resize (nres); WcrTek.resize  (nres);
-  akk.resize    (nres); gk.resize     (nres); dPsiNdr.resize (nres);
-  PsiN.resize   (nres); wkn.resize    (nres);
+  mk.resize      (nres); ntor.resize   (nres); rk.resize      (nres);
+  qk.resize      (nres); rhok.resize   (nres); a.resize       (nres);
+  Sk.resize      (nres); wk.resize     (nres); taumk.resize   (nres);
+  tautk.resize   (nres); fack.resize   (nres); delk.resize    (nres);
+  wkl.resize     (nres); wke.resize    (nres); dnedrk.resize  (nres);
+  dTedrk.resize  (nres); Wcrnek.resize (nres); WcrTek.resize  (nres);
+  akk.resize     (nres); gk.resize     (nres); dPsiNdr.resize (nres);
+  PsiN.resize    (nres); wkn.resize    (nres); Deltakp.resize (nres);
+  Deltakm.resize (nres);
 
   for (int j = 0; j < nres; j++)
     if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
@@ -487,9 +487,17 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fclose (file);
 
   for (int j = 0; j < nres; j++)
-    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e A2 = %10.3e A3 = %10.3e\n",
-	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j), A2 (j), A3 (j));
+    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e\n",
+	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j));
 
+  Deltakm (0) = PsiN (0);
+  for (int j = 1; j < nres; j++)
+    Deltakm (j) = PsiN (j) - PsiN (j-1);
+
+  for (int j = 0; j < nres-1; j++)
+    Deltakp (j) = PsiN (j+1) - PsiN (j);
+  Deltakp (nres-1) = 1. - PsiN (nres-1);
+  
   // ......................................
   // Interpolate uFiles, mFiles, and lFiles
   // ......................................
@@ -721,6 +729,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
       }
   fclose (file);
+  if (fabs (QIN[0] - qk(0)) > 1.e-15)
+    {
+      printf ("PHASE:: Error - minimum resonant q values do not match in nFile and uFile\n");
+      exit (1);
+    }
 
   if (MID != 0)
     {
@@ -778,6 +791,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
+      if (fabs (QIN[0] - qk(0)) > 1.e-15)
+	{
+	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and mFile\n");
+	  exit (1);
+	}
     }
 
   printf ("Lower coil:\n");
@@ -828,14 +846,17 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
 	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiL, i));
 	double WUNRE = 4. * sqrt (A1 (i) * Psi);
-	//4. * fack (i) * sqrt (Psi) * dPsiNdr(i);
-	//double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
-	double WFULL = 4. * fack (i) * sqrt (Psi) * dPsiNdr(i);
+	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
 	printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
 		QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
       }
   fclose (file);
+  if (fabs (QIN[0] - qk(0)) > 1.e-15)
+    {
+      printf ("PHASE:: Error - minimum resonant q values do not match in nFile and lFile\n");
+      exit (1);
+    }
 
   file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/q.txt");
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TSTART);
@@ -1083,7 +1104,7 @@ void Phase::Initialize ()
 
       for (int j = _nres; j < nres; j++)
 	{
-	  for (int i = 0.; i < NFLOW; i++)
+	  for (int i = 0; i < NFLOW; i++)
 	    {
 	      alphakp (j, i) = 0.;
 	      betakp  (j, i) = 0.;
@@ -1140,13 +1161,7 @@ void Phase::IslandDynamics ()
   Array<double,1> dydt (2*nres*(1+NFLOW));
   Array<double,1> wwo  (nres);
 
-  // Start time is lesser of Tstart, TT (0), and 0.
-  if (Tstart > TT (0))
-    t = Tstart;
-  else
-    t = TT (0);
-  if (t < 0.)
-    t  = 0.;
+  t = Tstart;
   h = h0;
   Pack (y);
  
@@ -1233,13 +1248,13 @@ void Phase::IslandDynamics ()
 	  // Output island widths in r
 	  fprintf (file3, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    fprintf (file3, "%16.9e ", GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j)) * R_0 /dPsiNdr (j));
+	    fprintf (file3, "%16.9e ", GetIslandWidth (j) * R_0 /dPsiNdr (j));
 	  fprintf (file3, "\n");
 
 	  // Output ratios of island widths to linear layer widths
 	  fprintf (file3a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
-	    fprintf (file3a, "%16.9e ", GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j)) * R_0 /dPsiNdr (j) /delk (j));
+	    fprintf (file3a, "%16.9e ", GetIslandWidth (j) * R_0 /dPsiNdr (j) /delk (j));
 	  fprintf (file3a, "\n");
 
 	  // Output modified natural frequencies
@@ -1286,60 +1301,13 @@ void Phase::IslandDynamics ()
 	  for (int j = 0; j < nres; j++)
 	    {
 	      // Calculate island width in PsiN
-	      double Wpk = GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j));
-
-	      // Limit island widths to prevent island overlap in PsiN
-	      if (j == 0)
-		{
-		  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-		  double Pplus  = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
-		    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-		  double dP;
-		  
-		  if (Pminus < Pplus)
-		    dP = Pminus;
-		  else
-		    dP = Pplus;
-		  
-		  if (Wpk/2. > dP)
-		    Wpk = 2.*dP;
-		}
-	      else if (j == nres-1)
-		{
-		  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-		  double Pplus  = 1. - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-		  double dP;
-		  
-		  if (Pminus < Pplus)
-		    dP = Pminus;
-		  else
-		    dP = Pplus;
-		  
-		  if (Wpk/2. > dP)
-		    Wpk = 2.*dP;
-		}
-	      else
-		{
-		  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j))
-		    - PsiN (j-1) - GetIslandOffset (A1 (j-1), A2 (j-1), A3 (j-1), Psik (j-1));
-		  double Pplus = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
-		    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-		  double dP;
-		  
-		  if (Pminus < Pplus)
-		    dP = Pminus;
-		  else
-		    dP = Pplus;
-		  
-		  if (Wpk/2. > dP)
-		    Wpk = 2.*dP;
-		}
+	      double Wpk = GetIslandWidth (j);
 
 	      // Calculate island width in r
 	      double Wrk = R_0 * Wpk /dPsiNdr (j);
 
 	      // Calculate vacuum island width in PsiN
-	      double Wvk = GetIslandWidth (A1 (j), A2 (j), A3 (j), chi (j));
+	      double Wvk = GetVacuumIslandWidth (j);
 
 	      // Calculate density and temperature flattening widths in r
 	      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
@@ -1368,7 +1336,7 @@ void Phase::IslandDynamics ()
 		       GetActualFrequency (j) /tau_A/1.e3,
 		       t*tau_A,
 		       (Wrk /R_0) /a (j),
-		       PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j)),
+		       PsiN (j),
 		       Wpk,
 		       Wvk,
 		       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
@@ -1387,8 +1355,7 @@ void Phase::IslandDynamics ()
 	  fflush (file17); fflush (file18); fflush (file3a); fflush (file4a); fflush (file19);
 	}
     }
-  // Simulation end time is lesser of TT (NCTRL-1) and Tend
-  while (t < TT (NCTRL-1) && t < Tend);
+  while (t < Tend);
 
   printf ("t(ms) = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, irmp, prmp /M_PI);
 
@@ -1411,60 +1378,13 @@ void Phase::IslandDynamics ()
   for (int j = 0; j < nres; j++)
     {
       // Calculate island width in PsiN
-      double Wpk = GetIslandWidth (A1 (j), A2 (j), A3 (j), Psik (j));
-
-      // Limit island widths to prevent island overlap in PsiN
-      if (j == 0)
-	{
-	  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-	  double Pplus  = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
-	    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-	  double dP;
-	  
-	  if (Pminus < Pplus)
-	    dP = Pminus;
-	  else
-	    dP = Pplus;
-	  
-	  if (Wpk/2. > dP)
-	    Wpk = 2.*dP;
-	}
-      else if (j == nres-1)
-	{
-	  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-	  double Pplus  = 1. - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));
-	  double dP;
-	  
-	  if (Pminus < Pplus)
-	    dP = Pminus;
-	  else
-	    dP = Pplus;
-	  
-	  if (Wpk/2. > dP)
-	    Wpk = 2.*dP;
-	}
-      else
-	{
-	  double Pminus = PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j))
-	    - PsiN (j-1) - GetIslandOffset (A1 (j-1), A2 (j-1), A3 (j-1), Psik (j-1));
-	  double Pplus = PsiN (j+1) + GetIslandOffset (A1 (j+1), A2 (j+1), A3 (j+1), Psik (j+1))
-	    - PsiN (j) - GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j));;
-	  double dP;
-	  
-	  if (Pminus < Pplus)
-	    dP = Pminus;
-	  else
-	    dP = Pplus;
-	  
-	  if (Wpk/2. > dP)
-	    Wpk = 2.*dP;
-	}
+      double Wpk = GetIslandWidth (j);
        
       // Calculate island width in r
       double Wrk = R_0 * Wpk /dPsiNdr (j);
 
       // Calculate vacuum island width in PsiN
-      double Wvk = GetIslandWidth (A1 (j), A2 (j), A3 (j), chi (j));
+      double Wvk = GetVacuumIslandWidth (j);
 
       // Calculate density and temperature flattening widths in r
       double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
@@ -1477,7 +1397,7 @@ void Phase::IslandDynamics ()
 	       GetActualFrequency (j) /tau_A/1.e3,
 	       TIME,
 	       (Wrk /R_0) /a (j),
-	       PsiN (j) + GetIslandOffset (A1 (j), A2 (j), A3 (j), Psik (j)),
+	       PsiN (j),
 	       Wpk,
 	       Wvk,
 	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
@@ -1494,7 +1414,7 @@ void Phase::IslandDynamics ()
       double Xminus, Xplus;
       for (int j = 0; j < nres; j++)
 	{
-	  GetIslandLimits (A1 (j), A2 (j), A3 (j), Psik (j) * cos (double (mk (j)) * theta - zeta (j)), Xminus, Xplus);
+	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * theta - zeta (j)), Xminus, Xplus);
 	  fprintf (filep, "%d %e %e %e\n", mk (j), theta/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
 	}
     }
@@ -1509,7 +1429,7 @@ void Phase::IslandDynamics ()
       double Xminus, Xplus;
       for (int j = 0; j < nres; j++)
 	{
-	  GetIslandLimits (A1 (j), A2 (j), A3 (j), Psik (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - zeta (j)), Xminus, Xplus);
+	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - zeta (j)), Xminus, Xplus);
 	  fprintf (fileq, "%d %e %e %e\n", mk (j), phi/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
 	}
     }

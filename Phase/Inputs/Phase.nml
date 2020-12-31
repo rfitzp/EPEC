@@ -1,6 +1,5 @@
 &PHASE_CONTROL
 	NFLOW  = 100   ! Number of flow harmonics
-	STAGE5 = 1     ! Flag for Stage5 calculation
 	INTF   = 0     ! Flag for fFile interpolation
 	INTN   = 0     ! Flag for nFile interpolation
 	INTU   = 0     ! Flag for uFile/mFile/lFile interpolation
@@ -8,10 +7,11 @@
 	FREQ   = 0     ! Flag for island width dependent natural frequency
 	LIN    = 0     ! Flag for purely linear calculation
 	MID    = 1     ! Flag for inclusion of mFiles
-	DT     = 1.e-5 ! Data recorded every DT seconds
-	TSTART = 0.    ! Simulation start time (ms)
-	TEND   = 1.e6  ! Simulation end time (ms)
 	SCALE  = 2.    ! GPEC scalefactor
 	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
+	STAGE5 = 1     ! Flag for Stage5 calculation
+	TSTART = 0.    ! Simulation start time (ms)
+	TEND   = 2.e3  ! Simulation end time (ms)
+	DT     = 0.01  ! Data recorded every DT ms
 &end
 

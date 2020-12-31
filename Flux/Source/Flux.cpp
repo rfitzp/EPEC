@@ -58,7 +58,7 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   ETA    = 1.e-8;
   DR     = 1.e-2;
  
-  // Read namelist file Inputs/Flux.in
+  // Read namelist file Inputs/Flux.nml
   NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &DR, &MMIN, &MMAX, &PSILIM, &TIME);
 
   // Override namelist values with command line options
@@ -121,12 +121,32 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
       printf ("FLUX::SetParameters: Error - PSILIM must lie between 0 and 1\n");
       exit (1);
     }
+  if (H0 <= 0.)
+    {
+      printf ("FLUX::SetParameters: Error - H0 must be positive\n");
+      exit (1);
+    }
+  if (ACC <= 0.)
+    {
+      printf ("FLUX::SetParameters: Error - ACC must be positive\n");
+      exit (1);
+    }
+  if (ETA <= 0.)
+    {
+      printf ("FLUX::SetParameters: Error - ETA must be positive\n");
+      exit (1);
+    }
+  if (DR <= 0.)
+    {
+      printf ("FLUX::SetParameters: Error - DR must be positive\n");
+      exit (1);
+    }
  
   // Output calculation parameters
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("Input Parameters (from Inputs/Flux.in and command line options):\n");
+  printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
 	  NPSI, NTHETA, NNC, PACK);
   printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d\n",
@@ -138,7 +158,7 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-  fprintf (namelist, "Input Parameters (from Inputs/Flux.in and command line options):\n");
+  fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
   fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
 	   NPSI, NTHETA, NNC, PACK);
   fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d\n",
@@ -151,7 +171,7 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-  fprintf (monitor, "Input Parameters (from Inputs/Flux.in and command line options):\n");
+  fprintf (monitor, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
   fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
 	   NPSI, NTHETA, NNC, PACK);
   fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d\n",
