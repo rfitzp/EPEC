@@ -9,7 +9,7 @@
 \usepackage{graphicx}
 \allowdisplaybreaks
 
-\title{\bf Rescaling of Plasma Equilibrium}
+\title{\bf Program {\sc RESCALE}}
 \date{\today}
 \author{Richard Fitzpatrick}
 
@@ -60,7 +60,7 @@ q_{\rm new} &= \frac{T_{\rm new}}{T_{\rm old}}\,q_{\rm old}.
 \section{Program {\sc RESCALE}}
 Let
 \begin{equation}
-{\mit\Psi} = \frac{\psi - \psi_{\rm axis}}{\psi_{\rm separatrix}-\psi_{\rm axis}}.
+{\mit\Psi}_N = \frac{\psi - \psi_{\rm axis}}{\psi_{\rm separatrix}-\psi_{\rm axis}}.
 \end{equation}
 
 Program {\sc RESCALE} first performs a type II rescaling such that 
@@ -69,8 +69,8 @@ a_2 = \left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)T
 \end{equation}
 where
 \begin{align}
-q_{95} &\equiv q({\mit\Psi}=0.95),\\[0.5ex]
-T_{95}&\equiv T({\mit\Psi}=0.95).
+q_{95} &\equiv q({\mit\Psi}_N=0.95),\\[0.5ex]
+T_{95}&\equiv T({\mit\Psi}_N=0.95).
 \end{align}
 It follows that
 \begin{align}
@@ -90,7 +90,7 @@ a_1 = \frac{T_{1\,{\rm old}}}{T_{1\,{\rm new}}},
 \end{equation}
 where 
 \begin{equation}
-T_{1}\equiv  T({\mit\Psi}=1).
+T_{1}\equiv  T({\mit\Psi}_N=1).
 \end{equation}
 It follows that 
 \begin{align}

@@ -183,6 +183,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       printf ("PHASE:: CHIR must be greater than unity\n");
       exit (1);
     }
+  if (FREQ < 0 || FREQ > 2)
+    {
+      printf ("PHASE:: Invalid FREQ value\n");
+      exit (1);
+    }
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -1300,7 +1305,7 @@ void Phase::IslandDynamics ()
 		}
 	    }
 	  
-	  fprintf (file6, "%16.9e %16.9e %16.9e %16.9ee %16.9e\n", t*tau_A, sumci*B_0*1.e4, sumsi*B_0*1.e4, sumco*B_0*1.e4, sumso*B_0*1.e4);
+	  fprintf (file6, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", t*tau_A, sumci*B_0*1.e4, sumsi*B_0*1.e4, sumco*B_0*1.e4, sumso*B_0*1.e4);
 
 	  fprintf (file9,  "%16.9e ", t*tau_A); fprintf (file10, "%16.9e ", t*tau_A); fprintf (file11, "%16.9e ", t*tau_A);
 	  fprintf (file12, "%16.9e ", t*tau_A); fprintf (file13, "%16.9e ", t*tau_A); fprintf (file14, "%16.9e ", t*tau_A);
@@ -1412,6 +1417,29 @@ void Phase::IslandDynamics ()
     }
   fclose (filew);
 
+  // Output Mirnov data
+  FILE* fileww = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/mirnov.txt");
+  double sumci = 0., sumsi = 0., sumco = 0., sumso = 0.;
+
+  for (int j = 0; j < nres; j++)
+    {
+      sumci += epsi (j) * EEh (j, j) * chi (j) * cos (sigi (j) + zeta (j));
+      sumsi += epsi (j) * EEh (j, j) * chi (j) * sin (sigi (j) + zeta (j));
+      sumco += epso (j) * EEh (j, j) * chi (j) * cos (sigo (j) + zeta (j));
+      sumso += epso (j) * EEh (j, j) * chi (j) * sin (sigo (j) + zeta (j));
+      
+      for (int k = 0; k < nres; k++)
+	{
+	  sumci += epsi (j) * EEh (j, k) * Psik (k) * cos (sigi (j) + phik (k) + xih (j, k));
+	  sumsi += epsi (j) * EEh (j, k) * Psik (k) * sin (sigi (j) + phik (k) + xih (j, k));
+	  sumco += epso (j) * EEh (j, k) * Psik (k) * cos (sigo (j) + phik (k) + xih (j, k));
+	  sumso += epso (j) * EEh (j, k) * Psik (k) * sin (sigo (j) + phik (k) + xih (j, k));
+	}
+    }
+  
+  fprintf (fileww, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", t*tau_A*1.e3, sumci*B_0*1.e4, sumsi*B_0*1.e4, sumco*B_0*1.e4, sumso*B_0*1.e4);
+  fclose (fileww);
+  
   // Output magnetic island chains versus theta
   FILE* filep = OpenFilew ((char*) "Outputs/Stage5/islandt.txt");
   int IMAX = 2000;
@@ -1613,7 +1641,14 @@ double Phase::GetNaturalFrequency (int j)
     }
   else
     {
-      if (FREQ)
+      if (FREQ == 2)
+	{
+	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
+	  double w2 = w*w;
+	  
+	  return (wkl (j) + wkn (j) * w2) /(1. + w2);
+	}
+      else if (FREQ == 1)
 	{
 	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
 	  double w2 = w*w;

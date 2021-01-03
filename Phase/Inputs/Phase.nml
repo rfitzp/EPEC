@@ -11,7 +11,7 @@
 	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
 	STAGE5 = 1     ! Flag for Stage5 calculation
 	TSTART = 0.    ! Simulation start time (ms)
-	TEND   = 2.e3  ! Simulation end time (ms)
+	TEND   = 1.e2  ! Simulation end time (ms)
 	DT     = 0.01  ! Data recorded every DT ms
 &end
 

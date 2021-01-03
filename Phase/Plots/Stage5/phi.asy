@@ -22,13 +22,13 @@ for (int i = 0; i < nres; i += 1)
 	s = blue;
     draw (graph (p, A[i+1]), s);
   }
-s = dotted + black + 1;
-yequals (0., s);
+
+ylimits (-1., 1., Crop);
 
 s = dotted + black + 1;
 yequals (0., s);
 
 pen qq = fontsize(25.);
 defaultpen (qq);
-xaxis("$t ({\rm s})$",BottomTop,LeftTicks);
-yaxis("$\varphi_k - \zeta_k$",LeftRight,RightTicks);
+xaxis("$t ({\rm ms})$",BottomTop,LeftTicks);
+yaxis("$(\varphi_k - \zeta_k)/\pi$",LeftRight,RightTicks);

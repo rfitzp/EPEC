@@ -54,7 +54,8 @@
 // 2.7  - Improved calculation of island widths
 // 2.8  - Replaced TIME by TSTART and TEND. Time now input in ms.
 // 2.9  - Renamed Namelist. Modified island width calculation.
-// 2.10 - Addced CHIR parameter
+// 2.10 - Added CHIR parameter
+// 2.11 - Added FREQ == 2 option
 
 // #######################################################################
 
@@ -62,7 +63,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 10
+#define VERSION_MINOR 11
 
 #include <stdio.h>
 #include <math.h>
@@ -111,7 +112,9 @@ class Phase
   int      INTN;   // If != 0 then use interpolated nFile
   int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
   int      OLD;    // If != 0 then initialize new calculation
-  int      FREQ;   // If != 0 then use island width dependent natural frequency
+  int      FREQ;   // If == 0 then use natural frequency from NEOCLASSICAL
+                   // If == 1 then use island width dependent natural frequency that iterpolates beteween electron, ExB, and ion frequecies
+                   // If == 2 then use island width dependent natural frequency that iterpolates beteween electron and ion frequecies
   int      LIN;    // If != 0 then perform purely linear calculation
   int      MID;    // If != 0 then include mFiles 
   double   SCALE;  // GPEC scalefactor
