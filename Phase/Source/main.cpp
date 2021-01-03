@@ -30,10 +30,10 @@ int main (int argc, char** argv)
   char* tvalue = NULL; char* svalue = NULL; char* fvalue = NULL; 
   char* nvalue = NULL; char* uvalue = NULL; char* ovalue = NULL;
   char* Fvalue = NULL; char* Svalue = NULL; char* lvalue = NULL;
-  char* mvalue = NULL; char* Tvalue = NULL;
+  char* mvalue = NULL; char* Tvalue = NULL; char* cvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:c:")) != -1)
     switch (c)
       {
       case 'f':
@@ -41,6 +41,7 @@ int main (int argc, char** argv)
  	break;
       case 'h':
  	printf ("Options:\n");
+	printf ("-c CHIR   - set maximum vacuum Chirkov parameter, CHIR\n");
 	printf ("-f INTF   - set interpolation flag INTF\n");
 	printf ("-h        - list options\n");
 	printf ("-l LIN    - set linear flag LIN\n");
@@ -84,8 +85,12 @@ int main (int argc, char** argv)
       case 'S':
 	Svalue = optarg;
  	break;
+      case 'c':
+	cvalue = optarg;
+ 	break;
       case '?':
-	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u' || optopt == 'F' || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T')
+	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u'
+	    || optopt == 'F' || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -98,8 +103,8 @@ int main (int argc, char** argv)
 
   int    _STAGE5 = -1;    int   _INTF = -1; int    _OLD    = -1;    int    _FREQ = -1;
   int    _INTN   = -1;    int   _INTU = -1; double _TSTART = -1.e6; float  __TSTART;
-  double _SCALE  = -1.e6; float __SCALE;    int    _LIN    = -1.;   int    _MID = -1;
-  double _TEND   = -1.e6; float __TEND;
+  double _SCALE  = -1.e6; float __SCALE;    int    _LIN    = -1.;   int    _MID  = -1;
+  double _TEND   = -1.e6; float __TEND;     double _CHIR   = -1.e6; float  __CHIR;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -120,24 +125,29 @@ int main (int argc, char** argv)
   if (tvalue != NULL)
     {
       __TSTART = atof (tvalue);
-      _TSTART = double (__TSTART);
+      _TSTART  = double (__TSTART);
     }
    if (Tvalue != NULL)
-    {
+     {
       __TEND = atof (Tvalue);
       _TEND  = double (__TEND);
-    }
+     }
    if (Svalue != NULL)
-    {
-      __SCALE = atof (Svalue);
-      _SCALE  = double (__SCALE);
-    }
+     {
+       __SCALE = atof (Svalue);
+       _SCALE  = double (__SCALE);
+     }
+   if (cvalue != NULL)
+     {
+      __CHIR = atof (cvalue);
+      _CHIR  = double (__CHIR);
+     }
     
   // ..................
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR);
 
   return 0;
 }

@@ -59,10 +59,10 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -89,7 +89,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -113,6 +113,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   TEND   = 1.e6;
   SCALE  = 2.;
   PMAX   = 4.;
+  CHIR   = 1.;
 
   // Read input data from namelists (Inputs/Phase.nml, Inputs/Waveform.nml)
   printf ("........................................................................................\n");
@@ -123,7 +124,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TSTART, &TEND, &SCALE, &PMAX, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -150,12 +151,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     TEND = _TEND;
   if (_SCALE > 0.)
     SCALE = _SCALE;
+  if (_CHIR > 0.)
+    CHIR = _CHIR;
   
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, NCTRL);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL);
 
   // ............
   // Sanity check
@@ -175,6 +178,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       printf ("PHASE:: TSTART must be less than TEND\n");
       exit (1);
     }
+  if (CHIR < 0.9999999)
+    {
+      printf ("PHASE:: CHIR must be greater than unity\n");
+      exit (1);
+    }
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -184,8 +192,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, NCTRL);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -193,8 +201,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e NCTRL = %4d\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, NCTRL);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL);
   fclose (monitor);
 
   // .................
@@ -1414,7 +1422,7 @@ void Phase::IslandDynamics ()
       double Xminus, Xplus;
       for (int j = 0; j < nres; j++)
 	{
-	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * theta - zeta (j)), Xminus, Xplus);
+	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * theta - phik (j)), 1., Xminus, Xplus);
 	  fprintf (filep, "%d %e %e %e\n", mk (j), theta/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
 	}
     }
@@ -1429,11 +1437,41 @@ void Phase::IslandDynamics ()
       double Xminus, Xplus;
       for (int j = 0; j < nres; j++)
 	{
-	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - zeta (j)), Xminus, Xplus);
+	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - phik (j)), 1., Xminus, Xplus);
 	  fprintf (fileq, "%d %e %e %e\n", mk (j), phi/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
 	}
     }
   fclose (fileq);
+
+  // Output vacuum magnetic island chains versus theta
+  FILE* filepv = OpenFilew ((char*) "Outputs/Stage5/islandtv.txt");
+  for (int i = 0; i < IMAX; i++)
+    {
+      double theta = 2.*M_PI * double (i) /double (IMAX - 1);
+
+      double Xminus, Xplus;
+      for (int j = 0; j < nres; j++)
+	{
+	  GetIslandLimits (j, chi (j) * cos (double (mk (j)) * theta - zeta (j)), CHIR, Xminus, Xplus);
+	  fprintf (filepv, "%d %e %e %e\n", mk (j), theta/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
+	}
+    }
+  fclose (filepv);
+
+  // Output vacuum magnetic island chains versus phi
+  FILE* fileqv = OpenFilew ((char*) "Outputs/Stage5/islandpv.txt");
+  for (int i = 0; i < IMAX; i++)
+    {
+      double phi = 2.*M_PI * double (i) /double (IMAX - 1);
+
+      double Xminus, Xplus;
+      for (int j = 0; j < nres; j++)
+	{
+	  GetIslandLimits (j, chi (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - zeta (j)), CHIR, Xminus, Xplus);
+	  fprintf (fileqv, "%d %e %e %e\n", mk (j), phi/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
+	}
+    }
+  fclose (fileqv);
 }
 
 // ###################################
@@ -1499,6 +1537,10 @@ void Phase::CalcChiZeta (double t)
     
       chi  (j) =   gsl_complex_abs (h) * irmp;
       zeta (j) = - gsl_complex_arg (h);
+
+      // Limit maximum Chirikov parameter for vacuum islands
+      double Wvac = GetVacuumIslandWidth (j);
+      chi (j)     = Wvac*Wvac /16. /A1 (j);
     }
 }
 

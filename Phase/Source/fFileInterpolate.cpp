@@ -16,6 +16,7 @@
 // ###############################
 void Phase::fFileInterp (vector<string> fFileName, vector<double> fFileTime, int fFileNumber, double time)
 {
+  printf ("***1\n");
   if (fFileNumber < 1)
     {
       printf ("NEOCLASSICAL::fFileInterp - fFileNumber must be greater than zero\n");
@@ -186,7 +187,7 @@ void Phase::fFileInterpolateLinear (char* fFile1, double time1, char* fFile, dou
 
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j), &u11_1(j), &u12_1(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL::fFileInterpolateLinear: Error reading fFile_1 (3)\n");
@@ -431,7 +432,7 @@ void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2,
  
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j), &u11_1(j), &u12_1(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL::fFileInterpolateQuadratic: Error reading fFile_1 (3)\n");
@@ -522,7 +523,7 @@ void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2,
     
   for (int j = 0; j < nres_2; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_2(j), &u1_2(j), &u2_2(j), &u3_2(j), &u4_2(j), &u5_2(j), &u6_2(j), &u7_2(j), &u8_2(j), &u9_2(j), &u10_2(j), &u11_2(j), &u12_2(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL::fFileInterpolateQuadratic: Error reading fFile_2 (3)\n");
@@ -801,7 +802,7 @@ void Phase::fFileInterpolateCubic (char* fFile1, double time1, char* fFile2, dou
   
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j), &u11_1(j), &u12_1(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateCubic: Error reading fFile_1 (3)\n");
@@ -892,7 +893,7 @@ void Phase::fFileInterpolateCubic (char* fFile1, double time1, char* fFile2, dou
   
   for (int j = 0; j < nres_2; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_2(j), &u1_2(j), &u2_2(j), &u3_2(j), &u4_2(j), &u5_2(j), &u6_2(j), &u7_2(j), &u8_2(j), &u9_2(j), &u10_2(j), &u11_2(j), &u12_2(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateCubic: Error reading fFile_2 (3)\n");
@@ -983,7 +984,7 @@ void Phase::fFileInterpolateCubic (char* fFile1, double time1, char* fFile2, dou
   
   for (int j = 0; j < nres_3; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_3(j), &u1_3(j), &u2_3(j), &u3_3(j), &u4_3(j), &u5_3(j), &u6_3(j), &u7_3(j), &u8_3(j), &u9_3(j), &u10_3(j), &u11_3(j), &u12_3(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateCubic: Error reading fFile_3 (3)\n");
@@ -1293,7 +1294,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &u1_1(j), &u2_1(j), &u3_1(j), &u4_1(j), &u5_1(j), &u6_1(j), &u7_1(j), &u8_1(j), &u9_1(j), &u10_1(j), &u11_1(j), &u12_1(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateQuartic: Error reading fFile_1 (3)\n");
@@ -1384,7 +1385,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   
   for (int j = 0; j < nres_2; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_2(j), &u1_2(j), &u2_2(j), &u3_2(j), &u4_2(j), &u5_2(j), &u6_2(j), &u7_2(j), &u8_2(j), &u9_2(j), &u10_2(j), &u11_2(j), &u12_2(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateQuartic: Error reading fFile_2 (3)\n");
@@ -1475,7 +1476,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   
   for (int j = 0; j < nres_3; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_3(j), &u1_3(j), &u2_3(j), &u3_3(j), &u4_3(j), &u5_3(j), &u6_3(j), &u7_3(j), &u8_3(j), &u9_3(j), &u10_3(j), &u11_3(j), &u12_3(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateQuartic: Error reading fFile_3 (3)\n");
@@ -1566,7 +1567,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   
   for (int j = 0; j < nres_4; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_4(j), &u1_4(j), &u2_4(j), &u3_4(j), &u4_4(j), &u5_4(j), &u6_4(j), &u7_4(j), &u8_4(j), &u9_4(j), &u10_4(j), &u11_4(j), &u12_4(j)) != 13)
 	{
 	  printf ("NEOCLASSICAL:fFileInterpolateQuartic: Error reading fFile_4 (3)\n");

@@ -2,7 +2,11 @@
 
 // ##################################################################################
 // Class to input gFile equilibrium data and output perturbed equilibrium data. 
-//
+
+// .................
+// Calculation grid:
+// .................
+
 // Radial grid in PsiN = 1. - Psi/Psi_axis (assuming Psi = 0 on boundary) is 
 //
 // PsiN_j = 1. - (1. - s)^PACK  for j = 0, NPSI-1
@@ -18,7 +22,10 @@
 // theta = 0 on inboard midplane.
 // theta > 0 above midplane.
 
+// .....................
 // Command line options:
+// .....................
+
 // -g INTG   - override INTG   value from namelist
 // -n NTOR   - override NTOR   value from namelist
 // -m MMIN   - override MMIN   value from namelist
@@ -26,6 +33,9 @@
 // -p PSILIM - override PSILIM value from namelist
 // -t TIME   - sets experimental time (ms)
 
+// ...................
+// Inputs and outputs:
+// ...................
 // Calculation control parameters in namelist file INPUTS/Flux.in
 
 // Equilibrium in Inputs/gFile
@@ -33,7 +43,10 @@
 // Final data in folder Outputs/Stage2/
 // Data passed to programs NEOCLASSICAL and PHASE output to Outputs/fFile
 
-// Version:
+// .........
+// Versions:
+// .........
+
 // 1.0 - Initial version
 // 1.2 - Improved gFile indexing
 // 1.3 - Major rearrangement of input and output files

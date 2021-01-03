@@ -5,7 +5,10 @@
 // phase velocities, and neoclassical resistivities, at rational 
 // surfaces in tokamak plasma.
 
+// .....................
 // Command line options:
+// .....................
+
 // -e INTF     - override INTF value from namelist file
 // -p INTP     - override INTP value from namelist file
 // -c INTC     - override INTC value from namelist file
@@ -18,10 +21,17 @@
 // -l LN       - override LN value from namelist file
 // -t TIME     - sets experimental time (ms)
 
+// ........
+// Outputs:
+// ........
+
 // Intermediate data in folder Outputs/Stage3
 // Final data passed to program PHASE in file Outputs/nFile
 
-// Version:
+// .........
+// Versions:
+// .........
+
 // 1.0  - Initial version
 // 1.1  - Improved indexing of pFiles and fFiles
 // 1.2  - Major rearrangement of input and output files

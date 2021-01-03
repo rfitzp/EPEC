@@ -9,7 +9,7 @@ double Phase::GetIslandWidth (int j)
 {
   double Xminus, Xplus;
 
-  GetIslandLimits (j, Psik (j), Xminus, Xplus);
+  GetIslandLimits (j, Psik (j), 1., Xminus, Xplus);
 
   return Xplus - Xminus;
 }
@@ -21,7 +21,7 @@ double Phase::GetVacuumIslandWidth (int j)
 {
   double Xminus, Xplus;
 
-  GetIslandLimits (j, chi (j), Xminus, Xplus);
+  GetIslandLimits (j, chi (j), CHIR, Xminus, Xplus);
 
   return Xplus - Xminus;
 }
@@ -29,10 +29,10 @@ double Phase::GetVacuumIslandWidth (int j)
 // ########################################################
 // Function to find limits in PsiN of magnetic island chain 
 // ########################################################
-void Phase::GetIslandLimits (int j, double Psi, double& Xminus, double& Xplus)
+void Phase::GetIslandLimits (int j, double Psi, double chir, double& Xminus, double& Xplus)
 {
-  double cplus  = 2. * A1 (j) * fabs (Psi) /Deltakp (j)/Deltakp (j);
-  double cminus = 2. * A1 (j) * fabs (Psi) /Deltakm (j)/Deltakm (j);
+  double cplus  = chir*chir * 2. * A1 (j) * fabs (Psi) /Deltakp (j)/Deltakp (j);
+  double cminus = chir*chir * 2. * A1 (j) * fabs (Psi) /Deltakm (j)/Deltakm (j);
   
   Xplus  = + Deltakp (j) * GetIslandRoot (cplus);
   Xminus = - Deltakm (j) * GetIslandRoot (cminus);

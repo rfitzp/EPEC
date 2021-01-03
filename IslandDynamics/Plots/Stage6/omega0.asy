@@ -1,6 +1,6 @@
 import graph;
      
-size (500, 500, IgnoreAspect);
+size (1000, 500, IgnoreAspect);
 
 file    in = input ("../../Outputs/Stage6/omega0.txt").line();
 real[][] A = in.dimension (0, 0);

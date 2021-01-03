@@ -4,10 +4,10 @@
 # to pwd
 
 CWD="$(pwd)"
-cd /Users/rfitzp/EPEC
+cd /Users/rfitzp/GitHub/EPEC-source
 tar  --dereference --exclude='*.eps' -c -v -z -f tarfile.tgz Flux/Inputs/* Flux/Outputs/* Flux/Plots/* Neoclassical/Inputs/* Neoclassical/Outputs/* Neoclassical/Plots/* 
 cd $CWD
-mv /Users/rfitzp/EPEC/tarfile.tgz .
+mv /Users/rfitzp/GitHub/EPEC-source/tarfile.tgz .
 tar xvfz tarfile.tgz
 rm tarfile.tgz
 

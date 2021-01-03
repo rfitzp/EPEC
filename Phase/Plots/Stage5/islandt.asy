@@ -112,79 +112,79 @@ pen s;
 
 if (t16.length > 0)
    {
-     s = palegreen + solid + 0.5;
+     s = palegreen + solid + 1.0;
      draw (graph (t16, wl16), s);
      draw (graph (t16, wu16), s);
    }
 if (t15.length > 0)
    {
-     s = grey + solid + 0.5;
+     s = grey + solid + 1.0;
      draw (graph (t15, wl15), s);
      draw (graph (t15, wu15), s);
     }	
 if (t14.length > 0)
    {
-     s = orange + solid + 0.5;
+     s = orange + solid + 1.0;
      draw (graph (t14, wl14), s);
      draw (graph (t14, wu14), s);
    }	
 if (t13.length > 0)
    {
-     s = purple + solid + 0.5;
+     s = purple + solid + 1.0;
      draw (graph (t13, wl13), s);
      draw (graph (t13, wu13), s);
    }
 if (t12.length > 0)
    {
-     s = pink + solid + 0.5;
+     s = pink + solid + 1.0;
      draw (graph (t12, wl12), s);
      draw (graph (t12, wu12), s);
   } 	
 if (t11.length > 0)
    {
-     s = brown + solid + 0.5;
+     s = brown + solid + 1.0;
      draw (graph (t11, wl11), s);
      draw (graph (t11, wu11), s);
    }	
 if (t10.length > 0)
    {
-     s = magenta + solid + 0.5;
+     s = magenta + solid + 1.0;
      draw (graph (t10, wl10), s);
      draw (graph (t10, wu10), s);
    }	
 if (t9.length > 0)
    {
-     s = cyan + solid + 0.5;
+     s = cyan + solid + 1.0;
      draw (graph (t9, wl9), s);
      draw (graph (t9, wu9), s);
    }
 if (t8.length > 0)
    {
-     s = yellow + solid + 0.5;
+     s = yellow + solid + 1.0;
      draw (graph (t8, wl8), s);
      draw (graph (t8, wu8), s);
    }
 if (t7.length > 0)
    {
-     s = blue + solid + 0.5;
+     s = blue + solid + 1.0;
      draw (graph (t7, wl7), s);
      draw (graph (t7, wu7), s);
    }
 if (t6.length > 0)
    {
-     s = green + solid + 0.5;
+     s = green + solid + 1.0;
      draw (graph (t6, wl6), s);
      draw (graph (t6, wu6), s);
    }
 if (t5.length > 0)
    {
-     s = red + solid + 0.5;
+     s = red + solid + 1.0;
      draw (graph (t5, wl5), s);
      draw (graph (t5, wu5), s);
    }
 if (t4.length > 0)
    {
-     s = black + solid + 0.5;
+     s = black + solid + 1.0;
      draw (graph (t4, wl4), s);
      draw (graph (t4, wu4), s);
    }

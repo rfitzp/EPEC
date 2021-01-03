@@ -5,7 +5,10 @@
 // with resonant magnetic perturbation in toroidal tokamak plasma.
 // Reads data from programs FLUX, NEOCLASSICAL, and GPEC.
 
+// .....................
 // Command line options:
+// .....................
+
 // -f INTF   - overrides INTF value from namelist file
 // -n INTN   - overrides INTN value from namelist file
 // -u INTU   - overrides INTU value from namelist file
@@ -16,34 +19,42 @@
 // -m MID    - overrides MID value from namelist file
 // -t TSTART - sets simulation start time (ms)
 // -T TEND   - sets simulation end time (ms)
+// -c CHIR   - sets maximum Chirikov parameter for vacuum islands
+
+// ............................
+// Major stages in calculation:
+// ............................
 
 // Stage 4 - Class reads FLUX/NEOCLASSICAL/GPEC data and plots error-field
 //           drive versus relative phases of RMP coil currents for 1kA currents
 
 // Stage 5 - Class performs island dynamics simulation
 
+// .........
 // Versions:
+// .........
 
-// 1.0 - Initial version
-// 1.1 - Improved indexing of fFiles, nFiles, uFiles, and lFiles
-// 1.2 - Major rearrangement of input and output files
-// 1.3 - Added PsiN and island width in PsiN to Stage6 output files
-// 1.4 - Added linear iterpolation
-// 1.5 - Added wnl
-// 1.6 - Redefined Sk. Corrected composite factor in Rutherford equation.
-// 1.7 - Added SCALE as input value
+// 1.0  - Initial version
+// 1.1  - Improved indexing of fFiles, nFiles, uFiles, and lFiles
+// 1.2  - Major rearrangement of input and output files
+// 1.3  - Added PsiN and island width in PsiN to Stage6 output files
+// 1.4  - Added linear iterpolation
+// 1.5  - Added wnl
+// 1.6  - Redefined Sk. Corrected composite factor in Rutherford equation.
+// 1.7  - Added SCALE as input value
 
-// 2.0 - Relaxed no-slip constraint
-// 2.1 - Redefined Sk. Corrected composite factor in Rutherford equation.
-// 2.2 - Added SCALE as input value
-// 2.3 - Separated waveform input data from main input data.
-//       Modified finite island-width natural frequency interpolation.
-// 2.4 - Added LIN flag
-// 2.5 - Added middle coil set
-// 2.6 - Limited island width to stop them extending beyond neighbouring rational surfaces
-// 2.7 - Improved calculation of island widths
-// 2.8 - Replaced TIME by TSTART and TEND
-// 2.9 - Renamed Namelist. Modified island width calculation.
+// 2.0  - Relaxed no-slip constraint
+// 2.1  - Redefined Sk. Corrected composite factor in Rutherford equation.
+// 2.2  - Added SCALE as input value
+// 2.3  - Separated waveform input data from main input data.
+//        Modified finite island-width natural frequency interpolation.
+// 2.4  - Added LIN flag
+// 2.5  - Added middle coil set
+// 2.6  - Limited island width to stop them extending beyond neighbouring rational surfaces
+// 2.7  - Improved calculation of island widths
+// 2.8  - Replaced TIME by TSTART and TEND. Time now input in ms.
+// 2.9  - Renamed Namelist. Modified island width calculation.
+// 2.10 - Addced CHIR parameter
 
 // #######################################################################
 
@@ -51,7 +62,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 9
+#define VERSION_MINOR 10
 
 #include <stdio.h>
 #include <math.h>
@@ -77,7 +88,7 @@ using namespace blitz;
 
 // Namelist funtion
 extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TSTART, double* TEND,
-			      double* SCALE, double* PMAX, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* SCALE, double* PMAX, double* CHIR, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -105,6 +116,7 @@ class Phase
   int      MID;    // If != 0 then include mFiles 
   double   SCALE;  // GPEC scalefactor
   double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
+  double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
   
   int      NCTRL;  // Number of control points
   double*  TCTRL;  // Control times (s)
@@ -252,7 +264,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR);        
 
   // -----------------------
   // Private class functions
@@ -260,7 +272,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors
@@ -338,10 +350,10 @@ class Phase
 
   // Find width in PsiN of magnetic island chain
   double GetIslandWidth (int j);
-  // Find offset in PsiN of vacuum magnetic island chain
+  // Find width in PsiN of vacuum magnetic island chain
   double GetVacuumIslandWidth (int j);
   // Find limits of magnetic island chains in PsiN
-  void GetIslandLimits (int j, double Psi, double& Xminus, double& Xplus);
+  void GetIslandLimits (int j, double Psi, double chir, double& Xminus, double& Xplus);
   // Solve island width equation
   double GetIslandRoot (double c);
 

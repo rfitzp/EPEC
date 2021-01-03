@@ -43,4 +43,6 @@
 	
 	islandt.asy  ... plots magnetic islands in PsiN-theta plane
 	islandp.asy  ... plots magnetic islands in PsiN-phi plane (on outboard midplane)
+	islandtv.asy ... plots vacuum magnetic islands in PsiN-theta plane
+	islandpv.asy ... plots vacuum magnetic islands in PsiN-phi plane (on outboard midplane)
 

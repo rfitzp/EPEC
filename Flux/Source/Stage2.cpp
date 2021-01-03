@@ -730,8 +730,8 @@ void Flux::Stage2FindRational ()
 
   printf ("Rational surface data:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  (A1/A1 = %11.4e)\n",
-	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i]);
+    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  residual = %11.4e\n",
+	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], 1. - (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i]);
    
   // .....................................
   // Confirm q values at rational surfaces
