@@ -16,9 +16,13 @@ draw(graph(psi,q),s);
 s = dotted + black + 1;
 yequals (0.,s);
 
+s = dotted + black + 2;
+
+xequals (0.945, s);
+
 xlimits (0.,1.0,Crop);
 
 pen qq = fontsize(25.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
-yaxis("$\omega_\phi ({\rm krad/s})$",LeftRight,RightTicks);
+yaxis("$\omega_{\phi\,I} ({\rm krad/s})$",LeftRight,RightTicks);

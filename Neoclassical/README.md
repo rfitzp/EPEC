@@ -27,7 +27,7 @@
 	 
 ### /Inputs
 
-- Neoclassical.in: Fortran_90 namelist control file
+- Neoclassical.nml: Fortran_90 namelist control file
 - fFile: Data from PHASE
 - /fFiles: Contains fFiles for interpolation
   - Index: List of fFile names and experimental times

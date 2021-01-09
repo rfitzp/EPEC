@@ -31,8 +31,8 @@
 	 
 ### /Inputs
 
-- Phase.in: Fortran_90 namelist control file
-- Waveform.in: Fortran_90 namelist file specifing RMP coil current waveform
+- Phase.nml: Fortran_90 namelist control file
+- Waveform.nml: Fortran_90 namelist file specifing RMP coil current waveform
 - fFile: Data from FLUX
 - /fFiles: Contains fFiles for interpolation
   - Index: List of fFile names and experimental times

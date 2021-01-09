@@ -32,7 +32,7 @@
 	 
 ### /Inputs
 
-- Flux.in: Fortran_90 namelist control file
+- Flux.nml: Fortran_90 namelist control file
 - gFile: Equilibrium gFile
 - /gFiles: Contains equilibrium gFiles for interpolation
   - Index: List of gFile names and experimental times

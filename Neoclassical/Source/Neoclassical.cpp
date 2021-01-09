@@ -1077,8 +1077,8 @@ void Neoclassical::Get_Frequencies ()
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/omega.txt");
   for (int j = 0; j < nres; j++)
     fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk(j), w_actual (j) /1.e3, wEk(j) /1.e3, w_E_Ik(j) /1.e3,
-	     wtk(j) /1.e3, w_ast_Ik(j) /1.e3, Kthek(j) * w_nc_Ik(j) /1.e3);
+	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk (j), w_actual (j) /1.e3, wEk (j) /1.e3, w_E_Ik (j) /1.e3,
+	     wtk (j) /1.e3, w_ast_Ik (j) /1.e3, Kthek (j) * w_nc_Ik (j) /1.e3);
   fclose (file);
 }
 

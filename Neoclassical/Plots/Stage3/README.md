@@ -45,6 +45,7 @@
 	wt.asy      ... plots components of toroidal impurity ion frequencies at rational surfaces versus PsiN
 
 	nt.asy      ... plots ne, Te, Ti, nI, nn versus PsiN
+	wet.asy     ... plots components of w_E_I at rational surfaces versus PsiN
 	wtorf.asy   ... plots w_tor(PsiN)
 	chif.asy    ... plots chi_perp energy/momentum/particles versus PsiN
 

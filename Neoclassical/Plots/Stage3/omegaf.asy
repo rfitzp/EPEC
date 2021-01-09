@@ -11,17 +11,23 @@ real[] wlin = A[1];
 real[] wnl  = A[2];
 real[] wEB  = A[3];
 
-pen s = red + dotted + 1.5;	
-draw(graph(r,wlin),s,marker(scale(1.5mm)*polygon(4)));
-s = blue + dotted + 1.5;	
-draw(graph(r,wnl),s,marker(scale(1.5mm)*polygon(4)));
-s = black + dotted + 1.5;	
-draw(graph(r,wEB),s,marker(scale(1.5mm)*polygon(4)));
+pen s = red + solid + 1.5;	
+draw(graph(r,wlin),s,marker(scale(2.0mm)*polygon(4)));
+s = blue + solid + 1.5;	
+draw(graph(r,wnl),s,marker(scale(2.0mm)*polygon(4)));
+s = black + solid + 1.5;	
+draw(graph(r,wEB),s,marker(scale(2.0mm)*polygon(4)));
 
-xlimits (0.5,1.0,Crop);
+xlimits (0.85,1.0,Crop);
+ylimits (-150, 550,Crop);
 
 s = dotted + black + 1;
 yequals (0., s);
+
+s = dotted + black + 2;
+
+xequals (0.945, s);
+
 
 pen qq = fontsize(25.);
 defaultpen (qq);

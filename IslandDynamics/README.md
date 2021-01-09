@@ -24,8 +24,8 @@
 	 
 ### /Inputs
 
-- Island.in: Fortran_90 namelist file
-- Waveform.in: Fortran_90 namelist file specifying RMP coil current waveform
+- Island.nml: Fortran_90 namelist file
+- Waveform.nml: Fortran_90 namelist file specifying RMP coil current waveform
 	  
 ### /Outputs
 

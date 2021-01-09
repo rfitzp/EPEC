@@ -1644,16 +1644,15 @@ double Phase::GetNaturalFrequency (int j)
       if (FREQ == 2)
 	{
 	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
-	  double w2 = w*w;
 	  
-	  return (wkl (j) + wkn (j) * w2) /(1. + w2);
+	  return (wkl (j) + wkn (j) * w) /(1. + w);
 	}
       else if (FREQ == 1)
 	{
 	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
 	  double w2 = w*w;
 	  
-	  return (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w2 + wkn (j) * w2*w2) /(1. - w2 + w2*w2);
+	  return (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w + wkn (j) * w2) /(1. - w + w2);
 	}
       else
 	return wk (j);
