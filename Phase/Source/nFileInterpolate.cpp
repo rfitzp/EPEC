@@ -121,25 +121,25 @@ void Phase::nFileInterp (vector<string> nFileName, vector<double> nFileTime, int
 void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, double time)
 {
   int             nres_1;
-  double          taua_1;
+  double          taua_1, P0_1;
   Array<int, 1>   mres_1, ntor_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1;
   Array<double,1> u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1, u18_1, u19_1;
-  Array<double,1> u20_1, u21_1;
+  Array<double,1> u20_1, u21_1, u22_1, u23_1, u24_1, u25_1, u26_1, u27_1;
 
   int             nres_0;
-  double          taua_0;
+  double          taua_0, P0_0;
   Array<int, 1>   mres_0, ntor_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0;
   Array<double,1> u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0, u18_0, u19_0;
-  Array<double,1> u20_0, u21_0;
+  Array<double,1> u20_0, u21_0, u22_0, u23_0, u24_0, u25_0, u26_0, u27_0;
  
   // ................
   // Read first nFile
   // ................
   FILE* file = OpenFiler (nFile1);
  
-  if (fscanf (file, "%d %lf", &nres_1, &taua_1) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_1, &taua_1, &P0_1) != 3)
     {
       printf ("PHASE::nFileInterpolateLinear:Error reading nFile_1 (1)\n");
       exit (1);
@@ -168,15 +168,22 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
   u19_1.resize  (nres_1);
   u20_1.resize  (nres_1);
   u21_1.resize  (nres_1);
+  u22_1.resize  (nres_1);
+  u23_1.resize  (nres_1);
+  u24_1.resize  (nres_1);
+  u25_1.resize  (nres_1);
+  u26_1.resize  (nres_1);
+  u27_1.resize  (nres_1);
   
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &ntor_1(j),
 		  &u1_1 (j), &u2_1 (j), &u3_1 (j), &u4_1 (j), &u5_1 (j),
 		  &u6_1 (j), &u7_1 (j), &u8_1 (j), &u9_1 (j), &u10_1(j),
 		  &u11_1(j), &u12_1(j), &u13_1(j), &u14_1(j), &u15_1(j),
-		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j)) != 23)
+		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j),
+		  &u22_1(j), &u23_1(j), &u25_1(j), &u25_1(j), &u26_1(j), &u27_1(j)) != 29)
 	{
 	  printf ("NEOCLASSICAL: Error reading nFile_1 (2)\n");
 	  exit (1);
@@ -213,7 +220,13 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
   u19_0.resize  (nres_0);
   u20_0.resize  (nres_0);
   u21_0.resize  (nres_0);
-
+  u22_0.resize  (nres_0);
+  u23_0.resize  (nres_0);
+  u24_0.resize  (nres_0);
+  u25_0.resize  (nres_0);
+  u26_0.resize  (nres_0);
+  u27_0.resize  (nres_0);
+  
   for (int i = 0; i < nres_0; i++)
     { 
       mres_0(i) = mres_1(i);
@@ -223,6 +236,7 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
   double weight1 = 1.;
 
   taua_0 = taua_1;
+  P0_0   = P0_1;
 
   for (int j = 0; j < nres_0; j++)
     {
@@ -246,7 +260,13 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
       u18_0(j) = u18_1(j); 
       u19_0(j) = u19_1(j);
       u20_0(j) = u20_1(j); 
-      u21_0(j) = u21_1(j); 
+      u21_0(j) = u21_1(j);
+      u22_0(j) = u22_1(j); 
+      u23_0(j) = u23_1(j); 
+      u24_0(j) = u24_1(j); 
+      u25_0(j) = u25_1(j);
+      u26_0(j) = u26_1(j); 
+      u27_0(j) = u27_1(j); 
     }
   
   // ........................
@@ -254,13 +274,14 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
   // ........................
   file = OpenFilew (nFile);
 
-  fprintf (file, "%3d %16.9e\n", nres_0, taua_0);
+  fprintf (file, "%3d %16.9e %16.9e\n", nres_0, taua_0, P0_0);
  
   for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mres_0(j), ntor_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j),
-	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j));
-
+	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j),
+	     u22_0(j), u23_0(j), u24_0(j), u25_0(j), u26_0(j), u27_0(j));
+  
   fclose (file);
   
   printf ("nFile Interpolation:\n");
@@ -274,32 +295,32 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
 void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2, double time2, char* nFile, double time)
 {
   int             nres_1;
-  double          taua_1;
+  double          taua_1, P0_1;
   Array<int, 1>   mres_1, ntor_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1;
   Array<double,1> u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1, u18_1, u19_1;
-  Array<double,1> u20_1, u21_1;
+  Array<double,1> u20_1, u21_1, u22_1, u23_1, u24_1, u25_1, u26_1, u27_1;
 
   int             nres_2;
-  double          taua_2;
+  double          taua_2, P0_2;
   Array<int, 1>   mres_2, ntor_2;
   Array<double,1> u1_2, u2_2, u3_2, u4_2, u5_2, u6_2, u7_2, u8_2, u9_2, u10_2;
   Array<double,1> u11_2, u12_2, u13_2, u14_2, u15_2, u16_2, u17_2, u18_2, u19_2;
-  Array<double,1> u20_2, u21_2;
+  Array<double,1> u20_2, u21_2, u22_2, u23_2, u24_2, u25_2, u26_2, u27_2;
 
   int             nres_0;
-  double          taua_0;
+  double          taua_0, P0_0;
   Array<int, 1>   mres_0, ntor_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0;
   Array<double,1> u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0, u18_0, u19_0;
-  Array<double,1> u20_0, u21_0;
+  Array<double,1> u20_0, u21_0, u22_0, u23_0, u24_0, u25_0, u26_0, u27_0;
  
   // ................
   // Read first nFile
   // ................
   FILE* file = OpenFiler (nFile1);
  
-  if (fscanf (file, "%d %lf", &nres_1, &taua_1) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_1, &taua_1, &P0_1) != 3)
     {
       printf ("PHASE::nFileInterpolateQuadratic:Error reading nFile_1 (1)\n");
       exit (1);
@@ -328,16 +349,23 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
   u19_1.resize  (nres_1);
   u20_1.resize  (nres_1);
   u21_1.resize  (nres_1);
+  u22_1.resize  (nres_1);
+  u23_1.resize  (nres_1);
+  u24_1.resize  (nres_1);
+  u25_1.resize  (nres_1);
+  u26_1.resize  (nres_1);
+  u27_1.resize  (nres_1);
   
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &ntor_1(j),
 		  &u1_1 (j), &u2_1 (j), &u3_1 (j), &u4_1 (j), &u5_1 (j),
 		  &u6_1 (j), &u7_1 (j), &u8_1 (j), &u9_1 (j), &u10_1(j),
 		  &u11_1(j), &u12_1(j), &u13_1(j), &u14_1(j), &u15_1(j),
-		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j)) != 23)
-	{
+		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j),
+		  &u22_1(j), &u23_1(j), &u25_1(j), &u25_1(j), &u26_1(j), &u27_1(j)) != 29)
+   	{
 	  printf ("NEOCLASSICAL: Error reading nFile_1 (2)\n");
 	  exit (1);
 	}
@@ -350,7 +378,7 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
   // .................
   file = OpenFiler (nFile2);
   
-  if (fscanf (file, "%d %lf", &nres_2, &taua_2) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_2, &taua_2, &P0_2) != 2)
     {
       printf ("PHASE::nFileInterpolateQuadratic:Error reading nFile_2 (1)\n");
       exit (1);
@@ -379,16 +407,23 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
   u19_2.resize  (nres_2);
   u20_2.resize  (nres_2);
   u21_2.resize  (nres_2);
+  u22_2.resize  (nres_2);
+  u23_2.resize  (nres_2);
+  u24_2.resize  (nres_2);
+  u25_2.resize  (nres_2);
+  u26_2.resize  (nres_2);
+  u27_2.resize  (nres_2);
   
   for (int j = 0; j < nres_2; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_2(j), &ntor_2(j),
 		  &u1_2 (j), &u2_2 (j), &u3_2 (j), &u4_2 (j), &u5_2 (j),
 		  &u6_2 (j), &u7_2 (j), &u8_2 (j), &u9_2 (j), &u10_2(j),
 		  &u11_2(j), &u12_2(j), &u13_2(j), &u14_2(j), &u15_2(j),
-		  &u16_2(j), &u17_2(j), &u18_2(j), &u19_2(j), &u20_2(j), &u21_2(j)) != 23)
-	{
+		  &u16_2(j), &u17_2(j), &u18_2(j), &u19_2(j), &u20_2(j), &u21_2(j),
+		  &u22_2(j), &u23_2(j), &u25_2(j), &u25_2(j), &u26_2(j), &u27_2(j)) != 29)
+      {
 	  printf ("NEOCLASSICAL: Error reading nFile_2 (2)\n");
 	  exit (1);
 	}
@@ -427,7 +462,13 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
   u19_0.resize  (nres_0);
   u20_0.resize  (nres_0);
   u21_0.resize  (nres_0);
-
+  u22_0.resize  (nres_0);
+  u23_0.resize  (nres_0);
+  u24_0.resize  (nres_0);
+  u25_0.resize  (nres_0);
+  u26_0.resize  (nres_0);
+  u27_0.resize  (nres_0);
+  
   if (nres_0 == nres_1)
     {
       for (int i = 0; i < nres_0; i++)
@@ -449,6 +490,7 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
   double weight2 = (time - time1)  /(time2 - time1);
 
   taua_0 = weight1 * taua_1 + weight2 * taua_2;
+  P0_0   = weight1 * P0_1   + weight2 * P0_2;
 
   for (int j = 0; j < nres_0; j++)
     {
@@ -473,6 +515,12 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
       u19_0(j) = weight1 * u19_1(j) + weight2 * u19_2(j);
       u20_0(j) = weight1 * u20_1(j) + weight2 * u20_2(j);
       u21_0(j) = weight1 * u21_1(j) + weight2 * u21_2(j);
+      u22_0(j) = weight1 * u22_1(j) + weight2 * u22_2(j);
+      u23_0(j) = weight1 * u23_1(j) + weight2 * u23_2(j);
+      u24_0(j) = weight1 * u24_1(j) + weight2 * u24_2(j);
+      u25_0(j) = weight1 * u25_1(j) + weight2 * u25_2(j);
+      u26_0(j) = weight1 * u26_1(j) + weight2 * u26_2(j);
+      u27_0(j) = weight1 * u27_1(j) + weight2 * u27_2(j);
     }
   
   // ........................
@@ -480,13 +528,14 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
   // ........................
   file = OpenFilew (nFile);
 
-  fprintf (file, "%3d %16.9e\n", nres_0, taua_0);
+  fprintf (file, "%3d %16.9e %16.9e\n", nres_0, taua_0, P0_0);
  
   for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mres_0(j), ntor_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j),
-	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j));
-
+	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j),
+	     u22_0(j), u23_0(j), u24_0(j), u25_0(j), u26_0(j), u27_0(j));
+  
   fclose (file);
   
   printf ("nFile Interpolation:\n");
@@ -502,39 +551,39 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
 void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, double time2, char* nFile3, double time3, char* nFile, double time)
 {
   int             nres_1;
-  double          taua_1;
+  double          taua_1, P0_1;
   Array<int, 1>   mres_1, ntor_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1;
   Array<double,1> u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1, u18_1, u19_1;
-  Array<double,1> u20_1, u21_1;
+  Array<double,1> u20_1, u21_1, u22_1, u23_1, u24_1, u25_1, u26_1, u27_1;
 
   int             nres_2;
-  double          taua_2;
+  double          taua_2, P0_2;
   Array<int, 1>   mres_2, ntor_2;
   Array<double,1> u1_2, u2_2, u3_2, u4_2, u5_2, u6_2, u7_2, u8_2, u9_2, u10_2;
   Array<double,1> u11_2, u12_2, u13_2, u14_2, u15_2, u16_2, u17_2, u18_2, u19_2;
-  Array<double,1> u20_2, u21_2;
+  Array<double,1> u20_2, u21_2, u22_2, u23_2, u24_2, u25_2, u26_2, u27_2;
  
   int             nres_3;
-  double          taua_3;
+  double          taua_3, P0_3;
   Array<int, 1>   mres_3, ntor_3;
   Array<double,1> u1_3, u2_3, u3_3, u4_3, u5_3, u6_3, u7_3, u8_3, u9_3, u10_3;
   Array<double,1> u11_3, u12_3, u13_3, u14_3, u15_3, u16_3, u17_3, u18_3, u19_3;
-  Array<double,1> u20_3, u21_3;
+  Array<double,1> u20_3, u21_3, u22_3, u23_3, u24_3, u25_3, u26_3, u27_3;
  
   int             nres_0;
-  double          taua_0;
+  double          taua_0, P0_0;
   Array<int, 1>   mres_0, ntor_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0;
   Array<double,1> u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0, u18_0, u19_0;
-  Array<double,1> u20_0, u21_0;
+  Array<double,1> u20_0, u21_0, u22_0, u23_0, u24_0, u25_0, u26_0, u27_0;
  
   // ................
   // Read first nFile
   // ................
   FILE* file = OpenFiler (nFile1);
  
-  if (fscanf (file, "%d %lf", &nres_1, &taua_1) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_1, &taua_1, &P0_1) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_1 (1)\n");
       exit (1);
@@ -563,16 +612,23 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   u19_1.resize  (nres_1);
   u20_1.resize  (nres_1);
   u21_1.resize  (nres_1);
+  u22_1.resize  (nres_1);
+  u23_1.resize  (nres_1);
+  u24_1.resize  (nres_1);
+  u25_1.resize  (nres_1);
+  u26_1.resize  (nres_1);
+  u27_1.resize  (nres_1);
   
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &ntor_1(j),
 		  &u1_1 (j), &u2_1 (j), &u3_1 (j), &u4_1 (j), &u5_1 (j),
 		  &u6_1 (j), &u7_1 (j), &u8_1 (j), &u9_1 (j), &u10_1(j),
 		  &u11_1(j), &u12_1(j), &u13_1(j), &u14_1(j), &u15_1(j),
-		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j)) != 23)
-	{
+		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j),
+		  &u22_1(j), &u23_1(j), &u25_1(j), &u25_1(j), &u26_1(j), &u27_1(j)) != 29)
+     	{
 	  printf ("NEOCLASSICAL: Error reading nFile_1 (2)\n");
 	  exit (1);
 	}
@@ -585,7 +641,7 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   // .................
   file = OpenFiler (nFile2);
   
-  if (fscanf (file, "%d %lf", &nres_2, &taua_2) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_2, &taua_2, &P0_2) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_2 (1)\n");
       exit (1);
@@ -614,16 +670,23 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   u19_2.resize  (nres_2);
   u20_2.resize  (nres_2);
   u21_2.resize  (nres_2);
+  u22_2.resize  (nres_2);
+  u23_2.resize  (nres_2);
+  u24_2.resize  (nres_2);
+  u25_2.resize  (nres_2);
+  u26_2.resize  (nres_2);
+  u27_2.resize  (nres_2);
   
   for (int j = 0; j < nres_2; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_2(j), &ntor_2(j),
 		  &u1_2 (j), &u2_2 (j), &u3_2 (j), &u4_2 (j), &u5_2 (j),
 		  &u6_2 (j), &u7_2 (j), &u8_2 (j), &u9_2 (j), &u10_2(j),
 		  &u11_2(j), &u12_2(j), &u13_2(j), &u14_2(j), &u15_2(j),
-		  &u16_2(j), &u17_2(j), &u18_2(j), &u19_2(j), &u20_2(j), &u21_2(j)) != 23)
-	{
+		  &u16_2(j), &u17_2(j), &u18_2(j), &u19_2(j), &u20_2(j), &u21_2(j),
+		  &u22_2(j), &u23_2(j), &u25_2(j), &u25_2(j), &u26_2(j), &u27_2(j)) != 29)
+      {
 	  printf ("NEOCLASSICAL: Error reading nFile_2 (2)\n");
 	  exit (1);
 	}
@@ -636,7 +699,7 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   // ................
   file = OpenFiler (nFile3);
 
-  if (fscanf (file, "%d %lf", &nres_3, &taua_3) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_3, &taua_3, &P0_3) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_3 (1)\n");
       exit (1);
@@ -665,15 +728,28 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   u19_3.resize  (nres_3);
   u20_3.resize  (nres_3);
   u21_3.resize  (nres_3);
+  u22_3.resize  (nres_3);
+  u23_3.resize  (nres_3);
+  u24_3.resize  (nres_3);
+  u25_3.resize  (nres_3);
+  u26_3.resize  (nres_3);
+  u27_3.resize  (nres_3);
+  u22_3.resize  (nres_3);
+  u23_3.resize  (nres_3);
+  u24_3.resize  (nres_3);
+  u25_3.resize  (nres_3);
+  u26_3.resize  (nres_3);
+  u27_3.resize  (nres_3);
   
   for (int j = 0; j < nres_3; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_3(j), &ntor_3(j),
 		  &u1_3 (j), &u2_3 (j), &u3_3 (j), &u4_3 (j), &u5_3 (j),
 		  &u6_3 (j), &u7_3 (j), &u8_3 (j), &u9_3 (j), &u10_3(j),
 		  &u11_3(j), &u12_3(j), &u13_3(j), &u14_3(j), &u15_3(j),
-		  &u16_3(j), &u17_3(j), &u18_3(j), &u19_3(j), &u20_3(j), &u21_3(j)) != 23)
+		  &u16_3(j), &u17_3(j), &u18_3(j), &u19_3(j), &u20_3(j), &u21_3(j),
+		  &u22_3(j), &u23_3(j), &u25_3(j), &u25_3(j), &u26_3(j), &u27_3(j)) != 29)
 	{
 	  printf ("NEOCLASSICAL: Error reading nFile_3 (2)\n");
 	  exit (1);
@@ -726,7 +802,13 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   u19_0.resize  (nres_0);
   u20_0.resize  (nres_0);
   u21_0.resize  (nres_0);
-
+  u22_0.resize  (nres_0);
+  u23_0.resize  (nres_0);
+  u24_0.resize  (nres_0);
+  u25_0.resize  (nres_0);
+  u26_0.resize  (nres_0);
+  u27_0.resize  (nres_0);
+  
   if (nres_0 == nres_1)
     {
       for (int i = 0; i < nres_0; i++)
@@ -757,6 +839,7 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   double weight3 = (time - time1) * (time - time2) /(time3 - time1) /(time3 - time2);
 
   taua_0 = weight1 * taua_1 + weight2 * taua_2 + weight3 * taua_3;
+  P0_0   = weight1 * P0_1   + weight2 * P0_2   + weight3 * P0_3;
 
   for (int j = 0; j < nres_0; j++)
     {
@@ -781,6 +864,12 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
       u19_0(j) = weight1 * u19_1(j) + weight2 * u19_2(j) + weight3 * u19_3(j);
       u20_0(j) = weight1 * u20_1(j) + weight2 * u20_2(j) + weight3 * u20_3(j);
       u21_0(j) = weight1 * u21_1(j) + weight2 * u21_2(j) + weight3 * u21_3(j);
+      u22_0(j) = weight1 * u22_1(j) + weight2 * u22_2(j) + weight3 * u22_3(j);
+      u23_0(j) = weight1 * u23_1(j) + weight2 * u23_2(j) + weight3 * u23_3(j);
+      u24_0(j) = weight1 * u24_1(j) + weight2 * u24_2(j) + weight3 * u24_3(j);
+      u25_0(j) = weight1 * u25_1(j) + weight2 * u25_2(j) + weight3 * u25_3(j);
+      u26_0(j) = weight1 * u26_1(j) + weight2 * u26_2(j) + weight3 * u26_3(j);
+      u27_0(j) = weight1 * u27_1(j) + weight2 * u27_2(j) + weight3 * u27_3(j);
     }
   
   // ........................
@@ -788,13 +877,14 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   // ........................
   file = OpenFilew (nFile);
 
-  fprintf (file, "%3d %16.9e\n", nres_0, taua_0);
+  fprintf (file, "%3d %16.9e %16.9e\n", nres_0, taua_0, P0_0);
  
   for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mres_0(j), ntor_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j),
-	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j));
-
+	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j),
+	     u22_0(j), u23_0(j), u24_0(j), u25_0(j), u26_0(j), u27_0(j));
+  
   fclose (file);
   
   printf ("nFile Interpolation:\n");
@@ -813,46 +903,46 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
 				     char* nFile4, double time4, char* nFile, double time)
 {
   int             nres_1;
-  double          taua_1;
+  double          taua_1, P0_1;
   Array<int, 1>   mres_1, ntor_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1;
   Array<double,1> u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1, u18_1, u19_1;
-  Array<double,1> u20_1, u21_1;
+  Array<double,1> u20_1, u21_1, u22_1, u23_1, u24_1, u25_1, u26_1, u27_1;
 
   int             nres_2;
-  double          taua_2;
+  double          taua_2, P0_2;
   Array<int, 1>   mres_2, ntor_2;
   Array<double,1> u1_2, u2_2, u3_2, u4_2, u5_2, u6_2, u7_2, u8_2, u9_2, u10_2;
   Array<double,1> u11_2, u12_2, u13_2, u14_2, u15_2, u16_2, u17_2, u18_2, u19_2;
-  Array<double,1> u20_2, u21_2;
+  Array<double,1> u20_2, u21_2, u22_2, u23_2, u24_2, u25_2, u26_2, u27_2;
 
   int             nres_3;
-  double          taua_3;
+  double          taua_3, P0_3;
   Array<int, 1>   mres_3, ntor_3;
   Array<double,1> u1_3, u2_3, u3_3, u4_3, u5_3, u6_3, u7_3, u8_3, u9_3, u10_3;
   Array<double,1> u11_3, u12_3, u13_3, u14_3, u15_3, u16_3, u17_3, u18_3, u19_3;
-  Array<double,1> u20_3, u21_3;
+  Array<double,1> u20_3, u21_3, u22_3, u23_3, u24_3, u25_3, u26_3, u27_3;
 
   int             nres_4;
-  double          taua_4;
+  double          taua_4, P0_4;
   Array<int, 1>   mres_4, ntor_4;
   Array<double,1> u1_4, u2_4, u3_4, u4_4, u5_4, u6_4, u7_4, u8_4, u9_4, u10_4;
   Array<double,1> u11_4, u12_4, u13_4, u14_4, u15_4, u16_4, u17_4, u18_4, u19_4;
-  Array<double,1> u20_4, u21_4;
+  Array<double,1> u20_4, u21_4, u22_4, u23_4, u24_4, u25_4, u26_4, u27_4;
   
   int             nres_0;
-  double          taua_0;
+  double          taua_0, P0_0;
   Array<int, 1>   mres_0, ntor_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0;
   Array<double,1> u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0, u18_0, u19_0;
-  Array<double,1> u20_0, u21_0;
+  Array<double,1> u20_0, u21_0, u22_0, u23_0, u24_0, u25_0, u26_0, u27_0;
  
   // ................
   // Read first nFile
   // ................
   FILE* file = OpenFiler (nFile1);
  
-  if (fscanf (file, "%d %lf", &nres_1, &taua_1) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_1, &taua_1, &P0_1) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_1 (1)\n");
       exit (1);
@@ -881,15 +971,22 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   u19_1.resize  (nres_1);
   u20_1.resize  (nres_1);
   u21_1.resize  (nres_1);
+  u22_1.resize  (nres_1);
+  u23_1.resize  (nres_1);
+  u24_1.resize  (nres_1);
+  u25_1.resize  (nres_1);
+  u26_1.resize  (nres_1);
+  u27_1.resize  (nres_1);
   
   for (int j = 0; j < nres_1; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_1(j), &ntor_1(j),
 		  &u1_1 (j), &u2_1 (j), &u3_1 (j), &u4_1 (j), &u5_1 (j),
 		  &u6_1 (j), &u7_1 (j), &u8_1 (j), &u9_1 (j), &u10_1(j),
 		  &u11_1(j), &u12_1(j), &u13_1(j), &u14_1(j), &u15_1(j),
-		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j)) != 23)
+		  &u16_1(j), &u17_1(j), &u18_1(j), &u19_1(j), &u20_1(j), &u21_1(j),
+		  &u22_1(j), &u23_1(j), &u25_1(j), &u25_1(j), &u26_1(j), &u27_1(j)) != 29)
 	{
 	  printf ("NEOCLASSICAL: Error reading nFile_1 (2)\n");
 	  exit (1);
@@ -903,7 +1000,7 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   // .................
   file = OpenFiler (nFile2);
   
-  if (fscanf (file, "%d %lf", &nres_2, &taua_2) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_2, &taua_2, &P0_2) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_2 (1)\n");
       exit (1);
@@ -932,15 +1029,22 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   u19_2.resize  (nres_2);
   u20_2.resize  (nres_2);
   u21_2.resize  (nres_2);
+  u22_2.resize  (nres_2);
+  u23_2.resize  (nres_2);
+  u24_2.resize  (nres_2);
+  u25_2.resize  (nres_2);
+  u26_2.resize  (nres_2);
+  u27_2.resize  (nres_2);
   
   for (int j = 0; j < nres_2; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_2(j), &ntor_2(j),
 		  &u1_2 (j), &u2_2 (j), &u3_2 (j), &u4_2 (j), &u5_2 (j),
 		  &u6_2 (j), &u7_2 (j), &u8_2 (j), &u9_2 (j), &u10_2(j),
 		  &u11_2(j), &u12_2(j), &u13_2(j), &u14_2(j), &u15_2(j),
-		  &u16_2(j), &u17_2(j), &u18_2(j), &u19_2(j), &u20_2(j), &u21_2(j)) != 23)
+		  &u16_2(j), &u17_2(j), &u18_2(j), &u19_2(j), &u20_2(j), &u21_2(j),
+		  &u22_2(j), &u23_2(j), &u25_2(j), &u25_2(j), &u26_2(j), &u27_2(j)) != 29)
 	{
 	  printf ("NEOCLASSICAL: Error reading nFile_2 (2)\n");
 	  exit (1);
@@ -954,7 +1058,7 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   // ................
   file = OpenFiler (nFile3);
 
-  if (fscanf (file, "%d %lf", &nres_3, &taua_3) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_3, &taua_3, &P0_3) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_3 (1)\n");
       exit (1);
@@ -983,15 +1087,22 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   u19_3.resize  (nres_3);
   u20_3.resize  (nres_3);
   u21_3.resize  (nres_3);
+  u22_3.resize  (nres_3);
+  u23_3.resize  (nres_3);
+  u24_3.resize  (nres_3);
+  u25_3.resize  (nres_3);
+  u26_3.resize  (nres_3);
+  u27_3.resize  (nres_3);
   
   for (int j = 0; j < nres_3; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_3(j), &ntor_3(j),
 		  &u1_3 (j), &u2_3 (j), &u3_3 (j), &u4_3 (j), &u5_3 (j),
 		  &u6_3 (j), &u7_3 (j), &u8_3 (j), &u9_3 (j), &u10_3(j),
 		  &u11_3(j), &u12_3(j), &u13_3(j), &u14_3(j), &u15_3(j),
-		  &u16_3(j), &u17_3(j), &u18_3(j), &u19_3(j), &u20_3(j), &u21_3(j)) != 23)
+		  &u16_3(j), &u17_3(j), &u18_3(j), &u19_3(j), &u20_3(j), &u21_3(j),
+		  &u22_3(j), &u23_3(j), &u25_3(j), &u25_3(j), &u26_3(j), &u27_3(j)) != 29)
 	{
 	  printf ("NEOCLASSICAL: Error reading nFile_3 (2)\n");
 	  exit (1);
@@ -1005,7 +1116,7 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   // .................
   file = OpenFiler (nFile4);
 
-  if (fscanf (file, "%d %lf", &nres_4, &taua_4) != 2)
+  if (fscanf (file, "%d %lf %lf", &nres_4, &taua_4, &P0_4) != 3)
     {
       printf ("PHASE::nFileInterpolateCubic:Error reading nFile_4 (1)\n");
       exit (1);
@@ -1034,16 +1145,23 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   u19_4.resize  (nres_4);
   u20_4.resize  (nres_4);
   u21_4.resize  (nres_4);
+  u22_4.resize  (nres_4);
+  u23_4.resize  (nres_4);
+  u24_4.resize  (nres_4);
+  u25_4.resize  (nres_4);
+  u26_4.resize  (nres_4);
+  u27_4.resize  (nres_4);
   
   for (int j = 0; j < nres_4; j++)
     {
-      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mres_4(j), &ntor_4(j),
 		  &u1_4 (j), &u2_4 (j), &u3_4 (j), &u4_4 (j), &u5_4 (j),
 		  &u6_4 (j), &u7_4 (j), &u8_4 (j), &u9_4 (j), &u10_4(j),
 		  &u11_4(j), &u12_4(j), &u13_4(j), &u14_4(j), &u15_4(j),
-		  &u16_4(j), &u17_4(j), &u18_4(j), &u19_4(j), &u20_4(j), &u21_4(j)) != 23)
-	{
+		  &u16_4(j), &u17_4(j), &u18_4(j), &u19_4(j), &u20_4(j), &u21_4(j),
+		  &u22_4(j), &u23_4(j), &u25_4(j), &u25_4(j), &u26_4(j), &u27_4(j)) != 29)
+    	{
 	  printf ("NEOCLASSICAL: Error reading nFile_4 (2)\n");
 	  exit (1);
 	}
@@ -1102,7 +1220,13 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   u19_0.resize  (nres_0);
   u20_0.resize  (nres_0);
   u21_0.resize  (nres_0);
-
+  u22_0.resize  (nres_0);
+  u23_0.resize  (nres_0);
+  u24_0.resize  (nres_0);
+  u25_0.resize  (nres_0);
+  u26_0.resize  (nres_0);
+  u27_0.resize  (nres_0);
+  
   if (nres_0 == nres_1)
     {
       for (int i = 0; i < nres_0; i++)
@@ -1142,6 +1266,7 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   double weight4 = (time - time1) * (time - time2) * (time - time3) /(time4 - time1) /(time4 - time2) /(time4 - time3);
 
   taua_0 = weight1 * taua_1 + weight2 * taua_2 + weight3 * taua_3 + weight4 * taua_4;
+  P0_0   = weight1 * P0_1   + weight2 * P0_2   + weight3 * P0_3   + weight4 * P0_4;
 
   for (int j = 0; j < nres_0; j++)
     {
@@ -1166,6 +1291,12 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
       u19_0(j) = weight1 * u19_1(j) + weight2 * u19_2(j) + weight3 * u19_3(j) + weight4 * u19_4(j);
       u20_0(j) = weight1 * u20_1(j) + weight2 * u20_2(j) + weight3 * u20_3(j) + weight4 * u20_4(j);
       u21_0(j) = weight1 * u21_1(j) + weight2 * u21_2(j) + weight3 * u21_3(j) + weight4 * u21_4(j);
+      u22_0(j) = weight1 * u22_1(j) + weight2 * u22_2(j) + weight3 * u22_3(j) + weight4 * u22_4(j);
+      u23_0(j) = weight1 * u23_1(j) + weight2 * u23_2(j) + weight3 * u23_3(j) + weight4 * u23_4(j);
+      u24_0(j) = weight1 * u24_1(j) + weight2 * u24_2(j) + weight3 * u24_3(j) + weight4 * u24_4(j);
+      u25_0(j) = weight1 * u25_1(j) + weight2 * u25_2(j) + weight3 * u25_3(j) + weight4 * u25_4(j);
+      u26_0(j) = weight1 * u26_1(j) + weight2 * u26_2(j) + weight3 * u26_3(j) + weight4 * u26_4(j);
+      u27_0(j) = weight1 * u27_1(j) + weight2 * u27_2(j) + weight3 * u27_3(j) + weight4 * u27_4(j);
     }
   
   // ........................
@@ -1173,13 +1304,14 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   // ........................
   file = OpenFilew (nFile);
 
-  fprintf (file, "%3d %16.9e\n", nres_0, taua_0);
+  fprintf (file, "%3d %16.9e %16.9e\n", nres_0, taua_0, P0_0);
  
   for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mres_0(j), ntor_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j),
-	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j));
-
+	     u11_0(j), u12_0(j), u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j),
+	     u22_0(j), u23_0(j), u24_0(j), u25_0(j), u26_0(j), u27_0(j));
+  
   fclose (file);
   
   printf ("nFile Interpolation:\n");

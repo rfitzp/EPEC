@@ -152,7 +152,7 @@ if (q4.length > 0)
    }
 
 s = dotted + black + 1;
-ylimits (-50., 50., Crop);
+//ylimits (-50., 50., Crop);
 yequals (0., s);
 
 pen qq = fontsize (25.);

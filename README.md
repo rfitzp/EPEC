@@ -28,5 +28,11 @@
 
  ### /ISLANDDYNAMICS 
     Program to perform island dynamics simulation in time-varying equilibrium by calling FLUX, NEOCLASSICAL, and PHASE
+	
+ ### /FFILEGENERATE
+    Program to generate series of interpolated fFiles and nFiles perform by calling FLUX and NEOCLASSICAL	
+
+ ### /WINDOWFIND
+    Program to find RMP-induced ELM suppression windows by calling NEOCLASSICAL, PHASE, and ISLANDDYNAMICS
 
 		

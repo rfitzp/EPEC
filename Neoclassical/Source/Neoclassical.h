@@ -47,6 +47,8 @@
 // 1.12 - Updated fFile input for additonal terms
 // 1.13 - Corrected error in fFile interpolation. Improved system calls.
 // 1.14 - Renamed Namelist. Adjusted for new fFile format
+// 1.15 - Added extra information to nFile
+// 1.16 - Added P0 to nFile
 
 // ################################################################
 
@@ -54,7 +56,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 14
+#define VERSION_MINOR 16
 
 #include <stdio.h>
 #include <math.h>
@@ -179,7 +181,7 @@ class Neoclassical
   // Profile data interpolated onto equilibrium grid
   Array<double,1> n_e;    // Electron number density (m^-3)
   Array<double,1> dn_edr; // Electron number density gradient (m^-4)
-  Array<double,1> T_e;    // Electron temperature  (J)
+  Array<double,1> T_e;    // Electron temperature (J)
   Array<double,1> dT_edr; // Electron temperature gradient (J m^-1)
   Array<double,1> n_i;    // Majority ion number density (m^-3)
   Array<double,1> dn_idr; // Majority ion number density gradient  (m^-4)
@@ -224,6 +226,7 @@ class Neoclassical
   // Derived from profiles
   double rho0;                // Central mass density
   double tau_A;               // Central Alfven time
+  double P0;                  // Central (thermal) pressure
   
   Array<double,1> nek;        // Electron number densities
   Array<double,1> dnedrk;     // Electron number density gradients

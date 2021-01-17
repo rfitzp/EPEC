@@ -263,8 +263,8 @@ void Neoclassical::Read_Equilibrium ()
   // Read parameters
   FILE* file = OpenFiler ((char*) "Inputs/fFile");
   double in;
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d",
-	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres) != 12)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf",
+	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres, &in) != 13)
     {
       printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (1)\n");
       exit (1);  
@@ -578,7 +578,8 @@ void Neoclassical::Get_Derived ()
   // -------------------------------------------
   rho0  = (AI * (n_i (0) + n_b (0)) + AII * n_I (0)) * m_p;
   tau_A = sqrt (mu_0 * rho0 * a*a /B_0/B_0);
-  
+  P0    = n_i (0) * T_i (0) + n_e (0) * T_e (0);
+   
   nek.resize    (nres);
   dnedrk.resize (nres);
   Tek.resize    (nres);
@@ -743,8 +744,8 @@ void Neoclassical::Get_Derived ()
       tau_Mk  (j) = a*a /chipk(j);
       tau_thk (j) = (rk(j) * a /qk(j) /R_0) * (rk(j) * a /qk(j) /R_0) /nu_iik (j);
 
-      printf ("m = %3d  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e\n",
-	      mk (j), tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j));
+      printf ("m = %3d  P0 = %11.4e  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e\n",
+	      mk (j), P0 /1.e19/e/1.e3, tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j));
     }
 
   // Output timescales
@@ -1089,7 +1090,7 @@ void Neoclassical::Get_Normalized ()
 {
   FILE* file = OpenFilew ((char*) "Outputs/nFile");
 
-  fprintf (file, "%3d %16.9e\n", nres, tau_A);
+  fprintf (file, "%3d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
  
   for (int j = 0; j < nres; j++)
     {
@@ -1106,10 +1107,11 @@ void Neoclassical::Get_Normalized ()
       printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e w0 = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
 	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, dk);
 
-      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-	       dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk (j), gk (j), dPsidr (j), PsiNk (j));
-    }
+	       dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk (j), dPsidr (j), PsiNk (j),
+	       nek (j) /1.e19, nik (j) /1.e19, Tek (j) /e/1.e3, Tik (j) /e/1.e3, dnidrk (j) /1.e19, dTidrk (j) /e/1.e3);
+      }
    fclose (file);
 
    if (INTP != 0)
@@ -1117,7 +1119,7 @@ void Neoclassical::Get_Normalized ()
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/nFiles/n.%d", int (TIME));
       file = OpenFilew (filename);
-      fprintf (file, "%d %16.9e\n", nres, tau_A);
+      fprintf (file, "%d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
  
       for (int j = 0; j < nres; j++)
 	{
@@ -1131,9 +1133,10 @@ void Neoclassical::Get_Normalized ()
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 	  
-	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-		   dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk (j), dPsidr (j), PsiNk (j));
+		   dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk (j), dPsidr (j), PsiNk (j),
+		   nek (j) /1.e19, nik (j) /1.e19, Tek (j) /e/1.e3, Tik (j) /e/1.e3, dnidrk (j) /1.e19, dTidrk (j) /e/1.e3);
 	}
       fclose (file);
 

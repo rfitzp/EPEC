@@ -56,6 +56,8 @@
 // 2.9  - Renamed Namelist. Modified island width calculation.
 // 2.10 - Added CHIR parameter
 // 2.11 - Added FREQ == 2 option
+// 2.12 - Added total pressure decrement
+// 2.13 - Normalize total pressure decrement by P(0). Added IRMP. 
 
 // #######################################################################
 
@@ -63,7 +65,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 11
+#define VERSION_MINOR 13
 
 #include <stdio.h>
 #include <math.h>
@@ -120,9 +122,11 @@ class Phase
   double   SCALE;  // GPEC scalefactor
   double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
+  int      IFLA;   // If != 0 then set all ICTRL values to IRMP
+  double   IRMP;   // RMP current (kA)
   
   int      NCTRL;  // Number of control points
-  double*  TCTRL;  // Control times (s)
+  double*  TCTRL;  // Control times (ms)
   double*  ICTRL;  // Peak current flowing in RMP coils (kA) at control times
   double*  PCTRL;  // Relative phases of RMP coil currents (units of pi) at control times
 
@@ -139,6 +143,7 @@ class Phase
   double rlim;            // Normalized radius of PSI = PSILIM flux surface
   double q0;              // Safety factor at magnetic axis
   double qa;              // Safety factor at plasma boundary
+  double PSILIM;          // Limiting value of PsiN
   int    nres;            // Number of resonant surfaces in plasma
   gsl_matrix_complex* FF; // Plasma inverse tearing stability matrix
   gsl_matrix_complex* EE; // Plasma tearing stability matrix 
@@ -160,6 +165,7 @@ class Phase
  
   // Read from Inputs/nFile
   double          tau_A;   // Alfven time
+  double          P0;      // Central thermal pressure
   Array<int,1>    mk;      // Resonant poloidal mode numbers
   Array<int,1>    ntor;    // Resonant toroidal mode number
   Array<double,1> rk;      // Normalized minor radii of resonant surfaces
@@ -175,8 +181,14 @@ class Phase
   Array<double,1> tautk;   // Normalized poloidal flow damping timescales at resonant surfaces
   Array<double,1> fack;    // Island width factors at resonant surfaces
   Array<double,1> delk;    // Linear layer widths at resonant surfaces
-  Array<double,1> dnedrk;  // Density gradients at resonant surfaces
-  Array<double,1> dTedrk;  // Temperature gradients at resonant surfaces
+  Array<double,1> nek;     // Electron number densities at resonant surfaces
+  Array<double,1> nik;     // Ion number densities at resonant surfaces
+  Array<double,1> Tek;     // Electron temperatures at resonant surfaces
+  Array<double,1> Tik;     // Ion temperatures at resonant surfaces
+  Array<double,1> dnedrk;  // Electron density gradients at resonant surfaces
+  Array<double,1> dnidrk;  // Ion density gradients at resonant surfaces
+  Array<double,1> dTedrk;  // Electron temperature gradients at resonant surfaces
+  Array<double,1> dTidrk;  // Ion temperature gradients at resonant surfaces
   Array<double,1> Wcrnek;  // Critical island widths for density flattening at resonant surfaces
   Array<double,1> WcrTek;  // Critical island widths for temperature flattening at resonant surfaces
   Array<double,1> akk;     // Metric elements at resonant surfaces
@@ -267,7 +279,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP);        
 
   // -----------------------
   // Private class functions
@@ -275,7 +287,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

@@ -63,8 +63,8 @@ void Flux::Stage2 ()
   // Output fFile
   // ............
   FILE* file = OpenFilew ((char*) "Outputs/fFile");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
-	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e\n",
+	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM);
   for (int j = 0; j < NPSI; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
@@ -90,8 +90,8 @@ void Flux::Stage2 ()
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
       file = OpenFilew (filename);
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d\n",
-	       R0, B0, ra * R0, q95, r95 /ra, qlim, rlim/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres);
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e\n",
+	       R0, B0, ra * R0, q95, r95 /ra, qlim, rlim/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM);
       for (int j = 0; j < NPSI; j++)
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));

@@ -36,7 +36,6 @@ void Neoclassical::pFileRead ()
 	  printf ("NEOCLASSICAL::pFileRead: Error reading pFile\n");
 	  exit (1);
 	}
-
       
       if (strstr (s, "ne(") != NULL)
 	{

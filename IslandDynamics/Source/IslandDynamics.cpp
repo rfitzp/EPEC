@@ -19,15 +19,18 @@
 // 1.5 - Added PHASE_LIN flag
 // 1.6 - Added PHASE_MID flag
 // 1.7 - Added PHASE_CHIR flag
+// 1.8 - Added IRMP
 
 // ##############################################################
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <ctype.h>
 #include <time.h>
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 7
+#define VERSION_MINOR 8
 
 #define MAXCOMMANDLINELENGTH 500
 
@@ -36,15 +39,50 @@ extern "C" void NameListRead (int* FLUX_NTOR, int* FLUX_MMIN, int* FLUX_MMAX,
 			      int* PHASE, int* PHASE_MID, int* PHASE_INTN, int* PHASE_INTU, int* PHASE_STAGE5, int* PHASE_OLD, int* PHASE_FREQ, int* PHASE_LIN, double* PHASE_SCALE, 
 			      double* PHASE_CHIR, int* RESTART, double* TSTART, double* TEND, double* DT); 
 
-void IslandDynamics ();
+void IslandDynamics (double IRMP);
 
 // #############
 // Main function
 // #############
 
-int main ()
+int main (int argc, char** argv)
 {
-  IslandDynamics ();
+  int c;
+  char* ivalue = NULL;
+  opterr = 0;
+  
+  while ((c = getopt (argc, argv, "hi:")) != -1)
+    switch (c)
+      {
+      case 'h':
+ 	printf ("Options:\n");
+ 	printf ("-h      - list options\n");
+	printf ("-i IRMP - set RMP current to IRMP");
+	exit (0);
+      case 'i':
+	ivalue = optarg;
+ 	break;
+      case '?':
+	if (optopt == 'i')
+	  printf ("Option = %c requires an argument\n", optopt);
+	  else if (isprint (optopt))
+	    printf ("Unknown option '-%c'\n", optopt);
+	  else
+	    printf ("Unknown option character `\\x%x'\n", optopt);
+	return 1;
+      default:
+	abort ();
+      }
+
+  double _IRMP = -1.e6; float __IRMP;
+  
+  if (ivalue != NULL)
+     {
+      __IRMP = atof (ivalue);
+      _IRMP  = double (__IRMP);
+     }
+    
+  IslandDynamics (_IRMP);
 
   return 0;
 }
@@ -66,7 +104,7 @@ double CallSystem (char* command)
 // ##############################################
 // Function to perform island dynamics simulation
 // ##############################################
-void IslandDynamics ()
+void IslandDynamics (double IRMP)
 {
   // ...............
   // Welcome message
@@ -100,7 +138,7 @@ void IslandDynamics ()
   int	 PHASE_STAGE5;   // If != 0 then Stage5 PHASE calculation enabled
   int	 PHASE_OLD;      // If != 0 then restart PHASE calculations from previous run
   int    PHASE_FREQ;     // If != 0 then use island width dependent natural frequency (only applies to Phase-2.x, overrides NEO_FREQ)
-  int    PHASE_LIN ;     // If != 0 then perform purely linear calculation (only applies to Phase-2.x)
+  int    PHASE_LIN;      // If != 0 then perform purely linear calculation (only applies to Phase-2.x)
   double PHASE_SCALE;    // GPEC scalefactor
   double PHASE_CHIR;     // Maximum Chirikov parameter for vacuum islands
   int	 RESTART;        // If != 0 then delete all previous IslandDynamics data
@@ -122,18 +160,18 @@ void IslandDynamics ()
 	  NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
   printf ("PHASE = %2d  PHASE_MID = %2d  PHASE_INTN = %2d  PHASE_INTU = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_FREQ = %2d  PHASE_LIN = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
 	  PHASE, PHASE_MID, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_LIN, PHASE_SCALE, PHASE_CHIR);
-  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
-	  RESTART, TSTART, TEND, DT);
+  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+	  RESTART, TSTART, TEND, DT, IRMP);
 
   // ............
   // Sanity check
   // ............
   if (TEND < TSTART)
     {
-      printf ("Error - TEND cannot be less than TSTART\n");
+      printf ("Error - TEND must be greater than TSTART\n");
       exit (1);
     }
-  if (DT <= 0.)
+  if (DT < 0.)
     {
       printf ("Error - DT must be positive\n");
       exit (1);
@@ -178,8 +216,8 @@ void IslandDynamics ()
 	  NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
   printf ("PHASE = %2d  PHASE_MID = %2d  PHASE_INTN = %2d  PHASE_INTU = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_FREQ = %2d  PHASE_LIN = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
 	  PHASE, PHASE_MID, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_LIN, PHASE_SCALE, PHASE_CHIR);
-  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
-	  RESTART, TSTART, TEND, DT);
+  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+	  RESTART, TSTART, TEND, DT, IRMP);
 
   FILE* monitor = fopen ("Outputs/monitor.txt", "a");
   fprintf (monitor, "%s\n", asctime (timeinfo));
@@ -198,8 +236,8 @@ void IslandDynamics ()
 	   NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
   fprintf (monitor, "PHASE = %2d  PHASE_MID = %2d  PHASE_INTN = %2d  PHASE_INTU = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_FREQ = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
 	   PHASE, PHASE_MID, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_SCALE, PHASE_CHIR);
-  fprintf (monitor, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
-	  RESTART, TSTART, TEND, DT);
+  fprintf (monitor, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+	   RESTART, TSTART, TEND, DT, IRMP);
   fclose (monitor);
 
   FILE* namelist = fopen ("Inputs/InputParameters", "w");
@@ -213,8 +251,8 @@ void IslandDynamics ()
 	   NEO_INTP, NEO_INTF, NEO_IMPURITY, NEO_NEUTRAL, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN);
   fprintf (namelist, "PHASE = %2d  PHASE_MID = %2d  PHASE_INTN = %2d  PHASE_INTU = %2d  PHASE_STAGE5 = %2d  PHASE_OLD = %2d  PHASE_FREQ = %2d  PHASE_LIN = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
 	   PHASE, PHASE_MID, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_LIN, PHASE_SCALE, PHASE_CHIR);
-  fprintf (namelist, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e\n",
-	  RESTART, TSTART, TEND, DT);
+  fprintf (namelist, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+	   RESTART, TSTART, TEND, DT, IRMP);
   fclose (namelist);
 
   // ..................
@@ -239,11 +277,11 @@ void IslandDynamics ()
 	       NEO_INTF, NEO_INTP, NEO_NEUTRAL, NEO_IMPURITY, NEO_FREQ, NEO_NTYPE, NEO_NN, NEO_LN, NEO_YN, Time);
   
       if (lock)
-	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -f %d -n %d -u %d -s %2d -o %2d -F %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e ",
-		 PHASE_MID, PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_LIN, Time, Time + DT, PHASE_SCALE, PHASE_CHIR);
+	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -f %d -n %d -u %d -s %2d -o %2d -F %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e -i %11.4e",
+		 PHASE_MID, PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_FREQ, PHASE_LIN, Time, Time + DT, PHASE_SCALE, PHASE_CHIR, IRMP);
       else
-	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -f %d -n %d -u %d -s %2d -o %2d -F %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e",
-		 PHASE_MID, PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_FREQ, PHASE_LIN, Time, Time + DT, PHASE_SCALE, PHASE_CHIR);
+	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -f %d -n %d -u %d -s %2d -o %2d -F %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e -i %11.4e",
+		 PHASE_MID, PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_FREQ, PHASE_LIN, Time, Time + DT, PHASE_SCALE, PHASE_CHIR, IRMP);
       
       lock = 1;
       
@@ -274,7 +312,7 @@ void IslandDynamics ()
       // Increment time
       Time += DT;
     }
-  while (Time < TEND);
+  while (Time <= TEND);
 
   time                 (&rawtime);
   timeinfo = localtime (&rawtime);

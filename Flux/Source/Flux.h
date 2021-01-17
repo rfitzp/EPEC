@@ -55,6 +55,7 @@
 // 1.6 - Removed QFLAG and Q95 functionality. Added calculation of A1, A2, A3 parameters
 // 1.7 - Improved system calls
 // 1.8 - Renamed Namelist. Removed A2 and A3 parameters (too much noise)
+// 1.9 - Added PSILIM to fFile
 
 // #####################################################################################
 
@@ -62,7 +63,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 8
+#define VERSION_MINOR 9
 
 #include <stdio.h>
 #include <math.h>

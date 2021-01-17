@@ -1,1 +1,1 @@
-Source files for program ISLANDDYNAMICS
+Source files for program WINDOWFIND

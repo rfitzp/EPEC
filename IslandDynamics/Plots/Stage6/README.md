@@ -8,11 +8,15 @@
 	q.asy          ... plots q(0), q(0.95), and q(1) versus experimental time
 	q95.asy        ... plots q(0.95) versus experimental time
 
-	omega0.asy     ... plots actual natural frequencies versus experimental time
 	omega0e.asy    ... plots linear natural frequencies versus experimental time
 	omega0eb.asy   ... plots ExB frequencies versus experimental time
 	omeg0i.asy     ... plots nonlinear natural frequencies versus experimental time
+
+	omega0.asy     ... plots actual natural frequencies versus experimental time
 	omega.asy      ... plots island frequencies versus experimental time
+
+	omega0q.asy    ... plots actual natural frequencies versus q95
+	omegaq.asy     ... plots island frequencies versus q95
 
 	i.asy          ... plots critical RMP currents for mode locking versus experimental time
 	r.asy          ... plots rational surface radii of penetrated island chains versus experimental time
@@ -25,6 +29,14 @@
 	wpsi.asy       ... plots island widths (in PsiN) versus time
 	npsi.asy       ... plots density flattened regions (in PsiN) versus time
 	tpsi.asy       ... plots electron temperature flattened regions (in PsiN) versus time
+	
+	rpsiq.asy      ... plots rational surface radii (in PsiN) versus time
+	wvpsiq.asy     ... plots vacuum island widths (in PsiN) versus time
+	wpsiq.asy      ... plots island widths (in PsiN) versus time
+	npsiq.asy      ... plots density flattened regions (in PsiN) versus time
+	tpsiq.asy      ... plots electron temperature flattened regions (in PsiN) versus time
+	
+	deltap.asy     ... plots - (Delta P)/P versus q95
 
 	mirnovin.asy   ... plots reconstructed Mirnow signal on outboard midplane
 	minrovout.asy  ... plots reconstructed Mirnow signal on inboard midplane

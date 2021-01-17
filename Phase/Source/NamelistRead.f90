@@ -21,7 +21,7 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, D
   real    (kind = c_double), intent (inout) :: SCALE
   real    (kind = c_double), intent (inout) :: PMAX
   real    (kind = c_double), intent (inout) :: CHIR
-  integer (kind = c_int),    intent (inout) :: NCTRL
+ integer (kind = c_int),    intent (inout) :: NCTRL
   
   real (kind = c_double), dimension (*), intent (inout) :: xTCTRL 
   real (kind = c_double), dimension (*), intent (inout) :: xICTRL 

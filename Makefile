@@ -4,4 +4,6 @@ all:
 	(cd Neoclassical/Source; ../../Scripts/clr; make clean; make)
 	(cd Phase/Source; ../../Scripts/clr; make clean; make)
 	(cd IslandDynamics/Source; ../../Scripts/clr; make clean; make)
+	(cd fFileGenerate/Source; ../../Scripts/clr; make clean; make)
+	(cd WindowFind/Source; ../../Scripts/clr; make clean; make)
 
