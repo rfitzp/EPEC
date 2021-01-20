@@ -141,7 +141,7 @@ void WindowFind ()
 	   ISTART, IEND, DI);
   fclose (monitor);
 
-  FILE* namelist = fopen ("Inputs/InputParameters", "w");
+  FILE* namelist = fopen ("Inputs/InputParameters.txt", "w");
   fprintf (namelist, "Input parameters (from Inputs/Window.nml):\n");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");

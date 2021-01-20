@@ -1,5 +1,5 @@
 &WINDOWFIND_CONTROL
 	ISTART = 0.   ! Initial RMP current (kA)
-	IEND   = 4.   ! final RMP current (kA)
+	IEND   = 4.01 ! final RMP current (kA)
 	DI     = 0.1  ! RMP current step (kA) 
 &end	

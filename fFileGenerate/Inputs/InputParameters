@@ -1,6 +1,6 @@
 Input parameters (from Inputs/fFile.nml):
 Git Hash     = ec056c94e149ae8a8bdaa977f22e961b7e02f61c
-Compile time = 2021-01-15 20:38:43 UTC
+Compile time = 2021-01-16 16:52:08 UTC
 Git Branch   = master
 
 FLUX_NTOR =  2  FLUX_MMIN =  3  FLUX_MMAX = 30

@@ -2,8 +2,9 @@
 
 ## Description
 
-   Program to generate series of interpolated fFiles by calling
-   the FLUX, NEOCLASSICAL, and PHASE codes.
+   Program to generate series of interpolated fFiles and nFiles
+   suitable  for ISLANDDYNAMICS code by calling the FLUX, 
+   NEOCLASSICAL, and PHASE codes.
 	
 ## Requirements
 
@@ -16,12 +17,14 @@
 
 ### /Source
 
-- Makefile: GNU makefile
-- *.f90: Fortran_90 source files
-- *.cpp: C++ source files
+  - Makefile: GNU makefile
+  - *.f90: Fortran_90 source files
+  - *.cpp: C++ source files
 	 
 ### /Inputs
 
-- fFile.nml: Fortran_90 namelist file
+  - fFile.nml: Fortran_90 namelist file
 	  
 ### /Outputs
+
+  - *.txt: Output files

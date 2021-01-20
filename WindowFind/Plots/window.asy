@@ -30,5 +30,5 @@ xaxis (Top,  NoTicks);
 yaxis ("$I_{\rm rmp}({\rm kA})$", Left, LeftTicks);
 yaxis (Right, NoTicks);
 
-palette ("$-{\mit\Delta}P/P$", range, point(NW) + (0, 0.02), point(NE) + (0, 0.06), Top, Palette);
+palette ("$-{\mit\Delta}P/P$", range, point(NW) + (0, 0.02), point(NE) + (0, 0.1), Top, Palette);
 
