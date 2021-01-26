@@ -19,8 +19,8 @@ real ymax = A1[3][0];
 pen[] Palette = BWRainbow ();
 bounds range  = image (A, Full, (xmin, ymin), (xmax, ymax), Palette);
 
-pen s = 1.5 + black;
-real[] cvals = {0.05};
+pen s = 1. + black;
+real[] cvals = {0.01,0.02,0.03,0.04,0.05};
 draw (contour (A, (xmin, ymin), (xmax, ymax), cvals), s);
 
 pen q = fontsize (20.);

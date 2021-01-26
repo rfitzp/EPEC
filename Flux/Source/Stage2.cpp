@@ -738,6 +738,24 @@ void Flux::Stage2FindRational ()
   // .....................................
   printf ("Confirm rational surface q-values:\n");
   CheckQP ();
+
+  // ................................
+  // Find appropriate PSILIM for GPEC
+  // ................................
+  double dmlim = 0.2;
+  double qGPEC = qres[nres-1] + dmlim /double (NTOR);
+  double rGPEC = Interpolate (NPSI, QP, rP, qGPEC, 0);
+  for (int ii = 0; ii < 4; ii++)
+	{
+	  double qqq = Interpolate (NPSI, rP, QP, rGPEC, 0);
+	  double qqp = Interpolate (NPSI, rP, QP, rGPEC, 1);
+	  double qpp = Interpolate (NPSI, rP, QP, rGPEC, 2);
+	  rGPEC += (- qqp + sqrt (qqp*qqp - 2.*qpp * (qqq - qGPEC))) /qpp;
+	}
+  double PSIGPEC = Interpolate (NPSI, rP, PsiN, rGPEC, 0);
+  double qqGPEC  = Interpolate (NPSI, rP, QP,   rGPEC, 0);
+  printf ("Calculating PSILIM for GPEC:\n");
+  printf ("qGPEC = %11.4e  PSIGPEC = %11.4e  res = %11.4e\n", qGPEC, PSIGPEC, fabs (qqGPEC - qGPEC));
  }
 
 // ##################################################

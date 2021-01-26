@@ -294,7 +294,7 @@ program Rescale
   
   open  (unit = 101, file = 'Outputs/Psi1.txt')
   do i = 1, NRBOX
-        write (101, '(1000e17.9)') (PSI (i, j), j = 1, NZBOX)
+     write (101, '(1000e17.9)') (PSI (i, j), j = 1, NZBOX)
   enddo
   close (unit = 101)
 
@@ -427,6 +427,10 @@ subroutine WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, 
   
 end subroutine WritegFile
 
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to return interpolated Psi
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
 
   implicit none
@@ -448,6 +452,10 @@ double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
   GetPsi = Psi (i, j) * (1.-x)*(1.-y) + Psi (i+1, j) * x*(1.-y) + Psi (i, j+1) * (1.-x)*y + Psi(i+1, j+1) * x*y
 
 end function GetPsi
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to return interpolated dPsi/dR
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
@@ -479,6 +487,10 @@ double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
   GetPsiR = (GetPsi (R2, Z, NRBOX, NZBOX, RR, ZZ, PSI) - GetPsi (R1, Z, NRBOX, NZBOX, RR, ZZ, PSI)) /2./dR
 
 end function GetPsiR
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to return interpolated dPsi/dZ
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
 
@@ -512,6 +524,10 @@ double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
   GetPsiZ = (GetPsi (R, Z2, NRBOX, NZBOX, RR, ZZ, PSI) - GetPsi (R, Z1, NRBOX, NZBOX, RR, ZZ, PSI)) /2./dZ
 
 end function GetPsiZ
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to return interpolated d^2Psi/dR^2
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
@@ -547,6 +563,10 @@ double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
 end function GetPsiRR
 
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to return interpolated d^2Psi/dZ^2
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
 
   implicit none
@@ -580,6 +600,10 @@ double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
        +  GetPsi (R, Z1, NRBOX, NZBOX, RR, ZZ, PSI)) /dZ/dZ
 
 end function GetPsiZZ
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to return interpolated d^2Psi/dRdZ
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
@@ -616,6 +640,10 @@ double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
        -  GetPsi (R2, Z1, NRBOX, NZBOX, RR, ZZ, PSI) + GetPsi (R1, Z1, NRBOX, NZBOX, RR, ZZ, PSI)) /4./dR/dR
 
 end function GetPsiRZ
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! Subroutine to find O- and X-points
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, p)
   

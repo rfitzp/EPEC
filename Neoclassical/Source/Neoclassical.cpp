@@ -578,7 +578,7 @@ void Neoclassical::Get_Derived ()
   // -------------------------------------------
   rho0  = (AI * (n_i (0) + n_b (0)) + AII * n_I (0)) * m_p;
   tau_A = sqrt (mu_0 * rho0 * a*a /B_0/B_0);
-  P0    = n_i (0) * T_i (0) + n_I (0) + T_I (0) + n_e (0) * T_e (0);
+  P0    = n_i (0) * T_i (0) + n_I (0) * T_I (0) + n_e (0) * T_e (0);
    
   nek.resize    (nres);
   dnedrk.resize (nres);

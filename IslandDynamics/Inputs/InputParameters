@@ -1,6 +1,6 @@
 Input parameters (from Inputs/Island.nml):
-Git Hash     = ec056c94e149ae8a8bdaa977f22e961b7e02f61c
-Compile time = 2021-01-16 16:52:08 UTC
+Git Hash     = 4b89d4a7352767f1852c1d6e071a2f74b7eb0d5a
+Compile time = 2021-01-25 00:44:20 UTC
 Git Branch   = master
 
 FLUX_NTOR =  2  FLUX_MMIN =  3  FLUX_MMAX = 30
