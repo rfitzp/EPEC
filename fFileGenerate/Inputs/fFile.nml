@@ -1,6 +1,6 @@
 &FFILEGENERATE_CONTROL
-	FLUX_NTOR    = 2       ! Set toroidal mode number in FLUX
-	FLUX_MMIN    = 3       ! Set minimum poloidal mode number in FLUX
+	FLUX_NTOR    = 1       ! Set toroidal mode number in FLUX
+	FLUX_MMIN    = 2       ! Set minimum poloidal mode number in FLUX
 	FLUX_MMAX    = 30      ! Set maximum poloidal mode number in fLUX
 	NEO_FREQ     = -2      ! Set natural frequency type (see NEOCLASSICAL/Inputs/Neoclassical.nml)
 	NEO_IMPURITY = 1       ! If != 0 then include single ion impurity species in calculation in NEOCLASSICAL
@@ -9,7 +9,7 @@
 	NEO_NN       = 3.0e17; ! Set neutral density at boundary in NEOCLASSICAL
 	NEO_LN       = 0.01;   ! Set neutral density scalelength in NEOCLASSICAL
 	NEO_YN       = 1.5     ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
-	TSTART       = 0.      ! Scan start time (ms)
-	TEND         = 2000.   ! Scan end time (ms)
+	TSTART       = 0000.   ! Scan start time (ms)
+	TEND         = 3000.   ! Scan end time (ms)
 	DT           = 5.      ! Scan time step (ms) 
 &end	

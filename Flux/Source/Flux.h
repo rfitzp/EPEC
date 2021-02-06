@@ -91,7 +91,7 @@ extern "C" int pRhs5 (double, const double[], double[], void*);
 
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
-			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME);
+			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME, double* PSIPED);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -117,6 +117,7 @@ class Flux
   int    NTOR;    // Toroidal mode number
   int    MMIN;    // Minimum poloidal mode number
   int    MMAX;    // Maximum poloidal mode number
+  double PSIPED;  // PsiN at top of pedestal
   double PSILIM;  // Maximum PsiN for rational surface
   double H0;      // Initial integration step-length for equilibirum flux surface integrals 
   double ACC;     // Integration accuracy for equilibrium flux surface integrals

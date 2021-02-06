@@ -14,7 +14,7 @@
 	PHASE        = 1       ! If != 0 then call PHASE
 	PHASE_MID    = 1       ! If != 0 then middle RMP coils included in calculation
   	PHASE_INTN   = 0       ! If != 0 then interpolate nFiles in PHASE
-	PHASE_INTU   = 0       ! If != 0 then interpolate uFiles/mFiles/lFiles in PHASE	
+	PHASE_INTU   = 1       ! If != 0 then interpolate uFiles/mFiles/lFiles in PHASE	
 	PHASE_STAGE5 = 1       ! If != 0 then Stage5 calculation enabled in PHASE
 	PHASE_OLD    = 1       ! If != 0 then restart PHASE calculations from previous run
 	PHASE_FREQ   = 2       ! If != 0 then use island width dependent natural frequency 
@@ -23,6 +23,6 @@
 	PHASE_CHIR   = 1.      ! Set maximum Chirihov parameter for vacuum islands
 	RESTART      = 1       ! If != 0 then delete all previous IslandDynamics data
 	TSTART       = 0.      ! Simulation experimental start time (ms)
-	TEND         = 2000.   ! Simulation experimental end time (ms)
+	TEND         = 3000.   ! Simulation experimental end time (ms)
 	DT           = 1.      ! Simulation experimental time step (ms) 
 &end	

@@ -4,12 +4,13 @@
 ! Function to read FLUX namelist
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, MMIN, MMAX, PSILIM, TIME) &
+subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, MMIN, MMAX, PSILIM, TIME, PSIPED) &
      bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
   implicit none
 
+  integer (kind = c_int),    intent (inout) :: INTG
   integer (kind = c_int),    intent (inout) :: NPSI
   real    (kind = c_double), intent (inout) :: PACK
   integer (kind = c_int),    intent (inout) :: NTHETA
@@ -23,9 +24,9 @@ subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, 
   integer (kind = c_int),    intent (inout) :: MMAX
   real    (kind = c_double), intent (inout) :: PSILIM
   real    (kind = c_double), intent (inout) :: TIME
-  integer (kind = c_int),    intent (inout) :: INTG
+  real    (kind = c_double), intent (inout) :: PSIPED
   
-  namelist /FLUX_CONTROL/ NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, MMIN, MMAX, PSILIM, TIME, INTG
+  namelist /FLUX_CONTROL/ INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, DR, MMIN, MMAX, PSILIM, TIME, PSIPED
   
   open  (unit = 100, file = 'Inputs/Flux.nml', status = 'old')
   read  (unit = 100, nml  = FLUX_CONTROL)

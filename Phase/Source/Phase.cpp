@@ -758,6 +758,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       exit (1);
     }
 
+  FILE* fileu = OpenFilew ((char*) "Outputs/Stage4/uFile.txt");
+  for (int i = 0; i < nres1; i++)
+    fprintf (fileu, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+  fclose (fileu);
+
   if (MID != 0)
     {
       printf ("Middle coil:\n");
@@ -819,6 +824,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and mFile\n");
 	  exit (1);
 	}
+
+      FILE* filem = OpenFilew ((char*) "Outputs/Stage4/mFile.txt");
+      for (int i = 0; i < nres1; i++)
+	fprintf (filem, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+      fclose (filem);
     }
 
   printf ("Lower coil:\n");
@@ -880,6 +890,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       printf ("PHASE:: Error - minimum resonant q values do not match in nFile and lFile\n");
       exit (1);
     }
+
+  FILE* filel = OpenFilew ((char*) "Outputs/Stage4/lFile.txt");
+  for (int i = 0; i < nres1; i++)
+    fprintf (filel, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+  fclose (filel);
 
   file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/q.txt");
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TSTART);

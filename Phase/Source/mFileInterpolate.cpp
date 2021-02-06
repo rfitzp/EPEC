@@ -25,7 +25,7 @@ void Phase::mFileInterp (vector<string> mFileName, vector<double> mFileTime, int
     {
       char* mFile = "Inputs/mFile";
       char* file1 = (char*) mFileName[0].c_str();
-
+  
       mFileInterpolateLinear (file1, mFileTime[0], mFile, time);
     }
   else if (mFileNumber == 2)
@@ -120,7 +120,7 @@ void Phase::mFileInterp (vector<string> mFileName, vector<double> mFileTime, int
 
 void Phase::mFileInterpolateLinear (char* mFile1, double time1, char* mFile, double time)
 {
-  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH],  line3[MAXULFILELINELENGTH], line4[MAXULFILELINELENGTH],  line5[MAXULFILELINELENGTH],
+  char line1[MAXULFILELINELENGTH],  line2[MAXULFILELINELENGTH],  line3[MAXULFILELINELENGTH], line4[MAXULFILELINELENGTH], line5[MAXULFILELINELENGTH],
        linea[MAXULFILELINELENGTH],  lineaa[MAXULFILELINELENGTH], line7[MAXULFILELINELENGTH], line8[MAXULFILELINELENGTH];
   
   // ................
@@ -161,7 +161,7 @@ void Phase::mFileInterpolateLinear (char* mFile1, double time1, char* mFile, dou
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
       {
-	printf ("PHASE::mFileInterpolateLinear: Error reading mFile_1\n");
+	printf ("PHASE:mFileInterpolateLinear: Error reading mFile_1\n");
 	exit (1);
       }
 
@@ -189,18 +189,18 @@ void Phase::mFileInterpolateLinear (char* mFile1, double time1, char* mFile, dou
 
   for (int i = 0; i < nres; i++)
     {
-      v01[i] = v01_1[i];
-      v02[i] = v02_1[i];
-      v03[i] = v03_1[i];
-      v04[i] = v04_1[i];
-      v05[i] = v05_1[i];
-      v06[i] = v06_1[i];
-      v07[i] = v07_1[i];
-      v08[i] = v08_1[i];
-      v09[i] = v09_1[i];
-      v10[i] = v10_1[i];
-      v11[i] = v11_1[i];
-      v12[i] = v12_1[i];
+      v01[i] = v01_1[i]; 
+      v02[i] = v02_1[i]; 
+      v03[i] = v03_1[i]; 
+      v04[i] = v04_1[i]; 
+      v05[i] = v05_1[i]; 
+      v06[i] = v06_1[i]; 
+      v07[i] = v07_1[i]; 
+      v08[i] = v08_1[i]; 
+      v09[i] = v09_1[i]; 
+      v10[i] = v10_1[i]; 
+      v11[i] = v11_1[i]; 
+      v12[i] = v12_1[i]; 
     }
 
   // ........................
@@ -286,7 +286,7 @@ void Phase::mFileInterpolateQuadratic (char* mFile1, double time1, char* mFile2,
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
       {
-	printf ("PHASE::mFileInterpolateQuadratic: Error reading mFile_1\n");
+	printf ("PHASE:mFileInterpolateQuadratic: Error reading mFile_1\n");
 	exit (1);
       }
 
@@ -329,7 +329,7 @@ void Phase::mFileInterpolateQuadratic (char* mFile1, double time1, char* mFile2,
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i]) != 12)
       {
-	printf ("PHASE::mFileInterpolateQuadratic: Error reading mFile_2\n");
+	printf ("PHASE:mFileInterpolateQuadratic: Error reading mFile_2\n");
 	exit (1);
       }
 
@@ -467,7 +467,7 @@ void Phase::mFileInterpolateCubic (char* mFile1, double time1, char* mFile2, dou
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
       {
-	printf ("PHASE::mFileInterpolateCubic: Error reading mFile_1\n");
+	printf ("PHASE:mFileInterpolateCubic: Error reading mFile_1\n");
 	exit (1);
       }
 
@@ -510,7 +510,7 @@ void Phase::mFileInterpolateCubic (char* mFile1, double time1, char* mFile2, dou
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i]) != 12)
       {
-	printf ("PHASE::mFileInterpolateCubic: Error reading mFile_2\n");
+	printf ("PHASE:mFileInterpolateCubic: Error reading mFile_2\n");
 	exit (1);
       }
 
@@ -553,7 +553,7 @@ void Phase::mFileInterpolateCubic (char* mFile1, double time1, char* mFile2, dou
     if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&v01_3[i], &v02_3[i], &v03_3[i], &v04_3[i], &v05_3[i], &v06_3[i], &v07_3[i], &v08_3[i], &v09_3[i], &v10_3[i], &v11_3[i], &v12_3[i]) != 12)
       {
-	printf ("PHASE::mFileInterpolateCubic: Error reading mFile_3\n");
+	printf ("PHASE:mFileInterpolateCubic: Error reading mFile_3\n");
 	exit (1);
       }
 

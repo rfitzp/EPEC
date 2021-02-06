@@ -626,6 +626,7 @@ void Flux::Stage2CalcQ ()
   // .........................
   double g95;
   double s95  = sqrt (0.95);
+  double sped = sqrt (PSIPED);
   double slim = sqrt (PSILIM);
   double sa   = 1.;
   q95    = Interpolate (NPSI, S, QP, s95,  0);
@@ -634,8 +635,9 @@ void Flux::Stage2CalcQ ()
   qlim   = Interpolate (NPSI, S, QP, slim, 0);
   rlim   = Interpolate (NPSI, S, rP, slim, 0);
   qa     = Interpolate (NPSI, S, QP, sa,   0);
-  printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)\n",
-	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0);
+  double pped   = Interpolate (NPSI, S, PP, sped, 0)/ PP[0];
+  printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)  Pped/P(0) = %11.4e\n",
+	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0, pped);
 
   // ..................
   // Output q95 and r95

@@ -12,6 +12,8 @@ real[] w   = A[8];
 real[] psi = A[6];
 
 int N = m.length;
+real[] t2,  wl2,  wu2;
+real[] t3,  wl3,  wu3;
 real[] t4,  wl4,  wu4;
 real[] t5,  wl5,  wu5;
 real[] t6,  wl6,  wu6;
@@ -27,7 +29,19 @@ real[] t15, wl15, wu15;
 real[] t16, wl16, wu16;
 for (int j = 0; j < N; ++j)
   {
-   if ((int) m[j] == 4)
+   if ((int) m[j] == 2)
+      {
+	t2.push (tt[j]);
+	wl2.push (psi[j]-cos(tt[j]*pi)*w[j]/2.);
+	wu2.push (psi[j]+cos(tt[j]*pi)*w[j]/2.);	
+      }
+    if ((int) m[j] == 3)
+      {
+	t3.push (tt[j]);
+	wl3.push (psi[j]-cos(tt[j]*pi)*w[j]/2.);
+	wu3.push (psi[j]+cos(tt[j]*pi)*w[j]/2.);	
+      }
+     if ((int) m[j] == 4)
       {
 	t4.push (tt[j]);
 	wl4.push (psi[j]-cos(tt[j]*pi)*w[j]/2.);
@@ -187,6 +201,18 @@ if (t4.length > 0)
      draw (graph (t4, wl4), s);
      draw (graph (t4, wu4), s);
    }
+if (t3.length > 0)
+   {
+     s = red + solid + 0.5;
+     draw (graph (t3, wl3), s);
+     draw (graph (t3, wu3), s);
+   }
+if (t2.length > 0)
+   {
+     s = black + solid + 0.5;
+     draw (graph (t2, wl2), s);
+     draw (graph (t2, wu2), s);
+   }   
 
 s = dotted + black + 1;
 ylimits (0.8, 1., Crop);

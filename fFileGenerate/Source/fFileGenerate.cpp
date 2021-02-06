@@ -74,7 +74,7 @@ void fFileGenerate ()
   int	 FLUX_MMAX;      // Set maximum poloidal mode number in FLUX
   int    FLUX_INTG = 1;  // Interpolate gFiles in FLUX
   int    NEO_INTP  = 1;  // Interpolate pFiles in NEOCLASSICAL
-  int	 NEO_INTF  = 1;  // Interpolate fFiles in NEOCLASSICAL
+  int	 NEO_INTF  = 0;  // Interpolate fFiles in NEOCLASSICAL
   int	 NEO_IMPURITY;   // If != 0 then include single ion impurity species in NEOCLASSICAL
   int	 NEO_NEUTRAL;    // If != 0  then include majority ion neutrals in NEOCLASSICAL
   int	 NEO_FREQ;       // Set natural frequency type (see NEOCLASSICAL/Inputs/Neoclassical.nml)
