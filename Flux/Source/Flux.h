@@ -56,6 +56,7 @@
 // 1.7 - Improved system calls
 // 1.8 - Renamed Namelist. Removed A2 and A3 parameters (too much noise)
 // 1.9 - Added PSILIM to fFile
+// 2.0 - Added A2res, PSIPED, Pped to fFile
 
 // #####################################################################################
 
@@ -63,7 +64,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 9
+#define VERSION_MINOR 10
 
 #include <stdio.h>
 #include <math.h>
@@ -91,7 +92,7 @@ extern "C" int pRhs5 (double, const double[], double[], void*);
 
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
-			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME, double* PSIPED);
+			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME, double* PSIPED, int* NSMOOTH);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -117,6 +118,7 @@ class Flux
   int    NTOR;    // Toroidal mode number
   int    MMIN;    // Minimum poloidal mode number
   int    MMAX;    // Maximum poloidal mode number
+  int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
   double PSIPED;  // PsiN at top of pedestal
   double PSILIM;  // Maximum PsiN for rational surface
   double H0;      // Initial integration step-length for equilibirum flux surface integrals 
@@ -173,6 +175,7 @@ class Flux
   double  rlim;        // Radial coordinate at PsiN = PSILIM flux surface
   double  qa;          // Safety-factor at plasma boundary
   double  ra;          // Radial coordinate of plasma boundary
+  double  Pped;        // Pedestal pressure / central pressure
   double  qgp, qgp1;
 
   // Stage2 profile parameters
@@ -195,7 +198,9 @@ class Flux
 
   double* PsiN;        // PsiN array
   double* QPN;         // dQ/dPsiN array
+  double* QPPN;        // d^2Q/dPsiN^2 array
   double* A1;          // QP/QPN/fabs(Psic) array
+  double* A2;          // QPPN/QPN/3 array
 
   // Rational surface data
   int     nres;        // Number of rational surfaces
@@ -215,6 +220,7 @@ class Flux
   double* ajj;         // Metric elements at rational surfaces
   double* dPsidr;      // dPsi/dr at rational surfaces
   double* A1res;       // A1 values at rational surfaces
+  double* A2res;       // A2 values at rational surfaces
   
   // Straight angle flux coordinate data
   double*     th;      // theta array

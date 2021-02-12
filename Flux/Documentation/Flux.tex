@@ -644,7 +644,6 @@ Hence,
 \frac{dF_0}{d{\mit\Psi}_N} = -B_0\,R_0^{\,2}\,|\psi_c|\,(1-q/q_k).
 \end{equation}
 
-\paragraph{Scheme 1:}
 Let
 \begin{equation}
 q = q_k + q_k'\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})+ \frac{1}{2}\,q_k''\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^2+ \frac{1}{6}\,q_k'''\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^3,
@@ -654,10 +653,10 @@ where $'\equiv d/d{\mit\Psi}_N$. Follows that
 F_0({\mit\Psi}_N) = B_0\,R_0^{\,2}\,|\psi_c|\left\{\frac{1}{2}\,\frac{q_k'}{q_k}({\mit\Psi}_N-{\mit\Psi}_{N\,k})^2+  \frac{1}{6}\,\frac{q_k''}{q_k}\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^3+ \frac{1}{24}\,
 \frac{q_k'''}{q_k}\,({\mit\Psi}_N-{\mit\Psi}_{N\,k})^4\right\}.
 \end{equation}
-Hence, the island extends from  ${\mit\Psi}_{N\,k}-X_{k-}$ to ${\mit\Psi}_{N\,k}+X_{k+}$, where $X_{k-}$ and $X_{k+}$ are the
+Hence, the island extends from  ${\mit\Psi}_{N\,k}+X_{k-}$ to ${\mit\Psi}_{N\,k}+X_{k+}$, where $X_{k-}$ and $X_{k+}$ are the
 positive and negative roots, respectively, of 
 \begin{equation}
-X_k^{\,2}+  A_k^{(2)}\,X_k^{\,3}+ A_k^{(3)}\,X_k^{\,4} = \frac{\overline{W}_k^{\,2}}{4},
+X_k^{\,2}+  A_k^{(2)}\,X_k^{\,3}= \frac{\overline{W}_k^{\,2}}{4},
 \end{equation}
 where
 \begin{equation}
@@ -666,31 +665,27 @@ where
 and
 \begin{align}
 A_k^{(1)} &= \frac{q_k}{q_k'\,|\psi_c|},\\[0.5ex]
-A_k^{(2)}& =  \frac{1}{3}\,\frac{q_k''}{q_k'},\\[0.5ex]
-A_k^{(3)}&= 
-\frac{1}{12}\,
-\frac{q_k'''}{q_k'}.
+A_k^{(2)}& =  \frac{1}{3}\,\frac{q_k''}{q_k'}.
 \end{align}
-
-\paragraph{Scheme 2:}
-Alternatively, we can say that $X_{k\,\pm}$ satisfy 
+It follows that
 \begin{equation}
-F_k(X_k) = \frac{|{\mit\Psi}_k|}{R_0\,B_0},
-\end{equation}
-where
-\begin{equation}
-\frac{dF_k}{dX_k} = \frac{|\psi_c|}{2}\left[\frac{q({\mit\Psi}_{N\,k}+X_k)}{q_k}-1\right].
+X_{k\pm} \simeq \pm \frac{\overline{W}_k}{2} - A_k^{(2)}\,\frac{\overline{W}_k^{\,2}}{8}.
 \end{equation}
 
-\paragraph{Scheme 3:}
-Alternatively, can say that $X_{k\pm} = \pm{\mit\Delta}_{k\pm}\,x_{k\pm}$,
-where
+Alternatively, can say that island extends from  ${\mit\Psi}_{N\,k}+X_{k-} + {\mit\Delta\Psi}_{N\,k}$ to ${\mit\Psi}_{N\,k}+X_{k+}+{\mit\Delta\Psi}_{N\,k}$,
+where $X_{k\pm} = \pm{\mit\Delta}_{k\pm}\,x_{k\pm}$,
+and
 \begin{align}
-{\mit\Delta}_{k+} &= {\mit\Psi}_{N\,k+1}-{\mit\Psi}_{N\,k},\\[0.5ex]
-{\mit\Delta}_{k-} &= {\mit\Psi}_{N\,k}-{\mit\Psi}_{N\,k-1},\\[0.5ex]
+{\mit\Delta}_{k+} &= \chi_{\rm max}({\mit\Psi}_{N\,k+1}-{\mit\Psi}_{N\,k}),\\[0.5ex]
+{\mit\Delta}_{k-} &=\chi_{\rm max}( {\mit\Psi}_{N\,k}-{\mit\Psi}_{N\,k-1}),\\[0.5ex]
 F_{k\pm}(x_{k\pm}) &= \frac{2\,A_k^{(1)}}{{\mit\Delta}_{k\pm}^{\,2}}\,\frac{|{\mit\Psi}_k|}{R_0\,B_0},\\[0.5ex]
 F_{k\pm}(x)&\equiv - x -\ln(1-x).
 \end{align}
+Here,  $\chi_{\rm max}$ is the maximum allowable Chirikov parameter.
+Moreover,
+\begin{equation}
+{\mit\Delta\Psi}_{N\,k } = -\frac{A_k^{(2)}}{8}\,(X_{k+}-X_{k-})^{\,2}.
+\end{equation}
 
 \section{Technical Details}
 \subsection{Flux Coordinate System}
@@ -850,7 +845,7 @@ It follows that
 Hence,
 \begin{align}
 L_c &= \frac{1}{|\gamma|}\,\frac{I_2^{\,2}}{I_1^{\,2}\,I_3}\sum_{k>0}
-I_{5,k}\,I_{6,k},\\[0.5ex]
+I_{4,k}\,I_{5,k},\\[0.5ex]
 \omega_{t\,a}&\equiv \frac{v_{T\,a}}{L_c} = K_{t}\,|\gamma|\,v_{T\,a},\\[0.5ex]
 \nu_{\ast\,a} &\equiv \frac{8}{3\pi}\,\frac{\langle B^{\,2}\rangle}{\langle
 ({\bf b}\cdot\nabla B)^{\,2}\rangle}\,\frac{g_t\,\omega_{t\,a}}{v_{T\,a}^{\,2}\,\tau_{aa}}= K_{\ast}\,\frac{g_t}{\omega_{t\,a}\,\tau_{aa}},\\[0.5ex]

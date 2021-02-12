@@ -5,7 +5,13 @@ size(1000,500,IgnoreAspect);
 file    in = input("../../Outputs/Stage3/omega.txt").line();
 real[][] A = in.dimension (0,0);
 A          = transpose(A);
-     
+
+file    inx = input ("../../../Flux/Outputs/Stage1/Psilim.txt").line();
+real[][] Ax = inx.dimension (0, 0);
+real[] ppp  = Ax[0];
+real psilim = ppp[0];
+real psiped = ppp[1];    
+
 real[] r    = A[4];
 real[] wlin = A[1];
 real[] wnl  = A[2];
@@ -24,10 +30,9 @@ ylimits (-150, 550,Crop);
 s = dotted + black + 1;
 yequals (0., s);
 
-s = dotted + black + 2;
-
-xequals (0.945, s);
-
+s = dotted + black + 1.5;
+xequals (psilim, s);
+xequals (psiped, s);
 
 pen qq = fontsize(25.);
 defaultpen (qq);

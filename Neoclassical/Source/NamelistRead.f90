@@ -4,7 +4,7 @@
 ! Function to read NEOCLASSICAL namelist
 ! ######################################
 
-subroutine NameListRead (IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB) &
+subroutine NameListRead (IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH) &
      bind (c, name = 'NameListRead')
   
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -17,6 +17,7 @@ subroutine NameListRead (IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, L
   integer (kind = c_int),    intent (inout) :: INTF
   integer (kind = c_int),    intent (inout) :: INTC
   integer (kind = c_int),    intent (inout) :: NTYPE
+  integer (kind = c_int),    intent (inout) :: NSMOOTH
   real    (kind = c_double), intent (inout) :: NN
   real    (kind = c_double), intent (inout) :: LN
   real    (kind = c_double), intent (inout) :: SVN
@@ -25,7 +26,7 @@ subroutine NameListRead (IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, L
   real    (kind = c_double), intent (inout) :: TIME
   real    (kind = c_double), intent (inout) :: COULOMB
   
-  namelist /NEOCLASSICAL_CONTROL/ IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB
+  namelist /NEOCLASSICAL_CONTROL/ IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH
   
   open  (unit = 100, file = 'Inputs/Neoclassical.nml', status = 'old')
   read  (unit = 100, nml = NEOCLASSICAL_CONTROL) 

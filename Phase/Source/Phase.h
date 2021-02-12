@@ -57,7 +57,8 @@
 // 2.10 - Added CHIR parameter
 // 2.11 - Added FREQ == 2 option
 // 2.12 - Added total pressure decrement
-// 2.13 - Normalize total pressure decrement by P(0). Added IRMP. 
+// 2.13 - Normalize total pressure decrement by P(0). Added IRMP.
+// 2.14 - Added higher order transport calculation
 
 // #######################################################################
 
@@ -65,7 +66,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 13
+#define VERSION_MINOR 14
 
 #include <stdio.h>
 #include <math.h>
@@ -91,7 +92,7 @@ using namespace blitz;
 
 // Namelist funtion
 extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TSTART, double* TEND,
-			      double* SCALE, double* PMAX, double* CHIR, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -123,6 +124,7 @@ class Phase
   double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
   int      IFLA;   // If != 0 then set all ICTRL values to IRMP
+  int      HIGH;   // If != 0 use higher order transport analysis
   double   IRMP;   // RMP current (kA)
   
   int      NCTRL;  // Number of control points
@@ -144,6 +146,7 @@ class Phase
   double q0;              // Safety factor at magnetic axis
   double qa;              // Safety factor at plasma boundary
   double PSILIM;          // Limiting value of PsiN
+  double Pped;            // Pedestal pressure / central pressure
   int    nres;            // Number of resonant surfaces in plasma
   gsl_matrix_complex* FF; // Plasma inverse tearing stability matrix
   gsl_matrix_complex* EE; // Plasma tearing stability matrix 
@@ -164,40 +167,53 @@ class Phase
   // ------------------------------
  
   // Read from Inputs/nFile
-  double          tau_A;   // Alfven time
-  double          P0;      // Central thermal pressure
-  Array<int,1>    mk;      // Resonant poloidal mode numbers
-  Array<int,1>    ntor;    // Resonant toroidal mode number
-  Array<double,1> rk;      // Normalized minor radii of resonant surfaces
-  Array<double,1> qk;      // Safety-factors at resonant surfaces
-  Array<double,1> rhok;    // Normalized mass densities at resonant surfaces
-  Array<double,1> a;       // Normalized (to R_0) plasma minor radius
-  Array<double,1> Sk;      // Lundquist numbers at resonant surfaces
-  Array<double,1> wk;      // Normalized actual natural frequencies at resonant surfaces
-  Array<double,1> wkl;     // Normalized linear natural frequencies at resonant surfaces
-  Array<double,1> wke;     // Normalized ExB frequencies at resonant surfaces
-  Array<double,1> wkn;     // Normalized nonlinear frequencies at resonant surfaces
-  Array<double,1> taumk;   // Normalized momentum confinement timescales at resonant surfaces
-  Array<double,1> tautk;   // Normalized poloidal flow damping timescales at resonant surfaces
-  Array<double,1> fack;    // Island width factors at resonant surfaces
-  Array<double,1> delk;    // Linear layer widths at resonant surfaces
-  Array<double,1> nek;     // Electron number densities at resonant surfaces
-  Array<double,1> nik;     // Ion number densities at resonant surfaces
-  Array<double,1> Tek;     // Electron temperatures at resonant surfaces
-  Array<double,1> Tik;     // Ion temperatures at resonant surfaces
-  Array<double,1> dnedrk;  // Electron density gradients at resonant surfaces
-  Array<double,1> dnidrk;  // Ion density gradients at resonant surfaces
-  Array<double,1> dTedrk;  // Electron temperature gradients at resonant surfaces
-  Array<double,1> dTidrk;  // Ion temperature gradients at resonant surfaces
-  Array<double,1> Wcrnek;  // Critical island widths for density flattening at resonant surfaces
-  Array<double,1> WcrTek;  // Critical island widths for temperature flattening at resonant surfaces
-  Array<double,1> akk;     // Metric elements at resonant surfaces
-  Array<double,1> gk;      // g values at resonant surfaces
-  Array<double,1> PsiN;    // PsiN values at rational surfaces
-  Array<double,1> dPsiNdr; // dPsiN/dr values at resonant surfaces
-  Array<double,1> Deltakp; // Delta_k+ values at rational surfaces
-  Array<double,1> Deltakm; // Delta_k- values at rational surfaces
-  
+  double          tau_A;    // Alfven time
+  double          P0;       // Central thermal pressure
+  Array<int,1>    mk;       // Resonant poloidal mode numbers
+  Array<int,1>    ntor;     // Resonant toroidal mode number
+  Array<double,1> rk;       // Normalized minor radii of resonant surfaces
+  Array<double,1> qk;       // Safety-factors at resonant surfaces
+  Array<double,1> rhok;     // Normalized mass densities at resonant surfaces
+  Array<double,1> a;        // Normalized (to R_0) plasma minor radius
+  Array<double,1> Sk;       // Lundquist numbers at resonant surfaces
+  Array<double,1> wk;       // Normalized actual natural frequencies at resonant surfaces
+  Array<double,1> taumk;    // Normalized momentum confinement timescales at resonant surfaces
+  Array<double,1> tautk;    // Normalized poloidal flow damping timescales at resonant surfaces
+  Array<double,1> fack;     // Island width factors at resonant surfaces
+  Array<double,1> delk;     // Linear layer widths at resonant surfaces
+  Array<double,1> wkl;      // Normalized linear natural frequencies at resonant surfaces
+  Array<double,1> wke;      // Normalized ExB frequencies at resonant surfaces
+  Array<double,1> wkn;      // Normalized nonlinear frequencies at resonant surfaces
+  Array<double,1> dnedrk;   // Electron density gradients at resonant surfaces
+  Array<double,1> dTedrk;   // Electron temperature gradients at resonant surfaces
+  Array<double,1> Wcrnek;   // Critical island widths for density flattening at resonant surfaces
+  Array<double,1> WcrTek;   // Critical island widths for electron temperature flattening at resonant surfaces
+  Array<double,1> WcrTik;   // Critical island widths for ion temperature flattening at resonant surfaces
+  Array<double,1> akk;      // Metric elements at resonant surfaces
+  Array<double,1> gk;       // g values at resonant surfaces
+  Array<double,1> dPsiNdr;  // dPsiN/dr values at resonant surfaces
+  Array<double,1> PsiN;     // PsiN values at rational surfaces
+  Array<double,1> nek;      // Electron number densities at resonant surfaces
+  Array<double,1> nik;      // Ion number densities at resonant surfaces
+  Array<double,1> Tek;      // Electron temperatures at resonant surfaces
+  Array<double,1> Tik;      // Ion temperatures at resonant surfaces
+  Array<double,1> dnidrk;   // Ion density gradients at resonant surfaces
+  Array<double,1> dTidrk;   // Ion temperature gradients at resonant surfaces
+  Array<double,1> Factor1;  // Transport factor
+  Array<double,1> Factor2;  // Transport factor
+  Array<double,1> Factor3;  // Transport factor
+  Array<double,1> Factor4;  // Transport factor
+  Array<double,1> Factor5;  // Transport factor
+  Array<double,1> Factor6;  // Transport factor
+  Array<double,1> Factor7;  // Transport factor
+  Array<double,1> Factor8;  // Transport factor
+  Array<double,1> Factor9;  // Transport factor
+  Array<double,1> Factor10; // Transport factor
+  Array<double,1> Factor11; // Transport factor
+  Array<double,1> Factor12; // Transport factor
+  Array<double,1> Deltakp;  // Delta_k+ values at rational surfaces
+  Array<double,1> Deltakm;  // Delta_k- values at rational surfaces
+   
   // ----------------------
   // Data from program GPEC
   // ----------------------
@@ -368,7 +384,7 @@ class Phase
   // Find width in PsiN of vacuum magnetic island chain
   double GetVacuumIslandWidth (int j);
   // Find limits of magnetic island chains in PsiN
-  void GetIslandLimits (int j, double Psi, double chir, double& Xminus, double& Xplus);
+  void GetIslandLimits (int j, double Psi, double& Xminus, double& Xplus);
   // Solve island width equation
   double GetIslandRoot (double c);
 

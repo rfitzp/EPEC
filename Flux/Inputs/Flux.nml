@@ -1,4 +1,5 @@
-&FLUX_CONTROL
+	&FLUX_CONTROL
+	NSMOOTH = 100    ! Number of smoothing cycles for higher derivatives of q
 	INTG    = 0      ! Flag for interpolating gFiles
 	NPSI    = 512	 ! Number of points in PsiN grid
 	PACK    = 2.     ! Packing index for PsiN grid

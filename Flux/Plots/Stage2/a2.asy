@@ -13,7 +13,7 @@ real psilim = ppp[0];
 real psiped = ppp[1];
      
 real[] p  = A[3];
-real[] q  = A[16];
+real[] q  = A[18];
 
 real[] psi = 1. - p;
 
@@ -23,7 +23,8 @@ draw(graph(psi,q),s,marker(scale(0.5mm)*polygon(3), s1));
 
 //xlimits (0.85, 1., Crop);
 
-limits ((0.85,0.), (1., 20.), Crop);
+//limits ((0.85,0.), (1., 20.), Crop);
+xlimits (0.85, 1., Crop);
 
 s = dotted + 1.5 + black;
 yequals (0., s);
@@ -33,4 +34,4 @@ xequals (psiped, s);
 pen qq = fontsize(25.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
-yaxis("$A_1$",LeftRight,RightTicks);
+yaxis("$A_2$",LeftRight,RightTicks);

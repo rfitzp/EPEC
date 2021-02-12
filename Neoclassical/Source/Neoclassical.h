@@ -49,6 +49,7 @@
 // 1.14 - Renamed Namelist. Adjusted for new fFile format
 // 1.15 - Added extra information to nFile
 // 1.16 - Added P0 to nFile
+// 1.17 - Added higher order derivatives of profiles
 
 // ################################################################
 
@@ -56,7 +57,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 16
+#define VERSION_MINOR 17
 
 #include <stdio.h>
 #include <math.h>
@@ -79,7 +80,7 @@ using namespace blitz;
 
 // Namelist funtion
 extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* INTP, int* INTF, int* INTC, 
-			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN, double* TIME, double* COULOMB);
+			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN, double* TIME, double* COULOMB, int* NSMOOTH);
 
 // ############
 // Class header
@@ -96,6 +97,7 @@ class Neoclassical
   // ------------------
 
   // Read from Inputs/Neoclassical.nml
+  int    NSMOOTH;  // Number of smoothing cycles for higher devivatives of profiles
   int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
   int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
   int    FREQ;     // Natural frequency switch:
@@ -150,6 +152,7 @@ class Neoclassical
   Array<double,1> psi;    // Normalized poloidal magnetic flux
   Array<double,1> rr;     // Normalized flux-surface minor radius
   Array<double,1> dpsidr; // Normalized dpsi/dr
+  double          PSILIM; // Maximum PSIN
 
   // -------------------
   // Plasma profile data
@@ -180,18 +183,18 @@ class Neoclassical
 
   // Profile data interpolated onto equilibrium grid
   Array<double,1> n_e;    // Electron number density (m^-3)
-  Array<double,1> dn_edr; // Electron number density gradient (m^-4)
+  Array<double,1> dn_edr; // Electron number density gradient in r (m^-4)
   Array<double,1> T_e;    // Electron temperature (J)
-  Array<double,1> dT_edr; // Electron temperature gradient (J m^-1)
+  Array<double,1> dT_edr; // Electron temperature gradient in r (J m^-1)
   Array<double,1> n_i;    // Majority ion number density (m^-3)
-  Array<double,1> dn_idr; // Majority ion number density gradient  (m^-4)
+  Array<double,1> dn_idr; // Majority ion number density gradient in r (m^-4)
   Array<double,1> T_i;    // Majority ion temperature (J)
-  Array<double,1> dT_idr; // Majority ion temperature gradient (J m^-1)
+  Array<double,1> dT_idr; // Majority ion temperature gradient in r (J m^-1)
   Array<double,1> n_b;    // Fast majority ion number density (m^-3)
   Array<double,1> n_I;    // Impurity ion number density (m^-3)
   Array<double,1> dn_Idr; // Impurity ion number density gradient (m^-4)
   Array<double,1> T_I;    // Impurity ion temperature (J)
-  Array<double,1> dT_Idr; // Impurity ion temperature gradient (J m^-1)
+  Array<double,1> dT_Idr; // Impurity ion temperature gradient in r (J m^-1)
   Array<double,1> n_n;    // Neutral number density (m^-3)
   Array<double,1> w_E;    // ExB frequency (rad/s)
   Array<double,1> w_t;    // Impurity ion toroidal angular frequency (rad/s)
@@ -202,6 +205,32 @@ class Neoclassical
   Array<double,1> chie;   // Perpendicular energy   diffusivity (m^2 s^-1)
   Array<double,1> chin;   // Perpendicular particle diffusivity (m^2 s^-1)
 
+  Array<double,1> dn_edP1; // Electron number density 1st derivative in PsiN (m^-3)
+  Array<double,1> dT_edP1; // Electron temperature 1st derivative in PsiN (J)
+  Array<double,1> dn_idP1; // Majority ion number 1st density derivative in PsiN (m^-3)
+  Array<double,1> dT_idP1; // Majority ion temperature 1st derivative in PsiN (J)
+  Array<double,1> dn_edP2; // Electron number density 2nd derivative in PsiN (m^-3)
+  Array<double,1> dT_edP2; // Electron temperature 2nd derivative in PsiN (J)
+  Array<double,1> dn_idP2; // Majority ion number density 2nd derivative in PsiN (m^-3)
+  Array<double,1> dT_idP2; // Majority ion temperature 2nd derivative in PsiN (J)
+  Array<double,1> dn_edP3; // Electron number density 3rd derivative in PsiN (m^-3)
+  Array<double,1> dT_edP3; // Electron temperature 3rd derivative in PsiN (J)
+  Array<double,1> dn_idP3; // Majority ion number density 3rd derivative in PsiN (m^-3)
+  Array<double,1> dT_idP3; // Majority ion temperature 3rd derivative in PsiN (J)
+
+  Array<double,1> Factor1;  // First transport factor
+  Array<double,1> Factor2;  // Second transport factor
+  Array<double,1> Factor3;  // Third transport factor
+  Array<double,1> Factor4;  // Fourth transport factor
+  Array<double,1> Factor5;  // Fifth transport factor
+  Array<double,1> Factor6;  // Sixth transport factor
+  Array<double,1> Factor7;  // Seventh transport factor
+  Array<double,1> Factor8;  // Eight transport factor
+  Array<double,1> Factor9;  // Ninth transport factor
+  Array<double,1> Factor10; // Tenth transport factor
+  Array<double,1> Factor11; // Eleventh transport factor
+  Array<double,1> Factor12; // Twelth transport factor
+  
   // ---------------------------
   // Rational surface parameters
   // ---------------------------
@@ -222,6 +251,7 @@ class Neoclassical
   Array<double,1> fck;    // Fractions of circulating particles
   Array<double,1> akk;    // Metric elements
   Array<double,1> dPsidr; // dPsiN/dr
+  Array<double,1> A2;     // A2
 
   // Derived from profiles
   double rho0;                // Central mass density
@@ -251,6 +281,19 @@ class Neoclassical
   Array<double,1> chiek;      // Perpendicular energy   diffusivities
   Array<double,1> chink;      // Perpendicular particle diffusivities
 
+  Array<double,1> dnedP1k;    // Electron number density 1st derivative wrt PsiN
+  Array<double,1> dTedP1k;    // Electron temperature 1st derivative wrt PsiN
+  Array<double,1> dnidP1k;    // Ion number density 1st derivative wrt PsiN
+  Array<double,1> dTidP1k;    // Ion temperature 1st derivative wrt PsiN
+  Array<double,1> dnedP2k;    // Electron number density 2nd derivative wrt PsiN
+  Array<double,1> dTedP2k;    // Electron temperature 2nd derivative wrt PsiN
+  Array<double,1> dnidP2k;    // Ion number density 2nd derivative wrt PsiN
+  Array<double,1> dTidP2k;    // Ion temperature 2nd derivative wrt PsiN
+  Array<double,1> dnedP3k;    // Electron number density 3rd derivative wrt PsiN
+  Array<double,1> dTedP3k;    // Electron temperature 3rd derivative wrt PsiN
+  Array<double,1> dnidP3k;    // Ion number density 3rd derivative wrt PsiN
+  Array<double,1> dTidP3k;    // Ion temperature 3rd derivative wrt PsiN
+
   Array<double,1> v_T_ek;     // Electron thermal velocities
   Array<double,1> v_T_ik;     // Majority ion thermal velocities
   Array<double,1> v_T_Ik;     // Impurity ion thermal velocities
@@ -263,8 +306,9 @@ class Neoclassical
   Array<double,1> nu_iik;     // Majority ion collision frequencies
   Array<double,1> nu_IIk;     // Impurity ion collision frequencies
 
-  Array<double,1> WcritTk;    // Critical island width for temperature flattening
-  Array<double,1> Wcritnk;    // Critical island width for density flattening
+  Array<double,1> WcritTek;   // Critical island width for electron temperature flattening
+  Array<double,1> WcritTik;   // Critical island width for ion temperature flattening
+  Array<double,1> Wcritnek;   // Critical island width for density flattening
 
   Array<double,1> eta_ek;     // Relative electron temperature gradients
   Array<double,1> eta_ik;     // Relative majority ion temperature gradients
@@ -428,6 +472,9 @@ class Neoclassical
 		    double h_min, double h_max, int flag, int diag, FILE* file);
   // Fixed step integration routine
   void RK4Fixed (double& x, Array<double,1>& y, double h);
+
+  // Savitsky-Gorlay smoothing routine
+  void Smoothing (int N, Array<double,1> y);
 
   // Open file for reading
   FILE* OpenFiler (char* filename);

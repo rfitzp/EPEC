@@ -63,14 +63,14 @@ void Flux::Stage2 ()
   // Output fFile
   // ............
   FILE* file = OpenFilew ((char*) "Outputs/fFile");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e\n",
-	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e\n",
+	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped);
   for (int j = 0; j < NPSI; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i]);
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i]);
   for (int i = 0; i < nres; i++)
     for (int j = 0; j < nres; j++)
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
@@ -90,14 +90,14 @@ void Flux::Stage2 ()
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
       file = OpenFilew (filename);
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e\n",
-	       R0, B0, ra * R0, q95, r95 /ra, qlim, rlim/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM);
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e \n",
+	       R0, B0, ra * R0, q95, r95 /ra, qlim, rlim/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped);
       for (int j = 0; j < NPSI; j++)
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
       for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i]);
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i]);
       for (int i = 0; i < nres; i++)
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
@@ -141,11 +141,11 @@ void Flux::Stage2 ()
   delete[] PPP;  delete[] S;   delete[] QX; delete[] RP1;
   delete[] Bt;   delete[] Bt1; delete[] Bp; delete[] Bp1;
 
-  delete[] PsiN; delete[] QPN; delete[] A1;  
+  delete[] PsiN; delete[] QPN; delete[] QPPN, delete[] A1, delete[] A2;
   
   delete[] mres;    delete[] qres;  delete[] rres;  delete[] sres;
   delete[] gres;    delete[] Rres;  delete[] gmres; delete[] fcres;
-  delete[] PsiNres; delete[] Rres1; delete[] A1res; 
+  delete[] PsiNres; delete[] Rres1; delete[] A1res; delete[] A2res;
 
   delete[] th; 
   gsl_matrix_free (Rst); gsl_matrix_free (Zst);
@@ -520,7 +520,9 @@ void Flux::Stage2CalcQ ()
 
   PsiN = new double[NPSI]; // PsiN array
   QPN  = new double[NPSI]; // dQ/dPsiN array
+  QPPN = new double[NPSI]; // d^2Q/dPsiN^2 array
   A1   = new double[NPSI]; // QP/QPN/fabs(Psic) array
+  A2   = new double[NPSI]; // QPPN/QPN/3 array
   
   for (int j = 0; j < NPSI; j++)
     {
@@ -568,7 +570,6 @@ void Flux::Stage2CalcQ ()
   QP [NPSI-1] = QGP[NPSI-1] * G[NRPTS-1];
 
   // Calculate and smooth QPN profile (quartic interpolation)
-  int NSMOOTH = 8;
   double* QPSmooth = new double[NPSI];
 
   for (int i = 0; i < NPSI; i++)
@@ -577,17 +578,32 @@ void Flux::Stage2CalcQ ()
   for (int i = 0; i < NSMOOTH; i++)
     Smoothing (NPSI, QPSmooth);
 
-   for (int j = 0; j < NPSI; j++)
-    QPN [j] = InterpolateQ (NPSI, PsiN, QP, PsiN[j], 1, 4);
+  for (int j = 0; j < NPSI; j++)
+    {
+      QPN  [j] = InterpolateQ (NPSI, PsiN, QPSmooth, PsiN[j], 1, 4);
+      QPPN [j] = InterpolateQ (NPSI, PsiN, QPSmooth, PsiN[j], 2, 4);
+    }
    
   for (int i = 0; i < NSMOOTH; i++)
-    Smoothing (NPSI, QPN);
+    {
+      Smoothing (NPSI, QPN);
+      Smoothing (NPSI, QPPN);
+    }
 
   delete[] QPSmooth;
   
   // Calculate A1 profile
   for (int j = 0; j < NPSI; j++)
-    A1[j] = QP[j] /QPN[j] /fabs(Psic);
+    {
+      A1[j] = QP[j] /QPN[j] /fabs(Psic);
+      A2[j] = QPPN[j] /QPN[j] /3.;
+    }
+
+  for (int i = 0; i < NSMOOTH; i++)
+    {
+      Smoothing (NPSI, A1);
+      Smoothing (NPSI, A2);
+    }
 
   // ...........................................
   // Calculate B_tor, B_pol profiles on midplane
@@ -635,9 +651,9 @@ void Flux::Stage2CalcQ ()
   qlim   = Interpolate (NPSI, S, QP, slim, 0);
   rlim   = Interpolate (NPSI, S, rP, slim, 0);
   qa     = Interpolate (NPSI, S, QP, sa,   0);
-  double pped   = Interpolate (NPSI, S, PP, sped, 0)/ PP[0];
+  Pped   = Interpolate (NPSI, S, PP, sped, 0)/ PP[0];
   printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)  Pped/P(0) = %11.4e\n",
-	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0, pped);
+	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0, Pped);
 
   // ..................
   // Output q95 and r95
@@ -653,8 +669,8 @@ void Flux::Stage2CalcQ ()
   for (int j = 0; j < NPSI; j++)
     {
       if (1. - P[j] < PSILIM)
-	fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
-		 rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j]);
+	fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
+		 rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j], QPPN[j], A2[j]);
     }
   fclose (file);
 }
@@ -696,6 +712,8 @@ void Flux::Stage2FindRational ()
   fcres   = new double[nres];
   PsiNres = new double[nres];
   A1res   = new double[nres];
+  A2res   = new double[nres];
+
   for (int i = 0; i < nres; i++)
     {
       mres[i] = mmin + i;
@@ -728,12 +746,13 @@ void Flux::Stage2FindRational ()
       Rres1  [i] = Interpolate (NPSI, rP, RP1,  rres[i], 0);
       PsiNres[i] = Interpolate (NPSI, rP, PsiN, rres[i], 0);
       A1res  [i] = Interpolate (NPSI, rP, A1,   rres[i], 0);
+      A2res  [i] = Interpolate (NPSI, rP, A2,   rres[i], 0);
     }
 
   printf ("Rational surface data:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  residual = %11.4e\n",
-	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], 1. - (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i]);
+    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  residual = %11.4e  A2 = %11.4e\n",
+	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], 1. - (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i], A2res[i]);
    
   // .....................................
   // Confirm q values at rational surfaces

@@ -9,6 +9,7 @@
 	MID    = 1     ! Flag for inclusion of mFiles
 	SCALE  = 2.    ! GPEC scalefactor
 	CHIR   = 1.    ! Maximum Chirihov parameter for vacuum islands
+        HIGH   = 0     ! Flag for higher order transport analysis
 	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
 	STAGE5 = 0     ! Flag for Stage5 calculation
 	TSTART = 0.    ! Simulation start time (ms)

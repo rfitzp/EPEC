@@ -1,4 +1,6 @@
 &NEOCLASSICAL_CONTROL
+	COULOMB  = 17.	   ! Coulomb logarithm
+	NSMOOTH  = 100     ! Number of smoothing cycles for higher derivatives of profiles
 	IMPURITY = 1       ! Flag for impurities
 	NEUTRAL  = 1       ! Flag for neutrals
 	FREQ     = -3      ! Flag for selecting natural frequency
@@ -12,5 +14,4 @@
 	SVN      = 4.e-14  ! Charge exchange rate constant (m^3/s)
 	EN       = 1.      ! Neutral energy/ion energy
 	TIME     = 0.      ! Experimental time (ms)
-	COULOMB  = 17.     ! Coulomb logarithm
 &end	

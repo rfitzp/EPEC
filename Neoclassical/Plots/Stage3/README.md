@@ -48,5 +48,25 @@
 	wet.asy     ... plots components of w_E_I at rational surfaces versus PsiN
 	wtorf.asy   ... plots w_tor(PsiN)
 	chif.asy    ... plots chi_perp energy/momentum/particles versus PsiN
+	
+	ne1.asy     ... plots dn_e/dPsiN in pedestal
+	te1.asy     ... plots dT_e/dPsiN in pedestal
+	ni1.asy     ... plots dn_i/dPsiN in pedestal
+	ti1.asy     ... plots dT_i/dPsiN in pedestal
+
+	ne2.asy     ... plots d^2n_e/dPsiN^2 in pedestal
+	te2.asy     ... plots d^2T_e/dPsiN^2 in pedestal
+	ni2.asy     ... plots d^2n_i/dPsiN^2 in pedestal
+	ti2.asy     ... plots d^2T_i/dPsiN^2 in pedestal
+
+	ne3.asy     ... plots d^3n_e/dPsiN^3 in pedestal
+	te3.asy     ... plots d^3T_e/dPsiN^3 in pedestal
+	ni3.asy     ... plots d^3n_i/dPsiN^3 in pedestal
+	ti3.asy     ... plots d^3T_i/dPsiN^3 in pedestal
+	
+	factor14.asy  ... plots transport factors 1-4
+	factor58.asy  ... plots transport factors 5-9
+	factor912.asy ... plots transport factors 9-12
+	
 
 

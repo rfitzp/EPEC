@@ -21,7 +21,9 @@
 	qgp.asy      ... plots (q/g)(PsiN)
 	qp.asy       ... plots q(PsiN)
 	qp1.asy      ... plots 1st derivative of q(PsiN)
+	qp2.asy      ... plots 2nd derivative of q(PsiN)
 	a1.asy       ... plots A1(PsiN)
+    a2.asy       ... plots A2(PsiN)
 
 	rational.asy ... plots rational surfaces
 

@@ -5,7 +5,13 @@ size(1000,500,IgnoreAspect);
 file    in = input("../../Outputs/Stage3/profiles.txt").line();
 real[][] A = in.dimension (0,0);
 A          = transpose(A);
-     
+
+file    inx = input ("../../../Flux/Outputs/Stage1/Psilim.txt").line();
+real[][] Ax = inx.dimension (0, 0);
+real[] ppp  = Ax[0];
+real psilim = ppp[0];
+real psiped = ppp[1];     
+
 real[] psi = A[0];
 real[] r   = A[1];
 real[] q   = A[20];
@@ -16,11 +22,12 @@ draw(graph(psi,q),s);
 s = dotted + black + 1;
 yequals (0.,s);
 
-s = dotted + black + 2;
-
-xequals (0.945, s);
-
 xlimits (0.,1.0,Crop);
+
+s = dotted + black + 1.5;
+
+xequals (psilim, s);
+xequals (psiped, s);
 
 pen qq = fontsize(25.);
 defaultpen (qq);

@@ -233,7 +233,6 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   double precision, dimension (:),    allocatable :: RBOUND,  ZBOUND,   RLIM,    ZLIM    
   double precision, dimension (:, :), allocatable :: PSI
 
-  
   ! -----------------------
   ! Read file and time data
   ! -----------------------

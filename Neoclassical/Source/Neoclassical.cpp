@@ -102,9 +102,10 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   EN       = 0.;
   TIME     = 0.;
   COULOMB  = 17.;
+  NSMOOTH  = 100;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB);
+  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH);
 
   // Override namelist values with command line option values
   if (_NEUTRAL > -1)
@@ -135,8 +136,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	  IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  printf ("IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d\n",
+	  IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH);
 
   // Sanity check
   if (YN < 0.)
@@ -180,8 +181,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d\n",
+	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -189,8 +190,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e\n",
-	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME);
+  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d\n",
+	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH);
   fclose (monitor);
 }
 
@@ -263,8 +264,8 @@ void Neoclassical::Read_Equilibrium ()
   // Read parameters
   FILE* file = OpenFiler ((char*) "Inputs/fFile");
   double in;
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf",
-	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres, &in) != 13)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
+	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres, &PSILIM, &in, &in) != 15)
     {
       printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (1)\n");
       exit (1);  
@@ -299,11 +300,12 @@ void Neoclassical::Read_Equilibrium ()
   akk.resize    (nres);
   PsiNk.resize  (nres);
   dPsidr.resize (nres);
+  A2.resize     (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j), &Kthek (j), &in) != 13)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j), &Kthek (j), &in, &A2 (j)) != 14)
 	{
 	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);
@@ -392,41 +394,41 @@ void Neoclassical::Read_Profiles ()
   double fac0 = dpsidr (0)      /a;
   double fac1 = dpsidr (NPSI-1) /a;
   
-  n_e.resize    (NPSI);
-  dn_edr.resize (NPSI);
-  T_e.resize    (NPSI);
-  dT_edr.resize (NPSI);
-  n_i.resize    (NPSI);
-  dn_idr.resize (NPSI);
-  T_i.resize    (NPSI);
-  dT_idr.resize (NPSI);
-  n_b.resize    (NPSI);
-  w_E.resize    (NPSI);
-  w_t.resize    (NPSI);
-  n_I.resize    (NPSI);
-  dn_Idr.resize (NPSI);
-  T_I.resize    (NPSI);
-  dT_Idr.resize (NPSI);
-  n_n.resize    (NPSI);
-  Quasi.resize  (NPSI);
-  Z_eff.resize  (NPSI);
+  n_e.resize    (NPSI); dn_edr.resize (NPSI);
+  T_e.resize    (NPSI); dT_edr.resize (NPSI);
+  n_i.resize    (NPSI); dn_idr.resize (NPSI);
+  T_i.resize    (NPSI); dT_idr.resize (NPSI);
+  n_b.resize    (NPSI); w_E.resize    (NPSI);
+  w_t.resize    (NPSI); n_I.resize    (NPSI);
+  dn_Idr.resize (NPSI); T_I.resize    (NPSI);
+  dT_Idr.resize (NPSI); n_n.resize    (NPSI);
+  Quasi.resize  (NPSI); Z_eff.resize  (NPSI);
   alpha.resize  (NPSI);
-  
-  n_e    (0)      = ne.GetY    (0);
-  dn_edr (0)      = ne.GetdYdX (0) * fac0;
-  T_e    (0)      = Te.GetY    (0);
-  dT_edr (0)      = Te.GetdYdX (0) * fac0;
-  n_i    (0)      = ni.GetY    (0);
-  dn_idr (0)      = ni.GetdYdX (0) * fac0;
-  T_i    (0)      = Ti.GetY    (0);
-  dT_idr (0)      = Ti.GetdYdX (0) * fac0;
-  n_b    (0)      = nb.GetY    (0);
-  w_E    (0)      = wE.GetY    (0);
-  w_t    (0)      = wt.GetY    (0);
-  n_I    (0)      = nI.GetY    (0);
-  dn_Idr (0)      = nI.GetdYdX (0) * fac0;
-  T_I    (0)      = Ti.GetY    (0);
-  dT_Idr (0)      = Ti.GetdYdX (0) * fac0;
+
+  dn_edP1.resize (NPSI); dT_edP1.resize (NPSI); dn_idP1.resize (NPSI); dT_idP1.resize (NPSI);
+  dn_edP2.resize (NPSI); dT_edP2.resize (NPSI); dn_idP2.resize (NPSI); dT_idP2.resize (NPSI);
+  dn_edP3.resize (NPSI); dT_edP3.resize (NPSI); dn_idP3.resize (NPSI); dT_idP3.resize (NPSI);
+
+  n_e    (0)  = ne.GetY    (0);
+  dn_edr (0)  = ne.GetdYdX (0) * fac0;
+  T_e    (0)  = Te.GetY    (0);
+  dT_edr (0)  = Te.GetdYdX (0) * fac0;
+  n_i    (0)  = ni.GetY    (0);
+  dn_idr (0)  = ni.GetdYdX (0) * fac0;
+  T_i    (0)  = Ti.GetY    (0);
+  dT_idr (0)  = Ti.GetdYdX (0) * fac0;
+  n_b    (0)  = nb.GetY    (0);
+  w_E    (0)  = wE.GetY    (0);
+  w_t    (0)  = wt.GetY    (0);
+  n_I    (0)  = nI.GetY    (0);
+  dn_Idr (0)  = nI.GetdYdX (0) * fac0;
+  T_I    (0)  = Ti.GetY    (0);
+  dT_Idr (0)  = Ti.GetdYdX (0) * fac0;
+
+  dn_edP1 (0) = ne.GetdYdX (0);
+  dT_edP1 (0) = Te.GetdYdX (0);
+  dn_idP1 (0) = ni.GetdYdX (0);
+  dT_idP1 (0) = Ti.GetdYdX (0);
   
   n_e    (NPSI-1) = ne.GetY    (ne.GetN()-1);
   dn_edr (NPSI-1) = ne.GetdYdX (ne.GetN()-1) * fac1;
@@ -444,6 +446,11 @@ void Neoclassical::Read_Profiles ()
   T_I    (NPSI-1) = Ti.GetY    (Ti.GetN()-1);
   dT_Idr (NPSI-1) = Ti.GetdYdX (Ti.GetN()-1) * fac1;
 
+  dn_edP1 (NPSI-1) = ne.GetdYdX (ne.GetN()-1);
+  dT_edP1 (NPSI-1) = Te.GetdYdX (Te.GetN()-1);
+  dn_idP1 (NPSI-1) = ni.GetdYdX (ni.GetN()-1);
+  dT_idP1 (NPSI-1) = Ti.GetdYdX (Ti.GetN()-1);
+  
   for (int j = 1; j < NPSI-1; j++)
     {
       n_e    (j) = InterpolateField (ne, psi (j), 0);
@@ -461,8 +468,54 @@ void Neoclassical::Read_Profiles ()
       dn_Idr (j) = InterpolateField (nI, psi (j), 1) * dpsidr (j) /a;
       T_I    (j) = InterpolateField (Ti, psi (j), 0);
       dT_Idr (j) = InterpolateField (Ti, psi (j), 1) * dpsidr (j) /a;
+
+      dn_edP1 (j) = InterpolateField (ne, psi (j), 1);
+      dT_edP1 (j) = InterpolateField (Te, psi (j), 1);
+      dn_idP1 (j) = InterpolateField (ni, psi (j), 1);
+      dT_idP1 (j) = InterpolateField (Ti, psi (j), 1);
+     }
+
+  // Calculate higher derivatives of density and temperature profiles
+  for (int i = 0; i < NSMOOTH; i++)
+    {
+      Smoothing (NPSI, dn_edP1);
+      Smoothing (NPSI, dT_edP1);
+      Smoothing (NPSI, dn_idP1);
+      Smoothing (NPSI, dT_idP1);
     }
 
+  for (int j = 0; j < NPSI; j++)
+    {
+      dn_edP2 (j) = Interpolate (NPSI, psi, dn_edP1, psi (j), 1);
+      dT_edP2 (j) = Interpolate (NPSI, psi, dT_edP1, psi (j), 1);
+      dn_idP2 (j) = Interpolate (NPSI, psi, dn_idP1, psi (j), 1);
+      dT_idP2 (j) = Interpolate (NPSI, psi, dT_idP1, psi (j), 1);
+    }
+
+  for (int i = 0; i < NSMOOTH; i++)
+    {
+      Smoothing (NPSI, dn_edP2);
+      Smoothing (NPSI, dT_edP2);
+      Smoothing (NPSI, dn_idP2);
+      Smoothing (NPSI, dT_idP2);
+    }
+  
+  for (int j = 0; j < NPSI; j++)
+    {
+      dn_edP3 (j) = Interpolate (NPSI, psi, dn_edP2, psi (j), 1);
+      dT_edP3 (j) = Interpolate (NPSI, psi, dT_edP2, psi (j), 1);
+      dn_idP3 (j) = Interpolate (NPSI, psi, dn_idP2, psi (j), 1);
+      dT_idP3 (j) = Interpolate (NPSI, psi, dT_idP2, psi (j), 1);
+    }
+
+   for (int i = 0; i < NSMOOTH; i++)
+    {
+      Smoothing (NPSI, dn_edP3);
+      Smoothing (NPSI, dT_edP3);
+      Smoothing (NPSI, dn_idP3);
+      Smoothing (NPSI, dT_idP3);
+    }
+  
   // Derived parameters
   for (int j = 0; j < NPSI; j++)
     {
@@ -478,12 +531,17 @@ void Neoclassical::Read_Profiles ()
   // Output profiles
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/profiles.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     psi (j), rr (j),
-	     n_e (j) /1.e19, dn_edr (j) /1.e19, T_e (j) /1.e3/e, dT_edr (j) /1.e3/e,
-	     n_i (j) /1.e19, dn_idr (j) /1.e19, T_i (j) /1.e3/e, dT_idr (j) /1.e3/e,
-	     n_I (j) /1.e19, dn_Idr (j) /1.e19, T_I (j) /1.e3/e, dT_Idr (j) /1.e3/e,
-	     w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a, w_t (j) /1.e3, n_n (j) /1.e19);
+    if (psi(j) < PSILIM)
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	       psi (j), rr (j),
+	       n_e (j) /1.e19, dn_edr (j) /1.e19, T_e (j) /1.e3/e, dT_edr (j) /1.e3/e,
+	       n_i (j) /1.e19, dn_idr (j) /1.e19, T_i (j) /1.e3/e, dT_idr (j) /1.e3/e,
+	       n_I (j) /1.e19, dn_Idr (j) /1.e19, T_I (j) /1.e3/e, dT_Idr (j) /1.e3/e,
+	       w_E (j) /1.e3, Quasi (j), Z_eff (j), alpha (j), n_b (j) /1.e19, dpsidr (j) /a, w_t (j) /1.e3, n_n (j) /1.e19,
+	       dn_edP1 (j) /1.e19, dT_edP1 (j) /1.e3/e, dn_idP1 (j) /1.e19, dT_idP1 (j) /1.e3/e,
+	       dn_edP2 (j) /1.e19, dT_edP2 (j) /1.e3/e, dn_idP2 (j) /1.e19, dT_idP2 (j) /1.e3/e,
+	       dn_edP3 (j) /1.e19, dT_edP3 (j) /1.e3/e, dn_idP3 (j) /1.e19, dT_idP3 (j) /1.e3/e);
+  
   fclose (file);
 
   // Interpolate cFiles
@@ -580,28 +638,26 @@ void Neoclassical::Get_Derived ()
   tau_A = sqrt (mu_0 * rho0 * a*a /B_0/B_0);
   P0    = n_i (0) * T_i (0) + n_I (0) * T_I (0) + n_e (0) * T_e (0);
    
-  nek.resize    (nres);
-  dnedrk.resize (nres);
-  Tek.resize    (nres);
-  dTedrk.resize (nres);
-  nik.resize    (nres);
-  dnidrk.resize (nres);
-  Tik.resize    (nres);
-  dTidrk.resize (nres);
-  nIk.resize    (nres);
-  dnIdrk.resize (nres);
-  TIk.resize    (nres);
-  dTIdrk.resize (nres);
-  wEk.resize    (nres);
-  wtk.resize    (nres);
-  nbk.resize    (nres);
-  Zeffk.resize  (nres);
-  alphak.resize (nres);
-  rhok.resize   (nres);
-  NNk.resize    (nres);
-  chipk.resize  (nres);
-  chiek.resize  (nres);
-  chink.resize  (nres);
+  nek.resize    (nres); dnedrk.resize (nres);
+  Tek.resize    (nres); dTedrk.resize (nres);
+  nik.resize    (nres); dnidrk.resize (nres);
+  Tik.resize    (nres); dTidrk.resize (nres);
+  nIk.resize    (nres); dnIdrk.resize (nres);
+  TIk.resize    (nres); dTIdrk.resize (nres);
+  wEk.resize    (nres); wtk.resize    (nres);
+  nbk.resize    (nres); Zeffk.resize  (nres);
+  alphak.resize (nres); rhok.resize   (nres);
+  NNk.resize    (nres); chipk.resize  (nres);
+  chiek.resize  (nres); chink.resize  (nres);
+
+  dnedP1k.resize (nres); dTedP1k.resize (nres); dnidP1k.resize (nres); dTidP1k.resize (nres);
+  dnedP2k.resize (nres); dTedP2k.resize (nres); dnidP2k.resize (nres); dTidP2k.resize (nres);
+  dnedP3k.resize (nres); dTedP3k.resize (nres); dnidP3k.resize (nres); dTidP3k.resize (nres);
+
+  Factor1.resize  (nres); Factor2.resize  (nres); Factor3.resize  (nres);
+  Factor4.resize  (nres); Factor5.resize  (nres); Factor6.resize  (nres);
+  Factor7.resize  (nres); Factor8.resize  (nres); Factor9.resize  (nres);
+  Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -627,6 +683,34 @@ void Neoclassical::Get_Derived ()
       chink  (j) = Interpolate (NPSI, rr, chin,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
 
+      dnedP1k (j) = Interpolate (NPSI, psi, dn_edP1, rk (j), 0);
+      dTedP1k (j) = Interpolate (NPSI, psi, dT_edP1, rk (j), 0);
+      dnidP1k (j) = Interpolate (NPSI, psi, dn_idP1, rk (j), 0);
+      dTidP1k (j) = Interpolate (NPSI, psi, dT_idP1, rk (j), 0);
+      dnedP2k (j) = Interpolate (NPSI, psi, dn_edP2, rk (j), 0);
+      dTedP2k (j) = Interpolate (NPSI, psi, dT_edP2, rk (j), 0);
+      dnidP2k (j) = Interpolate (NPSI, psi, dn_idP2, rk (j), 0);
+      dTidP2k (j) = Interpolate (NPSI, psi, dT_idP2, rk (j), 0);
+      dnedP3k (j) = Interpolate (NPSI, psi, dn_edP3, rk (j), 0);
+      dTedP3k (j) = Interpolate (NPSI, psi, dT_edP3, rk (j), 0);
+      dnidP3k (j) = Interpolate (NPSI, psi, dn_idP3, rk (j), 0);
+      dTidP3k (j) = Interpolate (NPSI, psi, dT_idP3, rk (j), 0);
+
+      Factor1  (j) = dnedP1k (j) * Tek (j);
+      Factor2  (j) = dTedP1k (j) * nek (j);
+      Factor3  (j) = dnidP1k (j) * Tik (j);
+      Factor4  (j) = dTidP1k (j) * nik (j);
+      
+      Factor5  (j) = - A2 (j) * (dnedP1k (j) * dTedP1k (j) + dnedP2k (j) * Tek (j)) /8.;
+      Factor6  (j) = - A2 (j) * (dnedP1k (j) * dTedP1k (j) + dTedP2k (j) * nek (j)) /8.;
+      Factor7  (j) = - A2 (j) * (dnidP1k (j) * dTidP1k (j) + dnidP2k (j) * Tik (j)) /8.;
+      Factor8  (j) = - A2 (j) * (dnidP1k (j) * dTidP1k (j) + dTidP2k (j) * nik (j)) /8.;
+
+      Factor9  (j) = dnedP3k (j) * Tek (j) /24.;
+      Factor10 (j) = dTedP3k (j) * nek (j) /24.;
+      Factor11 (j) = dnidP3k (j) * Tik (j) /24.;
+      Factor12 (j) = dTidP3k (j) * nik (j) /24.;
+      
       if (NTYPE == 0)
 	NNk (j) = NN * exp ((rk(j) - 1.) /(LN /a));
       else if (NTYPE == 1)
@@ -647,15 +731,21 @@ void Neoclassical::Get_Derived ()
     for (int j = 0; j < nres; j++)
       NNk (j) = 0.;
 
+  // Output factors
+  FILE* filex = OpenFilew ((char*) "Outputs/Stage3/factor.txt");
+  for (int j = 0; j < nres; j++)
+    fprintf (filex, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     PsiNk (j),
+	     Factor1 (j) /1.e19/e/1.e3, Factor2  (j) /1.e19/e/1.e3, Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
+	     Factor5 (j) /1.e19/e/1.e3, Factor6  (j) /1.e19/e/1.e3, Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
+	     Factor9 (j) /1.e19/e/1.e3, Factor10 (j) /1.e19/e/1.e3, Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
+  fclose (filex);
+
   // -------------------------------------------------------------------------
   // Calculate thermal velocities and transit frequencies at rational surfaces
   // -------------------------------------------------------------------------
-  v_T_ek.resize     (nres);     
-  v_T_ik.resize     (nres);     
-  v_T_Ik.resize     (nres);     
-  omega_t_ek.resize (nres); 
-  omega_t_ik.resize (nres); 
-  omega_t_Ik.resize (nres);
+  v_T_ek.resize     (nres); v_T_ik.resize     (nres); v_T_Ik.resize     (nres);     
+  omega_t_ek.resize (nres); omega_t_ik.resize (nres); omega_t_Ik.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -670,9 +760,7 @@ void Neoclassical::Get_Derived ()
   // ----------------------------------------------------
   // Calculate collision frequencies at rational surfaces
   // ----------------------------------------------------
-  nu_eek.resize (nres);
-  nu_iik.resize (nres);
-  nu_IIk.resize (nres);
+  nu_eek.resize (nres); nu_iik.resize (nres); nu_IIk.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -687,24 +775,20 @@ void Neoclassical::Get_Derived ()
   // ----------------------------------------------------------------------------
   // Calculate critical island widths for profile flattening at rational surfaces
   // ----------------------------------------------------------------------------
-  WcritTk.resize (nres);
-  Wcritnk.resize (nres);
+  WcritTek.resize (nres); WcritTik.resize (nres); Wcritnek.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      WcritTk (j) = pow (chiek(j) /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
-      Wcritnk (j) = pow (chink(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      WcritTek (j) = pow (chiek(j) /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      WcritTik (j) = pow (chiek(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      Wcritnek (j) = pow (chink(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
     }
 
   // ------------------------------------------------------
   // Calculate diamagnetic frequencies at rational surfaces
   // ------------------------------------------------------
-  eta_ek.resize   (nres);
-  eta_ik.resize   (nres);
-  eta_Ik.resize   (nres);
-  w_ast_ek.resize (nres);
-  w_ast_ik.resize (nres);
-  w_ast_Ik.resize (nres);
+  eta_ek.resize   (nres); eta_ik.resize   (nres); eta_Ik.resize   (nres);
+  w_ast_ek.resize (nres); w_ast_ik.resize (nres); w_ast_Ik.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -729,11 +813,7 @@ void Neoclassical::Get_Derived ()
   // -----------------------------------------
   // Calculate timescales at rational surfaces
   // -----------------------------------------
-  rho_sk.resize  (nres);
-  tau_Hk.resize  (nres);
-  tau_Rk.resize  (nres);
-  tau_Mk.resize  (nres);
-  tau_thk.resize (nres);
+  rho_sk.resize (nres); tau_Hk.resize (nres); tau_Rk.resize (nres); tau_Mk.resize (nres); tau_thk.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -759,14 +839,9 @@ void Neoclassical::Get_Derived ()
   // Calculate collisionality parameters at rational surfaces
   // --------------------------------------------------------
   gt.resize      (nres);
-  nu_P_e.resize  (nres);
-  nu_P_i.resize  (nres);
-  nu_P_I.resize  (nres);
-  nu_PS_e.resize (nres);
-  nu_PS_i.resize (nres);
-  nu_PS_I.resize (nres);
-  x_iI.resize    (nres);
-  x_Ii.resize    (nres);
+  nu_P_e.resize  (nres); nu_P_i.resize  (nres); nu_P_I.resize  (nres);
+  nu_PS_e.resize (nres); nu_PS_i.resize (nres); nu_PS_I.resize (nres);
+  x_iI.resize    (nres); x_Ii.resize    (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -798,15 +873,9 @@ void Neoclassical::Get_Derived ()
 // #######################################################
 void Neoclassical::Get_Viscosities ()
 {
-  mu_00_i.resize (nres);
-  mu_01_i.resize (nres);
-  mu_11_i.resize (nres);
-  mu_00_I.resize (nres);
-  mu_01_I.resize (nres);
-  mu_11_I.resize (nres);
-  mu_00_e.resize (nres);
-  mu_01_e.resize (nres);
-  mu_11_e.resize (nres);
+  mu_00_i.resize (nres); mu_01_i.resize (nres); mu_11_i.resize (nres);
+  mu_00_I.resize (nres); mu_01_I.resize (nres); mu_11_I.resize (nres);
+  mu_00_e.resize (nres); mu_01_e.resize (nres); mu_11_e.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -848,15 +917,9 @@ void Neoclassical::Get_Viscosities ()
 // ######################################################
 void Neoclassical::Get_Parameters ()
 {
-  L_ii_00.resize (nres);
-  L_ii_01.resize (nres);
-  L_iI_00.resize (nres);
-  L_iI_01.resize (nres);
-  L_Ii_00.resize (nres);
-  L_Ii_01.resize (nres);
-  L_II_00.resize (nres);
-  L_II_01.resize (nres);
-  G_ii_00.resize (nres);
+  L_ii_00.resize (nres); L_ii_01.resize (nres); L_iI_00.resize (nres);
+  L_iI_01.resize (nres); L_Ii_00.resize (nres); L_Ii_01.resize (nres);
+  L_II_00.resize (nres); L_II_01.resize (nres); G_ii_00.resize (nres);
   Q_00.resize    (nres); 
  
   // ........................
@@ -1018,14 +1081,9 @@ void Neoclassical::Get_Frequencies ()
   // .....................
   // Calculate frequencies
   // .....................
-  w_linear.resize    (nres);
-  w_nonlinear.resize (nres);
-  w_EB.resize        (nres);
-  w_actual.resize    (nres);
-  w_fac.resize       (nres);
-  w_nc_ik.resize     (nres);
-  w_nc_Ik.resize     (nres);
-  w_E_Ik.resize      (nres);
+  w_linear.resize    (nres); w_nonlinear.resize (nres); w_EB.resize    (nres);
+  w_actual.resize    (nres); w_fac.resize       (nres); w_nc_ik.resize (nres);
+  w_nc_Ik.resize     (nres); w_E_Ik.resize      (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -1107,10 +1165,17 @@ void Neoclassical::Get_Normalized ()
       printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e w0 = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
 	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, dk);
 
-      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-	       dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk (j), dPsidr (j), PsiNk (j),
-	       nek (j) /1.e19, nik (j) /1.e19, Tek (j) /e/1.e3, Tik (j) /e/1.e3, dnidrk (j) /1.e19, dTidrk (j) /e/1.e3);
+      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
+	       a /R_0,                      Sk,                          wk,                         tm,                        th,
+	       sqrt (qk (j)/gk (j)/sk (j)), dk,                          wkl,                        wke,                       wkn, 
+	       dnedrk  (j) /1.e19,          dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),              WcritTik (j),
+	       akk (j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                 nek (j) /1.e19,
+	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
+	       Factor1 (j) /1.e19/e/1.e3,   Factor2 (j) /1.e19/e/1.e3,   Factor3 (j) /1.e19/e/1.e3,  Factor4 (j) /1.e19/e/1.e3,
+	       Factor5 (j) /1.e19/e/1.e3,   Factor6 (j) /1.e19/e/1.e3,   Factor7 (j) /1.e19/e/1.e3,  Factor8 (j) /1.e19/e/1.e3,
+	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12(j) /1.e19/e/1.e3);
+	       
       }
    fclose (file);
 
@@ -1132,11 +1197,14 @@ void Neoclassical::Get_Normalized ()
 	  double wkn = w_nonlinear (j) * tau_A;
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
-	  
-	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		   mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-		   dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnk (j), WcritTk (j), akk(j), gk (j), dPsidr (j), PsiNk (j),
-		   nek (j) /1.e19, nik (j) /1.e19, Tek (j) /e/1.e3, Tik (j) /e/1.e3, dnidrk (j) /1.e19, dTidrk (j) /e/1.e3);
+
+	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
+	       dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnek (j), WcritTek (j), WcritTik (j), akk(j), gk (j), dPsidr (j), PsiNk (j),
+	       nek (j) /1.e19, nik (j) /1.e19, Tek (j) /e/1.e3, Tik (j) /e/1.e3, dnidrk (j) /1.e19, dTidrk (j) /e/1.e3,
+	       Factor1 (j) /1.e19/e/1.e3,  Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
+	       Factor5 (j) /1.e19/e/1.e3,  Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
+	       Factor9 (j) /1.e19/e/1.e3,  Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
 	}
       fclose (file);
 
