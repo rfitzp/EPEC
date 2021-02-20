@@ -59,10 +59,10 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR, _IRMP);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -89,7 +89,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -115,6 +115,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   PMAX   = 4.;
   CHIR   = 1.;
   HIGH   = 1;
+  RATS   = 1;
   IFLA   = 0;
   IRMP   = -1.e6;
 
@@ -127,7 +128,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -148,6 +149,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     LIN = _LIN;
   if (_MID > -1)
     MID = _MID;
+  if (_HIGH > -1)
+    HIGH = _HIGH;
+  if (_RATS > -1)
+    RATS = _RATS;
   if (_TSTART > 0.)
     TSTART = _TSTART;
   if (_TEND > 0.)
@@ -165,8 +170,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
 
   // ............
   // Sanity check
@@ -205,8 +210,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -214,8 +219,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (monitor);
 
   // .................
@@ -510,6 +515,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       }
   fclose (file);
 
+  // Temporary cludge to make D_per 1/3 m^2/s instead of 1 m^2/s
+  for (int j = 0; j < nres; j++)
+    Wcrnek (j) *= pow (1./3.,1./3.);
+
   for (int j = 0; j < nres; j++)
     printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e\n",
 	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j));
@@ -781,11 +790,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       token = strtok (line1, " "); 
       token = strtok (NULL, " "); 
       token = strtok (NULL, " ");
-      int nsingl = atoi (token);
+      int nsingm = atoi (token);
       
-      if (nsingl != nsingu)
+      if (nsingm != nsingu)
 	{
-	  printf ("PHASE:: Error - nsingl != nsingu\n");
+	  printf ("PHASE:: Error - nsingm != nsingu\n");
 	  exit (1);
 	}
       
@@ -904,6 +913,23 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TSTART);
   fclose (file);
 
+  file = OpenFilea ((char*) "../IslandDynamics/Outputs/Chi.txt");
+  for (int i = 0; i < nres; i++)
+    {
+      if (MID)
+	fprintf (file, "T = %11.4e  m = %3d  ChiU = (%11.4e, %11.4e)  ChiM = (%11.4e, %11.4e)  ChiL = (%11.4e, %11.4e)\n",
+		 TSTART, mk(i),
+		 GSL_REAL (gsl_vector_complex_get (ChiU, i)), GSL_IMAG (gsl_vector_complex_get (ChiU, i)),
+		 GSL_REAL (gsl_vector_complex_get (ChiM, i)), GSL_IMAG (gsl_vector_complex_get (ChiM, i)),
+		 GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
+      else
+	fprintf (file, "T = %11.4e  m = %3d  ChiU = (%11.4e, %11.4e)  ChiL = (%11.4e, %11.4e)\n",
+		 TSTART, mk(i),
+		 GSL_REAL (gsl_vector_complex_get (ChiU, i)), GSL_IMAG (gsl_vector_complex_get (ChiU, i)),
+		 GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
+    }
+  fclose (file);
+
   delete[] QIN; delete[] DRE; delete[] DIM; delete[] CRE; delete[] CIM; delete[] WWW; delete[] PSI;
  }
 
@@ -946,7 +972,7 @@ void Phase::Scan_Shift ()
 
 	      hl = gsl_complex_mul (hl, eik);
 	      hl = gsl_complex_mul (hl, eik);
-	      h  = gsl_complex_add (hu, hl);
+	      h  = gsl_complex_add (h,  hl);
 	    }
 
 	  double chi  =   gsl_complex_abs (h);
@@ -968,6 +994,9 @@ void Phase::Scan_Shift ()
 
   FILE* file4 = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/vac.txt");
 
+  double      pha = PMAX*M_PI /2.;
+  gsl_complex eik = gsl_complex_polar (one, pha);
+
   for (int j = 0; j < nres; j++)
     {
       gsl_complex hu = gsl_vector_complex_get (ChiU, j);
@@ -978,12 +1007,17 @@ void Phase::Scan_Shift ()
       gsl_complex h;
       if (MID == 0)
 	{
-	  h = gsl_complex_add (hu, hl);
+	  hl = gsl_complex_mul (hl, eik);
+	  h  = gsl_complex_add (hu, hl);
 	}
       else
 	{
-	  h = gsl_complex_add (hu, hm);
-	  h = gsl_complex_add (hu, hl);
+	  hm = gsl_complex_mul (hm, eik);
+	  h  = gsl_complex_add (hu, hm);
+	  
+	  hl = gsl_complex_mul (hl, eik);
+	  hl = gsl_complex_mul (hl, eik);
+	  h  = gsl_complex_add (h,  hl);
 	}
       
       double chi  =   gsl_complex_abs (h);
@@ -1375,13 +1409,13 @@ void Phase::IslandDynamics ()
 		       mk (j),
 		       rk (j),
 		       GetNaturalFrequency (j) /tau_A/1.e3,
-		       GetActualFrequency (j) /tau_A/1.e3,
+		       GetActualFrequency (j)  /tau_A/1.e3,
 		       t*tau_A,
 		       (Wrk /R_0) /a (j),
 		       PsiN (j),
 		       Wpk,
 		       Wvk,
-		       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j));
+		       deltanek * dPsiNdr (j) /R_0, deltaTek * dPsiNdr (j) /R_0);
 	    }
 	  fprintf (file9,  "\n"); fprintf (file10, "\n"); fprintf (file11, "\n"); fprintf (file12, "\n");
 	  fprintf (file13, "\n"); fprintf (file14, "\n"); fprintf (file15, "\n"); fprintf (file16, "\n");
@@ -1428,21 +1462,21 @@ void Phase::IslandDynamics ()
       // Calculate vacuum island width in PsiN
       double Wvk = GetVacuumIslandWidth (j);
 
-      // Calculate density and temperature flattening widths in r
-      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
-      double deltaTek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
+      // Calculate density and temperature flattening widths in PsiN
+      double deltanek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
+      double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
 
       fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
-	       GetActualFrequency (j) /tau_A/1.e3,
+	       GetActualFrequency (j)  /tau_A/1.e3,
 	       TIME,
 	       (Wrk /R_0) /a (j),
 	       PsiN (j),
 	       Wpk,
 	       Wvk,
-	       deltanek * dPsiNdr (j),  deltaTek * dPsiNdr (j), q95);
+	       deltanek, deltaTek, q95);
     }
   fclose (filew);
 
@@ -1456,15 +1490,10 @@ void Phase::IslandDynamics ()
       // Calculate island width in r
       double Wrk = R_0 * Wpk /dPsiNdr (j);
 
-      // Calculate density and temperature flattening widths in r
-      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
-      double deltaTek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
-      double deltaTik = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTik (j) * WcrTik (j));
-
       // Calculate density and temperature flattening widths in PsiN
-      deltanek *= dPsiNdr (j) /R_0;
-      deltaTek *= dPsiNdr (j) /R_0;
-      deltaTik *= dPsiNdr (j) /R_0;
+      double deltanek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
+      double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
+      double deltaTik = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTik (j) * WcrTik (j));
 
       // Calculate pressure decrement
       double deltapk;
@@ -1640,7 +1669,7 @@ void Phase::CalcChiZeta (double t)
 
 	  hl = gsl_complex_mul (hl, eik);
 	  hl = gsl_complex_mul (hl, eik);
-	  h  = gsl_complex_add (hu, hl);
+	  h  = gsl_complex_add (h,  hl);
 	}
     
       chi  (j) =   gsl_complex_abs (h) * irmp;
@@ -1658,7 +1687,7 @@ void Phase::CalcChiZeta (double t)
 void Phase::Pack (Array<double,1> y)
 {
   int cnt = 0;
-  for (int j = 0; j  < nres; j++)
+  for (int j = 0; j < nres; j++)
     {
       y (cnt) = Xk (j); cnt++;
       y (cnt) = Yk (j); cnt++;
@@ -1676,7 +1705,7 @@ void Phase::Pack (Array<double,1> y)
 void Phase::Unpack (Array<double,1> y)
 {
   int cnt = 0;
-  for (int j = 0; j  < nres; j++)
+  for (int j = 0; j < nres; j++)
     {
       Xk   (j) = y (cnt); cnt++;
       Yk   (j) = y (cnt); cnt++;
@@ -1698,7 +1727,7 @@ void Phase::PackRhs (Array<double,1> XkRHS, Array<double,1> YkRHS,
 		     Array<double,1> dydt)
 {
   int cnt = 0;
-  for (int j = 0; j  < nres; j++)
+  for (int j = 0; j < nres; j++)
     {
       dydt (cnt) = XkRHS (j); cnt++;
       dydt (cnt) = YkRHS (j); cnt++;

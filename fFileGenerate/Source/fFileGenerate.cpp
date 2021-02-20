@@ -5,6 +5,8 @@
 
 // Uses FLUX/NEOCLASSICAL codes.
 
+// Namelist in Inputs/fFile.nml
+
 // .........
 // Versions:
 // .........

@@ -22,26 +22,30 @@
 // theta = 0 on inboard midplane.
 // theta > 0 above midplane.
 
+// All lengths normalized to R_0.
+// All magnetic field-stengths normalized to B_0.
+
 // .....................
 // Command line options:
 // .....................
 
-// -g INTG   - override INTG   value from namelist
-// -n NTOR   - override NTOR   value from namelist
-// -m MMIN   - override MMIN   value from namelist
-// -M MMAX   - override MMAX   value from namelist
+// -h        - lists options
+// -g INTG   - override INTG value from namelist
+// -n NTOR   - override NTOR value from namelist
+// -m MMIN   - override MMIN value from namelist
 // -p PSILIM - override PSILIM value from namelist
 // -t TIME   - sets experimental time (ms)
+// -M MMAX   - override MMAX value from namelist
 
 // ...................
 // Inputs and outputs:
 // ...................
-// Calculation control parameters in namelist file INPUTS/Flux.in
+// Calculation control parameters in namelist file Inputs/Flux.nml
 
-// Equilibrium in Inputs/gFile
+// Equilibrium in Inputs/gFile or Inputs/gFiles
 // Intermediate data in folder Outputs/Stage1/
 // Final data in folder Outputs/Stage2/
-// Data passed to programs NEOCLASSICAL and PHASE output to Outputs/fFile
+// Data passed to programs NEOCLASSICAL and PHASE output to Outputs/fFile or Outputs/fFiles
 
 // .........
 // Versions:
@@ -133,8 +137,8 @@ class Flux
   double ROUT;    // Limiter R coordinate at outboard miplane
   
   // Stage 1 parameters
-  double          R0;       // Scale major radius
-  double          B0;       // Scale toroidal magnetic field strength
+  double          R0;       // Scale major radius (m)
+  double          B0;       // Scale toroidal magnetic field strength (T)
   int             NRPTS;    // Number of R points
   double*         RPTS;     // R array
   int             NZPTS;    // Number of Z points

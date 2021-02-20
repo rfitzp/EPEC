@@ -5,6 +5,9 @@
 // versus Irmp space.
 // Uses FLUX/NEOCLASSICAL/PHASE/ISLANDDYNAMICS codes.
 
+// Namelist in Inputs/Window.nml
+// Outputs in Outputs
+
 // .........
 // Versions:
 // .........

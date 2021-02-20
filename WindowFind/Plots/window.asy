@@ -20,15 +20,15 @@ pen[] Palette = BWRainbow ();
 bounds range  = image (A, Full, (xmin, ymin), (xmax, ymax), Palette);
 
 pen s = 1. + black;
-real[] cvals = {0.01,0.02,0.03,0.04,0.05};
+real[] cvals = {-0.05, -0.10, -0.15};
 draw (contour (A, (xmin, ymin), (xmax, ymax), cvals), s);
 
 pen q = fontsize (20.);
 defaultpen (q);
-xaxis ("$q_{95}$", Bottom, RightTicks (n=5), above=false);
+xaxis ("$q_{95}$", Bottom, RightTicks (Step=0.5, n=5), above=false);
 xaxis (Top,  NoTicks);
-yaxis ("$I_{\rm rmp}({\rm kA})$", Left, LeftTicks);
+yaxis ("$I_{\rm rmp}({\rm kA/turn})$", Left, LeftTicks(Step=0.5, n=5));
 yaxis (Right, NoTicks);
 
-palette ("$-{\mit\Delta}P/P$", range, point(NW) + (0, 0.02), point(NE) + (0, 0.1), Top, Palette);
+palette ("$-{\mit\Delta}P/P_{\rm ped}$", range, point (NW) + (0, 0.02), point (NE) + (0, 0.1), Top, Palette);
 

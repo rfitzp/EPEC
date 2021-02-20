@@ -20,5 +20,5 @@ yequals (0., s);
 
 pen qq = fontsize (25.);
 defaultpen (qq);
-xaxis ("$q_{95}$",                BottomTop, LeftTicks);
-yaxis ("$-{\mit\Delta}P/P$", LeftRight, RightTicks);
+xaxis ("$q_{95}$",                BottomTop, RightTicks(n=5));
+yaxis ("$-{\mit\Delta}P/P_{\rm ped}$", LeftRight, LeftTicks);

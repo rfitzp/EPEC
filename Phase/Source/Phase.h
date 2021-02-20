@@ -9,17 +9,36 @@
 // Command line options:
 // .....................
 
+// -c CHIR   - overrides CHIR value from namelist file
 // -f INTF   - overrides INTF value from namelist file
-// -n INTN   - overrides INTN value from namelist file
-// -u INTU   - overrides INTU value from namelist file
-// -o OLD    - overrides OLD value from namelist file
-// -F FREQ   - overrides FREQ value from namelist file
-// -s STAGE5 - overrides STAGE5 value from namelist file
-// -S SCALE  - overrides SCALE value from namelist file
+// -h        - list options
+// -i IRMP   - set RMP current to IRMP (kA)
+// -l LIN    - overdes LIN value from namelist file
 // -m MID    - overrides MID value from namelist file
+// -n INTN   - overrides INTN value from namelist file
+// -o OLD    - overrides OLD value from namelist file
+// -r RATS   - ovverides RATS value from namelist file
+// -s STAGE5 - overrides STAGE5 value from namelist file
 // -t TSTART - sets simulation start time (ms)
+// -u INTU   - overrides INTU value from namelist file
+// -F FREQ   - overrides FREQ value from namelist file
+// -H HIGH   - enables higher order transport calculation
+// -S SCALE  - overrides SCALE value from namelist file
 // -T TEND   - sets simulation end time (ms)
-// -c CHIR   - sets maximum Chirikov parameter for vacuum islands
+
+// ...................
+// Inputs and outputs:
+// ...................
+// Calculation control parameters in namelist file Inputs/Phase.nml
+// RMP wavform data in Inputs/Waveform.nml
+
+// FLUX data in Inputs/fFile or Inputs/fFiles
+// NEOCLASSICAL data in Inputs/nFile or Inputs/nFiles
+// GPEC data in Inputs/uFile, Inputs/mFile, Inputs/lFile or Inputs/uFiles, Inputs/mFiles, Inputs/lFiles
+
+// Intermediate data in folder Outputs/Stage4
+// Final data in folder Outputs/Stage5
+// Scan data in folder ../IslandDynamics/Outputs/Stage6
 
 // ............................
 // Major stages in calculation:
@@ -59,6 +78,7 @@
 // 2.12 - Added total pressure decrement
 // 2.13 - Normalize total pressure decrement by P(0). Added IRMP.
 // 2.14 - Added higher order transport calculation
+// 2.15 - Bug fixes. Improved uFile/mFile/lFile interpolation.
 
 // #######################################################################
 
@@ -66,7 +86,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 14
+#define VERSION_MINOR 15
 
 #include <stdio.h>
 #include <math.h>
@@ -92,7 +112,7 @@ using namespace blitz;
 
 // Namelist funtion
 extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TSTART, double* TEND,
-			      double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -123,8 +143,9 @@ class Phase
   double   SCALE;  // GPEC scalefactor
   double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
-  int      IFLA;   // If != 0 then set all ICTRL values to IRMP
+  int      IFLA;   // If != 0 then set all ICTRL values to IRMP (triggered if IRMP >= 0)
   int      HIGH;   // If != 0 use higher order transport analysis
+  int      RATS;   // If != 0 use only linear interpolation for uFiles/mFiles/lFiles
   double   IRMP;   // RMP current (kA)
   
   int      NCTRL;  // Number of control points
@@ -137,8 +158,8 @@ class Phase
   // ----------------------
 
   // Read from Inputs/fFile
-  double R_0;             // Scale major radius
-  double B_0;             // Scale toroidal field-strength
+  double R_0;             // Scale major radius (m)
+  double B_0;             // Scale toroidal field-strength (T)
   double q95;             // Safety factor at 95% flux surface
   double r95;             // Normalized radius of 95% flux surface
   double qlim;            // Safety factor at PSI = PSILIM flux surface
@@ -167,11 +188,11 @@ class Phase
   // ------------------------------
  
   // Read from Inputs/nFile
-  double          tau_A;    // Alfven time
-  double          P0;       // Central thermal pressure
+  double          tau_A;    // Alfven time (s)
+  double          P0;       // Central thermal pressure (10^19 m^-3 keV)
   Array<int,1>    mk;       // Resonant poloidal mode numbers
   Array<int,1>    ntor;     // Resonant toroidal mode number
-  Array<double,1> rk;       // Normalized minor radii of resonant surfaces
+  Array<double,1> rk;       // Minor radii of resonant surfaces / r_a
   Array<double,1> qk;       // Safety-factors at resonant surfaces
   Array<double,1> rhok;     // Normalized mass densities at resonant surfaces
   Array<double,1> a;        // Normalized (to R_0) plasma minor radius
@@ -184,21 +205,21 @@ class Phase
   Array<double,1> wkl;      // Normalized linear natural frequencies at resonant surfaces
   Array<double,1> wke;      // Normalized ExB frequencies at resonant surfaces
   Array<double,1> wkn;      // Normalized nonlinear frequencies at resonant surfaces
-  Array<double,1> dnedrk;   // Electron density gradients at resonant surfaces
-  Array<double,1> dTedrk;   // Electron temperature gradients at resonant surfaces
-  Array<double,1> Wcrnek;   // Critical island widths for density flattening at resonant surfaces
-  Array<double,1> WcrTek;   // Critical island widths for electron temperature flattening at resonant surfaces
-  Array<double,1> WcrTik;   // Critical island widths for ion temperature flattening at resonant surfaces
+  Array<double,1> dnedrk;   // Electron density gradients at resonant surfaces (in r) (10^19/m^-4)
+  Array<double,1> dTedrk;   // Electron temperature gradients at resonant surfaces (in r) (keV/m)
+  Array<double,1> Wcrnek;   // Critical island widths for density flattening at resonant surfaces (in r) (m)
+  Array<double,1> WcrTek;   // Critical island widths for electron temperature flattening at resonant surfaces (in r) (m)
+  Array<double,1> WcrTik;   // Critical island widths for ion temperature flattening at resonant surfaces (in r) (m)
   Array<double,1> akk;      // Metric elements at resonant surfaces
   Array<double,1> gk;       // g values at resonant surfaces
-  Array<double,1> dPsiNdr;  // dPsiN/dr values at resonant surfaces
+  Array<double,1> dPsiNdr;  // R_0 dPsiN/dr values at resonant surfaces
   Array<double,1> PsiN;     // PsiN values at rational surfaces
-  Array<double,1> nek;      // Electron number densities at resonant surfaces
-  Array<double,1> nik;      // Ion number densities at resonant surfaces
-  Array<double,1> Tek;      // Electron temperatures at resonant surfaces
-  Array<double,1> Tik;      // Ion temperatures at resonant surfaces
-  Array<double,1> dnidrk;   // Ion density gradients at resonant surfaces
-  Array<double,1> dTidrk;   // Ion temperature gradients at resonant surfaces
+  Array<double,1> nek;      // Electron number densities at resonant surfaces (10^19/m^-3)
+  Array<double,1> nik;      // Ion number densities at resonant surfaces (10^19/m^-3)
+  Array<double,1> Tek;      // Electron temperatures at resonant surfaces (keV)
+  Array<double,1> Tik;      // Ion temperatures at resonant surfaces (keV)
+  Array<double,1> dnidrk;   // Ion density gradients at resonant surfaces (in r) (10^19/m^-4)
+  Array<double,1> dTidrk;   // Ion temperature gradients at resonant surfaces (in r) (keV/m)
   Array<double,1> Factor1;  // Transport factor
   Array<double,1> Factor2;  // Transport factor
   Array<double,1> Factor3;  // Transport factor
@@ -264,11 +285,11 @@ class Phase
   // ------------------
   // Physical constants
   // ------------------
-  double e;         // Magnitude of electron charge
-  double epsilon_0; // Electric permittivity of free space
-  double mu_0;      // Magnetic permeability of free space
-  double m_p;       // Mass of proton
-  double m_e;       // Mass of electron
+  double e;         // Magnitude of electron charge (SI)
+  double epsilon_0; // Electric permittivity of free space (SI)
+  double mu_0;      // Magnetic permeability of free space (SI)
+  double m_p;       // Mass of proton (SI)
+  double m_e;       // Mass of electron (SI)
   
   // --------------------------------
   // Adapative integration parameters
@@ -295,7 +316,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);        
 
   // -----------------------
   // Private class functions
@@ -303,7 +324,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

@@ -779,9 +779,9 @@ void Neoclassical::Get_Derived ()
 
   for (int j = 0; j < nres; j++)
     {
-      WcritTek (j) = pow (chiek(j) /v_T_ek(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
-      WcritTik (j) = pow (chiek(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
-      Wcritnek (j) = pow (chink(j) /v_T_ik(j) /(rk(j)*a) /(rk(j)*a/R_0) /sk(j) /double (ntor), 1./3.) * rk(j) * a;
+      WcritTek (j) = pow (chiek (j) /v_T_ek (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
+      WcritTik (j) = pow (chiek (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
+      Wcritnek (j) = pow (chink (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
     }
 
   // ------------------------------------------------------
@@ -1169,7 +1169,7 @@ void Neoclassical::Get_Normalized ()
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          wk,                         tm,                        th,
 	       sqrt (qk (j)/gk (j)/sk (j)), dk,                          wkl,                        wke,                       wkn, 
-	       dnedrk  (j) /1.e19,          dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),              WcritTik (j),
+	       dnedrk (j) /1.e19,           dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),              WcritTik (j),
 	       akk (j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                 nek (j) /1.e19,
 	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
 	       Factor1 (j) /1.e19/e/1.e3,   Factor2 (j) /1.e19/e/1.e3,   Factor3 (j) /1.e19/e/1.e3,  Factor4 (j) /1.e19/e/1.e3,

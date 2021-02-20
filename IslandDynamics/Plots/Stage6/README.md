@@ -30,13 +30,13 @@
 	npsi.asy       ... plots density flattened regions (in PsiN) versus time
 	tpsi.asy       ... plots electron temperature flattened regions (in PsiN) versus time
 	
-	rpsiq.asy      ... plots rational surface radii (in PsiN) versus time
-	wvpsiq.asy     ... plots vacuum island widths (in PsiN) versus time
-	wpsiq.asy      ... plots island widths (in PsiN) versus time
-	npsiq.asy      ... plots density flattened regions (in PsiN) versus time
-	tpsiq.asy      ... plots electron temperature flattened regions (in PsiN) versus time
+	rpsiq.asy      ... plots rational surface radii (in PsiN) versus q95
+	wvpsiq.asy     ... plots vacuum island widths (in PsiN) versus q95
+	wpsiq.asy      ... plots island widths (in PsiN) versus q95
+	npsiq.asy      ... plots density flattened regions (in PsiN) versus q95
+	tpsiq.asy      ... plots electron temperature flattened regions (in PsiN) versus q95
 	
-	deltap.asy     ... plots - (Delta P)/P versus q95
+	deltap.asy     ... plots - (Delta P)/P_ped versus q95
 
 	mirnovin.asy   ... plots reconstructed Mirnow signal on outboard midplane
 	minrovout.asy  ... plots reconstructed Mirnow signal on inboard midplane

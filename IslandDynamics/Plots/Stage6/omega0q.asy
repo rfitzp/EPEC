@@ -12,6 +12,8 @@ real[] wnl = A[5];
 real[] tt  = A[7];
 
 int N = m.length;
+real[] q2,  i2;
+real[] q3,  i3;
 real[] q4,  i4;
 real[] q5,  i5;
 real[] q6,  i6;
@@ -27,7 +29,17 @@ real[] q15, i15;
 real[] q16, i16;
 for (int j = 0; j < N; ++j)
   {
-   if ((int) m[j] == 4)
+    if ((int) m[j] == 2)
+      {
+	q2.push (tt[j]);
+	i2.push (wnl[j]);
+      }
+    if ((int) m[j] == 3)
+      {
+	q3.push (tt[j]);
+	i3.push (wnl[j]);
+      }
+    if ((int) m[j] == 4)
       {
 	q4.push (tt[j]);
 	i4.push (wnl[j]);
@@ -149,6 +161,14 @@ if (q5.length > 0)
 if (q4.length > 0)
    {  
      draw (graph (q4, i4),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, black));
+   }
+if (q3.length > 0)
+   {  
+     draw (graph (q3, i3),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, grey));
+   }
+if (q2.length > 0)
+   {  
+     draw (graph (q2, i2),   s, marker (scale(0.5mm)*polygon(3),  filltype=Fill, fuchsia));
    }
 
 s = dotted + black + 1;

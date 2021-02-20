@@ -31,10 +31,10 @@ int main (int argc, char** argv)
   char* nvalue = NULL; char* uvalue = NULL; char* ovalue = NULL;
   char* Fvalue = NULL; char* Svalue = NULL; char* lvalue = NULL;
   char* mvalue = NULL; char* Tvalue = NULL; char* cvalue = NULL;
-  char* ivalue = NULL;
+  char* ivalue = NULL; char* rvalue = NULL; char* Hvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:c:i:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:c:i:r:H:")) != -1)
     switch (c)
       {
       case 'f':
@@ -43,19 +43,21 @@ int main (int argc, char** argv)
       case 'h':
  	printf ("Options:\n");
 	printf ("-c CHIR   - set maximum vacuum Chirkov parameter, CHIR\n");
-	printf ("-f INTF   - set interpolation flag INTF\n");
+	printf ("-f INTF   - set fFile interpolation enabling flag INTF\n");
 	printf ("-h        - list options\n");
 	printf ("-i IRMP   - set RMP current to IRMP");
-	printf ("-l LIN    - set linear flag LIN\n");
-	printf ("-m MID    - set mFile flag MID\n");
-	printf ("-n INTN   - set interpolation flag INTN\n");
+	printf ("-l LIN    - set linear calculation enabling flag LIN\n");
+	printf ("-m MID    - set mFile enabling flag MID\n");
+	printf ("-n INTN   - set nFile interpolation enabling flag INTN\n");
 	printf ("-o OLD    - set old calculation flag OLD\n");
-	printf ("-s STAGE5 - set Stage5 flag STAGE5\n");
+	printf ("-r RATS   - set uFile/mFile/lFile linear-only interpolation flag RATS\n");
+	printf ("-s STAGE5 - set Stage5 caculation enabling flag STAGE5\n");
 	printf ("-t TSTART - set simulation start time (s) to TSTART\n");
+	printf ("-u INTU   - set uFile/mFile/lFile interpolation enabling flag INTU\n");
+	printf ("-F FREQ   - set island frequency choice flag FREQ\n");
+	printf ("-H HIGH   - set higher orddr transport calculation enabling flag HIGH\n");
+	printf ("-S SCALE  - set GPEC scalefactor SCALE\n");	
 	printf ("-T TEND   - set simulation end time (s) to TEND\n");
-	printf ("-u INTU   - set interpolation flag INTU\n");
-	printf ("-F FREQ   - set frequency flag FREQ\n");
-	printf ("-S SCALE  - set GPEC scalefactor SCALE\n");
 	exit (0);
       case 'n':
 	nvalue = optarg;
@@ -93,10 +95,16 @@ int main (int argc, char** argv)
       case 'c':
 	cvalue = optarg;
  	break;
+      case 'r':
+	rvalue = optarg;
+ 	break;
+      case 'H':
+	Hvalue = optarg;
+ 	break;
       case '?':
 	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u'
 	    || optopt == 'F' || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c'
-	    || optopt == 'i')
+	    || optopt == 'i' || optopt == 'r' || optopt == 'H')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -111,7 +119,7 @@ int main (int argc, char** argv)
   int    _INTN   = -1;    int   _INTU = -1; double _TSTART = -1.e6; float  __TSTART;
   double _SCALE  = -1.e6; float __SCALE;    int    _LIN    = -1.;   int    _MID  = -1;
   double _TEND   = -1.e6; float __TEND;     double _CHIR   = -1.e6; float  __CHIR;
-  double _IRMP   = -1.e6; float __IRMP;
+  double _IRMP   = -1.e6; float __IRMP;     int    _HIGH   = -1.;   int    _RATS = -1.;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -129,6 +137,10 @@ int main (int argc, char** argv)
     _MID = atoi (mvalue);
   if (Fvalue != NULL)
      _FREQ = atoi (Fvalue);
+  if (Hvalue != NULL)
+     _HIGH = atoi (Hvalue);
+  if (rvalue != NULL)
+     _RATS = atoi (rvalue);
   if (tvalue != NULL)
     {
       __TSTART = atof (tvalue);
@@ -159,7 +171,7 @@ int main (int argc, char** argv)
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR, _IRMP);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
 
   return 0;
 }

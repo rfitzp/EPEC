@@ -9,8 +9,8 @@
 	ACC     = 1.e-14 ! Integration accuracy
 	ETA     = 1.e-8  ! Regularization factor for Green's function
 	DR      = 1.e-2  ! Discritization parameter for simulated Mirnov data
-	NTOR    = 1      ! Toroidal mode number
-	MMIN    = 2	 ! Minimum poloidal mode number
+	NTOR    = 2      ! Toroidal mode number
+	MMIN    = 3≈ß	 ! Minimum poloidal mode number
 	MMAX    = 30	 ! Maximum toroidal mode number
 	PSIPED  = 0.945  ! PsiN value at top of pedestal
 	PSILIM  = 0.995  ! Ignore rational surfaces for PsiN > PSILIM

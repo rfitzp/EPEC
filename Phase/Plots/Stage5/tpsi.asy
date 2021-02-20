@@ -11,6 +11,12 @@ real[] tt  = A[4]*1.e3;
 real[] w   = A[10];
 real[] psi = A[6];
 
+file    inx = input ("../../../Flux/Outputs/Stage1/Psilim.txt").line();
+real[][] Ax = inx.dimension (0, 0);
+real[] ppp  = Ax[0];
+real psilim = ppp[0];
+real psiped = ppp[1];
+
 int N = m.length;
 real[] t4,  wl4,  wu4,  wx4,   wy4;
 real[] t5,  wl5,  wu5,  wx5,   wy5;
@@ -240,13 +246,10 @@ if (t4.length > 0)
      draw (graph (t4, wy4), s);
    }
 
-s = dotted + black + 1;
+s = dotted + black + 1.5;
 ylimits (0.85, 1., Crop);
-//yequals (0., s);
-
-s = dotted + black + 2;
-
-yequals (0.945, s);
+yequals (psilim, s);
+yequals (psiped, s);
 
 pen qq = fontsize (25.);
 defaultpen (qq);

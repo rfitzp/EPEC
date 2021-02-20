@@ -1,6 +1,6 @@
 import graph;
      
-size(500,500,IgnoreAspect);
+size(1000,500,IgnoreAspect);
 
 file    in = input("../../Outputs/Stage4/zeta.txt").line();
 real[][] A = in.dimension (0,0);
@@ -29,5 +29,5 @@ yequals (0., s);
 
 pen qq = fontsize(25.);
 defaultpen (qq);
-xaxis("${\mit\Delta}\phi/\pi$",BottomTop,LeftTicks);
+xaxis("${\mit\Delta}\phi/\pi$",BottomTop,LeftTicks(n=10));
 yaxis("$\zeta_k$",LeftRight,RightTicks);

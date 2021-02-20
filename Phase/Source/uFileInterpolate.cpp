@@ -36,6 +36,27 @@ void Phase::uFileInterp (vector<string> uFileName, vector<double> uFileTime, int
 
       uFileInterpolateQuadratic (file1, uFileTime[0], file2, uFileTime[1], uFile, time);
     }
+  else if (RATS)
+    {
+      int index;
+
+      if (time < uFileTime[0])
+	index = 0;
+      else if (time >= uFileTime[uFileNumber-1])
+	index = uFileNumber - 2;
+      else
+	{
+	  for (int i = 0; i < uFileNumber - 1; i++)
+	    if (time >= uFileTime[i] && time < uFileTime[i+1])
+	      index = i;
+	}
+      
+      char* uFile = "Inputs/uFile";
+      char* file1 = (char*) uFileName[index  ].c_str();
+      char* file2 = (char*) uFileName[index+1].c_str();
+
+      uFileInterpolateQuadratic (file1, uFileTime[index], file2, uFileTime[index+1], uFile, time);
+    }
   else if (uFileNumber == 3)
     {
       char* uFile = "Inputs/uFile";
@@ -59,7 +80,7 @@ void Phase::uFileInterp (vector<string> uFileName, vector<double> uFileTime, int
   else
     {
       int index, cntrl;
-
+      
       if (time < uFileTime[0])
 	{
 	  index = 0;
@@ -72,14 +93,14 @@ void Phase::uFileInterp (vector<string> uFileName, vector<double> uFileTime, int
 	}
       else
 	{
-	  for (int i = 0; i < uFileNumber-1; i++)
+	  for (int i = 0; i < uFileNumber - 1; i++)
 	    if (time >= uFileTime[i] && time < uFileTime[i+1])
 	      {
 		index = i;
 		
 		if (index == 0)
 		  cntrl = 2;
-		else if (index == uFileNumber-2)
+		else if (index == uFileNumber - 2)
 		  cntrl = 3;
 		else
 		  cntrl = 1;
@@ -96,6 +117,7 @@ void Phase::uFileInterp (vector<string> uFileName, vector<double> uFileTime, int
 	  
 	  uFileInterpolateQuartic (file1, uFileTime[index-1], file2, uFileTime[index], file3, uFileTime[index+1],
 				   file4, uFileTime[index+2], uFile, time);
+	  
 	}
       else if (cntrl == 2)
 	{
@@ -103,7 +125,7 @@ void Phase::uFileInterp (vector<string> uFileName, vector<double> uFileTime, int
 	  char* file1 = (char*) uFileName[index  ].c_str();
 	  char* file2 = (char*) uFileName[index+1].c_str();
 	  char* file3 = (char*) uFileName[index+2].c_str();
-	  
+
 	  uFileInterpolateCubic (file1, uFileTime[index], file2, uFileTime[index+1], file3, uFileTime[index+2], uFile, time);
 	}
       else if (cntrl == 3)
@@ -112,7 +134,7 @@ void Phase::uFileInterp (vector<string> uFileName, vector<double> uFileTime, int
 	  char* file1 = (char*) uFileName[index-1].c_str();
 	  char* file2 = (char*) uFileName[index  ].c_str();
 	  char* file3 = (char*) uFileName[index+1].c_str();
-	  
+
 	  uFileInterpolateCubic (file1, uFileTime[index-1], file2, uFileTime[index], file3, uFileTime[index+1], uFile, time);
 	}
     }
@@ -343,19 +365,25 @@ void Phase::uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2,
     nres = nres_2;
   else
     nres = nres_1;
-
-  double* v01 = new double[nres];
-  double* v02 = new double[nres];
-  double* v03 = new double[nres];
-  double* v04 = new double[nres];
-  double* v05 = new double[nres];
-  double* v06 = new double[nres];
-  double* v07 = new double[nres];
-  double* v08 = new double[nres];
-  double* v09 = new double[nres];
-  double* v10 = new double[nres];
-  double* v11 = new double[nres];
-  double* v12 = new double[nres];
+  
+  int nres_0;
+  if (nres_1 > nres_2)
+    nres_0 = nres_1;
+  else
+    nres_0 = nres_2;
+  
+  double* v01 = new double[nres_0];
+  double* v02 = new double[nres_0];
+  double* v03 = new double[nres_0];
+  double* v04 = new double[nres_0];
+  double* v05 = new double[nres_0];
+  double* v06 = new double[nres_0];
+  double* v07 = new double[nres_0];
+  double* v08 = new double[nres_0];
+  double* v09 = new double[nres_0];
+  double* v10 = new double[nres_0];
+  double* v11 = new double[nres_0];
+  double* v12 = new double[nres_0];
 
   double weight1 = (time - time2) /(time1 - time2);
   double weight2 = (time - time1) /(time2 - time1);
@@ -376,6 +404,44 @@ void Phase::uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2,
       v12[i] = weight1 * v12_1[i] + weight2 * v12_2[i];
     }
 
+  if (nres_1 > nres)
+    {
+      for (int i = nres; i < nres_1; i++)
+	{
+	  v01[i] = weight1 * v01_1[i];
+	  v02[i] = weight1 * v02_1[i];
+	  v03[i] = weight1 * v03_1[i];
+	  v04[i] = weight1 * v04_1[i];
+	  v05[i] = weight1 * v05_1[i];
+	  v06[i] = weight1 * v06_1[i];
+	  v07[i] = weight1 * v07_1[i];
+	  v08[i] = weight1 * v08_1[i];
+	  v09[i] = weight1 * v09_1[i];
+	  v10[i] = weight1 * v10_1[i];
+	  v11[i] = weight1 * v11_1[i];
+	  v12[i] = weight1 * v12_1[i];
+	}
+    }
+
+   if (nres_2 > nres)
+     {
+       for (int i = nres; i < nres_2; i++)
+	 {
+	   v01[i] = weight2 * v01_2[i];
+	   v02[i] = weight2 * v02_2[i];
+	   v03[i] = weight2 * v03_2[i];
+	   v04[i] = weight2 * v04_2[i];
+	   v05[i] = weight2 * v05_2[i];
+	   v06[i] = weight2 * v06_2[i];
+	   v07[i] = weight2 * v07_2[i];
+	   v08[i] = weight2 * v08_2[i];
+	   v09[i] = weight2 * v09_2[i];
+	   v10[i] = weight2 * v10_2[i];
+	   v11[i] = weight2 * v11_2[i];
+	   v12[i] = weight2 * v12_2[i];
+	 }
+     }
+   
   // ........................
   // Write interpolated uFile
   // ........................
@@ -386,14 +452,14 @@ void Phase::uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2,
   fprintf (file, "%s", line3);
   fprintf (file, "%s", line4);
   fprintf (file, "%s", line5);
-  if (nres == nres_1)
+  if (nres_0 == nres_1)
     fprintf (file, "%s", lineaa);
   else
     fprintf (file, "%s", linebb);
   fprintf (file, "%s", line7);
   fprintf (file, "%s", line8);
 
-  for (int i = 0; i < nres; i++)
+  for (int i = 0; i < nres_0; i++)
     fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i]);
   
@@ -405,8 +471,8 @@ void Phase::uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2,
 
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
   fprintf (monitor, "uFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", uFile2, weight2);
+  fprintf (monitor, "%s %11.4e %3d %3d %3d\n", uFile1, weight1, nres_1, nres, nres_0);
+  fprintf (monitor, "%s %11.4e %3d %3d %3d\n", uFile2, weight2, nres_2, nres, nres_0);
   fclose (monitor);
  
   // ........
