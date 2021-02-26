@@ -21,6 +21,7 @@
 // -s STAGE5 - overrides STAGE5 value from namelist file
 // -t TSTART - sets simulation start time (ms)
 // -u INTU   - overrides INTU value from namelist file
+// -C COPT   - ovverrides COPT value from namelist file
 // -F FREQ   - overrides FREQ value from namelist file
 // -H HIGH   - enables higher order transport calculation
 // -S SCALE  - overrides SCALE value from namelist file
@@ -79,6 +80,7 @@
 // 2.13 - Normalize total pressure decrement by P(0). Added IRMP.
 // 2.14 - Added higher order transport calculation
 // 2.15 - Bug fixes. Improved uFile/mFile/lFile interpolation.
+// 2.16 - Added COPT flag
 
 // #######################################################################
 
@@ -86,7 +88,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 15
+#define VERSION_MINOR 16
 
 #include <stdio.h>
 #include <math.h>
@@ -111,8 +113,9 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, double* DT, double* TSTART, double* TEND,
-			      double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
+			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
+			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -146,6 +149,9 @@ class Phase
   int      IFLA;   // If != 0 then set all ICTRL values to IRMP (triggered if IRMP >= 0)
   int      HIGH;   // If != 0 use higher order transport analysis
   int      RATS;   // If != 0 use only linear interpolation for uFiles/mFiles/lFiles
+  int      COPT;   // If == 0 then no coil current optimization
+                   // If == 1 then coil currents optimized to maximize drive at closest rational surface to pedestal top
+                   // If == 2 then coil currents optimized to minimize drive at innermost rational surface
   double   IRMP;   // RMP current (kA)
   
   int      NCTRL;  // Number of control points
@@ -167,6 +173,7 @@ class Phase
   double q0;              // Safety factor at magnetic axis
   double qa;              // Safety factor at plasma boundary
   double PSILIM;          // Limiting value of PsiN
+  double PSIPED;          // Value of PsiN at top of pedestal
   double Pped;            // Pedestal pressure / central pressure
   int    nres;            // Number of resonant surfaces in plasma
   gsl_matrix_complex* FF; // Plasma inverse tearing stability matrix
@@ -316,7 +323,8 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
+	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);        
 
   // -----------------------
   // Private class functions
@@ -324,7 +332,8 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
+		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors
@@ -338,6 +347,16 @@ class Phase
   
   // Calculate Irmp and Prmp
   void CalcRMP (double t);
+  // Calculate coil currents and phases
+  void CalcCoil (double t, double& IUL, double& PUL, double& IM);
+  // Find resonant surfaces that straddle top of pedestal
+  int Findk ();
+  // Find maximum of three coil function
+  double FindMax (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML);
+  // Find minimum of three coil function
+  double FindMin (double X1UM, double X1UL, double X1ML, double gamma1UM, double gamma1UL, double gamma1ML);
+  // Evaluate three coil function and its derivative
+  void ThreeCoil (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML, double Delta, double& fun, double& deriv, double& dderiv);
   // Calculate chi and zeta vectors
   void CalcChiZeta (double t);
   // Pack simulation variables into single vector

@@ -13,14 +13,15 @@
 	NEO_YN       = 1.5     ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
 	PHASE        = 1       ! If != 0 then call PHASE
 	PHASE_MID    = 1       ! If != 0 then middle RMP coils included in PHASE calculation
+	PHASE_COPT   = 1       ! Coil current optimization switch (see PHASEL/Inputs/Phase.nml)
   	PHASE_INTN   = 1       ! If != 0 then interpolate nFiles in PHASE
 	PHASE_INTU   = 1       ! If != 0 then interpolate uFiles/mFiles/lFiles in PHASE	
 	PHASE_STAGE5 = 1       ! If != 0 then Stage5 calculation enabled in PHASE
 	PHASE_OLD    = 1       ! If != 0 then restart PHASE calculations from previous run
 	PHASE_FREQ   = 2       ! If != 0 then use island width dependent natural frequency in PHASE
 	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation in PHASE
-	PHASE_HIGH   = 1       ! If != 0 then enable higher order transport calculation in PHASE
-	PHASE_RATS   = 1       ! If != 0 then enable linear-onlt interpolation of uFiles/mFiles/lFiles in PHASE
+	PHASE_HIGH   = 1       ! If != 0 then enable higher-order transport calculation in PHASE
+	PHASE_RATS   = 1       ! If != 0 then enable linear-only interpolation of uFiles/mFiles/lFiles in PHASE
 	PHASE_SCALE  = 2.      ! Set GPEC scalefactor in PHASE
 	PHASE_CHIR   = 4.      ! Set maximum Chirihov parameter for vacuum islands in PHASE
 	RESTART      = 1       ! If != 0 then delete all previous IslandDynamics data

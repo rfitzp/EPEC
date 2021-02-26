@@ -300,4 +300,42 @@ Total pressure change due to islands is
 + \delta_{T_i\,k}^{\,3}\,\frac{n_i}{24}\,\frac{d^{\,3}T_i}{d{\mit\Psi}_N^{\,3}}\right]\right\}_{r_k}.
 \end{align}
 
+\section{Coil Optimization}
+Assuming an ideal response of the plasma to the applied RMP, characterized by ${\mit\Psi}_k=0$ for all $k$, 
+we have
+\begin{equation}
+{\mit\Delta\Psi}_k = |E_{kk}|\left(
+  I_U \, {\rm e}^{\,{\rm i}\,{\mit\Delta}_U}\,|\chi_k^{\,U}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,U}}
++I_M\,                                                    |\chi_k^{\,M}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,M}}
++I_L \, {\rm e}^{\,{\rm i}\,{\mit\Delta}_L}\,|\chi_k^{\,L}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,L}}
+\right),
+\end{equation}
+where $U$, $M$, and $L$ correspond to the upper, middle, and lower coil-sets, respectively, $I_{U,M,L}$ and ${\mit\Delta}_{U,M,L}$
+are the amplitudes and helical phase-shifts of the currents flowing in the upper, middle, and lower coil-sets, respectively,
+with ${\mit\Delta}_M=0$. Finally, $|\chi_k^{U,M,L}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,U,M,L}}$ are the $\chi_k$ values when 1 kA flows in the upper, middle, and lower coil-sets, respectively,
+with the same helical phase as the current flowing in the middle coil set.
+Let
+\begin{align}
+z_k& =\frac{ {\mit\Delta\Psi}_k }{ |E_{kk}|\,I_{M} },\\[0.5ex]
+\lambda_U&=\left(\frac{I_{U}}{I_{M}}\right){\rm e}^{\,{\rm i}\,{\mit\Delta}_{U}},\\[0.5ex]
+\lambda_L&=\left(\frac{I_{L}}{I_{M}}\right){\rm e}^{\,{\rm i}\,{\mit\Delta}_{L}},\\[0.5ex]
+x_k^{\,U,M,L} &= |\chi_k^{\,U\,M\,L}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,U,M,L}}.
+\end{align}
+It follows that
+\begin{equation}
+z_k =\lambda_{U}\,x_k^{\,U}+ x_k^{\,M}+\lambda_{L}\,x_k^{\,L}.
+\end{equation}
+Let the $k=1$ surface correspond to the innermost resonant surface, and let the $k=k'$ surface correspond to the nearest resonant surface
+to the top of the pedestal. To maximize ELM suppression while minimizing the chance of locked mode formation, we require
+\begin{align}
+z_1&=0,\label{tty}\\[0.5ex]
+z_{k'} &= 3\,x_{k'}^{\,M}.\label{tty1}
+\end{align}
+The latter constraint ensures that the signals from all three coils add in phase, with the same amplitude, at the top of the pedestal. 
+It is easily seen that the choices
+\begin{align}
+\lambda_{U} &= \frac{2\,x_{k'}^{\,M}\,x_1^{\,L}+x_1^{\,M}\,x_{k'}^{\,L}}{x_{k'}^{\,U}\,x_1^{\,L}- x_1^{\,U}\,x_{k'}^{\,L}},\\[0.5ex]
+\lambda_{L} &= \frac{2\,x_{k'}^{\,M}\,x_1^{\,U}+x_1^{\,M}\,x_{k'}^{\,U}}{x_{k'}^{\,L}\,x_1^{\,U}- x_1^{\,L}\,x_{k'}^{\,U}}
+\end{align}
+ensure that (\ref{tty}) and (\ref{tty1}) are satisfied. 
 \end{document}

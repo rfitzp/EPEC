@@ -2,18 +2,18 @@ import graph;
 
 size(500,500,IgnoreAspect);
 
-file    inz = input("nres.txt").line();
+file    inz = input("../../Outputs/Stage2/nres.txt").line();
 real[][] Az = inz.dimension (0,0);
 Az          = transpose(Az);
 
 real[] Nres = Az[0];
 real nres   = Nres[0];
 
-file    inx = input("Rnc.txt").line();
+file    inx = input("../../Outputs/Stage2/Rnc.txt").line();
 real[][] Ax = inx.dimension (0,0);
 Ax          = transpose(Ax);
 
-file    iny = input("Znc.txt").line();
+file    iny = input("../../Outputs/Stage2/Znc.txt").line();
 real[][] Ay = iny.dimension (0,0);
 Ay          = transpose(Ay);
   

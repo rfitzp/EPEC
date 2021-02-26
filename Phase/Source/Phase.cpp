@@ -59,10 +59,11 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
+		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -89,7 +90,8 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
+		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -108,6 +110,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   FREQ   = 0;
   LIN    = 0;
   MID    = 0;
+  COPT   = 0;
   DT     = 1.e-5;
   TSTART = 0.;
   TEND   = 1.e6;
@@ -128,7 +131,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &COPT,
+		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -153,6 +157,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     HIGH = _HIGH;
   if (_RATS > -1)
     RATS = _RATS;
+  if (_COPT > -1)
+    COPT = _COPT;
   if (_TSTART > 0.)
     TSTART = _TSTART;
   if (_TEND > 0.)
@@ -170,8 +176,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
 
   // ............
   // Sanity check
@@ -201,6 +207,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       printf ("PHASE:: Invalid FREQ value\n");
       exit (1);
     }
+  if (COPT < 0 || COPT > 2)
+    {
+      printf ("PHASE:: Invalid COPT value\n");
+      exit (1);
+    }
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -210,8 +221,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -219,8 +230,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (monitor);
 
   // .................
@@ -295,7 +306,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
  
   FILE* file = OpenFiler ((char*) "Inputs/fFile");
   if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &R_0, &B_0, &inr, &q95, &r95, &qlim, &rlim, &q0, &qa, &NPSI, &ini, &nres, &PSILIM, &inr, &Pped) != 15)
+	      &R_0, &B_0, &inr, &q95, &r95, &qlim, &rlim, &q0, &qa, &NPSI, &ini, &nres, &PSILIM, &PSIPED, &Pped) != 15)
     {
       printf ("PHASE::Error reading fFile (1)\n");
       exit (1);
@@ -913,7 +924,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TSTART);
   fclose (file);
 
-  file = OpenFilea ((char*) "../IslandDynamics/Outputs/Chi.txt");
+  file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/Chi.txt");
   for (int i = 0; i < nres; i++)
     {
       if (MID)
@@ -1523,6 +1534,14 @@ void Phase::IslandDynamics ()
 
   fclose (filewx);
 
+  // Output coil optimization data
+  double IUL, PUL, IM;
+  CalcCoil (t, IUL, PUL, IM);
+
+  FILE* fileco = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/opt.txt");
+  fprintf (fileco, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", TIME, q95, IUL, PUL/M_PI, IM); 
+  fclose (fileco);
+
   // Output Mirnov data
   FILE* fileww = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/mirnov.txt");
   double sumci = 0., sumsi = 0., sumco = 0., sumso = 0.;
@@ -1639,16 +1658,247 @@ void Phase::CalcRMP (double t)
     }
 }
 
+// ##############################################
+// Function to calculate coil currents and phases
+// ##############################################
+void Phase::CalcCoil (double t, double& IUL, double& PUL, double& IM)
+{
+  CalcRMP (t);
+
+  if (COPT == 0)
+    {
+      if (MID)
+	{
+	  IUL = irmp;
+	  PUL = prmp;
+	  IM  = irmp;
+	}
+      else
+	{
+	  IUL = irmp;
+	  PUL = prmp;
+	  IM  = 0.;
+	}
+    }
+  else if (COPT == 1 || (COPT == 2 && !MID))
+    {
+      if (MID)
+	{
+	  double k = Findk ();
+	
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
+	  gsl_complex chikmM = gsl_vector_complex_get (ChiM, k);
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
+	  gsl_complex chikpM = gsl_vector_complex_get (ChiM, k+1);
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
+	  chikmM = gsl_complex_mul_real (chikmM, Weightm);
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
+	  chikpM = gsl_complex_mul_real (chikpM, Weightp);
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
+	  gsl_complex chikM = gsl_complex_add (chikmM, chikpM);
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+
+	  gsl_complex chikMa = gsl_complex_conjugate (chikM);
+	  gsl_complex chikLa = gsl_complex_conjugate (chikL);
+
+	  gsl_complex xkUM = gsl_complex_mul (chikU, chikMa);
+	  gsl_complex xkUL = gsl_complex_mul (chikU, chikLa);
+	  gsl_complex xkML = gsl_complex_mul (chikM, chikLa);
+
+	  double XkUM = gsl_complex_abs (xkUM);
+	  double XkUL = gsl_complex_abs (xkUL);
+	  double XkML = gsl_complex_abs (xkML);
+	  
+	  double gammakUM = gsl_complex_arg (xkUM);
+	  double gammakUL = gsl_complex_arg (xkUL);
+	  double gammakML = gsl_complex_arg (xkML);
+
+	  double Delta = FindMax (XkUM, XkUL, XkML, gammakUM, gammakUL, gammakML);
+
+	  IUL = irmp;
+	  PUL = Delta;
+	  IM  = irmp;
+	}
+      else
+	{
+	  double k = Findk ();
+	
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+
+	  gsl_complex chikLa = gsl_complex_conjugate (chikL);
+
+	  gsl_complex xkUL = gsl_complex_mul (chikU, chikLa);
+
+	  double gammakUL = gsl_complex_arg (xkUL);
+
+	  double Delta = gammakUL;
+
+	  IUL = irmp;
+	  PUL = Delta /2.;
+	  IM  = 0.;
+	}
+    }
+  else 
+    {
+      gsl_complex chi1U = gsl_vector_complex_get (ChiU, 0);
+      gsl_complex chi1M = gsl_vector_complex_get (ChiM, 0);
+      gsl_complex chi1L = gsl_vector_complex_get (ChiL, 0);
+
+      gsl_complex chi1Ma = gsl_complex_conjugate (chi1M);
+      gsl_complex chi1La = gsl_complex_conjugate (chi1L);
+
+      gsl_complex x1UM = gsl_complex_mul (chi1U, chi1Ma);
+      gsl_complex x1UL = gsl_complex_mul (chi1U, chi1La);
+      gsl_complex x1ML = gsl_complex_mul (chi1M, chi1La);
+
+      double X1UM = gsl_complex_abs (x1UM);
+      double X1UL = gsl_complex_abs (x1UL);
+      double X1ML = gsl_complex_abs (x1ML);
+	  
+      double gamma1UM = gsl_complex_arg (x1UM);
+      double gamma1UL = gsl_complex_arg (x1UL);
+      double gamma1ML = gsl_complex_arg (x1ML);
+
+      double Delta = FindMin (X1UM, X1UL, X1ML, gamma1UM, gamma1UL, gamma1ML);
+
+      IUL = irmp;
+      PUL = Delta;
+      IM  = irmp;
+    }
+}
+
+// ################################################################
+// Function to find resonant surfaces that straddle top of pedestal
+// ################################################################
+int Phase::Findk ()
+{
+  int k = -1;
+
+  for (int j = 0; j < nres-1; j++)
+    if ((PsiN (j) - PSIPED) * (PsiN (j+1) - PSIPED) <= 0.)
+      k = j;
+
+  if (k == -1)
+    k = nres - 2;
+
+  return k;
+}
+
+// ###############################################
+// Function to find maximum of three coil function
+// ###############################################
+double Phase::FindMax (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML)
+{
+  double Delta = 0., fun, deriv, dderiv, max = -1.e6;
+  
+  for (int i = 0; i < 360; i++)
+    {
+      double delta = (double (i) /360.) * 2.*M_PI;
+
+      ThreeCoil (XkUM, XkUL, XkML, gammakUM, gammakUL, gammakML, delta, fun, deriv, dderiv);
+
+      if (fun > max)
+	{
+	  Delta  = delta;
+	  max    = fun;
+	}
+    }
+
+  for (int i = 0; i < 5; i++)
+    {
+      ThreeCoil (XkUM, XkUL, XkML, gammakUM, gammakUL, gammakML, Delta, fun, deriv, dderiv);
+
+      Delta -= deriv /dderiv; 
+    }
+
+  return Delta;
+}
+
+// ###############################################
+// Function to find minimum of three coil function
+// ###############################################
+double Phase::FindMin (double X1UM, double X1UL, double X1ML, double gamma1UM, double gamma1UL, double gamma1ML)
+{
+  double Delta = 0., fun, deriv, dderiv, min = 1.e6;
+  
+  for (int i = 0; i < 360; i++)
+    {
+      double delta = (double (i) /360.) * 2.*M_PI;
+
+      ThreeCoil (X1UM, X1UL, X1ML, gamma1UM, gamma1UL, gamma1ML, delta, fun, deriv, dderiv);
+
+      if (fun < min)
+	{
+	  Delta  = delta;
+	  min    = fun;
+	}
+    }
+
+  for (int i = 0; i < 5; i++)
+    {
+      ThreeCoil (X1UM, X1UL, X1ML, gamma1UM, gamma1UL, gamma1ML, Delta, fun, deriv, dderiv);
+
+      Delta -= deriv /dderiv; 
+    }
+
+  return Delta;
+}
+
+// ############################################################
+// Function to evaluate three coil function and its derivatives
+// ############################################################
+void Phase::ThreeCoil (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML, double Delta, double& fun, double& deriv, double& dderiv)
+{
+  fun    =   XkUM * cos (Delta - gammakUM) +      XkUL * cos (2.*Delta - gammakUL) + XkML * cos (Delta - gammakML);
+  deriv  = - XkUM * sin (Delta - gammakUM) - 2. * XkUL * sin (2.*Delta - gammakUL) - XkML * sin (Delta - gammakML);
+  dderiv = - XkUM * cos (Delta - gammakUM) - 4. * XkUL * cos (2.*Delta - gammakUL) - XkML * cos (Delta - gammakML);
+}
+
 // ##########################################
 // Function to calculate chi and zeta vectors
 // ##########################################
 void Phase::CalcChiZeta (double t)
 {
-  CalcRMP (t);
-  
+  // Get coil currents and phases
+  double IUL, PUL, IM;
+  CalcCoil (t, IUL, PUL, IM);
+
+  // Calculate complex coil currents
   double      one = 1.;
-  gsl_complex eik = gsl_complex_polar (one, prmp);
-  
+  gsl_complex eiU = gsl_complex_polar    (one, - PUL);
+  gsl_complex eiL = gsl_complex_polar    (one, + PUL);
+  gsl_complex IIU = gsl_complex_mul_real (eiU, IUL);
+  gsl_complex IIM = gsl_complex_rect     (IM,  0.);
+  gsl_complex IIL = gsl_complex_mul_real (eiL, IUL);
+
+  // Calculate chi and zeta values
   for (int j = 0; j < nres; j++)
     {
       gsl_complex hu = gsl_vector_complex_get (ChiU, j);
@@ -1659,20 +1909,22 @@ void Phase::CalcChiZeta (double t)
       gsl_complex h;
       if (MID == 0)
 	{
-	  hl = gsl_complex_mul (hl, eik);
-	  h  = gsl_complex_add (hu, hl);
+	  hu = gsl_complex_mul (IIU, hu);
+	  hl = gsl_complex_mul (IIL, hl);
+
+	  h = gsl_complex_add (hu, hl);
 	}
       else
 	{
-	  hm = gsl_complex_mul (hm, eik);
-	  h  = gsl_complex_add (hu, hm);
+	  hu = gsl_complex_mul (IIU, hu);
+	  hm = gsl_complex_mul (IIM, hm);
+	  hl = gsl_complex_mul (IIL, hl);
 
-	  hl = gsl_complex_mul (hl, eik);
-	  hl = gsl_complex_mul (hl, eik);
-	  h  = gsl_complex_add (h,  hl);
+	  h  = gsl_complex_add (hu, hm);
+	  h  = gsl_complex_add (h, hl);
 	}
     
-      chi  (j) =   gsl_complex_abs (h) * irmp;
+      chi  (j) =   gsl_complex_abs (h);
       zeta (j) = - gsl_complex_arg (h);
 
       // Limit maximum Chirikov parameter for vacuum islands

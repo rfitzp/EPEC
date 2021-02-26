@@ -51,16 +51,16 @@
 // Versions:
 // .........
 
-// 1.0 - Initial version
-// 1.2 - Improved gFile indexing
-// 1.3 - Major rearrangement of input and output files
-// 1.4 - Added linear interpolation
-// 1.5 - Added RP1, Bt, Bt1, Bp, Bp1, and K_theta
-// 1.6 - Removed QFLAG and Q95 functionality. Added calculation of A1, A2, A3 parameters
-// 1.7 - Improved system calls
-// 1.8 - Renamed Namelist. Removed A2 and A3 parameters (too much noise)
-// 1.9 - Added PSILIM to fFile
-// 2.0 - Added A2res, PSIPED, Pped to fFile
+// 1.0  - Initial version
+// 1.2  - Improved gFile indexing
+// 1.3  - Major rearrangement of input and output files
+// 1.4  - Added linear interpolation
+// 1.5  - Added RP1, Bt, Bt1, Bp, Bp1, and K_theta
+// 1.6  - Removed QFLAG and Q95 functionality. Added calculation of A1, A2, A3 parameters
+// 1.7  - Improved system calls
+// 1.8  - Renamed Namelist. Removed A2 and A3 parameters (too much noise)
+// 1.9  - Added PSILIM to fFile
+// 1.10 - Added A2res, PSIPED, Pped to fFile
 
 // #####################################################################################
 

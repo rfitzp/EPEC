@@ -7,6 +7,10 @@
 	FREQ   = 0     ! Flag for island width dependent natural frequency
 	LIN    = 0     ! Flag for purely linear calculation
 	MID    = 1     ! Flag for inclusion of mFiles
+	COPT   = 0     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
+                       !  0 - no optimization
+                       !  1 - maximize drive at resonant surface closest to top of pedestal
+	               !  2 - minimize drive at innermost resonant surface
 	SCALE  = 2.    ! GPEC scalefactor
 	CHIR   = 1.    ! Maximum Chirikov parameter for vacuum islands
         HIGH   = 1     ! Flag for higher order transport analysis

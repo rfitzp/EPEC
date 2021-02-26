@@ -32,9 +32,10 @@ int main (int argc, char** argv)
   char* Fvalue = NULL; char* Svalue = NULL; char* lvalue = NULL;
   char* mvalue = NULL; char* Tvalue = NULL; char* cvalue = NULL;
   char* ivalue = NULL; char* rvalue = NULL; char* Hvalue = NULL;
+  char* Cvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:c:i:r:H:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:c:i:r:H:C:")) != -1)
     switch (c)
       {
       case 'f':
@@ -54,6 +55,7 @@ int main (int argc, char** argv)
 	printf ("-s STAGE5 - set Stage5 caculation enabling flag STAGE5\n");
 	printf ("-t TSTART - set simulation start time (s) to TSTART\n");
 	printf ("-u INTU   - set uFile/mFile/lFile interpolation enabling flag INTU\n");
+	printf ("-C COPT   - set coil current optimization flag COPT\n");
 	printf ("-F FREQ   - set island frequency choice flag FREQ\n");
 	printf ("-H HIGH   - set higher orddr transport calculation enabling flag HIGH\n");
 	printf ("-S SCALE  - set GPEC scalefactor SCALE\n");	
@@ -101,10 +103,13 @@ int main (int argc, char** argv)
       case 'H':
 	Hvalue = optarg;
  	break;
+      case 'C':
+	Cvalue = optarg;
+ 	break;
       case '?':
 	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u'
 	    || optopt == 'F' || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c'
-	    || optopt == 'i' || optopt == 'r' || optopt == 'H')
+	    || optopt == 'i' || optopt == 'r' || optopt == 'H' || optopt == 'C')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -120,6 +125,7 @@ int main (int argc, char** argv)
   double _SCALE  = -1.e6; float __SCALE;    int    _LIN    = -1.;   int    _MID  = -1;
   double _TEND   = -1.e6; float __TEND;     double _CHIR   = -1.e6; float  __CHIR;
   double _IRMP   = -1.e6; float __IRMP;     int    _HIGH   = -1.;   int    _RATS = -1.;
+  int    _COPT   = 1;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -141,6 +147,8 @@ int main (int argc, char** argv)
      _HIGH = atoi (Hvalue);
   if (rvalue != NULL)
      _RATS = atoi (rvalue);
+  if (Cvalue != NULL)
+     _COPT = atoi (Cvalue);
   if (tvalue != NULL)
     {
       __TSTART = atof (tvalue);
@@ -171,7 +179,7 @@ int main (int argc, char** argv)
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
 
   return 0;
 }

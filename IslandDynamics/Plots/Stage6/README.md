@@ -37,6 +37,7 @@
 	tpsiq.asy      ... plots electron temperature flattened regions (in PsiN) versus q95
 	
 	deltap.asy     ... plots - (Delta P)/P_ped versus q95
+	pcoil.asy      ... plots optimized coil phases versus q95
 
 	mirnovin.asy   ... plots reconstructed Mirnow signal on outboard midplane
 	minrovout.asy  ... plots reconstructed Mirnow signal on inboard midplane
