@@ -60,10 +60,10 @@ Phase::Phase ()
 // Function to perform simulation
 // ##############################
 void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
+		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -91,7 +91,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // Function to read input data
 // ###########################
 void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS)
+		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -109,8 +109,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   OLD    = 0;
   FREQ   = 0;
   LIN    = 0;
-  MID    = 0;
+  MID    = 2;
   COPT   = 0;
+  CORE   = 1.;
   DT     = 1.e-5;
   TSTART = 0.;
   TEND   = 1.e6;
@@ -132,7 +133,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &COPT,
-		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &NCTRL, TCTRL, ICTRL, PCTRL);
+		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -159,6 +160,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     RATS = _RATS;
   if (_COPT > -1)
     COPT = _COPT;
+  if (_CORE > -1.)
+    CORE = _CORE;
   if (_TSTART > 0.)
     TSTART = _TSTART;
   if (_TEND > 0.)
@@ -176,8 +179,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, CORE, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
 
   // ............
   // Sanity check
@@ -207,9 +210,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       printf ("PHASE:: Invalid FREQ value\n");
       exit (1);
     }
-  if (COPT < 0 || COPT > 2)
+  if (COPT < 0 || COPT > 3)
     {
       printf ("PHASE:: Invalid COPT value\n");
+      exit (1);
+    }
+  if (MID < 1 || MID > 3)
+    {
+      printf ("PHASE:: Invalid MID value\n");
       exit (1);
     }
 
@@ -221,8 +229,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, CORE, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -230,8 +238,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, CORE, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (monitor);
 
   // .................
@@ -554,51 +562,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       char pwd[MAXFILENAMELENGTH];
       getcwd (pwd, MAXFILENAMELENGTH);
 
-      // Remove uFile
-      CallSystem ("rm -rf Inputs/uFile");
-
-      // Get uFiles directory
-      char uFileDir[MAXFILENAMELENGTH];
-      CallSystem ("greadlink -f Inputs/uFiles > uFileDir");
-      FILE* ufd = OpenFiler ("uFileDir");
-      fscanf (ufd, "%s", uFileDir);
-      fclose (ufd);
-      CallSystem ("rm uFileDir");
-       
-      // Read uFile data
-      char           Basename [MAXFILENAMELENGTH];
-      char           Filename [MAXFILENAMELENGTH];
-      char           ufilename[MAXFILENAMELENGTH];
-      vector<string> uFileName;
-      double         ufiletime;
-      vector<double> uFileTime;
-      int            uFileNumber;
-      
-      printf ("Reading uFile data:\n");
-
-      chdir (uFileDir);
-      getcwd (Basename, MAXFILENAMELENGTH);
-      strcat (Basename, "/");
-      
-      file = OpenFiler ((char*) "Index");
-
-      while (fscanf (file, "%s %lf", &ufilename, &ufiletime) == 2)
-	{
-          strcpy (Filename, Basename);
-	  strcat (Filename, ufilename);
-
-	  uFileName.push_back (Filename);
-	  uFileTime.push_back (ufiletime);
-	}
-      uFileNumber = uFileName.size ();
-      
-      fclose (file);
-      chdir (pwd);
- 
-      // Interpolate uFiles
-      uFileInterp (uFileName, uFileTime, uFileNumber, TSTART);
-
-      if (MID != 0)
+      if (MID == 3)
 	{
 	  // Remove mFile
 	  CallSystem ("rm -rf Inputs/mFile");
@@ -645,47 +609,99 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 	  mFileInterp (mFileName, mFileTime, mFileNumber, TSTART);
 	}
 
-      // Remove lFile
-      CallSystem ("rm -rf Inputs/lFile");
-      
-      // Get lFiles directory
-      char lFileDir[MAXFILENAMELENGTH];
-      CallSystem ("greadlink -f Inputs/lFiles > lFileDir");
-      FILE* lfd = OpenFiler ("lFileDir");
-      fscanf (lfd, "%s", lFileDir);
-      fclose (lfd);
-      CallSystem ("rm lFileDir");
-       
-      // Read lFile data
-      char           lfilename[MAXFILENAMELENGTH];
-      vector<string> lFileName;
-      double         lfiletime;
-      vector<double> lFileTime;
-      int            lFileNumber;
-      
-      printf ("Reading lFile data:\n");
-
-      chdir (lFileDir);
-      getcwd (Basename, MAXFILENAMELENGTH);
-      strcat (Basename, "/");
- 
-      file = OpenFiler ((char*) "Index");
-
-      while (fscanf (file, "%s %lf", &lfilename, &lfiletime) == 2)
+      if (MID >= 2)
 	{
-          strcpy (Filename, Basename);
-	  strcat (Filename, lfilename);
+	  // Remove uFile
+	  CallSystem ("rm -rf Inputs/uFile");
+	  
+	  // Get uFiles directory
+	  char uFileDir[MAXFILENAMELENGTH];
+	  CallSystem ("greadlink -f Inputs/uFiles > uFileDir");
+	  FILE* ufd = OpenFiler ("uFileDir");
+	  fscanf (ufd, "%s", uFileDir);
+	  fclose (ufd);
+	  CallSystem ("rm uFileDir");
+	  
+	  // Read uFile data
+	  char           Basename [MAXFILENAMELENGTH];
+	  char           Filename [MAXFILENAMELENGTH];
+	  char           ufilename[MAXFILENAMELENGTH];
+	  vector<string> uFileName;
+	  double         ufiletime;
+	  vector<double> uFileTime;
+	  int            uFileNumber;
+	  
+	  printf ("Reading uFile data:\n");
+	  
+	  chdir (uFileDir);
+	  getcwd (Basename, MAXFILENAMELENGTH);
+	  strcat (Basename, "/");
+	  
+	  file = OpenFiler ((char*) "Index");
+	  
+	  while (fscanf (file, "%s %lf", &ufilename, &ufiletime) == 2)
+	    {
+	      strcpy (Filename, Basename);
+	      strcat (Filename, ufilename);
+	      
+	      uFileName.push_back (Filename);
+	      uFileTime.push_back (ufiletime);
+	    }
+	  uFileNumber = uFileName.size ();
+	  
+	  fclose (file);
+	  chdir (pwd);
 
-	  lFileName.push_back (Filename);
-	  lFileTime.push_back (lfiletime);
+	  // Interpolate uFiles
+	  uFileInterp (uFileName, uFileTime, uFileNumber, TSTART);
 	}
-      lFileNumber = lFileName.size ();
-      
-      fclose (file);
-      chdir (pwd);
 
-      // Interpolate lFiles
-      lFileInterp (lFileName, lFileTime, lFileNumber, TSTART);
+      if (MID >= 1)
+	{
+	  // Remove lFile
+	  CallSystem ("rm -rf Inputs/lFile");
+	  
+	  // Get lFiles directory
+	  char lFileDir[MAXFILENAMELENGTH];
+	  CallSystem ("greadlink -f Inputs/lFiles > lFileDir");
+	  FILE* lfd = OpenFiler ("lFileDir");
+	  fscanf (lfd, "%s", lFileDir);
+	  fclose (lfd);
+	  CallSystem ("rm lFileDir");
+	  
+	  // Read lFile data
+	  char           Basename [MAXFILENAMELENGTH];
+	  char           Filename [MAXFILENAMELENGTH];
+	  char           lfilename[MAXFILENAMELENGTH];
+	  vector<string> lFileName;
+	  double         lfiletime;
+	  vector<double> lFileTime;
+	  int            lFileNumber;
+	  
+	  printf ("Reading lFile data:\n");
+	  
+	  chdir (lFileDir);
+	  getcwd (Basename, MAXFILENAMELENGTH);
+	  strcat (Basename, "/");
+	  
+	  file = OpenFiler ((char*) "Index");
+	  
+	  while (fscanf (file, "%s %lf", &lfilename, &lfiletime) == 2)
+	    {
+	      strcpy (Filename, Basename);
+	      strcat (Filename, lfilename);
+	      
+	      lFileName.push_back (Filename);
+	      lFileTime.push_back (lfiletime);
+	    }
+	  lFileNumber = lFileName.size ();
+	  
+	  fclose (file);
+	  chdir (pwd);
+	  
+	  // Interpolate lFiles
+	  lFileInterp (lFileName, lFileTime, lFileNumber, TSTART);
+	}
     }
 
   // ...........................
@@ -695,8 +711,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   printf ("Reading data from program GPEC:\n");
   printf ("...............................\n");
   
-  char line[MAXULFILELINELENGTH]; char line1[MAXULFILELINELENGTH];
-  double v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12;
+  char    line[MAXULFILELINELENGTH]; char line1[MAXULFILELINELENGTH];
+  double  v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12;
   double* QIN = new double[nres];
   double* PSI = new double[nres];
   double* DRE = new double[nres];
@@ -713,81 +729,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 
   double SCALEFACTOR = SCALE;
   printf ("SCALEFACTOR = %11.4e\n", SCALEFACTOR);
-  
-  printf ("Upper coil:\n");
-  file = OpenFiler ((char*) "Inputs/uFile");
 
-  for (int i = 0; i < 5; i++)
-    fgets (line, MAXULFILELINELENGTH, file);
-  fgets (line1, MAXULFILELINELENGTH, file);
-  for (int i = 0; i < 2; i++)
-    fgets (line, MAXULFILELINELENGTH, file);
-
-  char* token = strtok (line1, " "); 
-  token = strtok (NULL, " "); 
-  token = strtok (NULL, " ");
-  int nsingu = atoi (token);
-
-  int nres1 = nres;
-  if (nsingu < nres)
-    {
-      printf ("PHASE:: Warning - nsing < nres\n");
-      nres1 = nsingu;
-    }
-  if (nsingu > nres)
-    {
-      printf ("PHASE:: Warning - nsing > nres\n");
-      nres1 = nres;
-    }
-
-  double sum = 0.;
-  for (int i = 0; i < nres1; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
-      {
-	printf ("Error reading uFile\n");
-	exit (1);
-      }
-    else
-      {
-	QIN[i] = v1;
-	PSI[i] = v2;
-	DRE[i] = v9;
-	DIM[i] = v10;
-	WWW[i] = 2.*v11;
-
-	DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
-	DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
-
-	CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
-	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
-	CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
-	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
-
-	gsl_vector_complex_set (DeltaU, i, gsl_complex_rect (DRE[i], DIM[i]));
-	gsl_vector_complex_set (ChiU,   i, gsl_complex_rect (CRE[i], CIM[i]));
-
-	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiU, i));
-	double WUNRE = 4. * sqrt (A1 (i) * Psi);
-	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
-
-	printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
-
-      }
-  fclose (file);
-  if (fabs (QIN[0] - qk(0)) > 1.e-15)
-    {
-      printf ("PHASE:: Error - minimum resonant q values do not match in nFile and uFile\n");
-      exit (1);
-    }
-
-  FILE* fileu = OpenFilew ((char*) "Outputs/Stage4/uFile.txt");
-  for (int i = 0; i < nres1; i++)
-    fprintf (fileu, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
-  fclose (fileu);
-
-  if (MID != 0)
+  if (MID == 3)
     {
       printf ("Middle coil:\n");
       file = OpenFiler ((char*) "Inputs/mFile");
@@ -798,18 +741,24 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       for (int i = 0; i < 2; i++)
 	fgets (line, MAXULFILELINELENGTH, file);
       
-      token = strtok (line1, " "); 
+      char* token = strtok (line1, " "); 
       token = strtok (NULL, " "); 
       token = strtok (NULL, " ");
       int nsingm = atoi (token);
-      
-      if (nsingm != nsingu)
+
+      int nres1 = nres;
+      if (nsingm < nres)
 	{
-	  printf ("PHASE:: Error - nsingm != nsingu\n");
-	  exit (1);
+	  printf ("PHASE:: Warning - nsingm < nres\n");
+	  nres1 = nsingm;
+	}
+      if (nsingm > nres)
+	{
+	  printf ("PHASE:: Warning - nsingm > nres\n");
+	  nres1 = nres;
 	}
       
-      for (int i = 0; i < nres1; i++)
+       for (int i = 0; i < nres1; i++)
 	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
 	  {
@@ -843,7 +792,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
 		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
-      if (fabs (QIN[0] - qk(0)) > 1.e-15)
+
+      if (fabs (QIN[0] - qk(0)) > 1.e-3)
 	{
 	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and mFile\n");
 	  exit (1);
@@ -855,71 +805,158 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       fclose (filem);
     }
 
-  printf ("Lower coil:\n");
-  file = OpenFiler ((char*) "Inputs/lFile");
-  
-  for (int i = 0; i < 5; i++)
-    fgets (line, MAXULFILELINELENGTH, file);
-  fgets (line1, MAXULFILELINELENGTH, file);
-  for (int i = 0; i < 2; i++)
-    fgets (line, MAXULFILELINELENGTH, file);
-
-  token = strtok (line1, " "); 
-  token = strtok (NULL, " "); 
-  token = strtok (NULL, " ");
-  int nsingl = atoi (token);
-
-  if (nsingl != nsingu)
+  if (MID >= 2)
     {
-      printf ("PHASE:: Error - nsingl != nsingu\n");
-      exit (1);
+      printf ("Upper coil:\n");
+      file = OpenFiler ((char*) "Inputs/uFile");
+      
+      for (int i = 0; i < 5; i++)
+	fgets (line, MAXULFILELINELENGTH, file);
+      fgets (line1, MAXULFILELINELENGTH, file);
+      for (int i = 0; i < 2; i++)
+	fgets (line, MAXULFILELINELENGTH, file);
+      
+      char* token = strtok (line1, " "); 
+      token = strtok (NULL, " "); 
+      token = strtok (NULL, " ");
+      int nsingu = atoi (token);
+      
+      int nres1 = nres;
+      if (nsingu < nres)
+	{
+	  printf ("PHASE:: Warning - nsingu < nres\n");
+	  nres1 = nsingu;
+	}
+      if (nsingu > nres)
+	{
+	  printf ("PHASE:: Warning - nsingu > nres\n");
+	  nres1 = nres;
+	}
+      
+      double sum = 0.;
+      for (int i = 0; i < nres1; i++)
+	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
+	  {
+	    printf ("Error reading uFile\n");
+	    exit (1);
+	  }
+	else
+	  {
+	    QIN[i] = v1;
+	    PSI[i] = v2;
+	    DRE[i] = v9;
+	    DIM[i] = v10;
+	    WWW[i] = 2.*v11;
+	    
+	    DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	    DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	    
+	    CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
+	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	    CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
+	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	    
+	    gsl_vector_complex_set (DeltaU, i, gsl_complex_rect (DRE[i], DIM[i]));
+	    gsl_vector_complex_set (ChiU,   i, gsl_complex_rect (CRE[i], CIM[i]));
+	    
+	    double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiU, i));
+	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
+	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
+	    
+	    printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	    
+	  }
+      fclose (file);
+
+      if (fabs (QIN[0] - qk(0)) > 1.e-3)
+	{
+	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and uFile\n");
+	  exit (1);
+	}
+
+      FILE* fileu = OpenFilew ((char*) "Outputs/Stage4/uFile.txt");
+      for (int i = 0; i < nres1; i++)
+	fprintf (fileu, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+      fclose (fileu);
     }
 
-  for (int i = 0; i < nres1; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
-      {
-	printf ("Error reading lFile\n");
-	exit (1);
-      }
-    else
-      {
-	QIN[i] = v1;
-	PSI[i] = v2;
-	DRE[i] = v9;
-	DIM[i] = v10;
-	WWW[i] = 2.*v11;
-
-	DRE[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
-	DIM[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
-
-	CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
-	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
- 	CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
-	  /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
-
-	gsl_vector_complex_set (DeltaL, i, gsl_complex_rect (DRE[i], DIM[i]));
-	gsl_vector_complex_set (ChiL,   i, gsl_complex_rect (CRE[i], CIM[i]));
-
-	double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiL, i));
-	double WUNRE = 4. * sqrt (A1 (i) * Psi);
-	double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
-
-	printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
-      }
-  fclose (file);
-  if (fabs (QIN[0] - qk(0)) > 1.e-15)
+  if (MID >= 1)
     {
-      printf ("PHASE:: Error - minimum resonant q values do not match in nFile and lFile\n");
-      exit (1);
-    }
+      printf ("Lower coil:\n");
+      file = OpenFiler ((char*) "Inputs/lFile");
+      
+      for (int i = 0; i < 5; i++)
+	fgets (line, MAXULFILELINELENGTH, file);
+      fgets (line1, MAXULFILELINELENGTH, file);
+      for (int i = 0; i < 2; i++)
+	fgets (line, MAXULFILELINELENGTH, file);
+      
+      char* token = strtok (line1, " "); 
+      token = strtok (NULL, " "); 
+      token = strtok (NULL, " ");
+      int nsingl = atoi (token);
 
-  FILE* filel = OpenFilew ((char*) "Outputs/Stage4/lFile.txt");
-  for (int i = 0; i < nres1; i++)
-    fprintf (filel, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
-  fclose (filel);
+      int nres1 = nres;
+      if (nsingl < nres)
+	{
+	  printf ("PHASE:: Warning - nsingl < nres\n");
+	  nres1 = nsingl;
+	}
+      if (nsingl > nres)
+	{
+	  printf ("PHASE:: Warning - nsingl > nres\n");
+	  nres1 = nres;
+	}
+      
+      for (int i = 0; i < nres1; i++)
+	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
+	  {
+	    printf ("Error reading lFile\n");
+	    exit (1);
+	  }
+	else
+	  {
+	    QIN[i] = v1;
+	    PSI[i] = v2;
+	    DRE[i] = v9;
+	    DIM[i] = v10;
+	    WWW[i] = 2.*v11;
+	    
+	    DRE[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+	    DIM[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+	    
+	    CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
+	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	    CIM[i] = - DRE[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
+	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
+	    
+	    gsl_vector_complex_set (DeltaL, i, gsl_complex_rect (DRE[i], DIM[i]));
+	    gsl_vector_complex_set (ChiL,   i, gsl_complex_rect (CRE[i], CIM[i]));
+	    
+	    double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiL, i));
+	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
+	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
+	    
+	    printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	  }
+      fclose (file);
 
+      if (fabs (QIN[0] - qk(0)) > 1.e-3)
+	{
+	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and lFile\n");
+	  exit (1);
+	}
+      
+      FILE* filel = OpenFilew ((char*) "Outputs/Stage4/lFile.txt");
+      for (int i = 0; i < nres1; i++)
+	fprintf (filel, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+      fclose (filel);
+    } 
+ 
   file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/q.txt");
   fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TSTART);
   fclose (file);
@@ -927,16 +964,20 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/Chi.txt");
   for (int i = 0; i < nres; i++)
     {
-      if (MID)
+      if (MID == 3)
 	fprintf (file, "T = %11.4e  m = %3d  ChiU = (%11.4e, %11.4e)  ChiM = (%11.4e, %11.4e)  ChiL = (%11.4e, %11.4e)\n",
 		 TSTART, mk(i),
 		 GSL_REAL (gsl_vector_complex_get (ChiU, i)), GSL_IMAG (gsl_vector_complex_get (ChiU, i)),
 		 GSL_REAL (gsl_vector_complex_get (ChiM, i)), GSL_IMAG (gsl_vector_complex_get (ChiM, i)),
 		 GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
-      else
+      else if (MID == 2)
 	fprintf (file, "T = %11.4e  m = %3d  ChiU = (%11.4e, %11.4e)  ChiL = (%11.4e, %11.4e)\n",
 		 TSTART, mk(i),
 		 GSL_REAL (gsl_vector_complex_get (ChiU, i)), GSL_IMAG (gsl_vector_complex_get (ChiU, i)),
+		 GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
+      else
+	fprintf (file, "T = %11.4e  m = %3d  ChiL = (%11.4e, %11.4e)\n",
+		 TSTART, mk(i),
 		 GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
     }
   fclose (file);
@@ -957,34 +998,47 @@ void Phase::Scan_Shift ()
   double one = 1.;
   for (int i = 0; i <= I; i++)
     {
-      double      pha = double (i) * PMAX*M_PI /double (I);
-      gsl_complex eik = gsl_complex_polar (one, pha);
+      double      pha   = double (i) * PMAX*M_PI /double (I);
+      gsl_complex eiku  = gsl_complex_polar (one, - pha);
+      gsl_complex eikl  = gsl_complex_polar (one, + pha);
+      gsl_complex eikuh = gsl_complex_polar (one, - pha/2.);
+      gsl_complex eiklh = gsl_complex_polar (one, + pha/2.);
 
-      fprintf (file1, "%e", pha/M_PI);
-      fprintf (file2, "%e", pha/M_PI);
-      fprintf (file3, "%e", pha/M_PI);
+      fprintf (file1, "%e", pha /M_PI);
+      fprintf (file2, "%e", pha /M_PI);
+      fprintf (file3, "%e", pha /M_PI);
       for (int j = 0; j < nres; j++)
 	{
-	  gsl_complex hu = gsl_vector_complex_get (ChiU, j);
-	  gsl_complex hm;
-	  if (MID != 0)
-	    hm = gsl_vector_complex_get (ChiM, j);
-	  gsl_complex hl = gsl_vector_complex_get (ChiL, j);
-	  gsl_complex h;
-	  if (MID == 0)
+	  gsl_complex hl, hu, hm, h;
+
+	  if (MID == 3)
 	    {
-	      hl = gsl_complex_mul (hl, eik);
-	      h  = gsl_complex_add (hu, hl);
+	      hl = gsl_vector_complex_get (ChiL, j);
+	      hu = gsl_vector_complex_get (ChiU, j);
+	      hm = gsl_vector_complex_get (ChiM, j);
+
+	      hl = gsl_complex_mul (hl, eikl);
+	      hu = gsl_complex_mul (hm, eiku);
+
+	      h  = hl;
+	      h  = gsl_complex_add (h, hu);
+	      h  = gsl_complex_add (h, hm);
+	    }
+	  else if (MID == 2)
+	    {
+	      hl = gsl_vector_complex_get (ChiL, j);
+	      hu = gsl_vector_complex_get (ChiU, j);
+
+	      hl = gsl_complex_mul (hl, eiklh);
+	      hu = gsl_complex_mul (hm, eikuh);
+
+	      h  = hl;
+	      h  = gsl_complex_add (h, hu);
 	    }
 	  else
 	    {
-	      hm = gsl_complex_mul (hm, eik);
-	      h  = gsl_complex_add (hu, hm);
-
-	      hl = gsl_complex_mul (hl, eik);
-	      hl = gsl_complex_mul (hl, eik);
-	      h  = gsl_complex_add (h,  hl);
-	    }
+	      h = gsl_vector_complex_get (ChiL, j);
+	    }	  
 
 	  double chi  =   gsl_complex_abs (h);
 	  double zeta = - gsl_complex_arg (h);
@@ -1005,31 +1059,44 @@ void Phase::Scan_Shift ()
 
   FILE* file4 = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/vac.txt");
 
-  double      pha = PMAX*M_PI /2.;
-  gsl_complex eik = gsl_complex_polar (one, pha);
-
+  double      pha   = PMAX*M_PI /2.;
+  gsl_complex eiku  = gsl_complex_polar (one, - pha);
+  gsl_complex eikl  = gsl_complex_polar (one, + pha);
+  gsl_complex eikuh = gsl_complex_polar (one, - pha/2.);
+  gsl_complex eiklh = gsl_complex_polar (one, + pha/2.);
+  
   for (int j = 0; j < nres; j++)
     {
-      gsl_complex hu = gsl_vector_complex_get (ChiU, j);
-      gsl_complex hm;
-      if (MID != 0)
-	hm = gsl_vector_complex_get (ChiM, j);
-      gsl_complex hl = gsl_vector_complex_get (ChiL, j);
-      gsl_complex h;
-      if (MID == 0)
+      gsl_complex hl, hu, hm, h;
+
+      if (MID == 3)
 	{
-	  hl = gsl_complex_mul (hl, eik);
-	  h  = gsl_complex_add (hu, hl);
+	  hl = gsl_vector_complex_get (ChiL, j);
+	  hu = gsl_vector_complex_get (ChiU, j);
+	  hm = gsl_vector_complex_get (ChiM, j);
+	  
+	  hl = gsl_complex_mul (hl, eikl);
+	  hu = gsl_complex_mul (hm, eiku);
+	  
+	  h  = hl;
+	  h  = gsl_complex_add (h, hu);
+	  h  = gsl_complex_add (h, hm);
+	}
+      else if (MID == 2)
+	{
+	  hl = gsl_vector_complex_get (ChiL, j);
+	  hu = gsl_vector_complex_get (ChiU, j);
+
+	  hl = gsl_complex_mul (hl, eiklh);
+	  hu = gsl_complex_mul (hm, eikuh);
+	  
+	  h  = hl;
+	  h  = gsl_complex_add (h, hu);
 	}
       else
 	{
-	  hm = gsl_complex_mul (hm, eik);
-	  h  = gsl_complex_add (hu, hm);
-	  
-	  hl = gsl_complex_mul (hl, eik);
-	  hl = gsl_complex_mul (hl, eik);
-	  h  = gsl_complex_add (h,  hl);
-	}
+	  h = gsl_vector_complex_get (ChiL, j);
+	}	  
       
       double chi  =   gsl_complex_abs (h);
       double zeta = - gsl_complex_arg (h);
@@ -1524,22 +1591,29 @@ void Phase::IslandDynamics ()
 	    + deltanek * Factor3 (j)
 	    + deltaTik * Factor4 (j);
 	}
-      deltapk /= P0 * Pped;
 
       // Calculate cumulative pressure decrement
       deltap += deltapk;
     }
 
-  fprintf (filewx, "%16.9e %16.9e %16.9e\n", TIME, q95, deltap);
+  fprintf (filewx, "%16.9e %16.9e %16.9e %16.9e\n", TIME, q95, deltap /P0/Pped, deltap /P0);
 
   fclose (filewx);
 
   // Output coil optimization data
-  double IUL, PUL, IM;
-  CalcCoil (t, IUL, PUL, IM);
+  double IU, IM, IL, PU, PM, PL;
+  CalcCoil (t, IU, IM, IL, PU, PM, PL);
+
+  int    k       = Findk ();
+  double chikm   = chi (k);
+  double chikp   = chi (k+1);
+  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+  double chik    = chikm * Weightm + chikp * Weightp;
+  double chik1   = chi (0);
 
   FILE* fileco = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/opt.txt");
-  fprintf (fileco, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", TIME, q95, IUL, PUL/M_PI, IM); 
+  fprintf (fileco, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", TIME, q95, IU, IM, IL, PU/M_PI, PM/M_PI, PL/M_PI, chik, chik1); 
   fclose (fileco);
 
   // Output Mirnov data
@@ -1661,56 +1735,71 @@ void Phase::CalcRMP (double t)
 // ##############################################
 // Function to calculate coil currents and phases
 // ##############################################
-void Phase::CalcCoil (double t, double& IUL, double& PUL, double& IM)
+void Phase::CalcCoil (double t, double& IU, double& IM, double& IL, double& PU, double& PM, double& PL)
 {
   CalcRMP (t);
 
   if (COPT == 0)
     {
-      if (MID)
+      if (MID == 3)
 	{
-	  IUL = irmp;
-	  PUL = prmp;
-	  IM  = irmp;
+	  IU = irmp;
+	  IM = irmp;
+	  IL = irmp;
+	  PU = - prmp;
+	  PM = 0.;
+	  PL = + prmp;
+	}
+      else if (MID == 2)
+	{
+	  IL = irmp;
+	  IM = 0.;
+	  IU = irmp;
+	  PU = - prmp /2.;
+	  PM = 0.;
+	  PL = + prmp /2.;
 	}
       else
 	{
-	  IUL = irmp;
-	  PUL = prmp;
-	  IM  = 0.;
+	  IU = 0.;
+	  IM = 0.;
+	  IL = irmp;
+	  PU = 0.;
+	  PM = 0.;
+	  PL = 0.;
 	}
     }
-  else if (COPT == 1 || (COPT == 2 && !MID))
+  else if (COPT == 1)
     {
-      if (MID)
+      if (MID == 3)
 	{
-	  double k = Findk ();
+	  int k = Findk ();
 	
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
 	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
 	  gsl_complex chikmM = gsl_vector_complex_get (ChiM, k);
-	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
 
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
 	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
 	  gsl_complex chikpM = gsl_vector_complex_get (ChiM, k+1);
-	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
 
 	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
 	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
 
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
 	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
 	  chikmM = gsl_complex_mul_real (chikmM, Weightm);
-	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
-
+					 
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
 	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
 	  chikpM = gsl_complex_mul_real (chikpM, Weightp);
-	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
 
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
 	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
 	  gsl_complex chikM = gsl_complex_add (chikmM, chikpM);
-	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
 
-	  gsl_complex chikMa = gsl_complex_conjugate (chikM);
 	  gsl_complex chikLa = gsl_complex_conjugate (chikL);
+	  gsl_complex chikMa = gsl_complex_conjugate (chikM);
 
 	  gsl_complex xkUM = gsl_complex_mul (chikU, chikMa);
 	  gsl_complex xkUL = gsl_complex_mul (chikU, chikLa);
@@ -1723,34 +1812,37 @@ void Phase::CalcCoil (double t, double& IUL, double& PUL, double& IM)
 	  double gammakUM = gsl_complex_arg (xkUM);
 	  double gammakUL = gsl_complex_arg (xkUL);
 	  double gammakML = gsl_complex_arg (xkML);
-
+	  
 	  double Delta = FindMax (XkUM, XkUL, XkML, gammakUM, gammakUL, gammakML);
-
-	  IUL = irmp;
-	  PUL = Delta;
-	  IM  = irmp;
+	  
+	  IU = irmp;
+	  IM = irmp;
+	  IL = irmp;
+  	  PU =  - Delta;
+	  PM =  0.;
+	  PL =  + Delta;
 	}
-      else
+      else if (MID == 2)
 	{
-	  double k = Findk ();
+	  int k = Findk ();
 	
-	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
 	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
 
-	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
 	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
 
 	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
 	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
 
-	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
 	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
 
-	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
 	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
 
-	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
 	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
 
 	  gsl_complex chikLa = gsl_complex_conjugate (chikL);
 
@@ -1760,37 +1852,243 @@ void Phase::CalcCoil (double t, double& IUL, double& PUL, double& IM)
 
 	  double Delta = gammakUL;
 
-	  IUL = irmp;
-	  PUL = Delta /2.;
-	  IM  = 0.;
+  	  IU = irmp;
+	  IM = 0.;
+	  IL = irmp;
+	  PU =  - Delta /2.;
+	  PM =  0.;
+	  PL =  + Delta /2.;
+	}
+      else 
+	{
+	  IU = 0.;
+	  IM = 0.;
+	  IL = irmp;
+  	  PU = 0.;
+	  PM = 0.;
+	  PL = 0.;
 	}
     }
-  else 
+  else if (COPT == 2)
     {
-      gsl_complex chi1U = gsl_vector_complex_get (ChiU, 0);
-      gsl_complex chi1M = gsl_vector_complex_get (ChiM, 0);
-      gsl_complex chi1L = gsl_vector_complex_get (ChiL, 0);
+      if (MID == 3)
+	{
+	  int k = Findk ();
+	
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
+	  gsl_complex chikmM = gsl_vector_complex_get (ChiM, k);
 
-      gsl_complex chi1Ma = gsl_complex_conjugate (chi1M);
-      gsl_complex chi1La = gsl_complex_conjugate (chi1L);
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
+	  gsl_complex chikpM = gsl_vector_complex_get (ChiM, k+1);
 
-      gsl_complex x1UM = gsl_complex_mul (chi1U, chi1Ma);
-      gsl_complex x1UL = gsl_complex_mul (chi1U, chi1La);
-      gsl_complex x1ML = gsl_complex_mul (chi1M, chi1La);
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
 
-      double X1UM = gsl_complex_abs (x1UM);
-      double X1UL = gsl_complex_abs (x1UL);
-      double X1ML = gsl_complex_abs (x1ML);
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
+	  chikmM = gsl_complex_mul_real (chikmM, Weightm);
+					 
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
+	  chikpM = gsl_complex_mul_real (chikpM, Weightp);
+
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
+	  gsl_complex chikM = gsl_complex_add (chikmM, chikpM);
+
+	  gsl_complex iL = gsl_complex_conjugate (chikL);
+	  gsl_complex iU = gsl_complex_conjugate (chikU);
+	  gsl_complex iM = gsl_complex_conjugate (chikM);
+
+	  double      argM = gsl_complex_arg (iM);
+ 	  gsl_complex eiM  = gsl_complex_polar (1., argM);
+
+	  iL = gsl_complex_div (iL, eiM);
+	  iU = gsl_complex_div (iU, eiM);
+	  iM = gsl_complex_div (iM, eiM);
+
+	  double I = (gsl_complex_abs (iL) + gsl_complex_abs (iU) + gsl_complex_abs (iM)) /3.;
+
+	  IU = irmp * gsl_complex_abs (iU) /I;
+	  IM = irmp * gsl_complex_abs (iM) /I;
+	  IL = irmp * gsl_complex_abs (iL) /I;
+	  PU = gsl_complex_arg (iU);
+	  PM = gsl_complex_arg (iM);
+	  PL = gsl_complex_arg (iL);
+	}
+      else if (MID == 2)
+	{
+	  int k = Findk ();
+	
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
+
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
+
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
+					 
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
+
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
+
+	  gsl_complex iL = gsl_complex_conjugate (chikL);
+	  gsl_complex iU = gsl_complex_conjugate (chikU);
+
+	  double      argM = (gsl_complex_arg (iL) + gsl_complex_arg (iU)) /2.;
+	  gsl_complex eiM  = gsl_complex_polar (1., argM);
+
+	  iL = gsl_complex_div (iL, eiM);
+	  iU = gsl_complex_div (iU, eiM);
+
+	  double I = (gsl_complex_abs (iL) + gsl_complex_abs (iU)) /2.;
+
+	  IU = irmp * gsl_complex_abs (iU) /I;
+	  IM = 0.;
+	  IL = irmp * gsl_complex_abs (iL) /I;
+	  PU = gsl_complex_arg (iU);
+	  PM = 0.;
+	  PL = gsl_complex_arg (iL);
+	}
+      else 
+	{
+	  IU = 0.;
+	  IM = 0.;
+	  IL = irmp;
+  	  PU = 0.;
+	  PM = 0.;
+	  PL = 0.;
+	}
+    }
+  else if (COPT == 3)
+    {
+      if (MID == 3)
+	{
+	  int k = Findk ();
+	
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
+	  gsl_complex chikmM = gsl_vector_complex_get (ChiM, k);
+
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
+	  gsl_complex chikpM = gsl_vector_complex_get (ChiM, k+1);
+
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
+	  chikmM = gsl_complex_mul_real (chikmM, Weightm);
+					 
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
+	  chikpM = gsl_complex_mul_real (chikpM, Weightp);
+
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
+	  gsl_complex chikM = gsl_complex_add (chikmM, chikpM);
+	 
+	  gsl_complex chi1L = gsl_vector_complex_get (ChiL, 0);
+	  gsl_complex chi1U = gsl_vector_complex_get (ChiU, 0);
+	  gsl_complex chi1M = gsl_vector_complex_get (ChiM, 0);
+
+	  gsl_complex lambda = gsl_complex_mul (gsl_complex_conjugate (chikL), chi1L);
+	  lambda             = gsl_complex_add (lambda, gsl_complex_mul (gsl_complex_conjugate (chikU), chi1U));
+	  lambda             = gsl_complex_add (lambda, gsl_complex_mul (gsl_complex_conjugate (chikM), chi1M));
+	  lambda             = gsl_complex_div_real (lambda, gsl_complex_abs2 (chi1L) + gsl_complex_abs2 (chi1U) + gsl_complex_abs2 (chi1M));
+	  lambda             = gsl_complex_mul_real (lambda, CORE);
 	  
-      double gamma1UM = gsl_complex_arg (x1UM);
-      double gamma1UL = gsl_complex_arg (x1UL);
-      double gamma1ML = gsl_complex_arg (x1ML);
+	  gsl_complex iL = gsl_complex_sub (gsl_complex_conjugate (chikL), gsl_complex_mul (lambda, gsl_complex_conjugate (chi1L)));
+	  gsl_complex iU = gsl_complex_sub (gsl_complex_conjugate (chikU), gsl_complex_mul (lambda, gsl_complex_conjugate (chi1U)));
+	  gsl_complex iM = gsl_complex_sub (gsl_complex_conjugate (chikM), gsl_complex_mul (lambda, gsl_complex_conjugate (chi1M)));
 
-      double Delta = FindMin (X1UM, X1UL, X1ML, gamma1UM, gamma1UL, gamma1ML);
+	  double      argM = gsl_complex_arg (iM);
+ 	  gsl_complex eiM  = gsl_complex_polar (1., argM);
 
-      IUL = irmp;
-      PUL = Delta;
-      IM  = irmp;
+	  iL = gsl_complex_div (iL, eiM);
+	  iU = gsl_complex_div (iU, eiM);
+	  iM = gsl_complex_div (iM, eiM);
+
+	  double I = (gsl_complex_abs (iL) + gsl_complex_abs (iU) + gsl_complex_abs (iM)) /3.;
+
+	  IU = irmp * gsl_complex_abs (iU) /I;
+	  IM = irmp * gsl_complex_abs (iM) /I;
+	  IL = irmp * gsl_complex_abs (iL) /I;
+	  PU = gsl_complex_arg (iU);
+	  PM = gsl_complex_arg (iM);
+	  PL = gsl_complex_arg (iL);
+	}
+      else if (MID == 2)
+	{
+	  int k = Findk ();
+	
+	  gsl_complex chikmL = gsl_vector_complex_get (ChiL, k);
+	  gsl_complex chikmU = gsl_vector_complex_get (ChiU, k);
+
+	  gsl_complex chikpL = gsl_vector_complex_get (ChiL, k+1);
+	  gsl_complex chikpU = gsl_vector_complex_get (ChiU, k+1);
+
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+
+	  chikmL = gsl_complex_mul_real (chikmL, Weightm);
+	  chikmU = gsl_complex_mul_real (chikmU, Weightm);
+					 
+	  chikpL = gsl_complex_mul_real (chikpL, Weightp);
+	  chikpU = gsl_complex_mul_real (chikpU, Weightp);
+
+	  gsl_complex chikL = gsl_complex_add (chikmL, chikpL);
+	  gsl_complex chikU = gsl_complex_add (chikmU, chikpU);
+
+	  gsl_complex chi1L = gsl_vector_complex_get (ChiL, 0);
+	  gsl_complex chi1U = gsl_vector_complex_get (ChiU, 0);
+
+	  gsl_complex lambda = gsl_complex_mul (gsl_complex_conjugate (chikL), chi1L);
+	  lambda             = gsl_complex_add (lambda, gsl_complex_mul (gsl_complex_conjugate (chikU), chi1U));
+	  lambda             = gsl_complex_div_real (lambda, gsl_complex_abs2 (chi1L) + gsl_complex_abs2 (chi1U));
+	  lambda             = gsl_complex_mul_real (lambda, CORE);
+	  
+	  gsl_complex iL = gsl_complex_sub (gsl_complex_conjugate (chikL), gsl_complex_mul (lambda, gsl_complex_conjugate (chi1L)));
+	  gsl_complex iU = gsl_complex_sub (gsl_complex_conjugate (chikU), gsl_complex_mul (lambda, gsl_complex_conjugate (chi1U)));
+
+	  double      argM = (gsl_complex_arg (iL) + gsl_complex_arg (iU)) /2.;
+	  gsl_complex eiM  = gsl_complex_polar (1., argM);
+
+	  iL = gsl_complex_div (iL, eiM);
+	  iU = gsl_complex_div (iU, eiM);
+
+	  double I = (gsl_complex_abs (iL) + gsl_complex_abs (iU)) /2.;
+
+	  IU = irmp * gsl_complex_abs (iU) /I;
+	  IM = 0.;
+	  IL = irmp * gsl_complex_abs (iL) /I;
+	  PU = gsl_complex_arg (iU);
+	  PM = 0.;
+	  PL = gsl_complex_arg (iL);
+	}
+      else 
+	{
+	  IU = 0.;
+	  IM = 0.;
+	  IL = irmp;
+  	  PU = 0.;
+	  PM = 0.;
+	  PL = 0.;
+	}
+    }
+  else
+    {
+      printf ("PHASE::Error unknown option COPT = %2d\n");
+      exit (1);
     }
 }
 
@@ -1811,10 +2109,10 @@ int Phase::Findk ()
   return k;
 }
 
-// ###############################################
-// Function to find maximum of three coil function
-// ###############################################
-double Phase::FindMax (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML)
+// ##########################################################
+// Function to find maximum of restricted three-coil function
+// ##########################################################
+double Phase::FindMax (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
 {
   double Delta = 0., fun, deriv, dderiv, max = -1.e6;
   
@@ -1822,18 +2120,18 @@ double Phase::FindMax (double XkUM, double XkUL, double XkML, double gammakUM, d
     {
       double delta = (double (i) /360.) * 2.*M_PI;
 
-      ThreeCoil (XkUM, XkUL, XkML, gammakUM, gammakUL, gammakML, delta, fun, deriv, dderiv);
+      ThreeCoil (XUM, XUL, XML, gammaUM, gammaUL, gammaML, delta, fun, deriv, dderiv);
 
       if (fun > max)
 	{
-	  Delta  = delta;
-	  max    = fun;
+	  Delta = delta;
+	  max   = fun;
 	}
     }
 
   for (int i = 0; i < 5; i++)
     {
-      ThreeCoil (XkUM, XkUL, XkML, gammakUM, gammakUL, gammakML, Delta, fun, deriv, dderiv);
+      ThreeCoil (XUM, XUL, XML, gammaUM, gammaUL, gammaML, Delta, fun, deriv, dderiv);
 
       Delta -= deriv /dderiv; 
     }
@@ -1841,10 +2139,10 @@ double Phase::FindMax (double XkUM, double XkUL, double XkML, double gammakUM, d
   return Delta;
 }
 
-// ###############################################
-// Function to find minimum of three coil function
-// ###############################################
-double Phase::FindMin (double X1UM, double X1UL, double X1ML, double gamma1UM, double gamma1UL, double gamma1ML)
+// ##########################################################
+// Function to find minimum of restricted three-coil function
+// ##########################################################
+double Phase::FindMin (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
 {
   double Delta = 0., fun, deriv, dderiv, min = 1.e6;
   
@@ -1852,18 +2150,18 @@ double Phase::FindMin (double X1UM, double X1UL, double X1ML, double gamma1UM, d
     {
       double delta = (double (i) /360.) * 2.*M_PI;
 
-      ThreeCoil (X1UM, X1UL, X1ML, gamma1UM, gamma1UL, gamma1ML, delta, fun, deriv, dderiv);
+      ThreeCoil (XUM, XUL, XML, gammaUM, gammaUL, gammaML, delta, fun, deriv, dderiv);
 
       if (fun < min)
 	{
-	  Delta  = delta;
-	  min    = fun;
+	  Delta = delta;
+	  min   = fun;
 	}
     }
 
   for (int i = 0; i < 5; i++)
     {
-      ThreeCoil (X1UM, X1UL, X1ML, gamma1UM, gamma1UL, gamma1ML, Delta, fun, deriv, dderiv);
+      ThreeCoil (XUM, XUL, XML, gammaUM, gammaUL, gammaML, Delta, fun, deriv, dderiv);
 
       Delta -= deriv /dderiv; 
     }
@@ -1871,14 +2169,14 @@ double Phase::FindMin (double X1UM, double X1UL, double X1ML, double gamma1UM, d
   return Delta;
 }
 
-// ############################################################
-// Function to evaluate three coil function and its derivatives
-// ############################################################
-void Phase::ThreeCoil (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML, double Delta, double& fun, double& deriv, double& dderiv)
+// #######################################################################
+// Function to evaluate restricted three-coil function and its derivatives
+// #######################################################################
+void Phase::ThreeCoil (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML, double Delta, double& fun, double& deriv, double& dderiv)
 {
-  fun    =   XkUM * cos (Delta - gammakUM) +      XkUL * cos (2.*Delta - gammakUL) + XkML * cos (Delta - gammakML);
-  deriv  = - XkUM * sin (Delta - gammakUM) - 2. * XkUL * sin (2.*Delta - gammakUL) - XkML * sin (Delta - gammakML);
-  dderiv = - XkUM * cos (Delta - gammakUM) - 4. * XkUL * cos (2.*Delta - gammakUL) - XkML * cos (Delta - gammakML);
+  fun    =   XUM * cos (Delta - gammaUM) +      XUL * cos (2.*Delta - gammaUL) + XML * cos (Delta - gammaML);
+  deriv  = - XUM * sin (Delta - gammaUM) - 2. * XUL * sin (2.*Delta - gammaUL) - XML * sin (Delta - gammaML);
+  dderiv = - XUM * cos (Delta - gammaUM) - 4. * XUL * cos (2.*Delta - gammaUL) - XML * cos (Delta - gammaML);
 }
 
 // ##########################################
@@ -1887,41 +2185,52 @@ void Phase::ThreeCoil (double XkUM, double XkUL, double XkML, double gammakUM, d
 void Phase::CalcChiZeta (double t)
 {
   // Get coil currents and phases
-  double IUL, PUL, IM;
-  CalcCoil (t, IUL, PUL, IM);
+  double IU, IM, IL, PU, PM, PL;
+  CalcCoil (t, IU, IM, IL, PU, PM, PL);
 
   // Calculate complex coil currents
   double      one = 1.;
-  gsl_complex eiU = gsl_complex_polar    (one, - PUL);
-  gsl_complex eiL = gsl_complex_polar    (one, + PUL);
-  gsl_complex IIU = gsl_complex_mul_real (eiU, IUL);
-  gsl_complex IIM = gsl_complex_rect     (IM,  0.);
-  gsl_complex IIL = gsl_complex_mul_real (eiL, IUL);
-
+  gsl_complex eiL = gsl_complex_polar    (one, PL);
+  gsl_complex eiU = gsl_complex_polar    (one, PU);
+  gsl_complex eiM = gsl_complex_polar    (one, PM);
+  gsl_complex IIL = gsl_complex_mul_real (eiL, IL);
+  gsl_complex IIU = gsl_complex_mul_real (eiU, IU);
+  gsl_complex IIM = gsl_complex_mul_real (eiM, IM);
+  gsl_complex h;
+ 
   // Calculate chi and zeta values
   for (int j = 0; j < nres; j++)
     {
-      gsl_complex hu = gsl_vector_complex_get (ChiU, j);
-      gsl_complex hm;
-      if (MID != 0)
-	hm = gsl_vector_complex_get (ChiM, j);
-      gsl_complex hl = gsl_vector_complex_get (ChiL, j);
-      gsl_complex h;
-      if (MID == 0)
+      if (MID == 3)
 	{
-	  hu = gsl_complex_mul (IIU, hu);
-	  hl = gsl_complex_mul (IIL, hl);
+	  gsl_complex hl = gsl_vector_complex_get (ChiL, j);
+	  gsl_complex hu = gsl_vector_complex_get (ChiU, j);
+	  gsl_complex hm = gsl_vector_complex_get (ChiM, j);
 
-	  h = gsl_complex_add (hu, hl);
+	  hl = gsl_complex_mul (IIL, hl);
+	  hu = gsl_complex_mul (IIU, hu);
+	  hm = gsl_complex_mul (IIM, hm);
+
+	  h = gsl_complex_add (hl, hu);
+	  h = gsl_complex_add (h,  hm);
+	}
+      else if (MID == 2)
+	{
+	  gsl_complex hl = gsl_vector_complex_get (ChiL, j);
+	  gsl_complex hu = gsl_vector_complex_get (ChiU, j);
+
+	  hl = gsl_complex_mul (IIL, hl);
+	  hu = gsl_complex_mul (IIU, hu);
+
+	  h = gsl_complex_add (hl, hu);
 	}
       else
 	{
-	  hu = gsl_complex_mul (IIU, hu);
-	  hm = gsl_complex_mul (IIM, hm);
+	  gsl_complex hl = gsl_vector_complex_get (ChiL, j);
+
 	  hl = gsl_complex_mul (IIL, hl);
 
-	  h  = gsl_complex_add (hu, hm);
-	  h  = gsl_complex_add (h, hl);
+	  h = hl;
 	}
     
       chi  (j) =   gsl_complex_abs (h);

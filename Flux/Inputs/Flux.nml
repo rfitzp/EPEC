@@ -12,7 +12,7 @@
 	NTOR    = 3      ! Toroidal mode number
 	MMIN    = 4	 ! Minimum poloidal mode number
 	MMAX    = 30	 ! Maximum toroidal mode number
-	PSIPED  = 0.945  ! PsiN value at top of pedestal
+	PSIPED  = 0.963  ! PsiN value at top of pedestal
 	PSILIM  = 0.995  ! Ignore rational surfaces for PsiN > PSILIM
 	TIME    = 0.     ! Experimental time (ms)
 &end

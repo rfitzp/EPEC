@@ -1,5 +1,5 @@
-F_OBJECT = Rescale.o 
-F_SOURCE = Rescale.f90
+F_OBJECT = Function_Defs_0.o Function_Defs_1.o Function_Defs_2.o Rescale.o
+F_SOURCE = Function_Defs_0.f90 Function_Defs_1.f90 Function_Defs_2.f90 Rescale.f90
 
 C_HEADER = 
 C_OBJECT =

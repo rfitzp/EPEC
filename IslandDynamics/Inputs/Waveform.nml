@@ -5,7 +5,7 @@
 !	TCTRL = 0.0, 2.e3   ! Control times (ms)
 !	ICTRL = 0.0, 3.0    ! Control currents (kA)
 	TCTRL = 0.0, 1.e4   ! Control times (ms)
-	ICTRL = 4.0, 4.0    ! Control currents (kA)
-	PCTRL = 1.25, 1.25    ! Relative phase of RMP coil currents (units of PI)
+	ICTRL = 4., 4.    ! Control currents (kA)
+	PCTRL = 0.,  0.     ! Relative phase of RMP coil currents (units of PI)
 &end	
 

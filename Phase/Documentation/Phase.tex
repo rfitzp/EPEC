@@ -305,37 +305,55 @@ Assuming an ideal response of the plasma to the applied RMP, characterized by ${
 we have
 \begin{equation}
 {\mit\Delta\Psi}_k = |E_{kk}|\left(
-  I_U \, {\rm e}^{\,{\rm i}\,{\mit\Delta}_U}\,|\chi_k^{\,U}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,U}}
-+I_M\,                                                    |\chi_k^{\,M}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,M}}
-+I_L \, {\rm e}^{\,{\rm i}\,{\mit\Delta}_L}\,|\chi_k^{\,L}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,L}}
+  I_U \, {\rm e}^{-{\rm i}\,{\mit\Delta}_U}\,\chi_k^{\,U}
++I_M\,                                         \chi_k^{\,M}
++I_L \, {\rm e}^{\,{\rm i}\,{\mit\Delta}_L}\,\chi_k^{\,L}
 \right),
 \end{equation}
 where $U$, $M$, and $L$ correspond to the upper, middle, and lower coil-sets, respectively, $I_{U,M,L}$ and ${\mit\Delta}_{U,M,L}$
-are the amplitudes and helical phase-shifts of the currents flowing in the upper, middle, and lower coil-sets, respectively,
-with ${\mit\Delta}_M=0$. Finally, $|\chi_k^{U,M,L}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,U,M,L}}$ are the $\chi_k$ values when 1 kA flows in the upper, middle, and lower coil-sets, respectively,
+are the (real) amplitudes and helical phase-shifts of the currents flowing in the upper, middle, and lower coil-sets, respectively, with ${\mit\Delta}_M=0$.  Finally, $\chi_k^{U,M,L}=$ are the (complex) $\chi_k$ values when 1 kA flows in the upper, middle, and lower coil-sets, respectively,
 with the same helical phase as the current flowing in the middle coil set.
 Let
 \begin{align}
-z_k& =\frac{ {\mit\Delta\Psi}_k }{ |E_{kk}|\,I_{M} },\\[0.5ex]
-\lambda_U&=\left(\frac{I_{U}}{I_{M}}\right){\rm e}^{\,{\rm i}\,{\mit\Delta}_{U}},\\[0.5ex]
-\lambda_L&=\left(\frac{I_{L}}{I_{M}}\right){\rm e}^{\,{\rm i}\,{\mit\Delta}_{L}},\\[0.5ex]
-x_k^{\,U,M,L} &= |\chi_k^{\,U\,M\,L}|\,{\rm e}^{-{\rm i}\,\zeta_k^{\,U,M,L}}.
+z_k& =\frac{ {\mit\Delta\Psi}_k }{ |E_{kk}|\,(I_U+I_M+I_L)},\\[0.5ex]
+\lambda_U&=\frac{I_{U}}{I_U+I_{M}+I_L},\\[0.5ex]
+\lambda_L&=\frac{I_{L}}{I_U+I_M+I_L},
 \end{align}
+where $I_U\geq 0$, $I_M\geq 0$, and $I_U+I+M \leq 1$. 
 It follows that
 \begin{equation}
-z_k =\lambda_{U}\,x_k^{\,U}+ x_k^{\,M}+\lambda_{L}\,x_k^{\,L}.
+z_k =\lambda_{U}\,\chi_k^{\,U}\,{\rm e}^{-{\rm i}\,\Delta_U}+(1-\lambda_U-\lambda_L)\,\chi_k^{\,M}+\lambda_{L}\,\chi_k^{\,L}
+\,{\rm e}^{\,{\rm i}\,\Delta_L}.
 \end{equation}
-Let the $k=1$ surface correspond to the innermost resonant surface, and let the $k=k'$ surface correspond to the nearest resonant surface
-to the top of the pedestal. To maximize ELM suppression while minimizing the chance of locked mode formation, we require
+Let
 \begin{align}
-z_1&=0,\label{tty}\\[0.5ex]
-z_{k'} &= 3\,x_{k'}^{\,M}.\label{tty1}
+\chi_k^{\,U}\,\chi_k^{\,L\,\ast} &= |\chi_k^{\,U}\,|\chi_k^{\,L}|\,{\rm e}^{\,{\rm i}\,\gamma_k^{\,UL}},\\[0.5ex]
+\chi_k^{\,U}\,\chi_k^{\,M\,\ast} &= |\chi_k^{\,U}|\,|\chi_k^{\,M}|\,{\rm e}^{\,{\rm i}\,\gamma_k^{\,UM}},\\[0.5ex]
+\chi_k^{\,M}\,\chi_k^{\,L\,\ast} &= |\chi_k^{\,M}|\,|\chi_k^{\,L}|\,{\rm e}^{\,{\rm i}\,\gamma_k^{\,ML}}.
 \end{align}
-The latter constraint ensures that the signals from all three coils add in phase, with the same amplitude, at the top of the pedestal. 
-It is easily seen that the choices
+Follows that
 \begin{align}
-\lambda_{U} &= \frac{2\,x_{k'}^{\,M}\,x_1^{\,L}+x_1^{\,M}\,x_{k'}^{\,L}}{x_{k'}^{\,U}\,x_1^{\,L}- x_1^{\,U}\,x_{k'}^{\,L}},\\[0.5ex]
-\lambda_{L} &= \frac{2\,x_{k'}^{\,M}\,x_1^{\,U}+x_1^{\,M}\,x_{k'}^{\,U}}{x_{k'}^{\,L}\,x_1^{\,U}- x_1^{\,L}\,x_{k'}^{\,U}}
+|z_k|^{\,2} &= \lambda_U^{\,2}\,|\chi_k^{\,U}|^{\,2}+ (1-\lambda_U-\lambda_L)^{\,2}\,|\chi_k^{\,M}|^{\,2} + \lambda_L^{\,2}\,|\chi_k^{\,L}|^{\,2}\nonumber\\[0.5ex]
+&\phantom{=}+2\,\lambda_U\,(1-\lambda_U-\lambda_L)\,|\chi_k^{\,U}|\,|\chi_k^{\,M}|\,\cos(\gamma_k^{\,UM}-{\mit\Delta}^{\,U})\\[0.5ex]
+&\phantom{=}+2\,(1-\lambda_U-\lambda_L)\,\lambda_L\,|\chi_k^{\,M}|\,|\chi_k^{\,L}|\,\cos(\gamma_k^{\,ML}-{\mit\Delta}^{\,L})\\[0.5ex]
+&\phantom{=}+2\,\lambda_U\,\lambda_L\,|\chi_k^{\,U}|\,|\chi_k^{\,L}|\,\cos(\gamma_k^{\,UL}-{\mit\Delta}^{\,U}-{\mit\Delta}^{\,L}).
 \end{align}
-ensure that (\ref{tty}) and (\ref{tty1}) are satisfied. 
+
+Suppose that $k=1$ corresponds to the innermost resonant surface. Let the $k'$th and $(k'+1)$th resonant surfaces straddle the top of the
+pedestal. 
+Let
+\begin{align}
+f_1 &=|z_1|^{\,2},\\[0.5ex]
+f_2 &=\frac{ ({\mit\Psi}_{N\,k'+1}  - {\mit\Psi}_N)\,|z_k'|^{\,2} + ({\mit\Psi}_N - {\mit\Psi}_{N\,k'})\,|z_{k'+1}|^{\,2}}{{\mit\Psi}_{N\,k'+1}-{\mit\Psi}_{N\,k'}}.
+\end{align}
+Wish to simultaneously minimize $f_1$ and maximize $f_2$. Minimize
+\begin{equation}
+f (\lambda_U,\lambda_L,{\mit\Delta}_U,{\mit\Delta}_L)= w_1\,f_1+ \frac{1-w_1}{f_2},
+\end{equation}
+where $0\leq w_1\leq 1$. 
+
+Let 
+\begin{align}
+{\bf v} &= (\lambda_U, \lambda_L, {\mit\Delta}_U, {\mit\Delta}_L),\\[0.5ex]
+{\bf p| &= (|\chi_k
 \end{document}

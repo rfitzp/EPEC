@@ -21,7 +21,8 @@
 // -s STAGE5 - overrides STAGE5 value from namelist file
 // -t TSTART - sets simulation start time (ms)
 // -u INTU   - overrides INTU value from namelist file
-// -C COPT   - ovverrides COPT value from namelist file
+// -C COPT   - overrides COPT value from namelist file
+// -D CORE   - overrides CORE value from namelist file
 // -F FREQ   - overrides FREQ value from namelist file
 // -H HIGH   - enables higher order transport calculation
 // -S SCALE  - overrides SCALE value from namelist file
@@ -77,10 +78,12 @@
 // 2.10 - Added CHIR parameter
 // 2.11 - Added FREQ == 2 option
 // 2.12 - Added total pressure decrement
-// 2.13 - Normalize total pressure decrement by P(0). Added IRMP.
+// 2.13 - Normalized total pressure decrement by P(0). Added IRMP.
 // 2.14 - Added higher order transport calculation
 // 2.15 - Bug fixes. Improved uFile/mFile/lFile interpolation.
 // 2.16 - Added COPT flag
+// 2.17 - Changed definition of MID
+// 2.18 - Added more COPT options
 
 // #######################################################################
 
@@ -88,8 +91,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 16
-
+#define VERSION_MINOR 18
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -115,7 +117,7 @@ using namespace blitz;
 // Namelist funtion
 extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* CORE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -142,7 +144,7 @@ class Phase
                    // If == 1 then use island width dependent natural frequency that iterpolates beteween electron, ExB, and ion frequecies
                    // If == 2 then use island width dependent natural frequency that iterpolates beteween electron and ion frequecies
   int      LIN;    // If != 0 then perform purely linear calculation
-  int      MID;    // If != 0 then include mFiles 
+  int      MID;    // Number of coil sets
   double   SCALE;  // GPEC scalefactor
   double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
@@ -150,8 +152,10 @@ class Phase
   int      HIGH;   // If != 0 use higher order transport analysis
   int      RATS;   // If != 0 use only linear interpolation for uFiles/mFiles/lFiles
   int      COPT;   // If == 0 then no coil current optimization
-                   // If == 1 then coil currents optimized to maximize drive at closest rational surface to pedestal top
-                   // If == 2 then coil currents optimized to minimize drive at innermost rational surface
+                   // If == 1 then coil currents optimized in restricted fashion to maximize drive at closest rational surface to pedestal top
+                   // If == 2 then coil currents optimized in unrestricted fashion to maximize drive at closest rational surface to pedestal top
+                   // If == 3 then coil currents optimized in unrestricted fashion to maximize drive at pedestal top and minimize drive in core
+  double   CORE;   // Core drive minimization factor (0.0 = no minimization, 1.0 = complete minmization)
   double   IRMP;   // RMP current (kA)
   
   int      NCTRL;  // Number of control points
@@ -324,7 +328,7 @@ class Phase
 
   // Solve problem
   void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);        
+	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE);        
 
   // -----------------------
   // Private class functions
@@ -333,7 +337,7 @@ class Phase
 
   // Read data
   void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS);
+		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors
@@ -348,15 +352,15 @@ class Phase
   // Calculate Irmp and Prmp
   void CalcRMP (double t);
   // Calculate coil currents and phases
-  void CalcCoil (double t, double& IUL, double& PUL, double& IM);
+  void CalcCoil (double t, double& IU, double& IM, double& IL, double& PU, double& PM, double& PL);
   // Find resonant surfaces that straddle top of pedestal
   int Findk ();
-  // Find maximum of three coil function
-  double FindMax (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML);
-  // Find minimum of three coil function
-  double FindMin (double X1UM, double X1UL, double X1ML, double gamma1UM, double gamma1UL, double gamma1ML);
-  // Evaluate three coil function and its derivative
-  void ThreeCoil (double XkUM, double XkUL, double XkML, double gammakUM, double gammakUL, double gammakML, double Delta, double& fun, double& deriv, double& dderiv);
+  // Find maximum of restricted three-coil function
+  double FindMax (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML);
+  // Find minimum of restricted three coil function
+  double FindMin (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML);
+  // Evaluate restricted three-coil function and its derivative
+  void ThreeCoil (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML, double Delta, double& fun, double& deriv, double& dderiv);
   // Calculate chi and zeta vectors
   void CalcChiZeta (double t);
   // Pack simulation variables into single vector

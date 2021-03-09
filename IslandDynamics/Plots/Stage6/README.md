@@ -15,6 +15,7 @@
 	omega0.asy     ... plots actual natural frequencies versus experimental time
 	omega.asy      ... plots island frequencies versus experimental time
 
+	omega0lq.asy   ... plots linear natural frequencies versus q95
 	omega0q.asy    ... plots actual natural frequencies versus q95
 	omegaq.asy     ... plots island frequencies versus q95
 
@@ -37,7 +38,10 @@
 	tpsiq.asy      ... plots electron temperature flattened regions (in PsiN) versus q95
 	
 	deltap.asy     ... plots - (Delta P)/P_ped versus q95
-	pcoil.asy      ... plots optimized coil phases versus q95
+	deltap0.asy    ... plots - (Delta_P)/P_0 versus q95
+	icoil.asy      ... plots RMP coil currents versus q95
+    pcoil.asy      ... plots RMP coil phases versus q95
+	drive.asy      ... plots chi values at edge and in core versus q95
 
 	mirnovin.asy   ... plots reconstructed Mirnow signal on outboard midplane
 	minrovout.asy  ... plots reconstructed Mirnow signal on inboard midplane

@@ -12,8 +12,9 @@
 	NEO_LN       = 0.01;   ! Set neutral density scalelength in NEOCLASSICAL
 	NEO_YN       = 1.5     ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
 	PHASE        = 1       ! If != 0 then call PHASE
-	PHASE_MID    = 1       ! If != 0 then middle RMP coils included in PHASE calculation
-	PHASE_COPT   = 1       ! Coil current optimization switch (see PHASEL/Inputs/Phase.nml)
+	PHASE_MID    = 3       ! Number of coil sets in PHASE
+	PHASE_COPT   = 2       ! Coil current optimization switch (see PHASE/Inputs/Phase.nml)
+	PHASE_CORE   = 0.99     ! Core drive minimization factor (see PHASE/Inputs/Phase.nml)
   	PHASE_INTN   = 1       ! If != 0 then interpolate nFiles in PHASE
 	PHASE_INTU   = 1       ! If != 0 then interpolate uFiles/mFiles/lFiles in PHASE	
 	PHASE_STAGE5 = 1       ! If != 0 then Stage5 calculation enabled in PHASE

@@ -65,7 +65,8 @@ draw (graph (rl, zl), s);
 
 pen q = fontsize (20.);
 defaultpen (q);
-xaxis ("$R/R_0$", Bottom, RightTicks(new real[] {0.75,1.,1.25, 1.5}), above = true);
+//xaxis ("$R/R_0$", Bottom, RightTicks(new real[] {0.75,1.,1.25, 1.5}), above = true);
+xaxis ("$R/R_0$", Bottom, RightTicks, above = true);
 xaxis (Top,  NoTicks, above = true);
 yaxis ("$Z/R_0$", Right,  RightTicks, above = true);
 yaxis (Left, NoTicks, above = true);

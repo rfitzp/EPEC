@@ -15,13 +15,59 @@
 
 program Rescale
 
-  use Function_Defs_0
-
   implicit none
+
+  interface
+     subroutine ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+          B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+       
+       character (len = 100) :: string
+       
+       integer :: i3, NRBOX, NZBOX, NBOUND, NLIM
+       
+       double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+       
+       double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
+       
+       double precision, dimension (:, :), allocatable :: PSI
+       
+     end subroutine ReadgFile
+  end interface
+
+  interface
+     subroutine WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+          B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+
+       character (len = 100) :: string
+       
+       integer :: i3, NRBOX, NZBOX, NBOUND, NLIM
+       
+       double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+       
+       double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
+       
+       double precision, dimension (:, :), allocatable :: PSI
+    
+     end subroutine WritegFile
+  end interface
+
+  interface
+     subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, p)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z, dR, dZ, p
+       
+       double precision, dimension (:), allocatable :: RR, ZZ
+       
+       double precision, dimension (:, :), allocatable :: PSI
+    
+     end subroutine FindOXPoint
+  end interface
 
   character (len = 100) :: string
   
-  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM, i95, SCALE, OPOINT, XPOINT
+  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM, i95
   
   double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
   double precision :: RLEFT, RRIGHT, ZLOW, ZHIGH, RMAX, ZMAX
@@ -35,15 +81,7 @@ program Rescale
   print *, ''
   print *, 'Program Rescale'
   print *, ''
-
-  ! ..................
-  ! Read namelist file
-  ! ..................
-  call NameListRead (SCALE, q95_new, OPOINT, XPOINT)
-
-  print *, 'SCALE = ', SCALE, 'Q95 = ', q95_new, 'OPOINT = ', OPOINT, 'XPOINT = ', XPOINT
-  print *
-
+  
   ! ................
   ! Read input gFile
   ! ................
@@ -123,6 +161,18 @@ program Rescale
   write (101, '(2e17.9)') (RLIM (i), ZLIM (i), i = 1, NLIM)
   close (unit = 101)
 
+  ! ................
+  ! Read target q_95
+  ! ................
+  
+  open (unit = 100, file = 'Inputs/q95', status = 'old')
+
+  read (100, *) q95_new
+
+  close (100)
+
+  print *, 'q95_tgt = ', q95_new
+
   ! ..................
   ! Determine old q_95
   ! ..................
@@ -139,11 +189,7 @@ program Rescale
   ! Rescale equilibrium
   ! ...................
 
-  if (SCALE == 0) then
-     a2 = 1.
-  else 
-     a2 = (q95_new*q95_new /q95/q95 - 1.) * T95*T95
-  end if
+  a2 = (q95_new*q95_new /q95/q95 - 1.) * T95*T95
 
   do i = 1, NRBOX
      Told = T (i)
@@ -159,11 +205,7 @@ program Rescale
      Q (i) = qnew
   enddo
 
-  if (SCALE == 0) then
-     a1 = 1.
-  else
-     a1 = Tedge /T (NRBOX)
-  end if
+  a1 = Tedge /T (NRBOX)
 
   do i = 1, NRBOX
      Told  = T (i)
@@ -216,9 +258,7 @@ program Rescale
 
   !print *, "Raxis = ", Raxis, "Zaxis = ", Zaxis
   
-  if (OPOINT /= 0) then
-     call FindOXPoint (RO, ZO, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, PSIAXIS)
-  end if
+  !call FindOXPoint (RO, ZO, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, PSIAXIS)
 
   !print *, 'O-point at R = ', RO, ' Z = ', ZO, 'PSIAXIS = ', PSIAXIS
 
@@ -236,10 +276,8 @@ program Rescale
         RX = RBOUND (i)
      endif
   enddo
-
-  if (XPOINT /= 0) then
-     call FindOXPoint (RX, ZX, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, PSIBOUND)
-  end if
+  
+  call FindOXPoint (RX, ZX, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, PSIBOUND)
 
   !print *, 'X-point at R = ', RX, ' Z = ', ZX, 'PSIBOUND = ', PSIBOUND
 
@@ -291,25 +329,6 @@ program Rescale
   deallocate (ZZ)
   
 end program Rescale
-
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-! Function to read Rescale namelist
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-subroutine NameListRead (SCALE, Q_95, OPOINT, XPOINT) 
-
-  implicit none
-
-  integer          SCALE, OPOINT, XPOINT
-  double precision Q_95
-  
-  namelist /RESCALE_CONTROL/ SCALE, Q_95, OPOINT, XPOINT
-  
-  open  (unit = 100, file = 'Inputs/Rescale.nml', status = 'old')
-  read  (unit = 100, nml  = RESCALE_CONTROL)
-  close (unit = 100)
-
-end subroutine namelistRead
 
 ! %%%%%%%%%%%%%%%%%%%%%%%%
 ! Subroutine to read gFile
@@ -442,7 +461,19 @@ end function GetPsi
 
 double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
-  use Function_Defs_1
+  interface
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+       
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z
+       
+       double precision, dimension (:), allocatable :: RR, ZZ
+  
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsi
+  end interface
 
   integer :: NRBOX, NZBOX
 
@@ -465,9 +496,21 @@ end function GetPsiR
 
 double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
 
-  use Function_Defs_1
-  
   implicit none
+
+  interface
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z
+
+       double precision, dimension (:), allocatable :: RR, ZZ
+  
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsi
+  end interface
 
   integer :: NRBOX, NZBOX
 
@@ -490,9 +533,21 @@ end function GetPsiZ
 
 double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
-  use Function_Defs_1
-  
   implicit none
+
+  interface
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z, x, y
+
+       double precision, dimension (:), allocatable :: RR, ZZ
+  
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsi
+  end interface
 
   integer :: NRBOX, NZBOX
 
@@ -516,10 +571,22 @@ end function GetPsiRR
 
 double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
 
-  use Function_Defs_1
-  
   implicit none
+
+  interface
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z
+
+       double precision, dimension (:), allocatable :: RR, ZZ
   
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsi
+  end interface
+
   integer :: NRBOX, NZBOX
 
   double precision :: R, Z, dZ, Z1, Z2
@@ -542,9 +609,21 @@ end function GetPsiZZ
 
 double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
-  use Function_Defs_1
-  
   implicit none
+
+  interface
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z
+
+       double precision, dimension (:), allocatable :: RR, ZZ
+  
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsi
+  end interface
 
   integer :: NRBOX, NZBOX
 
@@ -569,11 +648,92 @@ end function GetPsiRZ
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, p)
-
-  use Function_Defs_1
-  use Function_Defs_2
   
   implicit none
+
+  interface
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+
+       integer :: NRBOX, NZBOX
+       
+       double precision :: R, Z
+       
+       double precision, dimension (:), allocatable :: RR, ZZ
+       
+       double precision, dimension (:, :), allocatable :: PSI
+       
+     end function GetPsi
+  end interface
+
+  interface
+     double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z, dR
+    
+       double precision, dimension (:), allocatable :: RR, ZZ
+  
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsiR
+  end interface
+
+  interface
+     double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
+
+       integer :: NRBOX, NZBOX
+       
+       double precision :: R, Z, dZ
+       
+       double precision, dimension (:), allocatable :: RR, ZZ
+       
+       double precision, dimension (:, :), allocatable :: PSI
+       
+     end function GetPsiZ
+  end interface
+
+  interface
+     double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+       
+       integer :: NRBOX, NZBOX
+       
+       double precision :: R, Z, dR
+       
+       double precision, dimension (:), allocatable :: RR, ZZ
+       
+       double precision, dimension (:, :), allocatable :: PSI
+       
+     end function GetPsiRR
+  end interface
+
+  interface
+     double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z, dZ
+
+       double precision, dimension (:), allocatable :: RR, ZZ
+       
+       double precision, dimension (:, :), allocatable :: PSI
+       
+     end function GetPsiZZ
+  end interface
+
+  interface
+     double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+
+       integer :: NRBOX, NZBOX
+
+       double precision :: R, Z, dR
+       
+       double precision, dimension (:), allocatable :: RR, ZZ
+       
+       double precision, dimension (:, :), allocatable :: PSI
+
+     end function GetPsiRZ
+  end interface
 
   integer :: NRBOX, NZBOX, i
 

@@ -19,7 +19,7 @@
  
 ### /Inputs
 - gFile: Initial gFile
-- q_95: Contains target q_95
+- Rescale.nml: Namelist file
 	
 ### /Outputs
 - gFile: Rescaled gFile
