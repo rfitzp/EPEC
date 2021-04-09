@@ -7,11 +7,11 @@ real[][] A = in.dimension (0,0);
 A          = transpose(A);
      
 real[] r    = A[4];
-real[] web  = A[6];
-real[] webI = A[7];
-real[] wtor = A[8];
-real[] wast = A[9];
-real[] wthe = A[10];
+real[] web  = A[5];
+real[] webI = A[6];
+real[] wtor = A[7];
+real[] wast = A[8];
+real[] wthe = A[9];
 real[] wp = wtor - web - wast;
 
 pen s = black + dotted + 1.5;	

@@ -9,7 +9,7 @@ A          = transpose(A);
 file    inx = input ("../../../Flux/Outputs/Stage1/Psilim.txt").line();
 real[][] Ax = inx.dimension (0, 0);
 real[] ppp  = Ax[0];
-real psilim = ppp[0];
+real psilim = ppp[2];
 real psiped = ppp[1];
      
 real[] psi = A[0];
@@ -30,5 +30,5 @@ pen qqx = fontsize(25.);
 defaultpen (qqx);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
 yaxis("$d^{\,3}n_e/d{\rm \Psi}_N^{\,3}(10^{19}\,{\rm m}^{-3})$",LeftRight,RightTicks);
-import graph;
+
      

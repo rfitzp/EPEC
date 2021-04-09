@@ -5,14 +5,21 @@
 // $####################
 
 //        Phase:: Phase               ()
-// void   Phase:: Solve               (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
-// void   Phase:: Read_Data           (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, double _TIME, double _SCALE)
+// void   Phase:: Solve               (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _LIN, int _MID, int _COPT,
+// 		                       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE)
+// void   Phase:: Read_Data           (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _LIN, int _MID, int _COPT,
+//                                     double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE)
 // void   Phase:: Scan_Shift          ()
 // void   Phase:: Calc_Velocity       ()
 // void   Phase:: Initialize          ()
 // void   Phase:: Save                ()
 // void   Phase:: IslandDynamics      ()
 // void   Phase:: CalcRMP             (double t)
+// void   Phase:: CalcCoil            (double t, double& IU, double& IM, double& IL, double& PU, double& PM, double& PL)
+// int    Phase:: Findk               ()
+// double Phase:: FindMax             (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
+// double Phase:: FindMin             (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
+// void   Phase:: ThreeCoil           (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML, double Delta, double& fun, double& deriv, double& dderiv)
 // void   Phase:: CalcChiZeta         (double t)
 // void   Phase:: Pack                (Array<double,1> y)
 // void   Phase:: Unpack              (Array<double,1> y)
@@ -40,11 +47,12 @@ Phase::Phase ()
   // -----------------------------------------------------
   // Set default values of adaptive integration parameters
   // -----------------------------------------------------
-  h0       = 1.e-4;
   acc      = 1.e-11;
-  hmin     = 1.e-10;
+  h0       = 1.e-2;
+  hmin     = 1.e-2;
   hmax     = 1.e2;
   maxrept  = 50;
+  omegamax = 500.;
 
   // ----------------------
   // Set physical constants
@@ -59,11 +67,11 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE)
+void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
+		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE, int _FREQ)
 {
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE);
+  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -90,8 +98,8 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE)
+void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
+		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE, int _FREQ)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -102,27 +110,34 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   // Set default values of input parameters
   // ......................................
   NFLOW  = 200;
+
   STAGE5 = 1;
+
   INTF   = 0;
   INTN   = 0;
   INTU   = 0;
+  NATS   = 0;
   OLD    = 0;
-  FREQ   = 0;
+
   LIN    = 0;
+  FREQ   = 0;
+
   MID    = 2;
+  IRMP   = -1.e6;
+  IFLA   = 0;
   COPT   = 0;
   CORE   = 1.;
+
   DT     = 1.e-5;
   TSTART = 0.;
   TEND   = 1.e6;
+
   SCALE  = 2.;
   PMAX   = 4.;
   CHIR   = 1.;
   HIGH   = 1;
   RATS   = 1;
-  IFLA   = 0;
-  IRMP   = -1.e6;
-
+  
   // Read input data from namelists (Inputs/Phase.nml, Inputs/Waveform.nml)
   printf ("........................................................................................\n");
   printf ("Input parameters (from Inputs/Phase.nml, Inputs/Waveform.nml, and command line options):\n");
@@ -132,8 +147,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &OLD, &FREQ, &LIN, &MID, &COPT,
-		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &NCTRL, TCTRL, ICTRL, PCTRL);
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &LIN, &MID, &COPT,
+		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FREQ, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -148,12 +163,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     INTU = _INTU;
   if (_OLD > -1)
     OLD = _OLD;
-  if (_FREQ > -1)
-    FREQ = _FREQ;
+  if (_NATS > -1)
+    NATS = _NATS;
   if (_LIN > -1)
     LIN = _LIN;
   if (_MID > -1)
     MID = _MID;
+  if (_FREQ > -1)
+    FREQ = _FREQ;
   if (_HIGH > -1)
     HIGH = _HIGH;
   if (_RATS > -1)
@@ -179,8 +196,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, CORE, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d FREQ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS, FREQ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
 
   // ............
   // Sanity check
@@ -205,14 +222,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
       printf ("PHASE:: CHIR must be greater than unity\n");
       exit (1);
     }
-  if (FREQ < 0 || FREQ > 2)
-    {
-      printf ("PHASE:: Invalid FREQ value\n");
-      exit (1);
-    }
   if (COPT < 0 || COPT > 3)
     {
       printf ("PHASE:: Invalid COPT value\n");
+      exit (1);
+    }
+  if (FREQ < 0 || FREQ > 1)
+    {
+      printf ("PHASE:: Invalid FREQ value\n");
       exit (1);
     }
   if (MID < 1 || MID > 3)
@@ -229,8 +246,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, CORE, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d FREQ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS, FREQ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -238,8 +255,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d FREQ = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, OLD, FREQ, LIN, MID, COPT, CORE, HIGH, RATS, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d FREQ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS, FREQ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (monitor);
 
   // .................
@@ -313,8 +330,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   double EIreal, EIimag, EOreal, EOimag; 
  
   FILE* file = OpenFiler ((char*) "Inputs/fFile");
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &R_0, &B_0, &inr, &q95, &r95, &qlim, &rlim, &q0, &qa, &NPSI, &ini, &nres, &PSILIM, &PSIPED, &Pped) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &R_0, &B_0, &inr, &q95, &r95, &qrat, &rrat, &q0, &qa, &NPSI, &ini, &nres, &PSILIM, &PSIPED, &Pped, &PSIRAT) != 16)
     {
       printf ("PHASE::Error reading fFile (1)\n");
       exit (1);
@@ -494,8 +511,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     }
   if (nresn != nres)
     {
-      printf ("PHASE:: Error - nres mismatch\n");
-      exit (1);
+      printf ("PHASE:: Warning - nresn != nres\n");
+      if (nresn < nres)
+	nres = nresn;
     }
 
   printf ("tau_A = %11.4e  P0 = %11.4e\n", tau_A, P0);
@@ -508,7 +526,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   Tend   = TEND       *1.e-3/tau_A;
 
   mk.resize      (nres); ntor.resize     (nres); rk.resize       (nres); qk.resize       (nres); rhok.resize   (nres);
-  a.resize       (nres); Sk.resize       (nres); wk.resize       (nres); taumk.resize    (nres); tautk.resize  (nres);
+  a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres);
   fack.resize    (nres); delk.resize     (nres); wkl.resize      (nres); wke.resize      (nres); wkn.resize    (nres);
   dnedrk.resize  (nres); dTedrk.resize   (nres); Wcrnek.resize   (nres); WcrTek.resize   (nres); WcrTik.resize (nres);
   akk.resize     (nres); gk.resize       (nres); dPsiNdr.resize  (nres); PsiN.resize     (nres); nek.resize    (nres);
@@ -518,29 +536,44 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
   Factor9.resize (nres); Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk      (j), &ntor     (j), &rk       (j), &qk       (j), &rhok   (j),
-		&a       (j), &Sk       (j), &wk       (j), &taumk    (j), &tautk  (j),
-		&fack    (j), &delk     (j), &wkl      (j), &wke      (j), &wkn    (j),
+		&a       (j), &Sk       (j), &taumk    (j), &tautk    (j), &fack   (j),
+		&delk    (j), &wkl      (j), &wke      (j), &wkn      (j),
 		&dnedrk  (j), &dTedrk   (j), &Wcrnek   (j), &WcrTek   (j), &WcrTik (j),
 		&akk     (j), &gk       (j), &dPsiNdr  (j), &PsiN     (j), &nek    (j),
 		&nik     (j), &Tek      (j), &Tik      (j), &dnidrk   (j), &dTidrk (j),
 		&Factor1 (j), &Factor2  (j), &Factor3  (j), &Factor4  (j),
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
-		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j)) != 42)
+		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j)) != 41)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
       }
   fclose (file);
 
-  // Temporary cludge to make D_per 1/3 m^2/s instead of 1 m^2/s
   for (int j = 0; j < nres; j++)
-    Wcrnek (j) *= pow (1./3.,1./3.);
+    {
+      if (taumk (j) < 0.)
+	{
+	  printf ("PHASE:: Error - taumk (%2d) < 0.\n", j);
+	  exit (1);
+	}
+      if (tautk (j) < 0.)
+	{
+	  printf ("PHASE:: Error - tautk (%2d) < 0.\n", j);
+	  exit (1);
+	}
+      if (Sk (j) < 0.)
+	{
+	  printf ("PHASE:: Error - Sk (%2d) < 0.\n", j);
+	  exit (1);
+	}
+    }
 
   for (int j = 0; j < nres; j++)
-    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_w0 = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e\n",
-	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), wk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j));
+    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e\n",
+	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j));
 
   // Set Deltak+/- values
   Deltakp.resize (nres); Deltakm.resize (nres);
@@ -958,7 +991,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, i
     } 
  
   file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/q.txt");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qlim, TSTART);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qrat, TSTART);
   fclose (file);
 
   file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/Chi.txt");
@@ -1342,6 +1375,7 @@ void Phase::IslandDynamics ()
   FILE*  file17 = OpenFilew ((char*) "Outputs/Stage5/rkminusTe.txt");
   FILE*  file18 = OpenFilew ((char*) "Outputs/Stage5/rkplusTe.txt");
   FILE*  file19 = OpenFilew ((char*) "Outputs/Stage5/results.txt");
+  FILE*  file20 = OpenFilew ((char*) "Outputs/Stage5/optimize.txt");
 
   fprintf (file, "%d\n", ntor (0));
   fclose (file);
@@ -1427,6 +1461,20 @@ void Phase::IslandDynamics ()
 	  CalcRMP (t);
 	  fprintf (file5, "%16.9e %16.9e %16.9e\n", t*tau_A, irmp, prmp /M_PI);
 
+	  // Output coil current data
+	  double IU, IM, IL, PU, PM, PL;
+	  CalcCoil (t, IU, IM, IL, PU, PM, PL);
+	  
+	  int    k       = Findk ();
+	  double chikm   = chi (k);
+	  double chikp   = chi (k+1);
+	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
+	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
+	  double chik    = chikm * Weightm + chikp * Weightp;
+	  double chik1   = chi (0);
+
+	  fprintf (file20, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e \n", t*tau_A, IU, IM, IL, PU/M_PI, PM/M_PI, PL/M_PI, chik, chik1); 
+
 	  // Calculate and output simulated Mirnov data
 	  double sumci = 0., sumsi = 0., sumco = 0., sumso = 0.;
 
@@ -1500,7 +1548,7 @@ void Phase::IslandDynamics ()
 	  fprintf (file17, "\n"); fprintf (file18, "\n");
 
 	  if (cnt%10 == 0)
-	    printf ("t(ms) = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, irmp, prmp /M_PI);
+	    printf ("t(ms) = %11.4e  h(ms) = %11.4e  h/tau_A = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 	  cnt++;
 	  
 	  fflush (file1);  fflush (file2);  fflush (file3);  fflush (file4);  fflush (file5);
@@ -1517,6 +1565,7 @@ void Phase::IslandDynamics ()
   fclose (file6);  fclose (file8);  fclose (file9);  fclose (file10); fclose (file11);
   fclose (file12); fclose (file13); fclose (file14); fclose (file15); fclose (file16);
   fclose (file17); fclose (file18); fclose (file3a); fclose (file4a); fclose (file19);
+  fclose (file20);
 
   // Save calculation for restart
   Save ();
@@ -2298,6 +2347,15 @@ void Phase::PackRhs (Array<double,1> XkRHS, Array<double,1> YkRHS,
 	  dydt (cnt) = betakpRHS  (j, i); cnt++;
 	}
     }
+
+  for (int j = 0; j < cnt-1; j++)
+    {
+      if (isnan (dydt(j)))
+	{
+	  printf ("PHASE: Error dydt(%4d) = NaN\n", j);
+	  exit (1);
+	}
+    }
 }
 
 // #######################################
@@ -2307,25 +2365,34 @@ double Phase::GetNaturalFrequency (int j)
 {
   if (LIN)
     {
-      return wkl (j);
+      double om = wkl (j);
+
+      if (om > omegamax*tau_A*1.e3)
+	om = omegamax*tau_A*1.e3;
+      else if (om < - omegamax*tau_A*1.e3)
+	om = - omegamax*tau_A*1.e3;
+
+      return om;
     }
   else
     {
-      if (FREQ == 2)
+      double om;
+      
+      if (FREQ == 0)
 	{
 	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
 	  
-	  return (wkl (j) + wkn (j) * w) /(1. + w);
-	}
-      else if (FREQ == 1)
-	{
-	  double w  = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
-	  double w2 = w*w;
-	  
-	  return (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w + wkn (j) * w2) /(1. - w + w2);
+	  om =  (wkl (j) + wkn (j) * w) /(1. + w);
 	}
       else
-	return wk (j);
+	om =  wke (j);
+
+      if (om > omegamax*tau_A*1.e3)
+	om = omegamax*tau_A*1.e3;
+      else if (om < - omegamax*tau_A*1.e3)
+	om = - omegamax*tau_A*1.e3;
+      
+      return om;
     }
 }
 

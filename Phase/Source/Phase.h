@@ -24,6 +24,7 @@
 // -C COPT   - overrides COPT value from namelist file
 // -D CORE   - overrides CORE value from namelist file
 // -F FREQ   - overrides FREQ value from namelist file
+// -N NATS   - overrides NATS value from namelist file
 // -H HIGH   - enables higher order transport calculation
 // -S SCALE  - overrides SCALE value from namelist file
 // -T TEND   - sets simulation end time (ms)
@@ -84,6 +85,8 @@
 // 2.16 - Added COPT flag
 // 2.17 - Changed definition of MID
 // 2.18 - Added more COPT options
+// 2.19 - Natural frequency limited to linear/nonlinear model
+// 2.20 - Added FREQ flag
 
 // #######################################################################
 
@@ -91,7 +94,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 18
+#define VERSION_MINOR 20
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -115,9 +118,9 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
+extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* CORE, int *FREQ, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -130,34 +133,42 @@ class Phase
   // Program data
   // ------------
   
-  // Read from Inputs/Phase.in
+  // Read from Inputs/Phase.nml
   int      NFLOW;  // Number of flow harmonics in model
-  double   DT;     // Data recorded every DT seconds
-  double   TSTART; // Simulation start time (ms)
-  double   TEND;   // Simulation end time (ms)
+
   int      STAGE5; // If != 0 then Stage5 calculation performed, otherwise calculation terminates after Stage4
   int      INTF;   // If != 0 then use interpolated fFile 
   int      INTN;   // If != 0 then use interpolated nFile
   int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
+  int      NATS;   // If != 0 then use linear only nFile interpolation
   int      OLD;    // If != 0 then initialize new calculation
-  int      FREQ;   // If == 0 then use natural frequency from NEOCLASSICAL
-                   // If == 1 then use island width dependent natural frequency that iterpolates beteween electron, ExB, and ion frequecies
-                   // If == 2 then use island width dependent natural frequency that iterpolates beteween electron and ion frequecies
+
   int      LIN;    // If != 0 then perform purely linear calculation
-  int      MID;    // Number of coil sets
-  double   SCALE;  // GPEC scalefactor
-  double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
-  double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
-  int      IFLA;   // If != 0 then set all ICTRL values to IRMP (triggered if IRMP >= 0)
-  int      HIGH;   // If != 0 use higher order transport analysis
-  int      RATS;   // If != 0 use only linear interpolation for uFiles/mFiles/lFiles
+  int      FREQ;   // Natural frequency switch:
+                   //  If == 0 then use linear/nonlinear natural frequency
+                   //  If == 1 then use ExB natural frequency
+ 
+  int      MID;    // Number of RMP coil sets
   int      COPT;   // If == 0 then no coil current optimization
                    // If == 1 then coil currents optimized in restricted fashion to maximize drive at closest rational surface to pedestal top
                    // If == 2 then coil currents optimized in unrestricted fashion to maximize drive at closest rational surface to pedestal top
                    // If == 3 then coil currents optimized in unrestricted fashion to maximize drive at pedestal top and minimize drive in core
   double   CORE;   // Core drive minimization factor (0.0 = no minimization, 1.0 = complete minmization)
-  double   IRMP;   // RMP current (kA)
   
+  double   SCALE;  // GPEC scalefactor
+  double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
+  int      HIGH;   // If != 0 use higher order transport analysis
+  int      RATS;   // If != 0 use only linear interpolation for uFiles/mFiles/lFiles
+
+  double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
+
+  double   TSTART; // Simulation start time (ms)
+  double   TEND;   // Simulation end time (ms)
+  double   DT;     // Data recorded every DT seconds
+
+  double   IRMP;   // RMP current (kA)
+  int      IFLA;   // If != 0 then set all ICTRL values to IRMP (triggered if IRMP >= 0)
+
   int      NCTRL;  // Number of control points
   double*  TCTRL;  // Control times (ms)
   double*  ICTRL;  // Peak current flowing in RMP coils (kA) at control times
@@ -170,14 +181,15 @@ class Phase
   // Read from Inputs/fFile
   double R_0;             // Scale major radius (m)
   double B_0;             // Scale toroidal field-strength (T)
-  double q95;             // Safety factor at 95% flux surface
-  double r95;             // Normalized radius of 95% flux surface
-  double qlim;            // Safety factor at PSI = PSILIM flux surface
-  double rlim;            // Normalized radius of PSI = PSILIM flux surface
+  double q95;             // Safety factor at PsiN = 0.95 flux surface
+  double r95;             // Normalized radius of PsiN = 0.95 flux surface
+  double qrat;            // Safety factor at PsiN = PSIRAT flux surface
+  double rrat;            // Normalized radius of PsiN = PSIRAT flux surface
   double q0;              // Safety factor at magnetic axis
   double qa;              // Safety factor at plasma boundary
   double PSILIM;          // Limiting value of PsiN
   double PSIPED;          // Value of PsiN at top of pedestal
+  double PSIRAT;          // Value of PsiN beyod which resonant surfaces ignored
   double Pped;            // Pedestal pressure / central pressure
   int    nres;            // Number of resonant surfaces in plasma
   gsl_matrix_complex* FF; // Plasma inverse tearing stability matrix
@@ -208,14 +220,13 @@ class Phase
   Array<double,1> rhok;     // Normalized mass densities at resonant surfaces
   Array<double,1> a;        // Normalized (to R_0) plasma minor radius
   Array<double,1> Sk;       // Lundquist numbers at resonant surfaces
-  Array<double,1> wk;       // Normalized actual natural frequencies at resonant surfaces
   Array<double,1> taumk;    // Normalized momentum confinement timescales at resonant surfaces
   Array<double,1> tautk;    // Normalized poloidal flow damping timescales at resonant surfaces
   Array<double,1> fack;     // Island width factors at resonant surfaces
   Array<double,1> delk;     // Linear layer widths at resonant surfaces
   Array<double,1> wkl;      // Normalized linear natural frequencies at resonant surfaces
-  Array<double,1> wke;      // Normalized ExB frequencies at resonant surfaces
-  Array<double,1> wkn;      // Normalized nonlinear frequencies at resonant surfaces
+  Array<double,1> wke;      // Normalized ExB natural frequencies at resonant surfaces
+  Array<double,1> wkn;      // Normalized nonlinear natural frequencies at resonant surfaces
   Array<double,1> dnedrk;   // Electron density gradients at resonant surfaces (in r) (10^19/m^-4)
   Array<double,1> dTedrk;   // Electron temperature gradients at resonant surfaces (in r) (keV/m)
   Array<double,1> Wcrnek;   // Critical island widths for density flattening at resonant surfaces (in r) (m)
@@ -305,11 +316,12 @@ class Phase
   // --------------------------------
   // Adapative integration parameters
   // --------------------------------
-  double h0;       // Initial step-length
   double acc;      // Integration accuracy
+  double h0;       // Initial step-length
   double hmin;     // Minimum step-length
   double hmax;     // Maximum step-length
   int    maxrept;  // Maximum number of step recalculations
+  double omegamax; // Maximum natural frequeny magnitude (krad/s)
 
   // ----
   // Misc
@@ -327,8 +339,8 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE);        
+  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
+	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE, int _FREQ);        
 
   // -----------------------
   // Private class functions
@@ -336,8 +348,8 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _OLD, int _FREQ, int _LIN, int _MID, int _COPT,
-		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE);
+  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
+		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE, int _FREQ);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

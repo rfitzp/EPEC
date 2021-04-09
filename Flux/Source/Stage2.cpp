@@ -63,8 +63,8 @@ void Flux::Stage2 ()
   // Output fFile
   // ............
   FILE* file = OpenFilew ((char*) "Outputs/fFile");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e\n",
-	   R0, B0, ra * R0, q95, r95 /ra, qlim, rlim /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.6e\n",
+	   R0, B0, ra * R0, q95, r95 /ra, qrat, rrat /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
   for (int j = 0; j < NPSI; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
@@ -90,8 +90,8 @@ void Flux::Stage2 ()
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
       file = OpenFilew (filename);
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e \n",
-	       R0, B0, ra * R0, q95, r95 /ra, qlim, rlim/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped);
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
+	       R0, B0, ra * R0, q95, r95 /ra, qrat, rrat/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
       for (int j = 0; j < NPSI; j++)
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
@@ -453,7 +453,7 @@ void Flux::Stage2ReadData ()
   Rbound = (RPTS[ia-1]*PSIARRAY (ia, jc) - RPTS[ia]*PSIARRAY (ia-1, jc))
     /(PSIARRAY (ia, jc) - PSIARRAY (ia-1, jc));
 
-  L = ic-ia+2;  // Number of points in Psi (R, Zaxis) array
+  L = ic - ia + 2; // Number of points in Psi (R, Zaxis) array
 
   // ..........................................................................
   // Find closest equilibrium grid-point to outer magnetic boundary on midplane
@@ -483,9 +483,9 @@ void Flux::Stage2CalcQ ()
   s[0]   = 0.;
   s[L-1] = 1.;
 
-  // .........................
-  // Setup R (Z=Zaxis) profile
-  // .........................
+  // ...........................
+  // Setup R (Z = Zaxis) profile
+  // ...........................
   Rs = new double[L]; // Array of R(s) values
 
   for (int l = 0; l < L-2; l++)
@@ -494,7 +494,7 @@ void Flux::Stage2CalcQ ()
   Rs[L-1] = Rbound;
 
   FILE* file = OpenFilew ((char*) "Outputs/Stage2/rs.txt");
-  for (int l = 0; l  < L; l++)
+  for (int l = 0; l < L; l++)
     fprintf (file, "%16.9e %16.9e\n", Rs[l], s[l]);
   fclose (file);
 
@@ -528,9 +528,9 @@ void Flux::Stage2CalcQ ()
     {
       double s = double (j) /double (NPSI-1);
 
-      PsiN[j] = 1. - pow (1. - s, PACK);
-      P[j]    = 1. - PsiN[j];
-      S[j]    = sqrt (1. - P[j]);
+      PsiN[j] = PSILIM * (1. - pow (1. - s, PACK));
+      P   [j] = 1. - PsiN[j];
+      S   [j] = sqrt (1. - P[j]);
     }
 
   // .......................................
@@ -564,10 +564,6 @@ void Flux::Stage2CalcQ ()
 
   QGP[0] = Q[0] /G[0];
   QP [0] = Q[0];
-
-  // Extrapolate q profile
-  QGP[NPSI-1] = InterpolateQ (NPSI-1, PsiN, QGP, 1., 0, 4);
-  QP [NPSI-1] = QGP[NPSI-1] * G[NRPTS-1];
 
   // Calculate and smooth QPN profile (quartic interpolation)
   double* QPSmooth = new double[NPSI];
@@ -630,36 +626,35 @@ void Flux::Stage2CalcQ ()
   printf ("Calculating r(Psi) profile:\n");
   CalcrP ();
   rP[0] = 0.;
-  ra    = rP[NPSI-1];
 
   // Perform diagnostic integration check (passes!)
   //for (int j = 1; j < NPSI; j++)
   //  printf ("r/a = %11.4e  PsiN = %11.4e  dPsiN/dr = %11.4e  r*g/|psi_c|/q = %11.4e  ratio = %11.4e\n",
   //	    rP[j]/ra, PsiN[j], Interpolate (NPSI, rP, PsiN, rP[j], 1), rP[j]*GP[j]/fabs(Psic)/QP[j], rP[j]*GP[j]/fabs(Psic)/QP[j] /Interpolate (NPSI, rP, PsiN, rP[j], 1));
 
-  // .........................
-  // Find q95, r95, qlim, rlim
-  // .........................
+  // .................................
+  // Find q95, r95, qrat, rrat, qa, ra
+  // .................................
   double g95;
   double s95  = sqrt (0.95);
   double sped = sqrt (PSIPED);
-  double slim = sqrt (PSILIM);
-  double sa   = 1.;
+  double srat = sqrt (PSIRAT);
   q95    = Interpolate (NPSI, S, QP, s95,  0);
   r95    = Interpolate (NPSI, S, rP, s95,  0);
   g95    = Interpolate (NPSI, S, GP, s95,  0);
-  qlim   = Interpolate (NPSI, S, QP, slim, 0);
-  rlim   = Interpolate (NPSI, S, rP, slim, 0);
-  qa     = Interpolate (NPSI, S, QP, sa,   0);
   Pped   = Interpolate (NPSI, S, PP, sped, 0)/ PP[0];
-  printf ("q95 = %11.4e  r95/ra = %11.4e  qlim = %11.4e  rlim/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)  Pped/P(0) = %11.4e\n",
-	  q95, r95 /ra, qlim, rlim/ra, qa, ra, ra*R0, Pped);
+  qrat   = Interpolate (NPSI, S, QP, srat,  0);
+  rrat   = Interpolate (NPSI, S, rP, srat,  0);
+  qa     = QP[NPSI-1];
+  ra     = rP[NPSI-1];
+  printf ("q95 = %11.4e  r95/ra = %11.4e  qrat = %11.4e  rrat/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)  Pped/P(0) = %11.4e\n",
+	  q95, r95 /ra, qrat, rrat/ra, qa, ra, ra*R0, Pped);
 
   // ..................
   // Output q95 and r95
   // ..................
   file = OpenFilew ((char*) "Outputs/Stage2/q95.txt");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", q95, r95 /ra, QP[0], QP[NPSI-1], qlim, rlim /ra);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", q95, r95 /ra, QP[0], QP[NPSI-1], qrat, rrat /ra);
   fclose (file);
 
   // ......................
@@ -667,12 +662,9 @@ void Flux::Stage2CalcQ ()
   // ......................
   file = OpenFilew ((char*) "Outputs/Stage2/qr.txt");
   for (int j = 0; j < NPSI; j++)
-    {
-      if (1. - P[j] < PSILIM)
-	fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
-		 rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j], QPPN[j], A2[j]);
-    }
-  fclose (file);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
+	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j], QPPN[j], A2[j]);
+    fclose (file);
 }
 
 // ###################################
@@ -685,7 +677,7 @@ void Flux::Stage2FindRational ()
   // Determine number of rational surfaces
   // .....................................
   int mmin = int (double (NTOR) * QP[0]) + 1;
-  int mmax = int (double (NTOR) * QP[NPSI-1]);
+  int mmax = int (double (NTOR) * qrat);
   if (mmin < MMIN)
     mmin = MMIN;
   if (mmax > MMAX)

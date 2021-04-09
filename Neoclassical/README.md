@@ -92,18 +92,18 @@
 	for (int i = 0; i < n; i++)
 	N, Z, A (i=0 impurity, i=1 majority; i=2 fast)
 
- - PSI: Normalized poloidal flux
- - NE: Electron number density (10^20/m^3)
- - TE: Electron temperature (keV)
- - NI: Thermal ion number density (10^20/m^3)
- - TI: Thermal ion temperature (keV)
- - NB: Fast ion number density (10^20/m^3)
- - OMEG: Impurity ion toroidal angular velocity on outboard midplane (krad/s)
+ - PSI:   Normalized poloidal flux
+ - NE:    Electron number density (10^20/m^3)
+ - TE:    Electron temperature (keV)
+ - NI:    Thermal ion number density (10^20/m^3)
+ - TI:    Thermal ion temperature (keV)
+ - NB:    Fast ion number density (10^20/m^3)
+ - OMEG:  Impurity ion toroidal angular velocity on outboard midplane (krad/s)
  - OMGEB: ExB frequency (krad/s)
- - NZ1: Impurity ion number density (10^20/m^3)
- - N: Ion atomic number
- - Z: Ion charge (units of e)
- - A: Ion mass number
+ - NZ1:   Impurity ion number density (10^20/m^3)
+ - N:     Ion atomic number
+ - Z:     Ion charge (units of e)
+ - A:     Ion mass number
  
  *Fields can occur in any order. Additional fields are ignored.*
  
@@ -111,9 +111,10 @@
  
     n
     for (int i = 0; i < n; i++)
-    PSI, CHI_PHI, CHI_E, D_PERP
+    PSI, CHI_PHI, CHI_E, D_PERP, CHI_I
 	
- - PSI: Normalized poloidal flux	
+ - PSI:     Normalized poloidal flux	
  - CHI_PSI: Perpendicular toroidal momentum diffusivity (m^2/s)
- - CHI_E: Perpendiocular energy diffusivity (m^2/s)
- - D_perp: Perpendicular particle diffusivity (m^2/s)
+ - CHI_E:   Perpendiocular electron energy diffusivity (m^2/s)
+ - D_PERP:  Perpendicular particle diffusivity (m^2/s)
+ - CHI_E:   Perpendiocular ion energy diffusivity (m^2/s)

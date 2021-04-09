@@ -1,6 +1,6 @@
 // Flux.h
 
-// ##################################################################################
+// ############################################################################
 // Class to input gFile equilibrium data and output perturbed equilibrium data. 
 
 // .................
@@ -9,7 +9,7 @@
 
 // Radial grid in PsiN = 1. - Psi/Psi_axis (assuming Psi = 0 on boundary) is 
 //
-// PsiN_j = 1. - (1. - s)^PACK  for j = 0, NPSI-1
+// PsiN_j = PSILIM * (1. - (1. - s)^PACK)  for j = 0, NPSI-1
 //
 //  where s = j /(NPSI-1),
 //
@@ -34,8 +34,10 @@
 // -n NTOR   - override NTOR value from namelist
 // -m MMIN   - override MMIN value from namelist
 // -p PSILIM - override PSILIM value from namelist
-// -t TIME   - sets experimental time (ms)
+// -r PSIRAT - override PSIRAT value from namelist
+// -t TIME   - override TIME value from namelist
 // -M MMAX   - override MMAX value from namelist
+// -P PSIPED - override PSIPED value from namelist
 
 // ...................
 // Inputs and outputs:
@@ -61,6 +63,9 @@
 // 1.8  - Renamed Namelist. Removed A2 and A3 parameters (too much noise)
 // 1.9  - Added PSILIM to fFile
 // 1.10 - Added A2res, PSIPED, Pped to fFile
+// 1.11 - Added -P option
+// 1.12 - Included ZOFF parameter in gFiles
+// 1.13 - Restrict program to only calculated q-profile for PsiN < PSIRAT
 
 // #####################################################################################
 
@@ -68,7 +73,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 10
+#define VERSION_MINOR 13
 
 #include <stdio.h>
 #include <math.h>
@@ -96,7 +101,8 @@ extern "C" int pRhs5 (double, const double[], double[], void*);
 
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
-			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME, double* PSIPED, int* NSMOOTH);
+			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
+			      double* PSIPED, int* NSMOOTH, double* PSIRAT);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -115,23 +121,29 @@ class Flux
  private:
   
   // Control parameters read from Inputs/Flux.nml
+  int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
   int    NPSI;    // Number of points in PsiN grid
   double PACK;    // Packing index for PsiN grid
   int    NTHETA;  // Number of points in theta grid
   int    NNC;     // Number of neoclassical harmonics
-  int    NTOR;    // Toroidal mode number
-  int    MMIN;    // Minimum poloidal mode number
-  int    MMAX;    // Maximum poloidal mode number
-  int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
-  double PSIPED;  // PsiN at top of pedestal
-  double PSILIM;  // Maximum PsiN for rational surface
+
   double H0;      // Initial integration step-length for equilibirum flux surface integrals 
   double ACC;     // Integration accuracy for equilibrium flux surface integrals
   double ETA;     // Regularization factor for Green's function
   double DR;      // Discritization parameter for simulated Mirnov data
-  double TIME;    // Experimental time (ms)
+
   int    INTG;    // If != 0 then use interpolated gFile
 
+  int    NTOR;    // Toroidal mode number
+  int    MMIN;    // Minimum poloidal mode number
+  int    MMAX;    // Maximum poloidal mode number
+
+  double PSILIM;  // Maximum value of PsiN for safety-factor calculation
+  double PSIRAT;  // All rational surfaces lying in region PsiN > PSIRAT are ignored
+  double PSIPED;  // PsiN value at top of pedestal
+
+  double TIME;    // Experimental time (ms)
+  
   // Toroidal Mirnov coil array locations
   double RIN;     // Limiter R coordinate at inboard miplane
   double ROUT;    // Limiter R coordinate at outboard miplane
@@ -175,8 +187,8 @@ class Flux
   double* Rs;          // Array of R(s) values, where R is major radius on inboard midplane
   double  q95;         // Safety-factor on 95% flux surface
   double  r95;         // Radial coordinate of 95% flux surface
-  double  qlim;        // Safety-factor at PsiN = PSILIM flux surface
-  double  rlim;        // Radial coordinate at PsiN = PSILIM flux surface
+  double  qrat;        // Safety-factor at PsiN = PSIRAT flux surface
+  double  rrat;        // Radial coordinate at PsiN = PSIRAT flux surface
   double  qa;          // Safety-factor at plasma boundary
   double  ra;          // Radial coordinate of plasma boundary
   double  Pped;        // Pedestal pressure / central pressure
@@ -263,7 +275,7 @@ public:
   // Constructor
   Flux ();
   // Solve problem
-  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM);
+  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
 
   // Evaluate right-hand sides of q/g equation
   int Rhs1 (double r, const double y[], double dydr[], void*);
@@ -279,7 +291,7 @@ public:
 private:
 
   // Set global parameters
-  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM);
+  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
   // Input gFile data and output Stage1 data
   void Stage1 ();
   // Input Stage1 data and output Stage2 data

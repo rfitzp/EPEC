@@ -8,11 +8,11 @@ A          = transpose (A);
 
 real[] t = A[0];
 real[] q = A[1];
-real[] p = A[3];
+real[] p = A[2];
 
 pen s = black + dotted + 0.5;
 
-draw (graph (t, p), s, marker (scale(2.0mm)*polygon(3),  filltype=Fill, black));
+draw (graph (q, p), s, marker (scale(2.0mm)*polygon(3),  filltype=Fill, black));
 
 s = black + 1 + dotted;
 
@@ -21,4 +21,4 @@ yequals (0., s);
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis ("$q_{95}$",                BottomTop, RightTicks(n=5));
-yaxis ("$t({\rm ms})$", LeftRight, LeftTicks);
+yaxis ("$-{\mit\Delta}P/P_{\rm ped}$", LeftRight, LeftTicks);

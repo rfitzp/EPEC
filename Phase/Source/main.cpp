@@ -32,10 +32,10 @@ int main (int argc, char** argv)
   char* Fvalue = NULL; char* Svalue = NULL; char* lvalue = NULL;
   char* mvalue = NULL; char* Tvalue = NULL; char* cvalue = NULL;
   char* ivalue = NULL; char* rvalue = NULL; char* Hvalue = NULL;
-  char* Cvalue = NULL; char* Dvalue = NULL;
+  char* Cvalue = NULL; char* Dvalue = NULL; char* Nvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:F:S:l:m:T:c:i:r:H:C:D:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:")) != -1)
     switch (c)
       {
       case 'f':
@@ -43,23 +43,24 @@ int main (int argc, char** argv)
  	break;
       case 'h':
  	printf ("Options:\n");
-	printf ("-c CHIR   - set maximum vacuum Chirkov parameter, CHIR\n");
-	printf ("-f INTF   - set fFile interpolation enabling flag INTF\n");
+	printf ("-c CHIR   - set maximum vacuum Chirkov parameter to CHIR\n");
+	printf ("-f INTF   - set fFile interpolation enabling flag to INTF\n");
 	printf ("-h        - list options\n");
 	printf ("-i IRMP   - set RMP current to IRMP");
-	printf ("-l LIN    - set linear calculation enabling flag LIN\n");
-	printf ("-m MID    - set mFile enabling flag MID\n");
-	printf ("-n INTN   - set nFile interpolation enabling flag INTN\n");
-	printf ("-o OLD    - set old calculation flag OLD\n");
-	printf ("-r RATS   - set uFile/mFile/lFile linear-only interpolation flag RATS\n");
-	printf ("-s STAGE5 - set Stage5 caculation enabling flag STAGE5\n");
+	printf ("-l LIN    - set linear calculation enabling flag to LIN\n");
+	printf ("-m MID    - set mFile enabling flag to MID\n");
+	printf ("-n INTN   - set nFile interpolation enabling flag to INTN\n");
+	printf ("-o OLD    - set old calculation flag to OLD\n");
+	printf ("-r RATS   - set uFile/mFile/lFile linear-only interpolation flag to RATS\n");
+	printf ("-s STAGE5 - set Stage5 caculation enabling flag to STAGE5\n");
 	printf ("-t TSTART - set simulation start time (s) to TSTART\n");
-	printf ("-u INTU   - set uFile/mFile/lFile interpolation enabling flag INTU\n");
-	printf ("-C COPT   - set coil current optimization flag COPT\n");
-	printf ("-D CORE   - set core minimization factor CORE\n");
-	printf ("-F FREQ   - set island frequency choice flag FREQ\n");
-	printf ("-H HIGH   - set higher orddr transport calculation enabling flag HIGH\n");
-	printf ("-S SCALE  - set GPEC scalefactor SCALE\n");	
+	printf ("-u INTU   - set uFile/mFile/lFile interpolation enabling flag to INTU\n");
+	printf ("-C COPT   - set coil current optimization flag to COPT\n");
+	printf ("-D CORE   - set core minimization factor to CORE\n");
+	printf ("-F FREQ   - set natural frequency selection flag to FREQ\n");
+	printf ("-H HIGH   - set higher order transport calculation enabling flag to HIGH\n");
+	printf ("-N NATS   - set linear only nFiles interpolation flag to NATS\n");
+	printf ("-S SCALE  - set GPEC scalefactor to SCALE\n");	
 	printf ("-T TEND   - set simulation end time (s) to TEND\n");
 	exit (0);
       case 'n':
@@ -80,6 +81,9 @@ int main (int argc, char** argv)
       case 'T':
 	Tvalue = optarg;
  	break;
+      case 'F':
+	Fvalue = optarg;
+ 	break;
       case 'u':
 	uvalue = optarg;
  	break;
@@ -88,9 +92,6 @@ int main (int argc, char** argv)
  	break;
       case 'm':
 	mvalue = optarg;
- 	break;
-      case 'F':
-	Fvalue = optarg;
  	break;
       case 'S':
 	Svalue = optarg;
@@ -110,10 +111,13 @@ int main (int argc, char** argv)
       case 'D':
 	Dvalue = optarg;
  	break;
+      case 'N':
+	Nvalue = optarg;
+ 	break;
       case '?':
 	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u'
-	    || optopt == 'F' || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c'
-	    || optopt == 'i' || optopt == 'r' || optopt == 'H' || optopt == 'C' || optopt == 'D')
+	    || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c'
+	    || optopt == 'i' || optopt == 'r' || optopt == 'H' || optopt == 'C' || optopt == 'D' || optopt == 'F'|| optopt == 'N')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -124,12 +128,12 @@ int main (int argc, char** argv)
 	abort ();
       }
 
-  int    _STAGE5 = -1;    int   _INTF = -1;     int    _OLD    = -1;    int    _FREQ = -1;
-  int    _INTN   = -1;    int   _INTU = -1;     double _TSTART = -1.e6; float  __TSTART;
-  double _SCALE  = -1.e6; float __SCALE;        int    _LIN    = -1.;   int    _MID  = -1;
-  double _TEND   = -1.e6; float __TEND;         double _CHIR   = -1.e6; float  __CHIR;
-  double _IRMP   = -1.e6; float __IRMP;         int    _HIGH   = -1.;   int    _RATS = -1.;
-  int    _COPT   = 1;     double _CORE = -1.e6; float __CORE; 
+  int    _STAGE5 = -1;    int   _INTF = -1;     int    _OLD    = -1;    int   _FREQ = -1;    
+  int    _INTN   = -1;    int   _INTU = -1;     double _TSTART = -1.e6; float __TSTART;
+  double _SCALE  = -1.e6; float __SCALE;        int    _LIN    = -1.;   int   _MID  = -1;
+  double _TEND   = -1.e6; float __TEND;         double _CHIR   = -1.e6; float __CHIR;
+  double _IRMP   = -1.e6; float __IRMP;         int    _HIGH   = -1.;   int   _RATS = -1.;
+  int    _COPT   = -1;    double _CORE = -1.e6; float __CORE;           int   _NATS = -1.;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -145,14 +149,16 @@ int main (int argc, char** argv)
     _LIN = atoi (lvalue);
   if (mvalue != NULL)
     _MID = atoi (mvalue);
-  if (Fvalue != NULL)
-     _FREQ = atoi (Fvalue);
   if (Hvalue != NULL)
      _HIGH = atoi (Hvalue);
   if (rvalue != NULL)
      _RATS = atoi (rvalue);
+  if (Nvalue != NULL)
+     _NATS = atoi (Nvalue);
   if (Cvalue != NULL)
      _COPT = atoi (Cvalue);
+  if (Fvalue != NULL)
+     _FREQ = atoi (Fvalue);
   if (tvalue != NULL)
     {
       __TSTART = atof (tvalue);
@@ -188,7 +194,7 @@ int main (int argc, char** argv)
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _OLD, _FREQ, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ);
 
   return 0;
 }

@@ -21,8 +21,9 @@
 	wtor.asy    ... plots w_tor (r)
 	nb.asy      ... plots n_b(r)
 	chip.asy    ... plots chi_perp (momentum) (r)
-	chie.asy    ... plots chi_perp (energy) (r)
+	chie.asy    ... plots chi_e    (energy) (r)
 	chin.asy    ... plots chi_perp (particle) (r)
+	chii.asy    ... plots chi_i    (energy (r)
 
 	needge.asy  ... plots n_e(Psi) at edge
 	teedge.asy  ... plots T_e(Psi) at edge
@@ -46,6 +47,7 @@
 
 	nt.asy      ... plots ne, Te, Ti, nI, nn versus PsiN
 	wet.asy     ... plots components of w_E_I at rational surfaces versus PsiN
+	wec.asy     ... compare given w_E with that calculated from neoclassiscal theory
 	wtorf.asy   ... plots w_tor(PsiN)
 	chif.asy    ... plots chi_perp energy/momentum/particles versus PsiN
 	

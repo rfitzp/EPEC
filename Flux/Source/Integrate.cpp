@@ -29,7 +29,7 @@ void Flux::CalcQGP ()
   double*                    y    = new double [3]; 
   double                     r, h;
   
-  for (int j = 1; j < NPSI-1; j++)
+  for (int j = 1; j < NPSI; j++)
     {
       r    = 0.;
       h    = H0;
@@ -63,10 +63,9 @@ void Flux::CalcQGP ()
       QGP[j] = y[2];
       QP [j] = QGP[j]*GP[j];
 
-      if (j%50 == 0)
+      if (j%50 == 0 || j > NPSI-10)
 	printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
     }
-  printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", NPSI-2, 1.-P[NPSI-2], QP[NPSI-2]);
 
   gsl_odeiv_evolve_free  (e);
   gsl_odeiv_control_free (c);

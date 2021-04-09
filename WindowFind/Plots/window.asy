@@ -20,7 +20,7 @@ pen[] Palette = BWRainbow ();
 bounds range  = image (A, Full, (xmin, ymin), (xmax, ymax), Palette);
 
 pen s = 1. + black;
-real[] cvals = {-0.05, -0.10, -0.15};
+real[] cvals = {-0.05,-0.10, -0.15, -0.20};
 draw (contour (A, (xmin, ymin), (xmax, ymax), cvals), s);
 
 pen q = fontsize (20.);

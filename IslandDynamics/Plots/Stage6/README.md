@@ -21,15 +21,15 @@
 
 	i.asy          ... plots critical RMP currents for mode locking versus experimental time
 	r.asy          ... plots rational surface radii of penetrated island chains versus experimental time
-	rs.asy         ... plots rational surface radii (in r) versus time
-	wv.asy         ... plots vacuum island widths (in r) versus time
-	w.asy          ... plots island widths (in r) versus time
+	rs.asy         ... plots rational surface radii (in r) versus experimental time
+	wv.asy         ... plots vacuum island widths (in r) versus experimental time
+	w.asy          ... plots island widths (in r) versus experimental time
 
-	rpsi.asy       ... plots rational surface radii (in PsiN) versus time
-	wvpsi.asy      ... plots vacuum island widths (in PsiN) versus time
-	wpsi.asy       ... plots island widths (in PsiN) versus time
-	npsi.asy       ... plots density flattened regions (in PsiN) versus time
-	tpsi.asy       ... plots electron temperature flattened regions (in PsiN) versus time
+	rpsi.asy       ... plots rational surface radii (in PsiN) versus experimental time
+	wvpsi.asy      ... plots vacuum island widths (in PsiN) versus experimental time
+	wpsi.asy       ... plots island widths (in PsiN) versus experimental time
+	npsi.asy       ... plots density flattened regions (in PsiN) versus experimental time
+	tpsi.asy       ... plots electron temperature flattened regions (in PsiN) versus experimental time
 	
 	rpsiq.asy      ... plots rational surface radii (in PsiN) versus q95
 	wvpsiq.asy     ... plots vacuum island widths (in PsiN) versus q95
@@ -37,11 +37,17 @@
 	npsiq.asy      ... plots density flattened regions (in PsiN) versus q95
 	tpsiq.asy      ... plots electron temperature flattened regions (in PsiN) versus q95
 	
-	deltap.asy     ... plots - (Delta P)/P_ped versus q95
-	deltap0.asy    ... plots - (Delta_P)/P_0 versus q95
-	icoil.asy      ... plots RMP coil currents versus q95
-    pcoil.asy      ... plots RMP coil phases versus q95
-	drive.asy      ... plots chi values at edge and in core versus q95
+	deltap.asy    ... plots - (Delta P)/P_ped versus experimental time
+   	deltap0.asy   ... plots - (Delta_P)/P_0 versus experimental time
+	icoil.asy     ... plots RMP coil currents versus experimental time 
+    pcoil.asy     ... plots RMP coil phases versus experimental time
+	drive.asy     ... plots chi values at edge and in core versus experimental time
 
-	mirnovin.asy   ... plots reconstructed Mirnow signal on outboard midplane
-	minrovout.asy  ... plots reconstructed Mirnow signal on inboard midplane
+    deltapq.asy    ... plots - (Delta P)/P_ped versus q95
+	deltap0q.asy   ... plots - (Delta_P)/P_0 versus q95
+	icoilq.asy     ... plots RMP coil currents versus q95
+    pcoilq.asy     ... plots RMP coil phases versus q95
+	driveq.asy     ... plots chi values at edge and in core versus q95
+
+	mirnovin.asy   ... plots reconstructed Mirnov signal on outboard midplane
+	minrovout.asy  ... plots reconstructed Mirnov signal on inboard midplane

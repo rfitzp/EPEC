@@ -11,13 +11,14 @@
 
 // -c INTC     - override INTC value from namelist file
 // -e INTF     - override INTF value from namelist file
-// -f FREQ     - override FREQ value from namelist file
-// -h          - lists options
+// -f EXB      - override EXB value from namelist file
+// -h          - list options
 // -l LN       - override LN value from namelist file
 // -n NEUTRAL  - override NEUTRAL value from namelist file
 // -p INTP     - override INTP value from namelist file
 // -t TIME     - sets experimental time (ms)
 // -y YN       - override YN value from namelist file
+// -C CATS     - override CATS value from namelist file
 // -I IMPURITY - override IMPURITY value from namelist file
 // -N NN       - override NN value from namelist file
 // -T NTYPE    - override NTYPE value from namelist file
@@ -56,6 +57,9 @@
 // 1.15 - Added extra information to nFile
 // 1.16 - Added P0 to nFile
 // 1.17 - Added higher order derivatives of profiles
+// 1.18 - Added L_Ii_00 correction
+// 1.19 - Added Chii. Changed FREQ flag to EXB flag.
+// 1.20 - Added CATS flag
 
 // ################################################################
 
@@ -63,7 +67,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 17
+#define VERSION_MINOR 20
 
 #include <stdio.h>
 #include <math.h>
@@ -85,8 +89,9 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* FREQ, int* INTP, int* INTF, int* INTC, 
-			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN, double* TIME, double* COULOMB, int* NSMOOTH);
+extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* EXB, int* INTP, int* INTF, int* INTC, 
+			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN,
+			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS);
 
 // ############
 // Class header
@@ -103,27 +108,29 @@ class Neoclassical
   // ------------------
 
   // Read from Inputs/Neoclassical.nml
+  double COULOMB;  // Coulomb logarithm
   int    NSMOOTH;  // Number of smoothing cycles for higher devivatives of profiles
-  int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
-  int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
-  int    FREQ;     // Natural frequency switch:
-                   //                 If == +1 then use linear frequency derived from given ExB profile
-                   //                 If == +2 then use ExB frequency derived from given ExB profile
-                   //                 If == +3 then use nonlinear frequency derived from given ExB profile
-                   //                 If == -1 then use linear frequency derived from inferred ExB profile
-                   //                 If == -2 then use ExB frequency derived from inferred ExB profile
-                   //                 If == -3 then use nonlinear derived frequency from inferred ExB profile
+
   int    INTP;     // If != 0 then use interpolated pFile
   int    INTF;     // If != 0 then use interpolated fFile
   int    INTC;     // If != 0 then use interpolated cFile
+  int    CATS;     // If != 0 then use only linear interpolation for cFiles
+
+  int    EXB;      //  If == 0 then use ExB frequency profile from pFile
+                   //  If == 1 then use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical theory  
+
+  int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
+
+  int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
   int    NTYPE;    // If == 0 then neutral density distribution exponential. If == 1 then neutral density distribution Lorentzian.
   double NN;       // Flux-surface averaged majority neutral density at plasma boundary (PSI=1) (m^-3)
   double LN;       // Flux-surface averaged majority neutral density decay lengthscale (m)
   double SVN;      // Majority ion/neutral charge exchange rate constant (m^3 /s)
   double YN;       // Majority neutral peaking factor on flux-surfaces
   double EN;       // Ratio of majority neutral to ion temperatures
+
   double TIME;     // Experimental time (ms)
- 
+
   // ------------------
   // Physical constants
   // ------------------
@@ -132,7 +139,6 @@ class Neoclassical
   double mu_0;      // Magnetic permeability of free space (SI)
   double m_p;       // Mass of proton (SI)
   double m_e;       // Mass of electron (SI)
-  double COULOMB;   // Coulomb logarithm
 
   // -------------------------------
   // Adaptive integration parameters
@@ -158,7 +164,7 @@ class Neoclassical
   Array<double,1> psi;    // Normalized poloidal magnetic flux (0 at axis, 1 at lcfs)
   Array<double,1> rr;     // Flux-surface minor radius / a
   Array<double,1> dpsidr; // a dpsi/dr
-  double          PSILIM; // Maximum PSIN
+  double          PSIRAT; // Value of PsiN beyond which resonant surfaces ignored
 
   // -------------------
   // Plasma profile data
@@ -184,8 +190,9 @@ class Neoclassical
 
   // Read from Inputs/cFile
   Field Chip; // Perpendicular momentum diffusivity (m^2/s)
-  Field Chie; // Perpendicular energy   diffusivity (m^2/s)
+  Field Chie; // Perpendicular electron energy diffusivity (m^2/s)
   Field Chin; // Perpendicular particle diffusivity (m^2/s)
+  Field Chii; // Perpendicularion energy diffusivity (m^2/s)
 
   // Profile data interpolated onto equilibrium grid
   Array<double,1> n_e;    // Electron number density (m^-3)
@@ -208,8 +215,9 @@ class Neoclassical
   Array<double,1> Z_eff;  // Effective ion charge number
   Array<double,1> alpha;  // Impurity strength parameter
   Array<double,1> chip;   // Perpendicular momentum diffusivity (m^2 s^-1)
-  Array<double,1> chie;   // Perpendicular energy   diffusivity (m^2 s^-1)
+  Array<double,1> chie;   // Perpendicular electron energy diffusivity (m^2 s^-1)
   Array<double,1> chin;   // Perpendicular particle diffusivity (m^2 s^-1)
+  Array<double,1> chii;   // Perpendicular ion energy diffusivity (m^2 s^-1)
 
   Array<double,1> dn_edP1; // Electron number density 1st derivative in PsiN (m^-3)
   Array<double,1> dT_edP1; // Electron temperature 1st derivative in PsiN (J)
@@ -284,8 +292,9 @@ class Neoclassical
   Array<double,1> rhok;       // Relative mass densities
   Array<double,1> NNk;        // Flux-surfaced-averaged majority neutral number densities (m^-3)
   Array<double,1> chipk;      // Perpendicular momentum diffusivities (m^2/s)
-  Array<double,1> chiek;      // Perpendicular energy   diffusivities (m^2/s)
+  Array<double,1> chiek;      // Perpendicular electron energy diffusivities (m^2/s)
   Array<double,1> chink;      // Perpendicular particle diffusivities (m^2/s)
+  Array<double,1> chiik;      // Perpendicular ion energy diffusivities (m^2/s)
 
   Array<double,1> dnedP1k;    // Electron number density 1st derivative wrt PsiN (m^-3)
   Array<double,1> dTedP1k;    // Electron temperature 1st derivative wrt PsiN (J)
@@ -369,16 +378,15 @@ class Neoclassical
   Array<double,1> L_II_00;  // Neoclassical ion flow parameter
   Array<double,1> L_II_01;  // Neoclassical ion flow parameter
   Array<double,1> G_ii_00;  // Neoclassical ion flow parameter
+  Array<double,1> G_Ii_00;  // Neoclassical ion flow parameter
   Array<double,1> Q_00;     // Neoclassical electron flow parameter
 
-  // ........................
-  // Neoclassical frequencies
-  // ........................
-  Array<double,1> w_linear;     // Neoclassical frequencies from linear theory (rad/s)
-  Array<double,1> w_nonlinear;  // Neoclassical frequencies from nonlinear theory (rad/s)
-  Array<double,1> w_EB;         // Neoclassical frequencies assuming convection by ExB fluid (rad/s)
-  Array<double,1> w_actual;     // Actual neoclassical frequencies (rad/s)
-  Array<double,1> w_fac;        // Degree of island propagation in ion diamagnetic direction
+  // ...................
+  // Natural frequencies
+  // ...................
+  Array<double,1> w_linear;     // Natural frequencies from linear theory (rad/s)
+  Array<double,1> w_nonlinear;  // Natural frequencies from nonlinear theory (rad/s)
+  Array<double,1> w_EB;         // Natural frequencies assuming convection by ExB fluid (rad/s)
   
   // ----
   // Misc
@@ -394,8 +402,8 @@ class Neoclassical
   virtual ~Neoclassical () {}; // Destructor
 
   // Solve problem
-  void Solve  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
-	       int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME);            
+  void Solve  (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+	       int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);            
  
   // -----------------------
   // Private class functions
@@ -403,8 +411,8 @@ class Neoclassical
  private:
 
   // Read discharge parameters
-  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
-			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME);
+  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);
   // Read equilibrium data
   void Read_Equilibrium ();
   // Read profile data

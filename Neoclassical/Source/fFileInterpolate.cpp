@@ -127,7 +127,7 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
 {
   int ini; double inr;
 
-  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1;
+  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1, r13_1;
   int             NPSI_1, NTOR_1, nres_1;
   Array<double,1> v1_1, v2_1, v3_1;
   Array<int, 1>   mres_1;
@@ -135,7 +135,7 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
   Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
-  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0;
+  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
   Array<double,1> v1_0, v2_0, v3_0;
   Array<int, 1>   mres_0;
@@ -148,8 +148,8 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
   // ................
   FILE* file = OpenFiler (fFile1);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_1) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_1, &r13_1) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateLinear: Error reading fFile_1 (1)\n");
       exit (1);
@@ -258,6 +258,7 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
   r10_0 = r10_1;
   r11_0 = r11_1;
   r12_0 = r12_1;
+  r13_0 = r13_1;
 
   for (int j = 0; j < NPSI_0; j++)
     {
@@ -304,8 +305,8 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
   // ........................
   file = OpenFilew (fFile);
   
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e\n",
-	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
+	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0, r13_0);
   for (int j = 0; j < NPSI_0; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     v1_0(j), v2_0(j), v3_0(j));
@@ -339,7 +340,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
 {
   int ini; double inr;
 
-  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1;
+  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1, r13_1;
   int             NPSI_1, NTOR_1, nres_1;
   Array<double,1> v1_1, v2_1, v3_1;
   Array<int, 1>   mres_1;
@@ -347,7 +348,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
   Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
-  double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2;
+  double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2, r13_2;
   int             NPSI_2, NTOR_2, nres_2;
   Array<double,1> v1_2, v2_2, v3_2;
   Array<int, 1>   mres_2;
@@ -355,7 +356,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   Array<double,2> Freal_2, Fimag_2, Ereal_2, Eimag_2;
   Array<double,1> EIreal_2, EIimag_2, EOreal_2, EOimag_2;
  
-  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0;
+  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
   Array<double,1> v1_0, v2_0, v3_0;
   Array<int, 1>   mres_0;
@@ -368,8 +369,8 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   // ................
   FILE* file = OpenFiler (fFile1);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r11_2) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_2, &r13_1) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateQuadratic: Error reading fFile_1 (1)\n");
       exit (1);
@@ -446,8 +447,8 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   // .................
   file = OpenFiler (fFile2);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_2, &r2_2, &r3_2, &r4_2, &r5_2, &r6_2, &r7_2, &r8_2, &r9_2, &NPSI_2, &NTOR_2, &nres_2, &r10_2, &r11_2, &r12_2) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_2, &r2_2, &r3_2, &r4_2, &r5_2, &r6_2, &r7_2, &r8_2, &r9_2, &NPSI_2, &NTOR_2, &nres_2, &r10_2, &r11_2, &r12_2, &r13_2) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateQuadratic: Error reading fFile_2 (1)\n");
       exit (1);
@@ -579,6 +580,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   r10_0 = weight1 * r10_1 + weight2 * r10_2;
   r11_0 = weight1 * r11_1 + weight2 * r11_2;
   r12_0 = weight1 * r12_1 + weight2 * r12_2;
+  r13_0 = weight1 * r13_1 + weight2 * r13_2;
 
   for (int j = 0; j < NPSI_0; j++)
     {
@@ -625,8 +627,8 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   // ........................
   file = OpenFilew (fFile);
   
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e\n",
-	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
+	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0, r13_0);
   for (int j = 0; j < NPSI_0; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     v1_0(j), v2_0(j), v3_0(j));
@@ -662,7 +664,7 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
 {
   int ini; double inr;
 
-  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1;
+  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1, r13_1;
   int             NPSI_1, NTOR_1, nres_1;
   Array<double,1> v1_1, v2_1, v3_1;
   Array<int, 1>   mres_1;
@@ -670,7 +672,7 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
   Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
-  double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2;
+  double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2, r13_2;
   int             NPSI_2, NTOR_2, nres_2;
   Array<double,1> v1_2, v2_2, v3_2;
   Array<int, 1>   mres_2;
@@ -679,7 +681,7 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<double,2> Freal_2, Fimag_2, Ereal_2, Eimag_2;
   Array<double,1> EIreal_2, EIimag_2, EOreal_2, EOimag_2;
  
-  double          r1_3, r2_3, r3_3, r4_3, r5_3, r6_3, r7_3, r8_3, r9_3, r10_3, r11_3, r12_3;
+  double          r1_3, r2_3, r3_3, r4_3, r5_3, r6_3, r7_3, r8_3, r9_3, r10_3, r11_3, r12_3, r13_3;
   int             NPSI_3, NTOR_3, nres_3;
   Array<double,1> v1_3, v2_3, v3_3;
   Array<int, 1>   mres_3;
@@ -687,7 +689,7 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<double,2> Freal_3, Fimag_3, Ereal_3, Eimag_3;
   Array<double,1> EIreal_3, EIimag_3, EOreal_3, EOimag_3;
 
-  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0;
+  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
   Array<double,1> v1_0, v2_0, v3_0;
   Array<int, 1>   mres_0;
@@ -700,8 +702,8 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   // ................
   FILE* file = OpenFiler (fFile1);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_1) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_1, &r13_1) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateCubic: Error reading fFile_1 (1)\n");
       exit (1);
@@ -778,8 +780,8 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
   // .................
   file = OpenFiler (fFile2);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_2, &r2_2, &r3_2, &r4_2, &r5_2, &r6_2, &r7_2, &r8_2, &r9_2, &NPSI_2, &NTOR_2, &nres_2, &r10_2, &r11_2, &r12_2) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_2, &r2_2, &r3_2, &r4_2, &r5_2, &r6_2, &r7_2, &r8_2, &r9_2, &NPSI_2, &NTOR_2, &nres_2, &r10_2, &r11_2, &r12_2, &r13_2) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateCubic: Error reading fFile_2 (1)\n");
       exit (1);
@@ -857,8 +859,8 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
   // ................
   file = OpenFiler (fFile3);
   
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_3, &r2_3, &r3_3, &r4_3, &r5_3, &r6_3, &r7_3, &r8_3, &r9_3, &NPSI_3, &NTOR_3, &nres_3, &r10_3, &r11_3, &r12_3) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_3, &r2_3, &r3_3, &r4_3, &r5_3, &r6_3, &r7_3, &r8_3, &r9_3, &NPSI_3, &NTOR_3, &nres_3, &r10_3, &r11_3, &r12_3, &r13_3) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateCubic: Error reading fFile_3 (1)\n");
       exit (1);
@@ -1009,6 +1011,7 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
   r10_0 = weight1 * r10_1 + weight2 * r10_2 + weight3 * r10_3;
   r11_0 = weight1 * r11_1 + weight2 * r11_2 + weight3 * r11_3;
   r12_0 = weight1 * r12_1 + weight2 * r12_2 + weight3 * r12_3;
+  r13_0 = weight1 * r13_1 + weight2 * r13_2 + weight3 * r13_3;
   
   for (int j = 0; j < NPSI_0; j++)
     {
@@ -1055,8 +1058,8 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
   // ........................
   file = OpenFilew (fFile);
   
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e\n",
-	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
+	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0, r13_0);
   for (int j = 0; j < NPSI_0; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     v1_0(j), v2_0(j), v3_0(j));
@@ -1095,7 +1098,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 {
   int ini; double inr;
 
-  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1;
+  double          r1_1, r2_1, r3_1, r4_1, r5_1, r6_1, r7_1, r8_1, r9_1, r10_1, r11_1, r12_1, r13_1;
   int             NPSI_1, NTOR_1, nres_1;
   Array<double,1> v1_1, v2_1, v3_1;
   Array<int, 1>   mres_1;
@@ -1103,7 +1106,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
   Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
-  double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2;
+  double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2, r13_2;
   int             NPSI_2, NTOR_2, nres_2;
   Array<double,1> v1_2, v2_2, v3_2;
   Array<int, 1>   mres_2;
@@ -1111,7 +1114,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<double,2> Freal_2, Fimag_2, Ereal_2, Eimag_2;
   Array<double,1> EIreal_2, EIimag_2, EOreal_2, EOimag_2;
  
-  double          r1_3, r2_3, r3_3, r4_3, r5_3, r6_3, r7_3, r8_3, r9_3, r10_3, r11_3, r12_3;
+  double          r1_3, r2_3, r3_3, r4_3, r5_3, r6_3, r7_3, r8_3, r9_3, r10_3, r11_3, r12_3, r13_3;
   int             NPSI_3, NTOR_3, nres_3;
   Array<double,1> v1_3, v2_3, v3_3;
   Array<int, 1>   mres_3;
@@ -1120,7 +1123,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<double,2> Freal_3, Fimag_3, Ereal_3, Eimag_3;
   Array<double,1> EIreal_3, EIimag_3, EOreal_3, EOimag_3;
  
-  double          r1_4, r2_4, r3_4, r4_4, r5_4, r6_4, r7_4, r8_4, r9_4, r10_4, r11_4, r12_4;
+  double          r1_4, r2_4, r3_4, r4_4, r5_4, r6_4, r7_4, r8_4, r9_4, r10_4, r11_4, r12_4, r13_4;
   int             NPSI_4, NTOR_4, nres_4;
   Array<double,1> v1_4, v2_4, v3_4;
   Array<int, 1>   mres_4;
@@ -1129,7 +1132,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<double,2> Freal_4, Fimag_4, Ereal_4, Eimag_4;
   Array<double,1> EIreal_4, EIimag_4, EOreal_4, EOimag_4;
 
-  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0;
+  double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
   Array<double,1> v1_0, v2_0, v3_0;
   Array<int, 1>   mres_0;
@@ -1142,8 +1145,8 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   // ................
   FILE* file = OpenFiler (fFile1);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_1) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_1, &r2_1, &r3_1, &r4_1, &r5_1, &r6_1, &r7_1, &r8_1, &r9_1, &NPSI_1, &NTOR_1, &nres_1, &r10_1, &r11_1, &r12_1, &r13_1) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_1 (1)\n");
       exit (1);
@@ -1220,8 +1223,8 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   // .................
   file = OpenFiler (fFile2);
  
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_2, &r2_2, &r3_2, &r4_2, &r5_2, &r6_2, &r7_2, &r8_2, &r9_2, &NPSI_2, &NTOR_2, &nres_2, &r10_2, &r11_2, &r12_2) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_2, &r2_2, &r3_2, &r4_2, &r5_2, &r6_2, &r7_2, &r8_2, &r9_2, &NPSI_2, &NTOR_2, &nres_2, &r10_2, &r11_2, &r12_2, &r13_2) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_2 (1)\n");
       exit (1);
@@ -1298,8 +1301,8 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   // ................
   file = OpenFiler (fFile3);
   
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_3, &r2_3, &r3_3, &r4_3, &r5_3, &r6_3, &r7_3, &r8_3, &r9_3, &NPSI_3, &NTOR_3, &nres_3, &r10_3, &r11_3, &r12_3) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_3, &r2_3, &r3_3, &r4_3, &r5_3, &r6_3, &r7_3, &r8_3, &r9_3, &NPSI_3, &NTOR_3, &nres_3, &r10_3, &r11_3, &r12_3, &r13_3) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_3 (1)\n");
       exit (1);
@@ -1377,8 +1380,8 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   // .................
   file = OpenFiler (fFile4);
   
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &r1_4, &r2_4, &r3_4, &r4_4, &r5_4, &r6_4, &r7_4, &r8_4, &r9_4, &NPSI_4, &NTOR_4, &nres_4, &r10_4, &r11_4, &r12_4) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &r1_4, &r2_4, &r3_4, &r4_4, &r5_4, &r6_4, &r7_4, &r8_4, &r9_4, &NPSI_4, &NTOR_4, &nres_4, &r10_4, &r11_4, &r12_4, &r13_4) != 16)
     {
       printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_4 (1)\n");
       exit (1);
@@ -1541,7 +1544,8 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   r9_0  = weight1 * r9_1  + weight2 * r9_2  + weight3 * r9_3  + weight4 * r9_4;
   r10_0 = weight1 * r10_1 + weight2 * r10_2 + weight3 * r10_3 + weight4 * r10_4;
   r11_0 = weight1 * r11_1 + weight2 * r11_2 + weight3 * r11_3 + weight4 * r11_4;
-  r12_0 = weight1 * r12_1 + weight2 * r12_2 + weight3 * r12_3 + weight4 * r12_4;  
+  r12_0 = weight1 * r12_1 + weight2 * r12_2 + weight3 * r12_3 + weight4 * r12_4;
+  r13_0 = weight1 * r13_1 + weight2 * r13_2 + weight3 * r13_3 + weight4 * r13_4;  
  
   for (int j = 0; j < NPSI_0; j++)
     {
@@ -1588,8 +1592,8 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   // ........................
   file = OpenFilew (fFile);
   
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e\n",
-	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0);
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
+	   r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, NPSI_0, NTOR_0, nres_0, r10_0, r11_0, r12_0, r13_0);
   for (int j = 0; j < NPSI_0; j++)
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     v1_0(j), v2_0(j), v3_0(j));

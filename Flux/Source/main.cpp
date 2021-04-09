@@ -76,9 +76,10 @@ int main (int argc, char** argv)
   int c;
   char* nvalue = NULL; char* mvalue = NULL; char* Mvalue = NULL;
   char* tvalue = NULL; char* gvalue = NULL; char* pvalue = NULL;
+  char* Pvalue = NULL; char* rvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "hg:n:m:p:t:M:")) != -1)
+  while ((c = getopt (argc, argv, "hg:n:m:p:t:M:P:r:")) != -1)
     switch (c)
       {
       case 'h':
@@ -87,9 +88,11 @@ int main (int argc, char** argv)
 	printf ("-g INTG   - set interpolation flag INTG\n");
 	printf ("-n NTOR   - set toroidal mode number to NTOR\n");
 	printf ("-m MMIN   - set minumum poloidal mode number to MMIN\n");
-	printf ("-p PSILIM - set maximum PSIN for rational surface, PSILIM\n");
+	printf ("-p PSILIM - set maximum PsiN for safety-factor caclulation to PSILIM\n");
+	printf ("-r PSIRAT - set maximum PsiN for rational surface to PSIRAT\n");
 	printf ("-t TIME   - set experimental time to TIME\n");
 	printf ("-M MMAX   - set maximum poloidal mode number to MMAX\n");
+	printf ("-P PSIPED - set PsiNat top of pedestal to PSIPED\n");
 	exit (0);
      case 'g':
 	gvalue = optarg;
@@ -106,11 +109,17 @@ int main (int argc, char** argv)
       case 't':
 	tvalue = optarg;
 	break;
+      case 'r':
+	rvalue = optarg;
+	break;
       case 'M':
 	Mvalue = optarg;
 	break;
+      case 'P':
+	Pvalue = optarg;
+	break;
       case '?':
-	if (optopt == 'n' || optopt == 'm' || optopt == 'M' || optopt == 't' || optopt == 'g' || optopt == 'p')
+	if (optopt == 'n' || optopt == 'm' || optopt == 'M' || optopt == 't' || optopt == 'g' || optopt == 'p'  || optopt == 'r' || optopt == 'P')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -121,8 +130,8 @@ int main (int argc, char** argv)
 	abort ();
       }
 
-  int    _NTOR = -1, _MMIN   = -1, _MMAX = -1, _INTG = -1;
-  double _TIME = 0., _PSILIM = -1.;
+  int    _NTOR = -1, _MMIN   = -1,  _MMAX   = -1,  _INTG   = -1;
+  double _TIME = 0., _PSILIM = -1., _PSIPED = -1., _PSIRAT = -1.;
   
   if (nvalue != NULL)
     _NTOR = atoi (nvalue);
@@ -134,6 +143,10 @@ int main (int argc, char** argv)
     _TIME = double (atof (tvalue));
   if (pvalue != NULL)
     _PSILIM = double (atof (pvalue));
+  if (Pvalue != NULL)
+    _PSIPED = double (atof (Pvalue));
+  if (rvalue != NULL)
+    _PSIRAT = double (atof (rvalue));
   if (gvalue != NULL)
     _INTG = atoi (gvalue);
 
@@ -141,7 +154,7 @@ int main (int argc, char** argv)
   // Call program FLUX
   // .................
   Flux flux;
-  flux.Solve (_INTG, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM);
+  flux.Solve (_INTG, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT);
  
   return 0;
 }

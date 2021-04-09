@@ -13,7 +13,7 @@ real[] p  = A[2];
 pen s = solid + red + 4.;	
 draw(graph(t,i),s);
 
-ylimits (0., 2.5, Crop);
+//ylimits (0., 2.5, Crop);
 
 s = dotted + black + 1.;
 yequals (0., s);

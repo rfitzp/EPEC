@@ -1,26 +1,33 @@
 &PHASE_CONTROL
 	NFLOW  = 100   ! Number of flow harmonics
+
+ 	STAGE5 = 1     ! Flag for Stage5 calculation
 	INTF   = 0     ! Flag for fFile interpolation
 	INTN   = 0     ! Flag for nFile interpolation
 	INTU   = 0     ! Flag for uFile/mFile/lFile interpolation
+	NATS   = 0     ! Flag for linear only nFile interpolation
 	OLD    = 0     ! Flag for restarting old calculation
-	FREQ   = 0     ! Flag for island width dependent natural frequency
+
 	LIN    = 0     ! Flag for purely linear calculation
-	MID    = 1     ! Number of coils sets
-	COPT   = 0     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
+	FREQ   = 0     ! Flag for selecting natural frequency type
+
+	MID    = 3     ! Number of coils sets
+	COPT   = 1     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
                        !  0 - no optimization
                        !  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
                        !  2 - maximize drive at resonant surface closest to top of pedestal (unrestricted)
                        !  3 - maximize drive at resonant surface closest to top of pedestal and minimize drive at innermost resonant surface (unrestricted)
 	CORE   = 1.    ! Core drive minimization factor (0.0 = no minimization, 1.0 = complete minmization)
+
 	SCALE  = 2.    ! GPEC scalefactor
 	CHIR   = 4.    ! Maximum Chirikov parameter for vacuum islands
         HIGH   = 1     ! Flag for higher order transport analysis
 	RATS   = 1     ! Flag for linear-only interpolation of uFiles/mFiles/lFiles
+
 	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
-	STAGE5 = 0     ! Flag for Stage5 calculation
+
 	TSTART = 0.    ! Simulation start time (ms)
-	TEND   = 1.e2  ! Simulation end time (ms)
+	TEND   = 2.e3  ! Simulation end time (ms)
 	DT     = 0.01  ! Data recorded every DT ms
 &end
 

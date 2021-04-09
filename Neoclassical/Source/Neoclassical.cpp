@@ -3,8 +3,10 @@
 // PROGRAM ORGANIZATION:
 // 
 //        Neoclassical:: Neoclassical     ()
-// void   Neoclassical:: Solve            (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
-// void   Neoclassical:: Read_Parameters  (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF, double _YN, double _TIME)
+// void   Neoclassical:: Solve            (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+//			                   int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+// void   Neoclassical:: Read_Parameters  (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+// 				           int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
 // void   Neoclassical:: Read_Equilibrium ()
 // void   Neoclassical:: Read_Profiles    ()
 // void   Neoclassical:: Get_Derived      ()
@@ -17,10 +19,10 @@
 // void   Neoclassical:: RK4Adaptive      (double& x, Array<double,1>& y, double& h, 
 //			                    double& t_err, double acc, double S, int& rept,
 //			                    int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
-// void  Neoclassical:: RK4Fixed          (double& x, Array<double,1>& y, double h)
-// FILE* Neoclassical:: OpenFilew         (char* filename)
-// FILE* Neoclassical:: OpenFilew         (char* filename)
-// FILE* Neoclassical:: OpenFilea         (char* filename)
+// void   Neoclassical:: RK4Fixed         (double& x, Array<double,1>& y, double h)
+// FILE*  Neoclassical:: OpenFilew        (char* filename)
+// FILE*  Neoclassical:: OpenFilew        (char* filename)
+// FILE*  Neoclassical:: OpenFilea        (char* filename)
 
 #include "Neoclassical.h"
 
@@ -53,11 +55,11 @@ Neoclassical::Neoclassical ()
 // ##############
 // Solve problem
 // ##############
-void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
-			  int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+			  int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
 {
   // Read discharge parameters
-  Read_Parameters (_NEUTRAL, _IMPURITY, _FREQ, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME);
+  Read_Parameters (_NEUTRAL, _IMPURITY, _EXB, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME, _CATS);
   
   // Read equilibrium data
   Read_Equilibrium ();
@@ -84,36 +86,43 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int
 // ####################################
 // Read Neoclassical control parameters
 // ####################################
-void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int _INTP, int _INTF,
-				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
 {
   // Set default values of control parameters
-  IMPURITY = 1;
-  NEUTRAL  = 1;
-  FREQ     = 0;
+  EXB     = 0;
+
   INTP     = 0;
   INTF     = 0;
   INTC     = 0;
+
+  IMPURITY = 1;
+
+  NEUTRAL  = 1;
   NTYPE    = 0;
   NN       = 0.;
   LN       = 1.;
   SVN      = 0.;
   YN       = 1.;
   EN       = 0.;
+
+  CATS     = 0;
+
   TIME     = 0.;
+
   COULOMB  = 17.;
   NSMOOTH  = 100;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &FREQ, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH);
+  NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH, &CATS);
 
   // Override namelist values with command line option values
   if (_NEUTRAL > -1)
     NEUTRAL = _NEUTRAL;
   if (_IMPURITY > -1)
     IMPURITY = _IMPURITY;
-  if (_FREQ != -999999)
-    FREQ = _FREQ;
+  if (_EXB != -999999)
+    EXB = _EXB;
   if (_TIME > 0.)
     TIME = _TIME;
   if (_NTYPE > -1)
@@ -130,14 +139,16 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
     INTF = _INTF;
   if (_INTC > -1)
     INTC = _INTC;
+  if (_CATS > -1)
+    CATS = _CATS;
 
   // Output input parameters
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d\n",
-	  IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH);
+  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d\n",
+	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS);
 
   // Sanity check
   if (YN < 0.)
@@ -170,9 +181,9 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
        printf ("NEOCLASSICAL::Read_Parameters: Error invalid NTYPE value\n");
        exit (1);
      }
-  if (abs (FREQ) > 3 || FREQ == 0)
+  if (EXB < 0 || EXB > 1)
     {
-      printf ("NEOCLASSICAL::Read_Parameters: Error invalid FREQ value\n");
+      printf ("NEOCLASSICAL::Read_Parameters: Error invalid EXB value\n");
       exit (1);
     }
    
@@ -181,8 +192,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d\n",
-	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -190,8 +201,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _FREQ, int 
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d FREQ = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d\n",
-	   IMPURITY, NEUTRAL, FREQ, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH);
+  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS);
   fclose (monitor);
 }
 
@@ -264,8 +275,8 @@ void Neoclassical::Read_Equilibrium ()
   // Read parameters
   FILE* file = OpenFiler ((char*) "Inputs/fFile");
   double in;
-  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf",
-	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres, &PSILIM, &in, &in) != 15)
+  if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %d %d %d %lf %lf %lf %lf",
+	      &R_0, &B_0, &a, &in, &in, &in, &in, &in, &in, &NPSI, &ntor, &nres, &in, &in, &in, &PSIRAT) != 16)
     {
       printf ("NEOCLASSICAL::Read_Equilibrium: Error reading fFile (1)\n");
       exit (1);  
@@ -531,7 +542,7 @@ void Neoclassical::Read_Profiles ()
   // Output profiles
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/profiles.txt");
   for (int j = 0; j < NPSI; j++)
-    if (psi(j) < PSILIM)
+    if (psi (j) < PSIRAT)
       fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       psi (j), rr (j),
 	       n_e (j) /1.e19, dn_edr (j) /1.e19, T_e (j) /1.e3/e, dT_edr (j) /1.e3/e,
@@ -541,9 +552,8 @@ void Neoclassical::Read_Profiles ()
 	       dn_edP1 (j) /1.e19, dT_edP1 (j) /1.e3/e, dn_idP1 (j) /1.e19, dT_idP1 (j) /1.e3/e,
 	       dn_edP2 (j) /1.e19, dT_edP2 (j) /1.e3/e, dn_idP2 (j) /1.e19, dT_idP2 (j) /1.e3/e,
 	       dn_edP3 (j) /1.e19, dT_edP3 (j) /1.e3/e, dn_idP3 (j) /1.e19, dT_idP3 (j) /1.e3/e);
-  
   fclose (file);
-
+  
   // Interpolate cFiles
   if (INTC != 0)
     {
@@ -604,25 +614,29 @@ void Neoclassical::Read_Profiles ()
   chip.resize (NPSI);
   chie.resize (NPSI);
   chin.resize (NPSI);
+  chii.resize (NPSI);
     
   chip (0)      = Chip.GetY (0);
   chie (0)      = Chie.GetY (0);
   chin (0)      = Chin.GetY (0);
+  chii (0)      = Chii.GetY (0);
   chip (NPSI-1) = Chip.GetY (Chip.GetN()-1);
   chie (NPSI-1) = Chie.GetY (Chie.GetN()-1);
   chin (NPSI-1) = Chin.GetY (Chin.GetN()-1);
+  chii (NPSI-1) = Chii.GetY (Chii.GetN()-1);
 
   for (int j = 1; j < NPSI-1; j++)
     {
       chip (j) = InterpolateField (Chip, psi (j), 0);
       chie (j) = InterpolateField (Chie, psi (j), 0);
       chin (j) = InterpolateField (Chin, psi (j), 0);
+      chii (j) = InterpolateField (Chii, psi (j), 0);
     }
 
-  // Output perpendicular diffusivity
+  // Output perpendicular diffusivities
   file = OpenFilew ((char*) "Outputs/Stage3/chip.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", psi (j), rr (j), chip (j), chie (j), chin (j));
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", psi (j), rr (j), chip (j), chie (j), chin (j), chii (j));
   fclose (file);
 }
 
@@ -649,6 +663,7 @@ void Neoclassical::Get_Derived ()
   alphak.resize (nres); rhok.resize   (nres);
   NNk.resize    (nres); chipk.resize  (nres);
   chiek.resize  (nres); chink.resize  (nres);
+  chiik.resize  (nres);
 
   dnedP1k.resize (nres); dTedP1k.resize (nres); dnidP1k.resize (nres); dTidP1k.resize (nres);
   dnedP2k.resize (nres); dTedP2k.resize (nres); dnidP2k.resize (nres); dTidP2k.resize (nres);
@@ -681,6 +696,7 @@ void Neoclassical::Get_Derived ()
       chipk  (j) = Interpolate (NPSI, rr, chip,   rk (j), 0);
       chiek  (j) = Interpolate (NPSI, rr, chie,   rk (j), 0);
       chink  (j) = Interpolate (NPSI, rr, chin,   rk (j), 0);
+      chiik  (j) = Interpolate (NPSI, rr, chii,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
 
       dnedP1k (j) = Interpolate (NPSI, psi, dn_edP1, rk (j), 0);
@@ -716,8 +732,8 @@ void Neoclassical::Get_Derived ()
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
  
-      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e wE = %10.3e wt = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e\n",
-	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, wtk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j));
+      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e wE = %10.3e wt = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e chii = %10.3e\n",
+	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, wtk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j), chii(j));
     }
 
   if (IMPURITY == 0)
@@ -764,11 +780,11 @@ void Neoclassical::Get_Derived ()
 
   for (int j = 0; j < nres; j++)
     {
-      nu_eek    (j) = (4./3./sqrt(M_PI)) * (4.*M_PI) * nek (j) * e*e*e*e * COULOMB
+      nu_eek (j) = (4./3./sqrt(M_PI)) * (4.*M_PI) * nek (j) * e*e*e*e * COULOMB
 	/(4.*M_PI*epsilon_0)/(4.*M_PI*epsilon_0) /m_e/m_e /v_T_ek (j)/v_T_ek (j)/v_T_ek (j);
-      nu_iik    (j) = (4./3./sqrt(M_PI)) * (4.*M_PI) * nik (j) * e*e*e*e * ZI*ZI*ZI*ZI * COULOMB
+      nu_iik (j) = (4./3./sqrt(M_PI)) * (4.*M_PI) * nik (j) * e*e*e*e * ZI*ZI*ZI*ZI * COULOMB
 	/(4.*M_PI*epsilon_0)/(4.*M_PI*epsilon_0) /(AI*m_p) /(AI*m_p) /v_T_ik (j)/v_T_ik (j)/v_T_ik (j);
-      nu_IIk    (j) = (4./3./sqrt(M_PI)) * (4.*M_PI) * nIk (j) * e*e*e*e * ZII*ZII*ZII*ZII * COULOMB
+      nu_IIk (j) = (4./3./sqrt(M_PI)) * (4.*M_PI) * nIk (j) * e*e*e*e * ZII*ZII*ZII*ZII * COULOMB
 	/(4.*M_PI*epsilon_0)/(4.*M_PI*epsilon_0) /(AII*m_p) /(AII*m_p) /v_T_Ik (j)/v_T_Ik (j)/v_T_Ik (j);
     }
 
@@ -780,7 +796,7 @@ void Neoclassical::Get_Derived ()
   for (int j = 0; j < nres; j++)
     {
       WcritTek (j) = pow (chiek (j) /v_T_ek (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
-      WcritTik (j) = pow (chiek (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
+      WcritTik (j) = pow (chiik (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
       Wcritnek (j) = pow (chink (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
     }
 
@@ -920,7 +936,7 @@ void Neoclassical::Get_Parameters ()
   L_ii_00.resize (nres); L_ii_01.resize (nres); L_iI_00.resize (nres);
   L_iI_01.resize (nres); L_Ii_00.resize (nres); L_Ii_01.resize (nres);
   L_II_00.resize (nres); L_II_01.resize (nres); G_ii_00.resize (nres);
-  Q_00.resize    (nres); 
+  G_Ii_00.resize (nres); Q_00.resize    (nres); 
  
   // ........................
   // Calculate ion parameters
@@ -1030,6 +1046,7 @@ void Neoclassical::Get_Parameters ()
       L_II_00 (j) = gsl_matrix_get (L, 2, 2);
       L_II_01 (j) = gsl_matrix_get (L, 2, 3);
       G_ii_00 (j) = gsl_matrix_get (invH, 0, 0) * SVN * NNk (j) /nu_iik (j);
+      G_Ii_00 (j) = gsl_matrix_get (invH, 2, 0) * SVN * NNk (j) /nu_iik (j);
             
       gsl_matrix_free      (H);
       gsl_matrix_free      (G);
@@ -1060,16 +1077,16 @@ void Neoclassical::Get_Parameters ()
       gsl_matrix_free (Q);
       gsl_permutation_free (pp);
       
-     printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  G_ii = %10.3e  Q_00 = %10.3e\n",
-	     mk (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),  L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), Q_00 (j));
+     printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  G_ii = %10.3e  G_Ii = %10.3e  Q_00 = %10.3e\n",
+	     mk (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),  L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j), Q_00 (j));
     }
 
   // Output parameters
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/parameters.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     rk (j), eta_ik (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),
-	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), Q_00 (j));
+	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j), Q_00 (j));
   fclose (file);
 }
 
@@ -1081,9 +1098,8 @@ void Neoclassical::Get_Frequencies ()
   // .....................
   // Calculate frequencies
   // .....................
-  w_linear.resize    (nres); w_nonlinear.resize (nres); w_EB.resize    (nres);
-  w_actual.resize    (nres); w_fac.resize       (nres); w_nc_ik.resize (nres);
-  w_nc_Ik.resize     (nres); w_E_Ik.resize      (nres);
+  w_linear.resize (nres); w_nonlinear.resize (nres); w_EB.resize   (nres);
+  w_nc_ik.resize  (nres); w_nc_Ik.resize     (nres); w_E_Ik.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -1092,14 +1108,15 @@ void Neoclassical::Get_Frequencies ()
 		    + L_II_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j)
 	            + L_Ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j);
 
-      w_E_Ik (j) = wtk (j) - w_ast_Ik (j) - Kthek (j) * w_nc_Ik (j);
+      w_E_Ik (j) = (wtk (j) - w_ast_Ik (j) - Kthek (j) * w_nc_Ik (j)) /(1. - Kthek (j) * G_Ii_00 (j));
 
-      if (FREQ > 0)
+      if (EXB == 0)
 	{
-	  w_nc_ik (j) = - G_ii_00 (j) * wEk (j) - L_ii_00 (j) * w_ast_ik (j)
-	    - L_iI_00 (j) * w_ast_Ik (j)
-	    + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
-	    + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+	  w_nc_ik (j) = - G_ii_00 (j) * wEk (j)
+	                - L_ii_00 (j) * w_ast_ik (j)
+	                - L_iI_00 (j) * w_ast_Ik (j)
+	                + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 	  
 	  w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
 	  w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j) + w_nc_ik (j));
@@ -1107,27 +1124,19 @@ void Neoclassical::Get_Frequencies ()
 	}
       else
 	{
-	  w_nc_ik (j) = - G_ii_00 (j) * w_E_Ik (j) - L_ii_00 (j) * w_ast_ik (j)
-	    - L_iI_00 (j) * w_ast_Ik (j)
-	    + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
-	    + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+	  w_nc_ik (j) = - G_ii_00 (j) * w_E_Ik (j)
+	                - L_ii_00 (j) * w_ast_ik (j)
+	                - L_iI_00 (j) * w_ast_Ik (j)
+	                + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 	  
 	  w_linear    (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ek (j));
 	  w_nonlinear (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ik (j) + w_nc_ik (j));
 	  w_EB        (j) = - double (ntor) * (w_E_Ik (j));
 	}
 
-      if (abs (FREQ) == 1)
-	w_actual (j) = w_linear    (j);
-      else if (abs (FREQ) == 2)
-	w_actual (j) = w_EB        (j);
-      else
-	w_actual (j) = w_nonlinear (j);
-
-      w_fac (j) = (w_actual (j)  - w_EB (j)) /(w_linear (j) - w_EB (j));
-      
-      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e  w_actual = %11.4e  fac = %11.4e\n",
-	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_actual (j) /1.e3, w_fac (j));
+      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e\n",
+	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3);
     }
 
   // ..................
@@ -1135,9 +1144,9 @@ void Neoclassical::Get_Frequencies ()
   // ..................
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk (j), w_actual (j) /1.e3, wEk (j) /1.e3, w_E_Ik (j) /1.e3,
-	     wtk (j) /1.e3, w_ast_Ik (j) /1.e3, Kthek (j) * w_nc_Ik (j) /1.e3);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk (j), wEk (j) /1.e3, w_E_Ik (j) /1.e3,
+	     wtk (j) /1.e3, w_ast_Ik (j) /1.e3, Kthek (j) * (- G_Ii_00 (j) * w_E_Ik (j) + w_nc_Ik (j)) /1.e3);
   fclose (file);
 }
 
@@ -1155,19 +1164,18 @@ void Neoclassical::Get_Normalized ()
       double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
 	/ (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
       double Sk  = tau_Rk (j) * Q_00 (j) /tau_A;
-      double wk  = w_actual (j) * tau_A;
       double wkl = w_linear (j) * tau_A;
       double wke = w_EB (j) * tau_A;
       double wkn = w_nonlinear (j) * tau_A;
       double tm  = tau_Mk (j) /tau_A;
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
-      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e w0 = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
-	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, dk);
+      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
+	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, dk);
 
-      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
-	       a /R_0,                      Sk,                          wk,                         tm,                        th,
+	       a /R_0,                      Sk,                          tm,                         th,
 	       sqrt (qk (j)/gk (j)/sk (j)), dk,                          wkl,                        wke,                       wkn, 
 	       dnedrk (j) /1.e19,           dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),              WcritTik (j),
 	       akk (j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                 nek (j) /1.e19,
@@ -1191,20 +1199,22 @@ void Neoclassical::Get_Normalized ()
 	  double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
 	    / (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
 	  double Sk  = tau_Rk (j) * Q_00 (j) /tau_A;
-	  double wk  = w_actual (j) * tau_A;
 	  double wkl = w_linear (j) * tau_A;
 	  double wke = w_EB (j) * tau_A;
 	  double wkn = w_nonlinear (j) * tau_A;
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
-	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	       mk (j), ntor, rk (j), qk (j), rhok (j), a /R_0, Sk, wk, tm, th, sqrt (qk (j)/gk (j)/sk (j)), dk, wkl, wke, wkn, 
-	       dnedrk (j) /1.e19, dTedrk (j) /e/1.e3, Wcritnek (j), WcritTek (j), WcritTik (j), akk(j), gk (j), dPsidr (j), PsiNk (j),
-	       nek (j) /1.e19, nik (j) /1.e19, Tek (j) /e/1.e3, Tik (j) /e/1.e3, dnidrk (j) /1.e19, dTidrk (j) /e/1.e3,
-	       Factor1 (j) /1.e19/e/1.e3,  Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
-	       Factor5 (j) /1.e19/e/1.e3,  Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-	       Factor9 (j) /1.e19/e/1.e3,  Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
+	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		   mk (j),                     ntor,                        rk (j),                     qk (j),                     rhok (j),
+		   a /R_0,                     Sk,                          tm,                         th,                         sqrt (qk (j)/gk (j)/sk (j)),
+		   dk,                         wkl,                         wke,                        wkn, 
+		   dnedrk (j) /1.e19,          dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),               WcritTik (j),
+		   akk(j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                  nek (j) /1.e19,
+		   nik (j) /1.e19,             Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
+		   Factor1 (j) /1.e19/e/1.e3,  Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
+		   Factor5 (j) /1.e19/e/1.e3,  Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
+		   Factor9 (j) /1.e19/e/1.e3,  Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
 	}
       fclose (file);
 

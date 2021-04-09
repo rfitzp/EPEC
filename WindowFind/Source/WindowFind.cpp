@@ -158,7 +158,7 @@ void WindowFind ()
   // ..............
   double IRMP = ISTART;
   char   ISLANDstring[MAXCOMMANDLINELENGTH];
-  double a, b, c, Q[5000], P[5000];
+  double a, b, c, d, Q[5000], P[5000];
 
   do
     {
@@ -179,7 +179,7 @@ void WindowFind ()
       // Extract RMP window data
       FILE* file = fopen ("../IslandDynamics/Outputs/Stage6/deltap.txt", "r");
       int i = -1;
-      while (fscanf (file, "%lf %lf %lf", &a, &b, &c) == 3)
+      while (fscanf (file, "%lf %lf %lf %lf", &a, &b, &c, &d) == 4)
 	{
 	  i++;
 	  Q[i] = b;
