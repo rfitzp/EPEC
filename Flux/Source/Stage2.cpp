@@ -69,8 +69,8 @@ void Flux::Stage2 ()
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i]);
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i]);
   for (int i = 0; i < nres; i++)
     for (int j = 0; j < nres; j++)
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
@@ -96,8 +96,8 @@ void Flux::Stage2 ()
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
       for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i]);
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i]);
       for (int i = 0; i < nres; i++)
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
@@ -155,9 +155,9 @@ void Flux::Stage2 ()
 
   gsl_matrix_free (Bnc); gsl_matrix_free (Cnc);
  
-  delete[] I1;    delete[] I2;    delete[] I3;    
+  delete[] I1;    delete[] I2;    delete[] I3;  delete[] I7;   
   delete[] Ktres; delete[] Kares; delete[] ajj; delete[] dPsidr;
-  delete[] Khres;
+  delete[] Khres; delete[] q_hat;
 
   gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
   
@@ -964,14 +964,16 @@ void Flux::Stage2CalcNeoclassicalPara ()
   I4     = gsl_matrix_alloc (nres, NNC);
   I5     = gsl_matrix_alloc (nres, NNC);
   I6     = gsl_matrix_alloc (nres, NTHETA);
+  I7     = new double[nres];
   Ktres  = new double[nres];
   Kares  = new double[nres];
   Khres  = new double[nres];
   ajj    = new double[nres];
   dPsidr = new double[nres];
+  q_hat  = new double[nres];
 
   // ......................................................
-  // Calculate neoclassical parameters at rational surfaces
+  // Calculate neoclassical parameters at rational surfaces 
   // ......................................................
   printf ("Calculating neoclassical parameters at rational surfaces:\n");
   double sum;
@@ -1057,6 +1059,15 @@ void Flux::Stage2CalcNeoclassicalPara ()
 	  gsl_matrix_set (I6, i, k, sum);
 	}
 
+      // Calculate I7
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) * gsl_matrix_get (Rnc, i, j) * gsl_matrix_get (Rnc, i, j)
+	  /gsl_matrix_get (Bnc, i, j);
+      sum /= 2.*M_PI;
+      
+      I7[i] = sum;
+
       // Calculate fraction of circulating particles
       sum = 0.;
       for (int k = 0; k < NTHETA; k++)
@@ -1085,17 +1096,25 @@ void Flux::Stage2CalcNeoclassicalPara ()
 
       // Calculate dPsidr values
       dPsidr[i] = rres[i] * gres[i] /qres[i] /fabs(Psic);
+
+      // Calculate q_hat values
+      q_hat[i] = (qres[i] /rres[i]) * sqrt ((1. - I1[i]*I1[i] * gres[i] /I7[i] /gmres[i] /qres[i]) /2./ajj[i]);
+      if (isnan(q_hat[i]))
+	{
+	  printf ("PHASE::STAGE2 - Error q_hat[%2d] is NaN\n", i);
+	  exit (1);
+	}
     }
 
   // ..............................
   // Output neoclassical parameters
   // ..............................
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d I1 = %11.4e I2 = %11.4e I3 = %11.4e I4 = (%11.4e; %11.4e) I5 = (%11.4e; %11.4e) Kt = %11.4e Ka = %11.4e Kh = %11.4e fc = %11.4e ajj = %11.4e dPsiNdr = %11.4e\n",
+    printf ("mpol = %3d I1 = %11.4e I2 = %11.4e I3 = %11.4e I4 = (%11.4e; %11.4e) I5 = (%11.4e; %11.4e) Kt = %11.4e Ka = %11.4e Kh = %11.4e fc = %11.4e ajj = %11.4e dPsiNdr = %11.4e q_hat = %11.4e\n",
 	    mres[i], I1[i], I2[i], I3[i],
 	    gsl_matrix_get (I4, i, 0), gsl_matrix_get (I4, i, NNC-1),
 	    gsl_matrix_get (I5, i, 0), gsl_matrix_get (I5, i, NNC-1),
-	    Ktres[i], Kares[i], Khres[i], fcres[i], ajj[i], dPsidr[i]);
+	    Ktres[i], Kares[i], Khres[i], fcres[i], ajj[i], dPsidr[i], q_hat[i]);
 }
 
 // ############################

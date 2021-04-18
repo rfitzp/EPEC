@@ -1,0 +1,146 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\def\vecsign{\mathchar"017E}
+\def\dvecsign{\smash{\stackon[-2.3pt]{\vecsign}{\rotatebox{180}{$\vecsign$}}}}
+\def\dvec#1{\def\useanchorwidth{T}\stackon[-4.2pt]{#1}{\,\dvecsign}}
+\usepackage{stackengine}
+\stackMath
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{\bf Linear Layer Physics}
+\date{\today}
+\author{Richard Fitzpatrick}
+
+\begin{document}
+\maketitle
+
+\section{Fundamental Quantities}
+\begin{description}
+\item Layer width - $\delta$
+\item Layer tearing stability index - ${\mit\Delta}$
+\item Poloidal mode number - $m$
+\item Toroidal mode number - $n$
+\item Major radius - $R_0$
+\item Minor radius - $r$
+\item Toroidal magnetic field-strength - $B_0$
+\item Magnetic shear - $s$
+\item Electrostatic potential - ${\mit\Phi}$
+\item Poloidal magnetic flux - $\psi$
+\item Magnitude of electron charge - $e$
+\item Electron mass - $m_e$
+\item Electron number density - $n_e$
+\item Electron temperature - $T_e$
+\item Ion mass - $m_i$
+\item Ion number density - $n_i$
+\item Ion temperature - $T_i$
+\item Parallel electrical resistivity - $\eta_\parallel$ 
+\item Perpendicular particle diffusivity - $D_\perp$
+\item Perpendicular energy diffusivity - $\chi_E$
+\item Perpendicular momentum diffusivity - $\chi_\phi$ 
+\end{description}
+
+\section{Derived Quantities}
+\begin{description}
+\item Safety-factor - $q=m/n$
+\item Scale length - $l = R_0\,q/s$ 
+\item Electron pressure - $p_e = n_e\,T_e$
+\item Ion pressure - $p_i = n_i\,T_i$
+\item Alfv\'{e}n velocity - $v_A = B_0/\sqrt{\mu_0\,n_e\,m_i}$
+\item Alfv\'{e}n time - $\tau_A= l/v_A =m\,\tau_H$
+\item Hydromagnetic time - $\tau_H =R_0/(n\,s\,v_A)$
+\item Resistive time - $\tau_R = \mu_0\,r^{\,2}/\eta_\parallel$
+\item Particle/energy confinement time - $\tau_E= r^{\,2}/[D_\perp + (2/3)\,\chi_E]$
+\item Momentum confinement time - $\tau_M = r^{\,2}/\chi_\phi$
+\item Ion sound radius - $\rho_s = \sqrt{m_i\,T_e}/(e\,B_0)$
+\item ${\bf E}\times {\bf B}$ frequency - $\omega_E = d{\mit\Phi}/d\psi$
+\item Electron diamagnetic frequency - $\omega_{\ast\,e} = (T_e/e)\,d\ln p_e/d\psi$
+\item Ion diamagnetic frequency - $\omega_{\ast\,i} =- (T_i/e)\,d\ln p_i/d\psi$
+\item ${\bf E}\times {\bf B}$ velocity - $v_E = (r/q)\,\omega_E$
+\item Electron diamagnetic velocity -  $v_{\ast\,e} = (r/q)\,\omega_{\ast\,e}$
+\item Ion diamagnetic velocity -  $v_{\ast\,i} = (r/q)\,\omega_{\ast\,i}$
+\end{description}
+
+\section{Non-dimensional Quantities}
+\begin{description}
+\item Lundquvist number - $S=\tau_R/\tau_H$
+\item Magnetic Prandtl number - $P_M = \tau_R/\tau_M$
+\item Energy confinement number - $P_E = \tau_R/\tau_E$
+\end{description}
+
+\section{Layer Theory Quantities}
+\begin{description}
+\item 
+$$
+\left(\frac{k}{\eta}\right)^{1/3} = S^{\,1/3}\,\frac{l}{r}
+$$
+\item
+$$
+\tau = -\frac{\omega_{\ast\,i}}{\omega_{\ast\,e}}
+$$
+\item
+$$
+ c_\beta^{\,2} = P_E
+ $$
+ \item
+ $$
+ P=P_M
+ $$
+\item 
+$$
+D= \frac{5}{3}\,S^{\,1/3}\,\frac{\rho_s}{r}
+$$ 
+\item 
+$$
+Q_E= S^{\,1/3}\,n\,\omega_E\,\tau_H
+$$
+\item 
+$$
+Q_{e,i}= -S^{\,1/3}\,n\,\omega_{\ast\,e,i}\,\tau_H
+$$
+\item 
+$$
+{\mit\Delta} = \frac{\delta}{r}\,\tau_R\,{\rm i}\,n\,(\omega_E-\omega_{\ast\,i})
+$$
+\item 
+$$
+\hat{\mit\Delta} = \left(\frac{\eta}{k}\right)^{1/3} \,\frac{l}{r}\,{\mit\Delta}
+$$
+
+\section{Constant-$\psi$ Layer Physics}
+Layer equation:
+$$
+\frac{d^{\,2}\,Y}{dp^{\,2}} -\left[\frac{-Q_E\,(Q_E-Q_i)+{\rm i}\,(Q_E-Q_i)\,(P_M+P_E)\,p^{\,2}+
+P_M\,P_E\,p^{\,4}}
+{{\rm i}\,(Q_E-Q_e) +\{P_E + {\rm i}\,(Q_E-Q_i)\,D^{\,2}\}\,p^{\,2}+(1+\tau)\,P_M\,D^{\,2}\,p^{\,4}}
+\right] p^{\,2}\, Y = 0.
+$$
+Suppose that small-$p$ behavior of solution that is well-behaved as $p\rightarrow \infty$ is
+$$
+Y(p) = Y_0\left[1 - c\,p+{\cal O}(p^{\,2})\right].
+$$
+Layer width is 
+$$
+\frac{\delta}{r} = \frac{\pi\,|c|}{S^{\,1/3}}.
+$$
+Large-$p$ limit of layer equation
+is
+$$
+\frac{d^{\,2}\,Y}{dp^{\,2}} - C\, p^{\,2}\, Y = 0,
+$$
+where
+$$
+C = \frac{P_E}{(1+\tau)\,D^{\,2}}.
+$$
+Solutions are
+$$
+p^{\,1/2}\,I_{1/4}\left(\frac{C^{\,1/2}\,p^{\,2}}{2}\right),~~ p^{\,1/2}\,K_{1/4}\left(\frac{C^{\,1/2}\,p^{\,2}}{2}\right).
+$$
+Should need to integrate to $p\sim C^{\,-1/4}$. 
+
+
+
+\end{description}
+
+\end{document}

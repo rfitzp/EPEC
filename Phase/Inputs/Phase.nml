@@ -10,6 +10,7 @@
 
 	LIN    = 0     ! Flag for purely linear calculation
 	FREQ   = 0     ! Flag for selecting natural frequency type
+	FFAC   = 0.    ! Parameter for selecting natural frequency (FREQ = 1)
 
 	MID    = 3     ! Number of coils sets
 	COPT   = 1     ! Switch for optimaiztion of relative amplitudes/phases of coils currents

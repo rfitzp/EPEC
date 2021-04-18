@@ -167,7 +167,7 @@ void Neoclassical::pFileRead ()
 	{
 	  // Read omeg field (assumed units krad/s)
 	  wt_flag = 1;
-	  printf ("Reading omeg from pFile - n = %4d:\n", n);
+	  printf ("Reading omeg  from pFile - n = %4d:\n", n);
 	  wt.resize (n);
 	  for (int i = 0; i < n; i++)
 	    {

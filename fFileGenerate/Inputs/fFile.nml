@@ -7,7 +7,7 @@
  	FLUX_PSIRAT  = 0.995   ! Ignore rational surfaces for PsiN > PSIRAT in FLUX
         FLUX_PSIPED  = 0.925   ! PsiN value at top of pedestal in FLUX
 
-	NEO_INTF     = 1       ! If != 0 then do not call FLUX and interpolate fFiles in NEOCLASSICAL
+	NEO_INTF     = 0       ! If != 0 then do not call FLUX and interpolate fFiles in NEOCLASSICAL
 	NEO_INTC     = 1       ! If != 0 then interpolate cFiles in NEOCLASSICAL
 	NEO_CATS     = 1       ! If != 0 then use only linear interpolation for cFiles in NEOCLASSICAL 
 

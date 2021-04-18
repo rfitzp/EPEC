@@ -33,9 +33,10 @@ int main (int argc, char** argv)
   char* mvalue = NULL; char* Tvalue = NULL; char* cvalue = NULL;
   char* ivalue = NULL; char* rvalue = NULL; char* Hvalue = NULL;
   char* Cvalue = NULL; char* Dvalue = NULL; char* Nvalue = NULL;
+  char* Gvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:G:")) != -1)
     switch (c)
       {
       case 'f':
@@ -58,6 +59,7 @@ int main (int argc, char** argv)
 	printf ("-C COPT   - set coil current optimization flag to COPT\n");
 	printf ("-D CORE   - set core minimization factor to CORE\n");
 	printf ("-F FREQ   - set natural frequency selection flag to FREQ\n");
+	printf ("-G FFAC   - set natural frequency selection parameter to FFAC\n");
 	printf ("-H HIGH   - set higher order transport calculation enabling flag to HIGH\n");
 	printf ("-N NATS   - set linear only nFiles interpolation flag to NATS\n");
 	printf ("-S SCALE  - set GPEC scalefactor to SCALE\n");	
@@ -114,6 +116,9 @@ int main (int argc, char** argv)
       case 'N':
 	Nvalue = optarg;
  	break;
+      case 'G':
+	Gvalue = optarg;
+ 	break;
       case '?':
 	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u'
 	    || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c'
@@ -134,6 +139,7 @@ int main (int argc, char** argv)
   double _TEND   = -1.e6; float __TEND;         double _CHIR   = -1.e6; float __CHIR;
   double _IRMP   = -1.e6; float __IRMP;         int    _HIGH   = -1.;   int   _RATS = -1.;
   int    _COPT   = -1;    double _CORE = -1.e6; float __CORE;           int   _NATS = -1.;
+  double _FFAC = -1.e6;   float __FFAC;  
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -189,12 +195,18 @@ int main (int argc, char** argv)
       __CORE = atof (Dvalue);
       _CORE  = double (__CORE);
      }
+   if (Gvalue != NULL)
+     {
+      __FFAC = atof (Gvalue);
+      _FFAC  = double (__FFAC);
+     }
     
   // ..................
   // Call program PHASE
   // ..................
   Phase phase;
-  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ);
+  phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND,
+	       _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ, _FFAC);
 
   return 0;
 }

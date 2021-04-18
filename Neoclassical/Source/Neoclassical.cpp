@@ -79,6 +79,9 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
   // Calculcate neoclassical frequencies at rational surfaces
   Get_Frequencies ();
 
+  // Calculcate linear layer widths at rational surfaces
+  Get_LayerWidths ();
+
   // Calculate normalized quantites at rational surface and output nFile
   Get_Normalized ();
 }
@@ -90,7 +93,7 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
 				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
 {
   // Set default values of control parameters
-  EXB     = 0;
+  EXB      = 0;
 
   INTP     = 0;
   INTF     = 0;
@@ -312,18 +315,19 @@ void Neoclassical::Read_Equilibrium ()
   PsiNk.resize  (nres);
   dPsidr.resize (nres);
   A2.resize     (nres);
+  q_hat.resize  (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j), &Kthek (j), &in, &A2 (j)) != 14)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j)) != 15)
 	{
 	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);
 	}
       qk (j) = double (mk (j)) /double (ntor);
-      printf ("m = %3d  r = %11.4e  s = %11.4e  g = %11.4e  gm = %11.4e  Kt = %11.4e  Kast = %11.4e  Kthe = %11.4e  fc = %11.4e  akk = %11.4e  PsiN = %11.4e\n",
-	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j));
+      printf ("m = %3d  r = %11.4e  s = %11.4e  g = %11.4e  gm = %11.4e  Kt = %11.4e  Kast = %11.4e  Kthe = %11.4e  fc = %11.4e  akk = %11.4e  PsiN = %11.4e  q_hat = %11.4e\n",
+	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j), q_hat (j));
     }
 
   fclose (file);
@@ -631,6 +635,27 @@ void Neoclassical::Read_Profiles ()
       chie (j) = InterpolateField (Chie, psi (j), 0);
       chin (j) = InterpolateField (Chin, psi (j), 0);
       chii (j) = InterpolateField (Chii, psi (j), 0);
+
+      if (chip (j) < 0.)
+	{
+	  printf ("NEOCLASSICAL:: Warning - chip(%3d) < 0.\n", j);
+	  chip (j) = 1.e-3;
+	}
+      if (chie (j) < 0.)
+	{
+	  printf ("NEOCLASSICAL:: Warning - chie(%3d) < 0.\n", j);
+	  chie (j) = 1.e-3;
+	}
+      if (chin (j) < 0.)
+	{
+	  printf ("NEOCLASSICAL:: Warning - chin(%3d) < 0.\n", j);
+	  chin (j) = 1.e-3; 
+	}
+      if (chii (j) < 0.)
+	{
+	  printf ("NEOCLASSICAL:: Warning - chii(%3d) < 0.\n", j);
+	  chii (j) = 1.e-3; 
+	}
     }
 
   // Output perpendicular diffusivities
@@ -830,6 +855,7 @@ void Neoclassical::Get_Derived ()
   // Calculate timescales at rational surfaces
   // -----------------------------------------
   rho_sk.resize (nres); tau_Hk.resize (nres); tau_Rk.resize (nres); tau_Mk.resize (nres); tau_thk.resize (nres);
+ 
 
   for (int j = 0; j < nres; j++)
     {
@@ -838,7 +864,7 @@ void Neoclassical::Get_Derived ()
       tau_Hk  (j) = tau_A * sqrt (rhok(j)) * R_0 /a /gk(j) /sk(j) /double (ntor);
       tau_Rk  (j) = mu_0 * a*a * rk(j)*rk(j) * nek (j) * e*e /nu_eek (j) /m_e;
       tau_Mk  (j) = a*a /chipk(j);
-      tau_thk (j) = (rk(j) * a /qk(j) /R_0) * (rk(j) * a /qk(j) /R_0) /nu_iik (j);
+      tau_thk (j) = 1. /nu_iik (j) / (1. + (qk(j) * R_0 /rk(j) /a) * (qk(j) * R_0 /rk(j) /a) /akk(j));
 
       printf ("m = %3d  P0 = %11.4e  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e\n",
 	      mk (j), P0 /1.e19/e/1.e3, tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j));
@@ -898,7 +924,7 @@ void Neoclassical::Get_Viscosities ()
       jj = j;
 
       double          x, h = h0, t_err;
-      int             rept, step = 0, skip = 0; count = 0;
+      int             rept, step = 0, skip = 0; count = 0; flag = 0;
       Array<double,1> y (9);
 
       x = xmin;
@@ -1150,6 +1176,76 @@ void Neoclassical::Get_Frequencies ()
   fclose (file);
 }
 
+// ##################################################
+// Calculate linear layer widths at rational surfaces
+// ##################################################
+void Neoclassical::Get_LayerWidths ()
+{
+  // ---------------------------------
+  // Calculate linear layer parameters
+  // ---------------------------------
+  Sk.resize (nres); tauk.resize (nres); PEk.resize (nres); PMk.resize (nres); Dk.resize (nres);
+  QEk.resize (nres); Qek.resize (nres); Qik.resize (nres); delk.resize (nres);
+  
+  for (int j = 0; j < nres; j++)
+    {
+      double tauE = a*a * rk(j)*rk(j) /(chink(j) + (2./3.) * chiek(j));
+      double tauM = a*a * rk(j)*rk(j) /chipk(j);
+
+      Sk   (j) = Q_00 (j) * tau_Rk (j) /tau_Hk (j);
+      tauk (j) = - w_ast_ik (j) /w_ast_ek (j);
+      PEk  (j) = tau_Rk(j) /tauE;
+      PMk  (j) = tau_Rk(j) /tauM;
+      Dk   (j) = (5./3.) * pow (Sk (j), 1./3.) * rho_sk (j) /a/rk(j);
+      QEk  (j) =   pow (Sk (j), 1./3.) * double (ntor) * wEk (j)      * tau_Hk (j);
+      Qek  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ek (j) * tau_Hk (j);
+      Qik  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ik (j) * tau_Hk (j);
+
+      printf ("m = %3d  tau = %11.4e  P_E = %11.4e  P_M = %11.4e  D = %11.4e  Q_E = %11.4e  Q_e = %11.4e  Q_i = %11.4e\n",
+	    mk (j), tauk (j),  PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
+    }
+
+  // -----------------------------
+  // Calculate linear layer widths
+  // -----------------------------
+
+  for (int j = 0; j < nres; j++)
+    {
+      jres = j;
+      
+      double          x, h = h0, t_err, max = 1.e20;
+      int             rept, step = 0, skip = 0; count = 0; flag = 1;
+      Array<double,1> y (8);
+      double          C    = PEk (j) / (1. + tauk (j)) /Dk (j)/Dk (j);
+      double          xmax = sqrt (2. * log (max) /sqrt (C));
+
+      x     = 0.;
+      y (0) = 1.;
+      y (1) = 0.;
+      y (2) = 0.;
+      y (3) = 0.;
+      y (4) = 0.;
+      y (5) = 0.;
+      y (6) = 1.;
+      y (7) = 0.;
+      
+      do
+	{
+	  RK4Adaptive (x, y, h, t_err, acc, 2., rept, maxrept, hmin, hmax, 2, 0, NULL);
+	}
+      while (x < xmax);
+
+      gsl_complex Y1 = gsl_complex_rect (y (0), y (1));
+      Y1             = gsl_complex_mul_real (Y1, sqrt (xmax) /exp (sqrt (C) * xmax*xmax /2.));
+      gsl_complex Y2 = gsl_complex_rect (y (4), y (5));
+      Y2             = gsl_complex_mul_real (Y2, sqrt (xmax) /exp (sqrt (C) * xmax*xmax /2.));
+
+      gsl_complex c  = gsl_complex_div (Y1, Y2);
+
+      delk (j) = M_PI * gsl_complex_abs (c) * a*rk(j) /pow (Sk (j), 1./3.);
+    }
+}
+
 // #######################################################################################
 // Calculate normalized quantities at rational surfaces for program PHASE and output nFile
 // #######################################################################################
@@ -1170,13 +1266,13 @@ void Neoclassical::Get_Normalized ()
       double tm  = tau_Mk (j) /tau_A;
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
-      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e del = %10.3e\n",
-	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, dk);
+      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
+	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, dk, delk (j));
 
       fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          tm,                         th,
-	       sqrt (qk (j)/gk (j)/sk (j)), dk,                          wkl,                        wke,                       wkn, 
+	       sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                       wkn, 
 	       dnedrk (j) /1.e19,           dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),              WcritTik (j),
 	       akk (j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                 nek (j) /1.e19,
 	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
@@ -1206,15 +1302,15 @@ void Neoclassical::Get_Normalized ()
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
 	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		   mk (j),                     ntor,                        rk (j),                     qk (j),                     rhok (j),
-		   a /R_0,                     Sk,                          tm,                         th,                         sqrt (qk (j)/gk (j)/sk (j)),
-		   dk,                         wkl,                         wke,                        wkn, 
-		   dnedrk (j) /1.e19,          dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),               WcritTik (j),
-		   akk(j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                  nek (j) /1.e19,
-		   nik (j) /1.e19,             Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
-		   Factor1 (j) /1.e19/e/1.e3,  Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
-		   Factor5 (j) /1.e19/e/1.e3,  Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-		   Factor9 (j) /1.e19/e/1.e3,  Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
+		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
+		   a /R_0,                      Sk,                          tm,                         th,
+		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 
+		   dnedrk (j) /1.e19,           dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),               WcritTik (j),
+		   akk(j),                      gk (j),                      dPsidr (j),                 PsiNk (j),                  nek (j) /1.e19,
+		   nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
+		   Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
+		   Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
+		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
 	}
       fclose (file);
 
@@ -1254,32 +1350,67 @@ double Neoclassical::psi_fun_p (double x)
 // ###############################################################
 void Neoclassical::Rhs (double x, Array<double,1>& y, Array<double,1>& dydx)
 {
-  double nuDi = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x)) /x
-    + (3.*sqrt(M_PI) /4.) * alphak (jj) * ((1. - x_iI (jj) /2./x) * psi_fun (x /x_iI (jj)) + psi_fun_p (x /x_iI (jj))) /x;
-  double nuEi = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x)) /x
-    + (3.*sqrt(M_PI) /2.) * alphak (jj) * ((AI/AII) * psi_fun (x /x_iI (jj)) - psi_fun_p (x /x_iI (jj))) /x;
-  double nuTi = 3. * nuDi + nuEi;
- 
-  double nuDI = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x)) /x
-    + (3.*sqrt(M_PI) /4.) * (1./alphak (jj)) * ((1. - x_Ii (jj) /2./x) * psi_fun (x /x_Ii (jj)) + psi_fun_p (x /x_Ii (jj))) /x;
-  double nuEI = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x)) /x
-    + (3.*sqrt(M_PI) /2.) * (1./alphak (jj)) * ((AII/AI) * psi_fun (x /x_Ii (jj)) - psi_fun_p (x /x_Ii (jj))) /x;
-  double nuTI = 3. * nuDI + nuEI;
+  if (flag == 0)
+    {
+      double nuDi = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x)) /x
+	+ (3.*sqrt(M_PI) /4.) * alphak (jj) * ((1. - x_iI (jj) /2./x) * psi_fun (x /x_iI (jj)) + psi_fun_p (x /x_iI (jj))) /x;
+      double nuEi = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x)) /x
+	+ (3.*sqrt(M_PI) /2.) * alphak (jj) * ((AI/AII) * psi_fun (x /x_iI (jj)) - psi_fun_p (x /x_iI (jj))) /x;
+      double nuTi = 3. * nuDi + nuEi;
+      
+      double nuDI = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x)) /x
+	+ (3.*sqrt(M_PI) /4.) * (1./alphak (jj)) * ((1. - x_Ii (jj) /2./x) * psi_fun (x /x_Ii (jj)) + psi_fun_p (x /x_Ii (jj))) /x;
+      double nuEI = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x)) /x
+	+ (3.*sqrt(M_PI) /2.) * (1./alphak (jj)) * ((AII/AI) * psi_fun (x /x_Ii (jj)) - psi_fun_p (x /x_Ii (jj))) /x;
+      double nuTI = 3. * nuDI + nuEI;
+      
+      double nuDe = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x))
+	+ (3.*sqrt(M_PI) /4.) * Zeffk (jj);
+      double nuEe = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x));
+      double nuTe = 3. * nuDe + nuEe;
+      
+      dydx (0) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 2.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
+      dydx (1) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 3.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
+      dydx (2) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
+      dydx (3) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 2.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
+      dydx (4) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 3.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
+      dydx (5) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
+      dydx (6) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
+      dydx (7) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 5.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
+      dydx (8) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 6.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
+    }
+  else
+    {
+      double QE  = QEk  (jres);
+      double Qe  = Qek  (jres);
+      double Qi  = Qik  (jres);
+      double tau = tauk (jres);
+      double PM  = PMk  (jres);
+      double PE  = PEk  (jres);
+      double D   = Dk   (jres);
+       
+      gsl_complex Y1 = gsl_complex_rect (y (0), y (1));
+      gsl_complex Y2 = gsl_complex_rect (y (4), y (5));
+      
+      gsl_complex I    = gsl_complex_rect (0., 1.);
+      gsl_complex fac1 = gsl_complex_rect (- QE * (QE - Qi) + PM * PE * x*x*x*x,       (QE - Qi) * (PM + PE) * x*x);
+      gsl_complex fac2 = gsl_complex_rect (PE * x*x + (1. + tau) * PM * D*D * x*x*x*x, (QE - Qe) + (QE - Qi) * D*D * x*x);
+      gsl_complex fac  = gsl_complex_div (fac1, fac2);
+      gsl_complex rhs1 = gsl_complex_mul (fac, Y1);
+      gsl_complex rhs2 = gsl_complex_mul (fac, Y2);
+      rhs1             = gsl_complex_mul_real (rhs1, x*x);
+      rhs2             = gsl_complex_mul_real (rhs2, x*x);
 
-  double nuDe = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x))
-    + (3.*sqrt(M_PI) /4.) * Zeffk (jj);
-  double nuEe = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x));
-  double nuTe = 3. * nuDe + nuEe;
+      dydx (0) = y (2);
+      dydx (1) = y (3);
+      dydx (2) = GSL_REAL (rhs1);
+      dydx (3) = GSL_IMAG (rhs1);
 
-  dydx (0) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 2.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
-  dydx (1) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 3.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
-  dydx (2) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
-  dydx (3) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 2.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
-  dydx (4) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 3.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
-  dydx (5) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
-  dydx (6) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
-  dydx (7) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 5.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
-  dydx (8) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 6.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
+      dydx (4) = y (6);
+      dydx (5) = y (7);
+      dydx (6) = GSL_REAL (rhs2);
+      dydx (7) = GSL_IMAG (rhs2);
+    }
 }
 
 // ########################################################################

@@ -60,6 +60,8 @@
 // 1.18 - Added L_Ii_00 correction
 // 1.19 - Added Chii. Changed FREQ flag to EXB flag.
 // 1.20 - Added CATS flag
+// 1.21 - Use more accurate expression for neoclassical flow damping time
+// 1.22 - Added more accurate calculation of linear layer width
 
 // ################################################################
 
@@ -67,7 +69,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 20
+#define VERSION_MINOR 22
 
 #include <stdio.h>
 #include <math.h>
@@ -75,6 +77,8 @@
 #include <unistd.h>
 #include <vector>
 #include <blitz/array.h>
+#include <gsl/gsl_complex.h>
+#include <gsl/gsl_complex_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_linalg.h>
@@ -150,6 +154,8 @@ class Neoclassical
   double hmin;     // Minimum step-length
   double hmax;     // Maximum step-length
   int    maxrept;  // Maximum number of step recalculations
+  int    flag;     // Flag for selecting right-hand sides of differential equations
+  int    jres;     // Flag for selecting resonant surface
 
   // .......................
   // Plasma equilibrium data
@@ -253,7 +259,7 @@ class Neoclassical
   int             ntor;   // Toroidal mode number
   int             nres;   // Number of resonant surfaces
   Array<int,1>    mk;     // Poloidal mode numbers
-  Array<double,1> rk;     // Minor radii /r_a
+  Array<double,1> rk;     // Minor radii /a
   Array<double,1> PsiNk;  // Normalized poloidal fluxes 
   Array<double,1> qk;     // Safety factors
   Array<double,1> sk;     // Magnetic shears (dlnq/dlnr)
@@ -266,6 +272,7 @@ class Neoclassical
   Array<double,1> akk;    // Metric elements
   Array<double,1> dPsidr; // R_0 dPsiN/dr
   Array<double,1> A2;     // A2
+  Array<double,1> q_hat;  // q_hat
 
   // Derived from profiles
   double rho0;                // Central mass density (kg/m^-3)
@@ -343,6 +350,16 @@ class Neoclassical
   Array<double,1> tau_Mk;     // Momentum confinement timescales (s)
   Array<double,1> tau_thk;    // Poloidal flow damping timescales (s)
 
+  Array<double,1> Sk;         // Lundquist number   
+  Array<double,1> tauk;       // Ratio of diamagnetic frequencies
+  Array<double,1> PEk;        // Perpendicular particle/energy transport parameter
+  Array<double,1> PMk;        // Perpendicular momentum transport parameter
+  Array<double,1> Dk;         // Semi-collisional parameter
+  Array<double,1> QEk;        // ExB frequency parameter
+  Array<double,1> Qek;        // Electron diamagnetic frequency parameter
+  Array<double,1> Qik;        // Ion diamagnetic frequency parameter
+  Array<double,1> delk;       // Linear layer width
+  
   Array<double,1> gt;         // Fraction of trapped particles
   Array<double,1> nu_P_e;     // Electron bananna/plateau collisionality parameter
   Array<double,1> nu_P_i;     // Majority ion bananna/plateau collisionality  parameter
@@ -429,6 +446,8 @@ class Neoclassical
   void Get_Parameters ();
   // Calculate neoclassical freqeuncies at rational surfaces
   void Get_Frequencies ();
+  // Calculate linear layer widths at rational surfaces
+  void Get_LayerWidths ();
   // Calculate normalized quantities at rational surfaces
   void Get_Normalized ();
 

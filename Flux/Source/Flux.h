@@ -66,6 +66,7 @@
 // 1.11 - Added -P option
 // 1.12 - Included ZOFF parameter in gFiles
 // 1.13 - Restrict program to only calculated q-profile for PsiN < PSIRAT
+// 1.14 - Added q_hat calculatiob
 
 // #####################################################################################
 
@@ -73,7 +74,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 13
+#define VERSION_MINOR 14
 
 #include <stdio.h>
 #include <math.h>
@@ -235,6 +236,7 @@ class Flux
   double* fcres;       // Fraction of circulating particles at rational surfaces
   double* ajj;         // Metric elements at rational surfaces
   double* dPsidr;      // dPsi/dr at rational surfaces
+  double* q_hat;       // q_hat at rational surfaces
   double* A1res;       // A1 values at rational surfaces
   double* A2res;       // A2 values at rational surfaces
   
@@ -257,6 +259,7 @@ class Flux
   gsl_matrix* I4;      // Neoclassical integrals
   gsl_matrix* I5;      // Neoclassical integrals
   gsl_matrix* I6;      // Neoclassical integrals
+  double*     I7;      // Neoclassical integral
 
   // Perturbed equilibrium data
   gsl_matrix_complex* FF;  // F-matrix

@@ -24,6 +24,7 @@
 // -C COPT   - overrides COPT value from namelist file
 // -D CORE   - overrides CORE value from namelist file
 // -F FREQ   - overrides FREQ value from namelist file
+// -G FFAC   - overrides FFAC value from namelist file
 // -N NATS   - overrides NATS value from namelist file
 // -H HIGH   - enables higher order transport calculation
 // -S SCALE  - overrides SCALE value from namelist file
@@ -87,6 +88,7 @@
 // 2.18 - Added more COPT options
 // 2.19 - Natural frequency limited to linear/nonlinear model
 // 2.20 - Added FREQ flag
+// 2.21 - Use q_hat instead of q in velocity evolution equation
 
 // #######################################################################
 
@@ -94,7 +96,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 20
+#define VERSION_MINOR 21
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -120,7 +122,7 @@ using namespace blitz;
 // Namelist funtion
 extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, int *FREQ, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* CORE, int *FREQ, double* FFAC, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -146,7 +148,8 @@ class Phase
   int      LIN;    // If != 0 then perform purely linear calculation
   int      FREQ;   // Natural frequency switch:
                    //  If == 0 then use linear/nonlinear natural frequency
-                   //  If == 1 then use ExB natural frequency
+                   //  If == 1 then w_natual = FFAC * w_linear + (1-FFAC) * w_EB
+  double   FFAC;   // Natural frequncy parameter
  
   int      MID;    // Number of RMP coil sets
   int      COPT;   // If == 0 then no coil current optimization
@@ -234,8 +237,9 @@ class Phase
   Array<double,1> WcrTik;   // Critical island widths for ion temperature flattening at resonant surfaces (in r) (m)
   Array<double,1> akk;      // Metric elements at resonant surfaces
   Array<double,1> gk;       // g values at resonant surfaces
+  Array<double,1> qhatk;    // q_hat values at resonant surfaces
   Array<double,1> dPsiNdr;  // R_0 dPsiN/dr values at resonant surfaces
-  Array<double,1> PsiN;     // PsiN values at rational surfaces
+  Array<double,1> PsiN;     // PsiN values at resonant surfaces
   Array<double,1> nek;      // Electron number densities at resonant surfaces (10^19/m^-3)
   Array<double,1> nik;      // Ion number densities at resonant surfaces (10^19/m^-3)
   Array<double,1> Tek;      // Electron temperatures at resonant surfaces (keV)
@@ -340,7 +344,8 @@ class Phase
 
   // Solve problem
   void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
-	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE, int _FREQ);        
+	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
+	      double _CORE, int _FREQ, double _FFAC);        
 
   // -----------------------
   // Private class functions
@@ -349,7 +354,8 @@ class Phase
 
   // Read data
   void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
-		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS, double _CORE, int _FREQ);
+		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
+		  double _CORE, int _FREQ, double _FFAC);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

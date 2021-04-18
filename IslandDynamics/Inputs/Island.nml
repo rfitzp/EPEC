@@ -2,10 +2,11 @@
 
 	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation in PHASE
 	PHASE_FREQ   = 0       ! Flag for choosing natural frequency type in PHASE
+	PHASE_FFAC   = 0.1     ! Parameter for specifying natural frequency in PHASE
 
 	PHASE_MID    = 2       ! Number of coil sets in PHASE
-	PHASE_COPT   = 1       ! Coil current optimization switch (see PHASE/Inputs/Phase.nml)
-	PHASE_CORE   = 0.99    ! Core drive minimization factor (see PHASE/Inputs/Phase.nml)
+	PHASE_COPT   = 1       ! Coil current optimization switch in PHASE (see PHASE/Inputs/Phase.nml)
+	PHASE_CORE   = 0.99    ! Core drive minimization factor in PHASE (see PHASE/Inputs/Phase.nml)
 
 	PHASE_HIGH   = 1       ! If != 0 then enable higher-order transport calculation in PHASE
 	PHASE_RATS   = 1       ! If != 0 then enable linear-only interpolation of uFiles/mFiles/lFiles in PHASE
@@ -14,9 +15,9 @@
 	PHASE_SCALE  = 2.      ! Set GPEC scalefactor in PHASE
 	PHASE_CHIR   = 4.      ! Set maximum Chirihov parameter for vacuum islands in PHASE
 
-	RESTART      = 1       ! If != 0 then delete all previous IslandDynamics data
+	RESTART      = 1       ! If != 0 then delete all previous ISLANDDYNAMICS data
 
-	TSTART       = 2500.   ! Simulation experimental start time (ms)
-	TEND         = 3200.   ! Simulation experimental end time (ms)
-	DT           = 1.      ! Simulation experimental time step (ms) 
+	TSTART       = 2500.   ! ISLANDDYNAMICS experimental start time (ms)
+	TEND         = 3200.   ! ISLANDDYNAMICS experimental end time (ms)
+	DT           = 0.5     ! ISLANDDYNAMICS recording interval (ms) 
 &end	

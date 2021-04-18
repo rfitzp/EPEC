@@ -35,6 +35,7 @@
 	nn.asy      ... plots <n_n> (r)
 
 	dia.asy     ... plots w_E (black), w_ast_e (red), w_ast_i (blue) at rational surfaces versus r
+	diaf.asy    ... plots w_E (black), w_ast_e (red), w_ast_i (blue) at rational surfaces versus PsiN
 	time.asy    ... plots tau_A (black), tau_R (red), tau_M (blue), tau_theta (green) at rational surfaces versus r
 	gt.asy      ... plots (1-fc)/fc versus r, where fc is fraction of circulating particles, at rational surfaces versus r
 	nu.asy      ... plots nu_ast for electrons (red), ions (blue), impurities (green) at rational surfaces versus r
