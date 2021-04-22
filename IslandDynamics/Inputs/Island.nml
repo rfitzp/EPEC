@@ -1,7 +1,7 @@
 &ISLANDDYNAMICS_CONTROL
 
 	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation in PHASE
-	PHASE_FREQ   = 0       ! Flag for choosing natural frequency type in PHASE
+	PHASE_FREQ   = 1       ! Flag for choosing natural frequency type in PHASE
 	PHASE_FFAC   = 0.1     ! Parameter for specifying natural frequency in PHASE
 
 	PHASE_MID    = 2       ! Number of coil sets in PHASE

@@ -171,7 +171,7 @@ void Phase::fFileInterpolateLinear (char* fFile1, double time1, char* fFile, dou
   u4_1.resize   (nres_1); u5_1.resize  (nres_1); u6_1.resize  (nres_1);
   u7_1.resize   (nres_1); u8_1.resize  (nres_1); u9_1.resize  (nres_1);
   u10_1.resize  (nres_1); u11_1.resize (nres_1); u12_1.resize (nres_1);
-  u13_1.resize  (nres_1);
+  u13_1.resize  (nres_1); u14_1.resize (nres_1);
 
   for (int j = 0; j < nres_1; j++)
     {
@@ -230,14 +230,17 @@ void Phase::fFileInterpolateLinear (char* fFile1, double time1, char* fFile, dou
   nres_0 = nres_1;
 
   v1_0.resize     (NPSI_0); v2_0.resize  (NPSI_0); v3_0.resize  (NPSI_0);
+
   mres_0.resize   (nres_0);
   u1_0.resize     (nres_0); u2_0.resize  (nres_0); u3_0.resize  (nres_0);
   u4_0.resize     (nres_0); u5_0.resize  (nres_0); u6_0.resize  (nres_0);
   u7_0.resize     (nres_0); u8_0.resize  (nres_0); u9_0.resize  (nres_0);
   u10_0.resize    (nres_0); u11_0.resize (nres_0); u12_0.resize (nres_0);
-  u13_0.resize    (nres_0);
+  u13_0.resize    (nres_0); u14_0.resize (nres_0);
+
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
+
   EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
   EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
@@ -393,7 +396,7 @@ void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2,
   u4_1.resize   (nres_1); u5_1.resize  (nres_1); u6_1.resize  (nres_1);
   u7_1.resize   (nres_1); u8_1.resize  (nres_1); u9_1.resize  (nres_1);
   u10_1.resize  (nres_1); u11_1.resize (nres_1); u12_1.resize (nres_1);
-  u13_1.resize  (nres_1);
+  u13_1.resize  (nres_1); u14_1.resize (nres_1);
  
   for (int j = 0; j < nres_1; j++)
     {
@@ -471,7 +474,7 @@ void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2,
   u4_2.resize   (nres_2); u5_2.resize  (nres_2); u6_2.resize  (nres_2);
   u7_2.resize   (nres_2); u8_2.resize  (nres_2); u9_2.resize  (nres_2);
   u10_2.resize  (nres_2); u11_2.resize (nres_2); u12_2.resize (nres_2);
-  u13_2.resize  (nres_2);
+  u13_2.resize  (nres_2); u14_2.resize (nres_2);
     
   for (int j = 0; j < nres_2; j++)
     {
@@ -544,14 +547,17 @@ void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2,
     nres_0 = nres_1;
  
   v1_0.resize     (NPSI_0); v2_0.resize  (NPSI_0); v3_0.resize  (NPSI_0);
+
   mres_0.resize   (nres_0);
   u1_0.resize     (nres_0); u2_0.resize  (nres_0); u3_0.resize  (nres_0);
   u4_0.resize     (nres_0); u5_0.resize  (nres_0); u6_0.resize  (nres_0);
   u7_0.resize     (nres_0); u8_0.resize  (nres_0); u9_0.resize  (nres_0);
   u10_0.resize    (nres_0); u11_0.resize (nres_0); u12_0.resize (nres_0);
-  u13_0.resize    (nres_0);
+  u13_0.resize    (nres_0); u14_0.resize (nres_0);
+
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
+
   EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
   EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
@@ -726,7 +732,7 @@ void Phase::fFileInterpolateCubic (char* fFile1, double time1, char* fFile2, dou
   u4_1.resize   (nres_1); u5_1.resize  (nres_1); u6_1.resize  (nres_1);
   u7_1.resize   (nres_1); u8_1.resize  (nres_1); u9_1.resize  (nres_1);
   u10_1.resize  (nres_1); u11_1.resize (nres_1); u12_1.resize (nres_1);
-  u13_1.resize  (nres_1);
+  u13_1.resize  (nres_1); u14_1.resize (nres_1);
   
   for (int j = 0; j < nres_1; j++)
     {
@@ -804,7 +810,7 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
   u4_2.resize   (nres_2); u5_2.resize  (nres_2); u6_2.resize  (nres_2);
   u7_2.resize   (nres_2); u8_2.resize  (nres_2); u9_2.resize  (nres_2);
   u10_2.resize  (nres_2); u11_2.resize (nres_2); u12_2.resize (nres_2);
-  u13_2.resize  (nres_2);
+  u13_2.resize  (nres_2); u14_2.resize (nres_2);
   
   for (int j = 0; j < nres_2; j++)
     {
@@ -883,7 +889,7 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
   u4_3.resize   (nres_3); u5_3.resize  (nres_3); u6_3.resize  (nres_3);
   u7_3.resize   (nres_3); u8_3.resize  (nres_3); u9_3.resize  (nres_3);
   u10_3.resize  (nres_3); u11_3.resize (nres_3); u12_3.resize (nres_3);
-  u13_3.resize  (nres_3);
+  u13_3.resize  (nres_3); u14_3.resize (nres_3);
   
   for (int j = 0; j < nres_3; j++)
     {
@@ -969,14 +975,17 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
     nres_0 = nres_3;
   
   v1_0.resize     (NPSI_0); v2_0.resize  (NPSI_0); v3_0.resize  (NPSI_0);
+
   mres_0.resize   (nres_0);
   u1_0.resize     (nres_0); u2_0.resize  (nres_0); u3_0.resize  (nres_0);
   u4_0.resize     (nres_0); u5_0.resize  (nres_0); u6_0.resize  (nres_0);
   u7_0.resize     (nres_0); u8_0.resize  (nres_0); u9_0.resize  (nres_0);
   u10_0.resize    (nres_0); u11_0.resize (nres_0); u12_0.resize (nres_0);
-  u13_0.resize    (nres_0);
+  u13_0.resize    (nres_0); u14_0.resize (nres_0);
+
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
+
   EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
   EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
@@ -1168,7 +1177,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   u4_1.resize   (nres_1); u5_1.resize  (nres_1); u6_1.resize  (nres_1);
   u7_1.resize   (nres_1); u8_1.resize  (nres_1); u9_1.resize  (nres_1);
   u10_1.resize  (nres_1); u11_1.resize (nres_1); u12_1.resize (nres_1);
-  u13_1.resize  (nres_1);
+  u13_1.resize  (nres_1); u14_1.resize (nres_1);
   
   for (int j = 0; j < nres_1; j++)
     {
@@ -1246,7 +1255,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   u4_2.resize   (nres_2); u5_2.resize  (nres_2); u6_2.resize  (nres_2);
   u7_2.resize   (nres_2); u8_2.resize  (nres_2); u9_2.resize  (nres_2);
   u10_2.resize  (nres_2); u11_2.resize (nres_2); u12_2.resize (nres_2);
-  u13_2.resize  (nres_2);
+  u13_2.resize  (nres_2); u14_2.resize (nres_2);
   
   for (int j = 0; j < nres_2; j++)
     {
@@ -1324,7 +1333,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   u4_3.resize   (nres_3); u5_3.resize  (nres_3); u6_3.resize  (nres_3);
   u7_3.resize   (nres_3); u8_3.resize  (nres_3); u9_3.resize  (nres_3);
   u10_3.resize  (nres_3); u11_3.resize (nres_3); u12_3.resize (nres_3);
-  u13_3.resize  (nres_3);
+  u13_3.resize  (nres_3); u14_3.resize (nres_3);
   
   for (int j = 0; j < nres_3; j++)
     {
@@ -1403,7 +1412,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   u4_4.resize   (nres_4); u5_4.resize  (nres_4); u6_4.resize  (nres_4);
   u7_4.resize   (nres_4); u8_4.resize  (nres_4); u9_4.resize  (nres_4);
   u10_4.resize  (nres_4); u11_4.resize (nres_4); u12_4.resize (nres_4);
-  u13_4.resize  (nres_4);
+  u13_4.resize  (nres_4); u14_4.resize (nres_4);
   
   for (int j = 0; j < nres_4; j++)
     {
@@ -1496,14 +1505,17 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
     nres_0 = nres_4;
   
   v1_0.resize     (NPSI_0); v2_0.resize  (NPSI_0); v3_0.resize  (NPSI_0);
+
   mres_0.resize   (nres_0);
   u1_0.resize     (nres_0); u2_0.resize  (nres_0); u3_0.resize  (nres_0);
   u4_0.resize     (nres_0); u5_0.resize  (nres_0); u6_0.resize  (nres_0);
   u7_0.resize     (nres_0); u8_0.resize  (nres_0); u9_0.resize  (nres_0);
   u10_0.resize    (nres_0); u11_0.resize (nres_0); u12_0.resize (nres_0);
-  u13_0.resize    (nres_0);
+  u13_0.resize    (nres_0); u14_0.resize (nres_0);
+
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
+
   EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
   EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 

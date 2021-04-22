@@ -2,14 +2,13 @@ import graph;
      
 size (1000, 500, IgnoreAspect);
 
-file    in = input ("../../Outputs/Stage6/vac.txt").line();
+file    in = input ("../../Outputs/Stage6/omega.txt").line();
 real[][] A = in.dimension (0, 0);
 A          = transpose (A);
      
 real[] m   = A[0];
-real[] r   = A[1];
-real[] wnl = A[2];
-real[] tt  = A[3];
+real[] tt  = A[4];
+real[] br  = A[12];
 
 int N = m.length;
 real[] q4,  i4;
@@ -30,68 +29,68 @@ for (int j = 0; j < N; ++j)
    if ((int) m[j] == 4)
       {
 	q4.push (tt[j]);
-	i4.push (wnl[j]);
+	i4.push (br[j]);
       }
     if ((int) m[j] == 5)
       {
 	q5.push (tt[j]);
-	i5.push (wnl[j]);
+	i5.push (br[j]);
       }
     if ((int) m[j] == 6)
       {
 	q6.push (tt[j]);
-	i6.push (wnl[j]);
+	i6.push (br[j]);
       }
     if ((int) m[j] == 7)
       {
 	q7.push (tt[j]);
-	i7.push (wnl[j]);
+	i7.push (br[j]);
       }
     if ((int) m[j] == 8)
       {
 	q8.push (tt[j]);
-	i8.push (wnl[j]);
+	i8.push (br[j]);
       }
     if ((int) m[j] == 9)
       {
 	q9.push (tt[j]);
-	i9.push (wnl[j]);
+	i9.push (br[j]);
       }
     if ((int) m[j] == 10)
       {
 	q10.push (tt[j]);
-	i10.push (wnl[j]);
+	i10.push (br[j]);
       }
  
     if ((int) m[j] == 11)
       {
 	q11.push (tt[j]);
-	i11.push (wnl[j]);
+	i11.push (br[j]);
       }
     if ((int) m[j] == 12)
       {
 	q12.push (tt[j]);
-	i12.push (wnl[j]);
+	i12.push (br[j]);
       }
     if ((int) m[j] == 13)
       {
 	q13.push (tt[j]);
-	i13.push (wnl[j]);
+	i13.push (br[j]);
       }
     if ((int) m[j] == 14)
       {
 	q14.push (tt[j]);
-	i14.push (wnl[j]);
+	i14.push (br[j]);
       }
     if ((int) m[j] == 15)
       {
 	q15.push (tt[j]);
-	i15.push (wnl[j]);
+	i15.push (br[j]);
       }
     if ((int) m[j] == 16)
       {
 	q16.push (tt[j]);
-	i16.push (wnl[j]);
+	i16.push (br[j]);
       }
   }
 
@@ -158,4 +157,4 @@ yequals (0., s);
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis ("$t ({\rm ms})$",                BottomTop, LeftTicks);
-yaxis ("$W_{\rm vac}/a$", LeftRight, RightTicks);
+yaxis ("$b_r({\rm gauss})$", LeftRight, RightTicks);

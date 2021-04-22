@@ -21,7 +21,7 @@
 	NEO_LN       = 1.2e-2  ! Set neutral density scalelength in NEOCLASSICAL
 	NEO_YN       = 1.5     ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
 
-	TSTART       = 2500.   ! Scan start time (ms)
-	TEND         = 3200.   ! Scan end time (ms)
+	TSTART       = 2000.   ! Scan start time (ms)
+	TEND         = 4500.   ! Scan end time (ms)
 	DT           = 5.      ! Scan time step (ms) 
 &end	

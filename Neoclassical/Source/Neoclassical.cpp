@@ -1184,13 +1184,13 @@ void Neoclassical::Get_LayerWidths ()
   // ---------------------------------
   // Calculate linear layer parameters
   // ---------------------------------
-  Sk.resize (nres); tauk.resize (nres); PEk.resize (nres); PMk.resize (nres); Dk.resize (nres);
-  QEk.resize (nres); Qek.resize (nres); Qik.resize (nres); delk.resize (nres);
+  Sk.resize  (nres); tauk.resize (nres); PEk.resize (nres); PMk.resize  (nres); Dk.resize (nres);
+  QEk.resize (nres); Qek.resize  (nres); Qik.resize (nres); delk.resize (nres);
   
   for (int j = 0; j < nres; j++)
     {
-      double tauE = a*a * rk(j)*rk(j) /(chink(j) + (2./3.) * chiek(j));
-      double tauM = a*a * rk(j)*rk(j) /chipk(j);
+      double tauE = a*a * rk (j)*rk (j) /(chink (j) + (2./3.) * chiek (j));
+      double tauM = R_0*R_0 * qk (j)*qk (j) /chipk (j);
 
       Sk   (j) = Q_00 (j) * tau_Rk (j) /tau_Hk (j);
       tauk (j) = - w_ast_ik (j) /w_ast_ek (j);
@@ -1202,7 +1202,7 @@ void Neoclassical::Get_LayerWidths ()
       Qik  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ik (j) * tau_Hk (j);
 
       printf ("m = %3d  tau = %11.4e  P_E = %11.4e  P_M = %11.4e  D = %11.4e  Q_E = %11.4e  Q_e = %11.4e  Q_i = %11.4e\n",
-	    mk (j), tauk (j),  PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
+	    mk (j), tauk (j), PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
     }
 
   // -----------------------------

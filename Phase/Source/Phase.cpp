@@ -153,8 +153,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
-  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &LIN, &MID, &COPT,
-		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FREQ, &FFAC, 
+  NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
+		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
 		&NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
@@ -205,8 +205,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS, FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
+  printf ("FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
 
   // ............
   // Sanity check
@@ -255,8 +257,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS, FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d \n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
+  fprintf (namelist, "FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -264,8 +268,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS, FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
+	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
+  fprintf (monitor, "FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (monitor);
 
   // .................
@@ -844,7 +850,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 
       FILE* filem = OpenFilew ((char*) "Outputs/Stage4/mFile.txt");
       for (int i = 0; i < nres1; i++)
-	fprintf (filem, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+	{
+	  double br = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiM, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+
+	  fprintf (filem, "%11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br);
+	}
       fclose (filem);
     }
 
@@ -921,7 +931,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 
       FILE* fileu = OpenFilew ((char*) "Outputs/Stage4/uFile.txt");
       for (int i = 0; i < nres1; i++)
-	fprintf (fileu, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+	{
+	  double br = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiU, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+	  
+	  fprintf (fileu, "%11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br);
+	}
       fclose (fileu);
     }
 
@@ -996,7 +1010,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       
       FILE* filel = OpenFilew ((char*) "Outputs/Stage4/lFile.txt");
       for (int i = 0; i < nres1; i++)
-	fprintf (filel, "%11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i]);
+	{
+	  double br = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiL, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+
+	  fprintf (filel, "%11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br);
+	}
       fclose (filel);
     } 
  
@@ -1061,7 +1079,7 @@ void Phase::Scan_Shift ()
 	      hm = gsl_vector_complex_get (ChiM, j);
 
 	      hl = gsl_complex_mul (hl, eikl);
-	      hu = gsl_complex_mul (hm, eiku);
+	      hu = gsl_complex_mul (hu, eiku);
 
 	      h  = hl;
 	      h  = gsl_complex_add (h, hu);
@@ -1073,7 +1091,7 @@ void Phase::Scan_Shift ()
 	      hu = gsl_vector_complex_get (ChiU, j);
 
 	      hl = gsl_complex_mul (hl, eiklh);
-	      hu = gsl_complex_mul (hm, eikuh);
+	      hu = gsl_complex_mul (hu, eikuh);
 
 	      h  = hl;
 	      h  = gsl_complex_add (h, hu);
@@ -1119,7 +1137,7 @@ void Phase::Scan_Shift ()
 	  hm = gsl_vector_complex_get (ChiM, j);
 	  
 	  hl = gsl_complex_mul (hl, eikl);
-	  hu = gsl_complex_mul (hm, eiku);
+	  hu = gsl_complex_mul (hu, eiku);
 	  
 	  h  = hl;
 	  h  = gsl_complex_add (h, hu);
@@ -1131,7 +1149,7 @@ void Phase::Scan_Shift ()
 	  hu = gsl_vector_complex_get (ChiU, j);
 
 	  hl = gsl_complex_mul (hl, eiklh);
-	  hu = gsl_complex_mul (hm, eikuh);
+	  hu = gsl_complex_mul (hu, eikuh);
 	  
 	  h  = hl;
 	  h  = gsl_complex_add (h, hu);
@@ -1144,8 +1162,9 @@ void Phase::Scan_Shift ()
       double chi  =   gsl_complex_abs (h);
       double zeta = - gsl_complex_arg (h);
       double wv   = 4. * fack (j) * sqrt (chi) /a (j);
+      double br   = 1.e4 * EEh (j, j) * chi * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
       
-      fprintf (file4, "%3d %16.9e %16.9e %16.9e\n", mk (j), rk (j), wv, TSTART);
+      fprintf (file4, "%3d %16.9e %16.9e %16.9e %16.9e\n", mk (j), rk (j), wv, TSTART, br);
     }
   fclose (file4);
 }
@@ -1569,7 +1588,7 @@ void Phase::IslandDynamics ()
     }
   while (t < Tend);
 
-  printf ("t(ms) = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, irmp, prmp /M_PI);
+  printf ("t(ms) = %11.4e  h(ms) = %11.4e  h/tau_A = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 
   fclose (file1);  fclose (file2);  fclose (file3);  fclose (file4);  fclose (file5);
   fclose (file6);  fclose (file8);  fclose (file9);  fclose (file10); fclose (file11);
@@ -1603,7 +1622,10 @@ void Phase::IslandDynamics ()
       double deltanek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
       double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
 
-      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      // Calculate radial magnetic field at edge
+      double br = 1.e4 * EEh (j, j) * chi (j) * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
+
+      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
@@ -1613,7 +1635,7 @@ void Phase::IslandDynamics ()
 	       PsiN (j),
 	       Wpk,
 	       Wvk,
-	       deltanek, deltaTek, q95);
+	       deltanek, deltaTek, q95, br);
     }
   fclose (filew);
 

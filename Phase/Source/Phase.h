@@ -120,9 +120,9 @@
 using namespace blitz;
 
 // Namelist funtion
-extern "C" void NameListRead (int* NFLOW, int* STAGE2, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* LIN, int* MID, int* COPT,
+extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, int *FREQ, double* FFAC, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* CORE, double* FFAC, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -148,7 +148,7 @@ class Phase
   int      LIN;    // If != 0 then perform purely linear calculation
   int      FREQ;   // Natural frequency switch:
                    //  If == 0 then use linear/nonlinear natural frequency
-                   //  If == 1 then w_natual = FFAC * w_linear + (1-FFAC) * w_EB
+                   //  If == 1 then w_natural = FFAC * w_linear + (1-FFAC) * w_EB
   double   FFAC;   // Natural frequncy parameter
  
   int      MID;    // Number of RMP coil sets
@@ -343,7 +343,7 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE2, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
+  void Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
 	      double _CORE, int _FREQ, double _FFAC);        
 
@@ -353,7 +353,7 @@ class Phase
  private:
 
   // Read data
-  void Read_Data (int _STAGE2, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
+  void Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
 		  double _CORE, int _FREQ, double _FFAC);
   // Calculate vacuum flux versus relative phases of RMP coil currents

@@ -1,7 +1,7 @@
 &PHASE_CONTROL
 	NFLOW  = 100   ! Number of flow harmonics
 
- 	STAGE5 = 1     ! Flag for Stage5 calculation
+ 	STAGE5 = 0     ! Flag for Stage5 calculation
 	INTF   = 0     ! Flag for fFile interpolation
 	INTN   = 0     ! Flag for nFile interpolation
 	INTU   = 0     ! Flag for uFile/mFile/lFile interpolation
@@ -12,7 +12,7 @@
 	FREQ   = 0     ! Flag for selecting natural frequency type
 	FFAC   = 0.    ! Parameter for selecting natural frequency (FREQ = 1)
 
-	MID    = 3     ! Number of coils sets
+	MID    = 2     ! Number of coils sets
 	COPT   = 1     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
                        !  0 - no optimization
                        !  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
