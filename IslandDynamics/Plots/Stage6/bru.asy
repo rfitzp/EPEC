@@ -157,4 +157,4 @@ yequals (0., s);
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis ("$t ({\rm ms})$",                BottomTop, LeftTicks);
-yaxis ("$b_r({\rm gauss})$", LeftRight, RightTicks);
+yaxis ("$b_{r\,{\rm un}}({\rm gauss})$", LeftRight, RightTicks);

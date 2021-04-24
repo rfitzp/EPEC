@@ -851,9 +851,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       FILE* filem = OpenFilew ((char*) "Outputs/Stage4/mFile.txt");
       for (int i = 0; i < nres1; i++)
 	{
-	  double br = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiM, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+	  double br_unrc = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiM, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+	  double br_full = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiM, i)) *  pow (rk (i), - double (mk (i)))                                    * fabs (B_0) /2./a (i);
 
-	  fprintf (filem, "%11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br);
+	  fprintf (filem, "%11.4e %11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br_unrc, br_full);
 	}
       fclose (filem);
     }
@@ -932,9 +933,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       FILE* fileu = OpenFilew ((char*) "Outputs/Stage4/uFile.txt");
       for (int i = 0; i < nres1; i++)
 	{
-	  double br = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiU, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
-	  
-	  fprintf (fileu, "%11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br);
+	  double br_unrc = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiU, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+	  double br_full = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiU, i)) *  pow (rk (i), - double (mk (i)))                                    * fabs (B_0) /2./a (i);
+
+	  fprintf (fileu, "%11.4e %11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br_unrc, br_full);
 	}
       fclose (fileu);
     }
@@ -1011,9 +1013,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       FILE* filel = OpenFilew ((char*) "Outputs/Stage4/lFile.txt");
       for (int i = 0; i < nres1; i++)
 	{
-	  double br = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiL, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+	  double br_unrc = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiL, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
+	  double br_full = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiL, i)) *  pow (rk (i), - double (mk (i)))                                    * fabs (B_0) /2./a (i);
 
-	  fprintf (filel, "%11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br);
+	  fprintf (filel, "%11.4e %11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br_unrc, br_full);
 	}
       fclose (filel);
     } 
@@ -1159,12 +1162,13 @@ void Phase::Scan_Shift ()
 	  h = gsl_vector_complex_get (ChiL, j);
 	}	  
       
-      double chi  =   gsl_complex_abs (h);
-      double zeta = - gsl_complex_arg (h);
-      double wv   = 4. * fack (j) * sqrt (chi) /a (j);
-      double br   = 1.e4 * EEh (j, j) * chi * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
+      double chi     =   gsl_complex_abs (h);
+      double zeta    = - gsl_complex_arg (h);
+      double wv      = 4. * fack (j) * sqrt (chi) /a (j);
+      double br_unrc = 1.e4 * EEh (j, j) * chi * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
+      double br_full = 1.e4 * EEh (j, j) * chi *  pow (rk (j), - double (mk (j)))                                    * fabs (B_0) /2./a (j);
       
-      fprintf (file4, "%3d %16.9e %16.9e %16.9e %16.9e\n", mk (j), rk (j), wv, TSTART, br);
+      fprintf (file4, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk (j), rk (j), wv, TSTART, br_unrc, br_full);
     }
   fclose (file4);
 }
@@ -1623,9 +1627,10 @@ void Phase::IslandDynamics ()
       double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
 
       // Calculate radial magnetic field at edge
-      double br = 1.e4 * EEh (j, j) * chi (j) * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
+      double br_unrc = 1.e4 * EEh (j, j) * chi (j) * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
+      double br_full = 1.e4 * EEh (j, j) * chi (j) *  pow (rk (j), - double (mk (j)))                                    * fabs (B_0) /2./a (j);
 
-      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
@@ -1635,7 +1640,7 @@ void Phase::IslandDynamics ()
 	       PsiN (j),
 	       Wpk,
 	       Wvk,
-	       deltanek, deltaTek, q95, br);
+	       deltanek, deltaTek, q95, br_unrc, br_full);
     }
   fclose (filew);
 

@@ -4,15 +4,16 @@
 // 
 //        Neoclassical:: Neoclassical     ()
 // void   Neoclassical:: Solve            (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-//			                   int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+//			                   int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
 // void   Neoclassical:: Read_Parameters  (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-// 				           int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME)
+// 				           int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
 // void   Neoclassical:: Read_Equilibrium ()
 // void   Neoclassical:: Read_Profiles    ()
 // void   Neoclassical:: Get_Derived      ()
 // void   Neoclassical:: Get_Viscosities  ()
 // void   Neoclassical:: Get_Parameters   ()
 // void   Neoclassical:: Get_Frequencies  ()
+// void   Neoclassical::Get_LayerWidths   ()
 // void   Neoclassical:: Get_Normalized   ()
 // double Neoclassical:: psi_fun          (double x)
 // double Neoclassical:: psi_fun_p        (double x)
@@ -115,9 +116,11 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
 
   COULOMB  = 17.;
   NSMOOTH  = 100;
+
+  TAUMIN   = - 0.8;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH, &CATS);
+  NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH, &CATS, &TAUMIN);
 
   // Override namelist values with command line option values
   if (_NEUTRAL > -1)
@@ -150,8 +153,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d\n",
-	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS);
+  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
+	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
 
   // Sanity check
   if (YN < 0.)
@@ -189,14 +192,19 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
       printf ("NEOCLASSICAL::Read_Parameters: Error invalid EXB value\n");
       exit (1);
     }
+  if (TAUMIN <= -1.)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error invalid TAUMIN value\n");
+      exit (1);
+    }
    
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d\n",
-	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -204,8 +212,8 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
   fprintf (monitor, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d\n",
-	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS);
+  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
   fclose (monitor);
 }
 
@@ -540,7 +548,7 @@ void Neoclassical::Read_Profiles ()
       if (NTYPE == 0)
 	n_n (j) = NN * exp ((rr(j) - 1.) /(LN /a));
       else if (NTYPE == 1)
-	n_n (j) = NN / (1. + (rr(j) - 1.) * (rr(j) - 1.) /(LN /a) /(LN /a));
+	n_n (j) = NN /(1. + (rr(j) - 1.) * (rr(j) - 1.) /(LN /a) /(LN /a));
     }
   
   // Output profiles
@@ -724,6 +732,16 @@ void Neoclassical::Get_Derived ()
       chiik  (j) = Interpolate (NPSI, rr, chii,   rk (j), 0);
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
 
+      // Prevent negative diffusivities
+      if (chipk (j) < 0.)
+	chipk (j) = 1.;
+      if (chiek (j) < 0.)
+	chiek (j) = 1.;
+      if (chiik (j) < 0.)
+	chiik (j) = 1.;
+      if (chink (j) < 0.)
+	chink (j) = 1.;
+  
       dnedP1k (j) = Interpolate (NPSI, psi, dn_edP1, rk (j), 0);
       dTedP1k (j) = Interpolate (NPSI, psi, dT_edP1, rk (j), 0);
       dnidP1k (j) = Interpolate (NPSI, psi, dn_idP1, rk (j), 0);
@@ -818,6 +836,7 @@ void Neoclassical::Get_Derived ()
   // ----------------------------------------------------------------------------
   WcritTek.resize (nres); WcritTik.resize (nres); Wcritnek.resize (nres);
 
+  
   for (int j = 0; j < nres; j++)
     {
       WcritTek (j) = pow (chiek (j) /v_T_ek (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
@@ -1201,6 +1220,10 @@ void Neoclassical::Get_LayerWidths ()
       Qek  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ek (j) * tau_Hk (j);
       Qik  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ik (j) * tau_Hk (j);
 
+      // Prevent 1 + tauk from taking negative value
+      if (tauk (j) < TAUMIN)
+	tauk (j) = TAUMIN;
+
       printf ("m = %3d  tau = %11.4e  P_E = %11.4e  P_M = %11.4e  D = %11.4e  Q_E = %11.4e  Q_e = %11.4e  Q_i = %11.4e\n",
 	    mk (j), tauk (j), PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
     }
@@ -1218,6 +1241,12 @@ void Neoclassical::Get_LayerWidths ()
       Array<double,1> y (8);
       double          C    = PEk (j) / (1. + tauk (j)) /Dk (j)/Dk (j);
       double          xmax = sqrt (2. * log (max) /sqrt (C));
+
+      if (C < 0.)
+	{
+	  printf ("NEOCLASSICAL::Get_LayerWidths: Error - C < 0.\n");
+	  exit (1);
+	}
 
       x     = 0.;
       y (0) = 1.;
@@ -1243,6 +1272,12 @@ void Neoclassical::Get_LayerWidths ()
       gsl_complex c  = gsl_complex_div (Y1, Y2);
 
       delk (j) = M_PI * gsl_complex_abs (c) * a*rk(j) /pow (Sk (j), 1./3.);
+
+      if (isnan (delk (j)))
+	{
+	  printf ("Neoclassical::Get_LayerWidths: Error - delk (%2d) = NaN\n", j);
+	  exit (1);
+	}
     }
 }
 
@@ -1253,7 +1288,7 @@ void Neoclassical::Get_Normalized ()
 {
   FILE* file = OpenFilew ((char*) "Outputs/nFile");
 
-  fprintf (file, "%3d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
+  fprintf (file, "%4d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
  
   for (int j = 0; j < nres; j++)
     {
@@ -1269,16 +1304,16 @@ void Neoclassical::Get_Normalized ()
       printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
 	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, dk, delk (j));
 
-      fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          tm,                         th,
 	       sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                       wkn, 
 	       dnedrk (j) /1.e19,           dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),              WcritTik (j),
 	       akk (j),                     gk (j),                      dPsidr (j),                 PsiNk (j),                 nek (j) /1.e19,
 	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
-	       Factor1 (j) /1.e19/e/1.e3,   Factor2 (j) /1.e19/e/1.e3,   Factor3 (j) /1.e19/e/1.e3,  Factor4 (j) /1.e19/e/1.e3,
-	       Factor5 (j) /1.e19/e/1.e3,   Factor6 (j) /1.e19/e/1.e3,   Factor7 (j) /1.e19/e/1.e3,  Factor8 (j) /1.e19/e/1.e3,
-	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12(j) /1.e19/e/1.e3);
+	       Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
+	       Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
+	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
 	       
       }
    fclose (file);
@@ -1288,7 +1323,7 @@ void Neoclassical::Get_Normalized ()
       char* filename = new char[MAXFILENAMELENGTH];
       sprintf (filename, "Outputs/nFiles/n.%d", int (TIME));
       file = OpenFilew (filename);
-      fprintf (file, "%d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
+      fprintf (file, "%4d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
  
       for (int j = 0; j < nres; j++)
 	{
@@ -1301,7 +1336,7 @@ void Neoclassical::Get_Normalized ()
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 
-	  fprintf (file, "%d %d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
 		   a /R_0,                      Sk,                          tm,                         th,
 		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 

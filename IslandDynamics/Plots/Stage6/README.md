@@ -30,7 +30,8 @@
 	wpsi.asy       ... plots island widths (in PsiN) versus experimental time
 	npsi.asy       ... plots density flattened regions (in PsiN) versus experimental time
 	tpsi.asy       ... plots electron temperature flattened regions (in PsiN) versus experimental time
-	br.asy         ... plots radial mangetic field at edge versus experimental time
+	bru.asy        ... plots unreconnected radial mangetic field at edge versus experimental time
+	brf.asy        ... plots fully reconnected radial mangetic field at edge versus experimental time
 	
 	rpsiq.asy      ... plots rational surface radii (in PsiN) versus q95
 	wvpsiq.asy     ... plots vacuum island widths (in PsiN) versus q95

@@ -95,7 +95,7 @@ using namespace blitz;
 // Namelist funtion
 extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* EXB, int* INTP, int* INTF, int* INTC, 
 			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN,
-			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS);
+			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS, double* TAUMIN);
 
 // ############
 // Class header
@@ -134,6 +134,8 @@ class Neoclassical
   double EN;       // Ratio of majority neutral to ion temperatures
 
   double TIME;     // Experimental time (ms)
+
+  double TAUMIN;   // Minimum allowed value of tau
 
   // ------------------
   // Physical constants

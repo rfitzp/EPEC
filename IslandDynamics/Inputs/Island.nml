@@ -2,7 +2,7 @@
 
 	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation in PHASE
 	PHASE_FREQ   = 1       ! Flag for choosing natural frequency type in PHASE
-	PHASE_FFAC   = 0.1     ! Parameter for specifying natural frequency in PHASE
+	PHASE_FFAC   = 1.      ! Parameter for specifying natural frequency in PHASE
 
 	PHASE_MID    = 2       ! Number of coil sets in PHASE
 	PHASE_COPT   = 1       ! Coil current optimization switch in PHASE (see PHASE/Inputs/Phase.nml)
@@ -17,7 +17,7 @@
 
 	RESTART      = 1       ! If != 0 then delete all previous ISLANDDYNAMICS data
 
-	TSTART       = 2500.   ! ISLANDDYNAMICS experimental start time (ms)
-	TEND         = 3200.   ! ISLANDDYNAMICS experimental end time (ms)
-	DT           = 0.5     ! ISLANDDYNAMICS recording interval (ms) 
+	TSTART       = 2400.   ! ISLANDDYNAMICS experimental start time (ms)
+	TEND         = 4500.   ! ISLANDDYNAMICS experimental end time (ms)
+	DT           = 1.0     ! ISLANDDYNAMICS recording interval (ms) 
 &end	

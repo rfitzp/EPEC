@@ -4,7 +4,8 @@
 ! Function to read NEOCLASSICAL namelist
 ! ######################################
 
-subroutine NameListRead (IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS) &
+subroutine NameListRead (IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE,&
+     NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS, TAUMIN)& 
      bind (c, name = 'NameListRead')
   
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -26,8 +27,10 @@ subroutine NameListRead (IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN
   real    (kind = c_double), intent (inout) :: EN
   real    (kind = c_double), intent (inout) :: TIME
   real    (kind = c_double), intent (inout) :: COULOMB
+  real    (kind = c_double), intent (inout) :: TAUMIN
   
-  namelist /NEOCLASSICAL_CONTROL/ IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS
+  namelist /NEOCLASSICAL_CONTROL/ IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE,&
+       NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS, TAUMIN
   
   open  (unit = 100, file = 'Inputs/Neoclassical.nml', status = 'old')
   read  (unit = 100, nml = NEOCLASSICAL_CONTROL) 
