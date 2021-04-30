@@ -2,7 +2,7 @@
 
 	PHASE_LIN    = 0       ! If != 0 then perform purely linear calculation in PHASE
 	PHASE_FREQ   = 1       ! Flag for choosing natural frequency type in PHASE
-	PHASE_FFAC   = 1.      ! Parameter for specifying natural frequency in PHASE
+	PHASE_FFAC   = 0.2     ! Parameter for specifying natural frequency in PHASE
 
 	PHASE_MID    = 2       ! Number of coil sets in PHASE
 	PHASE_COPT   = 1       ! Coil current optimization switch in PHASE (see PHASE/Inputs/Phase.nml)

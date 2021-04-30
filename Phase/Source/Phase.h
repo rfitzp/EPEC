@@ -148,8 +148,9 @@ class Phase
   int      LIN;    // If != 0 then perform purely linear calculation
   int      FREQ;   // Natural frequency switch:
                    //  If == 0 then use linear/nonlinear natural frequency
-                   //  If == 1 then w_natural = FFAC * w_linear + (1-FFAC) * w_EB
-  double   FFAC;   // Natural frequncy parameter
+                   //  If == 1 then use linear/ExB/nonlinear natural frequency 
+                   //  If == 2 then w_natural = FFAC * w_linear + (1-FFAC) * w_EB
+  double   FFAC;   // Natural frequency parameter
  
   int      MID;    // Number of RMP coil sets
   int      COPT;   // If == 0 then no coil current optimization

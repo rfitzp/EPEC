@@ -238,7 +238,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       printf ("PHASE:: Invalid COPT value\n");
       exit (1);
     }
-  if (FREQ < 0 || FREQ > 1)
+  if (FREQ < 0 || FREQ > 2)
     {
       printf ("PHASE:: Invalid FREQ value\n");
       exit (1);
@@ -1634,7 +1634,7 @@ void Phase::IslandDynamics ()
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
-	       GetActualFrequency (j)  /tau_A/1.e3,
+	       GetActualFrequency  (j) /tau_A/1.e3,
 	       TIME,
 	       (Wrk /R_0) /a (j),
 	       PsiN (j),
@@ -2420,6 +2420,12 @@ double Phase::GetNaturalFrequency (int j)
 	  double w = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
 	  
 	  om = (wkl (j) + wkn (j) * w) /(1. + w);
+	}
+      else if (FREQ == 1)
+	{
+	  double w = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
+
+	  om = (wkl (j) + (wke (j) - wkl (j) - wkn (j)) * w + wkn (j) * w*w) /(1. - w + w*w);
 	}
       else
 	om = FFAC * wkl (j) +  (1. - FFAC) * wke (j);
