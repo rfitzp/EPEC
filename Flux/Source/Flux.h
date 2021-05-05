@@ -66,7 +66,8 @@
 // 1.11 - Added -P option
 // 1.12 - Included ZOFF parameter in gFiles
 // 1.13 - Restrict program to only calculated q-profile for PsiN < PSIRAT
-// 1.14 - Added q_hat calculatiob
+// 1.14 - Added q_hat calculation
+// 1.15 - Added C1 and C2 calculation
 
 // #####################################################################################
 
@@ -74,7 +75,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 14
+#define VERSION_MINOR 15
 
 #include <stdio.h>
 #include <math.h>
@@ -239,6 +240,8 @@ class Flux
   double* q_hat;       // q_hat at rational surfaces
   double* A1res;       // A1 values at rational surfaces
   double* A2res;       // A2 values at rational surfaces
+  double* C1res;       // C1 values at rational surfaces
+  double* C2res;       // C2 values at rational surfaces
   
   // Straight angle flux coordinate data
   double*     th;      // theta array
@@ -260,6 +263,7 @@ class Flux
   gsl_matrix* I5;      // Neoclassical integrals
   gsl_matrix* I6;      // Neoclassical integrals
   double*     I7;      // Neoclassical integral
+  double*     I8;      // Neoclassical integral
 
   // Perturbed equilibrium data
   gsl_matrix_complex* FF;  // F-matrix

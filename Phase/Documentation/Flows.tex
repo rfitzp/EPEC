@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{\bf Plasma Flow Shifts}
+\date{\today}
+\author{Richard Fitzpatrick}
+
+\begin{document}
+\maketitle
+
+\section{Plasma Equilibrium}
+We have
+\begin{equation}
+{\bf B} = \nabla\phi\times\nabla\psi + I(\psi)\,\nabla\phi = B_0\,R_0\left[f(r)\,\nabla\phi\times \nabla r+g(r)\,\nabla\phi\right].
+\end{equation}
+So
+\begin{align}
+\frac{d\psi}{dr}= B_0\,R_0\,f(r),\\[0.5ex]
+I(\psi) = B_0\,R_0\,g(r).
+\end{align}
+We also have
+\begin{align}
+|\nabla\phi| &= \frac{1}{R},\\[0.5ex]
+\nabla r\times \nabla\theta\cdot\nabla\phi &= \frac{R_0}{r\,R^{\,2}},\\[0.5ex]
+q(r)&= \frac{r\,g}{R_0\,f}.
+\end{align}
+
+\section{Plasma Flows}
+We have
+\begin{align}
+{\bf E}& = - \nabla{\mit\Phi}(\psi) + \frac{E_\parallel}{B_0}\,{\bf B},
+\end{align}
+and
+\begin{align}
+{\bf V}^{\,a} &= {\bf V}_\perp^{\,a} + \frac{V_\parallel^{\,a}(\psi)}{B_0}\,{\bf B},\\[0.5ex]
+{\bf V}_\perp^{\,a} &= \frac{{\bf E}\times {\bf B}}{B^{\,2}} + \frac{{\bf B}\times \nabla p_a}{n_a\,e_a\,B^{\,2}}.
+\end{align}
+Furthermore,
+\begin{align}
+\omega_E(r) &= - \frac{d{\mit\Phi}}{d\psi},\\[0.5ex]
+\omega_\ast^{\,a}(r)&= - \frac{T_a}{e_a}\,\frac{d\ln p_a}{d\psi}.
+\end{align}
+
+It follows that
+\begin{align}
+{\bf V}_\perp^{\,a} &= (\omega_E+\omega_\ast^{\,a})\left(\frac{B_0}{B}\right)^2\left(\frac{r\,g^{\,2}}{q}\right)
+\left(-R_0\,\nabla\phi\times \nabla r + \frac{r\,|\nabla r|^{\,2}}{q}\,\nabla\phi\right),\\[0.5ex]
+\frac{V_\parallel^{\,a}}{B_0}\,{\bf B} &= V_\parallel^{\,a}\left(\frac{r\,g}{q}\,\nabla\phi\times \nabla r + R_0\,g\,\nabla\phi\right).
+\end{align}
+
+Let
+\begin{align}
+{\mit\Omega}_\theta^{\,a} &= {\bf V}^{\,a}\cdot\nabla\theta,\\[0.5ex]
+{\mit\Omega}_\phi^{\,a} &= {\bf V}^{\,a}\cdot\nabla\phi.
+\end{align}
+It follows that
+\begin{align}
+q\,{\mit\Omega}_\theta^{\,a}& = \frac{g\,V_\parallel^{\,a}}{R_0}\left(\frac{R_0}{R}\right)^2- (\omega_E+\omega_{\ast}^{\,a})\,g^{\,2}
+\left(\frac{R_0}{R}\right)^2\left(\frac{B_0}{B}\right)^2,\\[0.5ex]
+{\mit\Omega}_\phi^{\,a}& = \frac{g\,V_\parallel^{\,a}}{R_0}\left(\frac{R_0}{R}\right)^2+ (\omega_E+\omega_{\ast}^{\,a})\,g^{\,2}
+\left(\frac{R_0}{R}\right)^2\left(\frac{B_0}{B}\right)^2\left(\frac{r}{R_0\,q}\right)^2|\nabla r|^{\,2}.
+\end{align}
+
+Let 
+\begin{align}
+\omega_{\parallel}^{\,a} &= \frac{g\,V_\parallel^{\,a}}{R_0},\\[0.5ex]
+C_1 &= \left\langle \left(\frac{R_0}{R}\right)^2\right\rangle,\\[0.5ex]
+C_2 &= g^{\,2} \left\langle \left(\frac{R_0}{R}\right)^2\left(\frac{B_0}{B}\right)^2\right\rangle=\left\langle
+\left[1+\left(\frac{r}{R_0\,q}\right)^2\,|\nabla r|^{\,2}\right]^{-1}\right\rangle.
+\end{align}
+It follows that
+\begin{align}
+q\,\langle{\mit\Omega}_\theta^{\,a}\rangle &= C_1\,\omega_\parallel^{\,a}- C_2\,(\omega_E+\omega_\ast^{\,a}),\\[0.5ex]
+\langle{\mit\Omega}_\phi^{\,a}\rangle &= C_1\,\omega_\parallel^{\,a} +(1- C_2)\,(\omega_E+\omega_\ast^{\,a}).
+\end{align}
+
+Thus,
+\begin{align}
+{\mit\Delta}\omega_E &= {\mit\Delta\Omega}_\phi^{\,a}-q\,{\mit\Delta\Omega}_\theta^{\,a},\\[0.5ex]
+{\mit\Delta}\omega_\parallel^{\,a} &= \frac{C_2\,{\mit\Delta\Omega}_\phi^{\,a} + (1-C_2)\,q\,{\mit\Delta\Omega}_\theta^{\,a}}{C_1}.
+\end{align}
+Finally,
+\begin{align}
+{\mit\Delta}V_{\parallel}^{\,a} &=\frac{R_0}{g}\,{\mit\Delta}\omega_\parallel^{\,a},\\[0.5ex]
+{\mit\Delta}V_{E\,\theta} &= - C_2\,\frac{r}{q}\,{\mit\Delta}\omega_E.
+\end{align}
+\end{document}
