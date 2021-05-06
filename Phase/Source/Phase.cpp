@@ -29,6 +29,12 @@
 //		                       Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
 // double Phase:: GetNaturalFrequency (int j)
 // double Phase:: GetActualFrequency  (int j)
+// double Phase:: GetDeltaOmegaTheta  (int j)
+// double Phase:: GetDeltaOmegaPhi    (int j)
+// double Phase:: GetDeltaVPhi        (int j)
+// double Phase:: GetDeltaVParallel   (int j)
+// double Phase:: GetDeltaVEB         (int j)
+// double Phase:: GetDeltaEr          (int j)
 // void   Phase:: Rhs                 (double t, Array<double,1>& y, Array<double,1>& dydt)
 // void   Phase:: RK4Adaptive         (double& x, Array<double,1>& y, double& h, 
 //			               double& t_err, double acc, double S, int& rept,
@@ -363,10 +369,12 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 
   A1.resize    (nres);
   qhatk.resize (nres);
+  C1k.resize   (nres);
+  C2k.resize   (nres);
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &inr, &qhatk(j)) != 15)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &inr, &qhatk(j), &C1k(j), &C2k(j)) != 17)
 	{
 	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
 	  exit (1);
@@ -1394,6 +1402,9 @@ void Phase::IslandDynamics ()
   FILE*  file3a = OpenFilew ((char*) "Outputs/Stage5/Wdel.txt");
   FILE*  file4  = OpenFilew ((char*) "Outputs/Stage5/omega.txt");
   FILE*  file4a = OpenFilew ((char*) "Outputs/Stage5/omega0.txt");
+  FILE*  file4b = OpenFilew ((char*) "Outputs/Stage5/Omegat.txt");
+  FILE*  file4c = OpenFilew ((char*) "Outputs/Stage5/Omegap.txt");
+  FILE*  file4d = OpenFilew ((char*) "Outputs/Stage5/Er.txt");
   FILE*  file5  = OpenFilew ((char*) "Outputs/Stage5/rmp.txt");
   FILE*  file6  = OpenFilew ((char*) "Outputs/Stage5/mirnov.txt");
   FILE*  file8  = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/scan.txt");  
@@ -1490,6 +1501,24 @@ void Phase::IslandDynamics ()
 	    fprintf (file4a, "%16.9e ", GetNaturalFrequency (j) /tau_A/1.e3);
 	  fprintf (file4a, "\n");
 
+	  // Output changes in poloidal angular velocities
+	  fprintf (file4b, "%16.9e ", t*tau_A);
+	  for (int j = 0; j < nres; j++)
+	    fprintf (file4b, "%16.9e ", GetDeltaOmegaTheta (j));
+	  fprintf (file4b, "\n");
+
+	  // Output changes in toroidal angular velocities
+	  fprintf (file4c, "%16.9e ", t*tau_A);
+	  for (int j = 0; j < nres; j++)
+	    fprintf (file4c, "%16.9e ", GetDeltaOmegaPhi (j));
+	  fprintf (file4c, "\n");
+
+	  // Output changes in Er
+	  fprintf (file4d, "%16.9e ", t*tau_A);
+	  for (int j = 0; j < nres; j++)
+	    fprintf (file4d, "%16.9e ", GetDeltaEr (j));
+	  fprintf (file4d, "\n");
+	  
 	  // Output RMP data
 	  CalcRMP (t);
 	  fprintf (file5, "%16.9e %16.9e %16.9e\n", t*tau_A, irmp, prmp /M_PI);
@@ -1588,6 +1617,7 @@ void Phase::IslandDynamics ()
 	  fflush (file6);  fflush (file8);  fflush (file9);  fflush (file10); fflush (file11);
 	  fflush (file12); fflush (file13); fflush (file14); fflush (file15); fflush (file16);
 	  fflush (file17); fflush (file18); fflush (file3a); fflush (file4a); fflush (file19);
+	  fflush (file20); fflush (file4b); fflush (file4c); fflush (file4d); 
 	}
     }
   while (t < Tend);
@@ -1598,7 +1628,7 @@ void Phase::IslandDynamics ()
   fclose (file6);  fclose (file8);  fclose (file9);  fclose (file10); fclose (file11);
   fclose (file12); fclose (file13); fclose (file14); fclose (file15); fclose (file16);
   fclose (file17); fclose (file18); fclose (file3a); fclose (file4a); fclose (file19);
-  fclose (file20);
+  fclose (file20); fclose (file4b); fclose (file4c); fclose (file4d); 
 
   // Save calculation for restart
   Save ();
@@ -1630,7 +1660,14 @@ void Phase::IslandDynamics ()
       double br_unrc = 1.e4 * EEh (j, j) * chi (j) * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
       double br_full = 1.e4 * EEh (j, j) * chi (j) *  pow (rk (j), - double (mk (j)))                                    * fabs (B_0) /2./a (j);
 
-      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      // Calculate changes in poloidal angular velocity, toroidal angular velocity, toroidal velocity, ExB velocity, and radial electric field
+      double Omegat = GetDeltaOmegaTheta (j);
+      double Omegap = GetDeltaOmegaPhi   (j);
+      double Vp     = GetDeltaVPhi       (j);
+      double VEB    = GetDeltaVEB        (j);
+      double Er     = GetDeltaEr         (j);
+
+      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
@@ -1640,7 +1677,8 @@ void Phase::IslandDynamics ()
 	       PsiN (j),
 	       Wpk,
 	       Wvk,
-	       deltanek, deltaTek, q95, br_unrc, br_full);
+	       deltanek, deltaTek, q95, br_unrc, br_full,
+	       Omegat, Omegap, Vp, VEB, Er);
     }
   fclose (filew);
 
@@ -2451,6 +2489,80 @@ double Phase::GetActualFrequency (int j)
       sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
 
   return sum;
+}
+
+// ##################################################################
+// Function to calculate change in poloidal angular velocity (krad/s)
+// ##################################################################
+double Phase::GetDeltaOmegaTheta (int j)
+{
+  double sum = 0.;
+
+  for (int k = 0; k < nres; k++)
+    for (int i = 0; i < NFLOW; i++)
+      sum += alphakp (k, i) * natp (j, k, i);
+
+  return - sum /double (mk (j)) /tau_A/1.e3;
+}
+
+// ##################################################################
+// Function to calculate change in toroidal angular velocity (krad/s)
+// ##################################################################
+double Phase::GetDeltaOmegaPhi (int j)
+{
+  double sum = 0.;
+
+  for (int k = 0; k < nres; k++)
+    for (int i = 0; i < NFLOW; i++)
+      sum += betakp (k, i) * natt (j, k, i);
+
+  return sum /double (ntor (j)) /tau_A/1.e3;
+}
+
+// ########################################################
+// Function to calculate change in toroidal velocity (km/s)
+// ########################################################
+double Phase::GetDeltaVPhi (int j)
+{
+  double value = GetDeltaOmegaPhi (j);
+
+  return R_0 * value;
+}
+
+// ########################################################
+// Function to calculate change in parallel velocity (km/s)
+// ########################################################
+double Phase::GetDeltaVParallel (int j)
+{
+  double delta_theta    = GetDeltaOmegaTheta (j);
+  double delta_phi      = GetDeltaOmegaPhi   (j);
+  double delta_parallel = (C2k (j) * delta_phi + (1. - C2k (j)) * qk (j) * delta_theta) /C1k (j);
+
+  return R_0 * delta_parallel /gk (j);
+}
+
+// ###################################################
+// Function to calculate change in ExB velocity (km/s)
+// ###################################################
+double Phase::GetDeltaVEB (int j)
+{
+  double delta_theta = GetDeltaOmegaTheta (j);
+  double delta_phi   = GetDeltaOmegaPhi   (j);
+  double delta_EB    = delta_phi - qk (j) * delta_theta;
+
+  return - R_0 * C2k (j) * a (j) * rk (j) * delta_EB /qk (j);
+}
+
+// #########################################
+// Function to calculate change in Er (kV/m)
+// #########################################
+double Phase::GetDeltaEr (int j)
+{
+  double delta_theta = GetDeltaOmegaTheta (j);
+  double delta_phi   = GetDeltaOmegaPhi   (j);
+  double delta_EB    = delta_phi - qk (j) * delta_theta;
+
+  return R_0 * B_0 * dPsiNdr (j) * delta_EB;
 }
 
 // ###############################################################

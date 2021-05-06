@@ -62,6 +62,7 @@
 // 1.20 - Added CATS flag
 // 1.21 - Use more accurate expression for neoclassical flow damping time
 // 1.22 - Added more accurate calculation of linear layer width
+// 1.23 - Added C1 and C2
 
 // ################################################################
 
@@ -69,7 +70,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 22
+#define VERSION_MINOR 23
 
 #include <stdio.h>
 #include <math.h>
@@ -275,6 +276,8 @@ class Neoclassical
   Array<double,1> dPsidr; // R_0 dPsiN/dr
   Array<double,1> A2;     // A2
   Array<double,1> q_hat;  // q_hat
+  Array<double,1> C1;     // C1
+  Array<double,2> C2;     // C2
 
   // Derived from profiles
   double rho0;                // Central mass density (kg/m^-3)

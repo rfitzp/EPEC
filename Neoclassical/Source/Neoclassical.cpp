@@ -324,11 +324,14 @@ void Neoclassical::Read_Equilibrium ()
   dPsidr.resize (nres);
   A2.resize     (nres);
   q_hat.resize  (nres);
+  C1.resize     (nres);
+  C2.resize     (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j), &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j)) != 15)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j),
+		  &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j), &C1 (j), &C2 (j)) != 17)
 	{
 	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);

@@ -89,6 +89,7 @@
 // 2.19 - Natural frequency limited to linear/nonlinear model
 // 2.20 - Added FREQ flag
 // 2.21 - Use q_hat instead of q in velocity evolution equation
+// 2.22 - Added velocity changes
 
 // #######################################################################
 
@@ -96,7 +97,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 21
+#define VERSION_MINOR 22
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -219,7 +220,7 @@ class Phase
   double          P0;       // Central thermal pressure (10^19 m^-3 keV)
   Array<int,1>    mk;       // Resonant poloidal mode numbers
   Array<int,1>    ntor;     // Resonant toroidal mode number
-  Array<double,1> rk;       // Minor radii of resonant surfaces / r_a
+  Array<double,1> rk;       // Minor radii of resonant surfaces / a
   Array<double,1> qk;       // Safety-factors at resonant surfaces
   Array<double,1> rhok;     // Normalized mass densities at resonant surfaces
   Array<double,1> a;        // Normalized (to R_0) plasma minor radius
@@ -239,6 +240,8 @@ class Phase
   Array<double,1> akk;      // Metric elements at resonant surfaces
   Array<double,1> gk;       // g values at resonant surfaces
   Array<double,1> qhatk;    // q_hat values at resonant surfaces
+  Array<double,1> C1k;      // C1 values at resonant surfaces
+  Array<double,1> C2k;      // C2 values at resonant surfaces
   Array<double,1> dPsiNdr;  // R_0 dPsiN/dr values at resonant surfaces
   Array<double,1> PsiN;     // PsiN values at resonant surfaces
   Array<double,1> nek;      // Electron number densities at resonant surfaces (10^19/m^-3)
@@ -390,11 +393,23 @@ class Phase
   void PackRhs (Array<double,1> XkRHS,      Array<double,1> YkRHS,
 		Array<double,2> alphakpRHS, Array<double,2> betakpRHS,
 		Array<double,1> dydt);
-  // Calculate natural freqeuncy
+  // Calculate natural frequency
   double GetNaturalFrequency (int j);
-  // Calculate actual freqeuncy
+  // Calculate actual frequency
   double GetActualFrequency (int j);
-   // Evaluate right-hand sides of differential equations
+  // Calculate change in poloidal angular velocity (krad/s)
+  double GetDeltaOmegaTheta (int j);
+  // Calculate change in toroidal angular velocity (krad/s)
+  double GetDeltaOmegaPhi (int j);
+  // Function to calculate change in toroidal velocity (km/s)
+  double GetDeltaVPhi (int j);
+  // Calculate change in parallel velocity (km/s)
+  double GetDeltaVParallel (int j);
+  // Calculate change in ExB velocity (km/s)
+  double GetDeltaVEB (int j);
+  // Calculate change in Er (kV/m)
+  double GetDeltaEr (int j);
+  // Evaluate right-hand sides of differential equations
   void Rhs (double x, Array<double,1>& y, Array<double,1>& dydx);
   // Adaptive-step integration routine
   void RK4Adaptive (double& x, Array<double,1>& y, double& h, double& t_err, 
