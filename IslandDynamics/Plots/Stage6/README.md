@@ -14,6 +14,8 @@
 
 	omega0.asy     ... plots actual natural frequencies versus experimental time
 	omega.asy      ... plots island frequencies versus experimental time
+	domega.asy     ... plots changes in island frequencies versus experimental time
+	omegat.asy     ... plots changes in  versus experimental time
 
 	omega0lq.asy   ... plots linear natural frequencies versus q95
 	omega0q.asy    ... plots actual natural frequencies versus q95

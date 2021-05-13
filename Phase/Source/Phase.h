@@ -397,6 +397,8 @@ class Phase
   double GetNaturalFrequency (int j);
   // Calculate actual frequency
   double GetActualFrequency (int j);
+  // Calculate change in natural frequency (krad/s)
+  double GetDeltaOmega (int j);
   // Calculate change in poloidal angular velocity (krad/s)
   double GetDeltaOmegaTheta (int j);
   // Calculate change in toroidal angular velocity (krad/s)

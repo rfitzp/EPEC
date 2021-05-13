@@ -29,6 +29,7 @@
 //		                       Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
 // double Phase:: GetNaturalFrequency (int j)
 // double Phase:: GetActualFrequency  (int j)
+// double Phase:: GetDeltaOmega       (int j)
 // double Phase:: GetDeltaOmegaTheta  (int j)
 // double Phase:: GetDeltaOmegaPhi    (int j)
 // double Phase:: GetDeltaVPhi        (int j)
@@ -1666,8 +1667,9 @@ void Phase::IslandDynamics ()
       double Vp     = GetDeltaVPhi       (j);
       double VEB    = GetDeltaVEB        (j);
       double Er     = GetDeltaEr         (j);
+      double omega  = GetDeltaOmega      (j);
 
-      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),
 	       rk (j),
 	       GetNaturalFrequency (j) /tau_A/1.e3,
@@ -1678,7 +1680,7 @@ void Phase::IslandDynamics ()
 	       Wpk,
 	       Wvk,
 	       deltanek, deltaTek, q95, br_unrc, br_full,
-	       Omegat, Omegap, Vp, VEB, Er);
+	       Omegat, Omegap, Vp, VEB, Er, omega);
     }
   fclose (filew);
 
@@ -2489,6 +2491,20 @@ double Phase::GetActualFrequency (int j)
       sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
 
   return sum;
+}
+
+// ##########################################################
+// Function to calculate change in natural frequency (krad/s)
+// ##########################################################
+double Phase::GetDeltaOmega (int j)
+{
+  double sum = 0.;
+
+  for (int k = 0; k < nres; k++)
+    for (int i = 0; i < NFLOW; i++)
+      sum -= alphakp (k, i) * natp (j, k, i) + betakp (k, i) * natt (j, k, i);
+
+  return sum /tau_A/1.e3;
 }
 
 // ##################################################################
