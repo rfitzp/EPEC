@@ -117,4 +117,4 @@
  - CHI_PSI: Perpendicular toroidal momentum diffusivity (m^2/s)
  - CHI_E:   Perpendiocular electron energy diffusivity (m^2/s)
  - D_PERP:  Perpendicular particle diffusivity (m^2/s)
- - CHI_E:   Perpendiocular ion energy diffusivity (m^2/s)
+ - CHI_I:   Perpendiocular ion energy diffusivity (m^2/s)

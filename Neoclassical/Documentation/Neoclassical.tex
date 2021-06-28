@@ -226,7 +226,7 @@ where
 \end{align}
 Here,
 \begin{align}
-F^{\,ii}_{\,00} &= \frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI})^{\,3/2}},\\[0.5ex]
+F^{\,ii}_{\,00} &= \frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}},\\[0.5ex]
 F^{\,ii}_{\,01}&=\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{5/2}},\\[0.5ex]
 F^{\,ii}_{\,10}&=\frac{3}{2}\,\frac{\alpha\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{5/2}}=F^{\,ii}_{\,01},\\[0.5ex]
 F^{\,ii}_{\,11}& =\sqrt{2}+ \frac{\alpha\,[13/4+4\,x_{iI}^{\,2}+(15/2)\,x_{iI}^{\,4}]}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
@@ -619,10 +619,10 @@ K_\theta = \frac{I^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle},
 \end{equation}
 and 
 \begin{align}
-\omega_{{\rm nc}\,i}&= -G^{\,ii}_{00}\,\omega_E-L^{\,ii}_{00}\,\omega_{\ast\,i}-
-L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
-\omega_{{\rm nc}\,I}&= -G^{\,Ii}_{00}\,\omega_E-L^{\,II}_{00}\,\omega_{\ast\,I}-
-L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
+\omega_{{\rm nc}\,i}&= -G^{\,ii}_{00}\,\omega_E-L^{\,ii}_{00}\,\omega_{\ast\,i}+L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}-
+L^{\,iI}_{00}\,\omega_{\ast\,I}+L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I},\\[0.5ex]
+\omega_{{\rm nc}\,I}&= -G^{\,Ii}_{00}\,\omega_E-L^{\,II}_{00}\,\omega_{\ast\,I}+L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}-
+L^{\,Ii}_{00}\,\omega_{\ast\,i}+L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}.
 \end{align}
 
 \section{Natural Frequencies}
@@ -705,6 +705,17 @@ with
 \begin{equation}
 \omega_{\rm loop} = \frac{\langle E_\parallel\,B\rangle}{I\,\langle B\rangle}= \frac{V_{\rm loop}}{2\pi}\,\frac{\langle B/R\rangle}{I\,\langle B\rangle}.
 \end{equation}
+
+Can also write
+\begin{equation}
+\omega_{\parallel\,{\rm bootstrap}} = -(\omega_{\,\ast_e} + \omega_{{\rm nc}\,e}) + \frac{n_i}{n_e}\left(\omega_{\ast\,i} + \omega_{{\rm nc}\,i}\right)+ \frac{Z_I\,n_I}{n_e}\left(\omega_{\ast\,I} + \omega_{{\rm nc}\,I}\right),
+\end{equation}
+where
+\begin{align}
+\omega_{{\rm nc}\,e} &= -P^{\,ei}_{00}\,\omega_E-L^{\,ee}_{00}\,\omega_{\ast\,e}+L^{\,ee}_{01}\left(\frac{\eta_e}{1+\eta_e}\right)\omega_{\ast\,e} - L_{00}^{ei}\,\omega_{\ast\,i}+L^{\,ei}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\omega_{\ast\,i}\nonumber\\[0.5ex]
+&
+\phantom{=}-L^{\,eI}_{00}\,\omega_{\ast\,I}+L^{\,eI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\omega_{\ast\,I}.
+\end{align}
 
 \section{Model Poloidal Flow Damping Term}
 Our model poloidal flow damping force density in the plasma equation of motion takes the form

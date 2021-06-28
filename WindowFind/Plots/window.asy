@@ -30,5 +30,5 @@ xaxis (Top,  NoTicks);
 yaxis ("$I_{\rm rmp}({\rm kA/turn})$", Left, LeftTicks(Step=0.5, n=5));
 yaxis (Right, NoTicks);
 
-palette ("$-{\mit\Delta}P/P_{\rm ped}$", range, point (NW) + (0, 0.02), point (NE) + (0, 0.1), Top, Palette);
+palette ("${\mit\Delta}P/P_{\rm ped}$", range, point (NW) + (0, 0.02), point (NE) + (0, 0.1), Top, Palette);
 

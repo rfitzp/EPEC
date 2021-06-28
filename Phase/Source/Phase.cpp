@@ -61,7 +61,7 @@ Phase::Phase ()
   hmin     = 1.e-2;
   hmax     = 1.e2;
   maxrept  = 50;
-  omegamax = 500.;
+  omegamax = 1000.;
 
   // ----------------------
   // Set physical constants
@@ -551,7 +551,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   Tend   = TEND       *1.e-3/tau_A;
 
   mk.resize      (nres); ntor.resize     (nres); rk.resize       (nres); qk.resize       (nres); rhok.resize   (nres);
-  a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres);
+  a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres); tauxk.resize  (nres);
   fack.resize    (nres); delk.resize     (nres); wkl.resize      (nres); wke.resize      (nres); wkn.resize    (nres);
   dnedrk.resize  (nres); dTedrk.resize   (nres); Wcrnek.resize   (nres); WcrTek.resize   (nres); WcrTik.resize (nres);
   akk.resize     (nres); gk.resize       (nres); dPsiNdr.resize  (nres); PsiN.resize     (nres); nek.resize    (nres);
@@ -561,7 +561,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   Factor9.resize (nres); Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk      (j), &ntor     (j), &rk       (j), &qk       (j), &rhok   (j),
 		&a       (j), &Sk       (j), &taumk    (j), &tautk    (j), &fack   (j),
 		&delk    (j), &wkl      (j), &wke      (j), &wkn      (j),
@@ -570,7 +570,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 		&nik     (j), &Tek      (j), &Tik      (j), &dnidrk   (j), &dTidrk (j),
 		&Factor1 (j), &Factor2  (j), &Factor3  (j), &Factor4  (j),
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
-		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j)) != 41)
+		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j)) != 42)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -2632,11 +2632,11 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
       for (int i = 0; i < NFLOW; i++)
 	{
 	  alphakpRHS (j, i) = (torp (j, i) * Psik (j) * sink (j)
-			       - (j1p (i)*j1p (i) /taumk (j) + 1. /tautk (j)) * alphakp (j, i))
+			       - (j1p (i)*j1p (i) /taumk (j) + 1. /tautk (j) + 1. /tauxk (j)) * alphakp (j, i))
 	    /(1. + 2.*qhatk (j)*qhatk (j));
 
 	  betakpRHS (j, i) = tort (j, i) * Psik (j) * sink (j)
-	    - (j0p (i)*j0p (i) /taumk (j)) * betakp (j, i);
+	    - (j0p (i)*j0p (i) /taumk (j)  + 1. /tauxk (j)) * betakp (j, i);
 	}
     }
 

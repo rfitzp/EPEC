@@ -1,6 +1,6 @@
 import graph;
      
-size(500,500,IgnoreAspect);
+size(750,500,IgnoreAspect);
 
 file    in = input("../../Outputs/Stage3/profiles.txt").line();
 real[][] A = in.dimension (0,0);

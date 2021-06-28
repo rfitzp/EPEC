@@ -1,27 +1,27 @@
 &FFILEGENERATE_CONTROL
-	FLUX_NTOR    = 3       ! Set toroidal mode number in FLUX
-	FLUX_MMIN    = 4       ! Set minimum poloidal mode number in FLUX
+	FLUX_NTOR    = 2       ! Set toroidal mode number in FLUX
+	FLUX_MMIN    = 3       ! Set minimum poloidal mode number in FLUX
 	FLUX_MMAX    = 30      ! Set maximum poloidal mode number in FLUX
 
 	FLUX_PSILIM  = 0.998   ! Maximum PsiN for safety-factor calculation in FLUX
  	FLUX_PSIRAT  = 0.995   ! Ignore rational surfaces for PsiN > PSIRAT in FLUX
-        FLUX_PSIPED  = 0.925   ! PsiN value at top of pedestal in FLUX
+        FLUX_PSIPED  = 0.945   ! PsiN value at top of pedestal in FLUX
 
 	NEO_INTF     = 0       ! If != 0 then do not call FLUX and interpolate fFiles in NEOCLASSICAL
 	NEO_INTC     = 0       ! If != 0 then interpolate cFiles in NEOCLASSICAL
 	NEO_CATS     = 1       ! If != 0 then use only linear interpolation for cFiles in NEOCLASSICAL 
 
-	NEO_EXB      = 0       ! Set ExB frequency type in NEOCLASSICAL (see NEOCLASSICAL/Inputs/Neoclassical.nml)
+	NEO_EXB      = 1       ! Set ExB frequency type in NEOCLASSICAL (see NEOCLASSICAL/Inputs/Neoclassical.nml)
 
 	NEO_IMPURITY = 1       ! If != 0 then include single ion impurity species in calculation in NEOCLASSICAL
 
 	NEO_NEUTRAL  = 1       ! If != 0 then include majority ion neutrals in calculation in NEOCLASSICAL
 	NEO_NTYPE    = 1       ! If 0/1 then neutral density distribution exponential/Lorentzian in NEOCLASSICAL
-	NEO_NN       = 3.0e17  ! Set neutral density at boundary in NEOCLASSICAL
-	NEO_LN       = 1.2e-2  ! Set neutral density scalelength in NEOCLASSICAL
+	NEO_NN       = 0.25e17 ! Set neutral density at boundary in NEOCLASSICAL
+	NEO_LN       = 1.3e-2  ! Set neutral density scalelength in NEOCLASSICAL
 	NEO_YN       = 1.5     ! Set neutral poloidal asymmetry parameter in NEOCLASSICAL
 
-	TSTART       = 2000.   ! Scan start time (ms)
-	TEND         = 3301.   ! Scan end time (ms)
+	TSTART       = 0000.   ! Scan start time (ms)
+	TEND         = 2201.   ! Scan end time (ms)
 	DT           = 5.      ! Scan time step (ms) 
 &end	

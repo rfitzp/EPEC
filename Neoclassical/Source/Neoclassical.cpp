@@ -13,7 +13,7 @@
 // void   Neoclassical:: Get_Viscosities  ()
 // void   Neoclassical:: Get_Parameters   ()
 // void   Neoclassical:: Get_Frequencies  ()
-// void   Neoclassical::Get_LayerWidths   ()
+// void   Neoclassical:: Get_LayerWidths  ()
 // void   Neoclassical:: Get_Normalized   ()
 // double Neoclassical:: psi_fun          (double x)
 // double Neoclassical:: psi_fun_p        (double x)
@@ -876,7 +876,7 @@ void Neoclassical::Get_Derived ()
   // -----------------------------------------
   // Calculate timescales at rational surfaces
   // -----------------------------------------
-  rho_sk.resize (nres); tau_Hk.resize (nres); tau_Rk.resize (nres); tau_Mk.resize (nres); tau_thk.resize (nres);
+  rho_sk.resize (nres); tau_Hk.resize (nres); tau_Rk.resize (nres); tau_Mk.resize (nres); tau_thk.resize (nres); tau_cxk.resize (nres);
  
 
   for (int j = 0; j < nres; j++)
@@ -887,16 +887,17 @@ void Neoclassical::Get_Derived ()
       tau_Rk  (j) = mu_0 * a*a * rk(j)*rk(j) * nek (j) * e*e /nu_eek (j) /m_e;
       tau_Mk  (j) = a*a /chipk(j);
       tau_thk (j) = 1. /nu_iik (j) / (1. + (qk(j) * R_0 /rk(j) /a) * (qk(j) * R_0 /rk(j) /a) /akk(j));
+      tau_cxk (j) = 1. /NNk(j) /SVN;
 
-      printf ("m = %3d  P0 = %11.4e  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e\n",
-	      mk (j), P0 /1.e19/e/1.e3, tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j));
+      printf ("m = %3d  P0 = %11.4e  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e  tau_cx = %11.4e\n",
+	      mk (j), P0 /1.e19/e/1.e3, tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j), tau_cxk (j));
     }
 
   // Output timescales
   file = OpenFilew ((char*) "Outputs/Stage3/timescale.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     rk (j), log10 (tau_A), log10 (tau_Rk (j)), log10 (tau_Mk (j)), log10 (tau_thk (j)));
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     rk (j), log10 (tau_A), log10 (tau_Rk (j)), log10 (tau_Mk (j)), log10 (tau_thk (j)), log10 (tau_cxk (j)));
   fclose (file);
 
   // --------------------------------------------------------
@@ -1234,7 +1235,6 @@ void Neoclassical::Get_LayerWidths ()
   // -----------------------------
   // Calculate linear layer widths
   // -----------------------------
-
   for (int j = 0; j < nres; j++)
     {
       jres = j;
@@ -1303,11 +1303,12 @@ void Neoclassical::Get_Normalized ()
       double wkn = w_nonlinear (j) * tau_A;
       double tm  = tau_Mk (j) /tau_A;
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
+      double tx  = tau_cxk (j) /tau_A;
 
-      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
-	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, dk, delk (j));
+      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
+	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j));
 
-      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          tm,                         th,
 	       sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                       wkn, 
@@ -1316,7 +1317,7 @@ void Neoclassical::Get_Normalized ()
 	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
 	       Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
 	       Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
+	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3, tx);
 	       
       }
    fclose (file);
@@ -1338,8 +1339,9 @@ void Neoclassical::Get_Normalized ()
 	  double wkn = w_nonlinear (j) * tau_A;
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
+	  double tx  = tau_cxk (j) /tau_A;
 
-	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
 		   a /R_0,                      Sk,                          tm,                         th,
 		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 
@@ -1348,7 +1350,7 @@ void Neoclassical::Get_Normalized ()
 		   nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
 		   Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
 		   Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3);
+		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx);
 	}
       fclose (file);
 

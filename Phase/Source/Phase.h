@@ -90,6 +90,7 @@
 // 2.20 - Added FREQ flag
 // 2.21 - Use q_hat instead of q in velocity evolution equation
 // 2.22 - Added velocity changes
+// 2.23 - Added charge exchange damping time into angular equations of motion
 
 // #######################################################################
 
@@ -97,7 +98,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 22
+#define VERSION_MINOR 23
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -227,6 +228,7 @@ class Phase
   Array<double,1> Sk;       // Lundquist numbers at resonant surfaces
   Array<double,1> taumk;    // Normalized momentum confinement timescales at resonant surfaces
   Array<double,1> tautk;    // Normalized poloidal flow damping timescales at resonant surfaces
+  Array<double,1> tauxk;    // Normalized charge exchange damping timesscales at resonant surfaces
   Array<double,1> fack;     // Island width factors at resonant surfaces
   Array<double,1> delk;     // Linear layer widths at resonant surfaces
   Array<double,1> wkl;      // Normalized linear natural frequencies at resonant surfaces

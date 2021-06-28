@@ -1,6 +1,6 @@
 import graph;
      
-size(500,500,IgnoreAspect);
+size(750,500,IgnoreAspect);
 
 file    in = input("../../Outputs/Stage3/timescale.txt").line();
 real[][] A = in.dimension (0,0);
@@ -11,6 +11,7 @@ real[] ta     = A[1];
 real[] tr     = A[2];
 real[] tm     = A[3];
 real[] tth    = A[4];
+real[] tcx    = A[5];
 
 pen s = black + dotted + 1.5;	
 draw(graph(r,ta),s,marker(scale(1.5mm)*polygon(4)));
@@ -20,6 +21,8 @@ s = blue + dotted + 1.5;
 draw(graph(r,tm),s,marker(scale(1.5mm)*polygon(4)));
 s = green + dotted + 1.5;	
 draw(graph(r,tth),s,marker(scale(1.5mm)*polygon(4)));
+s = cyan + dotted + 1.5;	
+draw(graph(r,tcx),s,marker(scale(1.5mm)*polygon(4)));
 
 xlimits (0.,1.0,Crop);
 

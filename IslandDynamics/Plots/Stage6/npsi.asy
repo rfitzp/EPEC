@@ -14,7 +14,7 @@ real[] psi = A[6];
 file    inx = input ("../../../Flux/Outputs/Stage1/Psilim.txt").line();
 real[][] Ax = inx.dimension (0, 0);
 real[] ppp  = Ax[0];
-real psilim = ppp[0];
+real psilim = ppp[2];
 real psiped = ppp[1];
 
 int N = m.length;

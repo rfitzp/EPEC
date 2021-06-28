@@ -63,6 +63,7 @@
 // 1.21 - Use more accurate expression for neoclassical flow damping time
 // 1.22 - Added more accurate calculation of linear layer width
 // 1.23 - Added C1 and C2
+// 1.24 - Added change exchange to angular velocity evolution equations
 
 // ################################################################
 
@@ -70,7 +71,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 23
+#define VERSION_MINOR 24
 
 #include <stdio.h>
 #include <math.h>
@@ -354,6 +355,7 @@ class Neoclassical
   Array<double,1> tau_Rk;     // Classical resistive timescales (s)
   Array<double,1> tau_Mk;     // Momentum confinement timescales (s)
   Array<double,1> tau_thk;    // Poloidal flow damping timescales (s)
+  Array<double,1> tau_cxk;    // Charge exchange damping timescales (s)
 
   Array<double,1> Sk;         // Lundquist number   
   Array<double,1> tauk;       // Ratio of diamagnetic frequencies

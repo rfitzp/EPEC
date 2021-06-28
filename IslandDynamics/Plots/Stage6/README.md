@@ -44,13 +44,13 @@
 	deltap.asy    ... plots - (Delta P)/P_ped versus experimental time
    	deltap0.asy   ... plots - (Delta_P)/P_0 versus experimental time
 	icoil.asy     ... plots RMP coil currents versus experimental time 
-    pcoil.asy     ... plots RMP coil phases versus experimental time
+	pcoil.asy     ... plots RMP coil phases versus experimental time
 	drive.asy     ... plots chi values at edge and in core versus experimental time
 
-    deltapq.asy    ... plots - (Delta P)/P_ped versus q95
+	deltapq.asy    ... plots - (Delta P)/P_ped versus q95
 	deltap0q.asy   ... plots - (Delta_P)/P_0 versus q95
 	icoilq.asy     ... plots RMP coil currents versus q95
-    pcoilq.asy     ... plots RMP coil phases versus q95
+	pcoilq.asy     ... plots RMP coil phases versus q95
 	driveq.asy     ... plots chi values at edge and in core versus q95
 
 	mirnovin.asy   ... plots reconstructed Mirnov signal on outboard midplane

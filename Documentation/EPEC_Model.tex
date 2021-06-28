@@ -1,0 +1,464 @@
+\documentclass[12pt,prb,aps]{revtex4-2}
+\usepackage {amsmath}
+\pdfoutput = 1 
+\usepackage {graphicx}
+\allowdisplaybreaks
+
+\begin{document}
+\title{\bf The EPEC Model}
+\author{R.~Fitzpatrick\,\footnote{rfitzp@utexas.edu}}
+\affiliation{Institute for Fusion Studies,  Department of Physics,  University of Texas at Austin,  Austin TX 78712, USA}
+
+\maketitle
+
+\section{Plasma Response in Outer Region}
+\subsection{Coordinates}\label{a1}
+Let $R$, $\phi$, and $Z$ be right-handed cylindrical coordinates whose symmetry axis corresponds to
+the toroidal symmetry axis of the plasma. Let $r$, $\theta$, and $\phi$ be right-handed flux coordinates
+whose Jacobian is ${\cal J}\equiv (\nabla r \times \nabla\theta\cdot\nabla\phi)^{-1}=r\,R^{\,2}/R_0$. 
+Here, $R_0$ is a convenient scale major radius, $r$ is a magnetic flux-surface label with dimensions of length,
+and $\theta$ is an axisymmetric angular coordinate that increases by $2\pi$ radians for every poloidal circuit of the magnetic axis.
+Let $r=0$ correspond to the magnetic axis, and let $r=r_{100}$ correspond to the LCFS. 
+Let $\theta=0$ correspond to the inboard midplane, and let $0<\theta<\pi$ correspond to the region above the midplane.
+
+\subsection{Equilibrium Magnetic Field}\label{a2}
+The equilibrium magnetic field is written
+${\bf B} = R_0\,B_0\left[f(r)\,\nabla\phi\times \nabla r + g(r)\,\nabla\phi\right]$, 
+where $B_0$ is a convenient scale toroidal magnetic field-strength, and
+$q(r) = r\,g/(R_0\,f)$
+is the safety-factor profile. The equilibrium poloidal magnetic flux (divided by $2\pi$), ${\mit\Psi}_p(r)$,
+satisfies $d{\mit\Psi}_p/dr = R_0\,B_0\,f(r)$, where, by convention, ${\mit\Psi}_p(r_{100})=0$. The
+normalized poloidal magnetic flux, ${\mit\Psi}_N(r)$, is defined such that
+${\mit\Psi}_N(r) = 1-{\mit\Psi}_p(r)/{\mit\Psi}_p(0)$. Hence, ${\mit\Psi}_N(0)=0$ and
+${\mit\Psi}_N(r_{100})=1$. Finally, if ${\mit\Psi}_N(r_{95})=0.95$ then $q_{95}\equiv q(r_{95})$. 
+
+\subsection{Perturbed Magnetic Field}
+Consider the response of the plasma to an RMP with $n>0$ periods in the toroidal direction.
+We can write the components of the perturbed magnetic field in the form
+\begin{align}
+\frac{r\,R^{\,2}\,\delta{\bf B}\cdot\nabla r}{R_0^{\,2}}&= {\rm i}\sum_j \psi_j(r)\,{\rm e}^{\,{\rm i}\,(m_j\theta-n\,\phi)},\\[0.5ex]
+{\cal J} \,\delta{\bf B}\cdot\nabla\phi\times \nabla r &= -\sum_j{\mit\Xi}_j(r)\,{\rm e}^{\,{\rm i}\,(m_j\theta-n\,\phi)},\\[0.5ex]
+R^{\,2}\,\delta{\bf B}\cdot\nabla\phi&= n\sum_j \frac{{\mit\Xi}_j(r)}{m_j}\,{\rm e}^{\,{\rm i}\,(m_j\,\theta-n\,\phi)},
+\end{align}
+where the sum is over all relevant poloidal harmonics of the perturbed magnetic field. 
+
+Let there be $K$ resonant magnetic flux-surfaces in the plasma, labelled $1$ through $K$.
+Consider the $k$th resonant surface, $r=r_k$, at which $n\,q(r_k)= m_k$, where $m_k$ is a positive integer. Let
+${\mit\Psi}_k = \psi_k(r_k)/m_k$, and 
+${\mit\Delta\Psi}_k=[{\mit\Xi}_k]_{r_{k-}}^{r_{k+}}$.
+Here, ${\mit\Psi}_k$ is the (complex) reconnected helical magnetic flux (divided by $2\pi\,R_0$) at the $k$th resonant surface, whereas ${\mit\Delta\Psi}_k$ (which has the same dimensions as ${\mit\Psi}_k$) is a (complex) 
+measure of the strength of the current sheet (consisting of filaments running parallel to the local equilibrium magnetic
+field) at the same resonant surface. 
+
+\subsection{Toroidal Tearing Mode Dispersion Relation}\label{tear}
+In the presence of the RMP, the ${\mit\Psi}_k$ and the ${\mit\Delta\Psi}_k$ values are related according to the inhomogeneous 
+toroidal tearing mode dispersion relation, which takes the form
+\begin{equation}\label{dispersion}
+{\mit\Delta\Psi}_k = \sum_{k'=1,K} E_{kk'}\,{\mit\Psi}_{k'} + |E_{kk}|\,\chi_k.
+\end{equation}
+Here, $E_{kk'}$  (for $k$, $k'= 1$, $K$) is the dimensionless, Hermitian, toroidal tearing mode stability matrix, whereas the $\chi_k$ (for $k=1,K$) parameterize the current sheets driven at the various
+resonant surfaces when the plasma responds  to the applied RMP in accordance with the equations of linearized, marginally-stable, ideal-MHD. 
+
+The EPEC model determines the elements of the $E_{kk'}$ matrix using a high-$q$ approximation. In fact, if $F_{kk'}$ is the inverse of the $E_{kk'}$ matrix then
+\begin{equation}\label{e56}
+F_{kk'} = \oint\oint 
+G(R_k,Z_k;R_{k'},Z_{k'})\,{\rm e}^{-{\rm i}\,(m_k\,\theta_k-m_{k'}\,\theta_{k'})}\,\frac{d\theta_k}{2\pi}\,\frac{d\theta_{k'}}{2\pi},
+\end{equation}
+and
+\begin{align}
+ G(R_k,Z_k;R_{k'},Z_{k'})&= \frac{(-1)^{\,n}\,\pi^{\,2}\,R_k\,R_{k'}/R_0}{2\,\Gamma(1/2)\,\Gamma(n+1/2)}
+\left[\frac{\cosh\eta_{kk'}}{R_k^{\,2}+R_{k'}^{\,2}+(Z_k-Z_{k'})^{\,2}}\right]^{1/2}\nonumber\\[0.5ex]
+&\times\left[(n-1/2)\,P_{-1/2}^{\,n-1}(\cosh\eta_{kk'})+
+\frac{P_{-1/2}^{\,n+1}(\cosh\eta_{kk'})}{n+1/2}\right],
+\end{align}
+with
+\begin{equation}
+\eta_{kk'} = \tanh^{-1}\left[\frac{2\,R_k\,R_{k'}}{R_k^{\,2}+R_{k'}^{\,2}+(Z_k-Z_{k'})^{\,2}}\right].
+\end{equation}
+Here, the double integral in Eq.~(\ref{e56}) is taken around the
+$k$th resonant surface (cylindrical coordinates $R_k$, $0$, $Z_k$;
+flux coordinates $r_k$, $\theta_k$, $0$, with $r_k$ constant; resonant poloidal mode number $m_k$) and the $k'$th resonant surface (cylindrical coordinates $R_{k'}$, $0$, $Z_{k'}$;
+flux coordinates $r_{k'}$, $\theta_{k'}$, $0$, with $r_{k'}$ constant; resonant poloidal mode number $m_{k'}$). Finally, the $\Gamma(z)$ and $P_\mu^{\,\nu}(z)$ are Gamma functions and associated Legendre functions, respectively.
+
+The (complex) $\chi_k$ parameters are determined from the GPEC code.
+To be more exact, the GPEC code calculates the (complex) dimensionless ${\mit\Delta}_{m_k\,n}$ parameters which measure the strengths of the ideal current sheets that develop
+at the various resonant magnetic flux-surfaces in the plasma in response to the applied RMP.  The ${\mit\Delta}_{m_k\,n}$ parameters are related to the $\chi_k$ parameters according to
+\begin{equation}\label{a8}
+\frac{\chi_k}{R_0\,B_0} = -{\rm i} \,\frac{{\mit\Delta}_{m_k\,n}}{|E_{kk}|}\left(\frac{r_k}{R_0}\right)^2
+\frac{g(r_k)}{m_k\,[a_{kk}(r_k)+ (r_k/R_0\,q_k)^{\,2}]},
+\end{equation}
+where $q_k= m_k/n$, and $a_{kk}(r) = \oint |\nabla r|^{-2}\,d\theta/(2\pi)$. 
+
+
+\section{Neoclassical Physics}\label{appb}
+\subsection{Plasma Species}\label{a3}
+The plasma is assumed to consist of three (charged) species; namely,  electrons ($e$), majority ions ($i$), and impurity ions
+($I$).  The charges of the  three species are $e_e=-e$, $e_i= e$, and $e_I=Z_I\,e$, respectively, where
+$e$ is the magnitude of the electron charge. 
+Quasi-neutrality demands that
+$n_e= n_i+ Z_I\,n_I$, where $n_a(r)$ is the species-$a$ number density. 
+ Let 
+$\alpha_I(r) =Z_I\,(Z_{\rm eff}-1)/(Z_I-Z_{\rm eff})$,
+where 
+$Z_{\rm eff}(r) = (n_i+Z_I^{\,2}\,n_I)/n_e$
+is the effective ion charge number. It follows that
+$n_i/n_e = (Z_I-Z_{\rm eff})/(Z_I-1)$
+and
+$n_I/n_e= (Z_{\rm eff}-1)/[Z_I\,(Z_I-1)]$.
+
+\subsection{Collisionality Parameters}
+Consider an equilibrium magnetic flux-surface whose label is $r$. 
+Let
+\begin{equation}
+\frac{1}{\gamma(r)} =\frac{q}{g}\oint\frac{ B\,R^{\,2}}{B_0\,R_0^{\,2}}\,\frac{d\theta}{2\pi},
+\end{equation}
+where $B=|{\bf B}|$. 
+It is helpful to define a new poloidal angle ${\mit\Theta}$ such that
+\begin{equation}
+\frac{d{\mit\Theta}}{d\theta} = \frac{\gamma\,q}{g}\,\frac{B\,R^{\,2}}{B_0\,R_0^{\,2}}.
+\end{equation}
+Let
+\begin{align}
+I_1 &=\oint \frac{B_0}{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+I_2 &=\oint \frac{B}{B_0}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+I_3 &=\oint\left(\frac{\partial B}{\partial{\mit\Theta}}\right)^2\frac{1}{B_0\,B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+I_{4,j}&= \sqrt{2\,j}\oint\frac{\cos(j\,{\mit\Theta})}{B/B_0}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+I_{5,j} &= \sqrt{2\,j}\oint\frac{\cos(j\,{\mit\Theta})}{2\,(B/B_0)^{\,2}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+I_6(\lambda) &=\oint \frac{\sqrt{1-\lambda\,B/B_{\rm max}}}{B/B_0}\,\frac{d{\mit\Theta}}{2\pi},
+\end{align}
+where $B_{\rm max}$ is the maximum value of $B$ on the magnetic
+flux-surface, and $j$ a positive integer. 
+The species-$a$ transit frequency is written
+$\omega_{t\,a}(r)= K_t\,\gamma\,v_{T\,a}$,
+where 
+\begin{equation}\label{cdef}
+K_t(r) = \frac{I_1^{\,2}\,I_3}{I_2^{\,2}\,\sum_{j=1,\infty} I_{4,j}\,I_{5,j}},
+\end{equation}
+and $v_{T\,a} = \sqrt{2\,T_a/m_a}$.  Here, $m_a$ is the
+species-$a$ mass, and $T_a(r)$ the species-$a$ temperature (in energy units). The fraction of circulating particles 
+is
+\begin{equation}
+f_c(r) = \frac{3\,I_2}{4}\,\frac{B_0^{\,2}}{B_{\rm max}^{\,2}}
+\int_0^1 \frac{\lambda\,d\lambda}{I_6(\lambda)}.
+\end{equation}
+Finally, the dimensionless species-$a$ collisionality parameter
+is written
+$\nu_{\ast\,a} (r)= K_\ast\,g_t/(\omega_{t\,a}\,\tau_{aa})$,
+where 
+$g_t(r) =f_c/(1-f_c)$,
+\begin{align}
+K_\ast(r) &= \frac{3}{8\pi}\,\frac{I_2}{I_3}\,K_t^{\,2},\\[0.5ex]
+\frac{1}{\tau_{aa}(r)}&= \frac{4}{3\sqrt{\pi}}\,\frac{4\pi\,n_a\,e_a^{\,4}\,\ln{\mit\Lambda}}{(4\pi\,\epsilon_0)^{\,2}\,m_a^{\,2}\,v_{T\,a}^{\,3}}.
+\end{align}
+Here, the Coulomb logarithm, $\ln{\mit\Lambda}$, is assumed to take the same large constant value (i.e., $\ln{\mit\Lambda}\simeq 17$), 
+independent of species. 
+
+\subsection{Collisional Friction Matrices}
+Let $x_{ab}=v_{T\,b}/v_{T\,a}$. In the following,
+all quantities that are of order $(m_e/m_i)^{\,1/2}$, $(m_e/m_I)^{\,1/2}$, or smaller, are neglected with respect to unity.
+The  $2\times 2$ dimensionless ion collisional friction matrices, $[F^{\,ii}](r)$, $[F^{\,iI}](r)$, $[F^{\,Ii}](r)$, and $[F^{\,II}](r)$, are defined to have the following elements:
+\begin{align}
+F^{\,ii}_{\,00} &= \frac{\alpha_I\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,3/2}},\\[0.5ex]
+F^{\,ii}_{\,01}&=\frac{3}{2}\,\frac{\alpha_I\,(1+m_i/m_I)}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,ii}_{\,11}& =\sqrt{2}+ \frac{\alpha_I\,[13/4+4\,x_{iI}^{\,2}+(15/2)\,x_{iI}^{\,4}]}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,iI}_{\,01}&=\frac{3}{2}\,\frac{T_i}{T_I}\,\frac{\alpha_I\,(1+m_I/m_i)}{x_{iI}\,(1+x_{Ii}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,iI}_{\,11}& =\frac{27}{4}\,\frac{T_i}{T_I}\,\frac{\alpha_I\,x_{iI}^{\,2}}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,Ii}_{\,11}& =\frac{27}{4}\,\frac{\alpha_I\,x_{iI}^{\,2}}{(1+x_{iI}^{\,2})^{\,5/2}},\\[0.5ex]
+F^{\,II}_{\,11}& =\frac{T_i}{T_I}\left\{\sqrt{2}\,\alpha_I^{\,2}\,x_{Ii} + \frac{\alpha_I\,[
+15/2+4\,x_{iI}^{\,2}+(13/4)\,x_{iI}^{\,4}]}{(1+x_{iI}^{\,2})^{\,5/2}}\right\},
+\end{align}
+ $F^{\,ii}_{\,10}=F^{\,ii}_{\,01}$, $F^{\,iI}_{\,00} =F^{\,ii}_{\,00}$, $F^{\,iI}_{\,10}=F^{\,ii}_{01}$, $F^{\,Ii}_{\,00} =F^{\,ii}_{\,00}$,
+$F^{\,Ii}_{\,01}=F^{\,ii}_{01}$, 
+$F^{\,Ii}_{\,10}=F^{\,iI}_{01}$, $F^{\,II}_{\,00} =F^{\,ii}_{00}$,
+$F^{\,II}_{\,01}=F^{\,iI}_{01}$, 
+$F^{\,II}_{\,10}=F^{\,iI}_{01}$.
+
+The $2\times 2$ dimensionless electron collisional friction matrix, $[F^{\,ee}](r)$,   is defined to have the following elements:
+$F^{\,ee}_{00} = Z_{\rm eff}$,
+$F^{\,ee}_{01} = (3/2)\,Z_{\rm eff}$,
+$F^{\,ee}_{10} = F^{\,ee}_{01}$,
+$F^{\,ee}_{11}= \sqrt{2} + (13/4)\,Z_{\rm eff}$.
+
+\subsection{Neoclassical Viscosity Matrices}\label{vmatrix}
+The $2\times 2$ dimensionless species-$a$ neoclassical viscosity matrix, $[\mu^{\,a}](r)$,  is defined to have the following elements:
+$\mu_{00}^{\,a} = K_{00}^{\,a}$, $\mu_{01}^{\,a}= (5/2)\,K_{00}^{\,a}- K_{01}^{\,a}$,
+$\mu_{10}^{\,a}= \mu_{01}^{\,a}$,
+$\mu_{11}^{\,a} = K_{11}^{\,a} - 5\,K_{01}^{\,a}+(25/4)\,K_{00}^{\,a}$.
+Here,
+\begin{align}
+ K_{jk}^{\,e} &= g_t\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,4+j+k}\,\nu_D^{\,e}(x)\,dx}{[x^{\,2}+\nu_{\ast\,e}\,\nu_D^{\,e}(x)]\,[x^{\,2}+(5\pi/8)\,(\omega_{t\,e}\,\tau_{ee})^{\,-1}\,\nu_T^{\,e}(x)]},\\[0.5ex]
+\nu_D^{\,e}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]+\frac{3\sqrt{\pi}}{4}\,Z_{\rm eff},\\[0.5ex]
+\nu_\epsilon^{\,e}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right],\\[0.5ex]
+\nu_T^{\,a}(x) &= 3\,\nu_D^{\,a}(x)+\nu_{\epsilon}^{\,a}(x),
+\end{align}
+and
+\begin{align}
+\psi(x) &= \frac{2}{\sqrt{\pi}}\int_0^x{\rm e}^{-t^{\,2}}\,dt -\frac{2}{\sqrt{\pi}}\,x\,{\rm e}^{-x^{\,2}},\\[0.5ex]
+\psi'(x)&= \frac{2}{\sqrt{\pi}}\,x\,{\rm e}^{-x^{\,2}}.
+\end{align}
+Furthermore, 
+\begin{align}
+ K_{jk}^{\,i} &=g_t\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,2+j+k}\,\nu_D^{\,i}(x)\,dx}{[x+\nu_{\ast\,i}\,\nu_D^{\,i}(x)]\,[x+(5\pi/8)\,(\omega_{t\,i}\,\tau_{ii})^{\,-1}\,\nu_T^{\,i}(x)]},\\[0.5ex]
+ \nu_D^{\,i}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
+&\phantom{=}+\frac{3\sqrt{\pi}}{4}\,\alpha_I\left[\left(1-\frac{x_{iI}}{2\,x}\right)\psi\!\left(\frac{x}{x_{iI}}\right)
++\psi'\!\left(\frac{x}{x_{iI}}\right)\right]\frac{1}{x},\\[0.5ex]
+ \nu_\epsilon^{\,i}&=\frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
+&\phantom{=}+\frac{3\sqrt{\pi}}{2}\,\alpha_I\left[\frac{m_i}{m_I}\,\psi\!\left(\frac{x}{x_{iI}}\right)
+-\psi'\!\left(\frac{x}{x_{iI}}\right)\right]\frac{1}{x},
+\end{align}
+and, finally, 
+\begin{align}
+ K_{jk}^{\,I} &= g_t\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
+\frac{e^{-x}\,x^{\,2+j+k}\,\nu_D^{\,I}(x)\,dx}{[x+\nu_{\ast\,I}\,\nu_D^{\,I}(x)]\,[x+(5\pi/8)\,(\omega_{t\,I}\,\tau_{II})^{\,-1}\,\nu_T^{\,I}(x)]},\\[0.5ex]
+ \nu_D^{\,I}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
+&\phantom{=}+\frac{3\sqrt{\pi}}{4}\,\frac{1}{\alpha_I}\left[\left(1-\frac{x_{Ii}}{2\,x}\right)\psi\!\left(\frac{x}{x_{Ii}}\right)
++\psi'\!\left(\frac{x}{x_{Ii}}\right)\right]\frac{1}{x},\\[0.5ex]
+ \nu_\epsilon^{\,I}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
+&\phantom{=}+\frac{3\sqrt{\pi}}{2}\,\frac{1}{\alpha_I}\left[\frac{m_I}{m_i}\,\psi\!\left(\frac{x}{x_{Ii}}\right)
+-\psi'\!\left(\frac{x}{x_{Ii}}\right)\right]\frac{1}{x}.
+\end{align}
+Note that our expressions for the neoclassical viscosity
+matrices interpolate in the most accurate manner possible
+between the three standard neoclassical collisionality
+regimes (i.e., the banana, plateau, and Pfirsch-Sch\"{u}ter
+regimes).
+
+\subsection{Parallel Force and Heat Balance}\label{sbalance}
+Let
+$[\tilde{\mu}^{\,I}] =\alpha_I^{\,2}\,(T_i/T_I)\,x_{Ii}\,[\mu^{\,I}]$.
+The requirement of equilibrium force and heat balance parallel to the magnetic field leads us to define
+four $2\times 2$  dimensionless ion matrices, $[L^{\,ii}](r)$, $[L^{\,iI}](r)$, $[L^{\,Ii}](r)$, and $[L^{\,II}](r)$,
+where
+\begin{align}
+\left(\begin{array}{cc} [L^{\,ii}], & [L^{\,iI}]\\[0.5ex] [L^{\,Ii}],& [L^{\,II}]\end{array}\right)=
+\left(\begin{array}{cc}[F^{\,ii}+\mu^{\,i}+ Y^{\,in}/y_n], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right)^{-1}
+\left(\begin{array}{cc} [F^{\,ii}+Y^{\,in}], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}]\end{array}\right),
+\end{align}
+the additional  four $2\times 2$  dimensionless ion matrices, $[G^{\,ii}](r)$, $[G^{\,iI}](r)$, $[G^{\,Ii}](r)$, and $[G^{\,II}](r)$,
+where
+\begin{align}
+\left(\begin{array}{cc} [G^{\,ii}], & [G^{\,iI}]\\[0.5ex] [G^{\,Ii}],& [G^{\,II}]\end{array}\right)=\tau_{ii}\,\langle \sigma\,v\rangle_i^{\,\rm cx}
+\,\langle n_n\rangle
+\left(\begin{array}{cc}[F^{\,ii}+\mu^{\,i}+ Y^{\,in}/y_n], & -[F^{\,iI}]\\[0.5ex] -[F^{\,Ii}], & [F^{\,II}+\tilde{\mu}^{\,I}]\end{array}\right)^{-1},
+\end{align}
+and the $2\times 2$ dimensionless electron matrix, $[Q^{\,ee}](r)$, 
+where
+$[Q^{\,ee}]= [F^{\,ee}+\mu^{\,e}]^{\,-1}$.
+Here,
+\begin{align}
+[Y^{\,in}] &= \tau_{ii}\,\langle \sigma\,v\rangle_i^{\,\rm cx}
+\,\langle n_n\rangle\left[
+\begin{array}{cc} 1,& 0\\[0.5ex]0,&E_n/T_i\end{array}
+\right],\\[0.5ex]
+y_n &= \frac{\langle n_n\rangle\,\langle B^{\,2}\rangle}{\langle
+n_n\,B^{\,2}\rangle},
+\end{align}
+where
+\begin{equation}
+\langle A\rangle (r) \equiv\left.\oint \frac{A(r,{\mit\Theta})\,d{\mit\Theta}}{B(r,{\mit\Theta})}\right/\oint \frac{d{\mit\Theta}}{B(r,{\mit\Theta})}.
+\end{equation}
+Moreover, $\langle \sigma\,v\rangle_i^{\,\rm cx}$ is the flux-surface
+averaged rate constant for charge exchange reactions between neutrals and majority ions, $n_n(r,{\mit\Theta})$  the
+neutral particle number density, and $E_n/T_i$ the ratio of the incoming neutral energy to the majority ion energy. The parameter
+$y_n$ takes into account the fact that the incoming neutrals at the
+edge of an H-mode tokamak plasma are usually
+concentrated at the X-point (i.e., $y_n>1$).
+
+\subsection{Impurity Ion Angular Rotation Velocities}\label{srotation}
+Let
+\begin{align}
+\omega_{\theta\,I}(r)&=\frac{{\bf V}^{\,I}\cdot\nabla\theta}{{\bf B}\cdot\nabla\theta}\,\frac{R_0\,B_0\,g}{R^{\,2}},\\[0.5ex]
+\omega_{\phi\,I}(r) &= {\bf V}^{\,I}\cdot\nabla\phi,
+\end{align}
+where ${\bf V}^{\,I}$ is the impurity ion fluid velocity, and the right-hand sides are evaluated on the outboard mid-plane. According to neoclassical theory
+\begin{align}
+\omega_{\theta\,I} &= K_\theta\,\omega_{{\rm nc}\,I},\\[0.5ex]
+\omega_{\phi\,I} &= \omega_E+\omega_{\ast\,I} + \omega_{\theta\,I},
+\end{align}
+where
+\begin{equation}
+K_\theta(r) = \frac{R_0^{\,2}\,B_0^{\,2}\,g^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle},
+\end{equation}
+\begin{align}
+\omega_E(r) &=-\frac{d{\mit\Phi}}{d{\mit\Psi}_p},\\[0.5ex]
+\omega_{\ast\,a}(r) &= -\frac{T_a}{e_a}\,\frac{d\ln p_a}{d{\mit\Psi}_p},\\[0.5ex]
+\eta_a(r) &= \frac{d\ln T_a}{d\ln n_a}.
+\end{align}
+and 
+\begin{align}\label{a53}
+\omega_{{\rm nc}\,I}(r)&=-G_{00}^{\,Ii}\,\omega_E -\left[L^{\,II}_{00}-L^{\,II}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\right]\omega_{\ast\,I}-
+\left[L^{\,Ii}_{00}-L^{\,Ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\right]\omega_{\ast\,i}.
+\end{align}
+Here, $p_a(r)=n_a\,T_a$, and ${\mit\Phi}(r)$ is the equilibrium electric scalar potential. 
+
+\section{Plasma Response in Inner Region}
+\subsection{Evolution Equations}
+Let ${\mit\Psi}_k= R_0\,B_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$, ${\mit\chi}_k= R_0\,B_0\,\hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$, and $E_{kk'}=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$,
+where $\hat{\mit\Psi}_k>0$, $\varphi_k$, $\hat{\chi}_k>0$, $\zeta_k$, $\hat{E}_{kk}'>0$, and $\xi_{kk'}$ are all real quantities. Furthermore,
+let $X_k= \hat{\mit\Psi}_k\,\cos\varphi_k$ and $Y_k= \hat{\mit\Psi}_k\,\sin\varphi_k$. The resonant plasma response model at the 
+$k$th resonant surface takes the form
+\begin{align}\label{e21}
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dX_k}{d\hat{t}} 
++\hat{\varpi}_k\,Y_k\right)= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'}  -\sin\xi_{kk'}\,Y_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k,\\[0.5ex]
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dY_k}{d\hat{t}} -\hat{\varpi}_k\,X_k\right)
+= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,Y_{k'}
++\sin\xi_{kk'}\,X_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k,\label{e22}
+\end{align}
+where
+\begin{align}\label{e23}
+{\cal S}_k&=\frac{\tau_R(r_k)}{\tau_A},\\[0.5ex]
+\tau_A &= \left[\frac{\mu_0\,\rho(0)\,r_{100}^{\,2}}{B_0^{\,2}}\right]^{1/2},\\[0.5ex]
+\tau_R(r) &= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{ee},\\[0.5ex]
+\sigma_{ee}(r) &=\frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e},\\[0.5ex]
+\hat{W}_k &=\frac{2\,{\cal I}}{\epsilon_{100}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)^{1/2}_{r_k} (X_k^{\,2} + Y_k^{\,2})^{\,1/4},\\[0.5ex]
+s(r) &= \frac{d\ln q}{d\ln r},\\[0.5ex]
+\hat{\delta}_k &= \frac{\delta_{\rm linear}(r_k)}{R_0\,\epsilon_{100}\,\hat{r}_k}.
+\end{align}
+Here, ${\cal I}=0.8227$, $\epsilon_{100}=r_{100}/R_0$, $\hat{r}=r/r_{100}$, $\hat{r}_k=r_k/r_{100}$, and $\hat{t}=t/\tau_A$. Furthermore, $\delta_{\rm linear}(r)$ is the linear layer width, whereas $\rho(r)$ is the plasma
+mass density profile.
+
+The EPEC resonant plasma response model interpolates smoothly
+between the linear regime and the
+nonlinear Rutherford regime. The linear regime corresponds to $\hat{W}_k\ll\hat{\delta}_k$, whereas the nonlinear
+region corresponds to $\hat{W}_k\gg\hat{\delta}_k$.  
+
+\subsection{Linear Layer Width}\label{linear}
+Let
+\begin{align}
+\tau_H(r) &= \frac{R_0}{B_0\,g}\,\frac{\sqrt{\mu_0\,\rho}}{n\,s},\\[0.5ex]
+\tau_E(r) &= \frac{r^{\,2}}{D_\perp + (2/3)\,\chi_e},\\[0.5ex]
+\tau_M(r) &= \frac{R_0^{\,2}\,q^{\,2}}{\chi_\phi},\\[0.5ex]
+\rho_s (r)&= \frac{\sqrt{m_i\,T_e}}{e\,B_0\,g},\\[0.5ex]
+\tau(r)& = -\frac{\omega_{\ast\,i}}{\omega_{\ast\,e}},\\[0.5ex]
+S(r) &= \frac{\tau_R}{\tau_H},\\[0.5ex]
+P_M(r) &= \frac{\tau_R}{\tau_M},\\[0.5ex]
+P_E(r) &= \frac{\tau_R}{\tau_E},\\[0.5ex]
+D(r)&= \frac{5}{3}\,S^{\,1/3}\,\frac{\rho_s}{r},\\[0.5ex]
+Q_E(r)&= S^{\,1/3}\,n\,\omega_E\,\tau_H,\\[0.5ex]
+Q_{e,i}(r)&= -S^{\,1/3}\,n\,\omega_{\ast\,e,i}\,\tau_H
+\end{align}
+Here, $\chi_{e}(r)$ and $D_\perp(r)$ are the perpendicular electron energy and particle diffusivity profiles, respectively. 
+The constant-$\psi$ linear layer width is determined from the solution of
+\begin{equation}
+\frac{d^{\,2}\,Y}{dp^{\,2}} -\left[\frac{-Q_E\,(Q_E-Q_i)+{\rm i}\,(Q_E-Q_i)\,(P_M+P_E)\,p^{\,2}+
+P_M\,P_E\,p^{\,4}}
+{{\rm i}\,(Q_E-Q_e) +\{P_E + {\rm i}\,(Q_E-Q_i)\,D^{\,2}\}\,p^{\,2}+(1+\tau)\,P_M\,D^{\,2}\,p^{\,4}}
+\right] p^{\,2}\, Y = 0.
+\end{equation}
+If the small-$p$ behavior of solution of the previous equation that is well-behaved as $p\rightarrow \infty$ is
+\begin{equation}
+Y(p) = Y_0\left[1 - c\,p+{\cal O}(p^{\,2})\right].
+\end{equation}
+then the 
+linear layer width is 
+\begin{equation}
+\frac{\delta_{\rm linear}}{r} = \frac{\pi\,|c|}{S^{\,1/3}}.
+\end{equation}
+
+
+\section{Plasma Angular Velocity Evolution}\label{a4}
+\subsection{Evolution Equations}
+The quantity $\hat{\varpi}_k$ that appears in Eqs.~(\ref{e21}) and (\ref{e22}) evolves in time according to
+\begin{equation}\label{e19a}
+\hat{\varpi}_k(\hat{t})= \hat{\varpi}_{k\,0}-\sum_{k'=1,K}^{p=1,\infty} \frac{m_k}{m_{k'}}\,\frac{y_p(\hat{r}_k)}{y_p(\hat{r}_{k'})}\,\alpha_{k',p}(\hat{t})-\sum_{k'=1,K}^{p=1,\infty}\frac{z_p(\hat{r}_k)}{z_p(\hat{r}_{k'})}\,\beta_{k',p}(\hat{t}),
+\end{equation}
+Here, $\hat{\varpi}_{k\,0}= \varpi_{k\,0}\,\tau_A$, $y_p(\hat{r})=J_1(j_{1,p}\,\hat{r})/\hat{r}$, and $z_p(\hat{r})=J_0(j_{0,p}\,\hat{r})$. Moreover, $\varpi_{k\,0}$
+is the so-called ``natural frequency''  (in the absence of the RMP) at the $k$th resonant surface; this quantity is defined as the helical phase velocity of a naturally unstable island chain, resonant at the surface, in the
+absence of an RMP (or any other island chains). Furthermore, $J_m(z)$ is a standard Bessel function, and $j_{m,p}$ denotes the $p$th zero of this function. 
+The time evolution equations for the $\alpha_{k,p}$ and $\beta_{k,p}$ parameters specify how the
+plasma poloidal and toroidal angular velocity profiles are modified by the electromagnetic torques that develop within the plasma, in response to the applied
+RMP, and how these modifications affect the natural frequencies. The evolution equations take the form
+\begin{align}
+(1+2\,Q_k^{\,2})\,\frac{d\alpha_{k,p}}{d\hat{t}}+ \left(\frac{j_{1,p}^{\,2}}{\hat{\tau}_{M\,k}}+\frac{1}{\hat{\tau}_{\theta\,k}}+\frac{1}{\hat{\tau}_{{\rm cx}\,k}}\right)\alpha_{k,p}&=
+\frac{m_k^{\,2}\,[y_p(\hat{r}_k)]^{\,2}}{\hat{\rho}_k\,\epsilon_{100}^{\,2}\,[J_2(j_{1,p})]^{\,2}}\,\delta\hat{T}_k,\\[0.5ex]
+\frac{d\beta_{k,p}}{d\hat{t}}+ \left(\frac{j_{0,p}^{\,2}}{\hat{\tau}_{M\,k}}+\frac{1}{\hat{\tau}_{{\rm cx}\,k}}\right)\beta_{k,p}&=
+\frac{n^{\,2}\,[z_p(\hat{r}_k)]^{\,2}}{\hat{\rho}_k\,[J_1(j_{0,p})]^{\,2}}\,\delta\hat{T}_k,
+\end{align}
+where
+\begin{equation}\label{e24a}
+\delta \hat{T}_k=\sum_{k'=1,K}\hat{E}_{kk'}\,\hat{\mit\Psi}_k\,\hat{\mit\Psi}_{k'}\,\sin(\varphi_k-\varphi_{k'}-\xi_{kk'})+\hat{E}_{kk}\,\hat{\mit\Psi}_k\,\hat{\chi}_k\,\sin(\varphi_k-\zeta_k).
+\end{equation}
+Here, $Q_k = Q(r_k)$, $\hat{\rho}_k=\rho(r_k)/\rho(0)$, $\hat{\tau}_{M\,k}= r_{100}^{\,2}/[\chi_\phi(r_k)\,\tau_A]$,  $\hat{\tau}_{\theta\,k}=\tau_\theta(r_k)/\tau_A$, $\hat{\tau}_{{\rm cx}\,k} =\tau_{{\rm cx}}(r_k)/\tau_A$. 
+Moreover, $\chi_\phi(r)$ is the perpendicular toroidal momentum diffusivity profile, whereas
+\begin{equation}\label{a70}
+\tau_\theta(r) = \left. \frac{\tau_{ii}}{\mu_{00}^i}\right/\left(1+\frac{q^{\,2}\,R_0^{\,2}}{r^{\,2}\,a_{kk}}\right).
+\end{equation}
+is the poloidal flow damping timescale, 
+and
+\begin{equation}
+\tau_{\rm cx}(r)=\frac{1}{\langle n_n\rangle\,\langle \sigma\,v\rangle_i^{\rm cx}}
+\end{equation}
+is the charge exchange damping timescale. 
+Furthermore,
+\begin{equation}\label{a71}
+Q^{\,2}(r) =\frac{q^{\,2}\,R_0^{\,2}}{2\,r^{\,2}}\left.\left(\left\langle\frac{1}{R^{\,2}}\right\rangle-\frac{1}{\langle R^{\,2}\rangle}\right)\right/\left\langle \frac{|\nabla r|^{\,2}}{R^{\,2}}\right\rangle.
+\end{equation}
+
+\subsection{Natural Frequencies}
+According to linear tearing mode theory, in the absence of the RMP, the natural frequency of the tearing mode resonant at the $k$th resonant surface is given by
+\begin{equation}\label{elin}
+ \varpi_{{\rm linear}\,k} = - n\,(\omega_E+\omega_{\ast\,e})_{r_k}.
+\end{equation}
+According to nonlinear tearing mode theory, in the absence of the RMP, 
+the natural frequency of the tearing mode resonant at the $k$th resonant surface is given by
+\begin{equation}\label{e28y}
+ \varpi_{{\rm nonlinear}\,k}=  -n\,(\omega_E+\omega_{\ast\,i}+\omega_{{\rm nc}\,i})_{r_k},
+ \end{equation}
+where
+\begin{equation}\label{a74}
+\omega_{{\rm nc}\,i}(r)= -G^{\,ii}_{00}\,\omega_E-\left[L^{\,ii}_{00}-L^{\,ii}_{01}\left(\frac{\eta_i}{1+\eta_i}\right)\right]\omega_{\ast\,i}-
+\left[L^{\,iI}_{00}-L^{\,iI}_{01}\left(\frac{\eta_I}{1+\eta_I}\right)\right]\omega_{\ast\,I}.
+\end{equation}
+
+
+Given that our resonant plasma response model interpolates smoothly between the linear regime ($\hat{W}_k\ll \hat{\delta}_k$) and the nonlinear
+regime ($\hat{W}_k\gg \hat{\delta}_k$), it makes sense to adopt a model for the natural frequency that does the same. Hence, the EPEC model for the natural frequency is
+\begin{equation}\label{ecomp}
+\varpi_{k\,0} = \frac{\hat{\delta}_k\,\varpi_{{\rm linear}\,k} +\hat{W}_k\,\varpi_{{\rm nonlinear}\,k}}{\hat{\delta}_k+\hat{W}_k}.
+\end{equation}
+
+\section{Pedestal Pressure Reduction} \label{a5}
+The full width (in ${\mit\Psi}_N$)  of the magnetic separatrix of the island chain induced at the $k$th resonant surface is
+\begin{equation}
+W_k = 4\left[\frac{\hat{\mit\Psi}_k}{\sigma_k\,|\hat{{\mit\Psi}}_p(0)|}\right]^{1/2},
+\end{equation}
+where $\sigma_k=\sigma(r_k)$, $\sigma(r) = d\ln q/d{\mit\Psi}_N$, and $\hat{\mit\Psi}_p(r) = {\mit\Psi}_p/(R_0^{\,2}\,B_0)$.  
+However, the halfway point between the inner and outer extremities of the separatrix is located at the flux-surface where ${\mit\Psi}_N = {\mit\Psi}_N(r_k) - A_k\,W_k^{\,2}/8$ and $A_k = [(1/3)\,(d^{\,2}q/d{\mit\Psi}_N^{\,2})/(dq/d{\mit\Psi}_N)]_{r_k}$.
+On average, the presence of a magnetic island chain of full width $W_k$ at the $k$th resonant surface
+causes the electron temperature, ion temperature,  and electron number density profiles to be flattened in  annular regions, centered on the
+halfway points between the inner and outer radii of the island separatrices, of widths (in ${\mit\Psi}_N$)
+\begin{align}
+\delta_{T_e\,k}& = \frac{2}{\pi}\,W_k\,\tanh\left(\frac{W_k}{W_{T_e\,k}}\right),\\[0.5ex]
+\delta_{T_i\,k}& = \frac{2}{\pi}\,W_k\,\tanh\left(\frac{W_k}{W_{T_i\,k}}\right),\\[0.5ex]
+\delta_{n_e\,k}& = \frac{2}{\pi}\,W_k\,\tanh\left(\frac{W_k}{W_{n_e\,k}}\right),
+\end{align}
+respectively, where
+\begin{align}
+W_{T_e\,k} &= \left(\frac{\chi_{e}}{v_{T\,e}\,R_0}\,\frac{f^{\,2}}{n\,\sigma\,|\hat{\mit\Psi}_p(0)|^{\,2}}\right)^{1/3}_{r_k},\\[0.5ex]
+W_{T_i\,k} &= \left(\frac{\chi_{i}}{v_{T\,i}\,R_0}\,\frac{f^{\,2}}{n\,\sigma\,|\hat{\mit\Psi}_p(0)|^{\,2}}\right)^{1/3}_{r_k},\\[0.5ex]
+W_{n_e\,k} &= \left(\frac{D_\perp}{v_{T\,i}\,R_0}\,\frac{f^{\,2}}{n\,\sigma\,|\hat{\mit\Psi}_p(0)|^{\,2}}\right)^{1/3}_{r_k}.
+\end{align}
+Here, $\chi_i(r)$ is the perpendicular  ion energy diffusivity profile. 
+
+The total change in the plasma pressure interior to the innermost resonant surface due to the temperature and
+density flattening at the various resonant surfaces (assuming that the pressure at the LCFS is fixed) is
+\begin{align}
+{\mit\Delta}P &=\sum_{k=1,K} 
+\left\{\left[\delta_{n_e\,k}\,\frac{dn_e}{d{\mit\Psi}_N}\,T_e- \delta_{n_e\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}n_e}{d{\mit\Psi}_n^{\,2}}\,T_e\right)
++ \delta_{n_e\,k}^{\,3}\,\frac{d^{\,3}n_e}{d{\mit\Psi}_N^{\,3}}\,\frac{T_e}{24}\right]\right.
+\nonumber\\[0.5ex]
+&\phantom{++++}+\left[\delta_{T_e\,k}\,n_e\,\frac{dT_e}{d{\mit\Psi}_N}- \delta_{T_e\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+
+ n_e\,\frac{d^{\,2}T_e}{d{\mit\Psi}_n^{\,2}}\right)
++ \delta_{T_e\,k}^{\,3}\,\frac{n_e}{24}\,\frac{d^{\,3}T_e}{d{\mit\Psi}_N^{\,3}}\right]\nonumber\\[0.5ex]
+&\phantom{++++}+\left[\delta_{n_e\,k}\,\frac{dn_i}{d{\mit\Psi}_N}\,T_i- \delta_{n_e\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}
+\,T_i\right)+ \delta_{n_e\,k}^{\,3}\,\frac{d^{\,3}n_i}{d{\mit\Psi}_N^{\,3}}\,\frac{T_i}{24}\right]
+\nonumber\\[0.5ex]
+&\phantom{++++}\left.+\left[\delta_{T_i\,k}\,n_i\,\frac{dT_i}{d{\mit\Psi}_N}- \delta_{T_i\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+n_i\,\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\right)
++ \delta_{T_i\,k}^{\,3}\,\frac{n_i}{24}\,\frac{d^{\,3}T_i}{d{\mit\Psi}_N^{\,3}}\right]\right\}_{r_k}.
+\end{align}
+where
+we have neglected the impurity ion pressure. 
+
+\end{document}
