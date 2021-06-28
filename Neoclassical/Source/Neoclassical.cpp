@@ -21,6 +21,9 @@
 //			                    double& t_err, double acc, double S, int& rept,
 //			                    int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
 // void   Neoclassical:: RK4Fixed         (double& x, Array<double,1>& y, double h)
+// void   Neoclassical:: Matrix_Mult      (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+// void   Neoclassical:: Matrix_Add       (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+// void   Neoclassical:: Matrix_Sub       (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
 // FILE*  Neoclassical:: OpenFilew        (char* filename)
 // FILE*  Neoclassical:: OpenFilew        (char* filename)
 // FILE*  Neoclassical:: OpenFilea        (char* filename)
@@ -77,10 +80,10 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
   // Calculate neoclassical parameters at rational surfaces
   Get_Parameters ();
 
-  // Calculcate neoclassical frequencies at rational surfaces
+  // Calculate neoclassical frequencies at rational surfaces
   Get_Frequencies ();
 
-  // Calculcate linear layer widths at rational surfaces
+  // Calculate linear layer widths at rational surfaces
   Get_LayerWidths ();
 
   // Calculate normalized quantites at rational surface and output nFile
@@ -429,7 +432,7 @@ void Neoclassical::Read_Profiles ()
   dn_Idr.resize (NPSI); T_I.resize    (NPSI);
   dT_Idr.resize (NPSI); n_n.resize    (NPSI);
   Quasi.resize  (NPSI); Z_eff.resize  (NPSI);
-  alpha.resize  (NPSI);
+  alpha.resize  (NPSI); 
 
   dn_edP1.resize (NPSI); dT_edP1.resize (NPSI); dn_idP1.resize (NPSI); dT_idP1.resize (NPSI);
   dn_edP2.resize (NPSI); dT_edP2.resize (NPSI); dn_idP2.resize (NPSI); dT_idP2.resize (NPSI);
@@ -699,7 +702,8 @@ void Neoclassical::Get_Derived ()
   alphak.resize (nres); rhok.resize   (nres);
   NNk.resize    (nres); chipk.resize  (nres);
   chiek.resize  (nres); chink.resize  (nres);
-  chiik.resize  (nres);
+  chiik.resize  (nres); Zeffik.resize (nres);
+  ZeffIk.resize (nres);
 
   dnedP1k.resize (nres); dTedP1k.resize (nres); dnidP1k.resize (nres); dTidP1k.resize (nres);
   dnedP2k.resize (nres); dTedP2k.resize (nres); dnidP2k.resize (nres); dTidP2k.resize (nres);
@@ -733,8 +737,11 @@ void Neoclassical::Get_Derived ()
       chiek  (j) = Interpolate (NPSI, rr, chie,   rk (j), 0);
       chink  (j) = Interpolate (NPSI, rr, chin,   rk (j), 0);
       chiik  (j) = Interpolate (NPSI, rr, chii,   rk (j), 0);
-      rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
 
+      rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
+      Zeffik (j) =       (ZII - Zeffk (j)) /(ZII - 1.);
+      ZeffIk (j) = ZII * (Zeffk (j) - 1.)  /(ZII - 1.);
+      
       // Prevent negative diffusivities
       if (chipk (j) < 0.)
 	chipk (j) = 1.;
@@ -852,6 +859,7 @@ void Neoclassical::Get_Derived ()
   // ------------------------------------------------------
   eta_ek.resize   (nres); eta_ik.resize   (nres); eta_Ik.resize   (nres);
   w_ast_ek.resize (nres); w_ast_ik.resize (nres); w_ast_Ik.resize (nres);
+  w_betak.resize  (nres);
 
   for (int j = 0; j < nres; j++)
     {
@@ -861,9 +869,10 @@ void Neoclassical::Get_Derived ()
       w_ast_ek (j) =   (qk (j) /gk (j)) * Tek (j) * dnedrk (j) * (1. + eta_ek (j)) /e      /nek (j) /(a*rk (j)) /fabs (B_0);
       w_ast_ik (j) = - (qk (j) /gk (j)) * Tik (j) * dnidrk (j) * (1. + eta_ik (j)) /e /ZI  /nik (j) /(a*rk (j)) /fabs (B_0);
       w_ast_Ik (j) = - (qk (j) /gk (j)) * TIk (j) * dnIdrk (j) * (1. + eta_Ik (j)) /e /ZII /nIk (j) /(a*rk (j)) /fabs (B_0);
+      w_betak  (j) = - sk (j) * gk (j) * B_0 /mu_0 /nik (j) /R_0/R_0 /ZI/e /qk(j);
 
-      printf ("m = %3d  wE = %11.4e  w_ast_e = %11.4e  w_ast_i = %11.4e  w_ast_I = %11.4e\n",
-	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3);
+      printf ("m = %3d  wE = %11.4e  w_ast_e = %11.4e  w_ast_i = %11.4e  w_ast_I = %11.4e  w_beta = %11.4e\n",
+	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3, w_betak (j) /1.e3);
     }
 
   // Output diamagnetic frequencies
@@ -985,7 +994,9 @@ void Neoclassical::Get_Parameters ()
   L_ii_00.resize (nres); L_ii_01.resize (nres); L_iI_00.resize (nres);
   L_iI_01.resize (nres); L_Ii_00.resize (nres); L_Ii_01.resize (nres);
   L_II_00.resize (nres); L_II_01.resize (nres); G_ii_00.resize (nres);
-  G_Ii_00.resize (nres); Q_00.resize    (nres); 
+  G_Ii_00.resize (nres); Q_00.resize    (nres); P_ei_00.resize (nres);
+  L_ee_00.resize (nres); L_ee_01.resize (nres); L_ei_00.resize (nres);
+  L_ei_01.resize (nres); L_eI_00.resize (nres); L_eI_01.resize (nres);
  
   // ........................
   // Calculate ion parameters
@@ -1023,6 +1034,16 @@ void Neoclassical::Get_Parameters ()
       gsl_matrix* L    = gsl_matrix_alloc (4, 4);
       gsl_matrix* invH = gsl_matrix_alloc (4, 4);
 
+      gsl_matrix* Lii  = gsl_matrix_alloc (2, 2);
+      gsl_matrix* LiI  = gsl_matrix_alloc (2, 2);
+      gsl_matrix* LIi  = gsl_matrix_alloc (2, 2);
+      gsl_matrix* LII  = gsl_matrix_alloc (2, 2);
+
+      gsl_matrix* Gii  = gsl_matrix_alloc (2, 2);
+      gsl_matrix* GiI  = gsl_matrix_alloc (2, 2);
+      gsl_matrix* GIi  = gsl_matrix_alloc (2, 2);
+      gsl_matrix* GII  = gsl_matrix_alloc (2, 2);
+      
       gsl_matrix_set (H, 0, 0, a00 + mu_00_i (j) + SVN * NNk (j)      /nu_iik (j) /YN);
       gsl_matrix_set (H, 0, 1, a01 + mu_01_i (j));
       gsl_matrix_set (H, 1, 0, a10 + mu_01_i (j));
@@ -1071,20 +1092,7 @@ void Neoclassical::Get_Parameters ()
 
       gsl_linalg_LU_invert (H, p, invH);
 
-      for (int is = 0; is < 4; is++)
-	{
-	  for (int js = 0; js < 4; js++)
-	    {
-	      double val = 0.;
-	      
-	      for (int ks = 0; ks < 4; ks++)
-		{
-		  val += gsl_matrix_get (invH, is, ks) * gsl_matrix_get (G, ks, js);
-		}
-
-	      gsl_matrix_set (L, is, js, val);
-	    }
-	}
+      Matrix_Mult (invH, G, L, 4);
 
       L_ii_00 (j) = gsl_matrix_get (L, 0, 0);
       L_ii_01 (j) = gsl_matrix_get (L, 0, 1);
@@ -1096,18 +1104,51 @@ void Neoclassical::Get_Parameters ()
       L_II_01 (j) = gsl_matrix_get (L, 2, 3);
       G_ii_00 (j) = gsl_matrix_get (invH, 0, 0) * SVN * NNk (j) /nu_iik (j);
       G_Ii_00 (j) = gsl_matrix_get (invH, 2, 0) * SVN * NNk (j) /nu_iik (j);
+
+      for (int is = 0; is < 2; is++)
+	for (int js = 0; js < 2; js++)
+	  {
+	    gsl_matrix_set (Lii, is, js, gsl_matrix_get (L, is,     js));
+	    gsl_matrix_set (LiI, is, js, gsl_matrix_get (L, is,     js + 2));
+	    gsl_matrix_set (LIi, is, js, gsl_matrix_get (L, is + 2, js));
+	    gsl_matrix_set (LII, is, js, gsl_matrix_get (L, is + 2, js + 2));
+
+	    gsl_matrix_set (Gii, is, js, gsl_matrix_get (G, is,     js)     * SVN * NNk (j) /nu_iik (j));
+	    gsl_matrix_set (GiI, is, js, gsl_matrix_get (G, is,     js + 2) * SVN * NNk (j) /nu_iik (j));
+	    gsl_matrix_set (GIi, is, js, gsl_matrix_get (G, is + 2, js)     * SVN * NNk (j) /nu_iik (j));
+	    gsl_matrix_set (GII, is, js, gsl_matrix_get (G, is + 2, js + 2) * SVN * NNk (j) /nu_iik (j));
+	  }
             
-      gsl_matrix_free      (H);
-      gsl_matrix_free      (G);
-      gsl_matrix_free      (L);
-      gsl_matrix_free      (invH);
+      gsl_matrix_free (H); gsl_matrix_free (G); gsl_matrix_free (L); gsl_matrix_free (invH);
       gsl_permutation_free (p);
 
       // .............................
       // Calculate electron parameters
       // .............................
-      gsl_matrix* E = gsl_matrix_alloc (2, 2);
-      gsl_matrix* Q = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Fee = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Fei = gsl_matrix_alloc (2, 2);
+      gsl_matrix* FeI = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Pei = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Lee = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Lei = gsl_matrix_alloc (2, 2);
+      gsl_matrix* LeI = gsl_matrix_alloc (2, 2);
+      gsl_matrix* E   = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Q   = gsl_matrix_alloc (2, 2);
+
+      gsl_matrix_set (Fee, 0, 0, Zeffk (j));
+      gsl_matrix_set (Fee, 0, 1, (3./2.) * Zeffk (j));
+      gsl_matrix_set (Fee, 1, 0, (3./2.) * Zeffk (j));
+      gsl_matrix_set (Fee, 1, 1, sqrt(2.) + (13./4.) * Zeffk (j));
+
+      gsl_matrix_set (Fei, 0, 0, Zeffik (j));
+      gsl_matrix_set (Fei, 0, 1, 0.);
+      gsl_matrix_set (Fei, 1, 0, (3./2.) * Zeffik (j));
+      gsl_matrix_set (Fei, 1, 1, 0.);
+
+      gsl_matrix_set (FeI, 0, 0, ZeffIk (j));
+      gsl_matrix_set (FeI, 0, 1, 0.);
+      gsl_matrix_set (FeI, 1, 0, (3./2.) * ZeffIk (j));
+      gsl_matrix_set (FeI, 1, 1, 0.);
 
       gsl_matrix_set (E, 0, 0, Zeffk (j)                       + mu_00_e (j));
       gsl_matrix_set (E, 0, 1, (3./2.) * Zeffk (j)             + mu_01_e (j));
@@ -1121,21 +1162,59 @@ void Neoclassical::Get_Parameters ()
       gsl_linalg_LU_invert (E, pp, Q);
 
       Q_00 (j) = gsl_matrix_get (Q, 0, 0);
+	    
+      gsl_matrix* Temp1 = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Temp2 = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Temp3 = gsl_matrix_alloc (2, 2);
 
-      gsl_matrix_free (E);
-      gsl_matrix_free (Q);
-      gsl_permutation_free (pp);
+      Matrix_Mult (Fei,   Gii,   Temp1, 2);
+      Matrix_Mult (FeI,   GIi,   Temp2, 2);
+      Matrix_Add  (Temp1, Temp2, Temp3, 2);
+      Matrix_Mult (Q,     Temp3, Pei,   2);
+
+      Matrix_Mult (Q, Fee, Lee, 2);
+
+      Matrix_Mult (Fei,   Lii,   Temp1, 2);
+      Matrix_Sub  (Temp1, Fei,   Temp2, 2);
+      Matrix_Mult (FeI,   LIi,   Temp3, 2);
+      Matrix_Add  (Temp2, Temp3, Temp1, 2);
+      Matrix_Mult (Q,     Temp1, Lei,   2);
+
+      Matrix_Mult (FeI,   LII,   Temp1, 2);
+      Matrix_Sub  (Temp1, FeI,   Temp2, 2);
+      Matrix_Mult (Fei,   LiI,   Temp3, 2);
+      Matrix_Add  (Temp2, Temp3, Temp1, 2);
+      Matrix_Mult (Q,     Temp1, LeI,   2);
+
+      P_ei_00 (j) = gsl_matrix_get (Pei, 0, 0);
+      L_ee_00 (j) = gsl_matrix_get (Lee, 0, 0);
+      L_ee_01 (j) = gsl_matrix_get (Lee, 0, 1);
+      L_ei_00 (j) = gsl_matrix_get (Lei, 0, 0);
+      L_ei_01 (j) = gsl_matrix_get (Lei, 0, 1);
+      L_eI_00 (j) = gsl_matrix_get (LeI, 0, 0);
+      L_eI_01 (j) = gsl_matrix_get (LeI, 0, 1);
       
-     printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  G_ii = %10.3e  G_Ii = %10.3e  Q_00 = %10.3e\n",
-	     mk (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),  L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j), Q_00 (j));
+      gsl_matrix_free (Temp1); gsl_matrix_free (Temp2); gsl_matrix_free (Temp3); 
+      gsl_matrix_free (Lii);   gsl_matrix_free (LiI);   gsl_matrix_free (LIi);   gsl_matrix_free (LII);
+      gsl_matrix_free (Pei);   gsl_matrix_free (Lee);   gsl_matrix_free (Lei);   gsl_matrix_free (LeI);
+      gsl_matrix_free (Gii);   gsl_matrix_free (GiI);   gsl_matrix_free (GIi);   gsl_matrix_free (GII); 
+      gsl_matrix_free (Fee);   gsl_matrix_free (Fei);   gsl_matrix_free (FeI);   gsl_matrix_free (E); gsl_matrix_free (Q);
+      gsl_permutation_free (pp);
     }
-
+  for (int j = 0; j < nres; j++)
+    printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  G_ii = %10.3e  G_Ii = %10.3e\n",
+	    mk (j), L_ii_00 (j), L_ii_01 (j), L_iI_00 (j), L_iI_01 (j), L_Ii_00 (j), L_Ii_01 (j), L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j));
+  for (int j = 0; j < nres; j++)
+    printf ("m = %3d  L_ee = (%10.3e, %10.3e)  L_ei = (%10.3e, %10.3e)  L_eI = (%10.3e, %10.3e)  P_ei = %10.3e  Q_00 = %10.3e\n",
+	    mk (j), L_ee_00 (j), L_ee_01 (j), L_ei_00 (j), L_ei_01 (j), L_eI_00 (j), L_eI_01 (j), P_ei_00 (j), Q_00 (j));
+  
   // Output parameters
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/parameters.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     rk (j), eta_ik (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),
-	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j), Q_00 (j));
+	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j), Q_00 (j),
+	     L_ee_00 (j), L_ee_01 (j), L_ei_00 (j), L_ei_01 (j), L_eI_00 (j), L_eI_01 (j));
   fclose (file);
 }
 
@@ -1147,8 +1226,9 @@ void Neoclassical::Get_Frequencies ()
   // .....................
   // Calculate frequencies
   // .....................
-  w_linear.resize (nres); w_nonlinear.resize (nres); w_EB.resize   (nres);
-  w_nc_ik.resize  (nres); w_nc_Ik.resize     (nres); w_E_Ik.resize (nres);
+  w_linear.resize(nres); w_nonlinear.resize (nres); w_EB.resize   (nres);
+  w_nc_ik.resize (nres); w_nc_Ik.resize     (nres); w_E_Ik.resize (nres);
+  w_nc_ek.resize (nres); 
 
   for (int j = 0; j < nres; j++)
     {
@@ -1166,6 +1246,14 @@ void Neoclassical::Get_Frequencies ()
 	                - L_iI_00 (j) * w_ast_Ik (j)
 	                + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
 	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+
+	  w_nc_ek (j) = - P_ei_00 (j) * wEk (j)
+	                - L_ee_00 (j) * w_ast_ek (j)
+	                - L_ei_00 (j) * w_ast_ik (j)
+	                - L_eI_00 (j) * w_ast_Ik (j)
+	                + L_ee_01 (j) * (eta_ek (j) /(1. + eta_ek (j))) * w_ast_ek (j)
+	                + L_ei_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	                + L_eI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 	  
 	  w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
 	  w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j) + w_nc_ik (j));
@@ -1178,14 +1266,23 @@ void Neoclassical::Get_Frequencies ()
 	                - L_iI_00 (j) * w_ast_Ik (j)
 	                + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
 	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+
+	  
+	  w_nc_ek (j) = - P_ei_00 (j) * w_E_Ik (j)
+	                - L_ee_00 (j) * w_ast_ek (j)
+	                - L_ei_00 (j) * w_ast_ik (j)
+	                - L_eI_00 (j) * w_ast_Ik (j)
+	                + L_ee_01 (j) * (eta_ek (j) /(1. + eta_ek (j))) * w_ast_ek (j)
+	                + L_ei_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	                + L_eI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 	  
 	  w_linear    (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ek (j));
 	  w_nonlinear (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ik (j) + w_nc_ik (j));
 	  w_EB        (j) = - double (ntor) * (w_E_Ik (j));
 	}
 
-      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e\n",
-	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3);
+      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e  w_ast_ik = %11.4e  w_ast_ek = %11.4e  w_nc_i = %11.4e  w_nc_e = %11.4e\n",
+	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_ek (j) /1.e3, w_nc_ik (j) /1.e3, w_nc_ek (j) /1.e3);
     }
 
   // ..................
@@ -1193,9 +1290,10 @@ void Neoclassical::Get_Frequencies ()
   // ..................
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/omega.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk (j), wEk (j) /1.e3, w_E_Ik (j) /1.e3,
-	     wtk (j) /1.e3, w_ast_Ik (j) /1.e3, Kthek (j) * (- G_Ii_00 (j) * w_E_Ik (j) + w_nc_Ik (j)) /1.e3);
+	     wtk (j) /1.e3, w_ast_Ik (j) /1.e3, Kthek (j) * (- G_Ii_00 (j) * w_E_Ik (j) + w_nc_Ik (j)) /1.e3,
+	     w_nc_ik (j)/1.e3, w_nc_ek (j)/1.e3);
   fclose (file);
 }
 
@@ -1304,11 +1402,13 @@ void Neoclassical::Get_Normalized ()
       double tm  = tau_Mk (j) /tau_A;
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
       double tx  = tau_cxk (j) /tau_A;
+      double DB  =  (- w_ast_ek (j) - w_nc_ek (j) + (nik (j) /nek (j)) * (w_ast_ik (j) + w_nc_ik (j)) + (ZII * nIk (j) /nek (j)) * (w_ast_Ik (j) + w_nc_Ik (j))) /w_betak (j);
+      double DR  = -2. * ((qk (j)*qk (j) - 1.) /sk (j)/qk (j)/qk (j)) * (a*a * rk (j)*rk (j) /R_0/R_0) * ((w_ast_ik (j)- w_ast_ek (j)) /w_betak (j));
+       
+      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e DB = %10.3e DR = %10.3e\n",
+	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j), DB, DR);
 
-      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
-	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j));
-
-      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          tm,                         th,
 	       sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                       wkn, 
@@ -1317,7 +1417,7 @@ void Neoclassical::Get_Normalized ()
 	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
 	       Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
 	       Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3, tx);
+	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3, tx, 2.*0.8227*1.58*(DB-DR));
 	       
       }
    fclose (file);
@@ -1340,8 +1440,10 @@ void Neoclassical::Get_Normalized ()
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 	  double tx  = tau_cxk (j) /tau_A;
+	  double DB  =  (- w_ast_ek (j) - w_nc_ek (j) + (nik (j) /nek (j)) * (w_ast_ik (j) + w_nc_ik (j)) + (ZII * nIk (j) /nek (j)) * (w_ast_Ik (j) + w_nc_Ik (j))) /w_betak (j);
+	  double DR  = -2. * ((qk (j)*qk (j) - 1.) /sk (j)/qk (j)/qk (j)) * (a*a * rk (j)*rk (j) /R_0/R_0) * ((w_ast_ik (j)- w_ast_ek (j)) /w_betak (j));
 
-	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
 		   a /R_0,                      Sk,                          tm,                         th,
 		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 
@@ -1350,7 +1452,7 @@ void Neoclassical::Get_Normalized ()
 		   nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
 		   Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
 		   Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx);
+		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx, 2.*0.8227*1.58*(DB-DR));
 	}
       fclose (file);
 
@@ -1650,6 +1752,62 @@ FILE* Neoclassical::OpenFiler (char* filename)
     }
   return file;
 }
+
+// #############################
+// Matrix multiplication routine
+// #############################
+void Neoclassical::Matrix_Mult (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+ {
+   for (int is = 0; is < i; is++)
+	{
+	  for (int js = 0; js < i; js++)
+	    {
+	      double val = 0.;
+	      
+	      for (int ks = 0; ks < i; ks++)
+		{
+		  val += gsl_matrix_get (A, is, ks) * gsl_matrix_get (B, ks, js);
+		}
+
+	      gsl_matrix_set (C, is, js, val);
+	    }
+	}
+
+ }
+
+// #######################
+// Matrix addition routine
+// #######################
+void Neoclassical::Matrix_Add (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+ {
+   for (int is = 0; is < i; is++)
+	{
+	  for (int js = 0; js < i; js++)
+	    {
+	      double val = gsl_matrix_get (A, is, js) + gsl_matrix_get (B, is, js);
+
+	      gsl_matrix_set (C, is, js, val);
+	    }
+	}
+
+ }
+
+// ##########################
+// Matrix subtraction routine
+// ##########################
+void Neoclassical::Matrix_Sub (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+ {
+   for (int is = 0; is < i; is++)
+	{
+	  for (int js = 0; js < i; js++)
+	    {
+	      double val = gsl_matrix_get (A, is, js) - gsl_matrix_get (B, is, js);
+
+	      gsl_matrix_set (C, is, js, val);
+	    }
+	}
+
+ }
 
 // #################################
 // Function to open file for writing

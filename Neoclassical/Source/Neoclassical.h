@@ -64,6 +64,7 @@
 // 1.22 - Added more accurate calculation of linear layer width
 // 1.23 - Added C1 and C2
 // 1.24 - Added change exchange to angular velocity evolution equations
+// 1.25 - Added calculation of DB and DR
 
 // ################################################################
 
@@ -301,6 +302,8 @@ class Neoclassical
   Array<double,1> wEk;        // ExB frequencies (rad/s)
   Array<double,1> wtk;        // Impurity ion toroidal rotation frequencies (rad/s)
   Array<double,1> Zeffk;      // Effective ion charge numbers
+  Array<double,1> Zeffik;     // Effective ion charge numbers
+  Array<double,1> ZeffIk;     // Effective ion charge number
   Array<double,1> alphak;     // Impurity strength parameters
   Array<double,1> rhok;       // Relative mass densities
   Array<double,1> NNk;        // Flux-surfaced-averaged majority neutral number densities (m^-3)
@@ -347,7 +350,9 @@ class Neoclassical
   Array<double,1> w_ast_Ik;   // Impurity ion diamagnetic frequencies (rad/s)
   Array<double,1> w_nc_ik;    // Majority ion neoclassical frequencies (rad/s)
   Array<double,1> w_nc_Ik;    // Impurity ion neoclassical frequencies (rad/s)
+  Array<double,1> w_nc_ek;    // Electron neocalssical frequencies (rad/s)
   Array<double,1> w_E_Ik;     // ExB frequencies inferred from toroidal impurity ion rotation frequency (rad/s)
+  Array<double,1> w_betak;    // Bootstrap frequencies (rad/s)
 
   Array<double,1> rho_sk;     // Ion sound radii (m)
   
@@ -393,16 +398,25 @@ class Neoclassical
   // -----------------------
   // Neoclassical parameters
   // -----------------------
-  Array<double,1> L_ii_00;  // Neoclassical ion flow parameter
-  Array<double,1> L_ii_01;  // Neoclassical ion flow parameter
-  Array<double,1> L_iI_00;  // Neoclassical ion flow parameter
-  Array<double,1> L_iI_01;  // Neoclassical ion flow parameter
-  Array<double,1> L_Ii_00;  // Neoclassical ion flow parameter
-  Array<double,1> L_Ii_01;  // Neoclassical ion flow parameter
-  Array<double,1> L_II_00;  // Neoclassical ion flow parameter
-  Array<double,1> L_II_01;  // Neoclassical ion flow parameter
-  Array<double,1> G_ii_00;  // Neoclassical ion flow parameter
-  Array<double,1> G_Ii_00;  // Neoclassical ion flow parameter
+  Array<double,1> G_ii_00;  // Neoclassical majority ion flow parameter
+  Array<double,1> L_ii_00;  // Neoclassical majority ion flow parameter
+  Array<double,1> L_ii_01;  // Neoclassical majority ion flow parameter
+  Array<double,1> L_iI_00;  // Neoclassical majority ion flow parameter
+  Array<double,1> L_iI_01;  // Neoclassical majority ion flow parameter
+
+  Array<double,1> G_Ii_00;  // Neoclassical impurity ion flow parameter
+  Array<double,1> L_Ii_00;  // Neoclassical impurity ion flow parameter
+  Array<double,1> L_Ii_01;  // Neoclassical impurity ion flow parameter
+  Array<double,1> L_II_00;  // Neoclassical impurity ion flow parameter
+  Array<double,1> L_II_01;  // Neoclassical impurity ion flow parameter
+
+  Array<double,1> P_ei_00;  // Neoclassical electron flow parameter
+  Array<double,1> L_ee_00;  // Neoclassical electron flow parameter
+  Array<double,1> L_ee_01;  // Neoclassical electron flow parameter
+  Array<double,1> L_ei_00;  // Neoclassical electron flow parameter
+  Array<double,1> L_ei_01;  // Neoclassical electron flow parameter
+  Array<double,1> L_eI_00;  // Neoclassical electron flow parameter
+  Array<double,1> L_eI_01;  // Neoclassical electron flow parameter
   Array<double,1> Q_00;     // Neoclassical electron flow parameter
 
   // ...................
@@ -515,6 +529,13 @@ class Neoclassical
 
   // Savitsky-Gorlay smoothing routine
   void Smoothing (int N, Array<double,1> y);
+
+  // Matrix multiplication routine
+  void Matrix_Mult (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i);
+  // Matrix addition routine
+  void Matrix_Add (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i);
+  // Matrix subtraction routine
+  void Matrix_Sub (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i);
 
   // Open file for reading
   FILE* OpenFiler (char* filename);
