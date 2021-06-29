@@ -21,12 +21,12 @@
 // #######################################
 void Flux::CalcQGP ()
 {
-  gsl_odeiv_system           sys1 = {pRhs1, NULL, 3, this};
+  gsl_odeiv_system           sys1 = {pRhs1, NULL, 4, this};
   const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 3);
+  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 4);
   gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (3);
-  double*                    y    = new double [3]; 
+  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (4);
+  double*                    y    = new double [4]; 
   double                     r, h;
   
   for (int j = 1; j < NPSI; j++)
@@ -36,6 +36,7 @@ void Flux::CalcQGP ()
       y[0] = RP[j];
       y[1] = ZPTS[jc];
       y[2] = 0.;
+      y[3] = 0.;
   
       while (r < M_PI)
 	{
@@ -62,6 +63,7 @@ void Flux::CalcQGP ()
       
       QGP[j] = y[2];
       QP [j] = QGP[j]*GP[j];
+      J0 [j] = y[3];
 
       if (j%50 == 0 || j > NPSI-10)
 	printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
@@ -302,6 +304,7 @@ int Flux::Rhs1 (double r, const double y[], double dydr[], void*)
   // y[0] - R     
   // y[1] - Z
   // y[2] - q/g
+  // y[3] - J0
   
   double PsiR = GetPsiR (y[0], y[1]);
   double PsiZ = GetPsiZ (y[0], y[1]);
@@ -312,6 +315,7 @@ int Flux::Rhs1 (double r, const double y[], double dydr[], void*)
   dydr[0] = - PsiZ * fac;
   dydr[1] = + PsiR * fac;
   dydr[2] = (1./2./M_PI /fabs(Psic)) * fac /y[0];
+  dydr[3] = y[0] * (1./2./M_PI /fabs(Psic)) * fac;
     
   return GSL_SUCCESS;
 }

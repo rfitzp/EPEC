@@ -213,6 +213,7 @@ class Flux
   double* PPP;         // dP/dPsi
   double* S;           // sqrt(1 - Psi)
   double* QX;          // q(Psi) from gFile
+  double* J0;          // GGJ integral
 
   double* PsiN;        // PsiN array
   double* QPN;         // dQ/dPsiN array
@@ -254,6 +255,7 @@ class Flux
   gsl_matrix* Znc;     // Z versus Theta on rational surfaces
   gsl_matrix* Bnc;     // B versus Theta on rational surfaces
   gsl_matrix* Cnc;     // dB/dTheta versus Theta on rational surfaces
+  gsl_matrix* Pnc;     // |Grad psi|^2 versus Theta on rational surfaces 
 
   // Neoclassical parameter data
   double*     I1;      // Neoclassical integral
@@ -264,6 +266,17 @@ class Flux
   gsl_matrix* I6;      // Neoclassical integrals
   double*     I7;      // Neoclassical integral
   double*     I8;      // Neoclassical integral
+
+  // Glasser-Greene-Johnson data
+  double* J1;          // GGJ integral
+  double* J2;          // GGJ integral
+  double* J3;          // GGJ integral
+  double* J4;          // GGJ integral
+  double* J5;          // GGJ integral
+  double* J6;          // GGJ integral
+  double* E;           // GGJ index
+  double* F;           // GGJ index
+  double* H;           // GGJ index
 
   // Perturbed equilibrium data
   gsl_matrix_complex* FF;  // F-matrix

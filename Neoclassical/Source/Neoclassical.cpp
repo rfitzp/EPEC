@@ -994,7 +994,7 @@ void Neoclassical::Get_Parameters ()
   L_ii_00.resize (nres); L_ii_01.resize (nres); L_iI_00.resize (nres);
   L_iI_01.resize (nres); L_Ii_00.resize (nres); L_Ii_01.resize (nres);
   L_II_00.resize (nres); L_II_01.resize (nres); G_ii_00.resize (nres);
-  G_Ii_00.resize (nres); Q_00.resize    (nres); P_ei_00.resize (nres);
+  G_Ii_00.resize (nres); Q_00.resize    (nres); G_ei_00.resize (nres);
   L_ee_00.resize (nres); L_ee_01.resize (nres); L_ei_00.resize (nres);
   L_ei_01.resize (nres); L_eI_00.resize (nres); L_eI_01.resize (nres);
  
@@ -1128,7 +1128,7 @@ void Neoclassical::Get_Parameters ()
       gsl_matrix* Fee = gsl_matrix_alloc (2, 2);
       gsl_matrix* Fei = gsl_matrix_alloc (2, 2);
       gsl_matrix* FeI = gsl_matrix_alloc (2, 2);
-      gsl_matrix* Pei = gsl_matrix_alloc (2, 2);
+      gsl_matrix* Gei = gsl_matrix_alloc (2, 2);
       gsl_matrix* Lee = gsl_matrix_alloc (2, 2);
       gsl_matrix* Lei = gsl_matrix_alloc (2, 2);
       gsl_matrix* LeI = gsl_matrix_alloc (2, 2);
@@ -1170,7 +1170,7 @@ void Neoclassical::Get_Parameters ()
       Matrix_Mult (Fei,   Gii,   Temp1, 2);
       Matrix_Mult (FeI,   GIi,   Temp2, 2);
       Matrix_Add  (Temp1, Temp2, Temp3, 2);
-      Matrix_Mult (Q,     Temp3, Pei,   2);
+      Matrix_Mult (Q,     Temp3, Gei,   2);
 
       Matrix_Mult (Q, Fee, Lee, 2);
 
@@ -1186,7 +1186,7 @@ void Neoclassical::Get_Parameters ()
       Matrix_Add  (Temp2, Temp3, Temp1, 2);
       Matrix_Mult (Q,     Temp1, LeI,   2);
 
-      P_ei_00 (j) = gsl_matrix_get (Pei, 0, 0);
+      G_ei_00 (j) = gsl_matrix_get (Gei, 0, 0);
       L_ee_00 (j) = gsl_matrix_get (Lee, 0, 0);
       L_ee_01 (j) = gsl_matrix_get (Lee, 0, 1);
       L_ei_00 (j) = gsl_matrix_get (Lei, 0, 0);
@@ -1196,7 +1196,7 @@ void Neoclassical::Get_Parameters ()
       
       gsl_matrix_free (Temp1); gsl_matrix_free (Temp2); gsl_matrix_free (Temp3); 
       gsl_matrix_free (Lii);   gsl_matrix_free (LiI);   gsl_matrix_free (LIi);   gsl_matrix_free (LII);
-      gsl_matrix_free (Pei);   gsl_matrix_free (Lee);   gsl_matrix_free (Lei);   gsl_matrix_free (LeI);
+      gsl_matrix_free (Gei);   gsl_matrix_free (Lee);   gsl_matrix_free (Lei);   gsl_matrix_free (LeI);
       gsl_matrix_free (Gii);   gsl_matrix_free (GiI);   gsl_matrix_free (GIi);   gsl_matrix_free (GII); 
       gsl_matrix_free (Fee);   gsl_matrix_free (Fei);   gsl_matrix_free (FeI);   gsl_matrix_free (E); gsl_matrix_free (Q);
       gsl_permutation_free (pp);
@@ -1205,16 +1205,16 @@ void Neoclassical::Get_Parameters ()
     printf ("m = %3d  L_ii = (%10.3e, %10.3e)  L_iI = (%10.3e, %10.3e)  L_Ii = (%10.3e, %10.3e)  L_II = (%10.3e, %10.3e)  G_ii = %10.3e  G_Ii = %10.3e\n",
 	    mk (j), L_ii_00 (j), L_ii_01 (j), L_iI_00 (j), L_iI_01 (j), L_Ii_00 (j), L_Ii_01 (j), L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j));
   for (int j = 0; j < nres; j++)
-    printf ("m = %3d  L_ee = (%10.3e, %10.3e)  L_ei = (%10.3e, %10.3e)  L_eI = (%10.3e, %10.3e)  P_ei = %10.3e  Q_00 = %10.3e\n",
-	    mk (j), L_ee_00 (j), L_ee_01 (j), L_ei_00 (j), L_ei_01 (j), L_eI_00 (j), L_eI_01 (j), P_ei_00 (j), Q_00 (j));
+    printf ("m = %3d  L_ee = (%10.3e, %10.3e)  L_ei = (%10.3e, %10.3e)  L_eI = (%10.3e, %10.3e)  G_ei = %10.3e  Q_00 = %10.3e\n",
+	    mk (j), L_ee_00 (j), L_ee_01 (j), L_ei_00 (j), L_ei_01 (j), L_eI_00 (j), L_eI_01 (j), G_ei_00 (j), Q_00 (j));
   
   // Output parameters
   FILE* file = OpenFilew ((char*) "Outputs/Stage3/parameters.txt");
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     rk (j), eta_ik (j), L_ii_00 (j),  L_ii_01 (j),  L_iI_00 (j),  L_iI_01 (j),
 	     L_Ii_00 (j),  L_Ii_01 (j),  L_II_00 (j), L_II_01 (j), G_ii_00 (j), G_Ii_00 (j), Q_00 (j),
-	     L_ee_00 (j), L_ee_01 (j), L_ei_00 (j), L_ei_01 (j), L_eI_00 (j), L_eI_01 (j));
+	     L_ee_00 (j), L_ee_01 (j), L_ei_00 (j), L_ei_01 (j), L_eI_00 (j), L_eI_01 (j), G_ei_00 (j));
   fclose (file);
 }
 
@@ -1247,7 +1247,7 @@ void Neoclassical::Get_Frequencies ()
 	                + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
 	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 
-	  w_nc_ek (j) = - P_ei_00 (j) * wEk (j)
+	  w_nc_ek (j) = - G_ei_00 (j) * wEk (j)
 	                - L_ee_00 (j) * w_ast_ek (j)
 	                - L_ei_00 (j) * w_ast_ik (j)
 	                - L_eI_00 (j) * w_ast_Ik (j)
@@ -1268,7 +1268,7 @@ void Neoclassical::Get_Frequencies ()
 	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 
 	  
-	  w_nc_ek (j) = - P_ei_00 (j) * w_E_Ik (j)
+	  w_nc_ek (j) = - G_ei_00 (j) * w_E_Ik (j)
 	                - L_ee_00 (j) * w_ast_ek (j)
 	                - L_ei_00 (j) * w_ast_ik (j)
 	                - L_eI_00 (j) * w_ast_Ik (j)

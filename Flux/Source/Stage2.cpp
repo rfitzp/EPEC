@@ -140,6 +140,7 @@ void Flux::Stage2 ()
   delete[] QGP;  delete[] QP;  delete[] PP; delete[] GPP;
   delete[] PPP;  delete[] S;   delete[] QX; delete[] RP1;
   delete[] Bt;   delete[] Bt1; delete[] Bp; delete[] Bp1;
+  delete[] J0;
 
   delete[] PsiN; delete[] QPN; delete[] QPPN, delete[] A1, delete[] A2;
   
@@ -153,11 +154,14 @@ void Flux::Stage2 ()
   delete[] Th;
   gsl_matrix_free (Rnc); gsl_matrix_free (Znc); 
 
-  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc);
+  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc); gsl_matrix_free (Pnc);
  
   delete[] I1;    delete[] I2;    delete[] I3;    delete[] I7;    delete[] I8;  
   delete[] Ktres; delete[] Kares; delete[] ajj;   delete[] dPsidr;
   delete[] Khres; delete[] q_hat; delete[] C1res; delete[] C2res;
+
+  delete[] J1; delete[] J2;  delete[] J3; delete[] J4; delete[] J5;
+  delete[] J6; delete[] E;   delete[] F;  delete[] H;
 
   gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
   
@@ -517,6 +521,7 @@ void Flux::Stage2CalcQ ()
   PPP = new double[NPSI];  // dP/dPsi
   S   = new double[NPSI];  // sqrt (1 - Psi)
   QX  = new double[NPSI];  // q(Psi) from gFile
+  J0  = new double[NPSI];  // GGJ integral
 
   PsiN = new double[NPSI]; // PsiN array
   QPN  = new double[NPSI]; // dQ/dPsiN array
@@ -662,8 +667,8 @@ void Flux::Stage2CalcQ ()
   // ......................
   file = OpenFilew ((char*) "Outputs/Stage2/qr.txt");
   for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
-	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j], QPPN[j], A2[j]);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
+	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j], QPPN[j], A2[j], J0[j]);
     fclose (file);
 }
 
@@ -891,6 +896,7 @@ void Flux::Stage2CalcNeoclassicalAngle ()
   // Calculate |B| on rational surfaces
   // ..................................
   Bnc = gsl_matrix_alloc (nres, NTHETA);
+  Pnc = gsl_matrix_alloc (nres, NTHETA);
   for (int j = 0; j < nres; j++)
     for (int k = 0; k < NTHETA; k++)
       {
@@ -901,8 +907,10 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 	double PsiZ = GetPsiZ (Rval, Zval);
 	double Grad = sqrt (PsiR*PsiR + PsiZ*PsiZ);
 	double Bval = sqrt (gval*gval + Psic*Psic * Grad*Grad) /Rval;
+	double Pval = Psic*Psic * Grad*Grad;
 
 	gsl_matrix_set (Bnc, j, k, Bval);
+	gsl_matrix_set (Pnc, j, k, Pval);
       }
 
   // ..........
@@ -975,6 +983,17 @@ void Flux::Stage2CalcNeoclassicalPara ()
   C1res  = new double[nres];
   C2res  = new double[nres];
 
+  J1     = new double[nres];
+  J2     = new double[nres];
+  J3     = new double[nres];
+  J4     = new double[nres];
+  J5     = new double[nres];
+  J6     = new double[nres];
+
+  E      = new double[nres];
+  F      = new double[nres];
+  H      = new double[nres];
+  
   // ......................................................
   // Calculate neoclassical parameters at rational surfaces 
   // ......................................................
@@ -1091,7 +1110,7 @@ void Flux::Stage2CalcNeoclassicalPara ()
 
       fcres[i] = sum;
 
-      // Calculate ajj values
+      // Calculate ajj
       sum = 0.;
       for (int j = 0; j < NTHETA; j++)
 	{
@@ -1106,10 +1125,10 @@ void Flux::Stage2CalcNeoclassicalPara ()
      
       ajj[i] = sum;
 
-      // Calculate dPsidr values
+      // Calculate dPsidr 
       dPsidr[i] = rres[i] * gres[i] /qres[i] /fabs(Psic);
 
-      // Calculate q_hat values
+      // Calculate q_hat 
       q_hat[i] = (qres[i] /rres[i]) * sqrt ((1. - I1[i]*I1[i] * gres[i] /I7[i] /gmres[i] /qres[i]) /2./ajj[i]);
       if (isnan(q_hat[i]))
 	{
@@ -1117,23 +1136,73 @@ void Flux::Stage2CalcNeoclassicalPara ()
 	  exit (1);
 	}
 
-      // Calculate C1 values
+      // Calculate C1
       C1res[i] = gmres[i] * qres[i] /I1[i] /gres[i];
 
-      // Calculate C1 values
+      // Calculate C2
       C2res[i] = gres[i]*gres[i] * I8[i] /I1[i];
+
+      // Calculate J1
+      J1[i] = I1[i];
+
+      // Calculate J2
+      J2[i] = I2[i];
+
+      // Calculate J3
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) /gsl_matrix_get (Bnc, i, j)/gsl_matrix_get (Bnc, i, j)/gsl_matrix_get (Bnc, i, j);
+      sum /= 2.*M_PI;
+      
+      J3[i] = sum;
+
+      // Calculate J4
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) /gsl_matrix_get (Bnc, i, j) /gsl_matrix_get (Pnc, i, j);	 
+      sum /= 2.*M_PI;
+      
+      J4[i] = sum;
+
+      // Calculate J5
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) * gsl_matrix_get (Bnc, i, j) /gsl_matrix_get (Pnc, i, j);
+      sum /= 2.*M_PI;
+      
+      J5[i] = sum;
+
+      // Calculate J6
+      sum = 0.;
+      for (int j = 0; j < NTHETA; j++)
+	sum += Weight1D (j) /gsl_matrix_get (Bnc, i, j)/gsl_matrix_get (Bnc, i, j)/gsl_matrix_get (Bnc, i, j) /gsl_matrix_get (Pnc, i, j);
+      sum /= 2.*M_PI;
+      
+      J6[i] = sum;
+
+      // Calculate E, F, H
+      double qpsi = Interpolate (NPSI, rP, QP, rres[i], 1);
+      double ppsi = Interpolate (NPSI, rP, PP, rres[i], 1);
+      double J1p  = Interpolate (NPSI, rP, J0, rres[i], 1);
+
+      E[i] = - (ppsi /qpsi/qpsi)      * (1./gmres[i])          * (J1p - gres[i] * qpsi * J1[i]/J2[i]) * J5[i];
+      F[i] =   (ppsi*ppsi /qpsi/qpsi) * (1./gmres[i]/gmres[i]) * (gres[i]*gres[i] * (J5[i]*J6[i] - J4[i]*J4[i]) + J5[i]*J3[i]);
+      H[i] =   (ppsi /qpsi)           * (gres[i]/gmres[i])     * (J4[i] - J1[i] * J5[i] /J6[i]);
     }
 
   // ..............................
   // Output neoclassical parameters
   // ..............................
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d I1 = %10.3e I2 = %10.3e I3 = %10.3e I4 = (%10.3e; %10.3e) I5 = (%10.3e; %10.3e) Kt = %10.3e Ka = %10.3e Kh = %10.3e fc = %10.3e ajj = %10.3e dPsiNdr = %10.3e q_hat = %10.3e C1 = %10.3e C2 = %10.3e\n",
+    printf ("mpol = %3d I1 = %10.3e I2 = %10.3e I3 = %10.3e I4 = (%10.3e; %10.3e) I5 = (%10.3e; %10.3e) Kt = %10.3e Ka = %10.3e Kh = %10.3e fc = %10.3e ajj = %10.3e dPsiNdr = %10.3e\n",
 	    mres[i], I1[i], I2[i], I3[i],
 	    gsl_matrix_get (I4, i, 0), gsl_matrix_get (I4, i, NNC-1),
 	    gsl_matrix_get (I5, i, 0), gsl_matrix_get (I5, i, NNC-1),
-	    Ktres[i], Kares[i], Khres[i], fcres[i], ajj[i], dPsidr[i],
-	    q_hat[i], C1res[i], C2res[i]);
+	    Ktres[i], Kares[i], Khres[i], fcres[i], ajj[i], dPsidr[i]);
+
+  for (int i = 0; i < nres; i++)
+    printf ("mpol = %3d  q_hat = %10.3e C1 = %10.3e C2 = %10.3e J1 = %10.3e J2 = %10.3e J3 = %10.3e J4 = %10.3e J5 = %10.3e J6 = %10.3e E = %10.3e F = %10.3e H = %10.3e DR = %10.3e\n",
+	    mres[i], q_hat[i], C1res[i], C2res[i], J1[i], J2[i], J3[i], J4[i], J5[i], J6[i], E[i], F[i], H[i], E[i]+F[i]+H[i]*H[i]);
 }
 
 // ############################

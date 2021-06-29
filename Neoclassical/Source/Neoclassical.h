@@ -72,7 +72,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 24
+#define VERSION_MINOR 25
 
 #include <stdio.h>
 #include <math.h>
@@ -410,7 +410,7 @@ class Neoclassical
   Array<double,1> L_II_00;  // Neoclassical impurity ion flow parameter
   Array<double,1> L_II_01;  // Neoclassical impurity ion flow parameter
 
-  Array<double,1> P_ei_00;  // Neoclassical electron flow parameter
+  Array<double,1> G_ei_00;  // Neoclassical electron flow parameter
   Array<double,1> L_ee_00;  // Neoclassical electron flow parameter
   Array<double,1> L_ee_01;  // Neoclassical electron flow parameter
   Array<double,1> L_ei_00;  // Neoclassical electron flow parameter
