@@ -279,7 +279,8 @@ class Neoclassical
   Array<double,1> A2;     // A2
   Array<double,1> q_hat;  // q_hat
   Array<double,1> C1;     // C1
-  Array<double,2> C2;     // C2
+  Array<double,1> C2;     // C2
+  Array<double,1> DR;     // GGJ stability parameter
 
   // Derived from profiles
   double rho0;                // Central mass density (kg/m^-3)

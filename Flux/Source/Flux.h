@@ -100,6 +100,7 @@ extern "C" int pRhs2 (double, const double[], double[], void*);
 extern "C" int pRhs3 (double, const double[], double[], void*);
 extern "C" int pRhs4 (double, const double[], double[], void*);
 extern "C" int pRhs5 (double, const double[], double[], void*);
+extern "C" int pRhs6 (double, const double[], double[], void*);
 
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
@@ -243,6 +244,17 @@ class Flux
   double* A2res;       // A2 values at rational surfaces
   double* C1res;       // C1 values at rational surfaces
   double* C2res;       // C2 values at rational surfaces
+
+  // Glasser-Greene-Johnson data
+  double* J1;          // GGJ integral
+  double* J2;          // GGJ integral
+  double* J3;          // GGJ integral
+  double* J4;          // GGJ integral
+  double* J5;          // GGJ integral
+  double* J6;          // GGJ integral
+  double* E;           // GGJ index
+  double* F;           // GGJ index
+  double* H;           // GGJ index
   
   // Straight angle flux coordinate data
   double*     th;      // theta array
@@ -266,17 +278,6 @@ class Flux
   gsl_matrix* I6;      // Neoclassical integrals
   double*     I7;      // Neoclassical integral
   double*     I8;      // Neoclassical integral
-
-  // Glasser-Greene-Johnson data
-  double* J1;          // GGJ integral
-  double* J2;          // GGJ integral
-  double* J3;          // GGJ integral
-  double* J4;          // GGJ integral
-  double* J5;          // GGJ integral
-  double* J6;          // GGJ integral
-  double* E;           // GGJ index
-  double* F;           // GGJ index
-  double* H;           // GGJ index
 
   // Perturbed equilibrium data
   gsl_matrix_complex* FF;  // F-matrix
@@ -307,6 +308,8 @@ public:
   int Rhs4 (double r, const double y[], double dydr[], void*);
   // Evaluate right-hand sides of Theta equation
   int Rhs5 (double r, const double y[], double dydr[], void*);
+  // Evaluate right-hand sides of GGJ equation
+  int Rhs6 (double r, const double y[], double dydr[], void*);
 
 private:
 
@@ -325,6 +328,8 @@ private:
   void Stage2CalcQ ();
   // Find Stage2 rational surfaces
   void Stage2FindRational ();
+  // Calculate GGJ data at rational surfaces
+  void Stage2CalcGGJ ();
   // Calculate Stage2 straight angle data at rational surfaces
   void Stage2CalcStraightAngle ();
   // Calculate Stage2 neoclassical angle data at rational surfaces
@@ -340,6 +345,8 @@ private:
   void CheckQP ();
   // Calculate r(P) profile
   void CalcrP ();
+  // Calculate GGJ parameters at rationa surface
+  void CalcGGJ ();
   // Calculate straight angle data on rational surfaces
   void CalcStraightAngle ();
   // Calculate gamma values at rational surfaces
