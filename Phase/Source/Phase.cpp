@@ -78,11 +78,11 @@ Phase::Phase ()
 // ##############################
 void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		   double _CORE, int _FREQ, double _FFAC)
+		   double _CORE, int _FREQ, double _FFAC, int _CXD, int _BSC)
 {
   // Read input data
   Read_Data (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS,
-	     _CORE, _FREQ, _FFAC);
+	     _CORE, _FREQ, _FFAC, _CXD, _BSC);
 
   // Scan RMP phase shift
   Scan_Shift ();
@@ -111,7 +111,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int 
 // ###########################
 void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		       double _CORE, int _FREQ, double _FFAC)
+		       double _CORE, int _FREQ, double _FFAC, int _CXD, int _BSC)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -134,6 +134,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   LIN    = 0;
   FREQ   = 0;
   FFAC   = 0.;
+
+  CXD    = 0;
+  BSC    = 0;
 
   MID    = 2;
   IRMP   = -1.e6;
@@ -162,7 +165,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
 		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
-		&NCTRL, TCTRL, ICTRL, PCTRL);
+		&CXD, &BSC, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -193,6 +196,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
     RATS = _RATS;
   if (_COPT > -1)
     COPT = _COPT;
+  if (_CXD > -1)
+    CXD = _CXD;
+  if (_BSC > -1)
+    BSC = _BSC;
   if (_CORE > -1.e6)
     CORE = _CORE;
   if (_TSTART > -1.e6)
@@ -214,8 +221,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   // .............................
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  printf ("FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("FREQ = %2d FFAC = %11.4e CXD = %2d BSC = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  FREQ, FFAC, CXD, BSC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
 
   // ............
   // Sanity check
@@ -266,8 +273,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d \n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  fprintf (namelist, "FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "FREQ = %2d FFAC = %11.4e CXD = %2d BSC = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   FREQ, FFAC, CXD, BSC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
   
   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
@@ -277,8 +284,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
   fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  fprintf (monitor, "FREQ = %2d FFAC = %11.4e DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   FREQ, FFAC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (monitor, "FREQ = %2d FFAC = %11.4e CXD = %2d BSC = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	   FREQ, FFAC, CXD, BSC, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (monitor);
 
   // .................
@@ -556,12 +563,12 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   dnedrk.resize  (nres); dTedrk.resize   (nres); Wcrnek.resize   (nres); WcrTek.resize   (nres); WcrTik.resize (nres);
   akk.resize     (nres); gk.resize       (nres); dPsiNdr.resize  (nres); PsiN.resize     (nres); nek.resize    (nres);
   nik.resize     (nres); Tek.resize      (nres); Tik.resize      (nres); dnidrk.resize   (nres); dTidrk.resize (nres);
-  Factor1.resize (nres); Factor2.resize  (nres); Factor3.resize  (nres); Factor4.resize  (nres);
+  Factor1.resize (nres); Factor2.resize  (nres); Factor3.resize  (nres); Factor4.resize  (nres); alphab.resize (nres);
   Factor5.resize (nres); Factor6.resize  (nres); Factor7.resize  (nres); Factor8.resize  (nres);
   Factor9.resize (nres); Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk      (j), &ntor     (j), &rk       (j), &qk       (j), &rhok   (j),
 		&a       (j), &Sk       (j), &taumk    (j), &tautk    (j), &fack   (j),
 		&delk    (j), &wkl      (j), &wke      (j), &wkn      (j),
@@ -570,7 +577,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 		&nik     (j), &Tek      (j), &Tik      (j), &dnidrk   (j), &dTidrk (j),
 		&Factor1 (j), &Factor2  (j), &Factor3  (j), &Factor4  (j),
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
-		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j)) != 42)
+		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j), &alphab (j)) != 43)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -597,8 +604,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
     }
 
   for (int j = 0; j < nres; j++)
-    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e q_hat = %10.3e\n",
-	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j), qhatk (j));
+    printf ("m = %3d h_r = %10.3e q = %10.3e g = %10.3e akk = %10.3e h_rho = %10.3e h_a = %10.3e S = %10.3e h_tauM = %10.3e h_tauth = %10.3e h_del = %10.3e A1 = %10.3e q_hat = %10.3e alphab = %10.3e\n",
+	    mk (j), rk (j), qk (j), gk (j), akk (j), rhok (j), a (j), Sk (j), taumk (j), tautk (j), delk (j) /(rk (j) * a (j) * R_0), A1 (j), qhatk (j), alphab (j));
 
   // Set Deltak+/- values
   Deltakp.resize (nres); Deltakm.resize (nres);
@@ -610,6 +617,15 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   for (int j = 0; j < nres-1; j++)
     Deltakp (j) = CHIR * (PsiN (j+1) - PsiN (j));
   Deltakp (nres-1) = CHIR * (PSILIM - PsiN (nres-1));
+
+  // Implement CXD and BSC flags
+  for (int j = 0; j < nres; j++)
+    {
+      if (CXD == 0)
+	tauxk (j) = 1.e15;
+      if (BSC == 0)
+	alphab (j) = 0.;
+    }
   
   // ......................................
   // Interpolate uFiles, mFiles, and lFiles
@@ -1575,8 +1591,8 @@ void Phase::IslandDynamics ()
 	      double Wvk = GetVacuumIslandWidth (j);
 
 	      // Calculate density and temperature flattening widths in r
-	      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
-	      double deltaTek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
+	      double deltanek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j)*Wcrnek (j));
+	      double deltaTek = (2./M_PI) * Wrk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j)*WcrTek (j));
 
 	      // Calculate density and temperature reductions
 	      double dnek = dnedrk (j) * deltanek;
@@ -2595,8 +2611,12 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 
   for (int j = 0; j < nres; j++)
     {
-      Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j));
-      Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j));
+      double Wk  = 0.8227 * R_0 * GetIslandWidth (j) /dPsiNdr (j) /2. /a (j) /rk (j);
+      double Wck = 0.8227 * WcrTek (j) /2. /a (j) /rk (j);
+      double fac = Wk /(Wck*Wck + Wk*Wk);
+      
+      Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j)) + alphab (j) * fac * Xk (j);
+      Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j)) + alphab (j) * fac * Yk (j);
       sink (j) = EEh (j, j) * chi (j) * sin (phik (j) - zeta (j));
 
       for (int k = 0; k < nres; k++)

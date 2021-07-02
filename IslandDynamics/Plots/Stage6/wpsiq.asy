@@ -237,7 +237,7 @@ if (t2.length > 0)
    }   
 
 s = dotted + black + 1.5;
-ylimits (0.85, 1., Crop);
+ylimits (0.15, 1., Crop);
 yequals (psilim, s);
 yequals (psiped, s);
 

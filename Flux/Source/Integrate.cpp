@@ -166,12 +166,12 @@ void Flux::CalcrP ()
 // ##############################
 void Flux::CalcGGJ ()
 {
-  gsl_odeiv_system           sys6 = {pRhs6, NULL, 9, this};
+  gsl_odeiv_system           sys6 = {pRhs6, NULL, 8, this};
   const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 9);
+  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 8);
   gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (9);
-  double*                    y    = new double [9]; 
+  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (8);
+  double*                    y    = new double [8]; 
   double                     r, h;
   
   for (int j = 0; j < nres; j++)
@@ -186,7 +186,7 @@ void Flux::CalcGGJ ()
       y[5] = 0.;
       y[6] = 0.;
       y[7] = 0.;
-      y[8] = gres[j];
+      qgp  = gres[j];
   
       while (r < 2.*M_PI)
 	{
@@ -461,7 +461,6 @@ int Flux::Rhs6 (double r, const double y[], double dydr[], void*)
   // y[5] - J4
   // y[6] - J5
   // y[7] - J6
-  // y[8] - g
   
   double PsiR = GetPsiR (y[0], y[1]);
   double PsiZ = GetPsiZ (y[0], y[1]);
@@ -469,7 +468,7 @@ int Flux::Rhs6 (double r, const double y[], double dydr[], void*)
   double Zc   = y[1]  - Zaxis;
   double fac  = (Rc*Rc + Zc*Zc) /(- Zc*PsiZ + Rc*PsiR);
   double np2  = Psic*Psic * (PsiR*PsiR + PsiZ*PsiZ);
-  double b2   = (y[8]*y[8] + np2) /y[0]/y[0];
+  double b2   = (qgp*qgp + np2) /y[0]/y[0];
   double inp2 = 1. /np2;
   double ib2  = 1. /b2;
 
@@ -481,7 +480,6 @@ int Flux::Rhs6 (double r, const double y[], double dydr[], void*)
   dydr[5] = y[0]       * inp2 * (1./2./M_PI /fabs(Psic)) * fac;
   dydr[6] = y[0] * b2  * inp2 * (1./2./M_PI /fabs(Psic)) * fac;
   dydr[7] = y[0] * ib2 * inp2 * (1./2./M_PI /fabs(Psic)) * fac;
-  dydr[8] = 0.;
-    
+     
   return GSL_SUCCESS;
 }

@@ -68,6 +68,7 @@
 // 1.13 - Restrict program to only calculated q-profile for PsiN < PSIRAT
 // 1.14 - Added q_hat calculation
 // 1.15 - Added C1 and C2 calculation
+// 1.16 - Added E, F, H calculation
 
 // #####################################################################################
 
@@ -75,7 +76,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 15
+#define VERSION_MINOR 16
 
 #include <stdio.h>
 #include <math.h>

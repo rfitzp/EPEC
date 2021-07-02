@@ -27,6 +27,7 @@
 // 1.11 - Added PSIPED
 // 1.12 - Removed PHASE_FREQ flag
 // 1.13 - Greatly simplified such that only calls PHASE
+// 1.14 = Added PHASE_CXD and PHASE_BSC flags
 
 // ##############################################################
 
@@ -37,13 +38,14 @@
 #include <time.h>
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 13
+#define VERSION_MINOR 14
 
 #define MAXCOMMANDLINELENGTH 500
 
 extern "C" void NameListRead (int* PHASE_MID, int* PHASE_COPT, double* PHASE_CORE, int* PHASE_LIN, int* PHASE_FREQ,
 			      double* PHASE_FFAC, int* PHASE_HIGH, int* PHASE_RATS, int* PHASE_NATS, double* PHASE_SCALE,
-			      double* PHASE_CHIR, int* RESTART, double* TSTART, double* TEND, double* DT); 
+			      double* PHASE_CHIR, int* PHASE_CXD, int* PHASE_BSC,
+			      int* RESTART, double* TSTART, double* TEND, double* DT); 
 
 void IslandDynamics (double IRMP);
 
@@ -137,7 +139,10 @@ void IslandDynamics (double IRMP)
   int    PHASE_FREQ;     // Flag for selecting natural frequency type in PHASE
                          //  If == 0 then use composite linear/nonlinear model
                          //  If == 1 then w_natural = FFAC * w_linear + (1-FFAC) * w_EB
-  double PHASE_FFAC;     // Parameter for determining natural frequency in PHASE 
+  double PHASE_FFAC;     // Parameter for determining natural frequency in PHASE
+
+  int    PHASE_CXD;      // If != 0 then include charge exchange damping in angular equations of motion in PHASE
+  int    PHASE_BSC;      // If != 0 then include bootstrap/curvature terms in Rutherford equations in PHASE
 
   double PHASE_SCALE;    // GPEC scalefactor in PHASE
   double PHASE_CHIR;     // Maximum Chirikov parameter for vacuum islands in PHASE
@@ -151,12 +156,13 @@ void IslandDynamics (double IRMP)
   double DT;             // Simulation experimental time step (ms)
 
   NameListRead (&PHASE_MID, &PHASE_COPT, &PHASE_CORE, &PHASE_LIN, &PHASE_FREQ, &PHASE_FFAC, 
-		&PHASE_HIGH, &PHASE_RATS, &PHASE_NATS, &PHASE_SCALE, &PHASE_CHIR, &RESTART, &TSTART, &TEND, &DT);
+		&PHASE_HIGH, &PHASE_RATS, &PHASE_NATS, &PHASE_SCALE, &PHASE_CHIR, &PHASE_CXD, &PHASE_BSC,
+		&RESTART, &TSTART, &TEND, &DT);
 
   printf ("Reading Inputs/Island.nml:\n");
-  printf ("PHASE_MID = %2d  PHASE_COPT = %2d  PHASE_CORE = %11.4e PHASE_LIN = %2d  PHASE_FREQ = %2d  PHASE_FFAC = %11.4e  PHASE_HIGH = %2d  PHASE_RATS = %2d  PHASE_NATS = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
-	  PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR);
-  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+  printf ("PHASE_MID = %2d PHASE_COPT = %2d PHASE_CORE = %11.4e PHASE_LIN = %2d PHASE_FREQ = %2d PHASE_FFAC = %11.4e PHASE_HIGH = %2d PHASE_RATS = %2d PHASE_NATS = %2d PHASE_SCALE = %11.4e PHASE_CHIR = %11.4e PHASE_CXD = %2d PHASE_BSC = %2d\n",
+	  PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR, PHASE_CXD, PHASE_BSC);
+  printf ("RESTART = %2d TSTART = %11.4e TEND = %11.4e DT = %11.4e IRMP = %11.4e\n",
 	  RESTART, TSTART, TEND, DT, IRMP);
 
   // ............
@@ -206,9 +212,9 @@ void IslandDynamics (double IRMP)
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("PHASE_MID = %2d  PHASE_COPT = %2d  PHASE_CORE = %11.4e PHASE_LIN = %2d  PHASE_FREQ = %2d  PHASE_FFAC = %11.4e  PHASE_HIGH = %2d  PHASE_RATS = %2d  PHASE_NATS = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
-	  PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR);
-  printf ("RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+  printf ("PHASE_MID = %2d PHASE_COPT = %2d PHASE_CORE = %11.4e PHASE_LIN = %2d PHASE_FREQ = %2d PHASE_FFAC = %11.4e PHASE_HIGH = %2d PHASE_RATS = %2d PHASE_NATS = %2d PHASE_SCALE = %11.4e PHASE_CHIR = %11.4e PHASE_CXD = %2d PHASE_BSC = %2d\n",
+	  PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR, PHASE_CXD, PHASE_BSC);
+  printf ("RESTART = %2d TSTART = %11.4e TEND = %11.4e DT = %11.4e IRMP = %11.4e\n",
 	  RESTART, TSTART, TEND, DT, IRMP);
 
    FILE* monitor = fopen ("Outputs/monitor.txt", "a");
@@ -222,9 +228,9 @@ void IslandDynamics (double IRMP)
   fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-  fprintf (monitor, "PHASE_MID = %2d  PHASE_COPT = %2d  PHASE_CORE = %11.4e PHASE_LIN = %2d  PHASE_FREQ = %2d  PHASE_FFAC = %11.4e  PHASE_HIGH = %2d  PHASE_RATS = %2d  PHASE_NATS = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
-	   PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR);
-  fprintf (monitor, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+  fprintf (monitor, "PHASE_MID = %2d PHASE_COPT = %2d PHASE_CORE = %11.4e PHASE_LIN = %2d PHASE_FREQ = %2d PHASE_FFAC = %11.4e PHASE_HIGH = %2d PHASE_RATS = %2d PHASE_NATS = %2d PHASE_SCALE = %11.4e PHASE_CHIR = %11.4e PHASE_CXD = %2d PHASE_BSC = %2d\n",
+	   PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR, PHASE_CXD, PHASE_BSC);
+  fprintf (monitor, "RESTART = %2d TSTART = %11.4e TEND = %11.4e DT = %11.4e IRMP = %11.4e\n",
 	  RESTART, TSTART, TEND, DT, IRMP);
   fclose (monitor);
 
@@ -233,9 +239,9 @@ void IslandDynamics (double IRMP)
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-  fprintf (namelist, "PHASE_MID = %2d  PHASE_COPT = %2d  PHASE_CORE = %11.4e PHASE_LIN = %2d  PHASE_FREQ = %2d  PHASE_FFAC = %11.4e  PHASE_HIGH = %2d  PHASE_RATS = %2d  PHASE_NATS = %2d  PHASE_SCALE = %11.4e  PHASE_CHIR = %11.4e\n",
-	   PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR);
-  fprintf (namelist, "RESTART = %2d  TSTART = %11.4e  TEND = %11.4e  DT = %11.4e  IRMP = %11.4e\n",
+  fprintf (namelist, "PHASE_MID = %2d PHASE_COPT = %2d PHASE_CORE = %11.4e PHASE_LIN = %2d PHASE_FREQ = %2d PHASE_FFAC = %11.4e PHASE_HIGH = %2d PHASE_RATS = %2d PHASE_NATS = %2d PHASE_SCALE = %11.4e PHASE_CHIR = %11.4e PHASE_CXD = %2d PHASE_BSC = %2d\n",
+	   PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN, PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE, PHASE_CHIR, PHASE_CXD, PHASE_BSC);
+  fprintf (namelist, "RESTART = %2d TSTART = %11.4e TEND = %11.4e DT = %11.4e IRMP = %11.4e\n",
 	  RESTART, TSTART, TEND, DT, IRMP);
   fclose (namelist);
 
@@ -255,13 +261,13 @@ void IslandDynamics (double IRMP)
       fclose (monitor);
   
       if (lock)
-	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -C %d -f %d -n %d -u %d -s %2d -o %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e -i %11.4e -H %2d -r %2d -D %16.9e -F %2d -N %2d -G %16.9e",
+	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -C %d -f %d -n %d -u %d -s %2d -o %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e -i %11.4e -H %2d -r %2d -D %16.9e -F %2d -N %2d -G %16.9e -X %2d -B %2d",
 		 PHASE_MID, PHASE_COPT, PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, PHASE_OLD, PHASE_LIN, Time, Time + DT,
-		 PHASE_SCALE, PHASE_CHIR, IRMP, PHASE_HIGH, PHASE_RATS, PHASE_CORE, PHASE_FREQ, PHASE_NATS, PHASE_FFAC);
+		 PHASE_SCALE, PHASE_CHIR, IRMP, PHASE_HIGH, PHASE_RATS, PHASE_CORE, PHASE_FREQ, PHASE_NATS, PHASE_FFAC, PHASE_CXD, PHASE_BSC);
       else
-	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -C %d -f %d -n %d -u %d -s %2d -o %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e -i %11.4e -H %2d -r %2d -D %16.9e -F %2d -N %2d -G %16.9e",
+	sprintf (PHASEstring, "cd ../Phase; ./phase -m %d -C %d -f %d -n %d -u %d -s %2d -o %2d -l %2d -t %16.9e -T %16.9e -S %16.9e -c %11.4e -i %11.4e -H %2d -r %2d -D %16.9e -F %2d -N %2d -G %16.9e -X %2d -B %2d",
 		 PHASE_MID, PHASE_COPT, PHASE_INTF, PHASE_INTN, PHASE_INTU, PHASE_STAGE5, lock, PHASE_LIN, Time, Time + DT,
-		 PHASE_SCALE, PHASE_CHIR, IRMP, PHASE_HIGH, PHASE_RATS, PHASE_CORE, PHASE_FREQ, PHASE_NATS, PHASE_FFAC);
+		 PHASE_SCALE, PHASE_CHIR, IRMP, PHASE_HIGH, PHASE_RATS, PHASE_CORE, PHASE_FREQ, PHASE_NATS, PHASE_FFAC, PHASE_CXD, PHASE_BSC);
       
       lock = 1;
       

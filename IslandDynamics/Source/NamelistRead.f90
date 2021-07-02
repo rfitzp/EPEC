@@ -6,7 +6,7 @@
 
 subroutine NameListRead (PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN,&
      PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE,&
-     PHASE_CHIR, RESTART, TSTART, TEND, DT)&
+     PHASE_CHIR, PHASE_CXD, PHASE_BSC, RESTART, TSTART, TEND, DT)&
      bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -19,6 +19,8 @@ subroutine NameListRead (PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN,&
   integer (kind = c_int),    intent (inout) :: PHASE_HIGH
   integer (kind = c_int),    intent (inout) :: PHASE_RATS
   integer (kind = c_int),    intent (inout) :: PHASE_NATS
+  integer (kind = c_int),    intent (inout) :: PHASE_CXD
+  integer (kind = c_int),    intent (inout) :: PHASE_BSC
   real    (kind = c_double), intent (inout) :: PHASE_FFAC
   real    (kind = c_double), intent (inout) :: PHASE_SCALE
   real    (kind = c_double), intent (inout) :: PHASE_CHIR
@@ -30,7 +32,7 @@ subroutine NameListRead (PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN,&
   
   namelist /ISLANDDYNAMICS_CONTROL/ PHASE_MID, PHASE_COPT, PHASE_CORE, PHASE_LIN,&
        PHASE_FREQ, PHASE_FFAC, PHASE_HIGH, PHASE_RATS, PHASE_NATS, PHASE_SCALE,&
-       PHASE_CHIR, RESTART, TSTART, TEND, DT
+       PHASE_CHIR, PHASE_CXD, PHASE_BSC, RESTART, TSTART, TEND, DT
   
   open  (unit = 100, file = 'Inputs/Island.nml', status = 'old')
   read  (unit = 100, nml  = ISLANDDYNAMICS_CONTROL)

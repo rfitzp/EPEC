@@ -12,6 +12,9 @@
 	PHASE_RATS   = 1       ! If != 0 then enable linear-only interpolation of uFiles/mFiles/lFiles in PHASE
 	PHASE_NATS   = 0       ! If != 0 then enable linear-only interpolation of nFiles in PHASE
 
+	PHASE_CXD    = 1       ! If != 0 then enable charge exchange damping in angular equations of motion in PHASE
+	PHASE_BSC    = 0       ! If != 0 then enable bootstrap/curvature terms in Rutherford equations in PHASE 
+
 	PHASE_SCALE  = 2.      ! Set GPEC scalefactor in PHASE
 	PHASE_CHIR   = 1.5     ! Set maximum Chirihov parameter for vacuum islands in PHASE
 

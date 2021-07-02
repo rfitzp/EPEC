@@ -12,6 +12,9 @@
 	FREQ   = 0     ! Flag for selecting natural frequency type
 	FFAC   = 0.    ! Parameter for selecting natural frequency (FREQ = 1)
 
+	CXD    = 1     ! Flag for including charge exhange damping in angular equations of motion
+	BSC    = 1     ! Flag for including bootstrap/curvature terms in Rutherford equations
+
 	MID    = 2     ! Number of coils sets
 	COPT   = 1     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
                        !  0 - no optimization

@@ -799,7 +799,7 @@ void Neoclassical::Get_Derived ()
 
   if (NEUTRAL == 0)
     for (int j = 0; j < nres; j++)
-      NNk (j) = 0.;
+      NNk (j) = 1.e-15;
 
   // Output factors
   FILE* filex = OpenFilew ((char*) "Outputs/Stage3/factor.txt");
