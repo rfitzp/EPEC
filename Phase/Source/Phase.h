@@ -201,7 +201,7 @@ class Phase
   double qa;              // Safety factor at plasma boundary
   double PSILIM;          // Limiting value of PsiN
   double PSIPED;          // Value of PsiN at top of pedestal
-  double PSIRAT;          // Value of PsiN beyod which resonant surfaces ignored
+  double PSIRAT;          // Value of PsiN beyond which resonant surfaces ignored
   double Pped;            // Pedestal pressure / central pressure
   int    nres;            // Number of resonant surfaces in plasma
   gsl_matrix_complex* FF; // Plasma inverse tearing stability matrix
