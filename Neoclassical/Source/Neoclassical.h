@@ -65,6 +65,7 @@
 // 1.23 - Added C1 and C2
 // 1.24 - Added change exchange to angular velocity evolution equations
 // 1.25 - Added calculation of DB and DR
+// 1.26 - Added calculation of alpha_b(e,i), alpha_c, and alpha_p
 
 // ################################################################
 
@@ -72,7 +73,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 25
+#define VERSION_MINOR 26
 
 #include <stdio.h>
 #include <math.h>
@@ -312,6 +313,12 @@ class Neoclassical
   Array<double,1> chiek;      // Perpendicular electron energy diffusivities (m^2/s)
   Array<double,1> chink;      // Perpendicular particle diffusivities (m^2/s)
   Array<double,1> chiik;      // Perpendicular ion energy diffusivities (m^2/s)
+  Array<double,1> alpbek;     // Bootstrap current parameter
+  Array<double,1> alpbik;     // Bootstrap current parameter
+  Array<double,1> alpck;      // Curvature parameter
+  Array<double,1> alppk;      // Polarization current parameter
+  Array<double,1> rhothek;    // Electron poloidal gyroradius (m)
+  Array<double,1> rhothik;    // Majority ion poloidal gyroradius (m)
 
   Array<double,1> dnedP1k;    // Electron number density 1st derivative wrt PsiN (m^-3)
   Array<double,1> dTedP1k;    // Electron temperature 1st derivative wrt PsiN (J)
@@ -351,9 +358,11 @@ class Neoclassical
   Array<double,1> w_ast_Ik;   // Impurity ion diamagnetic frequencies (rad/s)
   Array<double,1> w_nc_ik;    // Majority ion neoclassical frequencies (rad/s)
   Array<double,1> w_nc_Ik;    // Impurity ion neoclassical frequencies (rad/s)
-  Array<double,1> w_nc_ek;    // Electron neocalssical frequencies (rad/s)
+  Array<double,1> w_nc_eek;   // Electron-electron neocalssical frequencies (rad/s)
+  Array<double,1> w_nc_eik;   // Electron-ion neocalssical frequencies (rad/s)
   Array<double,1> w_E_Ik;     // ExB frequencies inferred from toroidal impurity ion rotation frequency (rad/s)
   Array<double,1> w_betak;    // Bootstrap frequencies (rad/s)
+  Array<double,1> w_Omegk;    // Polarization frequencies (rad/s)
 
   Array<double,1> rho_sk;     // Ion sound radii (m)
   

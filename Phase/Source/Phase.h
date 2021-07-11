@@ -21,15 +21,17 @@
 // -s STAGE5 - overrides STAGE5 value from namelist file
 // -t TSTART - sets simulation start time (ms)
 // -u INTU   - overrides INTU value from namelist file
-// -B BSC    - overrides BSC value from namelist file
+// -B BOOT   - overrides BOOT value from namelist file
 // -C COPT   - overrides COPT value from namelist file
 // -D CORE   - overrides CORE value from namelist file
 // -F FREQ   - overrides FREQ value from namelist file
 // -G FFAC   - overrides FFAC value from namelist file
 // -H HIGH   - overrides HIGH value from namelist file
 // -N NATS   - overrides NATS value from namelist file
+// -P POLZ   - ovverides POLZ value from namelist file
 // -S SCALE  - overrides SCALE value from namelist file
 // -T TEND   - sets simulation end time (ms)
+// -V CURV   - overrides CURV value from namelist file
 // -X CXD    - overrides CXD value from namelist file
 
 // ...................
@@ -94,6 +96,7 @@
 // 2.22 - Added velocity changes
 // 2.23 - Added charge exchange damping time into angular equations of motion
 // 2.24 - Added bootstrap/curvature terms into Rutherford equations
+// 2.25 - Added polarization terms into Rutherford equations
 
 // #######################################################################
 
@@ -101,7 +104,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 24
+#define VERSION_MINOR 25
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -127,7 +130,8 @@ using namespace blitz;
 // Namelist funtion
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, double* FFAC, int* CXD, int* BSC, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ,
+			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -158,7 +162,9 @@ class Phase
   double   FFAC;   // Natural frequency parameter
 
   int      CXD;    // If != 0 include charge exchange damping in plasma angular equations of motion
-  int      BSC;    // If != 0 include effect of bootstrap current and magnetic field-line curvature in Rutherford equations
+  int      BOOT;   // If != 0 include effect of bootstrap current in Rutherford equations
+  int      CURV;   // If != 0 include effect of magnetic field-line curvature in Rutherford equations
+  int      POLZ;   // If != 0 include effect of ion polarization current in Rutherford equations
  
   int      MID;    // Number of RMP coil sets
   int      COPT;   // If == 0 then no coil current optimization
@@ -250,7 +256,12 @@ class Phase
   Array<double,1> qhatk;    // q_hat values at resonant surfaces
   Array<double,1> C1k;      // C1 values at resonant surfaces
   Array<double,1> C2k;      // C2 values at resonant surfaces
-  Array<double,1> alphab;   // Bootstrap/curvature terms at resonant surfaces
+  Array<double,1> alphabe;  // Electron bootstrap terms at resonant surfaces
+  Array<double,1> alphabi;  // Ion bootstrap terms at resonant surfaces
+  Array<double,1> alphac;   // Curvature terms at resonant surfaces
+  Array<double,1> alphap;   // Ion polarization terms at resonant surfaces
+  Array<double,1> rhothe;   // Electron poloidal gyroradii at resonant surfaces
+  Array<double,1> rhothi;   // Ion poloidal gyroradii at resonant surfaces
   Array<double,1> dPsiNdr;  // R_0 dPsiN/dr values at resonant surfaces
   Array<double,1> PsiN;     // PsiN values at resonant surfaces
   Array<double,1> nek;      // Electron number densities at resonant surfaces (10^19/m^-3)
@@ -317,6 +328,7 @@ class Phase
   Array<double,2> alphakp; // Poloidal velocity factors
   Array<double,2> betakp;  // Toroidal velocity factors
   Array<double,1> ww;      // Island frequencies
+  Array<double,1> vp;      // Island phase velocities
   Array<int,1>    lock;    // Locking flags
   Array<double,1> chi;     // RMP amplitudes at rational surfaces
   Array<double,1> zeta;    // RMP phases at rational surfaces
@@ -358,7 +370,7 @@ class Phase
   // Solve problem
   void Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BSC);        
+	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);        
 
   // -----------------------
   // Private class functions
@@ -368,7 +380,7 @@ class Phase
   // Read data
   void Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BSC);
+		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

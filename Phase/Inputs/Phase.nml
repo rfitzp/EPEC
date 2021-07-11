@@ -1,7 +1,7 @@
 &PHASE_CONTROL
 	NFLOW  = 100   ! Number of flow harmonics
 
- 	STAGE5 = 0     ! Flag for Stage5 calculation
+ 	STAGE5 = 1     ! Flag for Stage5 calculation
 	INTF   = 0     ! Flag for fFile interpolation
 	INTN   = 0     ! Flag for nFile interpolation
 	INTU   = 0     ! Flag for uFile/mFile/lFile interpolation
@@ -13,9 +13,11 @@
 	FFAC   = 0.    ! Parameter for selecting natural frequency (FREQ = 1)
 
 	CXD    = 1     ! Flag for including charge exhange damping in angular equations of motion
-	BSC    = 1     ! Flag for including bootstrap/curvature terms in Rutherford equations
+	BOOT   = 1     ! Flag for including bootstrap current in Rutherford equations
+	CURV   = 1     ! Flag for including magnetic field-line curvature in Rutherford equations
+	POLZ   = 1     ! Flag for including ion polarization current in Rutherford equations
 
-	MID    = 2     ! Number of coils sets
+	MID    = 3     ! Number of coils sets
 	COPT   = 1     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
                        !  0 - no optimization
                        !  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
@@ -24,7 +26,7 @@
 	CORE   = 1.    ! Core drive minimization factor (0.0 = no minimization, 1.0 = complete minmization)
 
 	SCALE  = 2.    ! GPEC scalefactor
-	CHIR   = 4.    ! Maximum Chirikov parameter for vacuum islands
+	CHIR   = 1.5   ! Maximum Chirikov parameter for vacuum islands
         HIGH   = 1     ! Flag for higher order transport analysis
 	RATS   = 1     ! Flag for linear-only interpolation of uFiles/mFiles/lFiles
 
@@ -32,6 +34,6 @@
 
 	TSTART = 0.    ! Simulation start time (ms)
 	TEND   = 2.e3  ! Simulation end time (ms)
-	DT     = 0.01  ! Data recorded every DT ms
+	DT     = 0.1   ! Data recorded every DT ms
 &end
 

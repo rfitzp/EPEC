@@ -13,7 +13,9 @@
 	PHASE_NATS   = 0       ! If != 0 then enable linear-only interpolation of nFiles in PHASE
 
 	PHASE_CXD    = 1       ! If != 0 then enable charge exchange damping in angular equations of motion in PHASE
-	PHASE_BSC    = 0       ! If != 0 then enable bootstrap/curvature terms in Rutherford equations in PHASE 
+	PHASE_BOOT   = 1       ! If != 0 then enable bootstrap terms in Rutherford equations in PHASE
+	PHASE_CURV   = 1       ! If != 0 then enable curvature terms in Rutherford equations in PHASE
+	PHASE_POLZ   = 1       ! If != 0 then enable polarization terms in Rutherford equations in PHASE 
 
 	PHASE_SCALE  = 2.      ! Set GPEC scalefactor in PHASE
 	PHASE_CHIR   = 1.5     ! Set maximum Chirihov parameter for vacuum islands in PHASE
@@ -22,5 +24,5 @@
 
 	TSTART       = 0000.   ! ISLANDDYNAMICS experimental start time (ms)
 	TEND         = 2200.   ! ISLANDDYNAMICS experimental end time (ms)
-	DT           = 1.0     ! ISLANDDYNAMICS recording interval (ms) 
+	DT           = 1.     ! ISLANDDYNAMICS recording interval (ms) 
 &end	

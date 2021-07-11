@@ -853,6 +853,9 @@ void Neoclassical::Get_Derived ()
       WcritTek (j) = pow (chiek (j) /v_T_ek (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
       WcritTik (j) = pow (chiik (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
       Wcritnek (j) = pow (chink (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
+
+      printf ("m = %3d  WcritTe/a = %11.4e  WcritTi/a = %11.4e  Wcritne/a = %11.4e\n",
+	      mk (j), WcritTek (j)/a, WcritTik (j)/a, Wcritnek (j)/a);
     }
 
   // ------------------------------------------------------
@@ -860,7 +863,7 @@ void Neoclassical::Get_Derived ()
   // ------------------------------------------------------
   eta_ek.resize   (nres); eta_ik.resize   (nres); eta_Ik.resize   (nres);
   w_ast_ek.resize (nres); w_ast_ik.resize (nres); w_ast_Ik.resize (nres);
-  w_betak.resize  (nres);
+  w_betak.resize  (nres); w_Omegk.resize  (nres); 
 
   for (int j = 0; j < nres; j++)
     {
@@ -871,9 +874,10 @@ void Neoclassical::Get_Derived ()
       w_ast_ik (j) = - (qk (j) /gk (j)) * Tik (j) * dnidrk (j) * (1. + eta_ik (j)) /e /ZI  /nik (j) /(a*rk (j)) /fabs (B_0);
       w_ast_Ik (j) = - (qk (j) /gk (j)) * TIk (j) * dnIdrk (j) * (1. + eta_Ik (j)) /e /ZII /nIk (j) /(a*rk (j)) /fabs (B_0);
       w_betak  (j) = sk (j) * gk (j) * fabs (B_0) /mu_0 /nek (j) /R_0/R_0 /e /qk(j);
+      w_Omegk  (j) = sk (j) * qk (j) * e * gk (j) * fabs (B_0) /AI /m_p;
 
-      printf ("m = %3d  wE = %11.4e  w_ast_e = %11.4e  w_ast_i = %11.4e  w_ast_I = %11.4e  w_beta = %11.4e\n",
-	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3, w_betak (j) /1.e3);
+      printf ("m = %3d  wE = %11.4e  w_ast_e = %11.4e  w_ast_i = %11.4e  w_ast_I = %11.4e  w_beta = %11.4e  w_Omega = %11.4e\n",
+	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3, w_betak (j) /1.e3, w_Omegk (j) /1.e3);
     }
 
   // Output diamagnetic frequencies
@@ -1224,13 +1228,15 @@ void Neoclassical::Get_Parameters ()
 // #####################################################################
 void Neoclassical::Get_Frequencies ()
 {
+  w_linear.resize(nres);  w_nonlinear.resize (nres); w_EB.resize    (nres);
+  w_nc_ik.resize (nres);  w_nc_Ik.resize     (nres); w_E_Ik.resize  (nres);
+  w_nc_eek.resize (nres); alpbek.resize      (nres); alpbik.resize  (nres);
+  alpck.resize   (nres);  alppk.resize       (nres); rhothek.resize (nres);
+  rhothik.resize (nres);  w_nc_eik.resize    (nres);
+
   // .....................
   // Calculate frequencies
   // .....................
-  w_linear.resize(nres); w_nonlinear.resize (nres); w_EB.resize   (nres);
-  w_nc_ik.resize (nres); w_nc_Ik.resize     (nres); w_E_Ik.resize (nres);
-  w_nc_ek.resize (nres); 
-
   for (int j = 0; j < nres; j++)
     {
       w_nc_Ik (j) = - L_II_00 (j) * w_ast_Ik (j)
@@ -1248,13 +1254,13 @@ void Neoclassical::Get_Frequencies ()
 	                + L_ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
 	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 
-	  w_nc_ek (j) = - G_ei_00 (j) * wEk (j)
-	                - L_ee_00 (j) * w_ast_ek (j)
-	                - L_ei_00 (j) * w_ast_ik (j)
-	                - L_eI_00 (j) * w_ast_Ik (j)
-	                + L_ee_01 (j) * (eta_ek (j) /(1. + eta_ek (j))) * w_ast_ek (j)
-	                + L_ei_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
-	                + L_eI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+	  w_nc_eek (j) = - G_ei_00 (j) * wEk (j)
+	                 - L_ee_00 (j) * w_ast_ek (j)
+	                 + L_ee_01 (j) * (eta_ek (j) /(1. + eta_ek (j))) * w_ast_ek (j);
+	  w_nc_eik (j) = - L_ei_00 (j) * w_ast_ik (j)
+			 - L_eI_00 (j) * w_ast_Ik (j)
+	                 + L_ei_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	                 + L_eI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 	  
 	  w_linear    (j) = - double (ntor) * (wEk (j) + w_ast_ek (j));
 	  w_nonlinear (j) = - double (ntor) * (wEk (j) + w_ast_ik (j) + w_nc_ik (j));
@@ -1269,13 +1275,13 @@ void Neoclassical::Get_Frequencies ()
 	                + L_iI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 
 	  
-	  w_nc_ek (j) = - G_ei_00 (j) * w_E_Ik (j)
-	                - L_ee_00 (j) * w_ast_ek (j)
-	                - L_ei_00 (j) * w_ast_ik (j)
-	                - L_eI_00 (j) * w_ast_Ik (j)
-	                + L_ee_01 (j) * (eta_ek (j) /(1. + eta_ek (j))) * w_ast_ek (j)
-	                + L_ei_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
-	                + L_eI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
+	  w_nc_eek (j) = - G_ei_00 (j) * w_E_Ik (j)
+	                 - L_ee_00 (j) * w_ast_ek (j)
+	                 + L_ee_01 (j) * (eta_ek (j) /(1. + eta_ek (j))) * w_ast_ek (j);
+	  w_nc_eik (j) = - L_ei_00 (j) * w_ast_ik (j)
+	                 - L_eI_00 (j) * w_ast_Ik (j)
+	                 + L_ei_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j)
+	                 + L_eI_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j);
 	  
 	  w_linear    (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ek (j));
 	  w_nonlinear (j) = - double (ntor) * (w_E_Ik (j) + w_ast_ik (j) + w_nc_ik (j));
@@ -1283,7 +1289,23 @@ void Neoclassical::Get_Frequencies ()
 	}
 
       printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e  w_ast_ik = %11.4e  w_ast_ek = %11.4e  w_nc_i = %11.4e  w_nc_e = %11.4e\n",
-	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_ek (j) /1.e3, w_nc_ik (j) /1.e3, w_nc_ek (j) /1.e3);
+	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_ek (j) /1.e3, w_nc_ik (j) /1.e3, (w_nc_eek (j) + w_nc_eik(j)) /1.e3);
+    }
+  
+  // ...........................................................
+  // Calculate bootstrap, curvature, and polarization parameters
+  // ...........................................................
+  for (int j = 0; j < nres; j++)
+    {
+      alpbek  (j) = - 2.*0.8227*1.58               * (w_ast_ek (j) + w_nc_eek (j)) /w_betak (j);
+      alpbik  (j) =   2.*0.8227*1.58               * (w_nc_eik (j) + (ZI * nik (j) /nek (j)) * (w_ast_ik (j) + w_nc_ik (j)) + (ZII * nIk (j) /nek (j)) * (w_ast_Ik (j) + w_nc_Ik (j))) /w_betak (j);
+      alpck   (j) =   2.*0.8227*1.58               * DR (j);
+      alppk   (j) =   8.*0.8227*0.8227*0.8227*1.38 * (w_ast_ik (j) + w_nc_ik (j)) * w_nc_ik (j) /w_betak (j) /w_Omegk (j);
+      rhothek (j) =   v_T_ek (j)      * m_e * qk (j) * R_0 /e /fabs(B_0) /gk (j) /rk (j) /a;
+      rhothik (j) =   v_T_ik (j) * AI * m_p * qk (j) * R_0 /e /fabs(B_0) /gk (j) /rk (j) /a;
+
+      printf ("m = %3d  alpha_b_e = %11.4e  alpha_b_i = %11.4e  alpha_c = %11.4e  alpha_p = %11.4e  rho_th_e/a = %11.4e  rho_th_i/a = %11.4e\n",
+	      mk (j), alpbek (j), alpbik (j), alpck (j), alppk (j), rhothek (j)/a, rhothik (j)/a);
     }
 
   // ..................
@@ -1294,7 +1316,16 @@ void Neoclassical::Get_Frequencies ()
     fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     rk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, PsiNk (j), wEk (j) /1.e3, w_E_Ik (j) /1.e3,
 	     wtk (j) /1.e3, w_ast_Ik (j) /1.e3, Kthek (j) * (- G_Ii_00 (j) * w_E_Ik (j) + w_nc_Ik (j)) /1.e3,
-	     w_nc_ik (j)/1.e3, w_nc_ek (j)/1.e3);
+	     w_nc_ik (j)/1.e3, (w_nc_eek (j) + w_nc_eik (j))/1.e3);
+  fclose (file);
+
+  // ..................................................
+  // Output bootstrap, curvature, and polarization data
+  // ..................................................
+  file = OpenFilew ((char*) "Outputs/Stage3/bootstrap.txt");
+  for (int j = 0; j < nres; j++)
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     rk (j), PsiNk (j), alpbek (j), alpbik (j), alpck (j), alppk (j));
   fclose (file);
 }
 
@@ -1403,12 +1434,11 @@ void Neoclassical::Get_Normalized ()
       double tm  = tau_Mk (j) /tau_A;
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
       double tx  = tau_cxk (j) /tau_A;
-      double DB  =  (- w_ast_ek (j) - w_nc_ek (j) + (ZI * nik (j) /nek (j)) * (w_ast_ik (j) + w_nc_ik (j)) + (ZII * nIk (j) /nek (j)) * (w_ast_Ik (j) + w_nc_Ik (j))) /w_betak (j);
      
-      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e DB = %10.3e DR = %10.3e\n",
-	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j), DB, DR (j));
+      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
+	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j));
 
-      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          tm,                         th,
 	       sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                       wkn, 
@@ -1417,11 +1447,13 @@ void Neoclassical::Get_Normalized ()
 	       nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,         dTidrk (j) /e/1.e3,
 	       Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
 	       Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3, tx, 2.*0.8227*1.58*(DB + DR (j)));
+	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3, tx,
+	       alpbek (j),                  alpbik (j),                  alpck (j),                  alppk (j),
+	       rhothek (j),                 rhothik (j));
 	       
-      }
+    }
    fclose (file);
-
+   
    if (INTP != 0)
      {
       char* filename = new char[MAXFILENAMELENGTH];
@@ -1440,9 +1472,8 @@ void Neoclassical::Get_Normalized ()
 	  double tm  = tau_Mk (j) /tau_A;
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 	  double tx  = tau_cxk (j) /tau_A;
-	  double DB  =  (- w_ast_ek (j) - w_nc_ek (j) + (ZI * nik (j) /nek (j)) * (w_ast_ik (j) + w_nc_ik (j)) + (ZII * nIk (j) /nek (j)) * (w_ast_Ik (j) + w_nc_Ik (j))) /w_betak (j);
 
-	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
 		   a /R_0,                      Sk,                          tm,                         th,
 		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 
@@ -1451,7 +1482,9 @@ void Neoclassical::Get_Normalized ()
 		   nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
 		   Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
 		   Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx, 2.*0.8227*1.58*(DB + DR (j)));
+		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx,
+		   alpbek (j),                  alpbik (j),                  alpck (j),                  alppk (j),
+		   rhothek (j),                 rhothik (j));
 	}
       fclose (file);
 

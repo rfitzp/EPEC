@@ -2,7 +2,7 @@ import graph;
      
 size(500,500,IgnoreAspect);
 
-file    in = input("../../Outputs/Stage5/phi.txt").line();
+file    in = input("../../Outputs/Stage5/vp.txt").line();
 real[][] A = in.dimension (0,0);
 int nres   = A[0].length - 1;
 A          = transpose(A);
@@ -22,13 +22,12 @@ for (int i = 0; i < nres; i += 1)
 	s = blue;
     draw (graph (p, A[i+1]), s);
   }
-
-ylimits (-1., 1., Crop);
-
 s = dotted + black + 1;
 yequals (0., s);
+
+ylimits(-200.,200.,Crop);
 
 pen qq = fontsize(25.);
 defaultpen (qq);
 xaxis("$t ({\rm s})$",BottomTop,LeftTicks);
-yaxis("$(\varphi_k - \zeta_k)/\pi$",LeftRight,RightTicks);
+yaxis("$v_p({\rm krad/s}$",LeftRight,RightTicks);

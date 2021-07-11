@@ -34,9 +34,10 @@ int main (int argc, char** argv)
   char* ivalue = NULL; char* rvalue = NULL; char* Hvalue = NULL;
   char* Cvalue = NULL; char* Dvalue = NULL; char* Nvalue = NULL;
   char* Gvalue = NULL; char* Xvalue = NULL; char* Bvalue = NULL;
+  char* Vvalue = NULL; char* Pvalue = NULL;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:G:X:B:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:G:X:B:V:P:")) != -1)
     switch (c)
       {
       case 'f':
@@ -56,15 +57,17 @@ int main (int argc, char** argv)
 	printf ("-s STAGE5 - set Stage5 caculation enabling flag to STAGE5\n");
 	printf ("-t TSTART - set simulation start time (s) to TSTART\n");
 	printf ("-u INTU   - set uFile/mFile/lFile interpolation enabling flag to INTU\n");
-	printf ("-B BSC    - set bootstrap/curvature flag to BSC\n");
+	printf ("-B BOOT   - set bootstrap flag to BOOT\n");
 	printf ("-C COPT   - set coil current optimization flag to COPT\n");
 	printf ("-D CORE   - set core minimization factor to CORE\n");
 	printf ("-F FREQ   - set natural frequency selection flag to FREQ\n");
 	printf ("-G FFAC   - set natural frequency selection parameter to FFAC\n");
 	printf ("-H HIGH   - set higher order transport calculation enabling flag to HIGH\n");
+	printf ("-P POLZ   - set polarization flag to POLZ\n");
 	printf ("-N NATS   - set linear only nFiles interpolation flag to NATS\n");
 	printf ("-S SCALE  - set GPEC scalefactor to SCALE\n");	
 	printf ("-T TEND   - set simulation end time (s) to TEND\n");
+	printf ("-V CURV   - set curvature flag to CURV\n");
 	printf ("-X CXD    - set charge exchange damping flag to CXD\n");
 	exit (0);
       case 'n':
@@ -127,11 +130,17 @@ int main (int argc, char** argv)
       case 'B':
 	Bvalue = optarg;
  	break;
+      case 'V':
+	Vvalue = optarg;
+ 	break;
+      case 'P':
+	Pvalue = optarg;
+ 	break;
       case '?':
 	if (optopt == 't' || optopt == 's' || optopt == 'f' || optopt == 'o'|| optopt == 'n' || optopt == 'u'
 	    || optopt == 'S' || optopt == 'l' || optopt == 'm' || optopt == 'T' || optopt == 'c'
 	    || optopt == 'i' || optopt == 'r' || optopt == 'H' || optopt == 'C' || optopt == 'D' || optopt == 'F'|| optopt == 'N'
-	    || optopt == 'X' || optopt == 'B')
+	    || optopt == 'X' || optopt == 'B' || optopt == 'V' || optopt == 'P')
 	  printf ("Option = %c requires an argument\n", optopt);
 	  else if (isprint (optopt))
 	    printf ("Unknown option '-%c'\n", optopt);
@@ -148,7 +157,8 @@ int main (int argc, char** argv)
   double _TEND   = -1.e6; float __TEND;         double _CHIR   = -1.e6; float __CHIR;
   double _IRMP   = -1.e6; float __IRMP;         int    _HIGH   = -1.;   int   _RATS = -1.;
   int    _COPT   = -1;    double _CORE = -1.e6; float __CORE;           int   _NATS = -1.;
-  double _FFAC = -1.e6;   float __FFAC;         int    _CXD    = -1;    int   _BSC  = -1;
+  double _FFAC   = -1.e6; float __FFAC;         int    _CXD    = -1;    int   _BOOT = -1;
+  int    _CURV   = 1;     int    _POLZ = -1.;
   
   if (svalue != NULL)
     _STAGE5 = atoi (svalue);
@@ -177,7 +187,11 @@ int main (int argc, char** argv)
   if (Xvalue != NULL)
     _CXD = atoi (Xvalue);
   if (Bvalue != NULL)
-     _BSC = atoi (Bvalue);
+     _BOOT = atoi (Bvalue);
+  if (Vvalue != NULL)
+     _CURV = atoi (Vvalue);
+  if (Pvalue != NULL)
+     _POLZ = atoi (Pvalue);
   if (tvalue != NULL)
     {
       __TSTART = atof (tvalue);
@@ -219,7 +233,7 @@ int main (int argc, char** argv)
   // ..................
   Phase phase;
   phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND,
-	       _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ, _FFAC, _CXD, _BSC);
+	       _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ, _FFAC, _CXD, _BOOT, _CURV, _POLZ);
 
   return 0;
 }

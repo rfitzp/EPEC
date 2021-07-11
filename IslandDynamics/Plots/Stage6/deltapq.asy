@@ -18,6 +18,8 @@ s = black + 1 + dotted;
 
 yequals (0., s);
 
+ylimits (-0.2,0.,Crop);
+
 pen qq = fontsize (25.);
 defaultpen (qq);
 xaxis ("$q_{95}$",                BottomTop, RightTicks(n=5));

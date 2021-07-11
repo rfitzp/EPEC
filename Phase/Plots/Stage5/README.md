@@ -18,6 +18,8 @@
 	omega.asy   ... plots all frequencies versus time
 	omegan.asy  ... plots frequency at single rational surface versus time
 	omega0.asy  ... plots natural frequencies versus time
+	vp.asy      ... plots phase velocities versus time
+	vpn.asy     ... plots phase velocity at single rational surface versus time
 
 	dne.asy     ... plots density reduction at rational surfaces versus time
 	dne1.asy    ... plots density flattened regions versus time

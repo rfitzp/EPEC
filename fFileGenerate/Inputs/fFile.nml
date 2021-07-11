@@ -5,7 +5,7 @@
 
 	FLUX_PSILIM  = 0.998   ! Maximum PsiN for safety-factor calculation in FLUX
  	FLUX_PSIRAT  = 0.995   ! Ignore rational surfaces for PsiN > PSIRAT in FLUX
-        FLUX_PSIPED  = 0.945   ! PsiN value at top of pedestal in FLUX
+        FLUX_PSIPED  = 0.940   ! PsiN value at top of pedestal in FLUX
 
 	NEO_INTF     = 0       ! If != 0 then do not call FLUX and interpolate fFiles in NEOCLASSICAL
 	NEO_INTC     = 0       ! If != 0 then interpolate cFiles in NEOCLASSICAL

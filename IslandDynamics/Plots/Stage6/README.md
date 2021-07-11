@@ -20,6 +20,8 @@
 	omega0lq.asy   ... plots linear natural frequencies versus q95
 	omega0q.asy    ... plots actual natural frequencies versus q95
 	omegaq.asy     ... plots island frequencies versus q95
+	phase.asy      ... plots island phases versus q95
+	vp.asy         ... plots island phase velocities versus q95
 
 	i.asy          ... plots critical RMP currents for mode locking versus experimental time
 	r.asy          ... plots rational surface radii of penetrated island chains versus experimental time

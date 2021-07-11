@@ -18,7 +18,7 @@
 
 	PSILIM  = 0.998  ! Maximum PsiN for safety-factor calculation
  	PSIRAT  = 0.995  ! Ignore rational surfaces for PsiN > PSIRAT
-	PSIPED  = 0.945  ! PsiN value at top of pedestal
+	PSIPED  = 0.940  ! PsiN value at top of pedestal
 
 	TIME    = 0.	 ! Experimental time (ms)
 &end

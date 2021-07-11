@@ -103,7 +103,7 @@ void Flux::Stage2 ()
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
       for (int i = 0; i < nres; i++)
 	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]);
       for (int i = 0; i < nres; i++)
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
@@ -813,8 +813,8 @@ void Flux::Stage2CalcGGJ ()
     }
 
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d J1 = %10.3e J2 = %10.3e J3 = %10.3e J4 = %10.4e J5 = %10.4e J6 = %10.4e E = %10.4e F = %10.4e H = %10.4e DI = %10.4e DR = %10.4e\n",
-	    mres[i], J1[i], J2[i], J3[i], J4[i], J5[i], J6[i], E[i], F[i], H[i], E[i]+F[i]+H[i]-0.25, E[i]+F[i]+H[i]*H[i]);
+    printf ("mpol = %3d J1 = %10.3e J2 = %10.3e J3 = %10.3e J4 = %10.4e J5 = %10.4e J6 = %10.4e E = %10.4e F = %10.4e H = %10.4e DI = %10.4e DR_ln = %10.4e DR_nl = %10.4e\n",
+	    mres[i], J1[i], J2[i], J3[i], J4[i], J5[i], J6[i], E[i], F[i], H[i], E[i]+F[i]+H[i]-0.25, E[i]+F[i]+H[i]*H[i], E[i]+F[i]);
 }
 
 // ##################################################

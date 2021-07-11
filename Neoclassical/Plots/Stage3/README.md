@@ -40,6 +40,7 @@
 	gt.asy      ... plots (1-fc)/fc versus r, where fc is fraction of circulating particles, at rational surfaces versus r
 	nu.asy      ... plots nu_ast for electrons (red), ions (blue), impurities (green) at rational surfaces versus r
 	omega.asy   ... plots natural frequencies at rational surfaces versus r
+	boot.asy    ... plots bootstrap, curvature, polarization indices at rational surfaces versus PsiN
 
 	nef.asy     ... plots n_e(PsiN)
 	nepf.asy    ... plots dn_e/dPsiN 
