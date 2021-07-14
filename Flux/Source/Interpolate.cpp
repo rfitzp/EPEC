@@ -14,6 +14,10 @@
 // double Flux:: InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2, int j3, int order)
 // double Flux:: GetPsiR                      (double r, double z)
 // double Flux:: GetPsiZ                      (double r, double z)
+// double Flux:: GetPsiRR                     (double r, double z)
+// double Flux:: GetPsiRR                     (double r, double z)
+// double Flux:: GetPsiRZ                     (double r, double z)
+// double Flux:: GetPsiZZ                     (double r, double z)
 // double Flux:: InterpolateQ                 (int I, double* X, double* Y, double x, int order, int method)
 // double Flux:: InterpolateQQuartic          (double* X, double* Y, double x, int i0, int i1, int i2, int i3, int order)
 // double Flux:: InterpolateQCubic            (double* X, double* Y, double x, int i0, int i1, int i2, int order)
@@ -265,8 +269,11 @@ double Flux::InterpolatePeriodicQuartic (int I, double* X, double* Y, double x, 
 // Uses cubic/quardatic iterpolation close to  grid boundaries
 //
 // order = 0: Psi
-// order = 1: Psi_x
-// order = 2: Psi_y
+// order = 1: Psi_r
+// order = 2: Psi_z
+// order = 3; Psi_rr
+// order = 4; Psi_rz
+// order = 5; Psi_zz
 //
 // ###########################################################
 double Flux::InterpolatePsi (double RR, double ZZ, int order)
@@ -415,6 +422,54 @@ double Flux::InterpolatePsiCubicCubic (double RR, double ZZ, int i0, int i1, int
 
       val = r0 * val0 + r1 * val1 + r2 * val2;
     }
+  else if (order == 3)
+    {
+      double r0 = 2. /(2.*dR2);
+      double r1 = 2. /(-  dR2);
+      double r2 = 2. /(2.*dR2);
+
+      double z0 = (ZZ - ZZ1) * (ZZ - ZZ2) /(2.*dZ2);
+      double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) /(-  dZ2);
+      double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) /(2.*dZ2);
+
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+
+      val = r0 * val0 + r1 * val1 + r2 * val2;
+    }
+  else if (order == 4)
+    {
+      double r0 = ((RR - RR1) + (RR - RR2)) /(2.*dR2);
+      double r1 = ((RR - RR0) + (RR - RR2)) /(-  dR2);
+      double r2 = ((RR - RR0) + (RR - RR1)) /(2.*dR2);
+
+      double z0 = ((ZZ - ZZ1) + (ZZ - ZZ2)) /(2.*dZ2);
+      double z1 = ((ZZ - ZZ0) + (ZZ - ZZ2)) /(-  dZ2);
+      double z2 = ((ZZ - ZZ0) + (ZZ - ZZ1)) /(2.*dZ2);
+
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+
+      val = r0 * val0 + r1 * val1 + r2 * val2;
+    }
+  else if (order == 5)
+    {
+      double r0 = (RR - RR1) * (RR - RR2) /(2.*dR2);
+      double r1 = (RR - RR0) * (RR - RR2) /(-  dR2);
+      double r2 = (RR - RR0) * (RR - RR1) /(2.*dR2);
+       
+      double z0 = 2. /(2.*dZ2);
+      double z1 = 2. /(-  dZ2);
+      double z2 = 2. /(2.*dZ2);
+
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+
+      val = r0 * val0 + r1 * val1 + r2 * val2;
+    }
   else
     {
       printf ("FLUX::InterpolatePsiCubicCubic: Error - order = %1d\n", order);
@@ -489,6 +544,60 @@ double Flux::InterpolatePsiQuarticCubic (double RR, double ZZ, int i0, int i1, i
       double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
       double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
    
+      val = r0 * val0 + r1 * val1 + r2 * val2 + r3 * val3;
+    }
+   else if (order == 3)
+    {
+      double r0 = 2. * ((RR - RR1) + (RR - RR2) + (RR - RR3)) /(-6.*dR3);
+      double r1 = 2. * ((RR - RR0) + (RR - RR2) + (RR - RR3)) /(+2.*dR3);
+      double r2 = 2. * ((RR - RR0) + (RR - RR1) + (RR - RR3)) /(-2.*dR3);
+      double r3 = 2. * ((RR - RR0) + (RR - RR1) + (RR - RR2)) /(+6.*dR3);
+
+      double z0 = (ZZ - ZZ1) * (ZZ - ZZ2) /(2.*dZ2);
+      double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) /(-  dZ2);
+      double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) /(2.*dZ2);
+ 
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+      double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
+
+      val = r0 * val0 + r1 * val1 + r2 * val2 + r3 * val3;
+    }
+  else if (order == 4)
+    {
+      double r0 = ((RR - RR2) * (RR - RR3) + (RR - RR1) * (RR - RR3) + (RR - RR1) * (RR - RR2)) /(-6.*dR3);
+      double r1 = ((RR - RR2) * (RR - RR3) + (RR - RR0) * (RR - RR3) + (RR - RR0) * (RR - RR2)) /(+2.*dR3);
+      double r2 = ((RR - RR1) * (RR - RR3) + (RR - RR0) * (RR - RR3) + (RR - RR0) * (RR - RR1)) /(-2.*dR3);
+      double r3 = ((RR - RR1) * (RR - RR2) + (RR - RR0) * (RR - RR2) + (RR - RR0) * (RR - RR1)) /(+6.*dR3);
+
+      double z0 = ((ZZ - ZZ1) + (ZZ - ZZ2)) /(2.*dZ2);
+      double z1 = ((ZZ - ZZ0) + (ZZ - ZZ2)) /(-  dZ2);
+      double z2 = ((ZZ - ZZ0) + (ZZ - ZZ1)) /(2.*dZ2);
+
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+      double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
+
+      val = r0 * val0 + r1 * val1 + r2 * val + r3 * val3;
+    }
+  else if (order == 5)
+    {
+      double r0 = (RR - RR1) * (RR - RR2) * (RR - RR3) /(-6.*dR3);
+      double r1 = (RR - RR0) * (RR - RR2) * (RR - RR3) /(+2.*dR3);
+      double r2 = (RR - RR0) * (RR - RR1) * (RR - RR3) /(-2.*dR3);
+      double r3 = (RR - RR0) * (RR - RR1) * (RR - RR2) /(+6.*dR3);
+       
+      double z0 = 2. /(2.*dZ2);
+      double z1 = 2. /(-  dZ2);
+      double z2 = 2. /(2.*dZ2);
+
+      double val0 = z0 * PSIARRAY (i0, j0) + z1 * PSIARRAY (i0, j1) + z2 * PSIARRAY (i0, j2);
+      double val1 = z0 * PSIARRAY (i1, j0) + z1 * PSIARRAY (i1, j1) + z2 * PSIARRAY (i1, j2);
+      double val2 = z0 * PSIARRAY (i2, j0) + z1 * PSIARRAY (i2, j1) + z2 * PSIARRAY (i2, j2);
+      double val3 = z0 * PSIARRAY (i3, j0) + z1 * PSIARRAY (i3, j1) + z2 * PSIARRAY (i3, j2);
+
       val = r0 * val0 + r1 * val1 + r2 * val2 + r3 * val3;
     }
   else
@@ -567,6 +676,60 @@ double Flux::InterpolatePsiCubicQuartic (double RR, double ZZ, int i0, int i1, i
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
+  else if (order == 3)
+    {
+      double r0 = 2. /(2.*dR2);
+      double r1 = 2. /(-  dR2);
+      double r2 = 2. /(2.*dR2);
+
+      double z0 = (ZZ - ZZ1) * (ZZ - ZZ2) * (ZZ - ZZ3) /(-6.*dZ3);
+      double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) * (ZZ - ZZ3) /(+2.*dZ3);
+      double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
+      double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
+
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3);
+
+      val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
+    }
+  else if (order == 4)
+    {
+      double r0 = ((RR - RR1) + (RR - RR2)) /(2.*dR2);
+      double r1 = ((RR - RR0) + (RR - RR2)) /(-  dR2);
+      double r2 = ((RR - RR0) + (RR - RR1)) /(2.*dR2);
+      
+      double z0 = ((ZZ - ZZ2) * (ZZ - ZZ3) + (ZZ - ZZ1) * (ZZ - ZZ3) + (ZZ - ZZ1) * (ZZ - ZZ2)) /(-6.*dZ3);
+      double z1 = ((ZZ - ZZ2) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ2)) /(+2.*dZ3);
+      double z2 = ((ZZ - ZZ1) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(-2.*dZ3);
+      double z3 = ((ZZ - ZZ1) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(+6.*dZ3);
+
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3);
+
+      val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
+    }
+  else if (order == 5)
+    {
+      double r0 = (RR - RR1) * (RR - RR2) /(2.*dR2);
+      double r1 = (RR - RR0) * (RR - RR2) /(-  dR2);
+      double r2 = (RR - RR0) * (RR - RR1) /(2.*dR2);
+
+      double z0 = 2. * ((ZZ - ZZ1) + (ZZ - ZZ2) + (ZZ - ZZ3)) /(-6.*dZ3);
+      double z1 = 2. * ((ZZ - ZZ0) + (ZZ - ZZ2) + (ZZ - ZZ3)) /(+2.*dZ3);
+      double z2 = 2. * ((ZZ - ZZ0) + (ZZ - ZZ1) + (ZZ - ZZ3)) /(-2.*dZ3);
+      double z3 = 2. * ((ZZ - ZZ0) + (ZZ - ZZ1) + (ZZ - ZZ2)) /(+6.*dZ3);
+ 
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3);
+
+      val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
+    }
   else
     {
       printf ("FLUX::InterpolatePsiCubicQuartic: Error - order = %1d\n", order);
@@ -601,7 +764,7 @@ double Flux::InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1,
       double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) * (ZZ - ZZ3) /(+2.*dZ3);
       double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
       double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
- 
+
       double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
       double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
       double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
@@ -647,6 +810,63 @@ double Flux::InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1,
 
       val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
     }
+  else if (order == 3)
+    {
+      double r0 = 2. * ((RR - RR1) + (RR - RR2) + (RR - RR3)) /(-6.*dR3);
+      double r1 = 2. * ((RR - RR0) + (RR - RR2) + (RR - RR3)) /(+2.*dR3);
+      double r2 = 2. * ((RR - RR0) + (RR - RR1) + (RR - RR3)) /(-2.*dR3);
+      double r3 = 2. * ((RR - RR0) + (RR - RR1) + (RR - RR2)) /(+6.*dR3);
+  
+      double z0 = (ZZ - ZZ1) * (ZZ - ZZ2) * (ZZ - ZZ3) /(-6.*dZ3);
+      double z1 = (ZZ - ZZ0) * (ZZ - ZZ2) * (ZZ - ZZ3) /(+2.*dZ3);
+      double z2 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ3) /(-2.*dZ3);
+      double z3 = (ZZ - ZZ0) * (ZZ - ZZ1) * (ZZ - ZZ2) /(+6.*dZ3);
+
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3) + r3 * PSIARRAY (i3, j3);
+
+      val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
+    }
+  else if (order == 4)
+    {
+      double r0 = ((RR - RR2) * (RR - RR3) + (RR - RR1) * (RR - RR3) + (RR - RR1) * (RR - RR2)) /(-6.*dR3);
+      double r1 = ((RR - RR2) * (RR - RR3) + (RR - RR0) * (RR - RR3) + (RR - RR0) * (RR - RR2)) /(+2.*dR3);
+      double r2 = ((RR - RR1) * (RR - RR3) + (RR - RR0) * (RR - RR3) + (RR - RR0) * (RR - RR1)) /(-2.*dR3);
+      double r3 = ((RR - RR1) * (RR - RR2) + (RR - RR0) * (RR - RR2) + (RR - RR0) * (RR - RR1)) /(+6.*dR3);
+
+      double z0 = ((ZZ - ZZ2) * (ZZ - ZZ3) + (ZZ - ZZ1) * (ZZ - ZZ3) + (ZZ - ZZ1) * (ZZ - ZZ2)) /(-6.*dZ3);
+      double z1 = ((ZZ - ZZ2) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ2)) /(+2.*dZ3);
+      double z2 = ((ZZ - ZZ1) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ3) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(-2.*dZ3);
+      double z3 = ((ZZ - ZZ1) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ2) + (ZZ - ZZ0) * (ZZ - ZZ1)) /(+6.*dZ3);
+
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3) + r3 * PSIARRAY (i3, j3);
+
+      val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
+    }
+  else if (order == 5)
+    {
+      double r0 = (RR - RR1) * (RR - RR2) * (RR - RR3) /(-6.*dR3);
+      double r1 = (RR - RR0) * (RR - RR2) * (RR - RR3) /(+2.*dR3);
+      double r2 = (RR - RR0) * (RR - RR1) * (RR - RR3) /(-2.*dR3);
+      double r3 = (RR - RR0) * (RR - RR1) * (RR - RR2) /(+6.*dR3);
+
+      double z0 = 2. * ((ZZ - ZZ1) + (ZZ - ZZ2) + (ZZ - ZZ3)) /(-6.*dZ3);
+      double z1 = 2. * ((ZZ - ZZ0) + (ZZ - ZZ2) + (ZZ - ZZ3)) /(+2.*dZ3);
+      double z2 = 2. * ((ZZ - ZZ0) + (ZZ - ZZ1) + (ZZ - ZZ3)) /(-2.*dZ3);
+      double z3 = 2. * ((ZZ - ZZ0) + (ZZ - ZZ1) + (ZZ - ZZ2)) /(+6.*dZ3);
+ 
+      double val0 = r0 * PSIARRAY (i0, j0) + r1 * PSIARRAY (i1, j0) + r2 * PSIARRAY (i2, j0) + r3 * PSIARRAY (i3, j0);
+      double val1 = r0 * PSIARRAY (i0, j1) + r1 * PSIARRAY (i1, j1) + r2 * PSIARRAY (i2, j1) + r3 * PSIARRAY (i3, j1);
+      double val2 = r0 * PSIARRAY (i0, j2) + r1 * PSIARRAY (i1, j2) + r2 * PSIARRAY (i2, j2) + r3 * PSIARRAY (i3, j2);
+      double val3 = r0 * PSIARRAY (i0, j3) + r1 * PSIARRAY (i1, j3) + r2 * PSIARRAY (i2, j3) + r3 * PSIARRAY (i3, j3);
+
+      val = z0 * val0 + z1 * val1 + z2 * val2 + z3 * val3;
+    }
   else
     {
       printf ("FLUX::InterpolatePsiQuarticQuartic: Error - order = %1d\n", order);
@@ -670,6 +890,30 @@ double Flux::GetPsiR (double r, double z)
 double Flux::GetPsiZ (double r, double z)
 {
   return InterpolatePsi (r, z, 2);
+}
+
+// #######################################
+// Function to evaluate d^2Psi/dR^2 (R, Z)
+// #######################################
+double Flux::GetPsiRR (double r, double z)
+{
+  return InterpolatePsi (r, z, 3);
+}
+
+// #######################################
+// Function to evaluate d^2Psi/dRdZ (R, Z)
+// #######################################
+double Flux::GetPsiRZ (double r, double z)
+{
+  return InterpolatePsi (r, z, 4);
+}
+
+// #######################################
+// Function to evaluate d^2Psi/dZ^2 (R, Z)
+// #######################################
+double Flux::GetPsiZZ (double r, double z)
+{
+  return InterpolatePsi (r, z, 5);
 }
 
 // ########################################################

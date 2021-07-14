@@ -786,8 +786,8 @@ void Neoclassical::Get_Derived ()
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
  
-      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e wE = %10.3e wt = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e chii = %10.3e\n",
-	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, wEk(j)/1.e3, wtk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j), chii(j));
+      printf ("m = %3d r = %9.2e ne = %9.2e Te = %9.2e ni = %9.2e Ti = %9.2e nI = %9.2e TI = %9.2e nb = %9.2e wE = %9.2e wt = %9.2e Z_eff = %9.2e NN = %9.2e rho = %9.2e chip = %9.2e chie = %9.2e chin = %9.2e chii = %9.2e\n",
+	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, nbk(j)/1.e19, wEk(j)/1.e3, wtk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j), chii(j));
     }
 
   if (IMPURITY == 0)

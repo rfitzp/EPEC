@@ -8,6 +8,9 @@
 	psi.asy      ... plots psi (R, Z)
 	psir.asy     ... plots interpolated dPsi/dR (R, Z)
 	psiz.asy     ... plots interpolated dPsi/dZ (R, Z)
+	psirr.asy    ... plots interpolated d^2Psi/dR^2 (R, Z)
+	psirz.asy    ... plots interpolated d^2Psi/dRdZ (R, Z)	
+	psizz.asy    ... plots interpolated d^2Psi/dZ^2 (R, Z)
 
 	qr.asy       ... plots q(r) profile
 	qredge.asy   ... plots q(r) profile close to plasma edge

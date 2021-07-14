@@ -246,6 +246,24 @@ void Neoclassical::pFileRead ()
   
   fclose (file);
 
+  // If nb field missing, set to zero
+  if (nb_flag == 0)
+    {
+      printf ("Dummy   nb     field    - n = %4d:\n", 2);
+      nb.resize (10);
+
+      for (int i = 0; i < 10; i++)
+	{
+	  double x    = double (i) * 0.1;
+	  double y    = 0.;
+	  double dydx = 0.;
+	  nb.PushData (i, x, y, dydx);
+	  nb.PushData (i, x, y, dydx);
+	}
+
+      nb_flag = 1;
+    }
+
   if (ne_flag * Te_flag * ni_flag * Ti_flag * nb_flag * wE_flag * wt_flag * nI_flag * NZ_flag == 0)
     {
       printf ("NEOCLASSICAL::pFileRead: Missing field in pFile\n");

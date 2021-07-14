@@ -88,6 +88,7 @@
 #include <gsl/gsl_complex_math.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
+#include <gsl/gsl_odeiv2.h>
 #include <gsl/gsl_odeiv.h>
 #include <gsl/gsl_sf_gamma.h>
 
@@ -268,7 +269,6 @@ class Flux
   gsl_matrix* Znc;     // Z versus Theta on rational surfaces
   gsl_matrix* Bnc;     // B versus Theta on rational surfaces
   gsl_matrix* Cnc;     // dB/dTheta versus Theta on rational surfaces
-  gsl_matrix* Pnc;     // |Grad psi|^2 versus Theta on rational surfaces 
 
   // Neoclassical parameter data
   double*     I1;      // Neoclassical integral
@@ -386,12 +386,16 @@ private:
   double InterpolatePsiCubicQuartic   (double RR, double ZZ, int i0, int i1, int i2, int j0, int j1, int j2, int j3,         int order);
   double InterpolatePsiQuarticQuartic (double RR, double ZZ, int i0, int i1, int i2, int i3, int j0, int j1, int j2, int j3, int order);
 
-  // Evaluate Psi (R, Z)
-  double GetPsi (double r, double z);
   // Evaluate dPsi/dR (R, Z)
   double GetPsiR (double r, double z);
   // Evaluate dPsi/dZ (R, Z)
   double GetPsiZ (double r, double z);
+  // Evaluate d^2Psi/dR^2 (R, Z)
+  double GetPsiRR (double r, double z);
+  // Evaluate d^2Psi/dRdZ (R, Z)
+  double GetPsiRZ (double r, double z);
+  // Evaluate d^2Psi/dZ^2 (R, Z)
+  double GetPsiZZ (double r, double z);
 
   // Savitsky-Gorlay smoothing algorithm
   void Smoothing (int N, double *y);

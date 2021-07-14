@@ -9,11 +9,11 @@
 	INTC     = 0	   ! Flag for cFile interpolation
 	CATS     = 1       ! Flag for linear only interpolation of cFiles
 	
-	EXB      = 1       ! Flag for calculating ExB frequency from neoclassical theory
+	EXB      = 0       ! Flag for calculating ExB frequency from neoclassical theory
 
 	IMPURITY = 1	   ! Flag for impurities
 
-	NEUTRAL  = 1       ! Flag for neutrals
+	NEUTRAL  = 0       ! Flag for neutrals
 	NTYPE    = 1       ! If 0/1 then flux-surface averaged neutral density distribution exponential/Lorentzian
 	NN       = 0.25e17 ! Flux-surface averaged neutral density on LCFS (m^-3)
 	LN       = 1.3e-2  ! Flux-surface average neutral density decay lengthscale (m)

@@ -160,7 +160,7 @@ void Flux::Stage2 ()
   delete[] Th;
   gsl_matrix_free (Rnc); gsl_matrix_free (Znc); 
 
-  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc); gsl_matrix_free (Pnc);
+  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc); 
  
   delete[] I1;    delete[] I2;    delete[] I3;    delete[] I7;    delete[] I8;  
   delete[] Ktres; delete[] Kares; delete[] ajj;   delete[] dPsidr;
@@ -172,7 +172,7 @@ void Flux::Stage2 ()
   gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
   
   gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
-  gsl_vector_complex_free (EI);  gsl_vector_complex_free (EO);
+  gsl_vector_complex_free (EI); gsl_vector_complex_free (EO);
 }
 
 // #############################################
@@ -386,9 +386,9 @@ void Flux::Stage2ReadData ()
 
   printf ("PsiAxis = %11.4e  PsiBoundary = %11.4e  PsiAxis /(R0*R0*B0) = %11.4e\n", PsiAxis, PsiBoundary, Psic);
 
-  // ......................
-  // Output Psi, PsiR, PsiZ
-  // ......................
+  // ...........................................
+  // Output Psi, PsiR, PsiZ, PsiRR, PsiRZ, PsiZZ
+  // ...........................................
   file = OpenFilew ((char*) "Outputs/Stage2/Psi.txt");
   for (int i = 0; i < NRPTS; i++)
     {
@@ -410,6 +410,30 @@ void Flux::Stage2ReadData ()
     {
       for (int j = 0; j < NZPTS; j++)
 	fprintf (file, "%16.9e ", GetPsiZ (RPTS[i], ZPTS[j]));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+  file = OpenFilew ((char*) "Outputs/Stage2/PsiRR.txt");
+  for (int i = 0; i < NRPTS; i++)
+    {
+      for (int j = 0; j < NZPTS; j++)
+	fprintf (file, "%16.9e ", GetPsiRR (RPTS[i], ZPTS[j]));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+  file = OpenFilew ((char*) "Outputs/Stage2/PsiRZ.txt");
+  for (int i = 0; i < NRPTS; i++)
+    {
+      for (int j = 0; j < NZPTS; j++)
+	fprintf (file, "%16.9e ", GetPsiRZ (RPTS[i], ZPTS[j]));
+      fprintf (file, "\n");
+    }
+  fclose (file);
+  file = OpenFilew ((char*) "Outputs/Stage2/PsiZZ.txt");
+  for (int i = 0; i < NRPTS; i++)
+    {
+      for (int j = 0; j < NZPTS; j++)
+	fprintf (file, "%16.9e ", GetPsiZZ (RPTS[i], ZPTS[j]));
       fprintf (file, "\n");
     }
   fclose (file);
@@ -937,7 +961,6 @@ void Flux::Stage2CalcNeoclassicalAngle ()
   // Calculate |B| on rational surfaces
   // ..................................
   Bnc = gsl_matrix_alloc (nres, NTHETA);
-  Pnc = gsl_matrix_alloc (nres, NTHETA);
   for (int j = 0; j < nres; j++)
     for (int k = 0; k < NTHETA; k++)
       {
@@ -948,10 +971,8 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 	double PsiZ = GetPsiZ (Rval, Zval);
 	double Grad = sqrt (PsiR*PsiR + PsiZ*PsiZ);
 	double Bval = sqrt (gval*gval + Psic*Psic * Grad*Grad) /Rval;
-	double Pval = Psic*Psic * Grad*Grad;
 
 	gsl_matrix_set (Bnc, j, k, Bval);
-	gsl_matrix_set (Pnc, j, k, Pval);
       }
 
   // ..........
@@ -971,9 +992,10 @@ void Flux::Stage2CalcNeoclassicalAngle ()
   // Calculate d|B|dTheta on rational surfaces
   // .........................................
   Cnc = gsl_matrix_alloc (nres, NTHETA);
-  double* Y = new double[NTHETA];
+  //double* Y = new double[NTHETA];
   for (int j = 0; j < nres; j++)
     {
+      /*
       for (int k = 0; k < NTHETA; k++)
  	Y[k] = gsl_matrix_get (Bnc, j, k);
 
@@ -982,8 +1004,30 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 	  double val = InterpolatePeriodic (NTHETA, Th, Y, Th[k], 1);
 	  gsl_matrix_set (Cnc, j, k, val);
 	}
+      */
+
+      for (int k = 0; k < NTHETA; k++)
+	{
+	  double gval  = gres [j];
+	  double gmval = gmres[j];
+	  double Rval  = gsl_matrix_get (Rnc, j, k);
+	  double Zval  = gsl_matrix_get (Znc, j, k);
+	  double PsiR  = GetPsiR  (Rval, Zval);
+	  double PsiZ  = GetPsiZ  (Rval, Zval);
+	  double PsiRR = GetPsiRR (Rval, Zval);
+	  double PsiRZ = GetPsiRZ (Rval, Zval);
+	  double PsiZZ = GetPsiZZ (Rval, Zval);
+	  double Grad  = sqrt (PsiR*PsiR + PsiZ*PsiZ);
+	  double Bval  = sqrt (gval*gval + Psic*Psic * Grad*Grad) /Rval;
+	  double dRdT  = - fabs (Psic) * PsiZ /gmval /Bval /Rval;
+	  double dZdT  = + fabs (Psic) * PsiR /gmval /Bval /Rval;
+	  
+	  double val   = - Bval*dRdT/Rval + (Psic*Psic/Bval/Rval/Rval) * ((PsiR*PsiRR+PsiZ*PsiRZ)*dRdT + (PsiR*PsiRZ+PsiZ*PsiZZ)*dZdT);
+	  
+	  gsl_matrix_set (Cnc, j, k, val);
+	}
     }
-  delete[] Y;
+  //  delete[] Y;
 
   // ..........
   // Output Cnc
@@ -1177,11 +1221,14 @@ void Flux::Stage2CalcNeoclassicalPara ()
   // Output neoclassical parameters
   // ..............................
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d I1 = %10.3e I2 = %10.3e I3 = %10.3e I4 = (%10.3e; %10.3e) I5 = (%10.3e; %10.3e) Kt = %10.3e Ka = %10.3e Kh = %10.3e fc = %10.3e ajj = %10.3e dPsiNdr = %10.3e q_hat = %10.3e C1 = %10.3e C2 = %10.3e\n",
+    printf ("mpol = %3d I1 = %9.2e I2 = %9.2e I3 = %9.2e I4 = (%9.2e; %9.2e) I5 = (%9.2e; %9.2e) Kt = %9.2e Ka = %9.2e Kh = %9.2e fc = %9.2e\n",
 	    mres[i], I1[i], I2[i], I3[i],
 	    gsl_matrix_get (I4, i, 0), gsl_matrix_get (I4, i, NNC-1),
 	    gsl_matrix_get (I5, i, 0), gsl_matrix_get (I5, i, NNC-1),
-	    Ktres[i], Kares[i], Khres[i], fcres[i], ajj[i], dPsidr[i], q_hat[i], C1res[i], C2res[i]);
+	    Ktres[i], Kares[i], Khres[i], fcres[i]);
+  for (int i = 0; i < nres; i++)
+    printf ("mpol = %3d ajj = %9.2e dPsiNdr = %9.2e q_hat = %9.2e C1 = %9.2e C2 = %9.2e\n",
+	    mres[i], ajj[i], dPsidr[i], q_hat[i], C1res[i], C2res[i]);
 }
 
 // ############################
@@ -1198,22 +1245,25 @@ void Flux::Stage2CalcMatrices ()
   EE = gsl_matrix_complex_alloc (nres, nres);
  
   for (int i = 0; i < nres; i++)
-    for (int j = 0; j < nres; j++)
-      {
- 	double sumc = 0.;
-	for (int k = 0; k < NTHETA; k++)
-	  for (int kk = 0; kk < NTHETA; kk++)
-	    sumc += Weight2D (k, kk) * GreenPlasmaCos (i, k, j, kk);
-	sumc /= 2.*M_PI * 2.*M_PI;
-
-	double sums = 0.;
-	for (int k = 0; k < NTHETA; k++)
-	  for (int kk = 0; kk < NTHETA; kk++)
-	    sums += Weight2D (k, kk) * GreenPlasmaSin (i, k, j, kk);
-	sums /= 2.*M_PI * 2.*M_PI;
-
-	gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
-      }
+    {
+      for (int j = 0; j < nres; j++)
+	{
+	  double sumc = 0.;
+	  for (int k = 0; k < NTHETA; k++)
+	    for (int kk = 0; kk < NTHETA; kk++)
+	      sumc += Weight2D (k, kk) * GreenPlasmaCos (i, k, j, kk);
+	  sumc /= 2.*M_PI * 2.*M_PI;
+	  
+	  double sums = 0.;
+	  for (int k = 0; k < NTHETA; k++)
+	    for (int kk = 0; kk < NTHETA; kk++)
+	      sums += Weight2D (k, kk) * GreenPlasmaSin (i, k, j, kk);
+	  sums /= 2.*M_PI * 2.*M_PI;
+	  
+	  gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
+	}
+      printf ("mpol = %3d\n", mres[i]);
+    }
 
   printf ("F-matrix:\n");
   for (int i = 0; i < nres; i++)
@@ -1253,7 +1303,7 @@ void Flux::Stage2CalcMatrices ()
   for (int i = 0; i < nres; i++)
     {
       for (int j = 0; j < nres; j++)
-	printf ("(%9.2e,%9.2e) ", GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+	printf ("(%8.1e,%8.1e) ", GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
       printf ("\n");
     }
 
@@ -1301,7 +1351,7 @@ void Flux::Stage2CalcMatrices ()
 
   printf ("E-vectors:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %4d  rs/ra = %11.4e  EI = (%11.4e, %11.4e)  EO = (%11.4e, %11.4e)\n", mres[i], rres[i]/ra,
+    printf ("mpol = %4d  rs/ra = %11.4e  EI = (%9.2e, %9.2e)  EO = (%9.2e, %9.2e)\n", mres[i], rres[i]/ra,
 	    GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
 	    GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
 }
