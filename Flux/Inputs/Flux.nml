@@ -12,13 +12,15 @@
 
 	INTG    = 0	 ! Flag for interpolating gFiles
 
-	NTOR    = 3	 ! Toroidal mode number
-	MMIN    = 4	 ! Minimum poloidal mode number
+	NTOR    = 1	 ! Toroidal mode number
+	MMIN    = 2	 ! Minimum poloidal mode number
 	MMAX    = 60	 ! Maximum toroidal mode number
 
-	PSILIM  = 0.9625  ! Maximum PsiN for safety-factor calculation
- 	PSIRAT  = 0.9625  ! Ignore rational surfaces for PsiN > PSIRAT
-	PSIPED  = 0.940  ! PsiN value at top of pedestal
+	PSILIM  = 0.995  ! Maximum PsiN for safety-factor calculation
+ 	PSIRAT  = 0.995  ! Ignore rational surfaces for PsiN > PSIRAT
+	PSIPED  = 0.940	 ! PsiN value at top of pedestal
+
+	NCOILS  = 1      ! Number of RMP coils
 
 	TIME    = 0.	 ! Experimental time (ms)
 &end

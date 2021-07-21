@@ -38,4 +38,4 @@ xequals (psiped, s);
 pen qq = fontsize(25.);
 defaultpen (qq);
 xaxis("${\mit\Psi}_N$",BottomTop,LeftTicks);
-yaxis("$|dq/d{\mit\Psi}_N|^{1/4}$",LeftRight,RightTicks);
+yaxis("$|d^2q/d{\mit\Psi}_N^2|^{1/4}$",LeftRight,RightTicks);

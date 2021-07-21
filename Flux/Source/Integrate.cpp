@@ -77,18 +77,15 @@ void Flux::CalcQGP ()
 // ################################################
 void Flux::CheckQP ()
 {
-  gsl_odeiv_system           sys1 = {pRhs1, NULL, 4, this};
-  const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 4);
-  gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (3);
-  double*                    y    = new double [4]; 
-  double                     r, h;
+  gsl_odeiv2_system           sys1 = {pRhs1, NULL, 4, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys1, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [4]; 
+  double                      r;
   
   for (int j = 0; j < nres; j++)
     {
       r    = 0.;
-      h    = H0;
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
       y[2] = 0.;
@@ -96,7 +93,7 @@ void Flux::CheckQP ()
   
       while (r < 2.*M_PI)
 	{
-	  int status = gsl_odeiv_evolve_apply (e, c, sss, &sys1, &r, 2.*M_PI, &h, y);
+	  int status = gsl_odeiv2_driver_apply (d, &r, 2.*M_PI, y); 
 	  
 	  if (status != GSL_SUCCESS)
 	    {
@@ -111,9 +108,7 @@ void Flux::CheckQP ()
 	      mres[j], double (mres[j]) /double(NTOR), qp, 1. - double (mres[j]) /double(NTOR)/qp);
     }
 
-  gsl_odeiv_evolve_free  (e);
-  gsl_odeiv_control_free (c);
-  gsl_odeiv_step_free    (sss);
+  gsl_odeiv2_driver_free (d);
   delete[]                y;
 }
 
@@ -122,24 +117,21 @@ void Flux::CheckQP ()
 // ##################################
 void Flux::CalcrP ()
 {
-  gsl_odeiv_system           sys2 = {pRhs2, NULL, 1, this};
-  const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 1);
-  gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (1);
-  double*                    y    = new double [1]; 
-  double                     r, h;
+  gsl_odeiv2_system           sys2 = {pRhs2, NULL, 1, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys2, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [1]; 
+  double                      r;
 
   // Calculate r[Psi]
   for (int j = 1; j < NPSI; j++)
     {
       r    = P[j];
-      h    = H0;
       y[0] = 0.;
       
       while (r < P[0])
 	{
-	  int status = gsl_odeiv_evolve_apply (e, c, sss, &sys2, &r, P[0], &h, y);
+	  int status = gsl_odeiv2_driver_apply (d, &r, P[0], y);
 	  
 	  if (status != GSL_SUCCESS)
 	    {
@@ -151,9 +143,7 @@ void Flux::CalcrP ()
       rP[j] = sqrt (y[0]);
     }
 
-  gsl_odeiv_evolve_free  (e);
-  gsl_odeiv_control_free (c);
-  gsl_odeiv_step_free    (sss);
+  gsl_odeiv2_driver_free (d);
   delete[]                y;
 }
 
@@ -162,18 +152,15 @@ void Flux::CalcrP ()
 // ##############################
 void Flux::CalcGGJ ()
 {
-  gsl_odeiv_system           sys6 = {pRhs6, NULL, 8, this};
-  const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 8);
-  gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (8);
-  double*                    y    = new double [8]; 
-  double                     r, h;
+  gsl_odeiv2_system           sys6 = {pRhs6, NULL, 8, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys6, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [8]; 
+  double                      r;
   
   for (int j = 0; j < nres; j++)
     {
       r    = 0.;
-      h    = H0;
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
       y[2] = 0.;
@@ -186,7 +173,7 @@ void Flux::CalcGGJ ()
   
       while (r < 2.*M_PI)
 	{
-	  int status = gsl_odeiv_evolve_apply (e, c, sss, &sys6, &r, 2.*M_PI, &h, y);
+	  int status =  gsl_odeiv2_driver_apply (d, &r, 2.*M_PI, y); 
 
 	  if (status != GSL_SUCCESS)
 	    {
@@ -203,9 +190,7 @@ void Flux::CalcGGJ ()
       J6[j] = y[7];
   }
 
-  gsl_odeiv_evolve_free  (e);
-  gsl_odeiv_control_free (c);
-  gsl_odeiv_step_free    (sss);
+  gsl_odeiv2_driver_free (d);
   delete[]                y;
 }
 
@@ -214,18 +199,15 @@ void Flux::CalcGGJ ()
 // #########################################
 void Flux::CalcStraightAngle ()
 {
-  gsl_odeiv_system           sys3 = {pRhs3, NULL, 2, this};
-  const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 2);
-  gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (2);
-  double*                    y    = new double [2]; 
-  double                     r, h, psir, psiz, rt, zt;
+  gsl_odeiv2_system           sys3 = {pRhs3, NULL, 2, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys3, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [2]; 
+  double                      r, psir, psiz, rt, zt;
   
   for (int j = 0; j < nres; j++)
     {
       r    = 0.;
-      h    = H0;
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
       qgp  = fabs (Psic) * qres[j] /gres[j];
@@ -237,7 +219,7 @@ void Flux::CalcStraightAngle ()
 	{
 	  while (r < th[k])
 	    {
-	      int status = gsl_odeiv_evolve_apply (e, c, sss, &sys3, &r, th[k], &h, y);
+	      int status = gsl_odeiv2_driver_apply (d, &r, th[k], y); 
 	      
 	      if (status != GSL_SUCCESS)
 		{
@@ -250,9 +232,7 @@ void Flux::CalcStraightAngle ()
 	}
      }
 
-  gsl_odeiv_evolve_free  (e);
-  gsl_odeiv_control_free (c);
-  gsl_odeiv_step_free    (sss);
+  gsl_odeiv2_driver_free (d);
   delete[]                y;
 }
 
@@ -261,18 +241,15 @@ void Flux::CalcStraightAngle ()
 // #################################################
 void Flux::CalcGamma ()
 {
-  gsl_odeiv_system           sys4 = {pRhs4, NULL, 3, this};
-  const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 3);
-  gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (3);
-  double*                    y    = new double [3]; 
-  double                     r, h;
+  gsl_odeiv2_system           sys4 = {pRhs4, NULL, 3, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys4, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [3]; 
+  double                      r;
   
   for (int j = 0; j < nres; j++)
     {
       r    = 0.;
-      h    = H0;
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
       y[2] = 0.;
@@ -280,7 +257,7 @@ void Flux::CalcGamma ()
 
       while (r < 2.*M_PI)
 	{
-	  int status = gsl_odeiv_evolve_apply (e, c, sss, &sys4, &r, 2.*M_PI, &h, y);
+	  int status = gsl_odeiv2_driver_apply (d, &r, 2.*M_PI, y); 
 
 	  if (status != GSL_SUCCESS)
 	    {
@@ -292,9 +269,7 @@ void Flux::CalcGamma ()
       gmres[j] = 1./y[2];
     }
 
-  gsl_odeiv_evolve_free  (e);
-  gsl_odeiv_control_free (c);
-  gsl_odeiv_step_free    (sss);
+  gsl_odeiv2_driver_free (d);
   delete[]                y;
 }
 
@@ -303,18 +278,15 @@ void Flux::CalcGamma ()
 // #############################################
 void Flux::CalcNeoclassicalAngle ()
 {
-  gsl_odeiv_system           sys5 = {pRhs5, NULL, 2, this};
-  const gsl_odeiv_step_type* T    = gsl_odeiv_step_rk8pd;
-  gsl_odeiv_step*            sss  = gsl_odeiv_step_alloc (T, 2);
-  gsl_odeiv_control*         c    = gsl_odeiv_control_y_new (ACC/2., ACC/2.);
-  gsl_odeiv_evolve*          e    = gsl_odeiv_evolve_alloc (2);
-  double*                    y    = new double [2]; 
-  double                     r, h, psir, psiz, rt, zt;
+  gsl_odeiv2_system           sys5 = {pRhs5, NULL, 2, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys5, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [2]; 
+  double                      r, psir, psiz, rt, zt;
   
   for (int j = 0; j < nres; j++)
     {
       r    = 0.;
-      h    = H0;
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
       qgp  = gres[j];
@@ -327,7 +299,7 @@ void Flux::CalcNeoclassicalAngle ()
 	{
 	  while (r < Th[k])
 	    {
-	      int status = gsl_odeiv_evolve_apply (e, c, sss, &sys5, &r, Th[k], &h, y);
+	      int status =  gsl_odeiv2_driver_apply (d, &r, Th[k], y); 
 	      
 	      if (status != GSL_SUCCESS)
 		{
@@ -339,10 +311,8 @@ void Flux::CalcNeoclassicalAngle ()
 	  gsl_matrix_set (Znc, j, k, y[1]);
 	}
      }
-
-  gsl_odeiv_evolve_free  (e);
-  gsl_odeiv_control_free (c);
-  gsl_odeiv_step_free    (sss);
+  
+  gsl_odeiv2_driver_free (d);
   delete[]                y;
 }
 

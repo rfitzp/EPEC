@@ -97,6 +97,7 @@
 // 2.23 - Added charge exchange damping time into angular equations of motion
 // 2.24 - Added bootstrap/curvature terms into Rutherford equations
 // 2.25 - Added polarization terms into Rutherford equations
+// 2.26 - Allowed for EPEC RMP coil data
 
 // #######################################################################
 
@@ -104,7 +105,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 25
+#define VERSION_MINOR 26
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

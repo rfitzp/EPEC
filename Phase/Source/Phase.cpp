@@ -803,7 +803,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   printf ("Reading data from program GPEC:\n");
   printf ("...............................\n");
   
-  char    line[MAXULFILELINELENGTH]; char line1[MAXULFILELINELENGTH];
+  char    line[MAXULFILELINELENGTH];
+  char    line1[MAXULFILELINELENGTH];
+  char    line0[MAXULFILELINELENGTH];
   double  v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12;
   double* QIN = new double[nres];
   double* PSI = new double[nres];
@@ -826,8 +828,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
     {
       printf ("Middle coil:\n");
       file = OpenFiler ((char*) "Inputs/mFile");
-      
-      for (int i = 0; i < 5; i++)
+
+      fgets (line0, MAXULFILELINELENGTH, file);
+      for (int i = 0; i < 4; i++)
 	fgets (line, MAXULFILELINELENGTH, file);
       fgets (line1, MAXULFILELINELENGTH, file);
       for (int i = 0; i < 2; i++)
@@ -864,9 +867,17 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    DRE[i] = v9;
 	    DIM[i] = v10;
 	    WWW[i] = 2.*v11;
-	    
-	    DRE[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
-	    DIM[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+
+	    if (strstr (line0, "GPEC") != NULL)
+	      {
+		DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+		DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	      }
+	    else
+	      {
+		DRE[i] /= 2.*M_PI * qk(i);
+		DIM[i] /= 2.*M_PI * qk(i);
+	      }
 	    
 	    CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
 	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
@@ -879,9 +890,13 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiM, i));
 	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
-	    
-	    printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+
+	    if (strstr (line0, "GPEC") != NULL)
+	      printf ("GPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		      QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	    else
+	      printf ("EPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		      QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
 
@@ -906,8 +921,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
     {
       printf ("Upper coil:\n");
       file = OpenFiler ((char*) "Inputs/uFile");
-      
-      for (int i = 0; i < 5; i++)
+
+      fgets (line0, MAXULFILELINELENGTH, file);
+      for (int i = 0; i < 4; i++)
 	fgets (line, MAXULFILELINELENGTH, file);
       fgets (line1, MAXULFILELINELENGTH, file);
       for (int i = 0; i < 2; i++)
@@ -945,9 +961,17 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    DRE[i] = v9;
 	    DIM[i] = v10;
 	    WWW[i] = 2.*v11;
-	    
-	    DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
-	    DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+
+	    if (strstr (line0, "GPEC") != NULL)
+	      {
+		DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+		DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	      }
+	    else
+	      {
+		DRE[i] /= 2.*M_PI * qk(i);
+		DIM[i] /= 2.*M_PI * qk(i);
+	      }
 	    
 	    CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk (i)
 	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
@@ -961,9 +985,12 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 	    
-	    printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
-	    
+	    if (strstr (line0, "GPEC") != NULL)
+	      printf ("GPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		      QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	    else
+	      printf ("EPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		      QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
 
@@ -988,8 +1015,9 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
     {
       printf ("Lower coil:\n");
       file = OpenFiler ((char*) "Inputs/lFile");
-      
-      for (int i = 0; i < 5; i++)
+
+      fgets (line0, MAXULFILELINELENGTH, file);
+      for (int i = 0; i < 4; i++)
 	fgets (line, MAXULFILELINELENGTH, file);
       fgets (line1, MAXULFILELINELENGTH, file);
       for (int i = 0; i < 2; i++)
@@ -1026,9 +1054,17 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    DRE[i] = v9;
 	    DIM[i] = v10;
 	    WWW[i] = 2.*v11;
-	    
-	    DRE[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
-	    DIM[i] /= 2.*M_PI * qk (i) /SCALEFACTOR/SCALEFACTOR;
+
+	    if (strstr (line0, "GPEC") != NULL)
+	      {
+		DRE[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+		DIM[i] /= 2.*M_PI * qk(i) /SCALEFACTOR/SCALEFACTOR;
+	      }
+	    else
+	      {
+		DRE[i] /= 2.*M_PI * qk(i);
+		DIM[i] /= 2.*M_PI * qk(i);
+	      }
 	    
 	    CRE[i] =   DIM[i] * (rk (i) * a (i)) * (rk (i) * a (i)) * gk(i)
 	      /double (mk (i)) /(akk (i) + rk (i) * rk (i) * a (i) * a (i) /qk (i) /qk (i)) /EEh (i, i);
@@ -1041,9 +1077,13 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    double Psi   = gsl_complex_abs (gsl_vector_complex_get (ChiL, i));
 	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
-	    
-	    printf ("q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
-		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+
+	    if (strstr (line0, "GPEC") != NULL)
+	      printf ("GPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		      QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
+	    else
+	      printf ("EPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+		      QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
 

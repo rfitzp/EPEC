@@ -37,6 +37,7 @@
 - /gFiles: Contains equilibrium gFiles for interpolation
   - Index: List of gFile names and experimental times
   - gFiles: Actual gFiles
+  - rFile: rFile
 	  
 ### /Outputs
 
@@ -77,3 +78,9 @@
     read (100, '(5e16.9)') (RLIM (i), ZLIM (i), i = 1, NLIM)
   
   *Anything after this is ignored*
+  
+## rFile Format
+
+    RPLUS RMINUS ZPLUS ZMINUS
+	
+  *First line is lFile, second is uFile, third is mFile*	

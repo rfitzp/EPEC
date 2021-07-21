@@ -69,6 +69,8 @@
 // 1.14 - Added q_hat calculation
 // 1.15 - Added C1 and C2 calculation
 // 1.16 - Added E, F, H calculation
+// 1.17 - Upgraded to gsl_odeiv2. Better Cnc calculation.
+// 1.18 - Added RMP coil calculation
 
 // #####################################################################################
 
@@ -76,8 +78,7 @@
 #define FLUX
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 16
-
+#define VERSION_MINOR 18
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -89,7 +90,6 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_odeiv2.h>
-#include <gsl/gsl_odeiv.h>
 #include <gsl/gsl_sf_gamma.h>
 
 #define MAXFILENAMELENGTH 500
@@ -107,7 +107,7 @@ extern "C" int pRhs6 (double, const double[], double[], void*);
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
 			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
-			      double* PSIPED, int* NSMOOTH, double* PSIRAT);
+			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NCOILS);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -146,6 +146,8 @@ class Flux
   double PSILIM;  // Maximum value of PsiN for safety-factor calculation
   double PSIRAT;  // All rational surfaces lying in region PsiN > PSIRAT are ignored
   double PSIPED;  // PsiN value at top of pedestal
+
+  int    NCOILS;  // Number of RMP coils
 
   double TIME;    // Experimental time (ms)
   
@@ -224,6 +226,12 @@ class Flux
   double* A1;          // QP/QPN/fabs(Psic) array
   double* A2;          // QPPN/QPN/3 array
 
+  // RMP coil data
+  double* RPLUS;       // R coordinates of positve legs of RMP coils
+  double* RMINUS;      // R coordinates of negative legs of RMP coils
+  double* ZPLUS;       // Z coordinates of positve legs of RMP coils
+  double* ZMINUS;      // Z coordinates of negative legs of RMP coils
+
   // Rational surface data
   int     nres;        // Number of rational surfaces
   int*    mres;        // Poloidal mode numbers at rational surfaces
@@ -285,6 +293,10 @@ class Flux
   gsl_matrix_complex* EE;  // E-matrix
   gsl_vector_complex* EI;  // Response vector for inboard toroidal Mirnov array
   gsl_vector_complex* EO;  // Response vector for outboard toroidal Mirnov array
+  gsl_matrix_complex* GG;  // RMP coil data
+  gsl_matrix_complex* HH;  // RMP coil data
+  gsl_matrix_complex* DD;  // RMP coil data
+  gsl_matrix*         WW;  // Vacuum island widths
 
   // Weights for Simpson's rule
   double          hh;
@@ -407,6 +419,8 @@ private:
   double GreenInboardSin  (int i, int j);
   double GreenOutboardCos (int i, int j);
   double GreenOutboardSin (int i, int j);
+  double GreenCoilCos     (int i, int j, int k);
+  double GreenCoilSin     (int i, int j, int k);
 
   // Calculate toroidal P function
   double ToroidalP (int m, int n, double z);

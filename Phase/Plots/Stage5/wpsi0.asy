@@ -8,7 +8,7 @@ A          = transpose (A);
      
 real[] m   = A[0];
 real[] tt  = A[4]*1.e3;
-real[] w   = A[9];
+real[] w   = A[7];
 real[] psi = A[6];
 
 file    inx = input ("../../../Flux/Outputs/Stage1/Psilim.txt").line();
@@ -1049,7 +1049,7 @@ if (t59.length > 0)
    }
 
 s = dotted + black + 1.5;
-ylimits (0.85, 1., Crop);
+ylimits (0.20, 1., Crop);
 yequals (psilim, s);
 yequals (psiped, s);
 

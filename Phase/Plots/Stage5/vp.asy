@@ -25,7 +25,7 @@ for (int i = 0; i < nres; i += 1)
 s = dotted + black + 1;
 yequals (0., s);
 
-ylimits(-200.,200.,Crop);
+//ylimits(-200.,200.,Crop);
 
 pen qq = fontsize(25.);
 defaultpen (qq);

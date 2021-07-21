@@ -44,7 +44,8 @@
 
 	nef.asy     ... plots n_e(PsiN)
 	nepf.asy    ... plots dn_e/dPsiN 
-	omegaf.asy  ... plots natural frequencies at rational surfaces versus PsiN
+	omegaf.asy  ... plots natural frequencies at rational surfaces versus PsiN at edge
+	omegaf0.asy ... plots natural frequencies at rational surface versus PsiN including core
 	wt.asy      ... plots components of toroidal impurity ion frequencies at rational surfaces versus PsiN
 
 	nt.asy      ... plots ne, Te, Ti, nI, nn versus PsiN

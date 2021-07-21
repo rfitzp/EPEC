@@ -60,13 +60,15 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   NNC     = 10;
   NSMOOTH = 100;
 
+  NCOILS  = 0;
+
   H0      = 1.e-6;
   ACC     = 1.e-14;
   ETA     = 1.e-8;
   DR      = 1.e-2;
  
   // Read namelist file Inputs/Flux.nml
-  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &DR, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT);
+  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &DR, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NCOILS);
 
   // Override namelist values with command line options
   if (_NTOR > 0)
@@ -157,9 +159,14 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
       printf ("FLUX::SetParameters: Error - DR must be positive\n");
       exit (1);
     }
-   if (PSIPED <= 0. || PSIPED > 1.)
+  if (PSIPED <= 0. || PSIPED > 1.)
     {
       printf ("FLUX::SetParameters: Error - PSIPED must lie betweeen 0 and 1\n");
+      exit (1);
+    }
+  if (NCOILS < 0 || NCOILS > 3)
+    {
+       printf ("FLUX::SetParameters: Error - NCOILS must lie betweeen 0 and 3\n");
       exit (1);
     }
 
@@ -168,47 +175,47 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    fprintf (Pfile, "%16.9e %16.9e %16.9e\n", PSILIM, PSIPED, PSIRAT);
    fclose (Pfile);
    
-  // Output calculation parameters
-  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
-  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
-  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
-  printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
-	  NPSI, NTHETA, NNC, PACK);
-  printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %3d  PSIRAT = %11.4e\n",
-	  NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
-  printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
-	  H0, ACC, ETA, DR);
-
-  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
-  fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
-  fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
-  fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-  fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
-  fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
-	   NPSI, NTHETA, NNC, PACK);
-  fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %11.4e  PSIRAT = %11.4e\n",
+   // Output calculation parameters
+   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
+   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
+   printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
+   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NCOILS = %3d\n",
+	   NPSI, NTHETA, NNC, PACK, NCOILS);
+   printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME   = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %3d  PSIRAT = %11.4e\n",
 	   NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
-  fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
-	  H0, ACC, ETA, DR);
-  fclose (namelist);
-  
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
-  fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
-  fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-  fprintf (monitor, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
-  fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
-	   NPSI, NTHETA, NNC, PACK);
-  fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %11.4e  PSIRAT = %11.4e\n",
-	   NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
-  fprintf (monitor, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
-	  H0, ACC, ETA, DR);
-  fclose (monitor);
-
-  FILE* file = OpenFilew ((char *) "Outputs/Stage2/NpsiNtor.txt");
-  fprintf (file, "%d %d\n", NPSI, NTOR);
-  fclose (file);
+   printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
+	   H0, ACC, ETA, DR);
+   
+   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
+   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
+   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
+   fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
+   fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NCOILS = %3d\n",
+	    NPSI, NTHETA, NNC, PACK, NCOILS);
+   fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME   = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %11.4e  PSIRAT = %11.4e\n",
+	    NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
+   fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
+	    H0, ACC, ETA, DR);
+   fclose (namelist);
+   
+   FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+   fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
+   fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
+   fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
+   fprintf (monitor, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
+   fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NCOILS = %3d\n",
+	    NPSI, NTHETA, NNC, PACK, NCOILS);
+   fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME   = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %11.4e  PSIRAT = %11.4e\n",
+	    NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
+   fprintf (monitor, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e      DR = %11.4e\n",
+	    H0, ACC, ETA, DR);
+   fclose (monitor);
+   
+   FILE* file = OpenFilew ((char *) "Outputs/Stage2/NpsiNtor.txt");
+   fprintf (file, "%d %d\n", NPSI, NTOR);
+   fclose (file);
 }
 
 // #####################################
