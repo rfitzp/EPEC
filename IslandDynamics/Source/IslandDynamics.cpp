@@ -118,9 +118,9 @@ void IslandDynamics (double IRMP)
   // ...............
   // Welcome message
   // ...............
-  printf ("\n#####################\n");
-  printf ("Program IslandDyamics\n");
-  printf ("#####################\n");
+  printf ("\n######################\n");
+  printf ("Program IslandDynamics\n");
+  printf ("######################\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
 
   // .............
