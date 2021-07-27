@@ -16,8 +16,8 @@ else ifeq ($(UNAME), Linux)
 	F_FLAGS    =
 	F_INCLUDE  =
 
-	C_COMPILER = clang++ -O3
+	C_COMPILER = g++ -O3
 	C_FLAGS    = -w $(VERSION_FLAGS)
-	C_INCLUDE  = -lgsl -lgslblas
-	C_LIBS	   = -lgfortran -lgsl -lgslcblas #-lblitz
+	C_INCLUDE  = -L/home/fitzpatrickr/include -lgsl -lgslblas
+	C_LIBS	   = -L/home/fitzpatrickr/lib -lgfortran -lgsl -lgslcblas -lblitz
 endif

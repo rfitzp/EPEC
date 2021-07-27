@@ -20,7 +20,7 @@
  	PSIRAT  = 0.995  ! Ignore rational surfaces for PsiN > PSIRAT
 	PSIPED  = 0.940	 ! PsiN value at top of pedestal
 
-	NCOILS  = 1      ! Number of RMP coils
+	NCOILS  = 0      ! Number of RMP coils
 
 	TIME    = 0.	 ! Experimental time (ms)
 &end

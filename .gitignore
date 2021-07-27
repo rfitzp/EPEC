@@ -5,6 +5,7 @@
 *.eps
 *.sty
 *.o
+*.mod
 *~
 *.sty
 *.gz
