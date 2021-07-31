@@ -83,6 +83,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <netcdf>
 #include <vector>
 #include <blitz/array.h>
 #include <gsl/gsl_complex.h>
@@ -95,6 +96,8 @@
 #define MAXFILENAMELENGTH 500
 
 using namespace blitz;
+using namespace netCDF;
+using namespace netCDF::exceptions;
 
 // Pointers to right-hand side function for adaptive integration
 extern "C" int pRhs1 (double, const double[], double[], void*);
@@ -106,8 +109,8 @@ extern "C" int pRhs6 (double, const double[], double[], void*);
 
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
-			      double* ACC, double* ETA, double* DR, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
-			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NCOILS);
+			      double* ACC, double* ETA, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
+			      double* PSIPED, int* NSMOOTH, double* PSIRAT);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -126,19 +129,6 @@ class Flux
  private:
   
   // Control parameters read from Inputs/Flux.nml
-  int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
-  int    NPSI;    // Number of points in PsiN grid
-  double PACK;    // Packing index for PsiN grid
-  int    NTHETA;  // Number of points in theta grid
-  int    NNC;     // Number of neoclassical harmonics
-
-  double H0;      // Initial integration step-length for equilibirum flux surface integrals 
-  double ACC;     // Integration accuracy for equilibrium flux surface integrals
-  double ETA;     // Regularization factor for Green's function
-  double DR;      // Discritization parameter for simulated Mirnov data
-
-  int    INTG;    // If != 0 then use interpolated gFile
-
   int    NTOR;    // Toroidal mode number
   int    MMIN;    // Minimum poloidal mode number
   int    MMAX;    // Maximum poloidal mode number
@@ -147,13 +137,18 @@ class Flux
   double PSIRAT;  // All rational surfaces lying in region PsiN > PSIRAT are ignored
   double PSIPED;  // PsiN value at top of pedestal
 
-  int    NCOILS;  // Number of RMP coils
-
+  int    INTG;    // If != 0 then use interpolated gFile
   double TIME;    // Experimental time (ms)
-  
-  // Toroidal Mirnov coil array locations
-  double RIN;     // Limiter R coordinate at inboard miplane
-  double ROUT;    // Limiter R coordinate at outboard miplane
+
+  int    NPSI;    // Number of points in PsiN grid
+  double PACK;    // Packing index for PsiN grid
+  int    NTHETA;  // Number of points in theta grid
+  int    NNC;     // Number of neoclassical harmonics
+  int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
+
+  double H0;      // Initial integration step-length for equilibirum flux surface integrals 
+  double ACC;     // Integration accuracy for equilibrium flux surface integrals
+  double ETA;     // Regularization factor for Green's function
   
   // Stage 1 parameters
   double          R0;       // Scale major radius (m)
@@ -226,12 +221,6 @@ class Flux
   double* A1;          // QP/QPN/fabs(Psic) array
   double* A2;          // QPPN/QPN/3 array
 
-  // RMP coil data
-  double* RPLUS;       // R coordinates of positve legs of RMP coils
-  double* RMINUS;      // R coordinates of negative legs of RMP coils
-  double* ZPLUS;       // Z coordinates of positve legs of RMP coils
-  double* ZMINUS;      // Z coordinates of negative legs of RMP coils
-
   // Rational surface data
   int     nres;        // Number of rational surfaces
   int*    mres;        // Poloidal mode numbers at rational surfaces
@@ -291,12 +280,6 @@ class Flux
   // Perturbed equilibrium data
   gsl_matrix_complex* FF;  // F-matrix
   gsl_matrix_complex* EE;  // E-matrix
-  gsl_vector_complex* EI;  // Response vector for inboard toroidal Mirnov array
-  gsl_vector_complex* EO;  // Response vector for outboard toroidal Mirnov array
-  gsl_matrix_complex* GG;  // RMP coil data
-  gsl_matrix_complex* HH;  // RMP coil data
-  gsl_matrix_complex* DD;  // RMP coil data
-  gsl_matrix*         WW;  // Vacuum island widths
 
   // Weights for Simpson's rule
   double          hh;
@@ -415,12 +398,6 @@ private:
   // Calculate Green's functions
   double GreenPlasmaCos   (int i, int j, int ip, int jp);
   double GreenPlasmaSin   (int i, int j, int ip, int jp);
-  double GreenInboardCos  (int i, int j);
-  double GreenInboardSin  (int i, int j);
-  double GreenOutboardCos (int i, int j);
-  double GreenOutboardSin (int i, int j);
-  double GreenCoilCos     (int i, int j, int k);
-  double GreenCoilSin     (int i, int j, int k);
 
   // Calculate toroidal P function
   double ToroidalP (int m, int n, double z);

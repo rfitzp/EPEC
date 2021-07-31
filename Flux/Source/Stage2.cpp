@@ -65,6 +65,10 @@ void Flux::Stage2 ()
   // ............................
   Stage2CalcMatrices ();
 
+  // ..................
+  // Output NETCDF file
+  // ..................
+
   // ............
   // Output fFile
   // ............
@@ -85,10 +89,6 @@ void Flux::Stage2 ()
     for (int j = 0; j < nres; j++)
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
 	       GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
-  for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n", mres[i],
-	     GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
-	     GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
   fclose (file);
 
   if (INTG > 0)
@@ -112,10 +112,6 @@ void Flux::Stage2 ()
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
 		   GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
-      for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n", i,
-		 GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
-		 GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
       fclose (file);
 
       sprintf (filename, "f.%d", int (TIME));
@@ -169,17 +165,9 @@ void Flux::Stage2 ()
   delete[] J1; delete[] J2;  delete[] J3; delete[] J4; delete[] J5;
   delete[] J6; delete[] E;   delete[] F;  delete[] H;
 
-  if (NCOILS > 0)
-    {
-      delete[] RPLUS, delete[] RMINUS, delete[] ZPLUS, delete[] ZMINUS;
-      gsl_matrix_complex_free (GG); gsl_matrix_complex_free (HH); gsl_matrix_complex_free (DD);
-      gsl_matrix_free (WW);
-    }
-
   gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
   
   gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
-  gsl_vector_complex_free (EI); gsl_vector_complex_free (EO);
 }
 
 // #############################################
@@ -322,31 +310,7 @@ void Flux::Stage2ReadData ()
 	exit (1);
       }
   fclose (file);
-
-  // .................
-  // Find RIN and ROUT
-  // .................
-  for (int i = 0; i < NLPTS-1; i++)
-    {
-      if ((ZLPTS[i] - Zaxis) * (ZLPTS[i+1] - Zaxis) < 0.)
-	{
-	  if (RLPTS[i] < Raxis)
-	    RIN  = (RLPTS[i] * (ZLPTS[i+1] - Zaxis) + RLPTS[i+1] * (Zaxis - ZLPTS[i])) /(ZLPTS[i+1] - ZLPTS[i]);
-	  else if (RLPTS[i] > Raxis)
-	    ROUT = (RLPTS[i] * (ZLPTS[i+1] - Zaxis) + RLPTS[i+1] * (Zaxis - ZLPTS[i])) /(ZLPTS[i+1] - ZLPTS[i]);
-	}
-    }
-  if ((ZLPTS[NLPTS-1] - Zaxis) * (ZLPTS[0] - Zaxis) < 0.)
-    {
-      if (RLPTS[NLPTS-1] < Raxis)
-	RIN  = (RLPTS[NLPTS-1] * (ZLPTS[0] - Zaxis) + RLPTS[0] * (Zaxis - ZLPTS[NLPTS-1])) /(ZLPTS[0] - ZLPTS[NLPTS-1]);
-      else if (RLPTS[NLPTS-1] > Raxis)
-	ROUT = (RLPTS[NLPTS-1] * (ZLPTS[0] - Zaxis) + RLPTS[0] * (Zaxis - ZLPTS[NLPTS-1])) /(ZLPTS[0] - ZLPTS[NLPTS-1]);
-    }
-  RIN  *= R0;
-  ROUT *= R0;
   printf ("R0      = %11.4e  B0          = %11.4e\n", R0,  B0);
-  printf ("RIN     = %11.4e  ROUT        = %11.4e\n", RIN, ROUT);
 
   // ........
   // Read Psi
@@ -454,10 +418,11 @@ void Flux::Stage2ReadData ()
   GGp  = new double[NRPTS]; // g dg/dpsi
   Prp  = new double[NRPTS]; // dp/dpsi
   Q    = new double[NRPTS]; // q
+  double dum;
 
   file = OpenFiler ((char*) "Outputs/Stage1/Profiles.txt");
   for (int i = 0; i < NRPTS; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf", &PSIN[i], &G[i], &Pr[i], &GGp[i], &Prp[i], &Q[i]) != 6)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf", &PSIN[i], &G[i], &Pr[i], &GGp[i], &Prp[i], &Q[i], &dum) != 7)
       {
 	printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/Profiles.txt\n");
 	exit (1);
@@ -507,31 +472,6 @@ void Flux::Stage2ReadData ()
     }
   Rbound1 = (RPTS[ia1+1]*PSIARRAY (ia1, jc) - RPTS[ia1]*PSIARRAY (ia1+1, jc))
     /(PSIARRAY (ia1, jc) - PSIARRAY (ia1+1, jc));
-
-  // ..................
-  // Read RMP coil data
-  // ..................
-  if (NCOILS > 0)
-    {
-      RPLUS  = new double[NCOILS];
-      RMINUS = new double[NCOILS];
-      ZPLUS  = new double[NCOILS];
-      ZMINUS = new double[NCOILS];
-
-      printf ("Reading data from rFile:\n");
-      file = OpenFiler ((char*) "Inputs/rFile");
-      for (int i = 0; i < NCOILS; i++)
-	if (fscanf (file, "%lf %lf %lf %lf", &RPLUS[i], &RMINUS[i], &ZPLUS[i], &ZMINUS[i]) != 4)
-	  {
-	    printf ("FLUX::Stage2ReadData: Error reading Inputs/rFile\n");
-	    exit (1);
-	  }
-      fclose (file);
-
-      for (int i = 0; i < NCOILS; i++)
-	printf ("COIL = %3d  RPLUS(m) = %11.4e  RMINUS(m) = %11.4e  ZPLUS(m) = %11.4e  ZMINUS(m) = %11.4e\n",
-		i+1, RPLUS[i], RMINUS[i], ZPLUS[i], ZMINUS[i]);
-    }
 }
 
 // ######################################
@@ -818,25 +758,7 @@ void Flux::Stage2FindRational ()
   // .....................................
   printf ("Confirm rational surface q-values:\n");
   CheckQP ();
-
-  // ................................
-  // Find appropriate PSILIM for GPEC
-  // ................................
-  double dmlim = 0.2;
-  double qGPEC = qres[nres-1] + dmlim /double (NTOR);
-  double rGPEC = Interpolate (NPSI, QP, rP, qGPEC, 0);
-  for (int ii = 0; ii < 4; ii++)
-	{
-	  double qqq = Interpolate (NPSI, rP, QP, rGPEC, 0);
-	  double qqp = Interpolate (NPSI, rP, QP, rGPEC, 1);
-	  double qpp = Interpolate (NPSI, rP, QP, rGPEC, 2);
-	  rGPEC += (- qqp + sqrt (qqp*qqp - 2.*qpp * (qqq - qGPEC))) /qpp;
-	}
-  double PSIGPEC = Interpolate (NPSI, rP, PsiN, rGPEC, 0);
-  double qqGPEC  = Interpolate (NPSI, rP, QP,   rGPEC, 0);
-  printf ("Calculating PSILIM for GPEC:\n");
-  printf ("qGPEC = %11.4e  PSIGPEC = %11.4e  res = %11.4e\n", qGPEC, PSIGPEC, fabs (qqGPEC - qGPEC));
- }
+}
 
 // ##########################################################
 // Calculate Glasser-Greene-Johnson data at rational surfaces
@@ -1334,161 +1256,5 @@ void Flux::Stage2CalcMatrices ()
       fprintf (file, "\n");
     }
   fclose (file);
-
-  // -------------------
-  // Calculate E-vectors
-  // -------------------
-  EI = gsl_vector_complex_alloc (nres);
-  EO = gsl_vector_complex_alloc (nres);
- 
-  for (int i = 0; i < nres; i++)
-    {
-      double sumc = 0.;
-      for (int j = 0; j < NTHETA; j++)
-	sumc += Weight1D (j) * GreenInboardCos (i, j);
-      sumc *= (R0 /RIN) /2./M_PI;
-
-      double sums = 0.;
-      for (int j = 0; j < NTHETA; j++)
-	sums += Weight1D (j) * GreenInboardSin (i, j);
-      sums *= (R0 /RIN) /2./M_PI;
-
-      gsl_vector_complex_set (EI, i, gsl_complex_rect (sumc, sums));
-   
-      sumc = 0.;
-      for (int j = 0; j < NTHETA; j++)
-	sumc += Weight1D (j) * GreenOutboardCos (i, j);
-      sumc *= (R0 /ROUT) /2./M_PI;
-
-      sums = 0.;
-      for (int j = 0; j < NTHETA; j++)
-	sums += Weight1D (j) * GreenOutboardSin (i, j);
-      sums *= (R0 /ROUT) /2./M_PI;
-
-      gsl_vector_complex_set (EO, i, gsl_complex_rect (sumc, sums));
-    }
-
-  printf ("E-vectors:\n");
-  for (int i = 0; i < nres; i++)
-    printf ("mpol = %4d  rs/ra = %11.4e  EI = (%9.2e, %9.2e)  EO = (%9.2e, %9.2e)\n", mres[i], rres[i]/ra,
-	    GSL_REAL (gsl_vector_complex_get (EI, i)), GSL_IMAG (gsl_vector_complex_get (EI, i)),
-	    GSL_REAL (gsl_vector_complex_get (EO, i)), GSL_IMAG (gsl_vector_complex_get (EO, i)));
-
-  // -----------------------
-  // Calculate RMP coil data
-  // -----------------------
-  if (NCOILS > 0)
-    {
-      GG = gsl_matrix_complex_alloc (nres, NCOILS);
-      HH = gsl_matrix_complex_alloc (nres, NCOILS);
-      DD = gsl_matrix_complex_alloc (nres, NCOILS);
-      WW = gsl_matrix_alloc (nres, NCOILS);
-
-      for (int k = 0; k < NCOILS; k++)
-	for (int i = 0; i < nres; i++)
-	  {
-	    double sumc = 0.;
-	    for (int j = 0; j < NTHETA; j++)
-	      sumc += Weight1D (j) * GreenCoilCos (i, j, k);
-	    sumc *= 1./2./M_PI /2./M_PI;
-	    
-	    double sums = 0.;
-	    for (int j = 0; j < NTHETA; j++)
-		sums += Weight1D (j) * GreenCoilSin (i, j, k);
-	    sums *= 1./2./M_PI /2./M_PI;
-	    
-	    gsl_matrix_complex_set (GG, i, k, gsl_complex_rect (sumc, sums));
-	  }
-      
-      for (int k = 0; k < NCOILS; k++)
-	for (int i = 0; i < nres; i++)
-	  {
-	    gsl_complex sum = gsl_complex_rect (0., 0.);
-	    for (int j = 0; j < nres; j++)
-	      sum = gsl_complex_add (sum, gsl_complex_mul (gsl_matrix_complex_get (EE, i, j), gsl_matrix_complex_get (GG, j, k)));
-	    double fac = 4.*M_PI*1.e-7 * 1.e3 /R0/B0;
-	    sum = gsl_complex_mul_real (sum, fac);
-
-	    gsl_matrix_complex_set (HH, i, k, sum);
-
-	    gsl_matrix_set (WW, i, k, 2. * sqrt (A1[i] * gsl_complex_abs (gsl_complex_div (gsl_matrix_complex_get (HH, i, k), gsl_matrix_complex_get (EE, i, i)))));
-	  }
-
-      for (int k = 0; k < NCOILS; k++)
-	for (int i = 0; i < nres; i++)
-	  {
-	    double fac = rres[i]*rres[i] * gres[i] /double(mres[i]) /(ajj[i] + rres[i]*rres[i]/qres[i]/qres[i]);
-
-	    gsl_complex Delta = gsl_complex_mul_real (gsl_matrix_complex_get (HH, i, k), 1./fac);
-	    Delta = gsl_complex_mul (Delta, gsl_complex_rect (0., 1.));
-
-	    gsl_matrix_complex_set (DD, i, k, Delta);
-	  }
-
-      printf ("Deltas and vacuum island widths:\n");
-      if (NCOILS == 1)
-	for (int i = 0; i < nres; i++)
-	  printf ("mpol = %4d  Delta = (%11.4e, %11.4e)  W = %11.4e\n",
-		  mres[i],
-		  GSL_REAL (gsl_matrix_complex_get (DD, i, 0)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 0)), gsl_matrix_get (WW, i, 0));
-      else if (NCOILS == 2)
-	for (int i = 0; i < nres; i++)
-	  printf ("mpol = %4d  Delta = (%11.4e, %11.4e)  W = %11.4e  Delta = (%11.4e, %11.4e)  W = %11.4e\n",
-		  mres[i],
-		  GSL_REAL (gsl_matrix_complex_get (DD, i, 0)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 0)),  gsl_matrix_get (WW, i, 0),
-		  GSL_REAL (gsl_matrix_complex_get (DD, i, 1)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 1)),  gsl_matrix_get (WW, i, 1));
-      else
-	for (int i = 0; i < nres; i++)
-	  printf ("mpol = %4d  Delta = (%11.4e, %11.4e)  W = %11.4e  Delta = (%11.4e, %11.4e)  W = %11.4e  Delta = (%11.4e, %11.4e)  W = %11.4e\n",
-		  mres[i],
-		  GSL_REAL (gsl_matrix_complex_get (DD, i, 0)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 0)),  gsl_matrix_get (WW, i, 0),
-		  GSL_REAL (gsl_matrix_complex_get (DD, i, 1)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 1)),  gsl_matrix_get (WW, i, 1),
-		  GSL_REAL (gsl_matrix_complex_get (DD, i, 2)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 2)),  gsl_matrix_get (WW, i, 2));
-
-      // Write lFile
-      double zero = 0.;
-      file = OpenFilew ("Outputs/lFile");
-      fprintf (file, " EPEC_SINGFLD:\n");
-      for (int i = 0; i < 4; i++)
-	fprintf (file, " \n");
-      fprintf (file, " msing = %4d\n", nres);
-      for (int i = 0; i < 2; i++)
-	fprintf (file, " \n");
-      for (int i = 0; i < nres; i++)
-	fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 qres[i], PsiNres[i], zero, zero, zero, zero, zero, zero, GSL_REAL (gsl_matrix_complex_get (DD, i, 0)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 0)), gsl_matrix_get (WW, i, 0), zero);
-      fclose (file);
-
-      if (NCOILS > 1)
-	{
-	  // Write uFile
-	  fprintf (file, " EPEC_SINGFLD:\n");
-	  file = OpenFilew ("Outputs/uFile");
-	  for (int i = 0; i < 4; i++)
-	    fprintf (file, " \n");
-	  fprintf (file, " msing = %4d\n", nres);
-	  for (int i = 0; i < 2; i++)
-	    fprintf (file, " \n");
-	  for (int i = 0; i < nres; i++)
-	    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		     qres[i], PsiNres[i], zero, zero, zero, zero, zero, zero, GSL_REAL (gsl_matrix_complex_get (DD, i, 1)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 1)), gsl_matrix_get (WW, i, 1), zero);
-	  fclose (file);
-	}
-
-      if (NCOILS > 2)
-	{
-	  // Write mFile
-	  file = OpenFilew ("Outputs/mFile");
-	  fprintf (file, " EPEC_SINGFLD:\n");
-	  for (int i = 0; i < 4; i++)
-	    fprintf (file, " \n");
-	  fprintf (file, " msing = %4d\n", nres);
-	  for (int i = 0; i < 2; i++)
-	    fprintf (file, " \n");
-	  for (int i = 0; i < nres; i++)
-	    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		     qres[i], PsiNres[i], zero, zero, zero, zero, zero, zero, GSL_REAL (gsl_matrix_complex_get (DD, i, 2)), GSL_IMAG (gsl_matrix_complex_get (DD, i, 2)),  gsl_matrix_get (WW, i, 2), zero);
-	  fclose (file);
-	}
-    }
 }
+

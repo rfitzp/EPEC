@@ -5,12 +5,12 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
 	F_COMPILER = gfortran
 	F_FLAGS    =
-	F_INCLUDE  =
+	F_INCLUDE  = -I/opt/local/include
 
 	C_COMPILER = clang++ -O3
 	C_FLAGS    = -w $(VERSION_FLAGS)
 	C_INCLUDE  = -I/opt/local/include
-	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas #-lblitz
+	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas -lnetcdf_c++4 -lnetcdff
 else ifeq ($(UNAME), Linux)
 	F_COMPILER = gfortran
 	F_FLAGS    =
