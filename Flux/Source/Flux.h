@@ -153,6 +153,12 @@ class Flux
   // Stage 1 parameters
   double          R0;       // Scale major radius (m)
   double          B0;       // Scale toroidal magnetic field strength (T)
+  double          RLEFT;    // Bounding box coordinate
+  double          ZLOW;     // Bounding box coordinate
+  double          RRIGHT;   // Bounding box coordinate
+  double          ZHIGH;    // Bounding box coordinate
+  double          RAXIS;    // Magnetic axis coordinate
+  double          ZAXIS;    // Magnetic axis coordinate
   int             NRPTS;    // Number of R points
   double*         RPTS;     // R array
   int             NZPTS;    // Number of Z points

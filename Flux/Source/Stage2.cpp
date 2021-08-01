@@ -69,6 +69,149 @@ void Flux::Stage2 ()
   // Output NETCDF file
   // ..................
 
+  try
+    {
+      // Open file
+      NcFile dataFile ("Outputs/Stage2.nc", NcFile::replace);
+
+      // Basic parameters
+      double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, RAXIS, ZAXIS, q95, PSILIM, PSIRAT};
+      NcDim para_d          = dataFile.addDim ("index", 11);
+      NcVar para            = dataFile.addVar ("Parameters", ncDouble, para_d);
+      para.putAtt ("Contents", "R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT");
+      para.putVar (parameters);
+
+      // Plasma boundary
+      NcDim bound_d = dataFile.addDim ("i_bound", NBPTS);
+      NcVar bound_r = dataFile.addVar ("RBPTS", ncDouble, bound_d);
+      NcVar bound_z = dataFile.addVar ("ZBPTS", ncDouble, bound_d);
+      bound_r.putVar (RBPTS);
+      bound_z.putVar (ZBPTS);
+
+      // R
+      NcDim R_d = dataFile.addDim ("i", NRPTS);
+      NcVar R   = dataFile.addVar ("R", ncDouble, R_d);
+      R.putVar (RPTS);
+
+      // Z
+      NcDim Z_d = dataFile.addDim ("j", NZPTS);
+      NcVar Z   = dataFile.addVar ("Z", ncDouble, Z_d);
+      Z.putVar (ZPTS);
+ 
+      // Psi
+      double* DATA = new double[NRPTS*NZPTS];
+      for (int i = 0; i < NRPTS; i++)
+	for (int j = 0; j < NZPTS; j++)
+	  DATA[i + j*NRPTS] = PSIARRAY (i, j);
+      
+      vector<NcDim> psi_d;
+      psi_d.push_back (R_d);
+      psi_d.push_back (Z_d);
+      NcVar psi = dataFile.addVar ("PSI", ncDouble, psi_d);
+      psi.putVar (DATA);
+      
+      // Psi_R
+      for (int i = 0; i < NRPTS; i++)
+	for (int j = 0; j < NZPTS; j++)
+	  DATA[i + j*NRPTS] = GetPsiR (RPTS[i], ZPTS[j]);
+
+      NcVar psi_r = dataFile.addVar ("PSI_R", ncDouble, psi_d);
+      psi_r.putVar (DATA);
+
+      // Psi_Z
+      for (int i = 0; i < NRPTS; i++)
+	for (int j = 0; j < NZPTS; j++)
+	  DATA[i + j*NRPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
+
+      NcVar psi_z = dataFile.addVar ("PSI_Z", ncDouble, psi_d);
+      psi_z.putVar (DATA);
+
+      // q
+      NcDim Q_d = dataFile.addDim ("PsiN", NPSI);
+      NcVar Q   = dataFile.addVar ("q", ncDouble, Q_d);
+      Q.putVar (QP);
+
+      // q_psi
+      NcVar Qp  = dataFile.addVar ("q_psi", ncDouble, Q_d);
+      Qp.putVar (QPN);
+
+      // g
+      NcVar G = dataFile.addVar ("g", ncDouble, Q_d);
+      G.putVar (GP);
+
+      // P
+      NcVar P = dataFile.addVar ("P", ncDouble, Q_d);
+      P.putVar (PP);
+
+      // g_psi
+      NcVar Gp = dataFile.addVar ("g_psi", ncDouble, Q_d);
+      Gp.putVar (GPP);
+
+      // P_psi
+      NcVar Pp = dataFile.addVar ("P_psi", ncDouble, Q_d);
+      Pp.putVar (PPP);
+
+      // m_res
+      NcDim S_d = dataFile.addDim ("i_res", nres);
+      NcVar mr  = dataFile.addVar ("m_pol", ncInt, S_d);
+      mr.putVar (mres);
+
+      // PsiN_res
+      NcVar PNr = dataFile.addVar ("PsiN", ncDouble, S_d);
+      PNr.putVar (PsiNres);
+      
+      // q_res
+      NcVar qr = dataFile.addVar ("q_res", ncDouble, S_d);
+      qr.putVar (qres);
+   
+      // s_res
+      NcVar sr = dataFile.addVar ("s_res", ncDouble, S_d);
+      sr.putVar (sres);
+
+      // g_res
+      NcVar gr = dataFile.addVar ("g_res", ncDouble, S_d);
+      gr.putVar (gres);
+
+      // gamma_res
+      NcVar gmr = dataFile.addVar ("gamma_res", ncDouble, S_d);
+      gmr.putVar (gmres);
+
+      // f_c
+      NcVar fcr = dataFile.addVar ("fc_res", ncDouble, S_d);
+      fcr.putVar (fcres);
+
+      // a_jj
+      NcVar ajr = dataFile.addVar ("ajj_res", ncDouble, S_d);
+      ajr.putVar (ajj);
+
+      // Q
+      NcVar qhr = dataFile.addVar ("Q_res", ncDouble, S_d);
+      qhr.putVar (q_hat);
+
+      // A1
+      NcVar a1r = dataFile.addVar ("A1_res", ncDouble, S_d);
+      a1r.putVar (A1res);
+
+      // A2
+      NcVar a2r = dataFile.addVar ("A2_res", ncDouble, S_d);
+      a2r.putVar (A2res);
+
+      // D_R
+      double* D_R = new double[nres];
+      for (int i = 0; i < nres; i++)
+	D_R[i] = E[i] + F[i] + H[i]*H[i];
+
+      NcVar dr = dataFile.addVar ("DR_res", ncDouble, S_d);
+      dr.putVar (D_R);
+      
+      delete[] DATA; delete[] D_R;
+    }
+  catch (NcException& e)
+    {
+      printf ("FLUX::Stage2: Error writing Outputs/Stage2.nc: Exception = %s\n", e.what ());
+      exit (1);
+    }
+
   // ............
   // Output fFile
   // ............
@@ -103,7 +246,7 @@ void Flux::Stage2 ()
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
       for (int i = 0; i < nres; i++)
 	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]);
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
       for (int i = 0; i < nres; i++)
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
@@ -228,6 +371,28 @@ void Flux::Stage2ReadData ()
   if (fscanf (file, "%lf %lf", &R0, &B0) != 2)
     {
       printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/R0B0.txt\n");
+      exit (1);
+    }
+  fclose (file);
+
+  // ......................
+  // Read bounding box data
+  // ......................
+  file = OpenFiler ((char*) "Outputs/Stage1/Box.txt");
+  if (fscanf (file, "%lf %lf %lf %lf", &RLEFT, &ZLOW, &RRIGHT, &ZHIGH) != 4)
+    {
+      printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/Box.txt\n");
+      exit (1);
+    }
+  fclose (file);
+
+  // .......................
+  // Read magnetic axis data
+  // .......................
+  file = OpenFiler ((char*) "Outputs/Stage1/Axis.txt");
+  if (fscanf (file, "%lf %lf %lf %lf", &RAXIS, &ZAXIS) != 2)
+    {
+      printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/Axis.txt\n");
       exit (1);
     }
   fclose (file);

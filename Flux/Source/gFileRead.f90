@@ -36,7 +36,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   double precision, dimension (:),    allocatable :: R,    Z,     RBOUND,  ZBOUND, RLIM, ZLIM  
   double precision, dimension (:, :), allocatable :: PSI,  PSII 
 
-  character (len = *), parameter :: file = "Outputs/Stage1/Stage1.nc"
+  character (len = *), parameter :: file = "Outputs/Stage1.nc"
 
   integer          :: err = 0, file_id
   integer          :: para_d_id, para_id, NPARA = 8, bound_d_id, rbound_id, zbound_id
