@@ -77,9 +77,6 @@
 #ifndef FLUX
 #define FLUX
 
-// Comment out if netcdf_cpp4 library not installed
-//#define NETCDF_CPP
-
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 1

@@ -14,10 +14,10 @@ ifeq ($(UNAME), Darwin)
 else ifeq ($(UNAME), Linux)
 	F_COMPILER = gfortran
 	F_FLAGS    =
-	F_INCLUDE  =
+	F_INCLUDE  = -I/fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/include
 
 	C_COMPILER = g++ -O3
 	C_FLAGS    = -w $(VERSION_FLAGS)
-	C_INCLUDE  = -L/home/fitzpatrickr/include -lgsl -lgslblas
-	C_LIBS	   = -L/home/fitzpatrickr/lib -lgfortran -lgsl -lgslcblas -lblitz -lnetcdf -lnetcdf_c++4 -lnetcdff 
+	C_INCLUDE  = -I/fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/include -I/home/fitzpatrickr/include -lgsl -lgslblas
+	C_LIBS	   = -L/fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/lib -L/home/fitzpatrickr/lib -lgfortran -lgsl -lgslcblas -lblitz -lnetcdf -lnetcdff 
 endif
