@@ -77,13 +77,19 @@
 #ifndef FLUX
 #define FLUX
 
+// Comment out if netcdf_cpp4 library not installed
+//#define NETCDF_CPP
+
+#define MAXFILENAMELENGTH 500
+
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 18
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
-#include <netcdf>
 #include <vector>
 #include <blitz/array.h>
 #include <gsl/gsl_complex.h>
@@ -93,11 +99,15 @@
 #include <gsl/gsl_odeiv2.h>
 #include <gsl/gsl_sf_gamma.h>
 
-#define MAXFILENAMELENGTH 500
-
 using namespace blitz;
+
+#ifdef NETCDF_CPP
+#include <netcdf>
 using namespace netCDF;
 using namespace netCDF::exceptions;
+#else
+#include <netcdf.h>
+#endif
 
 // Pointers to right-hand side function for adaptive integration
 extern "C" int pRhs1 (double, const double[], double[], void*);
@@ -321,6 +331,14 @@ private:
   void Stage1 ();
   // Input Stage1 data and output Stage2 data
   void Stage2 ();
+
+#ifdef NETCDF_CPP
+  // Write Stage2 NETCDF file via NETCDF-c++
+  void WriteStage2Netcdfcpp ();
+#else
+  // Write Stage2 NETCDF file via NETCDF-c
+  void WriteStage2Netcdfc ();
+#endif
 
   // Set Simpson weights
   void Stage2SetSimpsonWeights ();

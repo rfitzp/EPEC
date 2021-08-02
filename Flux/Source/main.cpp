@@ -72,11 +72,21 @@ int main (int argc, char** argv)
   // Welcome message
   // ...............
   printf ("\n############\nProgram FLUX\n############\n");
-  printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
-
+  printf ("Version: %1d.%1d\n", VERSION_MAJOR, VERSION_MINOR);
+#ifdef NETCDF_CPP
+  printf ("Using Netcdf c++ and f90 libraries\n\n");
+#else
+  printf ("Using Netcdf c and f90 libraries\n\n");
+#endif
+  
   FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
   fprintf (monitor, "\n############\nProgram FLUX\n############\n");
-  fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+  fprintf (monitor, "Version: %1d.%1d\n", VERSION_MAJOR, VERSION_MINOR);
+#ifdef NETCDF_CPP
+  fprintf (monitor, "Using Netcdf c++ and f90 libraries\n\n");
+#else
+  fprintf (monitor, "Using Netcdf c and f90 libraries\n\n");
+#endif
   fclose (monitor);
 
   // ........................

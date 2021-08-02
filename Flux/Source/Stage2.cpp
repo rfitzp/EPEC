@@ -3,6 +3,8 @@
 // PROGRAM ORGANIATION:
 //
 // void Flux:: Stage2                      ()
+// void Flux:: WriteStage2Netcdfcpp        ()
+// void Flux:: WriteStage2Netcdfc          ()
 // void Flux:: Stage2SetSimpsonWeights     ()
 // void Flux:: Stage2ReadData              ()
 // void Flux:: Stage2CalcQ                 ()
@@ -68,7 +70,119 @@ void Flux::Stage2 ()
   // ..................
   // Output NETCDF file
   // ..................
+#ifdef NETCDF_CPP
+  WriteStage2Netcdfcpp ();
+#else
+  WriteStage2Netcdfc ();
+#endif
+ 
+  // ............
+  // Output fFile
+  // ............
+  FILE* file = OpenFilew ((char*) "Outputs/fFile");
+  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.6e\n",
+	   R0, B0, ra * R0, q95, r95 /ra, qrat, rrat /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
+  for (int j = 0; j < NPSI; j++)
+    fprintf (file, "%16.9e %16.9e %16.9e\n",
+	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
+  for (int i = 0; i < nres; i++)
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
+	       GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
+	       GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+  fclose (file);
 
+  if (INTG > 0)
+    {
+      char* filename = new char[MAXFILENAMELENGTH];
+      sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
+      file = OpenFilew (filename);
+      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
+	       R0, B0, ra * R0, q95, r95 /ra, qrat, rrat/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
+      for (int j = 0; j < NPSI; j++)
+	fprintf (file, "%16.9e %16.9e %16.9e\n",
+		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
+      for (int i = 0; i < nres; i++)
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < nres; j++)
+	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
+		   GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < nres; j++)
+	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
+		   GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+      fclose (file);
+
+      sprintf (filename, "f.%d", int (TIME));
+      file = OpenFilea ((char*) "Outputs/fFiles/Index");
+      fprintf (file, "%s %19.6e\n", filename, TIME);
+      fclose (file);
+
+      file = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+      fprintf (file, "Wrote fFile %s\n", filename);
+      fclose (file);
+      
+      delete[] filename;
+    }
+  
+  // ........
+  // Clean up
+  // ........
+  delete[] RPTS;  delete[] ZPTS;
+  delete[] RBPTS; delete[] ZBPTS;
+  delete[] RLPTS; delete[] ZLPTS;
+
+  delete[] PSIN; delete[] G;   delete[] Pr;
+  delete[] GGp;  delete[] Prp; delete[] Q;
+
+  delete[] s; delete[] Rs;
+
+  delete[] P;    delete[] RP;  delete[] rP; delete[] GP;
+  delete[] QGP;  delete[] QP;  delete[] PP; delete[] GPP;
+  delete[] PPP;  delete[] S;   delete[] QX; delete[] RP1;
+  delete[] Bt;   delete[] Bt1; delete[] Bp; delete[] Bp1;
+  delete[] J0;
+
+  delete[] PsiN; delete[] QPN; delete[] QPPN, delete[] A1, delete[] A2;
+  
+  delete[] mres;    delete[] qres;  delete[] rres;  delete[] sres;
+  delete[] gres;    delete[] Rres;  delete[] gmres; delete[] fcres;
+  delete[] PsiNres; delete[] Rres1; delete[] A1res; delete[] A2res;
+
+  delete[] th; 
+  gsl_matrix_free (Rst); gsl_matrix_free (Zst);
+
+  delete[] Th;
+  gsl_matrix_free (Rnc); gsl_matrix_free (Znc); 
+
+  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc); 
+ 
+  delete[] I1;    delete[] I2;    delete[] I3;    delete[] I7;    delete[] I8;  
+  delete[] Ktres; delete[] Kares; delete[] ajj;   delete[] dPsidr;
+  delete[] Khres; delete[] q_hat; delete[] C1res; delete[] C2res;
+
+  delete[] J1; delete[] J2;  delete[] J3; delete[] J4; delete[] J5;
+  delete[] J6; delete[] E;   delete[] F;  delete[] H;
+
+  gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
+  
+  gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
+}
+
+#ifdef NETCDF_CPP
+// ###################################################
+// Function to write Stage2 NETCDF file via NETCDF-c++
+// ###################################################
+void Flux::WriteStage2Netcdfcpp ()
+{
   try
     {
       // Open file
@@ -208,110 +322,188 @@ void Flux::Stage2 ()
     }
   catch (NcException& e)
     {
-      printf ("FLUX::Stage2: Error writing Outputs/Stage2.nc: Exception = %s\n", e.what ());
+      printf ("FLUX::WriteStage2Netcdfcpp: Error writing Outputs/Stage2.nc: Exception = %s\n", e.what ());
+      exit (1);
+    }
+}
+#else
+// #################################################
+// Function to write Stage2 NETCDF file via NETCDF-c
+// #################################################
+void Flux::WriteStage2Netcdfc ()
+{
+  int err = 0, dataFile, para_d, para, bound_d, bound_r, bound_z, R_d, R, Z_d, Z;
+  int psi_d[2], psi, psi_r, psi_z, Q_d, Q, Qp, G, P, Gp, Pp, S_d, mr, PNr;
+  int qr, sr, gr, gmr, fcr, ajr, qhr, a1r, a2r, dr;
+
+  // Open file
+  err = nc_create ("Outputs/Stage2.nc", NC_CLOBBER, &dataFile);
+  
+  if (err != 0)
+    {
+      printf ("FLUX::WriteStage2Netcdfc: Error opening Outputs/Stage2.nc\n");
+      exit (1);
+    }
+  
+  // Basic parameters
+  double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, RAXIS, ZAXIS, q95, PSILIM, PSIRAT};
+  err += nc_def_dim (dataFile, "index", 11, &para_d);
+  err += nc_def_var (dataFile, "Parameters", NC_DOUBLE, 1, &para_d, &para);
+  nc_put_att_text   (dataFile, para, "Contents", strlen ("R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT"),
+		     "R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT");
+  
+  // Plasma boundary
+  err += nc_def_dim (dataFile, "i_bound", NBPTS, &bound_d);
+  err += nc_def_var (dataFile, "RBPTS", NC_DOUBLE, 1, &bound_d, &bound_r);
+  err += nc_def_var (dataFile, "ZBPTS", NC_DOUBLE, 1, &bound_d, &bound_z);
+  
+  // R
+  err += nc_def_dim (dataFile, "i", NRPTS, &R_d);
+  err += nc_def_var (dataFile, "R", NC_DOUBLE, 1, &R_d, &R);
+ 
+  // Z
+  err += nc_def_dim (dataFile, "j", NZPTS, &Z_d);
+  err += nc_def_var (dataFile, "Z", NC_DOUBLE, 1, &Z_d, &Z);
+ 
+  // Psi
+  double* DATA = new double[NRPTS*NZPTS];
+  for (int i = 0; i < NRPTS; i++)
+    for (int j = 0; j < NZPTS; j++)
+      DATA[i + j*NRPTS] = PSIARRAY (i, j);
+  
+  psi_d[0] = R_d;
+  psi_d[1] = Z_d;
+  err += nc_def_var (dataFile, "PSI", NC_DOUBLE, 2, psi_d, &psi);
+  
+  // Psi_R
+  double* DATA1 = new double[NRPTS*NZPTS];
+  for (int i = 0; i < NRPTS; i++)
+    for (int j = 0; j < NZPTS; j++)
+      DATA1[i + j*NRPTS] = GetPsiR (RPTS[i], ZPTS[j]);
+  
+  err += nc_def_var (dataFile, "PSI_R", NC_DOUBLE, 2, psi_d, &psi_r);
+  
+  // Psi_Z
+  double* DATA2 = new double[NRPTS*NZPTS];
+  for (int i = 0; i < NRPTS; i++)
+    for (int j = 0; j < NZPTS; j++)
+      DATA2[i + j*NRPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
+
+  err += nc_def_var (dataFile, "PSI_Z", NC_DOUBLE, 2, psi_d, &psi_z);
+ 
+  // q
+  err += nc_def_dim (dataFile, "PsiN", NPSI, &Q_d);
+  err += nc_def_var (dataFile, "q", NC_DOUBLE, 1, &Q_d, &Q);
+
+  // q_psi
+  err += nc_def_var (dataFile, "q_psi", NC_DOUBLE, 1, &Q_d, &Qp);
+ 
+  // g
+  err += nc_def_var (dataFile, "g", NC_DOUBLE, 1, &Q_d, &G);
+
+  // P
+  err += nc_def_var (dataFile, "P", NC_DOUBLE, 1, &Q_d, &P);
+ 
+  // g_psi
+  err += nc_def_var (dataFile, "g_psi", NC_DOUBLE, 1, &Q_d, &Gp);
+  
+  // P_psi
+  err += nc_def_var (dataFile, "P_psi", NC_DOUBLE, 1, &Q_d, &Pp);
+  
+  // m_res
+  err += nc_def_dim (dataFile, "i_res", nres, &S_d);
+  err += nc_def_var (dataFile, "m_pol", NC_INT, 1, &S_d, &mr);
+
+  // PsiN_res
+  err += nc_def_var (dataFile, "PsiN", NC_DOUBLE, 1, &S_d, &PNr);
+  
+  // q_res
+  err += nc_def_var (dataFile, "q_res", NC_DOUBLE, 1, &S_d, &qr);
+  
+  // s_res
+  err += nc_def_var (dataFile, "s_res", NC_DOUBLE, 1, &S_d, &sr);
+
+  // g_res
+  err += nc_def_var (dataFile, "g_res", NC_DOUBLE, 1, &S_d, &gr);
+ 
+  // gamma_res
+  err += nc_def_var (dataFile, "gamma_res", NC_DOUBLE, 1, &S_d, &gmr);
+  
+  // f_c
+  err += nc_def_var (dataFile, "fc_res", NC_DOUBLE, 1, &S_d, &fcr);
+
+  // a_jj
+  err += nc_def_var (dataFile, "ajj_res", NC_DOUBLE, 1, &S_d, &ajr);
+ 
+  // Q
+  err += nc_def_var (dataFile, "Q_res", NC_DOUBLE, 1, &S_d, &qhr);
+ 
+  // A1
+  err +=  nc_def_var (dataFile, "A1_res", NC_DOUBLE, 1, &S_d, &a1r);
+
+  // A2
+  err += nc_def_var (dataFile, "A2_res", NC_DOUBLE, 1, &S_d, &a2r);
+
+  // D_R
+  double* D_R = new double[nres];
+  for (int i = 0; i < nres; i++)
+    D_R[i] = E[i] + F[i] + H[i]*H[i];
+  
+  err += nc_def_var (dataFile, "DR_res", NC_DOUBLE, 1, &S_d, &dr);
+
+  err += nc_enddef (dataFile);
+
+  if (err != 0)
+    {
+      printf ("FLUX::WriteStage2Netcdfc: Error defining varaibles in Outputs/Stage2.nc\n");
       exit (1);
     }
 
-  // ............
-  // Output fFile
-  // ............
-  FILE* file = OpenFilew ((char*) "Outputs/fFile");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.6e\n",
-	   R0, B0, ra * R0, q95, r95 /ra, qrat, rrat /ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
-  for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e\n",
-	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
-  for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
-  for (int i = 0; i < nres; i++)
-    for (int j = 0; j < nres; j++)
-      fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
-	       GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
-  for (int i = 0; i < nres; i++)
-    for (int j = 0; j < nres; j++)
-      fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
-	       GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
-  fclose (file);
+  // Write data
+  err += nc_put_var_double (dataFile, para,    parameters);
+  err += nc_put_var_double (dataFile, bound_r, RBPTS);
+  err += nc_put_var_double (dataFile, bound_z, ZBPTS);
+  err += nc_put_var_double (dataFile, R,       RPTS);
+  err += nc_put_var_double (dataFile, Z,       ZPTS);
+  err += nc_put_var_double (dataFile, psi,     DATA);
+  err += nc_put_var_double (dataFile, psi_r,   DATA1);
+  err += nc_put_var_double (dataFile, psi_z,   DATA2);
+  err += nc_put_var_double (dataFile, Q,       QP);
+  err += nc_put_var_double (dataFile, Qp,      QPN);
+  err += nc_put_var_double (dataFile, G,       GP);
+  err += nc_put_var_double (dataFile, Gp,      GPP);
+  err += nc_put_var_double (dataFile, P,       PP);
+  err += nc_put_var_double (dataFile, Pp,      PPP);
+  err += nc_put_var_int    (dataFile, mr,      mres);
+  err += nc_put_var_double (dataFile, PNr,     PsiNres);
+  err += nc_put_var_double (dataFile, qr,      qres);
+  err += nc_put_var_double (dataFile, sr,      sres);
+  err += nc_put_var_double (dataFile, gr,      gres);
+  err += nc_put_var_double (dataFile, gmr,     gmres);
+  err += nc_put_var_double (dataFile, fcr,     fcres);
+  err += nc_put_var_double (dataFile, ajr,     ajj);
+  err += nc_put_var_double (dataFile, qhr,     q_hat);
+  err += nc_put_var_double (dataFile, a1r,     A1res);
+  err += nc_put_var_double (dataFile, a2r,     A2res);
+  err += nc_put_var_double (dataFile, dr,      D_R);
 
-  if (INTG > 0)
+  if (err != 0)
     {
-      char* filename = new char[MAXFILENAMELENGTH];
-      sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
-      file = OpenFilew (filename);
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
-	       R0, B0, ra * R0, q95, r95 /ra, qrat, rrat/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
-      for (int j = 0; j < NPSI; j++)
-	fprintf (file, "%16.9e %16.9e %16.9e\n",
-		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
-      for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < nres; j++)
-	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
-		   GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < nres; j++)
-	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
-		   GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
-      fclose (file);
-
-      sprintf (filename, "f.%d", int (TIME));
-      file = OpenFilea ((char*) "Outputs/fFiles/Index");
-      fprintf (file, "%s %19.6e\n", filename, TIME);
-      fclose (file);
-
-      file = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (file, "Wrote fFile %s\n", filename);
-      fclose (file);
-      
-      delete[] filename;
+      printf ("FLUX::WriteStage2Netcdfc: Error writing Outputs/Stage2.nc\n");
+      exit (1);
     }
   
-  // ........
-  // Clean up
-  // ........
-  delete[] RPTS;  delete[] ZPTS;
-  delete[] RBPTS; delete[] ZBPTS;
-  delete[] RLPTS; delete[] ZLPTS;
+  err += nc_close (dataFile);
 
-  delete[] PSIN; delete[] G;   delete[] Pr;
-  delete[] GGp;  delete[] Prp; delete[] Q;
-
-  delete[] s; delete[] Rs;
-
-  delete[] P;    delete[] RP;  delete[] rP; delete[] GP;
-  delete[] QGP;  delete[] QP;  delete[] PP; delete[] GPP;
-  delete[] PPP;  delete[] S;   delete[] QX; delete[] RP1;
-  delete[] Bt;   delete[] Bt1; delete[] Bp; delete[] Bp1;
-  delete[] J0;
-
-  delete[] PsiN; delete[] QPN; delete[] QPPN, delete[] A1, delete[] A2;
-  
-  delete[] mres;    delete[] qres;  delete[] rres;  delete[] sres;
-  delete[] gres;    delete[] Rres;  delete[] gmres; delete[] fcres;
-  delete[] PsiNres; delete[] Rres1; delete[] A1res; delete[] A2res;
-
-  delete[] th; 
-  gsl_matrix_free (Rst); gsl_matrix_free (Zst);
-
-  delete[] Th;
-  gsl_matrix_free (Rnc); gsl_matrix_free (Znc); 
-
-  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc); 
- 
-  delete[] I1;    delete[] I2;    delete[] I3;    delete[] I7;    delete[] I8;  
-  delete[] Ktres; delete[] Kares; delete[] ajj;   delete[] dPsidr;
-  delete[] Khres; delete[] q_hat; delete[] C1res; delete[] C2res;
-
-  delete[] J1; delete[] J2;  delete[] J3; delete[] J4; delete[] J5;
-  delete[] J6; delete[] E;   delete[] F;  delete[] H;
-
-  gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
-  
-  gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
-}
+  if (err != 0)
+    {
+      printf ("FLUX::WriteStage2Netcdfc: Error closing Outputs/Stage2.nc\n");
+      exit (1);
+    }
+   
+  delete[] DATA; delete[] DATA1, delete[] DATA2, delete[] D_R;
+ }
+#endif
 
 // #############################################
 // Function to assign weights for Simpson's rule
@@ -801,7 +993,7 @@ void Flux::Stage2CalcQ ()
 
   // Perform diagnostic integration check (passes!)
   //for (int j = 1; j < NPSI; j++)
-  //  printf ("r/a = %11.4e  PsiN = %11.4e  dPsiN/dr = %11.4e  r*g/|psi_c|/q = %11.4e  ratio = %11.4e\n",
+  //  printf ("r/a = %9.2e  PsiN = %9.2e  dPsiN/dr = %9.2e  r*g/|psi_c|/q = %9.2e  ratio = %9.2e\n",
   //	    rP[j]/ra, PsiN[j], Interpolate (NPSI, rP, PsiN, rP[j], 1), rP[j]*GP[j]/fabs(Psic)/QP[j], rP[j]*GP[j]/fabs(Psic)/QP[j] /Interpolate (NPSI, rP, PsiN, rP[j], 1));
 
   // .................................
@@ -819,7 +1011,7 @@ void Flux::Stage2CalcQ ()
   rrat   = Interpolate (NPSI, S, rP, srat,  0);
   qa     = QP[NPSI-1];
   ra     = rP[NPSI-1];
-  printf ("q95 = %11.4e  r95/ra = %11.4e  qrat = %11.4e  rrat/ra = %11.4e  qa = %11.4e  ra = %11.4e  a = %11.4e (m)  Pped/P(0) = %11.4e\n",
+  printf ("q95 = %9.2e  r95/ra = %9.2e  qrat = %9.2e  rrat/ra = %9.2e  qa = %9.2e  ra = %9.2e  a = %9.2e (m)  Pped/P(0) = %9.2e\n",
 	  q95, r95 /ra, qrat, rrat/ra, qa, ra, ra*R0, Pped);
 
   // ..................
@@ -915,7 +1107,7 @@ void Flux::Stage2FindRational ()
 
   printf ("Rational surface data:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  PsiNs = %11.4e  rs/ra = %11.4e  ss = %11.4e  residual = %11.4e  R = %11.4e  A1 = %11.4e  residual = %11.4e  A2 = %11.4e\n",
+    printf ("mpol = %3d  PsiNs = %9.2e  rs/ra = %9.2e  ss = %9.2e  residual = %9.2e  R = %9.2e  A1 = %9.2e  residual = %9.2e  A2 = %9.2e\n",
 	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], 1. - (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i], A2res[i]);
    
   // .....................................
@@ -956,7 +1148,7 @@ void Flux::Stage2CalcGGJ ()
     }
 
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d J1 = %10.3e J2 = %10.3e J3 = %10.3e J4 = %10.3e J5 = %10.3e J6 = %10.3e E = %10.3e F = %10.4e H = %10.3e DI = %10.3e DR_ln = %10.3e DR_nl = %10.3e\n",
+    printf ("mpol = %3d J1 = %9.2e J2 = %9.2e J3 = %9.2e J4 = %9.2e J5 = %9.2e J6 = %9.2e E = %9.2e F = %10.4e H = %9.2e DI = %9.2e DR_ln = %9.2e DR_nl = %9.2e\n",
 	    mres[i], J1[i], J2[i], J3[i], J4[i], J5[i], J6[i], E[i], F[i], H[i], E[i]+F[i]+H[i]-0.25, E[i]+F[i]+H[i]*H[i], E[i]+F[i]);
 }
 
@@ -1029,7 +1221,7 @@ void Flux::Stage2CalcNeoclassicalAngle ()
   CalcGamma ();
 
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  rs/ra = %11.4e  g = %11.4e  gamma = %11.4e  gamma*q/g = %11.4e\n",
+    printf ("mpol = %3d  rs/ra = %9.2e  g = %9.2e  gamma = %9.2e  gamma*q/g = %9.2e\n",
 	    mres[i], rres[i] /ra, gres[i], gmres[i], gmres[i]*qres[i] /gres[i]);
 
   // ..................

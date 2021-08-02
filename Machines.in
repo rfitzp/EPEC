@@ -8,9 +8,9 @@ ifeq ($(UNAME), Darwin)
 	F_INCLUDE  = -I/opt/local/include
 
 	C_COMPILER = clang++ -O3
-	C_FLAGS    = -w $(VERSION_FLAGS)
+	C_FLAGS    = -w $(VERSION_FLAGS) -D NETCDF_CPP
 	C_INCLUDE  = -I/opt/local/include
-	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas -lnetcdf_c++4 -lnetcdff
+	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas  -lnetcdf -lnetcdf_c++4 -lnetcdff
 else ifeq ($(UNAME), Linux)
 	F_COMPILER = gfortran
 	F_FLAGS    =
@@ -19,5 +19,5 @@ else ifeq ($(UNAME), Linux)
 	C_COMPILER = g++ -O3
 	C_FLAGS    = -w $(VERSION_FLAGS)
 	C_INCLUDE  = -L/home/fitzpatrickr/include -lgsl -lgslblas
-	C_LIBS	   = -L/home/fitzpatrickr/lib -lgfortran -lgsl -lgslcblas -lblitz
+	C_LIBS	   = -L/home/fitzpatrickr/lib -lgfortran -lgsl -lgslcblas -lblitz -lnetcdf -lnetcdf_c++4 -lnetcdff 
 endif

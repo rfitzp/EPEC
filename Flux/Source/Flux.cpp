@@ -23,6 +23,9 @@ Flux::Flux ()
 // #########################
 void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT)
 {
+  // Start timer
+  clock_t begin = clock();
+  
   // Set global parameters
   SetParameters (_INTP, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT);
 
@@ -34,6 +37,15 @@ void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, doub
   // Stage2 data output to directory Outputs/Stage2.
   // Data passed to other programs output to Outputs/fFile.
   Stage2 ();
+
+  // End timer
+  clock_t end        = clock ();
+  double  time_spent = double (end - begin) /CLOCKS_PER_SEC;
+
+  // Print exit message
+  printf ("*********************************************************\n");
+  printf ("PROGRAM FLUX:: Normal termination: Wall time = %8d s\n", time_spent);
+  printf ("*********************************************************\n");
 }
 
 // #################################
@@ -168,8 +180,8 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
    printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
 	   NPSI, NTHETA, NNC, PACK);
-   printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME   = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %3d  PSIRAT = %11.4e\n",
-	   NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
+   printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
+	   NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
    printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
 	   H0, ACC, ETA);
    
@@ -180,8 +192,8 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
    fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
 	    NPSI, NTHETA, NNC, PACK);
-   fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME   = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %11.4e  PSIRAT = %11.4e\n",
-	    NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
+   fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
+	    NTOR, MMIN, MMAX, PSILIM, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
    fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
 	    H0, ACC, ETA);
    fclose (namelist);
@@ -193,8 +205,8 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    fprintf (monitor, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
    fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
 	    NPSI, NTHETA, NNC, PACK);
-   fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  TIME   = %11.4e  INTG = %2d  PSIPED = %11.4e  NSMOOTH = %11.4e  PSIRAT = %11.4e\n",
-	    NTOR, MMIN, MMAX, PSILIM, TIME, INTG, PSIPED, NSMOOTH, PSIRAT);
+   fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
+	    NTOR, MMIN, MMAX, PSILIM, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
    fprintf (monitor, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
 	    H0, ACC, ETA);
    fclose (monitor);
