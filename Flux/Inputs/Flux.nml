@@ -1,22 +1,34 @@
 &FLUX_CONTROL
-	NTOR    = 1	 ! Toroidal mode number
-	MMIN    = 2	 ! Minimum poloidal mode number
-	MMAX    = 60	 ! Maximum toroidal mode number
-
-	PSILIM  = 0.995  ! Maximum PsiN for safety-factor calculation
- 	PSIRAT  = 0.995  ! Ignore rational surfaces for PsiN > PSIRAT
-	PSIPED  = 0.940	 ! PsiN value at top of pedestal
-
-	INTG    = 0	 ! Flag for interpolating gFiles
-	TIME    = 0.	 ! Experimental time (ms)
-
-	NPSI    = 512	 ! Number of points in PsiN grid
-	PACK    = 2.     ! Packing index for PsiN grid
-	NTHETA  = 513    ! Number of points in theta grid (must be odd)
-	NNC     = 20     ! Number of neoclassical harmonics
-	NSMOOTH = 100    ! Number of smoothing cycles for higher derivatives of q
-
-	H0      = 1.e-6	 ! Initial integration step-length
-	ACC     = 1.e-14 ! Integration accuracy
-	ETA     = 1.e-8  ! Regularization factor for Green's function
+ NTOR    = 1	 
+! Toroidal mode number
+ MMIN    = 2	
+! Minimum poloidal mode number
+ MMAX    = 60	
+! Maximum toroidal mode number
+ PSILIM  = 0.995  
+! Maximum PsiN for safety-factor calculation
+ PSIRAT  = 0.995 
+! Ignore rational surfaces for PsiN > PSIRAT
+ PSIPED  = 0.940	 
+! PsiN value at top of pedestal
+ INTG    = 0	 
+! Flag for interpolating gFiles
+ TIME    = 0.	 
+! Experimental time (ms)
+ NPSI    = 512	
+! Number of points in PsiN grid
+ PACK    = 2.    
+! Packing index for PsiN grid
+ NTHETA  = 513    
+! Number of points in theta grid (must be odd)
+ NNC     = 20     
+! Number of neoclassical harmonics
+ NSMOOTH = 100    
+! Number of smoothing cycles for higher derivatives of q
+ H0      = 1.e-6	 
+! Initial integration step-length
+ ACC     = 1.e-14
+! Integration accuracy
+ ETA     = 1.e-8 
+! Regularization factor for Green's function
 &end

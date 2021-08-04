@@ -1,23 +1,39 @@
 # Machine dependent part of Makefiles
 
-UNAME := $(shell uname)
+UNAME  := $(shell uname)
+NNAME  := $(findstring iris, $(shell uname -n))
 
 ifeq ($(UNAME), Darwin)
-	F_COMPILER = gfortran
-	F_FLAGS    =
-	F_INCLUDE  = -I/opt/local/include
 
-	C_COMPILER = clang++ -O3
-	C_FLAGS    = -w $(VERSION_FLAGS) -D NETCDF_CPP
-	C_INCLUDE  = -I/opt/local/include
-	C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas  -lnetcdf -lnetcdf_c++4 -lnetcdff
-else ifeq ($(UNAME), Linux)
-	F_COMPILER = gfortran
-	F_FLAGS    =
-	F_INCLUDE  = -I/fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/include
+     # ##################
+     # Machine is ifs mac
+     # ##################
+     F_COMPILER = gfortran
+     F_FLAGS    =
+     F_INCLUDE  = -I/opt/local/include
 
-	C_COMPILER = g++ -O3
-	C_FLAGS    = -w $(VERSION_FLAGS)
-	C_INCLUDE  = -I/fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/include -I/home/fitzpatrickr/include -lgsl -lgslblas
-	C_LIBS	   = -L/fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/lib -L/home/fitzpatrickr/lib -lgfortran -lgsl -lgslcblas -lblitz -lnetcdf -lnetcdff 
+     C_COMPILER = clang++ -O3
+     C_FLAGS    = -w $(VERSION_FLAGS) -D NETCDF_CPP
+     C_INCLUDE  = -I/opt/local/include
+     C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas  -lnetcdf -lnetcdf_c++4 -lnetcdff
+
+else ifeq ($(NNAME), iris)
+
+     # #######################
+     # Machine is iris.gat.com
+     # #######################
+     NCLIB := /fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/lib
+     NCINC := /fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/include
+     HOME  := /home/fitzpatrickr
+     LIB   := -lgsl -lgslcblas -lblitz -lgfortran -lnetcdf -lnetcdff
+  
+     F_COMPILER = gfortran
+     F_FLAGS    =
+     F_INCLUDE  = -I$(NCINC)
+
+     C_COMPILER = g++ -O3
+     C_FLAGS    = -w $(VERSION_FLAGS)
+     C_INCLUDE  = -I$(NCINC) -I$(HONE)/include 
+     C_LIBS	= -L$(NCLIB) -L$(HOME)/lib  $(LIB)  
+
 endif

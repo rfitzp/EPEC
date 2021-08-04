@@ -78,6 +78,7 @@ int main (int argc, char** argv)
 #else
   printf ("Using Netcdf c and f90 libraries\n\n");
 #endif
+  fflush (stdout);
   
   FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
   fprintf (monitor, "\n############\nProgram FLUX\n############\n");

@@ -31,41 +31,49 @@ void Flux::Stage2 ()
   // Read data for Stage2 calculation
   // ................................
   Stage2ReadData ();
+  fflush (stdout);
   
   // ..........................
   // Calculate Stage2 q profile
   // ..........................
   Stage2CalcQ ();
+  fflush (stdout);
 
   // ......................
   // Find rational surfaces
   // ......................
   Stage2FindRational ();
+  fflush (stdout);
 
   // .......................................
   // Calculate GGJ data at rational surfaces
   // .......................................
   Stage2CalcGGJ ();
+  fflush (stdout);
   
   // ..................................................
   // Calculate straight angle data on rational surfaces
   // ..................................................
   Stage2CalcStraightAngle ();
+  fflush (stdout);
 
   // ......................................................
   // Calculate neoclassical angle data on rational surfaces
   // ......................................................
   Stage2CalcNeoclassicalAngle ();
+  fflush (stdout);
  
   // ......................................................
   // Calculate neoclassical parameters at rational surfaces
   // ......................................................
   Stage2CalcNeoclassicalPara ();
+  fflush (stdout);
   
   // ............................
   // Calculate stability matrices
   // ............................
   Stage2CalcMatrices ();
+  fflush (stdout);
 
   // ..................
   // Output NETCDF file
@@ -1561,6 +1569,7 @@ void Flux::Stage2CalcMatrices ()
 	  gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
 	}
       printf ("mpol = %3d\n", mres[i]);
+      fflush (stdout);
     }
 
   printf ("F-matrix:\n");

@@ -65,7 +65,10 @@ void Flux::CalcQGP ()
       J0 [j] = y[3];
 
       if (j%10 == 0 || j > NPSI-10)
-	printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
+	{
+	  printf ("j = %4d  PsiN = %11.4e  q = %11.4e\n", j, 1.-P[j], QP[j]);
+	  fflush (stdout);
+	}
     }
 
   gsl_odeiv2_driver_free (d);
@@ -106,6 +109,7 @@ void Flux::CheckQP ()
       double qp  = qgp * gres[j];
       printf ("mpol = %3d  qres = %11.4e  q = %11.4e  residual = %11.4e\n",
 	      mres[j], double (mres[j]) /double(NTOR), qp, 1. - double (mres[j]) /double(NTOR)/qp);
+      fflush (stdout);
     }
 
   gsl_odeiv2_driver_free (d);
