@@ -76,30 +76,19 @@ int main (int argc, char** argv)
 #ifdef NETCDF_CPP
   printf ("Using Netcdf c++ and f90 libraries\n\n");
 #else
-  printf ("Using Netcdf c and f90 libraries\n\n");
+  printf ("Using Netcdf c and f90 libraries\n");
 #endif
-  fflush (stdout);
   
-  FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
-  fprintf (monitor, "\n############\nProgram FLUX\n############\n");
-  fprintf (monitor, "Version: %1d.%1d\n", VERSION_MAJOR, VERSION_MINOR);
-#ifdef NETCDF_CPP
-  fprintf (monitor, "Using Netcdf c++ and f90 libraries\n\n");
-#else
-  fprintf (monitor, "Using Netcdf c and f90 libraries\n\n");
-#endif
-  fclose (monitor);
-
   // ........................
   // Get command line options
   // ........................
   int c;
   char* nvalue = NULL; char* mvalue = NULL; char* Mvalue = NULL;
   char* tvalue = NULL; char* gvalue = NULL; char* pvalue = NULL;
-  char* Pvalue = NULL; char* rvalue = NULL;
+  char* Pvalue = NULL; char* rvalue = NULL; int   _OMFIT = 0;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "hg:n:m:p:t:M:P:r:")) != -1)
+  while ((c = getopt (argc, argv, "hg:n:m:p:t:M:P:r:o")) != -1)
     switch (c)
       {
       case 'h':
@@ -108,16 +97,19 @@ int main (int argc, char** argv)
 	printf ("-g INTG   - set interpolation flag INTG\n");
 	printf ("-n NTOR   - set toroidal mode number to NTOR\n");
 	printf ("-m MMIN   - set minumum poloidal mode number to MMIN\n");
+	printf ("-o        - flag to select OMFIT mode\n");
 	printf ("-p PSILIM - set maximum PsiN for safety-factor caclulation to PSILIM\n");
 	printf ("-r PSIRAT - set maximum PsiN for rational surface to PSIRAT\n");
 	printf ("-t TIME   - set experimental time to TIME\n");
 	printf ("-M MMAX   - set maximum poloidal mode number to MMAX\n");
 	printf ("-P PSIPED - set PsiNat top of pedestal to PSIPED\n");
 	exit (0);
-     case 'g':
+      case 'o':
+	_OMFIT = 1;
+      case 'g':
 	gvalue = optarg;
 	break;
-     case 'n':
+      case 'n':
 	nvalue = optarg;
  	break;
       case 'm':
@@ -170,11 +162,29 @@ int main (int argc, char** argv)
   if (gvalue != NULL)
     _INTG = atoi (gvalue);
 
+  if (_OMFIT)
+    printf ("OMFIT mode\n\n");
+  else
+    {
+      printf ("Normal mode\n\n");
+     
+      FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
+      fprintf (monitor, "\n############\nProgram FLUX\n############\n");
+      fprintf (monitor, "Version: %1d.%1d\n", VERSION_MAJOR, VERSION_MINOR);
+#ifdef NETCDF_CPP
+      fprintf (monitor, "Using Netcdf c++ and f90 libraries\n");
+#else
+      fprintf (monitor, "Using Netcdf c and f90 libraries\n");
+#endif
+      fprintf (monitor, "Normal mode\n\n");
+      fclose (monitor);
+    }
+  fflush (stdout);
+
   // .................
   // Call program FLUX
   // .................
   Flux flux;
-  flux.Solve (_INTG, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT);
- 
+  flux.Solve (_INTG, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT, _OMFIT);
   return 0;
 }

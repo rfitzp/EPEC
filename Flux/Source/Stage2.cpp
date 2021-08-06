@@ -157,7 +157,7 @@ void Flux::Stage2 ()
   delete[] QGP;  delete[] QP;  delete[] PP; delete[] GPP;
   delete[] PPP;  delete[] S;   delete[] QX; delete[] RP1;
   delete[] Bt;   delete[] Bt1; delete[] Bp; delete[] Bp1;
-  delete[] J0;
+  delete[] J0;   
 
   delete[] PsiN; delete[] QPN; delete[] QPPN, delete[] A1, delete[] A2;
   
@@ -248,9 +248,13 @@ void Flux::WriteStage2Netcdfcpp ()
       NcVar psi_z = dataFile.addVar ("PSI_Z", ncDouble, psi_d);
       psi_z.putVar (DATA);
 
+      // Psi_N
+      NcDim Q_d  = dataFile.addDim ("N_PSI", NPSI);
+      NcVar PSIN = dataFile.addVar ("PsiN", ncDouble, Q_d);
+      PSIN.putVar (P);
+
       // q
-      NcDim Q_d = dataFile.addDim ("PsiN", NPSI);
-      NcVar Q   = dataFile.addVar ("q", ncDouble, Q_d);
+      NcVar Q = dataFile.addVar ("q", ncDouble, Q_d);
       Q.putVar (QP);
 
       // q_psi
@@ -279,7 +283,7 @@ void Flux::WriteStage2Netcdfcpp ()
       mr.putVar (mres);
 
       // PsiN_res
-      NcVar PNr = dataFile.addVar ("PsiN", ncDouble, S_d);
+      NcVar PNr = dataFile.addVar ("PsiN_res", ncDouble, S_d);
       PNr.putVar (PsiNres);
       
       // q_res
@@ -341,7 +345,7 @@ void Flux::WriteStage2Netcdfcpp ()
 void Flux::WriteStage2Netcdfc ()
 {
   int err = 0, dataFile, para_d, para, bound_d, bound_r, bound_z, R_d, R, Z_d, Z;
-  int psi_d[2], psi, psi_r, psi_z, Q_d, Q, Qp, G, P, Gp, Pp, S_d, mr, PNr;
+  int psi_d[2], psi, psi_r, psi_z, PN, Q_d, Q, Qp, G, Px, Gp, Pp, S_d, mr, PNr;
   int qr, sr, gr, gmr, fcr, ajr, qhr, a1r, a2r, dr;
 
   // Open file
@@ -399,8 +403,11 @@ void Flux::WriteStage2Netcdfc ()
 
   err += nc_def_var (dataFile, "PSI_Z", NC_DOUBLE, 2, psi_d, &psi_z);
  
+  // Psi_N
+  err += nc_def_dim (dataFile, "N_PSI", NPSI, &Q_d);
+  err += nc_def_var (dataFile, "PsiN", NC_DOUBLE, 1, &Q_d, &PN);
+
   // q
-  err += nc_def_dim (dataFile, "PsiN", NPSI, &Q_d);
   err += nc_def_var (dataFile, "q", NC_DOUBLE, 1, &Q_d, &Q);
 
   // q_psi
@@ -410,7 +417,7 @@ void Flux::WriteStage2Netcdfc ()
   err += nc_def_var (dataFile, "g", NC_DOUBLE, 1, &Q_d, &G);
 
   // P
-  err += nc_def_var (dataFile, "P", NC_DOUBLE, 1, &Q_d, &P);
+  err += nc_def_var (dataFile, "P", NC_DOUBLE, 1, &Q_d, &Px);
  
   // g_psi
   err += nc_def_var (dataFile, "g_psi", NC_DOUBLE, 1, &Q_d, &Gp);
@@ -423,7 +430,7 @@ void Flux::WriteStage2Netcdfc ()
   err += nc_def_var (dataFile, "m_pol", NC_INT, 1, &S_d, &mr);
 
   // PsiN_res
-  err += nc_def_var (dataFile, "PsiN", NC_DOUBLE, 1, &S_d, &PNr);
+  err += nc_def_var (dataFile, "PsiN_res", NC_DOUBLE, 1, &S_d, &PNr);
   
   // q_res
   err += nc_def_var (dataFile, "q_res", NC_DOUBLE, 1, &S_d, &qr);
@@ -476,11 +483,12 @@ void Flux::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, psi,     DATA);
   err += nc_put_var_double (dataFile, psi_r,   DATA1);
   err += nc_put_var_double (dataFile, psi_z,   DATA2);
+  err += nc_put_var_double (dataFile, PN,      P);
   err += nc_put_var_double (dataFile, Q,       QP);
   err += nc_put_var_double (dataFile, Qp,      QPN);
   err += nc_put_var_double (dataFile, G,       GP);
   err += nc_put_var_double (dataFile, Gp,      GPP);
-  err += nc_put_var_double (dataFile, P,       PP);
+  err += nc_put_var_double (dataFile, Px,      PP);
   err += nc_put_var_double (dataFile, Pp,      PPP);
   err += nc_put_var_int    (dataFile, mr,      mres);
   err += nc_put_var_double (dataFile, PNr,     PsiNres);
@@ -563,6 +571,7 @@ void Flux::Stage2SetSimpsonWeights ()
 void Flux::Stage2ReadData ()
 {
   printf ("Reading data from gFile:\n");
+  fflush (stdout);
   
   // ..............
   // Read R0 and B0
@@ -872,7 +881,7 @@ void Flux::Stage2CalcQ ()
   // ......................
   // Set up Stage2 Psi grid
   // ......................
-  P   = new double[NPSI];  // Psi array
+  P   = new double[NPSI];  // 1 - Psi array
   RP  = new double[NPSI];  // R(Psi) on inboard midplane
   RP1 = new double[NPSI];  // R(Psi) on outboard midplane
   Bt  = new double[NPSI];  // B_toroidal(Psi) on inboard midplane
@@ -929,6 +938,7 @@ void Flux::Stage2CalcQ ()
   // Calculate Stage2 q(Psi)/g(Psi) profile
   // ......................................
   printf ("Calculating q(Psi)/g(Psi) profile:\n");
+  fflush (stdout);
   CalcQGP ();
   
   RP1[0]      = Raxis;
@@ -996,6 +1006,7 @@ void Flux::Stage2CalcQ ()
   // Calculate Stage2 r(P) profile
   // .............................
   printf ("Calculating r(Psi) profile:\n");
+  fflush (stdout);
   CalcrP ();
   rP[0] = 0.;
 
@@ -1141,6 +1152,7 @@ void Flux::Stage2CalcGGJ ()
   H  = new double[nres];
 
   printf ("Calculating Glasser-Greene-Johnson data at rational surfaces:\n");
+  fflush (stdout);
   CalcGGJ ();
 
   // Calculate E, F, H
@@ -1181,6 +1193,7 @@ void Flux::Stage2CalcStraightAngle ()
   // Calculate straight angle data
   // .............................
   printf ("Calculating straight angle data at rational surfaces:\n");
+  fflush (stdout);
   CalcStraightAngle ();
 
   // ...........
@@ -1226,6 +1239,7 @@ void Flux::Stage2CalcNeoclassicalAngle ()
   // Calculate gamma values at rational surfaces
   // ...........................................
   printf ("Calculating gamma values at rational surfaces:\n");
+  fflush (stdout);
   CalcGamma ();
 
   for (int i = 0; i < nres; i++)
@@ -1378,6 +1392,7 @@ void Flux::Stage2CalcNeoclassicalPara ()
   // Calculate neoclassical parameters at rational surfaces 
   // ......................................................
   printf ("Calculating neoclassical parameters at rational surfaces:\n");
+  fflush (stdout);
   double sum;
   for (int i = 0; i < nres; i++)
     {
@@ -1543,6 +1558,7 @@ void Flux::Stage2CalcNeoclassicalPara ()
 void Flux::Stage2CalcMatrices ()
 {
   printf ("Calculating stability matrices:\n");
+  fflush (stdout);
   
   // ..................
   // Calculate F matrix

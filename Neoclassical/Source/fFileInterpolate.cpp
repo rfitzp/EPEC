@@ -133,7 +133,6 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
   Array<int, 1>   mres_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1, u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1;
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
-  Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
   double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
@@ -141,7 +140,6 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
   Array<int, 1>   mres_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0, u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0;
   Array<double,2> Freal_0, Fimag_0, Ereal_0, Eimag_0;
-  Array<double,1> EIreal_0, EIimag_0, EOreal_0, EOimag_0;
 
   // ................
   // Read first fFile
@@ -208,21 +206,7 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
 	    exit (1);
 	  }
       }
-  
-  EIreal_1.resize (nres_1); EIimag_1.resize (nres_1);
-  EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
-
-  for (int j = 0; j < nres_1; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_1(j), &EIimag_1(j), &EOreal_1(j), &EOimag_1(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateLinear: Error reading fFile (6)\n");
-	  exit (1);
-	}
-    }
-  
-  fclose (file);
-
+ 
   // ......................
   // Interpolate fFile data
   // ......................
@@ -243,9 +227,6 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
 
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
-
-  EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
-  EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
   for (int i = 0; i < nres_0; i++)
     mres_0(i) = mres_1(i);
@@ -295,21 +276,14 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
     }
 
   for (int j = 0; j < nres_0; j++)
-    {
-      EIreal_0(j) = EIreal_1(j);
-      EIimag_0(j) = EIimag_1(j); 
-      EOreal_0(j) = EOreal_1(j); 
-      EOimag_0(j) = EOimag_1(j); 
-      
-      for (int k = 0; k < nres_0; k++)
-	{
-	  Freal_0(j, k) = Freal_1(j, k);
-	  Fimag_0(j, k) = Fimag_1(j, k);
-	  Ereal_0(j, k) = Ereal_1(j, k);
-	  Eimag_0(j, k) = Eimag_1(j, k);
-	}
-    }
-
+    for (int k = 0; k < nres_0; k++)
+      {
+	Freal_0(j, k) = Freal_1(j, k);
+	Fimag_0(j, k) = Fimag_1(j, k);
+	Ereal_0(j, k) = Ereal_1(j, k);
+	Eimag_0(j, k) = Eimag_1(j, k);
+      }
+    
   // ........................
   // Write interpolated fFile
   // ........................
@@ -331,10 +305,7 @@ void Neoclassical::fFileInterpolateLinear (char* fFile1, double time1, char* fFi
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
 	       mres_0(j), mres_0(k), Ereal_0(j, k), Eimag_0(j, k));
-  for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), EIreal_0(j), EIimag_0(j), EOreal_0(j), EOimag_0(j));
-
+  
   fclose (file);
   
   printf ("fFile Interpolation:\n");
@@ -356,7 +327,6 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   Array<int, 1>   mres_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1, u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1;
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
-  Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
   double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2, r13_2;
   int             NPSI_2, NTOR_2, nres_2;
@@ -364,7 +334,6 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   Array<int, 1>   mres_2;
   Array<double,1> u1_2, u2_2, u3_2, u4_2, u5_2, u6_2, u7_2, u8_2, u9_2, u10_2, u11_2, u12_2, u13_2, u14_2, u15_2, u16_2, u17_2;
   Array<double,2> Freal_2, Fimag_2, Ereal_2, Eimag_2;
-  Array<double,1> EIreal_2, EIimag_2, EOreal_2, EOimag_2;
  
   double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
@@ -372,7 +341,6 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
   Array<int, 1>   mres_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0, u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0;
   Array<double,2> Freal_0, Fimag_0, Ereal_0, Eimag_0;
-  Array<double,1> EIreal_0, EIimag_0, EOreal_0, EOimag_0;
 
   // ................
   // Read first fFile
@@ -439,19 +407,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
 	    exit (1);
 	  }
       }
-  
-  EIreal_1.resize (nres_1); EIimag_1.resize (nres_1);
-  EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
-
-  for (int j = 0; j < nres_1; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_1(j), &EIimag_1(j), &EOreal_1(j), &EOimag_1(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateQuadratic: Error reading fFile (6)\n");
-	  exit (1);
-	}
-    }
-  
+ 
   fclose (file);
 
   // .................
@@ -519,19 +475,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
 	    exit (1);
 	  }
       }
-  
-  EIreal_2.resize (nres_2); EIimag_2.resize (nres_2);
-  EOreal_2.resize (nres_2); EOimag_2.resize (nres_2);
-  
-  for (int j = 0; j < nres_2; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_2(j), &EIimag_2(j), &EOreal_2(j), &EOimag_2(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateQuadratic: Error reading fFile_2 (6)\n");
-	  exit (1);
-	}
-    }
-  
+ 
   fclose (file);
   
    // ......................
@@ -568,9 +512,6 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
 
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
-
-  EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
-  EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
   if (nres_0 == nres_1)
     {
@@ -629,21 +570,13 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
     }
 
   for (int j = 0; j < nres_0; j++)
-    {
-      EIreal_0(j) = weight1 * EIreal_1(j) + weight2 * EIreal_2(j);
-      EIimag_0(j) = weight1 * EIimag_1(j) + weight2 * EIimag_2(j); 
-      EOreal_0(j) = weight1 * EOreal_1(j) + weight2 * EOreal_2(j); 
-      EOimag_0(j) = weight1 * EOimag_1(j) + weight2 * EOimag_2(j); 
-      
-      for (int k = 0; k < nres_0; k++)
-	{
-	  Freal_0(j, k) = weight1 * Freal_1(j, k) + weight2 * Freal_2(j, k);
-	  Fimag_0(j, k) = weight1 * Fimag_1(j, k) + weight2 * Fimag_2(j, k);
-	  Ereal_0(j, k) = weight1 * Ereal_1(j, k) + weight2 * Ereal_2(j, k);
-	  Eimag_0(j, k) = weight1 * Eimag_1(j, k) + weight2 * Eimag_2(j, k);
-	}
-    }
-
+    for (int k = 0; k < nres_0; k++)
+      {
+	Freal_0(j, k) = weight1 * Freal_1(j, k) + weight2 * Freal_2(j, k);
+	Fimag_0(j, k) = weight1 * Fimag_1(j, k) + weight2 * Fimag_2(j, k);
+	Ereal_0(j, k) = weight1 * Ereal_1(j, k) + weight2 * Ereal_2(j, k);
+	Eimag_0(j, k) = weight1 * Eimag_1(j, k) + weight2 * Eimag_2(j, k);
+      }
   // ........................
   // Write interpolated fFile
   // ........................
@@ -665,10 +598,7 @@ void Neoclassical::fFileInterpolateQuadratic (char* fFile1, double time1, char* 
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
 	       mres_0(j), mres_0(k), Ereal_0(j, k), Eimag_0(j, k));
-  for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), EIreal_0(j), EIimag_0(j), EOreal_0(j), EOimag_0(j));
-
+ 
   fclose (file);
   
   printf ("fFile Interpolation:\n");
@@ -692,7 +622,6 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<int, 1>   mres_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1, u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1;
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
-  Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
   double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2, r13_2;
   int             NPSI_2, NTOR_2, nres_2;
@@ -700,7 +629,6 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<int, 1>   mres_2;
   Array<double,1> u1_2, u2_2, u3_2, u4_2, u5_2, u6_2, u7_2, u8_2, u9_2, u10_2, u11_2, u12_2, u13_2, u14_2, u15_2, u16_2, u17_2;
   Array<double,2> Freal_2, Fimag_2, Ereal_2, Eimag_2;
-  Array<double,1> EIreal_2, EIimag_2, EOreal_2, EOimag_2;
  
   double          r1_3, r2_3, r3_3, r4_3, r5_3, r6_3, r7_3, r8_3, r9_3, r10_3, r11_3, r12_3, r13_3;
   int             NPSI_3, NTOR_3, nres_3;
@@ -708,7 +636,6 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<int, 1>   mres_3;
   Array<double,1> u1_3, u2_3, u3_3, u4_3, u5_3, u6_3, u7_3, u8_3, u9_3, u10_3, u11_3, u12_3, u13_3, u14_3, u15_3, u16_3, u17_3;
   Array<double,2> Freal_3, Fimag_3, Ereal_3, Eimag_3;
-  Array<double,1> EIreal_3, EIimag_3, EOreal_3, EOimag_3;
 
   double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
@@ -716,7 +643,6 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
   Array<int, 1>   mres_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0, u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0;
   Array<double,2> Freal_0, Fimag_0, Ereal_0, Eimag_0;
-  Array<double,1> EIreal_0, EIimag_0, EOreal_0, EOimag_0;
 
   // ................
   // Read first fFile
@@ -783,18 +709,6 @@ void Neoclassical::fFileInterpolateCubic (char* fFile1, double time1, char* fFil
 	    exit (1);
 	  }
       }
-  
-  EIreal_1.resize (nres_1); EIimag_1.resize (nres_1);
-EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
-
-  for (int j = 0; j < nres_1; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_1(j), &EIimag_1(j), &EOreal_1(j), &EOimag_1(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateCubic: Error reading fFile (6)\n");
-	  exit (1);
-	}
-    }
   
   fclose (file);
 
@@ -864,19 +778,7 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
 	    exit (1);
 	  }
       }
-  
-  EIreal_2.resize (nres_2); EIimag_2.resize (nres_2);
-  EOreal_2.resize (nres_2); EOimag_2.resize (nres_2);
-  
-  for (int j = 0; j < nres_2; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_2(j), &EIimag_2(j), &EOreal_2(j), &EOimag_2(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateCubic: Error reading fFile_2 (6)\n");
-	  exit (1);
-	}
-    }
-  
+
   fclose (file);
   
   // ................
@@ -944,19 +846,7 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
 	    exit (1);
 	  }
       }
-  
-  EIreal_3.resize (nres_3); EIimag_3.resize (nres_3);
-  EOreal_3.resize (nres_3); EOimag_3.resize (nres_3);
-  
-  for (int j = 0; j < nres_3; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_3(j), &EIimag_3(j), &EOreal_3(j), &EOimag_3(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateCubic: Error reading fFile_3 (6)\n");
-	  exit (1);
-	}
-    }
-  
+   
   fclose (file);
   
   // ......................
@@ -1007,9 +897,6 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
 
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
-
-  EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
-  EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
   if (nres_0 == nres_1)
     {
@@ -1074,20 +961,13 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
     }
 
   for (int j = 0; j < nres_0; j++)
-    {
-      EIreal_0(j) = weight1 * EIreal_1(j) + weight2 * EIreal_2(j) + weight3 * EIreal_3(j);
-      EIimag_0(j) = weight1 * EIimag_1(j) + weight2 * EIimag_2(j) + weight3 * EIimag_3(j);
-      EOreal_0(j) = weight1 * EOreal_1(j) + weight2 * EOreal_2(j) + weight3 * EOreal_3(j);
-      EOimag_0(j) = weight1 * EOimag_1(j) + weight2 * EOimag_2(j) + weight3 * EOimag_3(j);
-      
-      for (int k = 0; k < nres_0; k++)
-	{
-	  Freal_0(j, k) = weight1 * Freal_1(j, k) + weight2 * Freal_2(j, k) + weight3 * Freal_3(j, k);
-	  Fimag_0(j, k) = weight1 * Fimag_1(j, k) + weight2 * Fimag_2(j, k) + weight3 * Fimag_3(j, k);
-	  Ereal_0(j, k) = weight1 * Ereal_1(j, k) + weight2 * Ereal_2(j, k) + weight3 * Ereal_3(j, k);
-	  Eimag_0(j, k) = weight1 * Eimag_1(j, k) + weight2 * Eimag_2(j, k) + weight3 * Eimag_3(j, k);
-	}
-    }
+    for (int k = 0; k < nres_0; k++)
+      {
+	Freal_0(j, k) = weight1 * Freal_1(j, k) + weight2 * Freal_2(j, k) + weight3 * Freal_3(j, k);
+	Fimag_0(j, k) = weight1 * Fimag_1(j, k) + weight2 * Fimag_2(j, k) + weight3 * Fimag_3(j, k);
+	Ereal_0(j, k) = weight1 * Ereal_1(j, k) + weight2 * Ereal_2(j, k) + weight3 * Ereal_3(j, k);
+	Eimag_0(j, k) = weight1 * Eimag_1(j, k) + weight2 * Eimag_2(j, k) + weight3 * Eimag_3(j, k);
+      }
 
   // ........................
   // Write interpolated fFile
@@ -1110,10 +990,7 @@ EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
 	       mres_0(j), mres_0(k), Ereal_0(j, k), Eimag_0(j, k));
-  for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), EIreal_0(j), EIimag_0(j), EOreal_0(j), EOimag_0(j));
-
+ 
   fclose (file);
   
   printf ("fFile Interpolation:\n");
@@ -1140,7 +1017,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<int, 1>   mres_1;
   Array<double,1> u1_1, u2_1, u3_1, u4_1, u5_1, u6_1, u7_1, u8_1, u9_1, u10_1, u11_1, u12_1, u13_1, u14_1, u15_1, u16_1, u17_1;
   Array<double,2> Freal_1, Fimag_1, Ereal_1, Eimag_1;
-  Array<double,1> EIreal_1, EIimag_1, EOreal_1, EOimag_1;
   
   double          r1_2, r2_2, r3_2, r4_2, r5_2, r6_2, r7_2, r8_2, r9_2, r10_2, r11_2, r12_2, r13_2;
   int             NPSI_2, NTOR_2, nres_2;
@@ -1148,7 +1024,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<int, 1>   mres_2;
   Array<double,1> u1_2, u2_2, u3_2, u4_2, u5_2, u6_2, u7_2, u8_2, u9_2, u10_2, u11_2, u12_2, u13_2, u14_2, u15_2, u16_2, u17_2;
   Array<double,2> Freal_2, Fimag_2, Ereal_2, Eimag_2;
-  Array<double,1> EIreal_2, EIimag_2, EOreal_2, EOimag_2;
  
   double          r1_3, r2_3, r3_3, r4_3, r5_3, r6_3, r7_3, r8_3, r9_3, r10_3, r11_3, r12_3, r13_3;
   int             NPSI_3, NTOR_3, nres_3;
@@ -1156,7 +1031,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<int, 1>   mres_3;
   Array<double,1> u1_3, u2_3, u3_3, u4_3, u5_3, u6_3, u7_3, u8_3, u9_3, u10_3, u11_3, u12_3, u13_3, u14_3, u15_3, u16_3, u17_3;
   Array<double,2> Freal_3, Fimag_3, Ereal_3, Eimag_3;
-  Array<double,1> EIreal_3, EIimag_3, EOreal_3, EOimag_3;
  
   double          r1_4, r2_4, r3_4, r4_4, r5_4, r6_4, r7_4, r8_4, r9_4, r10_4, r11_4, r12_4, r13_4;
   int             NPSI_4, NTOR_4, nres_4;
@@ -1164,7 +1038,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<int, 1>   mres_4;
   Array<double,1> u1_4, u2_4, u3_4, u4_4, u5_4, u6_4, u7_4, u8_4, u9_4, u10_4, u11_4, u12_4, u13_4, u14_4, u15_4, u16_4, u17_4;
   Array<double,2> Freal_4, Fimag_4, Ereal_4, Eimag_4;
-  Array<double,1> EIreal_4, EIimag_4, EOreal_4, EOimag_4;
 
   double          r1_0, r2_0, r3_0, r4_0, r5_0, r6_0, r7_0, r8_0, r9_0, r10_0, r11_0, r12_0, r13_0;
   int             NPSI_0, NTOR_0, nres_0;
@@ -1172,7 +1045,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
   Array<int, 1>   mres_0;
   Array<double,1> u1_0, u2_0, u3_0, u4_0, u5_0, u6_0, u7_0, u8_0, u9_0, u10_0, u11_0, u12_0, u13_0, u14_0, u15_0, u16_0, u17_0;
   Array<double,2> Freal_0, Fimag_0, Ereal_0, Eimag_0;
-  Array<double,1> EIreal_0, EIimag_0, EOreal_0, EOimag_0;
 
   // ................
   // Read first fFile
@@ -1239,18 +1111,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 	    exit (1);
 	  }
       }
-  
-  EIreal_1.resize (nres_1); EIimag_1.resize (nres_1);
-  EOreal_1.resize (nres_1); EOimag_1.resize (nres_1);
-
-  for (int j = 0; j < nres_1; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_1(j), &EIimag_1(j), &EOreal_1(j), &EOimag_1(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile (6)\n");
-	  exit (1);
-	}
-    }
   
   fclose (file);
 
@@ -1319,18 +1179,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 	    exit (1);
 	  }
       }
-  
-  EIreal_2.resize (nres_2); EIimag_2.resize (nres_2);
-  EOreal_2.resize (nres_2); EOimag_2.resize (nres_2);
-  
-  for (int j = 0; j < nres_2; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_2(j), &EIimag_2(j), &EOreal_2(j), &EOimag_2(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_2 (6)\n");
-	  exit (1);
-	}
-    }
   
   fclose (file);
   
@@ -1401,18 +1249,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 	  }
       }
   
-  EIreal_3.resize (nres_3); EIimag_3.resize (nres_3);
-  EOreal_3.resize (nres_3); EOimag_3.resize (nres_3);
-  
-  for (int j = 0; j < nres_3; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_3(j), &EIimag_3(j), &EOreal_3(j), &EOimag_3(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_3 (6)\n");
-	  exit (1);
-	}
-    }
-  
   fclose (file);
 
   // .................
@@ -1480,19 +1316,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 	    exit (1);
 	  }
       }
-  
-  EIreal_4.resize (nres_4); EIimag_4.resize (nres_4);
-  EOreal_4.resize (nres_4); EOimag_4.resize (nres_4);
-  
-  for (int j = 0; j < nres_4; j++)
-    {
-      if (fscanf (file, "%d %lf %lf %lf %lf", &ini, &EIreal_4(j), &EIimag_4(j), &EOreal_4(j), &EOimag_4(j)) != 5)
-	{
-	  printf ("NEOCLASSICAL::fFileInterpolateQuartic: Error reading fFile_4 (6)\n");
-	  exit (1);
-	}
-    }
-  
+ 
   fclose (file);
   
   // ......................
@@ -1549,9 +1373,6 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
 
   Freal_0.resize  (nres_0, nres_0); Fimag_0.resize  (nres_0, nres_0);
   Ereal_0.resize  (nres_0, nres_0); Eimag_0.resize  (nres_0, nres_0);
-
-  EIreal_0.resize (nres_0); EIimag_0.resize (nres_0);
-  EOreal_0.resize (nres_0); EOimag_0.resize (nres_0);
 
   if (nres_0 == nres_1)
     {
@@ -1622,21 +1443,14 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
     }
 
   for (int j = 0; j < nres_0; j++)
-    {
-      EIreal_0(j) = weight1 * EIreal_1(j) + weight2 * EIreal_2(j) + weight3 * EIreal_3(j) + weight4 * EIreal_4(j);
-      EIimag_0(j) = weight1 * EIimag_1(j) + weight2 * EIimag_2(j) + weight3 * EIimag_3(j) + weight4 * EIimag_4(j);
-      EOreal_0(j) = weight1 * EOreal_1(j) + weight2 * EOreal_2(j) + weight3 * EOreal_3(j) + weight4 * EOreal_4(j);
-      EOimag_0(j) = weight1 * EOimag_1(j) + weight2 * EOimag_2(j) + weight3 * EOimag_3(j) + weight4 * EOimag_4(j);
-      
-      for (int k = 0; k < nres_0; k++)
-	{
-	  Freal_0(j, k) = weight1 * Freal_1(j, k) + weight2 * Freal_2(j, k) + weight3 * Freal_3(j, k) + weight4 * Freal_4(j, k);
-	  Fimag_0(j, k) = weight1 * Fimag_1(j, k) + weight2 * Fimag_2(j, k) + weight3 * Fimag_3(j, k) + weight4 * Fimag_4(j, k);
-	  Ereal_0(j, k) = weight1 * Ereal_1(j, k) + weight2 * Ereal_2(j, k) + weight3 * Ereal_3(j, k) + weight4 * Ereal_4(j, k);
-	  Eimag_0(j, k) = weight1 * Eimag_1(j, k) + weight2 * Eimag_2(j, k) + weight3 * Eimag_3(j, k) + weight4 * Eimag_4(j, k);
-	}
-    }
-
+    for (int k = 0; k < nres_0; k++)
+      {
+	Freal_0(j, k) = weight1 * Freal_1(j, k) + weight2 * Freal_2(j, k) + weight3 * Freal_3(j, k) + weight4 * Freal_4(j, k);
+	Fimag_0(j, k) = weight1 * Fimag_1(j, k) + weight2 * Fimag_2(j, k) + weight3 * Fimag_3(j, k) + weight4 * Fimag_4(j, k);
+	Ereal_0(j, k) = weight1 * Ereal_1(j, k) + weight2 * Ereal_2(j, k) + weight3 * Ereal_3(j, k) + weight4 * Ereal_4(j, k);
+	Eimag_0(j, k) = weight1 * Eimag_1(j, k) + weight2 * Eimag_2(j, k) + weight3 * Eimag_3(j, k) + weight4 * Eimag_4(j, k);
+      }
+  
   // ........................
   // Write interpolated fFile
   // ........................
@@ -1658,10 +1472,7 @@ void Neoclassical::fFileInterpolateQuartic (char* fFile1, double time1, char* fF
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",
 	       mres_0(j), mres_0(k), Ereal_0(j, k), Eimag_0(j, k));
-  for (int j = 0; j < nres_0; j++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e\n",
-	     mres_0(j), EIreal_0(j), EIimag_0(j), EOreal_0(j), EOimag_0(j));
-
+ 
   fclose (file);
   
   printf ("fFile Interpolation:\n");

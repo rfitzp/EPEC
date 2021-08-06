@@ -34,15 +34,15 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
 
   double precision, dimension (:),    allocatable :: PSIN, T,     P,       TTp,    Pp,   Q,  CURR
   double precision, dimension (:),    allocatable :: R,    Z,     RBOUND,  ZBOUND, RLIM, ZLIM  
-  double precision, dimension (:, :), allocatable :: PSI,  PSII 
+  double precision, dimension (:, :), allocatable :: PSI
 
   character (len = *), parameter :: file = "Outputs/Stage1.nc"
 
   integer          :: err = 0, file_id
-  integer          :: para_d_id, para_id, NPARA = 8, bound_d_id, rbound_id, zbound_id
+  integer          :: para_d_id, para_id, NPARA = 9, bound_d_id, rbound_id, zbound_id
   integer          :: lim_d_id, rlim_id, zlim_id, R_d_id, R_id, Z_d_id, Z_id
   integer          :: PS_d_id (2), PS_id, PN_id, T_id, P_id, TTp_id, Pp_id, Q_id, C_id
-  double precision :: para (8)
+  double precision :: para (9)
 
   MU0 = 16. * atan(1.0) * 1.e-7
 
@@ -72,6 +72,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   para (6) = ZHIGH
   para (7) = RAXIS
   para (8) = ZAXIS 
+  para (9) = PSIAXIS /R0/R0/B0
 
   allocate (R (NRBOX))
   allocate (Z (NZBOX))
@@ -94,7 +95,6 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   allocate (Q     (NRBOX))
   allocate (CURR  (NRBOX))
   allocate (PSI   (NRBOX, NZBOX))
-  allocate (PSII  (NZBOX, NRBOX))
 
   read (100, '(5e16.9)') ( T   (i),    i = 1, NRBOX)
   read (100, '(5e16.9)') ( P   (i),    i = 1, NRBOX)
@@ -168,8 +168,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   do i = 1, NRBOX
      do j = 1, NZBOX
         PSI  (i, j) = PSI (i, j) /R0/R0/B0
-        PSII (j, i) = PSI (i, j)
-     end do
+      end do
   end do
 
   open  (unit = 101, file = 'Outputs/Stage1/Psi.txt')
@@ -240,7 +239,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   err = err + nf90_put_var (file_id, para_id,   para)
   err = err + nf90_put_var (file_id, R_id,      R)
   err = err + nf90_put_var (file_id, Z_id,      Z)
-  err = err + nf90_put_var (file_id, PS_id,     PSII)
+  err = err + nf90_put_var (file_id, PS_id,     PSI)
   err = err + nf90_put_var (file_id, PN_id,     PSIN)
   err = err + nf90_put_var (file_id, T_id,      T)
   err = err + nf90_put_var (file_id, P_id,      P)
@@ -277,6 +276,5 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   deallocate (RLIM)
   deallocate (ZLIM)
   deallocate (PSI)
-  deallocate (PSII)
 
 endsubroutine gFileRead

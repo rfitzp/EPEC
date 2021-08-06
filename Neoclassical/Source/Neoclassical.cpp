@@ -2,31 +2,33 @@
 
 // PROGRAM ORGANIZATION:
 // 
-//        Neoclassical:: Neoclassical     ()
-// void   Neoclassical:: Solve            (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-//			                   int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
-// void   Neoclassical:: Read_Parameters  (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-// 				           int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
-// void   Neoclassical:: Read_Equilibrium ()
-// void   Neoclassical:: Read_Profiles    ()
-// void   Neoclassical:: Get_Derived      ()
-// void   Neoclassical:: Get_Viscosities  ()
-// void   Neoclassical:: Get_Parameters   ()
-// void   Neoclassical:: Get_Frequencies  ()
-// void   Neoclassical:: Get_LayerWidths  ()
-// void   Neoclassical:: Get_Normalized   ()
-// double Neoclassical:: psi_fun          (double x)
-// double Neoclassical:: psi_fun_p        (double x)
-// void   Neoclassical:: RK4Adaptive      (double& x, Array<double,1>& y, double& h, 
-//			                    double& t_err, double acc, double S, int& rept,
-//			                    int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
-// void   Neoclassical:: RK4Fixed         (double& x, Array<double,1>& y, double h)
-// void   Neoclassical:: Matrix_Mult      (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
-// void   Neoclassical:: Matrix_Add       (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
-// void   Neoclassical:: Matrix_Sub       (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
-// FILE*  Neoclassical:: OpenFilew        (char* filename)
-// FILE*  Neoclassical:: OpenFilew        (char* filename)
-// FILE*  Neoclassical:: OpenFilea        (char* filename)
+//        Neoclassical:: Neoclassical         ()
+// void   Neoclassical:: Solve                (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+//			                        int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT)
+// void   Neoclassical:: Read_Parameters      (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+// 				                int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT)
+// void   Neoclassical:: Read_Equilibrium     ()
+// void   Neoclassical:: Read_Profiles        ()
+// void   Neoclassical:: Get_Derived          ()
+// void   Neoclassical:: Get_Viscosities      ()
+// void   Neoclassical:: Get_Parameters       ()
+// void   Neoclassical:: Get_Frequencies      ()
+// void   Neoclassical:: Get_LayerWidths      ()
+// void   Neoclassical:: WriteStage2Netcdfcpp ()
+// void   Neoclassical:: WriteStage2Netcdfc   ()
+// void   Neoclassical:: Get_Normalized       ()
+// double Neoclassical:: psi_fun              (double x)
+// double Neoclassical:: psi_fun_p            (double x)
+// void   Neoclassical:: RK4Adaptive          (double& x, Array<double,1>& y, double& h, 
+//			                       double& t_err, double acc, double S, int& rept,
+//			                       int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
+// void   Neoclassical:: RK4Fixed             (double& x, Array<double,1>& y, double h)
+// void   Neoclassical:: Matrix_Mult          (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+// void   Neoclassical:: Matrix_Add           (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+// void   Neoclassical:: Matrix_Sub           (gsl_matrix* A, gsl_matrix* B, gsl_matrix* C, int i)
+// FILE*  Neoclassical:: OpenFilew            (char* filename)
+// FILE*  Neoclassical:: OpenFilew            (char* filename)
+// FILE*  Neoclassical:: OpenFilea            (char* filename)
 
 #include "Neoclassical.h"
 
@@ -60,43 +62,73 @@ Neoclassical::Neoclassical ()
 // Solve problem
 // ##############
 void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-			  int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
+			  int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT)
 {
+  // Start timer
+  clock_t begin = clock ();
+
   // Read discharge parameters
-  Read_Parameters (_NEUTRAL, _IMPURITY, _EXB, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME, _CATS);
+  Read_Parameters (_NEUTRAL, _IMPURITY, _EXB, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME, _CATS, _OMFIT);
+  fflush (stdout);
   
   // Read equilibrium data
   Read_Equilibrium ();
+  fflush (stdout);
 
   // Read profile data
   Read_Profiles ();
+  fflush (stdout);
 
   // Calculate derived quantities at rational surface
   Get_Derived ();
+  fflush (stdout);
 
   // Calculate neoclassical viscosities at rational surfaces
   Get_Viscosities ();
+  fflush (stdout);
 
   // Calculate neoclassical parameters at rational surfaces
   Get_Parameters ();
+  fflush (stdout);
 
   // Calculate neoclassical frequencies at rational surfaces
   Get_Frequencies ();
+  fflush (stdout);
 
   // Calculate linear layer widths at rational surfaces
   Get_LayerWidths ();
+  fflush (stdout);
+
+  // Output NETCDF file
+#ifdef NETCDF_CPP
+  WriteStage2Netcdfcpp ();
+#else
+  WriteStage2Netcdfc ();
+#endif
 
   // Calculate normalized quantites at rational surface and output nFile
   Get_Normalized ();
+  fflush (stdout);
+   
+  // Stop timer
+  clock_t end        = clock ();
+  double  time_spent = double (end - begin) /CLOCKS_PER_SEC;
+
+  // Print exit message
+  printf ("*****************************************************************\n");
+  printf ("PROGRAM NEOCLASSICAL:: Normal termination: Wall time = %8d s\n", time_spent);
+  printf ("*****************************************************************\n");
 }
 
 // ####################################
 // Read Neoclassical control parameters
 // ####################################
 void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
+				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT)
 {
   // Set default values of control parameters
+  OMFIT    = 0;
+
   EXB      = 0;
 
   INTP     = 0;
@@ -150,14 +182,16 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
     INTC = _INTC;
   if (_CATS > -1)
     CATS = _CATS;
+ if (_OMFIT > 0)
+    OMFIT = _OMFIT;
 
   // Output input parameters
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
-	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
+  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e OMFIT = %2d\n",
+	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, OMFIT);
 
   // Sanity check
   if (YN < 0.)
@@ -200,24 +234,42 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
       printf ("NEOCLASSICAL::Read_Parameters: Error invalid TAUMIN value\n");
       exit (1);
     }
+  if (OMFIT && INTP)
+    {
+      printf ("NEOCLASSICAL:: pFile interpolation not implemented yet in OMFIT mode\n");
+      exit (1);
+    }
+  if (OMFIT && INTF)
+    {
+      printf ("NEOCLASSICAL:: fFile interpolation not implemented yet in OMFIT mode\n");
+      exit (1);
+    }
+  if (OMFIT && INTC)
+    {
+      printf ("NEOCLASSICAL:: cFile interpolation not implemented yet in OMFIT mode\n");
+      exit (1);
+    }
    
   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
-	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e OMFIT = %2d\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, OMFIT);
   fclose (namelist);
   
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
-  fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
-  fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-  fprintf (monitor, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
-	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
-  fclose (monitor);
+  if (!OMFIT)
+    {
+      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+      fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
+      fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
+      fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
+      fprintf (monitor, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
+      fprintf (monitor, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e OMFIT = %2d\n",
+	       IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, OMFIT);
+      fclose (monitor);
+    }
 }
 
 // ###################################################
@@ -1413,6 +1465,322 @@ void Neoclassical::Get_LayerWidths ()
 	}
     }
 }
+
+#ifdef NETCDF_CPP
+// ###################################################
+// Function to write Stage2 NETCDF file via NETCDF-c++
+// ###################################################
+void Neoclassical::WriteStage2Netcdfcpp ()
+{
+  // Convert data
+  double* psi_x   = new double[NPSI];
+  double* n_e_x   = new double[NPSI];
+  double* T_e_x   = new double[NPSI];
+  double* n_i_x   = new double[NPSI];
+  double* T_i_x   = new double[NPSI];
+  double* n_I_x   = new double[NPSI];
+  double* T_I_x   = new double[NPSI];
+  double* w_E_x   = new double[NPSI];
+  double* Z_eff_x = new double[NPSI];
+  double* w_t_x   = new double[NPSI];
+  double* n_n_x   = new double[NPSI];
+  for (int i = 0; i < NPSI; i++)
+    {
+      psi_x[i]   = psi(i);
+      n_e_x[i]   = n_e(i) /1.e19; 
+      T_e_x[i]   = T_e(i) /e/1.e3;
+      n_i_x[i]   = n_i(i) /1.e19; 
+      T_i_x[i]   = T_i(i) /e/1.e3; 
+      n_I_x[i]   = n_I(i) /1.e19; 
+      T_I_x[i]   = T_I(i) /e/1.e3; 
+      w_E_x[i]   = w_E(i) /1.e3;
+      Z_eff_x[i] = Z_eff(i);
+      w_t_x[i]   = w_t(i) /1.e3;
+      n_n_x[i]   = n_n(i) /1.e19;
+    }
+  
+  try
+    {
+      // Open file
+      NcFile dataFile ("Outputs/Stage3.nc", NcFile::replace);
+
+      // PsiN
+      NcDim PsiN_d = dataFile.addDim ("N_psi", NPSI);
+      NcVar PsiN   = dataFile.addVar ("PsiN", ncDouble, PsiN_d);
+      PsiN.put (psi);
+
+      // n_e
+      NcVar n_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
+      n_e_y.put (n_e);
+
+      // T_e
+      NcVar T_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
+      T_e_y.put (T_e);
+
+      // n_i
+      NcVar n_i_y = dataFile.addVar ("n_i", ncDouble, PsiN_d);
+      n_i_y.put (n_i);
+
+      // T_i
+      NcVar t_i_y = dataFile.addVar ("T_i", ncDouble, PsiN_d);
+      T_i_y.put (T_i);
+
+      // n_I
+      NcVar n_I_y = dataFile.addVar ("n_I", ncDouble, PsiN_d);
+      n_i_y.put (n_I);
+
+      // T_I
+      NcVar T_I_y = dataFile.addVar ("T_I", ncDouble, PsiN_d);
+      T_I_y.put (T_I);
+
+      // Z_eff
+      NcVar Z_eff_y = dataFile.addVar ("Z_eff", ncDouble, PsiN_d);
+      Z_eff_y.put (Z_eff);
+
+      // n_n
+      NcVar n_n_y = dataFile.addVar ("n_n", ncDouble, PsiN_d);
+      n_n_y.put (n_n);
+
+      // w_E
+      NcVar w_E_y = dataFile.addVar ("w_E", ncDouble, PsiN_d);
+      w_E_y.put (w_E); 
+
+      // w_t
+      NcVar w_t_y = dataFile.addVar ("w_t", ncDouble, PsiN_d);
+      w_t_y.put (w_t);
+    }
+  catch (NcException& e)
+    {
+      printf ("NEOCLASSICAL::WriteStage2Netcdfcpp: Error writing Outputs/Stage3.nc: Exception = %s\n", e.what ());
+      exit (1);
+    }
+
+  // Clean up
+  delete[] psi_x; delete[] n_e_x;   delete[] T_e_x; delete[] n_i_x; delete[] T_i_x; delete[] n_I_x; delete[] T_I_x;
+  delete[] w_E_x; delete[] Z_eff_x; delete[] w_t_x; delete[] n_n_x;w
+}
+#else
+// #################################################
+// Function to write Stage2 NETCDF file via NETCDF-c
+// #################################################
+void Neoclassical::WriteStage2Netcdfc ()
+{
+  // Convert data
+  double* psi_x         = new double[NPSI];
+  double* n_e_x         = new double[NPSI];
+  double* T_e_x         = new double[NPSI];
+  double* n_i_x         = new double[NPSI];
+  double* T_i_x         = new double[NPSI];
+  double* n_I_x         = new double[NPSI];
+  double* T_I_x         = new double[NPSI];
+  double* w_E_x         = new double[NPSI];
+  double* Z_eff_x       = new double[NPSI];
+  double* w_t_x         = new double[NPSI];
+  double* n_n_x         = new double[NPSI];
+  double* chip_x        = new double[NPSI];
+  double* chie_x        = new double[NPSI];
+  double* chin_x        = new double[NPSI];
+  double* chii_x        = new double[NPSI];
+  double* PsiNk_x       = new double[NPSI];
+  double* tau_Hk_x      = new double[NPSI];
+  double* tau_Rk_x      = new double[NPSI];
+  double* tau_Mk_x      = new double[NPSI];
+  double* tau_thk_x     = new double[NPSI];
+  double* tau_cxk_x     = new double[NPSI];
+  double* w_linear_x    = new double[NPSI];
+  double* w_nonlinear_x = new double[NPSI];
+  double* w_EB_x        = new double[NPSI];
+  for (int i = 0; i < NPSI; i++)
+    {
+      psi_x[i]         = psi(i);
+      n_e_x[i]         = n_e(i) /1.e19; 
+      T_e_x[i]         = T_e(i) /e/1.e3;
+      n_i_x[i]         = n_i(i) /1.e19; 
+      T_i_x[i]         = T_i(i) /e/1.e3; 
+      n_I_x[i]         = n_I(i) /1.e19; 
+      T_I_x[i]         = T_I(i) /e/1.e3; 
+      w_E_x[i]         = w_E(i) /1.e3;
+      Z_eff_x[i]       = Z_eff(i);
+      w_t_x[i]         = w_t(i) /1.e3;
+      n_n_x[i]         = n_n(i) /1.e19;
+      chip_x[i]        = chip(i);
+      chie_x[i]        = chie(i);
+      chin_x[i]        = chin(i);
+      chii_x[i]        = chii(i);
+      PsiNk_x[i]       = PsiNk(i);
+      tau_Hk_x[i]      = tau_Hk(i);
+      tau_Rk_x[i]      = tau_Rk(i) * Q_00(i);
+      tau_Mk_x[i]      = tau_Mk(i);
+      tau_thk_x[i]     = tau_thk(i)  /mu_00_i(i);
+      tau_cxk_x[i]     = tau_cxk(i);
+      w_linear_x[i]    = w_linear(i) /1.e3;
+      w_nonlinear_x[i] = w_nonlinear(i) /1.e3;
+      w_EB_x[i]        = w_EB(i) /1.e3;
+    }
+
+  // Open file
+  int err = 0, dataFile;
+  err = nc_create ("Outputs/Stage3.nc", NC_CLOBBER, &dataFile);
+ 
+  if (err != 0)
+    {
+      printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error opening Outputs/Stage3.nc\n");
+      exit (1);
+    }
+
+  // PsiN
+  int PsiN_d, PsiN;
+  err += nc_def_dim (dataFile, "N_psi", NPSI, &PsiN_d);
+  err += nc_def_var (dataFile, "PsiN", NC_DOUBLE, 1, &PsiN_d, &PsiN);
+
+  // n_e
+  int n_e_y;
+  err += nc_def_var (dataFile, "n_e", NC_DOUBLE, 1, &PsiN_d, &n_e_y);
+
+  // T_e
+  int T_e_y;
+  err += nc_def_var (dataFile, "T_e", NC_DOUBLE, 1, &PsiN_d, &T_e_y);
+  
+  // n_i
+  int n_i_y;
+  err += nc_def_var (dataFile, "n_i", NC_DOUBLE, 1, &PsiN_d, &n_i_y);
+
+  // T_i
+  int T_i_y;
+  err += nc_def_var (dataFile, "T_i", NC_DOUBLE, 1, &PsiN_d, &T_i_y);
+  
+  // n_I
+  int n_I_y;
+  err += nc_def_var (dataFile, "n_I", NC_DOUBLE, 1, &PsiN_d, &n_I_y);
+
+  // T_I
+  int T_I_y;
+  err += nc_def_var (dataFile, "T_I", NC_DOUBLE, 1, &PsiN_d, &T_I_y);
+  
+  // Z_eff
+  int Z_eff_y;
+  err += nc_def_var (dataFile, "Z_eff", NC_DOUBLE, 1, &PsiN_d, &Z_eff_y);
+
+  // n_n
+  int n_n_y;
+  err += nc_def_var (dataFile, "n_n", NC_DOUBLE, 1, &PsiN_d, &n_n_y);
+  
+  // w_E
+  int w_E_y;
+  err += nc_def_var (dataFile, "w_E", NC_DOUBLE, 1, &PsiN_d, &w_E_y);
+
+  // w_t
+  int w_t_y;
+  err += nc_def_var (dataFile, "w_t", NC_DOUBLE, 1, &PsiN_d, &w_t_y);
+
+  // chip
+  int chip_y;
+  err += nc_def_var (dataFile, "chi_p", NC_DOUBLE, 1, &PsiN_d, &chip_y);
+
+  // chie
+  int chie_y;
+  err += nc_def_var (dataFile, "chi_e", NC_DOUBLE, 1, &PsiN_d, &chie_y);
+
+  // chin
+  int chin_y;
+  err += nc_def_var (dataFile, "chi_n", NC_DOUBLE, 1, &PsiN_d, &chin_y);
+
+  // chii
+  int chii_y;
+  err += nc_def_var (dataFile, "chi_i", NC_DOUBLE, 1, &PsiN_d, &chii_y);
+
+  // PsiNk
+  int nres_d, PsiNk_y;
+  err += nc_def_dim (dataFile, "N_res", nres, &nres_d);
+  err += nc_def_var (dataFile, "PsiN_k", NC_DOUBLE, 1, &nres_d, &PsiNk_y);
+
+  // tau_Hk
+  int tau_Hk_y;
+  err += nc_def_var (dataFile, "tau_H", NC_DOUBLE, 1, &nres_d, &tau_Hk_y);
+
+  // tau_Rk
+  int tau_Rk_y;
+  err += nc_def_var (dataFile, "tau_R", NC_DOUBLE, 1, &nres_d, &tau_Rk_y);
+
+  // tau_Mk
+  int tau_Mk_y;
+  err += nc_def_var (dataFile, "tau_M", NC_DOUBLE, 1, &nres_d, &tau_Mk_y);
+
+  // tau_thk
+  int tau_thk_y;
+  err += nc_def_var (dataFile, "tau_th", NC_DOUBLE, 1, &nres_d, &tau_thk_y);
+
+  // tau_cxk
+  int tau_cxk_y;
+  err += nc_def_var (dataFile, "tau_cx", NC_DOUBLE, 1, &nres_d, &tau_cxk_y);
+
+  // w_linear
+  int w_linear_y;
+  err += nc_def_var (dataFile, "w_linear", NC_DOUBLE, 1, &nres_d, &w_linear_y);
+
+  // w_nonlinear
+  int w_nonlinear_y;
+  err += nc_def_var (dataFile, "w_nonlinear", NC_DOUBLE, 1, &nres_d, &w_nonlinear_y);
+
+  // w_EB
+  int w_EB_y;
+  err += nc_def_var (dataFile, "w_EB", NC_DOUBLE, 1, &nres_d, &w_EB_y);
+
+  err += nc_enddef (dataFile);
+
+  if (err != 0)
+    {
+      printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error defining varaibles in Outputs/Stage3.nc\n");
+      exit (1);
+    }
+
+  // Write data
+  err += nc_put_var_double (dataFile, PsiN,          psi_x);
+  err += nc_put_var_double (dataFile, n_e_y,         n_e_x);
+  err += nc_put_var_double (dataFile, T_e_y,         T_e_x);
+  err += nc_put_var_double (dataFile, n_i_y,         n_i_x);
+  err += nc_put_var_double (dataFile, T_i_y,         T_i_x);
+  err += nc_put_var_double (dataFile, n_I_y,         n_I_x);
+  err += nc_put_var_double (dataFile, T_I_y,         T_I_x);
+  err += nc_put_var_double (dataFile, Z_eff_y,       Z_eff_x);
+  err += nc_put_var_double (dataFile, n_n_y,         n_n_x);
+  err += nc_put_var_double (dataFile, w_E_y,         w_E_x);
+  err += nc_put_var_double (dataFile, w_t_y,         w_t_x);
+  err += nc_put_var_double (dataFile, chip_y,        chip_x);
+  err += nc_put_var_double (dataFile, chie_y,        chie_x);
+  err += nc_put_var_double (dataFile, chin_y,        chin_x);
+  err += nc_put_var_double (dataFile, chii_y,        chii_x);
+  err += nc_put_var_double (dataFile, PsiNk_y,       PsiNk_x);
+  err += nc_put_var_double (dataFile, tau_Hk_y,      tau_Hk_x);
+  err += nc_put_var_double (dataFile, tau_Rk_y,      tau_Rk_x);
+  err += nc_put_var_double (dataFile, tau_Mk_y,      tau_Mk_x);
+  err += nc_put_var_double (dataFile, tau_thk_y,     tau_thk_x);
+  err += nc_put_var_double (dataFile, tau_cxk_y,     tau_cxk_x);
+  err += nc_put_var_double (dataFile, w_linear_y,    w_linear_x);
+  err += nc_put_var_double (dataFile, w_nonlinear_y, w_nonlinear_x);
+  err += nc_put_var_double (dataFile, w_EB_y,        w_EB_x);
+   
+  if (err != 0)
+    {
+      printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error writing Outputs/Stage3.nc\n");
+      exit (1);
+    }
+  
+  err += nc_close (dataFile);
+
+  if (err != 0)
+    {
+      printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error closing Outputs/Stage3.nc\n");
+      exit (1);
+    }
+
+  // Clean up
+  delete[] psi_x;      delete[] n_e_x;         delete[] T_e_x;    delete[] n_i_x;    delete[] T_i_x;     delete[] n_I_x;     delete[] T_I_x;
+  delete[] w_E_x;      delete[] Z_eff_x;       delete[] w_t_x;    delete[] n_n_x;    delete[] chip_x;    delete[] chie_x;    delete[] chin_x;
+  delete[] chii_x;     delete[] tau_Hk_x;      delete[] tau_Rk_x; delete[] tau_Mk_x; delete[] tau_thk_x; delete[] tau_cxk_x; delete[] PsiNk_x;
+  delete[] w_linear_x; delete[] w_nonlinear_x; delete[] w_EB_x;
+}
+#endif
 
 // #######################################################################################
 // Calculate normalized quantities at rational surfaces for program PHASE and output nFile

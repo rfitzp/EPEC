@@ -14,6 +14,7 @@
 // -f EXB      - override EXB value from namelist file
 // -h          - list options
 // -l LN       - override LN value from namelist file
+// -o          - flag to select OMFIT mode
 // -n NEUTRAL  - override NEUTRAL value from namelist file
 // -p INTP     - override INTP value from namelist file
 // -t TIME     - sets experimental time (ms)
@@ -74,11 +75,14 @@
 
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 26
+#define MAXFILENAMELENGTH 500
+#define MAXPFILELINELENGTH 500
 
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 #include <vector>
 #include <blitz/array.h>
 #include <gsl/gsl_complex.h>
@@ -89,10 +93,15 @@
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_poly.h>
 
-#include "Field.h"
+#ifdef NETCDF_CPP
+#include <netcdf>
+using namespace netCDF;
+using namespace netCDF::exceptions;
+#else
+#include <netcdf.h>
+#endif
 
-#define MAXFILENAMELENGTH 500
-#define MAXPFILELINELENGTH 500
+#include "Field.h"
 
 using namespace blitz;
 
@@ -114,6 +123,9 @@ class Neoclassical
   // ------------------
   // Control parameters
   // ------------------
+
+  // Read from command line
+  int OMFIT;       // Flag to select OMFIT mode
 
   // Read from Inputs/Neoclassical.nml
   double COULOMB;  // Coulomb logarithm
@@ -139,7 +151,8 @@ class Neoclassical
 
   double TIME;     // Experimental time (ms)
 
-  double TAUMIN;   // Minimum allowed value of tau
+  double TAUMIN;   // Minimum allowed value of tau (i.e., ratio of electon to ion diamagnetic frequencies)
+                   //  1+tau must be positive otherwise layer width calculation fails.
 
   // ------------------
   // Physical constants
@@ -204,7 +217,7 @@ class Neoclassical
   Field Chip; // Perpendicular momentum diffusivity (m^2/s)
   Field Chie; // Perpendicular electron energy diffusivity (m^2/s)
   Field Chin; // Perpendicular particle diffusivity (m^2/s)
-  Field Chii; // Perpendicularion energy diffusivity (m^2/s)
+  Field Chii; // Perpendicular ion energy diffusivity (m^2/s)
 
   // Profile data interpolated onto equilibrium grid
   Array<double,1> n_e;    // Electron number density (m^-3)
@@ -358,7 +371,7 @@ class Neoclassical
   Array<double,1> w_ast_Ik;   // Impurity ion diamagnetic frequencies (rad/s)
   Array<double,1> w_nc_ik;    // Majority ion neoclassical frequencies (rad/s)
   Array<double,1> w_nc_Ik;    // Impurity ion neoclassical frequencies (rad/s)
-  Array<double,1> w_nc_eek;   // Electron-electron neocalssical frequencies (rad/s)
+  Array<double,1> w_nc_eek;   // Electron-electron neoclassical frequencies (rad/s)
   Array<double,1> w_nc_eik;   // Electron-ion neocalssical frequencies (rad/s)
   Array<double,1> w_E_Ik;     // ExB frequencies inferred from toroidal impurity ion rotation frequency (rad/s)
   Array<double,1> w_betak;    // Bootstrap frequencies (rad/s)
@@ -451,7 +464,7 @@ class Neoclassical
 
   // Solve problem
   void Solve  (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-	       int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);            
+	       int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT);            
  
   // -----------------------
   // Private class functions
@@ -460,7 +473,7 @@ class Neoclassical
 
   // Read discharge parameters
   void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);
+			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT);
   // Read equilibrium data
   void Read_Equilibrium ();
   // Read profile data
@@ -481,6 +494,14 @@ class Neoclassical
   void Get_LayerWidths ();
   // Calculate normalized quantities at rational surfaces
   void Get_Normalized ();
+
+#ifdef NETCDF_CPP
+  // Write Stage2 NETCDF file via NETCDF-c++
+  void WriteStage2Netcdfcpp ();
+#else
+  // Write Stage2 NETCDF file via NETCDF-c
+  void WriteStage2Netcdfc ();
+#endif
 
   // 1D interpolation function with nonuniform grid
   double Interpolate             (int I, Array<double,1> X, Array<double,1> Y, double x, int order);

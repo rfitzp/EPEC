@@ -33,6 +33,7 @@
 // -g INTG   - override INTG value from namelist
 // -n NTOR   - override NTOR value from namelist
 // -m MMIN   - override MMIN value from namelist
+// -o        - flag to select OMFIT mode
 // -p PSILIM - override PSILIM value from namelist
 // -r PSIRAT - override PSIRAT value from namelist
 // -t TIME   - override TIME value from namelist
@@ -71,6 +72,8 @@
 // 1.16 - Added E, F, H calculation
 // 1.17 - Upgraded to gsl_odeiv2. Better Cnc calculation.
 // 1.18 - Added RMP coil calculation
+// 1.19 - Removed RMP coil calculation and E vectors. 
+//         Added NECTCDF output. Adapted to run with OMFIT.
 
 // #####################################################################################
 
@@ -80,7 +83,7 @@
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 18
+#define VERSION_MINOR 19
 
 #include <stdio.h>
 #include <math.h>
@@ -134,6 +137,9 @@ extern "C" void gFileInterpolateQuartic   ();
 class Flux
 {
  private:
+
+  // Control parameters read from command line
+  int OMFIT;      // Flag to select OMFIT mode
   
   // Control parameters read from Inputs/Flux.nml
   int    NTOR;    // Toroidal mode number
@@ -305,7 +311,7 @@ public:
   // Constructor
   Flux ();
   // Solve problem
-  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
+  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT);
 
   // Evaluate right-hand sides of q/g equation
   int Rhs1 (double r, const double y[], double dydr[], void*);
@@ -323,7 +329,7 @@ public:
 private:
 
   // Set global parameters
-  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
+  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT);
   // Input gFile data and output Stage1 data
   void Stage1 ();
   // Input Stage1 data and output Stage2 data
