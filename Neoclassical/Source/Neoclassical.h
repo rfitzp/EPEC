@@ -67,6 +67,7 @@
 // 1.24 - Added change exchange to angular velocity evolution equations
 // 1.25 - Added calculation of DB and DR
 // 1.26 - Added calculation of alpha_b(e,i), alpha_c, and alpha_p
+// 1.27 - Added NETCDF output. Adapted ti run with OMFIT.
 
 // ################################################################
 
@@ -74,7 +75,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 1
-#define VERSION_MINOR 26
+#define VERSION_MINOR 27
 #define MAXFILENAMELENGTH 500
 #define MAXPFILELINELENGTH 500
 
@@ -385,7 +386,7 @@ class Neoclassical
   Array<double,1> tau_thk;    // Poloidal flow damping timescales (s)
   Array<double,1> tau_cxk;    // Charge exchange damping timescales (s)
 
-  Array<double,1> Sk;         // Lundquist number   
+  Array<double,1> Sk;         // Lundquist numbers   
   Array<double,1> tauk;       // Ratio of diamagnetic frequencies
   Array<double,1> PEk;        // Perpendicular particle/energy transport parameter
   Array<double,1> PMk;        // Perpendicular momentum transport parameter
@@ -393,7 +394,7 @@ class Neoclassical
   Array<double,1> QEk;        // ExB frequency parameter
   Array<double,1> Qek;        // Electron diamagnetic frequency parameter
   Array<double,1> Qik;        // Ion diamagnetic frequency parameter
-  Array<double,1> delk;       // Linear layer width
+  Array<double,1> delk;       // Linear layer width (m)
   
   Array<double,1> gt;         // Fraction of trapped particles
   Array<double,1> nu_P_e;     // Electron bananna/plateau collisionality parameter

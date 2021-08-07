@@ -344,11 +344,8 @@ void Flux::WriteStage2Netcdfcpp ()
 // #################################################
 void Flux::WriteStage2Netcdfc ()
 {
-  int err = 0, dataFile, para_d, para, bound_d, bound_r, bound_z, R_d, R, Z_d, Z;
-  int psi_d[2], psi, psi_r, psi_z, PN, Q_d, Q, Qp, G, Px, Gp, Pp, S_d, mr, PNr;
-  int qr, sr, gr, gmr, fcr, ajr, qhr, a1r, a2r, dr;
-
   // Open file
+  int err = 0, dataFile;
   err = nc_create ("Outputs/Stage2.nc", NC_CLOBBER, &dataFile);
   
   if (err != 0)
@@ -358,6 +355,7 @@ void Flux::WriteStage2Netcdfc ()
     }
   
   // Basic parameters
+  int para_d, para;
   double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, RAXIS, ZAXIS, q95, PSILIM, PSIRAT};
   err += nc_def_dim (dataFile, "index", 11, &para_d);
   err += nc_def_var (dataFile, "Parameters", NC_DOUBLE, 1, &para_d, &para);
@@ -365,15 +363,18 @@ void Flux::WriteStage2Netcdfc ()
 		     "R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT");
   
   // Plasma boundary
+  int bound_d, bound_r, bound_z;
   err += nc_def_dim (dataFile, "i_bound", NBPTS, &bound_d);
   err += nc_def_var (dataFile, "RBPTS", NC_DOUBLE, 1, &bound_d, &bound_r);
   err += nc_def_var (dataFile, "ZBPTS", NC_DOUBLE, 1, &bound_d, &bound_z);
   
   // R
+  int R_d, R;
   err += nc_def_dim (dataFile, "i", NRPTS, &R_d);
   err += nc_def_var (dataFile, "R", NC_DOUBLE, 1, &R_d, &R);
  
   // Z
+  int Z_d, Z;
   err += nc_def_dim (dataFile, "j", NZPTS, &Z_d);
   err += nc_def_var (dataFile, "Z", NC_DOUBLE, 1, &Z_d, &Z);
  
@@ -382,7 +383,8 @@ void Flux::WriteStage2Netcdfc ()
   for (int i = 0; i < NRPTS; i++)
     for (int j = 0; j < NZPTS; j++)
       DATA[i + j*NRPTS] = PSIARRAY (i, j);
-  
+
+  int psi_d[2], psi;
   psi_d[0] = R_d;
   psi_d[1] = Z_d;
   err += nc_def_var (dataFile, "PSI", NC_DOUBLE, 2, psi_d, &psi);
@@ -393,6 +395,7 @@ void Flux::WriteStage2Netcdfc ()
     for (int j = 0; j < NZPTS; j++)
       DATA1[i + j*NRPTS] = GetPsiR (RPTS[i], ZPTS[j]);
   
+  int psi_r;
   err += nc_def_var (dataFile, "PSI_R", NC_DOUBLE, 2, psi_d, &psi_r);
   
   // Psi_Z
@@ -401,62 +404,81 @@ void Flux::WriteStage2Netcdfc ()
     for (int j = 0; j < NZPTS; j++)
       DATA2[i + j*NRPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
 
+  int psi_z;
   err += nc_def_var (dataFile, "PSI_Z", NC_DOUBLE, 2, psi_d, &psi_z);
  
   // Psi_N
+  int Q_d, PN;
   err += nc_def_dim (dataFile, "N_PSI", NPSI, &Q_d);
   err += nc_def_var (dataFile, "PsiN", NC_DOUBLE, 1, &Q_d, &PN);
 
   // q
+  int Q;
   err += nc_def_var (dataFile, "q", NC_DOUBLE, 1, &Q_d, &Q);
 
   // q_psi
+  int Qp;
   err += nc_def_var (dataFile, "q_psi", NC_DOUBLE, 1, &Q_d, &Qp);
  
   // g
+  int G;
   err += nc_def_var (dataFile, "g", NC_DOUBLE, 1, &Q_d, &G);
 
   // P
+  int Px;
   err += nc_def_var (dataFile, "P", NC_DOUBLE, 1, &Q_d, &Px);
  
   // g_psi
+  int Gp;
   err += nc_def_var (dataFile, "g_psi", NC_DOUBLE, 1, &Q_d, &Gp);
   
   // P_psi
+  int Pp;
   err += nc_def_var (dataFile, "P_psi", NC_DOUBLE, 1, &Q_d, &Pp);
   
   // m_res
+  int S_d, mr;
   err += nc_def_dim (dataFile, "i_res", nres, &S_d);
   err += nc_def_var (dataFile, "m_pol", NC_INT, 1, &S_d, &mr);
 
   // PsiN_res
+  int PNr;
   err += nc_def_var (dataFile, "PsiN_res", NC_DOUBLE, 1, &S_d, &PNr);
   
   // q_res
+  int qr;
   err += nc_def_var (dataFile, "q_res", NC_DOUBLE, 1, &S_d, &qr);
   
   // s_res
+  int sr;
   err += nc_def_var (dataFile, "s_res", NC_DOUBLE, 1, &S_d, &sr);
 
   // g_res
+  int gr;
   err += nc_def_var (dataFile, "g_res", NC_DOUBLE, 1, &S_d, &gr);
  
   // gamma_res
+  int gmr;
   err += nc_def_var (dataFile, "gamma_res", NC_DOUBLE, 1, &S_d, &gmr);
   
   // f_c
+  int fcr;
   err += nc_def_var (dataFile, "fc_res", NC_DOUBLE, 1, &S_d, &fcr);
 
   // a_jj
+  int ajr; 
   err += nc_def_var (dataFile, "ajj_res", NC_DOUBLE, 1, &S_d, &ajr);
  
   // Q
+  int qhr;
   err += nc_def_var (dataFile, "Q_res", NC_DOUBLE, 1, &S_d, &qhr);
  
   // A1
+  int a1r;
   err +=  nc_def_var (dataFile, "A1_res", NC_DOUBLE, 1, &S_d, &a1r);
 
   // A2
+  int a2r;
   err += nc_def_var (dataFile, "A2_res", NC_DOUBLE, 1, &S_d, &a2r);
 
   // D_R
@@ -464,6 +486,7 @@ void Flux::WriteStage2Netcdfc ()
   for (int i = 0; i < nres; i++)
     D_R[i] = E[i] + F[i] + H[i]*H[i];
   
+  int dr;
   err += nc_def_var (dataFile, "DR_res", NC_DOUBLE, 1, &S_d, &dr);
 
   err += nc_enddef (dataFile);
@@ -509,6 +532,7 @@ void Flux::WriteStage2Netcdfc ()
       exit (1);
     }
   
+  // Close file
   err += nc_close (dataFile);
 
   if (err != 0)

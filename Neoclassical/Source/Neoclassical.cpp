@@ -1471,101 +1471,7 @@ void Neoclassical::Get_LayerWidths ()
 // Function to write Stage2 NETCDF file via NETCDF-c++
 // ###################################################
 void Neoclassical::WriteStage2Netcdfcpp ()
-{
-  // Convert data
-  double* psi_x   = new double[NPSI];
-  double* n_e_x   = new double[NPSI];
-  double* T_e_x   = new double[NPSI];
-  double* n_i_x   = new double[NPSI];
-  double* T_i_x   = new double[NPSI];
-  double* n_I_x   = new double[NPSI];
-  double* T_I_x   = new double[NPSI];
-  double* w_E_x   = new double[NPSI];
-  double* Z_eff_x = new double[NPSI];
-  double* w_t_x   = new double[NPSI];
-  double* n_n_x   = new double[NPSI];
-  for (int i = 0; i < NPSI; i++)
-    {
-      psi_x[i]   = psi(i);
-      n_e_x[i]   = n_e(i) /1.e19; 
-      T_e_x[i]   = T_e(i) /e/1.e3;
-      n_i_x[i]   = n_i(i) /1.e19; 
-      T_i_x[i]   = T_i(i) /e/1.e3; 
-      n_I_x[i]   = n_I(i) /1.e19; 
-      T_I_x[i]   = T_I(i) /e/1.e3; 
-      w_E_x[i]   = w_E(i) /1.e3;
-      Z_eff_x[i] = Z_eff(i);
-      w_t_x[i]   = w_t(i) /1.e3;
-      n_n_x[i]   = n_n(i) /1.e19;
-    }
-  
-  try
-    {
-      // Open file
-      NcFile dataFile ("Outputs/Stage3.nc", NcFile::replace);
-
-      // PsiN
-      NcDim PsiN_d = dataFile.addDim ("N_psi", NPSI);
-      NcVar PsiN   = dataFile.addVar ("PsiN", ncDouble, PsiN_d);
-      PsiN.put (psi);
-
-      // n_e
-      NcVar n_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
-      n_e_y.put (n_e);
-
-      // T_e
-      NcVar T_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
-      T_e_y.put (T_e);
-
-      // n_i
-      NcVar n_i_y = dataFile.addVar ("n_i", ncDouble, PsiN_d);
-      n_i_y.put (n_i);
-
-      // T_i
-      NcVar t_i_y = dataFile.addVar ("T_i", ncDouble, PsiN_d);
-      T_i_y.put (T_i);
-
-      // n_I
-      NcVar n_I_y = dataFile.addVar ("n_I", ncDouble, PsiN_d);
-      n_i_y.put (n_I);
-
-      // T_I
-      NcVar T_I_y = dataFile.addVar ("T_I", ncDouble, PsiN_d);
-      T_I_y.put (T_I);
-
-      // Z_eff
-      NcVar Z_eff_y = dataFile.addVar ("Z_eff", ncDouble, PsiN_d);
-      Z_eff_y.put (Z_eff);
-
-      // n_n
-      NcVar n_n_y = dataFile.addVar ("n_n", ncDouble, PsiN_d);
-      n_n_y.put (n_n);
-
-      // w_E
-      NcVar w_E_y = dataFile.addVar ("w_E", ncDouble, PsiN_d);
-      w_E_y.put (w_E); 
-
-      // w_t
-      NcVar w_t_y = dataFile.addVar ("w_t", ncDouble, PsiN_d);
-      w_t_y.put (w_t);
-    }
-  catch (NcException& e)
-    {
-      printf ("NEOCLASSICAL::WriteStage2Netcdfcpp: Error writing Outputs/Stage3.nc: Exception = %s\n", e.what ());
-      exit (1);
-    }
-
-  // Clean up
-  delete[] psi_x; delete[] n_e_x;   delete[] T_e_x; delete[] n_i_x; delete[] T_i_x; delete[] n_I_x; delete[] T_I_x;
-  delete[] w_E_x; delete[] Z_eff_x; delete[] w_t_x; delete[] n_n_x;w
-}
-#else
-// #################################################
-// Function to write Stage2 NETCDF file via NETCDF-c
-// #################################################
-void Neoclassical::WriteStage2Netcdfc ()
-{
-  // Convert data
+{ // Convert data from blitz++ array to c array
   double* psi_x         = new double[NPSI];
   double* n_e_x         = new double[NPSI];
   double* T_e_x         = new double[NPSI];
@@ -1581,41 +1487,331 @@ void Neoclassical::WriteStage2Netcdfc ()
   double* chie_x        = new double[NPSI];
   double* chin_x        = new double[NPSI];
   double* chii_x        = new double[NPSI];
-  double* PsiNk_x       = new double[NPSI];
-  double* tau_Hk_x      = new double[NPSI];
-  double* tau_Rk_x      = new double[NPSI];
-  double* tau_Mk_x      = new double[NPSI];
-  double* tau_thk_x     = new double[NPSI];
-  double* tau_cxk_x     = new double[NPSI];
-  double* w_linear_x    = new double[NPSI];
-  double* w_nonlinear_x = new double[NPSI];
-  double* w_EB_x        = new double[NPSI];
   for (int i = 0; i < NPSI; i++)
     {
-      psi_x[i]         = psi(i);
-      n_e_x[i]         = n_e(i) /1.e19; 
-      T_e_x[i]         = T_e(i) /e/1.e3;
-      n_i_x[i]         = n_i(i) /1.e19; 
-      T_i_x[i]         = T_i(i) /e/1.e3; 
-      n_I_x[i]         = n_I(i) /1.e19; 
-      T_I_x[i]         = T_I(i) /e/1.e3; 
-      w_E_x[i]         = w_E(i) /1.e3;
-      Z_eff_x[i]       = Z_eff(i);
-      w_t_x[i]         = w_t(i) /1.e3;
-      n_n_x[i]         = n_n(i) /1.e19;
-      chip_x[i]        = chip(i);
-      chie_x[i]        = chie(i);
-      chin_x[i]        = chin(i);
-      chii_x[i]        = chii(i);
+      psi_x[i]   = psi(i);
+      n_e_x[i]   = n_e(i) /1.e19; 
+      T_e_x[i]   = T_e(i) /e/1.e3;
+      n_i_x[i]   = n_i(i) /1.e19; 
+      T_i_x[i]   = T_i(i) /e/1.e3; 
+      n_I_x[i]   = n_I(i) /1.e19; 
+      T_I_x[i]   = T_I(i) /e/1.e3; 
+      w_E_x[i]   = w_E(i) /1.e3;
+      Z_eff_x[i] = Z_eff(i);
+      w_t_x[i]   = w_t(i) /1.e3;
+      n_n_x[i]   = n_n(i) /1.e19;
+      chip_x[i]  = chip(i);
+      chie_x[i]  = chie(i);
+      chin_x[i]  = chin(i);
+      chii_x[i]  = chii(i);
+    }
+
+  double* PsiNk_x       = new double[nres];
+  double* tau_Hk_x      = new double[nres];
+  double* tau_Rk_x      = new double[nres];
+  double* tau_Mk_x      = new double[nres];
+  double* tau_thk_x     = new double[nres];
+  double* tau_cxk_x     = new double[nres];
+  double* w_linear_x    = new double[nres];
+  double* w_nonlinear_x = new double[nres];
+  double* w_EB_x        = new double[nres];
+  double* rho_sk_x      = new double[nres];
+  double* delk_x        = new double[nres];
+  double* rhothek_x     = new double[nres];
+  double* rhothik_x     = new double[nres];
+  double* WcritTek_x    = new double[nres];
+  double* WcritTik_x    = new double[nres];
+  double* Wcritnek_x    = new double[nres];
+  double* w_ast_ek_x    = new double[nres];
+  double* w_ast_ik_x    = new double[nres];
+  double* w_ast_Ik_x    = new double[nres];
+  double* wEk_x         = new double[nres];
+  double* w_E_Ik_x      = new double[nres];
+  double* Sk_x          = new double[nres];
+  for (int i = 0; i < nres; i++)
+    {
       PsiNk_x[i]       = PsiNk(i);
       tau_Hk_x[i]      = tau_Hk(i);
       tau_Rk_x[i]      = tau_Rk(i) * Q_00(i);
       tau_Mk_x[i]      = tau_Mk(i);
-      tau_thk_x[i]     = tau_thk(i)  /mu_00_i(i);
+      tau_thk_x[i]     = tau_thk(i) /mu_00_i(i);
       tau_cxk_x[i]     = tau_cxk(i);
-      w_linear_x[i]    = w_linear(i) /1.e3;
+      w_linear_x[i]    = w_linear(i)    /1.e3;
       w_nonlinear_x[i] = w_nonlinear(i) /1.e3;
-      w_EB_x[i]        = w_EB(i) /1.e3;
+      w_EB_x[i]        = w_EB(i)        /1.e3;
+      rho_sk_x[i]      = rho_sk(i)   /1.e-2;
+      delk_x[i]        = delk(i)     /1.e-2;
+      rhothek_x[i]     = rhothek(i)  /1.e-2;
+      rhothik_x[i]     = rhothik(i)  /1.e-2;
+      WcritTek_x[i]    = WcritTek(i) /1.e-2;
+      WcritTik_x[i]    = WcritTik(i) /1.e-2;
+      Wcritnek_x[i]    = Wcritnek(i) /1.e-2;
+      w_ast_ek_x[i]    = w_ast_ek(i) /1.e3;
+      w_ast_ik_x[i]    = w_ast_ik(i) /1.e3;
+      w_ast_Ik_x[i]    = w_ast_Ik(i) /1.e3;
+      wEk_x[i]         = wEk(i)      /1.e3;
+      w_E_Ik_x[i]      = w_E_Ik(i)   /1.e3;
+      Sk_x[i]          = Sk(i);
+    }
+
+  try
+    {
+      // Open file
+      NcFile dataFile ("Outputs/Stage3.nc", NcFile::replace);
+
+      // PsiN
+      NcDim PsiN_d = dataFile.addDim ("N_psi", NPSI);
+      NcVar PsiN   = dataFile.addVar ("PsiN", ncDouble, PsiN_d);
+      PsiN.put (psi_x);
+
+      // n_e
+      NcVar n_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
+      n_e_y.put (n_e_x);
+
+      // T_e
+      NcVar T_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
+      T_e_y.put (T_e_x);
+
+      // n_i
+      NcVar n_i_y = dataFile.addVar ("n_i", ncDouble, PsiN_d);
+      n_i_y.put (n_i_x);
+
+      // T_i
+      NcVar t_i_y = dataFile.addVar ("T_i", ncDouble, PsiN_d);
+      T_i_y.put (T_i_x);
+
+      // n_I
+      NcVar n_I_y = dataFile.addVar ("n_I", ncDouble, PsiN_d);
+      n_i_y.put (n_I_x);
+
+      // T_I
+      NcVar T_I_y = dataFile.addVar ("T_I", ncDouble, PsiN_d);
+      T_I_y.put (T_I);
+
+      // Z_eff
+      NcVar Z_eff_y = dataFile.addVar ("Z_eff", ncDouble, PsiN_d);
+      Z_eff_y.put (Z_eff_x);
+
+      // n_n
+      NcVar n_n_y = dataFile.addVar ("n_n", ncDouble, PsiN_d);
+      n_n_y.put (n_n_x);
+
+      // w_E
+      NcVar w_E_y = dataFile.addVar ("w_E", ncDouble, PsiN_d);
+      w_E_y.put (w_E_x); 
+
+      // w_t
+      NcVar w_t_y = dataFile.addVar ("w_t", ncDouble, PsiN_d);
+      w_t_y.put (w_t_x);
+
+      // chip
+      NcVar chip_y = dataFile.addvar ("chi_p", ncDouble, PsiN_d);
+      chip_y.put (chip_x);
+ 
+      // chie
+      NcVar chie_y = dataFile.addvar ("chi_e", ncDouble, PsiN_d);
+      chie_y.put (chie_x);
+     
+      // chin
+      NcVar chin_y = dataFile.addvar ("chi_n", ncDouble, PsiN_d);
+      chin_y.put (chin_x);
+      
+      // chii
+      NcVar chii_y = dataFile.addvar ("chi_i", ncDouble, PsiN_d);
+      chii_y.put (chii_x);
+
+      // PsiNk
+      NcDim nres_d  = dataFile.addDim ("N_res", nres);
+      NcVar PsiNk_y = dataFile.addvar ("PsiN_k", ncDouble, nres_d);
+      PsiNk_y.put (PsiNk_x);
+
+      // tau_Hk
+      NcVar tau_Hk_y = dataFile.addvar ("tau_H", ncDouble, nres_d);
+      tau_Hk_y.put (tau_Hk_x);
+
+      // tau_Rk
+      NcVar tau_Rk_y = dataFile.addvar ("tau_R", ncDouble, nres_d);
+      tau_Rk_y.put (tau_Rk_x);
+
+      // tau_Mk
+      NcVar tau_Mk_y = dataFile.addvar ("tau_M", ncDouble, nres_d);
+      tau_Mk_y.put (tau_Mk_x);
+
+      // tau_thk
+      NcVar tau_thk_y = dataFile.addvar ("tau_th", ncDouble, nres_d);
+      tau_thk_y.put (tau_thk_x);
+
+      // tau_cxk
+      NcVar tau_cx_y = dataFile.addvar ("tau_cx", ncDouble, nres_d);
+      tau_cx_y.put (tau_cx_x);
+
+      // w_linear
+      NcVar w_linear_y = dataFile.addvar ("w_linear", ncDouble, nres_d);
+      w_linear_y.put (w_linear_x);
+      
+      // w_nonlinear
+      NcVar w_nonlinear_y = dataFile.addvar ("w_nonlinear", ncDouble, nres_d);
+      w_nonlinear_y.put (w_nonlinear_x);
+      
+      // w_EB
+      NcVar w_EB_y = dataFile.addvar ("w_EB", ncDouble, nres_d);
+      w_EB_y.put (w_EB_x);
+
+      // rho_sk
+      NcVar rho_sk_y = dataFile.addvar ("rho_s", ncDouble, nres_d);
+      rho_sk_y.put (rho_sk_x);
+
+      // delk
+      NcVar delk_y = dataFile.addvar ("delta", ncDouble, nres_d);
+      delk_y.put (delk_x);
+
+      // rhothek
+      NcVar rhothek_y = dataFile.addvar ("rho_theta_e", ncDouble, nres_d);
+      rhothek_y.put (rhothek_x);
+
+      // rhothik
+      NcVar rhothik_y = dataFile.addvar ("rho_theta_i", ncDouble, nres_d);
+      rhothik_y.put (rho_sk_x); 
+
+      // WcritTek
+      NcVar WcritTek_y = dataFile.addvar ("W_crit_Te", ncDouble, nres_d);
+      WcritTek_y.put (WcritTek_x);
+
+      // WcritTik
+      NcVar WcritTik_y = dataFile.addvar ("W_crit_Ti", ncDouble, nres_d);
+      WcritTIk_y.put (WcritTik_x);
+
+      // Wcritnek
+      NcVar Wcritnek_y = dataFile.addvar ("W_crit_ne", ncDouble, nres_d);
+      Wcritnek_y.put (Wcritnek_x);
+
+      // w_ast_ek
+      NcVar w_ast_ek_y = dataFile.addvar ("w_ast_e", ncDouble, nres_d);
+      w_ast_ek_y.put (w_ast_ek_x);
+
+      // w_ast_ik
+      NcVar w_ast_ik_y = dataFile.addvar ("w_ast_i", ncDouble, nres_d);
+      w_ast_ik_y.put (w_ast_ik_x);
+
+      // w_ast_Ik
+      NcVar w_ast_Ik_y = dataFile.addvar ("w_ast_I", ncDouble, nres_d);
+      w_ast_Ik_y.put (w_ast_Ik_x);
+
+      // wEk
+      NcVar wEk_y = dataFile.addvar ("w_EB_measured", ncDouble, nres_d);
+      wEk_y.put (wEk_x);
+
+      // w_E_Ik
+      NcVar w_E_Ik_y = dataFile.addvar ("w_EB_inferred", ncDouble, nres_d);
+      w_E_Ik_y.put (w_E_Ik_x);
+
+      // Sk
+      NcVar Sk_y = dataFile.addvar ("S", ncDouble, nres_d);
+      Sk_y.put (Sk_x);
+    }
+  catch (NcException& e)
+    {
+      printf ("NEOCLASSICAL::WriteStage2Netcdfcpp: Error writing Outputs/Stage3.nc: Exception = %s\n", e.what ());
+      exit (1);
+    }
+
+  // Clean up
+  delete[] psi_x;      delete[] n_e_x;      delete[] T_e_x;         delete[] n_i_x;      delete[] T_i_x;        
+  delete[] n_I_x;      delete[] T_I_x;      delete[] w_E_x;         delete[] Z_eff_x;    delete[] w_t_x;      
+  delete[] n_n_x;      delete[] chip_x;     delete[] chie_x;        delete[] chin_x;     delete[] chii_x;     
+  delete[] tau_Hk_x;   delete[] tau_Rk_x;   delete[] tau_Mk_x;      delete[] tau_thk_x;  delete[] tau_cxk_x;  
+  delete[] PsiNk_x;    delete[] w_linear_x; delete[] w_nonlinear_x; delete[] w_EB_x;     delete[] rho_sk_x;  
+  delete[] delk_x;     delete[] rhothek_x;  delete[] rhothik_x;     delete[] WcritTek_x; delete[] WcritTik_x;    
+  delete[] Wcritnek_x; delete[] w_ast_ek_x; delete[] w_ast_ik_x;    delete[] w_ast_Ik_x; delete[] wEk_x;
+  delete[] w_E_Ik_x;   delete[] Sk_x;
+}
+#else
+// #################################################
+// Function to write Stage2 NETCDF file via NETCDF-c
+// #################################################
+void Neoclassical::WriteStage2Netcdfc ()
+{
+  // Convert data from blitz++ array to c array
+  double* psi_x         = new double[NPSI];
+  double* n_e_x         = new double[NPSI];
+  double* T_e_x         = new double[NPSI];
+  double* n_i_x         = new double[NPSI];
+  double* T_i_x         = new double[NPSI];
+  double* n_I_x         = new double[NPSI];
+  double* T_I_x         = new double[NPSI];
+  double* w_E_x         = new double[NPSI];
+  double* Z_eff_x       = new double[NPSI];
+  double* w_t_x         = new double[NPSI];
+  double* n_n_x         = new double[NPSI];
+  double* chip_x        = new double[NPSI];
+  double* chie_x        = new double[NPSI];
+  double* chin_x        = new double[NPSI];
+  double* chii_x        = new double[NPSI];
+  for (int i = 0; i < NPSI; i++)
+    {
+      psi_x[i]   = psi(i);
+      n_e_x[i]   = n_e(i) /1.e19; 
+      T_e_x[i]   = T_e(i) /e/1.e3;
+      n_i_x[i]   = n_i(i) /1.e19; 
+      T_i_x[i]   = T_i(i) /e/1.e3; 
+      n_I_x[i]   = n_I(i) /1.e19; 
+      T_I_x[i]   = T_I(i) /e/1.e3; 
+      w_E_x[i]   = w_E(i) /1.e3;
+      Z_eff_x[i] = Z_eff(i);
+      w_t_x[i]   = w_t(i) /1.e3;
+      n_n_x[i]   = n_n(i) /1.e19;
+      chip_x[i]  = chip(i);
+      chie_x[i]  = chie(i);
+      chin_x[i]  = chin(i);
+      chii_x[i]  = chii(i);
+    }
+
+  double* PsiNk_x       = new double[nres];
+  double* tau_Hk_x      = new double[nres];
+  double* tau_Rk_x      = new double[nres];
+  double* tau_Mk_x      = new double[nres];
+  double* tau_thk_x     = new double[nres];
+  double* tau_cxk_x     = new double[nres];
+  double* w_linear_x    = new double[nres];
+  double* w_nonlinear_x = new double[nres];
+  double* w_EB_x        = new double[nres];
+  double* rho_sk_x      = new double[nres];
+  double* delk_x        = new double[nres];
+  double* rhothek_x     = new double[nres];
+  double* rhothik_x     = new double[nres];
+  double* WcritTek_x    = new double[nres];
+  double* WcritTik_x    = new double[nres];
+  double* Wcritnek_x    = new double[nres];
+  double* w_ast_ek_x    = new double[nres];
+  double* w_ast_ik_x    = new double[nres];
+  double* w_ast_Ik_x    = new double[nres];
+  double* wEk_x         = new double[nres];
+  double* w_E_Ik_x      = new double[nres];
+  double* Sk_x          = new double[nres];
+  for (int i = 0; i < nres; i++)
+    {
+      PsiNk_x[i]       = PsiNk(i);
+      tau_Hk_x[i]      = tau_Hk(i);
+      tau_Rk_x[i]      = tau_Rk(i) * Q_00(i);
+      tau_Mk_x[i]      = tau_Mk(i);
+      tau_thk_x[i]     = tau_thk(i) /mu_00_i(i);
+      tau_cxk_x[i]     = tau_cxk(i);
+      w_linear_x[i]    = w_linear(i)    /1.e3;
+      w_nonlinear_x[i] = w_nonlinear(i) /1.e3;
+      w_EB_x[i]        = w_EB(i)        /1.e3;
+      rho_sk_x[i]      = rho_sk(i)   /1.e-2;
+      delk_x[i]        = delk(i)     /1.e-2;
+      rhothek_x[i]     = rhothek(i)  /1.e-2;
+      rhothik_x[i]     = rhothik(i)  /1.e-2;
+      WcritTek_x[i]    = WcritTek(i) /1.e-2;
+      WcritTik_x[i]    = WcritTik(i) /1.e-2;
+      Wcritnek_x[i]    = Wcritnek(i) /1.e-2;
+      w_ast_ek_x[i]    = w_ast_ek(i) /1.e3;
+      w_ast_ik_x[i]    = w_ast_ik(i) /1.e3;
+      w_ast_Ik_x[i]    = w_ast_Ik(i) /1.e3;
+      wEk_x[i]         = wEk(i)      /1.e3;
+      w_E_Ik_x[i]      = w_E_Ik(i)   /1.e3;
+      Sk_x[i]          = Sk(i);
     }
 
   // Open file
@@ -1726,6 +1922,58 @@ void Neoclassical::WriteStage2Netcdfc ()
   int w_EB_y;
   err += nc_def_var (dataFile, "w_EB", NC_DOUBLE, 1, &nres_d, &w_EB_y);
 
+  // rho_sk
+  int rho_sk_y;
+  err += nc_def_var (dataFile, "rho_s", NC_DOUBLE, 1, &nres_d, &rho_sk_y);
+
+  // delk
+  int delk_y;
+  err += nc_def_var (dataFile, "delta", NC_DOUBLE, 1, &nres_d, &delk_y);
+
+  // rhothek
+  int rhothek_y;
+  err += nc_def_var (dataFile, "rho_theta_e", NC_DOUBLE, 1, &nres_d, &rhothek_y);
+
+  // rhothik
+  int rhothik_y;
+  err += nc_def_var (dataFile, "rho_theta_i", NC_DOUBLE, 1, &nres_d, &rhothik_y);
+
+  // WcritTek
+  int WcritTek_y;
+  err += nc_def_var (dataFile, "W_crit_Te", NC_DOUBLE, 1, &nres_d, &WcritTek_y);
+
+  // WcritTik
+  int WcritTik_y;
+  err += nc_def_var (dataFile, "W_crit_Ti", NC_DOUBLE, 1, &nres_d, &WcritTik_y);
+
+  // Wcritnek
+  int Wcritnek_y;
+  err += nc_def_var (dataFile, "W_crit_ne", NC_DOUBLE, 1, &nres_d, &Wcritnek_y);
+
+  // w_ast_ek
+  int w_ast_ek_y;
+  err += nc_def_var (dataFile, "w_ast_e", NC_DOUBLE, 1, &nres_d, &w_ast_ek_y);
+
+  // w_ast_ik
+  int w_ast_ik_y;
+  err += nc_def_var (dataFile, "w_ast_i", NC_DOUBLE, 1, &nres_d, &w_ast_ik_y);
+
+  // w_ast_Ik
+  int w_ast_Ik_y;
+  err += nc_def_var (dataFile, "w_ast_I", NC_DOUBLE, 1, &nres_d, &w_ast_Ik_y);
+  
+  // wEk
+  int wEk_y;
+  err += nc_def_var (dataFile, "w_EB_measured", NC_DOUBLE, 1, &nres_d, &wEk_y);
+
+  // w_E_Ik
+  int w_E_Ik_y;
+  err += nc_def_var (dataFile, "w_EB_inferred", NC_DOUBLE, 1, &nres_d, &w_E_Ik_y);
+
+  // Sk
+  int Sk_y;
+  err += nc_def_var (dataFile, "S", NC_DOUBLE, 1, &nres_d, &Sk_y);
+
   err += nc_enddef (dataFile);
 
   if (err != 0)
@@ -1759,13 +2007,27 @@ void Neoclassical::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, w_linear_y,    w_linear_x);
   err += nc_put_var_double (dataFile, w_nonlinear_y, w_nonlinear_x);
   err += nc_put_var_double (dataFile, w_EB_y,        w_EB_x);
-   
+  err += nc_put_var_double (dataFile, rho_sk_y,      rho_sk_x);
+  err += nc_put_var_double (dataFile, delk_y,        delk_x);
+  err += nc_put_var_double (dataFile, rhothek_y,     rhothek_x);
+  err += nc_put_var_double (dataFile, rhothik_y,     rhothik_x);
+  err += nc_put_var_double (dataFile, WcritTek_y,    WcritTek_x);
+  err += nc_put_var_double (dataFile, WcritTik_y,    WcritTik_x);
+  err += nc_put_var_double (dataFile, Wcritnek_y,    Wcritnek_x);
+  err += nc_put_var_double (dataFile, w_ast_ek_y,    w_ast_ek_x);
+  err += nc_put_var_double (dataFile, w_ast_ik_y,    w_ast_ik_x);
+  err += nc_put_var_double (dataFile, w_ast_Ik_y,    w_ast_Ik_x);
+  err += nc_put_var_double (dataFile, wEk_y,         wEk_x);
+  err += nc_put_var_double (dataFile, w_E_Ik_y,      w_E_Ik_x);
+  err += nc_put_var_double (dataFile, Sk_y,          Sk_x);
+ 
   if (err != 0)
     {
       printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error writing Outputs/Stage3.nc\n");
       exit (1);
     }
   
+  // Close file
   err += nc_close (dataFile);
 
   if (err != 0)
@@ -1775,10 +2037,14 @@ void Neoclassical::WriteStage2Netcdfc ()
     }
 
   // Clean up
-  delete[] psi_x;      delete[] n_e_x;         delete[] T_e_x;    delete[] n_i_x;    delete[] T_i_x;     delete[] n_I_x;     delete[] T_I_x;
-  delete[] w_E_x;      delete[] Z_eff_x;       delete[] w_t_x;    delete[] n_n_x;    delete[] chip_x;    delete[] chie_x;    delete[] chin_x;
-  delete[] chii_x;     delete[] tau_Hk_x;      delete[] tau_Rk_x; delete[] tau_Mk_x; delete[] tau_thk_x; delete[] tau_cxk_x; delete[] PsiNk_x;
-  delete[] w_linear_x; delete[] w_nonlinear_x; delete[] w_EB_x;
+  delete[] psi_x;      delete[] n_e_x;      delete[] T_e_x;         delete[] n_i_x;      delete[] T_i_x;        
+  delete[] n_I_x;      delete[] T_I_x;      delete[] w_E_x;         delete[] Z_eff_x;    delete[] w_t_x;      
+  delete[] n_n_x;      delete[] chip_x;     delete[] chie_x;        delete[] chin_x;     delete[] chii_x;     
+  delete[] tau_Hk_x;   delete[] tau_Rk_x;   delete[] tau_Mk_x;      delete[] tau_thk_x;  delete[] tau_cxk_x;  
+  delete[] PsiNk_x;    delete[] w_linear_x; delete[] w_nonlinear_x; delete[] w_EB_x;     delete[] rho_sk_x;  
+  delete[] delk_x;     delete[] rhothek_x;  delete[] rhothik_x;     delete[] WcritTek_x; delete[] WcritTik_x;    
+  delete[] Wcritnek_x; delete[] w_ast_ek_x; delete[] w_ast_ik_x;    delete[] w_ast_Ik_x; delete[] wEk_x;
+  delete[] w_E_Ik_x;   delete[] Sk_x;
 }
 #endif
 
