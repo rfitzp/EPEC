@@ -112,7 +112,7 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
    
   // Stop timer
   clock_t end        = clock ();
-  double  time_spent = double (end - begin) /CLOCKS_PER_SEC;
+  double  time_spent = double (end - begin) /double (CLOCKS_PER_SEC);
 
   // Print exit message
   printf ("*****************************************************************\n");
@@ -1562,152 +1562,152 @@ void Neoclassical::WriteStage2Netcdfcpp ()
       // PsiN
       NcDim PsiN_d = dataFile.addDim ("N_psi", NPSI);
       NcVar PsiN   = dataFile.addVar ("PsiN", ncDouble, PsiN_d);
-      PsiN.put (psi_x);
+      PsiN.putVar (psi_x);
 
       // n_e
       NcVar n_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
-      n_e_y.put (n_e_x);
+      n_e_y.putVar (n_e_x);
 
       // T_e
-      NcVar T_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
-      T_e_y.put (T_e_x);
+      NcVar T_e_y = dataFile.addVar ("T_e", ncDouble, PsiN_d);
+      T_e_y.putVar (T_e_x);
 
       // n_i
       NcVar n_i_y = dataFile.addVar ("n_i", ncDouble, PsiN_d);
-      n_i_y.put (n_i_x);
+      n_i_y.putVar (n_i_x);
 
       // T_i
-      NcVar t_i_y = dataFile.addVar ("T_i", ncDouble, PsiN_d);
-      T_i_y.put (T_i_x);
+      NcVar T_i_y = dataFile.addVar ("T_i", ncDouble, PsiN_d);
+      T_i_y.putVar (T_i_x);
 
       // n_I
       NcVar n_I_y = dataFile.addVar ("n_I", ncDouble, PsiN_d);
-      n_i_y.put (n_I_x);
+      n_I_y.putVar (n_I_x);
 
       // T_I
       NcVar T_I_y = dataFile.addVar ("T_I", ncDouble, PsiN_d);
-      T_I_y.put (T_I);
+      T_I_y.putVar (T_I_x);
 
       // Z_eff
       NcVar Z_eff_y = dataFile.addVar ("Z_eff", ncDouble, PsiN_d);
-      Z_eff_y.put (Z_eff_x);
+      Z_eff_y.putVar (Z_eff_x);
 
       // n_n
       NcVar n_n_y = dataFile.addVar ("n_n", ncDouble, PsiN_d);
-      n_n_y.put (n_n_x);
+      n_n_y.putVar (n_n_x);
 
       // w_E
       NcVar w_E_y = dataFile.addVar ("w_E", ncDouble, PsiN_d);
-      w_E_y.put (w_E_x); 
+      w_E_y.putVar (w_E_x); 
 
       // w_t
       NcVar w_t_y = dataFile.addVar ("w_t", ncDouble, PsiN_d);
-      w_t_y.put (w_t_x);
+      w_t_y.putVar (w_t_x);
 
       // chip
-      NcVar chip_y = dataFile.addvar ("chi_p", ncDouble, PsiN_d);
-      chip_y.put (chip_x);
+      NcVar chip_y = dataFile.addVar ("chi_p", ncDouble, PsiN_d);
+      chip_y.putVar (chip_x);
  
       // chie
-      NcVar chie_y = dataFile.addvar ("chi_e", ncDouble, PsiN_d);
-      chie_y.put (chie_x);
+      NcVar chie_y = dataFile.addVar ("chi_e", ncDouble, PsiN_d);
+      chie_y.putVar (chie_x);
      
       // chin
-      NcVar chin_y = dataFile.addvar ("chi_n", ncDouble, PsiN_d);
-      chin_y.put (chin_x);
+      NcVar chin_y = dataFile.addVar ("chi_n", ncDouble, PsiN_d);
+      chin_y.putVar (chin_x);
       
       // chii
-      NcVar chii_y = dataFile.addvar ("chi_i", ncDouble, PsiN_d);
-      chii_y.put (chii_x);
+      NcVar chii_y = dataFile.addVar ("chi_i", ncDouble, PsiN_d);
+      chii_y.putVar (chii_x);
 
       // PsiNk
       NcDim nres_d  = dataFile.addDim ("N_res", nres);
-      NcVar PsiNk_y = dataFile.addvar ("PsiN_k", ncDouble, nres_d);
-      PsiNk_y.put (PsiNk_x);
+      NcVar PsiNk_y = dataFile.addVar ("PsiN_k", ncDouble, nres_d);
+      PsiNk_y.putVar (PsiNk_x);
 
       // tau_Hk
-      NcVar tau_Hk_y = dataFile.addvar ("tau_H", ncDouble, nres_d);
-      tau_Hk_y.put (tau_Hk_x);
+      NcVar tau_Hk_y = dataFile.addVar ("tau_H", ncDouble, nres_d);
+      tau_Hk_y.putVar (tau_Hk_x);
 
       // tau_Rk
-      NcVar tau_Rk_y = dataFile.addvar ("tau_R", ncDouble, nres_d);
-      tau_Rk_y.put (tau_Rk_x);
+      NcVar tau_Rk_y = dataFile.addVar ("tau_R", ncDouble, nres_d);
+      tau_Rk_y.putVar (tau_Rk_x);
 
       // tau_Mk
-      NcVar tau_Mk_y = dataFile.addvar ("tau_M", ncDouble, nres_d);
-      tau_Mk_y.put (tau_Mk_x);
+      NcVar tau_Mk_y = dataFile.addVar ("tau_M", ncDouble, nres_d);
+      tau_Mk_y.putVar (tau_Mk_x);
 
       // tau_thk
-      NcVar tau_thk_y = dataFile.addvar ("tau_th", ncDouble, nres_d);
-      tau_thk_y.put (tau_thk_x);
+      NcVar tau_thk_y = dataFile.addVar ("tau_th", ncDouble, nres_d);
+      tau_thk_y.putVar (tau_thk_x);
 
       // tau_cxk
-      NcVar tau_cx_y = dataFile.addvar ("tau_cx", ncDouble, nres_d);
-      tau_cx_y.put (tau_cx_x);
+      NcVar tau_cxk_y = dataFile.addVar ("tau_cx", ncDouble, nres_d);
+      tau_cxk_y.putVar (tau_cxk_x);
 
       // w_linear
-      NcVar w_linear_y = dataFile.addvar ("w_linear", ncDouble, nres_d);
-      w_linear_y.put (w_linear_x);
+      NcVar w_linear_y = dataFile.addVar ("w_linear", ncDouble, nres_d);
+      w_linear_y.putVar (w_linear_x);
       
       // w_nonlinear
-      NcVar w_nonlinear_y = dataFile.addvar ("w_nonlinear", ncDouble, nres_d);
-      w_nonlinear_y.put (w_nonlinear_x);
+      NcVar w_nonlinear_y = dataFile.addVar ("w_nonlinear", ncDouble, nres_d);
+      w_nonlinear_y.putVar (w_nonlinear_x);
       
       // w_EB
-      NcVar w_EB_y = dataFile.addvar ("w_EB", ncDouble, nres_d);
-      w_EB_y.put (w_EB_x);
+      NcVar w_EB_y = dataFile.addVar ("w_EB", ncDouble, nres_d);
+      w_EB_y.putVar (w_EB_x);
 
       // rho_sk
-      NcVar rho_sk_y = dataFile.addvar ("rho_s", ncDouble, nres_d);
-      rho_sk_y.put (rho_sk_x);
+      NcVar rho_sk_y = dataFile.addVar ("rho_s", ncDouble, nres_d);
+      rho_sk_y.putVar (rho_sk_x);
 
       // delk
-      NcVar delk_y = dataFile.addvar ("delta", ncDouble, nres_d);
-      delk_y.put (delk_x);
+      NcVar delk_y = dataFile.addVar ("delta", ncDouble, nres_d);
+      delk_y.putVar (delk_x);
 
       // rhothek
-      NcVar rhothek_y = dataFile.addvar ("rho_theta_e", ncDouble, nres_d);
-      rhothek_y.put (rhothek_x);
+      NcVar rhothek_y = dataFile.addVar ("rho_theta_e", ncDouble, nres_d);
+      rhothek_y.putVar (rhothek_x);
 
       // rhothik
-      NcVar rhothik_y = dataFile.addvar ("rho_theta_i", ncDouble, nres_d);
-      rhothik_y.put (rho_sk_x); 
+      NcVar rhothik_y = dataFile.addVar ("rho_theta_i", ncDouble, nres_d);
+      rhothik_y.putVar (rho_sk_x); 
 
       // WcritTek
-      NcVar WcritTek_y = dataFile.addvar ("W_crit_Te", ncDouble, nres_d);
-      WcritTek_y.put (WcritTek_x);
+      NcVar WcritTek_y = dataFile.addVar ("W_crit_Te", ncDouble, nres_d);
+      WcritTek_y.putVar (WcritTek_x);
 
       // WcritTik
-      NcVar WcritTik_y = dataFile.addvar ("W_crit_Ti", ncDouble, nres_d);
-      WcritTIk_y.put (WcritTik_x);
+      NcVar WcritTik_y = dataFile.addVar ("W_crit_Ti", ncDouble, nres_d);
+      WcritTik_y.putVar (WcritTik_x);
 
       // Wcritnek
-      NcVar Wcritnek_y = dataFile.addvar ("W_crit_ne", ncDouble, nres_d);
-      Wcritnek_y.put (Wcritnek_x);
+      NcVar Wcritnek_y = dataFile.addVar ("W_crit_ne", ncDouble, nres_d);
+      Wcritnek_y.putVar (Wcritnek_x);
 
       // w_ast_ek
-      NcVar w_ast_ek_y = dataFile.addvar ("w_ast_e", ncDouble, nres_d);
-      w_ast_ek_y.put (w_ast_ek_x);
+      NcVar w_ast_ek_y = dataFile.addVar ("w_ast_e", ncDouble, nres_d);
+      w_ast_ek_y.putVar (w_ast_ek_x);
 
       // w_ast_ik
-      NcVar w_ast_ik_y = dataFile.addvar ("w_ast_i", ncDouble, nres_d);
-      w_ast_ik_y.put (w_ast_ik_x);
+      NcVar w_ast_ik_y = dataFile.addVar ("w_ast_i", ncDouble, nres_d);
+      w_ast_ik_y.putVar (w_ast_ik_x);
 
       // w_ast_Ik
-      NcVar w_ast_Ik_y = dataFile.addvar ("w_ast_I", ncDouble, nres_d);
-      w_ast_Ik_y.put (w_ast_Ik_x);
+      NcVar w_ast_Ik_y = dataFile.addVar ("w_ast_I", ncDouble, nres_d);
+      w_ast_Ik_y.putVar (w_ast_Ik_x);
 
       // wEk
-      NcVar wEk_y = dataFile.addvar ("w_EB_measured", ncDouble, nres_d);
-      wEk_y.put (wEk_x);
+      NcVar wEk_y = dataFile.addVar ("w_EB_measured", ncDouble, nres_d);
+      wEk_y.putVar (wEk_x);
 
       // w_E_Ik
-      NcVar w_E_Ik_y = dataFile.addvar ("w_EB_inferred", ncDouble, nres_d);
-      w_E_Ik_y.put (w_E_Ik_x);
+      NcVar w_E_Ik_y = dataFile.addVar ("w_EB_inferred", ncDouble, nres_d);
+      w_E_Ik_y.putVar (w_E_Ik_x);
 
       // Sk
-      NcVar Sk_y = dataFile.addvar ("S", ncDouble, nres_d);
-      Sk_y.put (Sk_x);
+      NcVar Sk_y = dataFile.addVar ("S", ncDouble, nres_d);
+      Sk_y.putVar (Sk_x);
     }
   catch (NcException& e)
     {
