@@ -192,7 +192,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   open  (unit = 101, file = 'Outputs/Stage1/Profiles.txt')
   write (101, '(7e17.9)') (PSIN (i), T (i), P (i), TTp (i), Pp (i), Q (i), CURR (i), i = 1, NRBOX)
   close (unit = 101)
-
+  
   open  (unit = 101, file = 'Outputs/Stage1/Points.txt')
   write (101, '(4i5)') NRBOX, NZBOX, NBOUND, NLIM
   close (unit = 101)
@@ -216,7 +216,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   err = err + nf90_def_dim (file_id, "i_bound", NBOUND, bound_d_id)
   err = err + nf90_def_dim (file_id, "i_lim",   NLIM,   lim_d_id)
 
-  PS_d_id = (/Z_d_id, R_d_id/) 
+  PS_d_id = (/R_d_id, Z_d_id/) 
   
   err = err + nf90_def_var (file_id, "Parameters", NF90_DOUBLE, para_d_id,  para_id)
   err = err + nf90_def_var (file_id, "R",          NF90_DOUBLE, R_d_id,     R_id)

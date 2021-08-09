@@ -224,7 +224,7 @@ void Flux::WriteStage2Netcdfcpp ()
       double* DATA = new double[NRPTS*NZPTS];
       for (int i = 0; i < NRPTS; i++)
 	for (int j = 0; j < NZPTS; j++)
-	  DATA[i + j*NRPTS] = PSIARRAY (i, j);
+	  DATA[j + i*NZPTS] = PSIARRAY (i, j);
       
       vector<NcDim> psi_d;
       psi_d.push_back (R_d);
@@ -235,7 +235,7 @@ void Flux::WriteStage2Netcdfcpp ()
       // Psi_R
       for (int i = 0; i < NRPTS; i++)
 	for (int j = 0; j < NZPTS; j++)
-	  DATA[i + j*NRPTS] = GetPsiR (RPTS[i], ZPTS[j]);
+	  DATA[j + i*NZPTS] = GetPsiR (RPTS[i], ZPTS[j]);
 
       NcVar psi_r = dataFile.addVar ("PSI_R", ncDouble, psi_d);
       psi_r.putVar (DATA);
@@ -243,7 +243,7 @@ void Flux::WriteStage2Netcdfcpp ()
       // Psi_Z
       for (int i = 0; i < NRPTS; i++)
 	for (int j = 0; j < NZPTS; j++)
-	  DATA[i + j*NRPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
+	  DATA[j + i*NZPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
 
       NcVar psi_z = dataFile.addVar ("PSI_Z", ncDouble, psi_d);
       psi_z.putVar (DATA);
@@ -329,8 +329,45 @@ void Flux::WriteStage2Netcdfcpp ()
 
       NcVar dr = dataFile.addVar ("DR_res", ncDouble, S_d);
       dr.putVar (D_R);
+
+      // Rst
+      double* DATA1 = new double[nres*NTHETA];
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (Rst, i, j);
       
-      delete[] DATA; delete[] D_R;
+      NcDim T_d = dataFile.addDim ("k", NTHETA);
+      vector<NcDim> rst_d;
+      rst_d.push_back (S_d);
+      rst_d.push_back (T_d);
+      NcVar rst =  dataFile.addVar ("R_st", ncDouble, rst_d);
+      rst.putVar (DATA1);
+
+      // Zst
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (Zst, i, j);
+      
+      NcVar Zst =  dataFile.addVar ("Z_st", ncDouble, rst_d);
+      zst.putVar (DATA1);
+      
+      // Rnc
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (Rnc, i, j);
+      
+      NcVar rnc =  dataFile.addVar ("R_nc", ncDouble, rst_d);
+      rnc.putVar (DATA1);
+      
+      // Znc
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (Znc, i, j);
+      
+      NcVar znc =  dataFile.addVar ("Z_nc", ncDouble, rst_d);
+      znc.putVar (DATA1);
+      
+      delete[] DATA; delete[] D_R; delete[] DATA1;
     }
   catch (NcException& e)
     {
@@ -382,7 +419,7 @@ void Flux::WriteStage2Netcdfc ()
   double* DATA = new double[NRPTS*NZPTS];
   for (int i = 0; i < NRPTS; i++)
     for (int j = 0; j < NZPTS; j++)
-      DATA[i + j*NRPTS] = PSIARRAY (i, j);
+      DATA[j + i*NZPTS] = PSIARRAY (i, j);
 
   int psi_d[2], psi;
   psi_d[0] = R_d;
@@ -393,7 +430,7 @@ void Flux::WriteStage2Netcdfc ()
   double* DATA1 = new double[NRPTS*NZPTS];
   for (int i = 0; i < NRPTS; i++)
     for (int j = 0; j < NZPTS; j++)
-      DATA1[i + j*NRPTS] = GetPsiR (RPTS[i], ZPTS[j]);
+      DATA1[j + i*NZPTS] = GetPsiR (RPTS[i], ZPTS[j]);
   
   int psi_r;
   err += nc_def_var (dataFile, "PSI_R", NC_DOUBLE, 2, psi_d, &psi_r);
@@ -402,7 +439,7 @@ void Flux::WriteStage2Netcdfc ()
   double* DATA2 = new double[NRPTS*NZPTS];
   for (int i = 0; i < NRPTS; i++)
     for (int j = 0; j < NZPTS; j++)
-      DATA2[i + j*NRPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
+      DATA2[j + i*NZPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
 
   int psi_z;
   err += nc_def_var (dataFile, "PSI_Z", NC_DOUBLE, 2, psi_d, &psi_z);
@@ -489,6 +526,45 @@ void Flux::WriteStage2Netcdfc ()
   int dr;
   err += nc_def_var (dataFile, "DR_res", NC_DOUBLE, 1, &S_d, &dr);
 
+  // Rst
+  double* DATA3 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA3[j + i*NTHETA] = gsl_matrix_get (Rst, i, j);
+
+  int rst_d[2], T_d, rst;
+  err += nc_def_dim (dataFile, "k", NTHETA, &T_d);
+  rst_d[0] = S_d;
+  rst_d[1] = T_d;
+  err += nc_def_var (dataFile, "R_st", NC_DOUBLE, 2, rst_d, &rst);
+
+  // Zst
+  double* DATA4 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA4[j + i*NTHETA] = gsl_matrix_get (Zst, i, j);
+
+  int zst;
+  err += nc_def_var (dataFile, "Z_st", NC_DOUBLE, 2, rst_d, &zst);
+
+  // Rnc
+  double* DATA5 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA5[j + i*NTHETA] = gsl_matrix_get (Rnc, i, j);
+
+  int rnc;
+  err += nc_def_var (dataFile, "R_nc", NC_DOUBLE, 2, rst_d, &rnc);
+
+  // Znc
+  double* DATA6 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA6[j + i*NTHETA] = gsl_matrix_get (Znc, i, j);
+
+  int znc;
+  err += nc_def_var (dataFile, "Z_nc", NC_DOUBLE, 2, rst_d, &znc);
+
   err += nc_enddef (dataFile);
 
   if (err != 0)
@@ -525,6 +601,10 @@ void Flux::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, a1r,     A1res);
   err += nc_put_var_double (dataFile, a2r,     A2res);
   err += nc_put_var_double (dataFile, dr,      D_R);
+  err += nc_put_var_double (dataFile, rst,     DATA3);
+  err += nc_put_var_double (dataFile, zst,     DATA4);
+  err += nc_put_var_double (dataFile, rnc,     DATA5);
+  err += nc_put_var_double (dataFile, znc,     DATA6);
 
   if (err != 0)
     {
@@ -541,7 +621,8 @@ void Flux::WriteStage2Netcdfc ()
       exit (1);
     }
    
-  delete[] DATA; delete[] DATA1, delete[] DATA2, delete[] D_R;
+  delete[] DATA;  delete[] DATA1, delete[] DATA2, delete[] D_R;
+  delete[] DATA3; delete[] DATA4; delete[] DATA5; delete[] DATA6;
  }
 #endif
 
