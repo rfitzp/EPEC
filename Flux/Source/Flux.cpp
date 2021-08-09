@@ -72,13 +72,14 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   NTHETA  = 512;
   NNC     = 10;
   NSMOOTH = 100;
+  NEOANG  = 0;
 
   H0      = 1.e-6;
   ACC     = 1.e-14;
   ETA     = 1.e-8;
   
   // Read namelist file Inputs/Flux.nml
-  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT);
+  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NEOANG);
 
   // Override namelist values with command line options
   if (_NTOR > 0)
@@ -187,8 +188,8 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
    printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
    printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
-   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
-	   NPSI, NTHETA, NNC, PACK);
+   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NEOANG = %2d\n",
+	   NPSI, NTHETA, NNC, PACK, NEOANG);
    printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
 	   NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
    printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
@@ -199,8 +200,8 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
    fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
    fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
-   fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
-	    NPSI, NTHETA, NNC, PACK);
+   fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NEOANG = %2d\n",
+	    NPSI, NTHETA, NNC, PACK, NEOANG);
    fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
 	    NTOR, MMIN, MMAX, PSILIM, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
    fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
@@ -214,8 +215,8 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
        fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
        fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
        fprintf (monitor, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
-       fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e\n",
-		NPSI, NTHETA, NNC, PACK);
+       fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NEOANG = %2d\n",
+		NPSI, NTHETA, NNC, PACK, NEOANG);
        fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
 		NTOR, MMIN, MMAX, PSILIM, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
        fprintf (monitor, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",

@@ -171,7 +171,8 @@ void Flux::Stage2 ()
   delete[] Th;
   gsl_matrix_free (Rnc); gsl_matrix_free (Znc); 
 
-  gsl_matrix_free (Bnc); gsl_matrix_free (Cnc); 
+  gsl_matrix_free (Bnc);    gsl_matrix_free (Cnc); gsl_matrix_free (theta);
+  gsl_matrix_free (factor);
  
   delete[] I1;    delete[] I2;    delete[] I3;    delete[] I7;    delete[] I8;  
   delete[] Ktres; delete[] Kares; delete[] ajj;   delete[] dPsidr;
@@ -367,7 +368,51 @@ void Flux::WriteStage2Netcdfcpp ()
       NcVar znc =  dataFile.addVar ("Z_nc", ncDouble, rst_d);
       znc.putVar (DATA1);
       
-      delete[] DATA; delete[] D_R; delete[] DATA1;
+      // theta
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (theta, i, j);
+
+      NcVar the =  dataFile.addVar ("theta", ncDouble, rst_d);
+      the.putVar (DATA1);
+
+      // B_nc
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (Bnc, i, j);
+
+      NcVar bnc =  dataFile.addVar ("B_nc", ncDouble, rst_d);
+      bnc.putVar (DATA1);
+
+      // C_nc
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < NTHETA; j++)
+	  DATA1[j + i*NTHETA] = gsl_matrix_get (Cnc, i, j);
+
+      NcVar Cnc =  dataFile.addVar ("C_nc", ncDouble, rst_d);
+      cnc.putVar (DATA1);
+
+      // E_real
+      double* DATA2 = new double[nres*nres];
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < nres; j++)
+	  DATA2[j + i*nres] = GSL_REAL (gsl_matrix_complex_get (EE, i, j));
+
+      vector<NcDim> est_d;
+      est_d.push_back (S_d);
+      est_d.push_back (S_d);
+      NcVar ereal = dataFile.addvar ("E_real", ncDouble, est_d);
+      ereal.putVar (DATA2);
+
+      // E_imag
+      for (int i = 0; i < nres; i++)
+	for (int j = 0; j < nres; j++)
+	  DATA2[j + i*nres] = GSL_IMAG (gsl_matrix_complex_get (EE, i, j));
+
+      NcVar eimag = dataFile.addvar ("E_imag", ncDouble, est_d);
+      eimag.putVar (DATA2);
+
+      delete[] DATA; delete[] D_R; delete[] DATA1; delete[] DATA2;
     }
   catch (NcException& e)
     {
@@ -565,6 +610,53 @@ void Flux::WriteStage2Netcdfc ()
   int znc;
   err += nc_def_var (dataFile, "Z_nc", NC_DOUBLE, 2, rst_d, &znc);
 
+  // theta
+  double* DATA7 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA7[j + i*NTHETA] = gsl_matrix_get (theta, i, j);
+
+  int the;
+  err += nc_def_var (dataFile, "theta", NC_DOUBLE, 2, rst_d, &the);
+
+  // B_nc
+  double* DATA10 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA10[j + i*NTHETA] = gsl_matrix_get (Bnc, i, j);
+
+  int bnc;
+  err += nc_def_var (dataFile, "B_nc", NC_DOUBLE, 2, rst_d, &bnc);
+
+  // B_nc
+  double* DATA11 = new double[nres*NTHETA];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      DATA11[j + i*NTHETA] = gsl_matrix_get (Cnc, i, j);
+
+  int cnc;
+  err += nc_def_var (dataFile, "C_nc", NC_DOUBLE, 2, rst_d, &cnc);
+
+  // E_real
+  double* DATA8 = new double[nres*nres];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      DATA8[j + i*nres] = GSL_REAL (gsl_matrix_complex_get (EE, i, j));
+
+  int est_d[2], ereal;
+  est_d[0] = S_d;
+  est_d[1] = S_d;
+  err += nc_def_var (dataFile, "E_real", NC_DOUBLE, 2, est_d, &ereal);
+
+  // E_imag
+  double* DATA9 = new double[nres*nres];
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < nres; j++)
+      DATA9[j + i*nres] = GSL_IMAG (gsl_matrix_complex_get (EE, i, j));
+
+  int eimag;
+  err += nc_def_var (dataFile, "E_imag", NC_DOUBLE, 2, est_d, &eimag);
+
   err += nc_enddef (dataFile);
 
   if (err != 0)
@@ -605,7 +697,12 @@ void Flux::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, zst,     DATA4);
   err += nc_put_var_double (dataFile, rnc,     DATA5);
   err += nc_put_var_double (dataFile, znc,     DATA6);
-
+  err += nc_put_var_double (dataFile, the,     DATA7);
+  err += nc_put_var_double (dataFile, bnc,     DATA10);
+  err += nc_put_var_double (dataFile, cnc,     DATA11);
+  err += nc_put_var_double (dataFile, ereal,   DATA8);
+  err += nc_put_var_double (dataFile, eimag,   DATA9);
+ 
   if (err != 0)
     {
       printf ("FLUX::WriteStage2Netcdfc: Error writing Outputs/Stage2.nc\n");
@@ -621,8 +718,10 @@ void Flux::WriteStage2Netcdfc ()
       exit (1);
     }
    
-  delete[] DATA;  delete[] DATA1, delete[] DATA2, delete[] D_R;
-  delete[] DATA3; delete[] DATA4; delete[] DATA5; delete[] DATA6;
+  delete[] DATA;   delete[] DATA1, delete[] DATA2, delete[] D_R;
+  delete[] DATA3;  delete[] DATA4; delete[] DATA5; delete[] DATA6;
+  delete[] DATA7;  delete[] DATA8; delete[] DATA9; delete[] DATA10;
+  delete[] DATA11;
  }
 #endif
 
@@ -1360,14 +1459,33 @@ void Flux::Stage2CalcNeoclassicalAngle ()
       double t = double (k) /double (NTHETA-1);
       Th[k]    = 2.* M_PI * t;
     }
-  Rnc = gsl_matrix_alloc (nres, NTHETA);
-  Znc = gsl_matrix_alloc (nres, NTHETA);
+  Rnc    = gsl_matrix_alloc (nres, NTHETA);
+  Znc    = gsl_matrix_alloc (nres, NTHETA);
+  theta  = gsl_matrix_alloc (nres, NTHETA);
+  factor = gsl_matrix_alloc (nres, NTHETA);
 
   // .................................
   // Calculate neoclassical angle data
   // .................................
   printf ("Calculating neoclassical angle data at rational surfaces:\n");
   CalcNeoclassicalAngle ();
+
+  // Calculate transformation factor between theta and Theta
+  for (int i = 0; i < nres; i++)
+    for (int j = 0; j < NTHETA; j++)
+      {
+	double R    = gsl_matrix_get (Rnc, i,  j);
+	double Z    = gsl_matrix_get (Znc, i,  j);
+
+	double PsiR = GetPsiR (R, Z);
+	double PsiZ = GetPsiZ (R, Z);
+	double Grad = PsiR*PsiR + PsiZ*PsiZ;
+	double RB   = sqrt (gres[i]*gres[i] + Psic*Psic * Grad);
+
+	double fac  = gres[i] /qres[i] /gmres[i] /RB /R;
+
+	gsl_matrix_set (factor, i, j, fac);
+      }
 
   // ..........
   // Output Rnc
@@ -1430,6 +1548,7 @@ void Flux::Stage2CalcNeoclassicalAngle ()
   // Calculate d|B|dTheta on rational surfaces
   // .........................................
   Cnc = gsl_matrix_alloc (nres, NTHETA);
+  double* Carray = new double[NTHETA];
   for (int j = 0; j < nres; j++)
     {
       for (int k = 0; k < NTHETA; k++)
@@ -1449,10 +1568,18 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 	  double dZdT  = + fabs (Psic) * PsiR /gmval /Bval /Rval;
 	  
 	  double val   = - Bval*dRdT/Rval + (Psic*Psic/Bval/Rval/Rval) * ((PsiR*PsiRR + PsiZ*PsiRZ)*dRdT + (PsiR*PsiRZ + PsiZ*PsiZZ)*dZdT);
-	  
-	  gsl_matrix_set (Cnc, j, k, val);
+
+	  Carray[k] = val;
 	}
+
+      // Smooth data
+      for (int i = 0; i < 10; i++)
+	Smoothing (NTHETA, Carray);
+	  
+      for (int k = 0; k < NTHETA; k++)
+	gsl_matrix_set (Cnc, j, k, Carray[k]);
     }
+  delete[] Carray;
 
   // ..........
   // Output Cnc
@@ -1671,28 +1798,55 @@ void Flux::Stage2CalcMatrices ()
   FF = gsl_matrix_complex_alloc (nres, nres);
   EE = gsl_matrix_complex_alloc (nres, nres);
  
-  for (int i = 0; i < nres; i++)
+  if (NEOANG)
     {
-      for (int j = 0; j < nres; j++)
+      for (int i = 0; i < nres; i++)
 	{
-	  double sumc = 0.;
-	  for (int k = 0; k < NTHETA; k++)
-	    for (int kk = 0; kk < NTHETA; kk++)
-	      sumc += Weight2D (k, kk) * GreenPlasmaCos (i, k, j, kk);
-	  sumc /= 2.*M_PI * 2.*M_PI;
-	  
-	  double sums = 0.;
-	  for (int k = 0; k < NTHETA; k++)
-	    for (int kk = 0; kk < NTHETA; kk++)
-	      sums += Weight2D (k, kk) * GreenPlasmaSin (i, k, j, kk);
-	  sums /= 2.*M_PI * 2.*M_PI;
-	  
-	  gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
+	  for (int j = 0; j < nres; j++)
+	    {
+	      double sumc = 0.;
+	      for (int k = 0; k < NTHETA; k++)
+		for (int kk = 0; kk < NTHETA; kk++)
+		  sumc += Weight2D (k, kk) * GreenPlasmaCosNeo (i, k, j, kk);
+	      sumc /= 2.*M_PI * 2.*M_PI;
+	      
+	      double sums = 0.;
+	      for (int k = 0; k < NTHETA; k++)
+		for (int kk = 0; kk < NTHETA; kk++)
+		  sums += Weight2D (k, kk) * GreenPlasmaSinNeo (i, k, j, kk);
+	      sums /= 2.*M_PI * 2.*M_PI;
+	      
+	      gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
+	    }
+	  printf ("mpol = %3d\n", mres[i]);
+	  fflush (stdout);
 	}
-      printf ("mpol = %3d\n", mres[i]);
-      fflush (stdout);
     }
-
+  else
+    {
+      for (int i = 0; i < nres; i++)
+	{
+	  for (int j = 0; j < nres; j++)
+	    {
+	      double sumc = 0.;
+	      for (int k = 0; k < NTHETA; k++)
+		for (int kk = 0; kk < NTHETA; kk++)
+		  sumc += Weight2D (k, kk) * GreenPlasmaCos (i, k, j, kk);
+	      sumc /= 2.*M_PI * 2.*M_PI;
+	      
+	      double sums = 0.;
+	      for (int k = 0; k < NTHETA; k++)
+		for (int kk = 0; kk < NTHETA; kk++)
+		  sums += Weight2D (k, kk) * GreenPlasmaSin (i, k, j, kk);
+	      sums /= 2.*M_PI * 2.*M_PI;
+	      
+	      gsl_matrix_complex_set (FF, i, j, gsl_complex_rect (sumc, sums));
+	    }
+	  printf ("mpol = %3d\n", mres[i]);
+	  fflush (stdout);
+	}
+    }
+      
   printf ("F-matrix:\n");
   for (int i = 0; i < nres; i++)
     {

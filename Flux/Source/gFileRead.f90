@@ -34,7 +34,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
 
   double precision, dimension (:),    allocatable :: PSIN, T,     P,       TTp,    Pp,   Q,  CURR
   double precision, dimension (:),    allocatable :: R,    Z,     RBOUND,  ZBOUND, RLIM, ZLIM  
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: PSI, PSIT
 
   character (len = *), parameter :: file = "Outputs/Stage1.nc"
 
@@ -95,6 +95,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   allocate (Q     (NRBOX))
   allocate (CURR  (NRBOX))
   allocate (PSI   (NRBOX, NZBOX))
+  allocate (PSIT  (NZBOX, NRBOX))
 
   read (100, '(5e16.9)') ( T   (i),    i = 1, NRBOX)
   read (100, '(5e16.9)') ( P   (i),    i = 1, NRBOX)
@@ -168,6 +169,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   do i = 1, NRBOX
      do j = 1, NZBOX
         PSI  (i, j) = PSI (i, j) /R0/R0/B0
+        PSIT (j, i) = PSI (i, j)
       end do
   end do
 
@@ -216,7 +218,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   err = err + nf90_def_dim (file_id, "i_bound", NBOUND, bound_d_id)
   err = err + nf90_def_dim (file_id, "i_lim",   NLIM,   lim_d_id)
 
-  PS_d_id = (/R_d_id, Z_d_id/) 
+  PS_d_id = (/Z_d_id, R_d_id/) 
   
   err = err + nf90_def_var (file_id, "Parameters", NF90_DOUBLE, para_d_id,  para_id)
   err = err + nf90_def_var (file_id, "R",          NF90_DOUBLE, R_d_id,     R_id)
@@ -239,7 +241,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   err = err + nf90_put_var (file_id, para_id,   para)
   err = err + nf90_put_var (file_id, R_id,      R)
   err = err + nf90_put_var (file_id, Z_id,      Z)
-  err = err + nf90_put_var (file_id, PS_id,     PSI)
+  err = err + nf90_put_var (file_id, PS_id,     PSIT)
   err = err + nf90_put_var (file_id, PN_id,     PSIN)
   err = err + nf90_put_var (file_id, T_id,      T)
   err = err + nf90_put_var (file_id, P_id,      P)
@@ -276,5 +278,6 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   deallocate (RLIM)
   deallocate (ZLIM)
   deallocate (PSI)
+  deallocate (PSIT)
 
 endsubroutine gFileRead

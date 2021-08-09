@@ -120,7 +120,7 @@ extern "C" int pRhs6 (double, const double[], double[], void*);
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
 			      double* ACC, double* ETA, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
-			      double* PSIPED, int* NSMOOTH, double* PSIRAT);
+			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NEOANG);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -158,6 +158,7 @@ class Flux
   int    NTHETA;  // Number of points in theta grid
   int    NNC;     // Number of neoclassical harmonics
   int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
+  int    NEOANG;  // Flag for using neoclassical angle in E-matrix calculation
 
   double H0;      // Initial integration step-length for equilibirum flux surface integrals 
   double ACC;     // Integration accuracy for equilibrium flux surface integrals
@@ -213,7 +214,8 @@ class Flux
   double  qa;          // Safety-factor at plasma boundary
   double  ra;          // Radial coordinate of plasma boundary
   double  Pped;        // Pedestal pressure / central pressure
-  double  qgp, qgp1;
+
+  double  qgp, qgp1, qgp2;
 
   // Stage2 profile parameters
   double* P;           // Psi array
@@ -281,10 +283,12 @@ class Flux
 
   // Neoclassical angle flux coordinate data
   double*     Th;      // Theta array
+  gsl_matrix* theta;   // theta evaluated on Theta array on rational surfaces
   gsl_matrix* Rnc;     // R versus Theta on rational surfaces
   gsl_matrix* Znc;     // Z versus Theta on rational surfaces
   gsl_matrix* Bnc;     // B versus Theta on rational surfaces
   gsl_matrix* Cnc;     // dB/dTheta versus Theta on rational surfaces
+  gsl_matrix* factor;  // Transformation function for neoclassical E-matrix interagration
 
   // Neoclassical parameter data
   double*     I1;      // Neoclassical integral
@@ -423,8 +427,10 @@ private:
   void Smoothing (int N, double *y);
    
   // Calculate Green's functions
-  double GreenPlasmaCos   (int i, int j, int ip, int jp);
-  double GreenPlasmaSin   (int i, int j, int ip, int jp);
+  double GreenPlasmaCos    (int i, int j, int ip, int jp);
+  double GreenPlasmaSin    (int i, int j, int ip, int jp);
+  double GreenPlasmaCosNeo (int i, int j, int ip, int jp);
+  double GreenPlasmaSinNeo (int i, int j, int ip, int jp);
 
   // Calculate toroidal P function
   double ToroidalP (int m, int n, double z);

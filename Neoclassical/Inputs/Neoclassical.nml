@@ -1,26 +1,36 @@
-&NEOCLASSICAL_CONTROL
-
-	TAUMIN   = -0.8	   ! Minimum allowed value of tau
-	COULOMB  = 17.	   ! Coulomb logarithm
-	NSMOOTH  = 100     ! Number of smoothing cycles for higher derivatives of profiles
-
-	INTP     = 0	   ! Flag for pFile interpolation
-	INTF     = 0       ! Flag for fFile interpolation
-	INTC     = 0	   ! Flag for cFile interpolation
-	CATS     = 1       ! Flag for linear only interpolation of cFiles
-	
-	EXB      = 0       ! Flag for calculating ExB frequency from neoclassical theory
-
-	IMPURITY = 1	   ! Flag for impurities
-
-	NEUTRAL  = 1       ! Flag for neutrals
-	NTYPE    = 1       ! If 0/1 then flux-surface averaged neutral density distribution exponential/Lorentzian
-	NN       = 1.e16   ! Flux-surface averaged neutral density on LCFS (m^-3)
-	LN       = 1.3e-2  ! Flux-surface average neutral density decay lengthscale (m)
-	YN       = 1.5     ! Neutral peaking factor at X-point
-	SVN      = 4.e-14  ! Charge exchange rate constant (m^3/s)
-	EN       = 1.      ! Neutral energy/ion energy
-
-	TIME     = 0.	   ! Experimental time (ms)
-
-&end	
+ &NEOCLASSICAL_CONTROL
+ EXB = 0       
+! Flag for calculating ExB frequency from neoclassical theory
+ IMPURITY = 1	   
+! Flag for impurities
+ NEUTRAL = 1       
+! Flag for neutrals
+ NTYPE = 1       
+! If 0/1 then flux-surface averaged neutral density distribution exponential/Lorentzian
+ NN = 1.e16   
+! Flux-surface averaged neutral density on LCFS (m^-3)
+ LN = 1.3e-2  
+! Flux-surface average neutral density decay lengthscale (m)
+ YN = 1.5     
+! Neutral peaking factor at X-point
+ SVN = 4.e-14  
+! Charge exchange rate constant (m^3/s)
+ EN = 1.      
+! Neutral energy/ion energy
+ INTP = 0	   
+! Flag for pFile interpolation
+ INTF = 0       
+! Flag for fFile interpolation
+ INTC = 0	   
+! Flag for cFile interpolation
+ CATS = 1       
+! Flag for linear only interpolation of cFiles
+ TIME = 0.	   
+! Experimental time (ms)
+ TAUMIN = -0.8	   
+! Minimum allowed value of tau
+ COULOMB = 17.	   
+! Coulomb logarithm
+ NSMOOTH = 100     
+! Number of smoothing cycles for higher derivatives of profiles
+ / 

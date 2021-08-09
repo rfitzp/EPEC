@@ -282,10 +282,10 @@ void Flux::CalcGamma ()
 // #############################################
 void Flux::CalcNeoclassicalAngle ()
 {
-  gsl_odeiv2_system           sys5 = {pRhs5, NULL, 2, this};
+  gsl_odeiv2_system           sys5 = {pRhs5, NULL, 3, this};
   const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
   gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys5, T, H0, ACC/2., ACC/2.);
-  double*                     y    = new double [2]; 
+  double*                     y    = new double [3]; 
   double                      r, psir, psiz, rt, zt;
   
   for (int j = 0; j < nres; j++)
@@ -293,11 +293,14 @@ void Flux::CalcNeoclassicalAngle ()
       r    = 0.;
       y[0] = Rres[j];
       y[1] = ZPTS[jc];
+      y[2] = 0.;
       qgp  = gres[j];
       qgp1 = fabs (Psic) /gmres[j];
+      qgp2 = gres[j] /gmres[j] /qres[j];
 	      
-      gsl_matrix_set (Rnc, j, 0, y[0]);
-      gsl_matrix_set (Znc, j, 0, y[1]);
+      gsl_matrix_set (Rnc,   j, 0, y[0]);
+      gsl_matrix_set (Znc,   j, 0, y[1]);
+      gsl_matrix_set (theta, j, 0, y[2]);
 
       for (int k = 1; k < NTHETA; k++)
 	{
@@ -311,8 +314,9 @@ void Flux::CalcNeoclassicalAngle ()
 		  exit (1);
 		}
 	    }
-	  gsl_matrix_set (Rnc, j, k, y[0]);
-	  gsl_matrix_set (Znc, j, k, y[1]);
+	  gsl_matrix_set (Rnc,   j, k, y[0]);
+	  gsl_matrix_set (Znc,   j, k, y[1]);
+	  gsl_matrix_set (theta, j, k, y[2]);
 	}
      }
   
@@ -406,6 +410,7 @@ int Flux::Rhs5 (double r, const double y[], double dydr[], void*)
 {
   // y[0] - R     
   // y[1] - Z
+  // y[2] - theta
 
   double PsiR = GetPsiR (y[0], y[1]);
   double PsiZ = GetPsiZ (y[0], y[1]);
@@ -414,6 +419,7 @@ int Flux::Rhs5 (double r, const double y[], double dydr[], void*)
 
   dydr[0] = - qgp1 * PsiZ /RB;
   dydr[1] = + qgp1 * PsiR /RB;
+  dydr[2] =   qgp2 /RB /y[0];
 
   return GSL_SUCCESS;
 }

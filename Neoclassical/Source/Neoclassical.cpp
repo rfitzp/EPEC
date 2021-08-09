@@ -1528,6 +1528,10 @@ void Neoclassical::WriteStage2Netcdfcpp ()
   double* wEk_x         = new double[nres];
   double* w_E_Ik_x      = new double[nres];
   double* Sk_x          = new double[nres];
+  double* alpbek_x      = new double[nres];
+  double* alpbik_x      = new double[nres];
+  double* alpck_x       = new double[nres];
+  double* alppk_x       = new double[nres];
   for (int i = 0; i < nres; i++)
     {
       PsiNk_x[i]       = PsiNk(i);
@@ -1552,6 +1556,10 @@ void Neoclassical::WriteStage2Netcdfcpp ()
       wEk_x[i]         = wEk(i)      /1.e3;
       w_E_Ik_x[i]      = w_E_Ik(i)   /1.e3;
       Sk_x[i]          = Sk(i);
+      alpbek_x[i]      = alpbek(i);
+      alpbik_x[i]      = alpbik(i);
+      alpck_x[i]       = alpck(i);
+      alppk_x[i]       = alppk(i);
     }
 
   try
@@ -1708,6 +1716,22 @@ void Neoclassical::WriteStage2Netcdfcpp ()
       // Sk
       NcVar Sk_y = dataFile.addVar ("S", ncDouble, nres_d);
       Sk_y.putVar (Sk_x);
+
+      // alpbek
+      NcVar alpbek_y = dataFile.addVar ("alpha_b_e", ncDouble, nres_d);
+      alpbek_y.putVar (alpbek_x);
+
+      // alpbik
+      NcVar alpbik_y = dataFile.addVar ("alpha_b_i", ncDouble, nres_d);
+      alpbik_y.putVar (alpbik_x);
+
+      // alpck
+      NcVar alpck_y = dataFile.addVar ("alpha_c", ncDouble, nres_d);
+      alpck_y.putVar (alpck_x);
+
+      // alppk
+      NcVar alppk_y = dataFile.addVar ("alpha_p", ncDouble, nres_d);
+      alppk_y.putVar (alppk_x);
     }
   catch (NcException& e)
     {
@@ -1788,6 +1812,10 @@ void Neoclassical::WriteStage2Netcdfc ()
   double* wEk_x         = new double[nres];
   double* w_E_Ik_x      = new double[nres];
   double* Sk_x          = new double[nres];
+  double* alpbek_x      = new double[nres];
+  double* alpbik_x      = new double[nres];
+  double* alpck_x       = new double[nres];
+  double* alppk_x       = new double[nres];
   for (int i = 0; i < nres; i++)
     {
       PsiNk_x[i]       = PsiNk(i);
@@ -1812,6 +1840,10 @@ void Neoclassical::WriteStage2Netcdfc ()
       wEk_x[i]         = wEk(i)      /1.e3;
       w_E_Ik_x[i]      = w_E_Ik(i)   /1.e3;
       Sk_x[i]          = Sk(i);
+      alpbek_x[i]      = alpbek(i);
+      alpbik_x[i]      = alpbik(i);
+      alpck_x[i]       = alpck(i);
+      alppk_x[i]       = alppk(i);
     }
 
   // Open file
@@ -1973,6 +2005,22 @@ void Neoclassical::WriteStage2Netcdfc ()
   // Sk
   int Sk_y;
   err += nc_def_var (dataFile, "S", NC_DOUBLE, 1, &nres_d, &Sk_y);
+  
+  // alpbek
+  int alpbek_y;
+  err += nc_def_var (dataFile, "alpha_b_e", NC_DOUBLE, 1, &nres_d, &alpbek_y);
+
+  // alpbik
+  int alpbik_y;
+  err += nc_def_var (dataFile, "alpha_b_i", NC_DOUBLE, 1, &nres_d, &alpbik_y);
+
+  // alpck
+  int alpck_y;
+  err += nc_def_var (dataFile, "alpha_c", NC_DOUBLE, 1, &nres_d, &alpck_y);
+
+  // alppk
+  int alppk_y;
+  err += nc_def_var (dataFile, "alpha_p", NC_DOUBLE, 1, &nres_d, &alppk_y);
 
   err += nc_enddef (dataFile);
 
@@ -2020,6 +2068,10 @@ void Neoclassical::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, wEk_y,         wEk_x);
   err += nc_put_var_double (dataFile, w_E_Ik_y,      w_E_Ik_x);
   err += nc_put_var_double (dataFile, Sk_y,          Sk_x);
+  err += nc_put_var_double (dataFile, alpbek_y,      alpbek_x);
+  err += nc_put_var_double (dataFile, alpbik_y,      alpbik_x);
+  err += nc_put_var_double (dataFile, alpck_y,       alpck_x);
+  err += nc_put_var_double (dataFile, alppk_y,       alppk_x);
  
   if (err != 0)
     {
@@ -2044,7 +2096,8 @@ void Neoclassical::WriteStage2Netcdfc ()
   delete[] PsiNk_x;    delete[] w_linear_x; delete[] w_nonlinear_x; delete[] w_EB_x;     delete[] rho_sk_x;  
   delete[] delk_x;     delete[] rhothek_x;  delete[] rhothik_x;     delete[] WcritTek_x; delete[] WcritTik_x;    
   delete[] Wcritnek_x; delete[] w_ast_ek_x; delete[] w_ast_ik_x;    delete[] w_ast_Ik_x; delete[] wEk_x;
-  delete[] w_E_Ik_x;   delete[] Sk_x;
+  delete[] w_E_Ik_x;   delete[] Sk_x;       delete[] alpbek_x;      delete[] alpbik_x;   delete[] alpck_x;
+  delete[] alppk_x;
 }
 #endif
 

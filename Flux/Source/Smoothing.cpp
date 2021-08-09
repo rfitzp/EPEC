@@ -7,7 +7,7 @@
 // ###################################
 void Flux::Smoothing (int N, double *y)
 {
-  double* w = new double[N];
+  double* w       = new double[N];
   double* weights = new double[5];
 
   for (int i = 0; i < N; i++)
