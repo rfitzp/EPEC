@@ -349,7 +349,7 @@ void Flux::WriteStage2Netcdfcpp ()
 	for (int j = 0; j < NTHETA; j++)
 	  DATA1[j + i*NTHETA] = gsl_matrix_get (Zst, i, j);
       
-      NcVar Zst =  dataFile.addVar ("Z_st", ncDouble, rst_d);
+      NcVar zst =  dataFile.addVar ("Z_st", ncDouble, rst_d);
       zst.putVar (DATA1);
       
       // Rnc
@@ -389,7 +389,7 @@ void Flux::WriteStage2Netcdfcpp ()
 	for (int j = 0; j < NTHETA; j++)
 	  DATA1[j + i*NTHETA] = gsl_matrix_get (Cnc, i, j);
 
-      NcVar Cnc =  dataFile.addVar ("C_nc", ncDouble, rst_d);
+      NcVar cnc =  dataFile.addVar ("C_nc", ncDouble, rst_d);
       cnc.putVar (DATA1);
 
       // E_real
@@ -401,7 +401,7 @@ void Flux::WriteStage2Netcdfcpp ()
       vector<NcDim> est_d;
       est_d.push_back (S_d);
       est_d.push_back (S_d);
-      NcVar ereal = dataFile.addvar ("E_real", ncDouble, est_d);
+      NcVar ereal = dataFile.addVar ("E_real", ncDouble, est_d);
       ereal.putVar (DATA2);
 
       // E_imag
@@ -409,7 +409,7 @@ void Flux::WriteStage2Netcdfcpp ()
 	for (int j = 0; j < nres; j++)
 	  DATA2[j + i*nres] = GSL_IMAG (gsl_matrix_complex_get (EE, i, j));
 
-      NcVar eimag = dataFile.addvar ("E_imag", ncDouble, est_d);
+      NcVar eimag = dataFile.addVar ("E_imag", ncDouble, est_d);
       eimag.putVar (DATA2);
 
       delete[] DATA; delete[] D_R; delete[] DATA1; delete[] DATA2;
