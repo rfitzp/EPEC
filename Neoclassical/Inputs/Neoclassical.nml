@@ -1,10 +1,12 @@
  &NEOCLASSICAL_CONTROL
  EXB = 0       
 ! Flag for calculating ExB frequency from neoclassical theory
+!  0 - use ExB frequency profile from pFile 
+!  1 - use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical theory 
  IMPURITY = 1	   
-! Flag for impurities
+! Flag for inclusions of impurities in calculation
  NEUTRAL = 1       
-! Flag for neutrals
+! Flag for inclusions of neutrals in claculation
  NTYPE = 1       
 ! If 0/1 then flux-surface averaged neutral density distribution exponential/Lorentzian
  NN = 1.e16   
@@ -16,17 +18,17 @@
  SVN = 4.e-14  
 ! Charge exchange rate constant (m^3/s)
  EN = 1.      
-! Neutral energy/ion energy
- INTP = 0	   
-! Flag for pFile interpolation
+! Incoming neutral energy/ion energy
  INTF = 0       
 ! Flag for fFile interpolation
- INTC = 0	   
+ INTP = 0	   
+! Flag for pFile interpolation
+  INTC = 0       
 ! Flag for cFile interpolation
  CATS = 1       
 ! Flag for linear only interpolation of cFiles
  TIME = 0.	   
-! Experimental time (ms)
+! Experimental time (ms) (only relevant with interpolation of pFiles/fFiles/cFiles)
  TAUMIN = -0.8	   
 ! Minimum allowed value of tau
  COULOMB = 17.	   

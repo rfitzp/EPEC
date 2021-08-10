@@ -1,39 +1,63 @@
-&PHASE_CONTROL
-	NFLOW  = 100   ! Number of flow harmonics
-
- 	STAGE5 = 1     ! Flag for Stage5 calculation
-	INTF   = 0     ! Flag for fFile interpolation
-	INTN   = 0     ! Flag for nFile interpolation
-	INTU   = 0     ! Flag for uFile/mFile/lFile interpolation
-	NATS   = 0     ! Flag for linear only nFile interpolation
-	OLD    = 0     ! Flag for restarting old calculation
-
-	LIN    = 0     ! Flag for purely linear calculation
-	FREQ   = 0     ! Flag for selecting natural frequency type
-	FFAC   = 0.4    ! Parameter for selecting natural frequency (FREQ = 1)
-
-	CXD    = 1     ! Flag for including charge exhange damping in angular equations of motion
-	BOOT   = 0     ! Flag for including bootstrap current in Rutherford equations
-	CURV   = 0     ! Flag for including magnetic field-line curvature in Rutherford equations
-	POLZ   = 0     ! Flag for including ion polarization current in Rutherford equations
-
-	MID    = 1     ! Number of coils sets
-	COPT   = 1     ! Switch for optimaiztion of relative amplitudes/phases of coils currents
-                       !  0 - no optimization
-                       !  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
-                       !  2 - maximize drive at resonant surface closest to top of pedestal (unrestricted)
-                       !  3 - maximize drive at resonant surface closest to top of pedestal and minimize drive at innermost resonant surface (unrestricted)
-	CORE   = 1.    ! Core drive minimization factor (0.0 = no minimization, 1.0 = complete minmization)
-
-	SCALE  = 2.    ! GPEC scalefactor
-	CHIR   = 4.    ! Maximum Chirikov parameter for vacuum islands
-        HIGH   = 1     ! Flag for higher order transport analysis
-	RATS   = 1     ! Flag for linear-only interpolation of uFiles/mFiles/lFiles
-
-	PMAX   = 2.    ! Coil relative phase scan from 0 to PMAX*M_PI
-
-	TSTART = 0.    ! Simulation start time (ms)
-	TEND   = 2.e3  ! Simulation end time (ms)
-	DT     = 0.1   ! Data recorded every DT ms
-&end
+ &PHASE_CONTROL
+ PMAX = 2.    
+! Coil relative phase scan from 0 to PMAX*M_PI in Stage 4
+ STAGE5 = 1     
+! Flag for proceeding to Stage5 calculation
+ TSTART = 0.    
+! Simulation start time (ms)
+ TEND = 2.e3  
+! Simulation end time (ms)
+ DT = 0.1   
+! Data recorded every DT ms
+ MID = 1     
+! Number of coils sets
+!  1 - require lFile
+!  2 - require lFile and uFile
+!  3 - require lFile, uFile, and mFile
+ COPT = 1     
+! Switch for optimaiztion of relative amplitudes/phases of coils currents
+!  0 - no optimization
+!  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
+!  2 - maximize drive at resonant surface closest to top of pedestal (unrestricted)
+!  3 - maximize drive at resonant surface closest to top of pedestal and minimize drive at innermost resonant surface (unrestricted)
+ CORE   = 1.    
+! Core drive minimization factor when COPT = 3 (0.0 = no minimization, 1.0 = complete minmization)
+ FREQ = 0     
+! Switch for selecting natural frequency type
+! 0 - use linear/nonlinear natural frequency
+! 1 - use linear/ExB/nonlinear natural frequency 
+! 2 - use w_natural = FFAC * w_linear + (1-FFAC) * w_EB
+ FFAC = 0.4    
+! Parameter for selecting natural frequency (when FREQ = 1)
+ LIN = 0     
+! Flag for purely linear island dynamical simulation
+ CXD = 1     
+! Flag for including charge exhange damping in angular equations of motion
+ BOOT = 0     
+! Flag for including bootstrap current in Rutherford equations
+ CURV = 0     
+! Flag for including magnetic field-line curvature in Rutherford equations
+ POLZ = 0     
+! Flag for including ion polarization current in Rutherford equations
+ CHIR = 4.    
+! Maximum Chirikov parameter for vacuum islands
+ INTF = 0     
+! Flag for fFile interpolation
+ INTN = 0     
+! Flag for nFile interpolation
+ INTU = 0    
+ ! Flag for uFile/mFile/lFile interpolation
+ NATS = 0     
+! Flag for linear-only nFile interpolation
+ RATS   = 1     
+! Flag for linear-only interpolation of uFiles/mFiles/lFiles
+ OLD = 0     
+! Flag for restarting old calculation
+  HIGH = 1     
+! Flag for higher-order transport analysis
+ SCALE = 2.    
+! GPEC scalefactor
+ NFLOW = 100  
+! Number of flow harmonics included in calculation
+ /
 

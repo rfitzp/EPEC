@@ -1,1 +1,12 @@
-../../IslandDynamics/Inputs/Waveform.nml
+ &WAVEFORM_CONTROL
+ NCTRL = 2          
+! Number of control points
+ /
+ &WAVEFORM
+ TCTRL = 0.0, 2.e3
+! Control times (ms)
+ ICTRL = 0.0, 5.0
+! Control currents (kA)
+ PCTRL = 0.0, 0.0
+! Relative phase of RMP coil currents (units of PI)
+ /

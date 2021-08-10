@@ -17,6 +17,11 @@ int main (int argc, char** argv)
   // .....................
   printf ("\n#############\nProgram PHASE\n#############\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+#ifdef NETCDF_CPP
+  printf ("Using Netcdf c++ and f90 libraries\n\n");
+#else
+  printf ("Using Netcdf c and f90 libraries\n");
+#endif
 
   FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
   fprintf (monitor, "\n#############\nProgram PHASE\n#############\n");
@@ -35,9 +40,10 @@ int main (int argc, char** argv)
   char* Cvalue = NULL; char* Dvalue = NULL; char* Nvalue = NULL;
   char* Gvalue = NULL; char* Xvalue = NULL; char* Bvalue = NULL;
   char* Vvalue = NULL; char* Pvalue = NULL;
+  int   _OMFIT = 0;
   opterr = 0;
   
-  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:G:X:B:V:P:")) != -1)
+  while ((c = getopt (argc, argv, "f:hn:o:s:t:u:S:l:m:T:c:i:r:H:C:D:F:N:G:X:B:V:P:O")) != -1)
     switch (c)
       {
       case 'f':
@@ -63,6 +69,7 @@ int main (int argc, char** argv)
 	printf ("-F FREQ   - set natural frequency selection flag to FREQ\n");
 	printf ("-G FFAC   - set natural frequency selection parameter to FFAC\n");
 	printf ("-H HIGH   - set higher order transport calculation enabling flag to HIGH\n");
+	printf ("-O          - flag to select OMFIT mode\n");
 	printf ("-P POLZ   - set polarization flag to POLZ\n");
 	printf ("-N NATS   - set linear only nFiles interpolation flag to NATS\n");
 	printf ("-S SCALE  - set GPEC scalefactor to SCALE\n");	
@@ -70,6 +77,8 @@ int main (int argc, char** argv)
 	printf ("-V CURV   - set curvature flag to CURV\n");
 	printf ("-X CXD    - set charge exchange damping flag to CXD\n");
 	exit (0);
+      case 'O':
+	_OMFIT = 1;
       case 'n':
 	nvalue = optarg;
  	break;
@@ -228,12 +237,30 @@ int main (int argc, char** argv)
       _FFAC  = double (__FFAC);
      }
     
+    if (_OMFIT)
+    printf ("OMFIT mode\n\n");
+  else
+    {
+      printf ("Normal mode\n\n");
+    
+      FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
+      fprintf (monitor, "\n#############\nProgram PHASE\n#############\n");
+      fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
+#ifdef NETCDF_CPP
+      fprintf (monitor, "Using Netcdf c++ and f90 libraries\n");
+#else
+      fprintf (monitor, "Using Netcdf c and f90 libraries\n");
+#endif
+      fprintf (monitor, "Normal mode\n\n");
+      fclose (monitor);
+    }
+
   // ..................
   // Call program PHASE
   // ..................
   Phase phase;
   phase.Solve (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND,
-	       _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ, _FFAC, _CXD, _BOOT, _CURV, _POLZ);
+	       _SCALE, _CHIR, _IRMP, _HIGH, _RATS, _CORE, _FREQ, _FFAC, _CXD, _BOOT, _CURV, _POLZ, _OMFIT);
 
   return 0;
 }
