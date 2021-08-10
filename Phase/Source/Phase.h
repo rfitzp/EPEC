@@ -28,6 +28,7 @@
 // -G FFAC   - overrides FFAC value from namelist file
 // -H HIGH   - overrides HIGH value from namelist file
 // -N NATS   - overrides NATS value from namelist file
+// -O        - flag to select OMFIT mode
 // -P POLZ   - ovverides POLZ value from namelist file
 // -S SCALE  - overrides SCALE value from namelist file
 // -T TEND   - sets simulation end time (ms)
@@ -145,6 +146,9 @@ class Phase
   // Program data
   // ------------
   
+  // Read from command line
+  int OMFIT;       // Flag to select OMFIT mode
+
   // Read from Inputs/Phase.nml
   int      NFLOW;  // Number of flow harmonics in model
 
@@ -213,17 +217,11 @@ class Phase
   int    nres;            // Number of resonant surfaces in plasma
   gsl_matrix_complex* FF; // Plasma inverse tearing stability matrix
   gsl_matrix_complex* EE; // Plasma tearing stability matrix 
-  gsl_vector_complex* EI; // Response vector for inboard toroidal Mirnov coil array
-  gsl_vector_complex* EO; // Response vector for outboard toroidal Mirnov coil array
-
-  Array<double,2> FFh;  // Moduli of FF elements
-  Array<double,2> EEh;  // Moduli of EE elements    
-  Array<double,2> xih;  // Arguments of EE elements
-  Array<double,1> epsi; // Response amplitudes for inboard toroidal Mirnov coil array
-  Array<double,1> sigi; // Response phases for inboard toroidal Mirnov coil array
-  Array<double,1> epso; // Response amplitudes for outboard toroidal Mirnov coil array
-  Array<double,1> sigo; // Response phases for outboard toroidal Mirnov coil array
-  Array<double,1> A1;   // A1 values at rational surfaces
+ 
+  Array<double,2> FFh;    // Moduli of FF elements
+  Array<double,2> EEh;    // Moduli of EE elements    
+  Array<double,2> xih;    // Arguments of EE elements
+  Array<double,1> A1;     // A1 values at rational surfaces
 
   // ------------------------------
   // Data from program NEOCLASSICAL
@@ -371,7 +369,7 @@ class Phase
   // Solve problem
   void Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);        
+	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ, int _OMFIT);        
 
   // -----------------------
   // Private class functions
@@ -381,7 +379,7 @@ class Phase
   // Read data
   void Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);
+		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ, int _OMFIT);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

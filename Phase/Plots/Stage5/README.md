@@ -26,18 +26,7 @@
 	dte.asy     ... plots temperature reduction at rational surfaces versus time
 	dte1.asy    ... plots temperature flattened regions versus time
 
-	in.asy      ... plots inboard Mirnov signals versus time
-	inamp.asy   ... plots magnitude of inboard Mirnov signal versus time
-	inpha.asy   ... plots phase of inboard Mirnov signal versus time
-
-	out.asy     ... plots outboard Mirnov signals versus time
-	outamp.asy  ... plots magnitude of outboard Mirnov signal versus time
-	outpha.asy  ... plots phase of outboard Mirnov signal versus time
-
-	mirnovin.asy  ... plots reconstructed inboard Mirnov signal versus time
-	mirnovout.asy ... plots reconstructed outboard Mirnov signal versus time
-
-	wvpsi.asy    ... plots vacuum island widths (in PsiN) versus time
+ 	wvpsi.asy    ... plots vacuum island widths (in PsiN) versus time
 	wpsi.asy     ... plots island widths (in PsiN) versus time
 	npsi.asy     ... plots density flattened regions (in PsiN) versus time
 	tpsi.asy     ... plots electron temperature flattened regions (in PsiN) versus time

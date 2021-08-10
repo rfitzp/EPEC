@@ -6,6 +6,7 @@
 *.sty
 *.o
 *.mod
+*.nc
 *~
 *.sty
 *.gz
