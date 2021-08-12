@@ -13,9 +13,9 @@ ifeq ($(UNAME), Darwin)
      F_INCLUDE  = -I/opt/local/include
 
      C_COMPILER = clang++ -O3
-     C_FLAGS    = -w $(VERSION_FLAGS) -D NETCDF_CPP
+     C_FLAGS    = -w $(VERSION_FLAGS)
      C_INCLUDE  = -I/opt/local/include
-     C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas  -lnetcdf -lnetcdf_c++4 -lnetcdff
+     C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas  -lnetcdf -lnetcdff
 
 else ifeq ($(NNAME), iris)
 

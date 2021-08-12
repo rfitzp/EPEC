@@ -65,14 +65,14 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   ZAXIS  = ZAXIS                  /R0
    
   para (1) = R0
-  para (2) = B0
+  para (2) = dabs(B0)
   para (3) = RLEFT
   para (4) = RRIGHT
   para (5) = ZLOW
   para (6) = ZHIGH
   para (7) = RAXIS
   para (8) = ZAXIS 
-  para (9) = PSIAXIS /R0/R0/B0
+  para (9) = PSIAXIS /R0/R0/dabs(B0)
 
   allocate (R (NRBOX))
   allocate (Z (NZBOX))
@@ -135,7 +135,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   ! Output equilibrium data to ascii files
   ! --------------------------------------  
   open  (unit = 101, file = 'Outputs/Stage1/R0B0.txt')
-  write (101, '(2e17.9)') R0, B0
+  write (101, '(2e17.9)') R0, dabs(B0)
   close (unit = 101)
 
   open  (unit = 101, file = 'Outputs/Stage1/Box.txt')
@@ -168,7 +168,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
 
   do i = 1, NRBOX
      do j = 1, NZBOX
-        PSI  (i, j) = PSI (i, j) /R0/R0/B0
+        PSI  (i, j) = PSI (i, j) /R0/R0/dabs(B0)
         PSIT (j, i) = PSI (i, j)
       end do
   end do
@@ -184,8 +184,8 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   close (unit = 101)
 
   do i = 1, NRBOX
-     T    (i) = T    (i) /R0/dabs(B0)
-     P    (i) = P    (i) *MU0/B0/B0
+     T    (i) = T    (i) /R0/B0
+     P    (i) = P    (i) *MU0/dabs(B0)/dabs(B0)
      TTp  (i) = TTp  (i) /B0
      Pp   (i) = Pp   (i) *MU0*R0*R0/dabs(B0)
      CURR (i) = CURR (i) *MU0*R0/dabs(B0)

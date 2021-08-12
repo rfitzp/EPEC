@@ -10,12 +10,12 @@
  DT = 0.1   
 ! Data recorded every DT ms
  MID = 1     
-! Number of coils sets
-!  1 - require lFile
-!  2 - require lFile and uFile
-!  3 - require lFile, uFile, and mFile
+! Number of coil sets:
+!  1 - requires lFile
+!  2 - requires lFile and uFile
+!  3 - requires lFile, uFile, and mFile
  COPT = 1     
-! Switch for optimaiztion of relative amplitudes/phases of coils currents
+! Switch for optimaiztion of relative amplitudes/phases of coils currents:
 !  0 - no optimization
 !  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
 !  2 - maximize drive at resonant surface closest to top of pedestal (unrestricted)
@@ -23,12 +23,12 @@
  CORE   = 1.    
 ! Core drive minimization factor when COPT = 3 (0.0 = no minimization, 1.0 = complete minmization)
  FREQ = 0     
-! Switch for selecting natural frequency type
+! Switch for selecting natural frequency type:
 ! 0 - use linear/nonlinear natural frequency
 ! 1 - use linear/ExB/nonlinear natural frequency 
 ! 2 - use w_natural = FFAC * w_linear + (1-FFAC) * w_EB
  FFAC = 0.4    
-! Parameter for selecting natural frequency (when FREQ = 1)
+! Parameter for selecting natural frequency (when FREQ = 2)
  LIN = 0     
 ! Flag for purely linear island dynamical simulation
  CXD = 1     

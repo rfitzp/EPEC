@@ -93,20 +93,12 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_sf_bessel.h>
 #include <gsl/gsl_poly.h>
-
-#ifdef NETCDF_CPP
-#include <netcdf>
-using namespace netCDF;
-using namespace netCDF::exceptions;
-#else
-#include <netcdf.h>
-#endif
-
 #include "Field.h"
+#include <netcdf.h>
 
 using namespace blitz;
 
-// Namelist funtion
+// Namelist function
 extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* EXB, int* INTP, int* INTF, int* INTC, 
 			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN,
 			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS, double* TAUMIN);
@@ -496,13 +488,8 @@ class Neoclassical
   // Calculate normalized quantities at rational surfaces
   void Get_Normalized ();
 
-#ifdef NETCDF_CPP
-  // Write Stage2 NETCDF file via NETCDF-c++
-  void WriteStage2Netcdfcpp ();
-#else
-  // Write Stage2 NETCDF file via NETCDF-c
+  // Write Stage2 NETCDF file
   void WriteStage2Netcdfc ();
-#endif
 
   // 1D interpolation function with nonuniform grid
   double Interpolate             (int I, Array<double,1> X, Array<double,1> Y, double x, int order);

@@ -40,12 +40,12 @@ void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, doub
 
   // Stop timer
   clock_t end        = clock ();
-  double  time_spent = double (end - begin) /CLOCKS_PER_SEC;
+  double  time_spent = double (end - begin) /double(CLOCKS_PER_SEC);
 
   // Print exit message
-  printf ("*****************************************************\n");
-  printf ("PROGRAM FLUX:: Normal termination: Wall time = %4d s\n", time_spent);
-  printf ("*****************************************************\n");
+  printf ("*************************************************************\n");
+  printf ("PROGRAM FLUX:: Normal termination: Wall time = %11.4e s\n", time_spent);
+  printf ("*************************************************************\n");
 }
 
 // #################################

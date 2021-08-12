@@ -78,11 +78,7 @@ void Flux::Stage2 ()
   // ..................
   // Output NETCDF file
   // ..................
-#ifdef NETCDF_CPP
-  WriteStage2Netcdfcpp ();
-#else
   WriteStage2Netcdfc ();
-#endif
  
   // ............
   // Output fFile
@@ -186,244 +182,9 @@ void Flux::Stage2 ()
   gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
 }
 
-#ifdef NETCDF_CPP
-// ###################################################
-// Function to write Stage2 NETCDF file via NETCDF-c++
-// ###################################################
-void Flux::WriteStage2Netcdfcpp ()
-{
-  try
-    {
-      // Open file
-      NcFile dataFile ("Outputs/Stage2.nc", NcFile::replace);
-
-      // Basic parameters
-      double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, RAXIS, ZAXIS, q95, PSILIM, PSIRAT};
-      NcDim para_d          = dataFile.addDim ("index", 11);
-      NcVar para            = dataFile.addVar ("Parameters", ncDouble, para_d);
-      para.putAtt ("Contents", "R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT");
-      para.putVar (parameters);
-
-      // Plasma boundary
-      NcDim bound_d = dataFile.addDim ("i_bound", NBPTS);
-      NcVar bound_r = dataFile.addVar ("RBPTS", ncDouble, bound_d);
-      NcVar bound_z = dataFile.addVar ("ZBPTS", ncDouble, bound_d);
-      bound_r.putVar (RBPTS);
-      bound_z.putVar (ZBPTS);
-
-      // R
-      NcDim R_d = dataFile.addDim ("i", NRPTS);
-      NcVar R   = dataFile.addVar ("R", ncDouble, R_d);
-      R.putVar (RPTS);
-
-      // Z
-      NcDim Z_d = dataFile.addDim ("j", NZPTS);
-      NcVar Z   = dataFile.addVar ("Z", ncDouble, Z_d);
-      Z.putVar (ZPTS);
- 
-      // Psi
-      double* DATA = new double[NRPTS*NZPTS];
-      for (int i = 0; i < NRPTS; i++)
-	for (int j = 0; j < NZPTS; j++)
-	  DATA[j + i*NZPTS] = PSIARRAY (i, j);
-      
-      vector<NcDim> psi_d;
-      psi_d.push_back (R_d);
-      psi_d.push_back (Z_d);
-      NcVar psi = dataFile.addVar ("PSI", ncDouble, psi_d);
-      psi.putVar (DATA);
-      
-      // Psi_R
-      for (int i = 0; i < NRPTS; i++)
-	for (int j = 0; j < NZPTS; j++)
-	  DATA[j + i*NZPTS] = GetPsiR (RPTS[i], ZPTS[j]);
-
-      NcVar psi_r = dataFile.addVar ("PSI_R", ncDouble, psi_d);
-      psi_r.putVar (DATA);
-
-      // Psi_Z
-      for (int i = 0; i < NRPTS; i++)
-	for (int j = 0; j < NZPTS; j++)
-	  DATA[j + i*NZPTS] = GetPsiZ (RPTS[i], ZPTS[j]);
-
-      NcVar psi_z = dataFile.addVar ("PSI_Z", ncDouble, psi_d);
-      psi_z.putVar (DATA);
-
-      // Psi_N
-      NcDim Q_d  = dataFile.addDim ("N_PSI", NPSI);
-      NcVar PSIN = dataFile.addVar ("PsiN", ncDouble, Q_d);
-      PSIN.putVar (P);
-
-      // q
-      NcVar Q = dataFile.addVar ("q", ncDouble, Q_d);
-      Q.putVar (QP);
-
-      // q_psi
-      NcVar Qp  = dataFile.addVar ("q_psi", ncDouble, Q_d);
-      Qp.putVar (QPN);
-
-      // g
-      NcVar G = dataFile.addVar ("g", ncDouble, Q_d);
-      G.putVar (GP);
-
-      // P
-      NcVar P = dataFile.addVar ("P", ncDouble, Q_d);
-      P.putVar (PP);
-
-      // g_psi
-      NcVar Gp = dataFile.addVar ("g_psi", ncDouble, Q_d);
-      Gp.putVar (GPP);
-
-      // P_psi
-      NcVar Pp = dataFile.addVar ("P_psi", ncDouble, Q_d);
-      Pp.putVar (PPP);
-
-      // m_res
-      NcDim S_d = dataFile.addDim ("i_res", nres);
-      NcVar mr  = dataFile.addVar ("m_pol", ncInt, S_d);
-      mr.putVar (mres);
-
-      // PsiN_res
-      NcVar PNr = dataFile.addVar ("PsiN_res", ncDouble, S_d);
-      PNr.putVar (PsiNres);
-      
-      // q_res
-      NcVar qr = dataFile.addVar ("q_res", ncDouble, S_d);
-      qr.putVar (qres);
-   
-      // s_res
-      NcVar sr = dataFile.addVar ("s_res", ncDouble, S_d);
-      sr.putVar (sres);
-
-      // g_res
-      NcVar gr = dataFile.addVar ("g_res", ncDouble, S_d);
-      gr.putVar (gres);
-
-      // gamma_res
-      NcVar gmr = dataFile.addVar ("gamma_res", ncDouble, S_d);
-      gmr.putVar (gmres);
-
-      // f_c
-      NcVar fcr = dataFile.addVar ("fc_res", ncDouble, S_d);
-      fcr.putVar (fcres);
-
-      // a_jj
-      NcVar ajr = dataFile.addVar ("ajj_res", ncDouble, S_d);
-      ajr.putVar (ajj);
-
-      // Q
-      NcVar qhr = dataFile.addVar ("Q_res", ncDouble, S_d);
-      qhr.putVar (q_hat);
-
-      // A1
-      NcVar a1r = dataFile.addVar ("A1_res", ncDouble, S_d);
-      a1r.putVar (A1res);
-
-      // A2
-      NcVar a2r = dataFile.addVar ("A2_res", ncDouble, S_d);
-      a2r.putVar (A2res);
-
-      // D_R
-      double* D_R = new double[nres];
-      for (int i = 0; i < nres; i++)
-	D_R[i] = E[i] + F[i] + H[i]*H[i];
-
-      NcVar dr = dataFile.addVar ("DR_res", ncDouble, S_d);
-      dr.putVar (D_R);
-
-      // Rst
-      double* DATA1 = new double[nres*NTHETA];
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (Rst, i, j);
-      
-      NcDim T_d = dataFile.addDim ("k", NTHETA);
-      vector<NcDim> rst_d;
-      rst_d.push_back (S_d);
-      rst_d.push_back (T_d);
-      NcVar rst =  dataFile.addVar ("R_st", ncDouble, rst_d);
-      rst.putVar (DATA1);
-
-      // Zst
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (Zst, i, j);
-      
-      NcVar zst =  dataFile.addVar ("Z_st", ncDouble, rst_d);
-      zst.putVar (DATA1);
-      
-      // Rnc
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (Rnc, i, j);
-      
-      NcVar rnc =  dataFile.addVar ("R_nc", ncDouble, rst_d);
-      rnc.putVar (DATA1);
-      
-      // Znc
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (Znc, i, j);
-      
-      NcVar znc =  dataFile.addVar ("Z_nc", ncDouble, rst_d);
-      znc.putVar (DATA1);
-      
-      // theta
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (theta, i, j);
-
-      NcVar the =  dataFile.addVar ("theta", ncDouble, rst_d);
-      the.putVar (DATA1);
-
-      // B_nc
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (Bnc, i, j);
-
-      NcVar bnc =  dataFile.addVar ("B_nc", ncDouble, rst_d);
-      bnc.putVar (DATA1);
-
-      // C_nc
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < NTHETA; j++)
-	  DATA1[j + i*NTHETA] = gsl_matrix_get (Cnc, i, j);
-
-      NcVar cnc =  dataFile.addVar ("C_nc", ncDouble, rst_d);
-      cnc.putVar (DATA1);
-
-      // E_real
-      double* DATA2 = new double[nres*nres];
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < nres; j++)
-	  DATA2[j + i*nres] = GSL_REAL (gsl_matrix_complex_get (EE, i, j));
-
-      vector<NcDim> est_d;
-      est_d.push_back (S_d);
-      est_d.push_back (S_d);
-      NcVar ereal = dataFile.addVar ("E_real", ncDouble, est_d);
-      ereal.putVar (DATA2);
-
-      // E_imag
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < nres; j++)
-	  DATA2[j + i*nres] = GSL_IMAG (gsl_matrix_complex_get (EE, i, j));
-
-      NcVar eimag = dataFile.addVar ("E_imag", ncDouble, est_d);
-      eimag.putVar (DATA2);
-
-      delete[] DATA; delete[] D_R; delete[] DATA1; delete[] DATA2;
-    }
-  catch (NcException& e)
-    {
-      printf ("FLUX::WriteStage2Netcdfcpp: Error writing Outputs/Stage2.nc: Exception = %s\n", e.what ());
-      exit (1);
-    }
-}
-#else
-// #################################################
-// Function to write Stage2 NETCDF file via NETCDF-c
-// #################################################
+// ####################################
+// Function to write Stage2 NETCDF file
+// ####################################
 void Flux::WriteStage2Netcdfc ()
 {
   // Open file
@@ -661,7 +422,7 @@ void Flux::WriteStage2Netcdfc ()
 
   if (err != 0)
     {
-      printf ("FLUX::WriteStage2Netcdfc: Error defining varaibles in Outputs/Stage2.nc\n");
+      printf ("FLUX::WriteStage2Netcdfc: Error defining variables in Outputs/Stage2.nc\n");
       exit (1);
     }
 
@@ -723,7 +484,6 @@ void Flux::WriteStage2Netcdfc ()
   delete[] DATA7;  delete[] DATA8; delete[] DATA9; delete[] DATA10;
   delete[] DATA11;
  }
-#endif
 
 // #############################################
 // Function to assign weights for Simpson's rule

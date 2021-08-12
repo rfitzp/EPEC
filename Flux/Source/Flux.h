@@ -98,16 +98,9 @@
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_odeiv2.h>
 #include <gsl/gsl_sf_gamma.h>
+#include <netcdf.h>
 
 using namespace blitz;
-
-#ifdef NETCDF_CPP
-#include <netcdf>
-using namespace netCDF;
-using namespace netCDF::exceptions;
-#else
-#include <netcdf.h>
-#endif
 
 // Pointers to right-hand side function for adaptive integration
 extern "C" int pRhs1 (double, const double[], double[], void*);
@@ -338,14 +331,8 @@ private:
   void Stage1 ();
   // Input Stage1 data and output Stage2 data
   void Stage2 ();
-
-#ifdef NETCDF_CPP
-  // Write Stage2 NETCDF file via NETCDF-c++
-  void WriteStage2Netcdfcpp ();
-#else
-  // Write Stage2 NETCDF file via NETCDF-c
+  // Write Stage2 NETCDF file
   void WriteStage2Netcdfc ();
-#endif
 
   // Set Simpson weights
   void Stage2SetSimpsonWeights ();
