@@ -99,6 +99,7 @@
 // 2.24 - Added bootstrap/curvature terms into Rutherford equations
 // 2.25 - Added polarization terms into Rutherford equations
 // 2.26 - Allowed for EPEC RMP coil data
+// 2.27 - Removed EPEC RMP coil data. Added Netcdf output. Adapted for use with OMFIT.
 
 // #######################################################################
 
@@ -106,12 +107,17 @@
 #define PHASE
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 26
+#define VERSION_MINOR 27
+#define MAXFILENAMELENGTH 500
+#define MAXCONTROLPOINTNUMBER 500
+#define MAXULFILELINELENGTH 500
+
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
 #include <vector>
 #include <blitz/array.h>
 #include <gsl/gsl_complex.h>
@@ -122,14 +128,11 @@
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_poly.h>
 #include <gsl/gsl_errno.h>
-
-#define MAXFILENAMELENGTH 500
-#define MAXCONTROLPOINTNUMBER 500
-#define MAXULFILELINELENGTH 500
+#include <netcdf.h>
 
 using namespace blitz;
 
-// Namelist funtion
+// Namelist function
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
 			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ,
@@ -147,16 +150,16 @@ class Phase
   // ------------
   
   // Read from command line
-  int OMFIT;       // Flag to select OMFIT mode
+  int      OMFIT;  // Flag to select OMFIT mode
 
   // Read from Inputs/Phase.nml
-  int      NFLOW;  // Number of flow harmonics in model
+  int      NFLOW;  // Number of flow harmonics included in model
 
   int      STAGE5; // If != 0 then Stage5 calculation performed, otherwise calculation terminates after Stage4
   int      INTF;   // If != 0 then use interpolated fFile 
   int      INTN;   // If != 0 then use interpolated nFile
   int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
-  int      NATS;   // If != 0 then use linear only nFile interpolation
+  int      NATS;   // If != 0 then use linear-only nFile interpolation
   int      OLD;    // If != 0 then initialize new calculation
 
   int      LIN;    // If != 0 then perform purely linear calculation
@@ -164,26 +167,27 @@ class Phase
                    //  If == 0 then use linear/nonlinear natural frequency
                    //  If == 1 then use linear/ExB/nonlinear natural frequency 
                    //  If == 2 then w_natural = FFAC * w_linear + (1-FFAC) * w_EB
-  double   FFAC;   // Natural frequency parameter
+  double   FFAC;   // Natural frequency parameter (for FREQ = 2)
 
   int      CXD;    // If != 0 include charge exchange damping in plasma angular equations of motion
   int      BOOT;   // If != 0 include effect of bootstrap current in Rutherford equations
   int      CURV;   // If != 0 include effect of magnetic field-line curvature in Rutherford equations
   int      POLZ;   // If != 0 include effect of ion polarization current in Rutherford equations
  
-  int      MID;    // Number of RMP coil sets
+  int      MID;    // Number of RMP coil sets (1, 2, or 3)
   int      COPT;   // If == 0 then no coil current optimization
                    // If == 1 then coil currents optimized in restricted fashion to maximize drive at closest rational surface to pedestal top
                    // If == 2 then coil currents optimized in unrestricted fashion to maximize drive at closest rational surface to pedestal top
                    // If == 3 then coil currents optimized in unrestricted fashion to maximize drive at pedestal top and minimize drive in core
-  double   CORE;   // Core drive minimization factor (0.0 = no minimization, 1.0 = complete minmization)
+  double   CORE;   // Core drive minimization factor for COPT = 3 (0.0 = no minimization, 1.0 = complete minmization)
   
   double   SCALE;  // GPEC scalefactor
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
-  int      HIGH;   // If != 0 use higher order transport analysis
-  int      RATS;   // If != 0 use only linear interpolation for uFiles/mFiles/lFiles
+  int      HIGH;   // If != 0 use higher-order transport analysis
+  int      RATS;   // If != 0 use linear-only interpolation for uFiles/mFiles/lFiles
 
   double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
+  int      NPHA;   // Number of points in phase scan
 
   double   TSTART; // Simulation start time (ms)
   double   TEND;   // Simulation end time (ms)
@@ -300,6 +304,12 @@ class Phase
   gsl_vector_complex* DeltaL; // Delta values for 1kA in lower RMP coil
   gsl_vector_complex* ChiL;   // Chi values for 1kA in lower RMP coil
 
+  // ------------------
+  // Stage 4 parameters
+  // ------------------
+  Array<double,1> phase;      // RMP coil phases  
+  Array<double,2> wvac;       // Vacuum island widths (in PsiN) versus RMP coil phases
+
   // ----------------
   // Velocity factors
   // ----------------
@@ -331,7 +341,7 @@ class Phase
   Array<int,1>    lock;    // Locking flags
   Array<double,1> chi;     // RMP amplitudes at rational surfaces
   Array<double,1> zeta;    // RMP phases at rational surfaces
-    
+
   // ------------------
   // Physical constants
   // ------------------
@@ -390,7 +400,10 @@ class Phase
   void IslandDynamics ();
   // Save island dynamics calculation
   void Save ();
-  
+
+  // Write Stage4 NETCDF file
+  void WriteStage4Netcdfc ();
+
   // Calculate Irmp and Prmp
   void CalcRMP (double t);
   // Calculate coil currents and phases
@@ -471,6 +484,7 @@ class Phase
   void fFileInterpolateCubic     (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,    double time3, char* fFile, double time);
   void fFileInterpolateQuartic   (char* fFile1, double time1, char* fFile2, double time2, char* fFile3,    double time3,
 				  char* fFile4, double time4, char* fFile,  double time);
+  
   // Interpolate nFiles
   void nFileInterp               (vector<string> nFileName,   vector<double> nFileTime,   int nFilenumber, double TIME);
   void nFileInterpolateLinear    (char* nFile1, double time1, char* nFile,  double time);
@@ -483,6 +497,8 @@ class Phase
   double GetIslandWidth (int j);
   // Find width in PsiN of vacuum magnetic island chain
   double GetVacuumIslandWidth (int j);
+  // Find width in PsiN of vacuum magnetic island chain
+  double GetVacuumIslandWidth (int j, double chi);
   // Find limits of magnetic island chains in PsiN
   void GetIslandLimits (int j, double Psi, double& Xminus, double& Xplus);
   // Solve island width equation

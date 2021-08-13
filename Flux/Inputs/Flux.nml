@@ -18,7 +18,8 @@
  NPSI = 512	
 ! Number of points in PsiN grid
  PACK = 2.    
-! Packing index for PsiN grid
+! Packing index for PsiN grid:
+!  PsiN[i] = PSILIM * (1. - (1. - s)^PACK) for i = 0, NPSI-1 where s = j /(NPSI-1),
  NTHETA = 513    
 ! Number of points in theta grid (must be odd)
  NNC = 20     

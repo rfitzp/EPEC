@@ -100,11 +100,7 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
   fflush (stdout);
 
   // Output NETCDF file
-#ifdef NETCDF_CPP
-  WriteStage2Netcdfcpp ();
-#else
   WriteStage2Netcdfc ();
-#endif
 
   // Calculate normalized quantites at rational surface and output nFile
   Get_Normalized ();
@@ -115,9 +111,9 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
   double  time_spent = double (end - begin) /double (CLOCKS_PER_SEC);
 
   // Print exit message
-  printf ("*****************************************************************\n");
-  printf ("PROGRAM NEOCLASSICAL:: Normal termination: Wall time = %8d s\n", time_spent);
-  printf ("*****************************************************************\n");
+  printf ("********************************************************************\n");
+  printf ("PROGRAM NEOCLASSICAL:: Normal termination: Wall time = %11.4e s\n", time_spent);
+  printf ("********************************************************************\n");
 }
 
 // ####################################
@@ -332,7 +328,8 @@ void Neoclassical::Read_Equilibrium ()
     }
   else
     {
-      CallSystem ("cd Inputs; rm -rf fFile; ln -s ../../Flux/Outputs/fFile fFile");
+      if (!OMFIT)
+	CallSystem ("cd Inputs; rm -rf fFile; ln -s ../../Flux/Outputs/fFile fFile");
     }
 
   // Read fFile
@@ -1466,293 +1463,9 @@ void Neoclassical::Get_LayerWidths ()
     }
 }
 
-#ifdef NETCDF_CPP
-// ###################################################
-// Function to write Stage2 NETCDF file via NETCDF-c++
-// ###################################################
-void Neoclassical::WriteStage2Netcdfcpp ()
-{ // Convert data from blitz++ array to c array
-  double* psi_x         = new double[NPSI];
-  double* n_e_x         = new double[NPSI];
-  double* T_e_x         = new double[NPSI];
-  double* n_i_x         = new double[NPSI];
-  double* T_i_x         = new double[NPSI];
-  double* n_I_x         = new double[NPSI];
-  double* T_I_x         = new double[NPSI];
-  double* w_E_x         = new double[NPSI];
-  double* Z_eff_x       = new double[NPSI];
-  double* w_t_x         = new double[NPSI];
-  double* n_n_x         = new double[NPSI];
-  double* chip_x        = new double[NPSI];
-  double* chie_x        = new double[NPSI];
-  double* chin_x        = new double[NPSI];
-  double* chii_x        = new double[NPSI];
-  for (int i = 0; i < NPSI; i++)
-    {
-      psi_x[i]   = psi(i);
-      n_e_x[i]   = n_e(i) /1.e19; 
-      T_e_x[i]   = T_e(i) /e/1.e3;
-      n_i_x[i]   = n_i(i) /1.e19; 
-      T_i_x[i]   = T_i(i) /e/1.e3; 
-      n_I_x[i]   = n_I(i) /1.e19; 
-      T_I_x[i]   = T_I(i) /e/1.e3; 
-      w_E_x[i]   = w_E(i) /1.e3;
-      Z_eff_x[i] = Z_eff(i);
-      w_t_x[i]   = w_t(i) /1.e3;
-      n_n_x[i]   = n_n(i) /1.e19;
-      chip_x[i]  = chip(i);
-      chie_x[i]  = chie(i);
-      chin_x[i]  = chin(i);
-      chii_x[i]  = chii(i);
-    }
-
-  double* PsiNk_x       = new double[nres];
-  double* tau_Hk_x      = new double[nres];
-  double* tau_Rk_x      = new double[nres];
-  double* tau_Mk_x      = new double[nres];
-  double* tau_thk_x     = new double[nres];
-  double* tau_cxk_x     = new double[nres];
-  double* w_linear_x    = new double[nres];
-  double* w_nonlinear_x = new double[nres];
-  double* w_EB_x        = new double[nres];
-  double* rho_sk_x      = new double[nres];
-  double* delk_x        = new double[nres];
-  double* rhothek_x     = new double[nres];
-  double* rhothik_x     = new double[nres];
-  double* WcritTek_x    = new double[nres];
-  double* WcritTik_x    = new double[nres];
-  double* Wcritnek_x    = new double[nres];
-  double* w_ast_ek_x    = new double[nres];
-  double* w_ast_ik_x    = new double[nres];
-  double* w_ast_Ik_x    = new double[nres];
-  double* wEk_x         = new double[nres];
-  double* w_E_Ik_x      = new double[nres];
-  double* Sk_x          = new double[nres];
-  double* alpbek_x      = new double[nres];
-  double* alpbik_x      = new double[nres];
-  double* alpck_x       = new double[nres];
-  double* alppk_x       = new double[nres];
-  for (int i = 0; i < nres; i++)
-    {
-      PsiNk_x[i]       = PsiNk(i);
-      tau_Hk_x[i]      = tau_Hk(i);
-      tau_Rk_x[i]      = tau_Rk(i) * Q_00(i);
-      tau_Mk_x[i]      = tau_Mk(i);
-      tau_thk_x[i]     = tau_thk(i) /mu_00_i(i);
-      tau_cxk_x[i]     = tau_cxk(i);
-      w_linear_x[i]    = w_linear(i)    /1.e3;
-      w_nonlinear_x[i] = w_nonlinear(i) /1.e3;
-      w_EB_x[i]        = w_EB(i)        /1.e3;
-      rho_sk_x[i]      = rho_sk(i)   /1.e-2;
-      delk_x[i]        = delk(i)     /1.e-2;
-      rhothek_x[i]     = rhothek(i)  /1.e-2;
-      rhothik_x[i]     = rhothik(i)  /1.e-2;
-      WcritTek_x[i]    = WcritTek(i) /1.e-2;
-      WcritTik_x[i]    = WcritTik(i) /1.e-2;
-      Wcritnek_x[i]    = Wcritnek(i) /1.e-2;
-      w_ast_ek_x[i]    = w_ast_ek(i) /1.e3;
-      w_ast_ik_x[i]    = w_ast_ik(i) /1.e3;
-      w_ast_Ik_x[i]    = w_ast_Ik(i) /1.e3;
-      wEk_x[i]         = wEk(i)      /1.e3;
-      w_E_Ik_x[i]      = w_E_Ik(i)   /1.e3;
-      Sk_x[i]          = Sk(i);
-      alpbek_x[i]      = alpbek(i);
-      alpbik_x[i]      = alpbik(i);
-      alpck_x[i]       = alpck(i);
-      alppk_x[i]       = alppk(i);
-    }
-
-  try
-    {
-      // Open file
-      NcFile dataFile ("Outputs/Stage3.nc", NcFile::replace);
-
-      // PsiN
-      NcDim PsiN_d = dataFile.addDim ("N_psi", NPSI);
-      NcVar PsiN   = dataFile.addVar ("PsiN", ncDouble, PsiN_d);
-      PsiN.putVar (psi_x);
-
-      // n_e
-      NcVar n_e_y = dataFile.addVar ("n_e", ncDouble, PsiN_d);
-      n_e_y.putVar (n_e_x);
-
-      // T_e
-      NcVar T_e_y = dataFile.addVar ("T_e", ncDouble, PsiN_d);
-      T_e_y.putVar (T_e_x);
-
-      // n_i
-      NcVar n_i_y = dataFile.addVar ("n_i", ncDouble, PsiN_d);
-      n_i_y.putVar (n_i_x);
-
-      // T_i
-      NcVar T_i_y = dataFile.addVar ("T_i", ncDouble, PsiN_d);
-      T_i_y.putVar (T_i_x);
-
-      // n_I
-      NcVar n_I_y = dataFile.addVar ("n_I", ncDouble, PsiN_d);
-      n_I_y.putVar (n_I_x);
-
-      // T_I
-      NcVar T_I_y = dataFile.addVar ("T_I", ncDouble, PsiN_d);
-      T_I_y.putVar (T_I_x);
-
-      // Z_eff
-      NcVar Z_eff_y = dataFile.addVar ("Z_eff", ncDouble, PsiN_d);
-      Z_eff_y.putVar (Z_eff_x);
-
-      // n_n
-      NcVar n_n_y = dataFile.addVar ("n_n", ncDouble, PsiN_d);
-      n_n_y.putVar (n_n_x);
-
-      // w_E
-      NcVar w_E_y = dataFile.addVar ("w_E", ncDouble, PsiN_d);
-      w_E_y.putVar (w_E_x); 
-
-      // w_t
-      NcVar w_t_y = dataFile.addVar ("w_t", ncDouble, PsiN_d);
-      w_t_y.putVar (w_t_x);
-
-      // chip
-      NcVar chip_y = dataFile.addVar ("chi_p", ncDouble, PsiN_d);
-      chip_y.putVar (chip_x);
- 
-      // chie
-      NcVar chie_y = dataFile.addVar ("chi_e", ncDouble, PsiN_d);
-      chie_y.putVar (chie_x);
-     
-      // chin
-      NcVar chin_y = dataFile.addVar ("chi_n", ncDouble, PsiN_d);
-      chin_y.putVar (chin_x);
-      
-      // chii
-      NcVar chii_y = dataFile.addVar ("chi_i", ncDouble, PsiN_d);
-      chii_y.putVar (chii_x);
-
-      // PsiNk
-      NcDim nres_d  = dataFile.addDim ("N_res", nres);
-      NcVar PsiNk_y = dataFile.addVar ("PsiN_k", ncDouble, nres_d);
-      PsiNk_y.putVar (PsiNk_x);
-
-      // tau_Hk
-      NcVar tau_Hk_y = dataFile.addVar ("tau_H", ncDouble, nres_d);
-      tau_Hk_y.putVar (tau_Hk_x);
-
-      // tau_Rk
-      NcVar tau_Rk_y = dataFile.addVar ("tau_R", ncDouble, nres_d);
-      tau_Rk_y.putVar (tau_Rk_x);
-
-      // tau_Mk
-      NcVar tau_Mk_y = dataFile.addVar ("tau_M", ncDouble, nres_d);
-      tau_Mk_y.putVar (tau_Mk_x);
-
-      // tau_thk
-      NcVar tau_thk_y = dataFile.addVar ("tau_th", ncDouble, nres_d);
-      tau_thk_y.putVar (tau_thk_x);
-
-      // tau_cxk
-      NcVar tau_cxk_y = dataFile.addVar ("tau_cx", ncDouble, nres_d);
-      tau_cxk_y.putVar (tau_cxk_x);
-
-      // w_linear
-      NcVar w_linear_y = dataFile.addVar ("w_linear", ncDouble, nres_d);
-      w_linear_y.putVar (w_linear_x);
-      
-      // w_nonlinear
-      NcVar w_nonlinear_y = dataFile.addVar ("w_nonlinear", ncDouble, nres_d);
-      w_nonlinear_y.putVar (w_nonlinear_x);
-      
-      // w_EB
-      NcVar w_EB_y = dataFile.addVar ("w_EB", ncDouble, nres_d);
-      w_EB_y.putVar (w_EB_x);
-
-      // rho_sk
-      NcVar rho_sk_y = dataFile.addVar ("rho_s", ncDouble, nres_d);
-      rho_sk_y.putVar (rho_sk_x);
-
-      // delk
-      NcVar delk_y = dataFile.addVar ("delta", ncDouble, nres_d);
-      delk_y.putVar (delk_x);
-
-      // rhothek
-      NcVar rhothek_y = dataFile.addVar ("rho_theta_e", ncDouble, nres_d);
-      rhothek_y.putVar (rhothek_x);
-
-      // rhothik
-      NcVar rhothik_y = dataFile.addVar ("rho_theta_i", ncDouble, nres_d);
-      rhothik_y.putVar (rho_sk_x); 
-
-      // WcritTek
-      NcVar WcritTek_y = dataFile.addVar ("W_crit_Te", ncDouble, nres_d);
-      WcritTek_y.putVar (WcritTek_x);
-
-      // WcritTik
-      NcVar WcritTik_y = dataFile.addVar ("W_crit_Ti", ncDouble, nres_d);
-      WcritTik_y.putVar (WcritTik_x);
-
-      // Wcritnek
-      NcVar Wcritnek_y = dataFile.addVar ("W_crit_ne", ncDouble, nres_d);
-      Wcritnek_y.putVar (Wcritnek_x);
-
-      // w_ast_ek
-      NcVar w_ast_ek_y = dataFile.addVar ("w_ast_e", ncDouble, nres_d);
-      w_ast_ek_y.putVar (w_ast_ek_x);
-
-      // w_ast_ik
-      NcVar w_ast_ik_y = dataFile.addVar ("w_ast_i", ncDouble, nres_d);
-      w_ast_ik_y.putVar (w_ast_ik_x);
-
-      // w_ast_Ik
-      NcVar w_ast_Ik_y = dataFile.addVar ("w_ast_I", ncDouble, nres_d);
-      w_ast_Ik_y.putVar (w_ast_Ik_x);
-
-      // wEk
-      NcVar wEk_y = dataFile.addVar ("w_EB_measured", ncDouble, nres_d);
-      wEk_y.putVar (wEk_x);
-
-      // w_E_Ik
-      NcVar w_E_Ik_y = dataFile.addVar ("w_EB_inferred", ncDouble, nres_d);
-      w_E_Ik_y.putVar (w_E_Ik_x);
-
-      // Sk
-      NcVar Sk_y = dataFile.addVar ("S", ncDouble, nres_d);
-      Sk_y.putVar (Sk_x);
-
-      // alpbek
-      NcVar alpbek_y = dataFile.addVar ("alpha_b_e", ncDouble, nres_d);
-      alpbek_y.putVar (alpbek_x);
-
-      // alpbik
-      NcVar alpbik_y = dataFile.addVar ("alpha_b_i", ncDouble, nres_d);
-      alpbik_y.putVar (alpbik_x);
-
-      // alpck
-      NcVar alpck_y = dataFile.addVar ("alpha_c", ncDouble, nres_d);
-      alpck_y.putVar (alpck_x);
-
-      // alppk
-      NcVar alppk_y = dataFile.addVar ("alpha_p", ncDouble, nres_d);
-      alppk_y.putVar (alppk_x);
-    }
-  catch (NcException& e)
-    {
-      printf ("NEOCLASSICAL::WriteStage2Netcdfcpp: Error writing Outputs/Stage3.nc: Exception = %s\n", e.what ());
-      exit (1);
-    }
-
-  // Clean up
-  delete[] psi_x;      delete[] n_e_x;      delete[] T_e_x;         delete[] n_i_x;      delete[] T_i_x;        
-  delete[] n_I_x;      delete[] T_I_x;      delete[] w_E_x;         delete[] Z_eff_x;    delete[] w_t_x;      
-  delete[] n_n_x;      delete[] chip_x;     delete[] chie_x;        delete[] chin_x;     delete[] chii_x;     
-  delete[] tau_Hk_x;   delete[] tau_Rk_x;   delete[] tau_Mk_x;      delete[] tau_thk_x;  delete[] tau_cxk_x;  
-  delete[] PsiNk_x;    delete[] w_linear_x; delete[] w_nonlinear_x; delete[] w_EB_x;     delete[] rho_sk_x;  
-  delete[] delk_x;     delete[] rhothek_x;  delete[] rhothik_x;     delete[] WcritTek_x; delete[] WcritTik_x;    
-  delete[] Wcritnek_x; delete[] w_ast_ek_x; delete[] w_ast_ik_x;    delete[] w_ast_Ik_x; delete[] wEk_x;
-  delete[] w_E_Ik_x;   delete[] Sk_x;
-}
-#else
-// #################################################
-// Function to write Stage2 NETCDF file via NETCDF-c
-// #################################################
+// ####################################
+// Function to write Stage2 NETCDF file
+// ####################################
 void Neoclassical::WriteStage2Netcdfc ()
 {
   // Convert data from blitz++ array to c array
@@ -2026,7 +1739,7 @@ void Neoclassical::WriteStage2Netcdfc ()
 
   if (err != 0)
     {
-      printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error defining varaibles in Outputs/Stage3.nc\n");
+      printf ("NEOCLASSICAL::WriteStage2Netcdfc: Error defining variables in Outputs/Stage3.nc\n");
       exit (1);
     }
 
@@ -2099,7 +1812,6 @@ void Neoclassical::WriteStage2Netcdfc ()
   delete[] w_E_Ik_x;   delete[] Sk_x;       delete[] alpbek_x;      delete[] alpbik_x;   delete[] alpck_x;
   delete[] alppk_x;
 }
-#endif
 
 // #######################################################################################
 // Calculate normalized quantities at rational surfaces for program PHASE and output nFile

@@ -17,17 +17,7 @@ int main (int argc, char** argv)
   // .....................
   printf ("\n#############\nProgram PHASE\n#############\n");
   printf ("Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
-#ifdef NETCDF_CPP
-  printf ("Using Netcdf c++ and f90 libraries\n\n");
-#else
-  printf ("Using Netcdf c and f90 libraries\n");
-#endif
 
-  FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
-  fprintf (monitor, "\n#############\nProgram PHASE\n#############\n");
-  fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
-  fclose (monitor);
-  
   // ........................
   // Get command line options
   // ........................
@@ -246,11 +236,6 @@ int main (int argc, char** argv)
       FILE* monitor = fopen ("../IslandDynamics/Outputs/monitor.txt", "a");
       fprintf (monitor, "\n#############\nProgram PHASE\n#############\n");
       fprintf (monitor, "Version: %1d.%1d\n\n", VERSION_MAJOR, VERSION_MINOR);
-#ifdef NETCDF_CPP
-      fprintf (monitor, "Using Netcdf c++ and f90 libraries\n");
-#else
-      fprintf (monitor, "Using Netcdf c and f90 libraries\n");
-#endif
       fprintf (monitor, "Normal mode\n\n");
       fclose (monitor);
     }

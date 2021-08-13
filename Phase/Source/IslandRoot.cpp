@@ -1,5 +1,15 @@
 // IslandRoot.cpp
 
+// #####################
+// PROGRAM ORGANIZATION:
+// #####################
+
+// double Phase::GetIslandWidth       (int j)
+// double Phase::GetVacuumIslandWidth (int j)
+// double Phase::GetVacuumIslandWidth (int j, double chi)
+// void   Phase::GetIslandLimits      (int j, double Psi, double& Xminus, double& Xplus)
+// double Phase::GetIslandRoot        (double c)
+
 #include "Phase.h"
 
 // ############################################################
@@ -22,6 +32,18 @@ double Phase::GetVacuumIslandWidth (int j)
   double Xminus, Xplus;
 
   GetIslandLimits (j, chi (j), Xminus, Xplus);
+
+  return Xplus - Xminus;
+}
+
+// ###################################################################
+// Function to find full width in PsiN of vacuum magnetic island chain
+// ###################################################################
+double Phase::GetVacuumIslandWidth (int j, double chi)
+{
+  double Xminus, Xplus;
+
+  GetIslandLimits (j, chi, Xminus, Xplus);
 
   return Xplus - Xminus;
 }

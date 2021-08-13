@@ -1,15 +1,15 @@
  &NEOCLASSICAL_CONTROL
- EXB = 0       
-! Flag for calculating ExB frequency from neoclassical theory
+ EXB = 1       
+! Switch for calculating ExB frequency from neoclassical theory:
 !  0 - use ExB frequency profile from pFile 
 !  1 - use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical theory 
  IMPURITY = 1	   
-! Flag for inclusions of impurities in calculation
+! Flag for inclusion of impurities in calculation
  NEUTRAL = 1       
-! Flag for inclusions of neutrals in claculation
+! Flag for inclusion of neutrals in claculation
  NTYPE = 1       
 ! If 0/1 then flux-surface averaged neutral density distribution exponential/Lorentzian
- NN = 1.e16   
+ NN = 5e16   
 ! Flux-surface averaged neutral density on LCFS (m^-3)
  LN = 1.3e-2  
 ! Flux-surface average neutral density decay lengthscale (m)
@@ -26,7 +26,7 @@
   INTC = 0       
 ! Flag for cFile interpolation
  CATS = 1       
-! Flag for linear only interpolation of cFiles
+! Flag for linear-only interpolation of cFiles
  TIME = 0.	   
 ! Experimental time (ms) (only relevant with interpolation of pFiles/fFiles/cFiles)
  TAUMIN = -0.8	   

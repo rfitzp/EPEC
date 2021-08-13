@@ -248,10 +248,13 @@ void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, dou
   printf ("lFile Interpolation:\n");
   printf ("%s %11.4e\n", lFile1, weight1);
 
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "lFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", lFile1, weight1);
-  fclose (monitor);
+  if (!OMFIT)
+    {
+      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+      fprintf (monitor, "lFile Interpolation:\n");
+      fprintf (monitor, "%s %11.4e\n", lFile1, weight1);
+      fclose (monitor);
+    }
  
   // ........
   // Clean up
@@ -469,11 +472,14 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
   printf ("%s %11.4e\n", lFile1, weight1);
   printf ("%s %11.4e\n", lFile2, weight2);
 
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "lFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e %3d %3d %3d\n", lFile1, weight1, nres_1, nres, nres_0);
-  fprintf (monitor, "%s %11.4e %3d %3d %3d\n", lFile2, weight2, nres_2, nres, nres_0);
-  fclose (monitor);
+  if (!OMFIT)
+    {
+      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+      fprintf (monitor, "lFile Interpolation:\n");
+      fprintf (monitor, "%s %11.4e %3d %3d %3d\n", lFile1, weight1, nres_1, nres, nres_0);
+      fprintf (monitor, "%s %11.4e %3d %3d %3d\n", lFile2, weight2, nres_2, nres, nres_0);
+      fclose (monitor);
+    }
  
   // ........
   // Clean up
@@ -710,12 +716,15 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   printf ("%s %11.4e\n", lFile2, weight2);
   printf ("%s %11.4e\n", lFile3, weight3);
 
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "lFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", lFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", lFile2, weight2);
-  fprintf (monitor, "%s %11.4e\n", lFile3, weight3);
-  fclose (monitor);
+  if (!OMFIT)
+    {
+      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+      fprintf (monitor, "lFile Interpolation:\n");
+      fprintf (monitor, "%s %11.4e\n", lFile1, weight1);
+      fprintf (monitor, "%s %11.4e\n", lFile2, weight2);
+      fprintf (monitor, "%s %11.4e\n", lFile3, weight3);
+      fclose (monitor);
+    }
   
   // ........
   // Clean up
@@ -1010,13 +1019,16 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   printf ("%s %11.4e\n", lFile3, weight3);
   printf ("%s %11.4e\n", lFile4, weight4);
 
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "lFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", lFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", lFile2, weight2);
-  fprintf (monitor, "%s %11.4e\n", lFile3, weight3);
-  fprintf (monitor, "%s %11.4e\n", lFile4, weight4);
-  fclose (monitor);
+  if (!OMFIT)
+    {
+      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
+      fprintf (monitor, "lFile Interpolation:\n");
+      fprintf (monitor, "%s %11.4e\n", lFile1, weight1);
+      fprintf (monitor, "%s %11.4e\n", lFile2, weight2);
+      fprintf (monitor, "%s %11.4e\n", lFile3, weight3);
+      fprintf (monitor, "%s %11.4e\n", lFile4, weight4);
+      fclose (monitor);
+    }
   
   // ........
   // Clean up
