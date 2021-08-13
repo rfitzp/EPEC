@@ -292,7 +292,7 @@ program Rescale
   
 end program Rescale
 
-! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ! Function to read Rescale namelist
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

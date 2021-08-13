@@ -1529,6 +1529,18 @@ void Neoclassical::WriteStage2Netcdfc ()
   double* alpbik_x      = new double[nres];
   double* alpck_x       = new double[nres];
   double* alppk_x       = new double[nres];
+  double* fac1_x        = new double[nres];
+  double* fac2_x        = new double[nres];
+  double* fac3_x        = new double[nres];
+  double* fac4_x        = new double[nres];
+  double* fac5_x        = new double[nres];
+  double* fac6_x        = new double[nres];
+  double* fac7_x        = new double[nres];
+  double* fac8_x        = new double[nres];
+  double* fac9_x        = new double[nres];
+  double* fac10_x       = new double[nres];
+  double* fac11_x       = new double[nres];
+  double* fac12_x       = new double[nres];
   for (int i = 0; i < nres; i++)
     {
       PsiNk_x[i]       = PsiNk(i);
@@ -1557,6 +1569,18 @@ void Neoclassical::WriteStage2Netcdfc ()
       alpbik_x[i]      = alpbik(i);
       alpck_x[i]       = alpck(i);
       alppk_x[i]       = alppk(i);
+      fac1_x[i]        = Factor1(i)  /1.e19/e/1.e3;
+      fac2_x[i]        = Factor2(i)  /1.e19/e/1.e3;
+      fac3_x[i]        = Factor3(i)  /1.e19/e/1.e3;
+      fac4_x[i]        = Factor4(i)  /1.e19/e/1.e3;
+      fac5_x[i]        = Factor5(i)  /1.e19/e/1.e3;
+      fac6_x[i]        = Factor6(i)  /1.e19/e/1.e3;
+      fac7_x[i]        = Factor7(i)  /1.e19/e/1.e3;
+      fac8_x[i]        = Factor8(i)  /1.e19/e/1.e3;
+      fac9_x[i]        = Factor9(i)  /1.e19/e/1.e3;
+      fac10_x[i]       = Factor10(i) /1.e19/e/1.e3;
+      fac11_x[i]       = Factor11(i) /1.e19/e/1.e3;
+      fac12_x[i]       = Factor12(i) /1.e19/e/1.e3;
     }
 
   // Open file
@@ -1717,7 +1741,7 @@ void Neoclassical::WriteStage2Netcdfc ()
 
   // Sk
   int Sk_y;
-  err += nc_def_var (dataFile, "S", NC_DOUBLE, 1, &nres_d, &Sk_y);
+  err += nc_def_var (dataFile, "S",         NC_DOUBLE, 1, &nres_d, &Sk_y);
   
   // alpbek
   int alpbek_y;
@@ -1729,11 +1753,59 @@ void Neoclassical::WriteStage2Netcdfc ()
 
   // alpck
   int alpck_y;
-  err += nc_def_var (dataFile, "alpha_c", NC_DOUBLE, 1, &nres_d, &alpck_y);
+  err += nc_def_var (dataFile, "alpha_c",   NC_DOUBLE, 1, &nres_d, &alpck_y);
 
   // alppk
   int alppk_y;
-  err += nc_def_var (dataFile, "alpha_p", NC_DOUBLE, 1, &nres_d, &alppk_y);
+  err += nc_def_var (dataFile, "alpha_p",   NC_DOUBLE, 1, &nres_d, &alppk_y);
+
+  // Factor1
+  int fac1_y;
+  err += nc_def_var (dataFile, "Factor_1",  NC_DOUBLE, 1, &nres_d, &fac1_y);
+
+  // Factor2
+  int fac2_y;
+  err += nc_def_var (dataFile, "Factor_2",  NC_DOUBLE, 1, &nres_d, &fac2_y);
+
+  // Factor3
+  int fac3_y;
+  err += nc_def_var (dataFile, "Factor_3",  NC_DOUBLE, 1, &nres_d, &fac3_y);
+
+  // Factor4
+  int fac4_y;
+  err += nc_def_var (dataFile, "Factor_4",  NC_DOUBLE, 1, &nres_d, &fac4_y);
+
+  // Factor5
+  int fac5_y;
+  err += nc_def_var (dataFile, "Factor_5",  NC_DOUBLE, 1, &nres_d, &fac5_y);
+
+  // Factor6
+  int fac6_y;
+  err += nc_def_var (dataFile, "Factor_6",  NC_DOUBLE, 1, &nres_d, &fac6_y);
+
+  // Factor7
+  int fac7_y;
+  err += nc_def_var (dataFile, "Factor_7",  NC_DOUBLE, 1, &nres_d, &fac7_y);
+
+  // Factor8
+  int fac8_y;
+  err += nc_def_var (dataFile, "Factor_8",  NC_DOUBLE, 1, &nres_d, &fac8_y);
+
+  // Factor9
+  int fac9_y;
+  err += nc_def_var (dataFile, "Factor_9",  NC_DOUBLE, 1, &nres_d, &fac9_y);
+
+  // Factor10
+  int fac10_y;
+  err += nc_def_var (dataFile, "Factor_10", NC_DOUBLE, 1, &nres_d, &fac10_y);
+
+  // Factor11
+  int fac11_y;
+  err += nc_def_var (dataFile, "Factor_11", NC_DOUBLE, 1, &nres_d, &fac11_y);
+
+  // Factor12
+  int fac12_y;
+  err += nc_def_var (dataFile, "Factor_12", NC_DOUBLE, 1, &nres_d, &fac12_y);
 
   err += nc_enddef (dataFile);
 
@@ -1785,6 +1857,18 @@ void Neoclassical::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, alpbik_y,      alpbik_x);
   err += nc_put_var_double (dataFile, alpck_y,       alpck_x);
   err += nc_put_var_double (dataFile, alppk_y,       alppk_x);
+  err += nc_put_var_double (dataFile, fac1_y,        fac1_x);
+  err += nc_put_var_double (dataFile, fac2_y,        fac2_x);
+  err += nc_put_var_double (dataFile, fac3_y,        fac3_x);
+  err += nc_put_var_double (dataFile, fac4_y,        fac4_x);
+  err += nc_put_var_double (dataFile, fac5_y,        fac5_x);
+  err += nc_put_var_double (dataFile, fac6_y,        fac6_x);
+  err += nc_put_var_double (dataFile, fac7_y,        fac7_x);
+  err += nc_put_var_double (dataFile, fac8_y,        fac8_x);
+  err += nc_put_var_double (dataFile, fac9_y,        fac9_x);
+  err += nc_put_var_double (dataFile, fac10_y,       fac10_x);
+  err += nc_put_var_double (dataFile, fac11_y,       fac11_x);
+  err += nc_put_var_double (dataFile, fac12_y,       fac12_x);
  
   if (err != 0)
     {
@@ -1810,7 +1894,9 @@ void Neoclassical::WriteStage2Netcdfc ()
   delete[] delk_x;     delete[] rhothek_x;  delete[] rhothik_x;     delete[] WcritTek_x; delete[] WcritTik_x;    
   delete[] Wcritnek_x; delete[] w_ast_ek_x; delete[] w_ast_ik_x;    delete[] w_ast_Ik_x; delete[] wEk_x;
   delete[] w_E_Ik_x;   delete[] Sk_x;       delete[] alpbek_x;      delete[] alpbik_x;   delete[] alpck_x;
-  delete[] alppk_x;
+  delete[] alppk_x;    delete[] fac1_x;     delete[] fac2_x;        delete[] fac3_x;     delete[] fac4_x;
+  delete[] fac5_x;     delete[] fac6_x;     delete[] fac7_x;        delete[] fac8_x;     delete[] fac9_x;
+  delete[] fac10_x;    delete[] fac11_x;    delete[] fac12_x;
 }
 
 // #######################################################################################
