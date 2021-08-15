@@ -3,8 +3,8 @@
 // PROGRAM ORGANIZATION:
 //
 //       Flux:: Flux          ()       
-// void  Flux:: Solve         (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT)
-// void  Flux:: SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT)
+// void  Flux:: Solve         (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT)
+// void  Flux:: SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT)
 // FILE* Flux:: OpenFilew     (char* filename)
 // FILE* Flux:: OpenFiler     (char* filename)
 // FILE* Flux:: OpenFilea     (char* filename)
@@ -21,13 +21,13 @@ Flux::Flux ()
 // #########################
 // Function to solve problem
 // #########################
-void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT)
+void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT)
 {
   // Start timer
   clock_t begin = clock ();
 
   // Set global parameters
-  SetParameters (_INTP, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT, _OMFIT);
+  SetParameters (_INTP, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT);
 
   // Input gFile data and output Stage1 data.
   // Stage1 data output to directory Outputs/Stage1.
@@ -51,11 +51,9 @@ void Flux::Solve (int _INTP, int _NTOR, int _MMIN, int _MMAX, double _TIME, doub
 // #################################
 // Function to set global parameters
 // #################################
-void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT)
+void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT)
 {
   // Set default values of input parameters
-  OMFIT   = 0;
-
   NTOR    = 2;
   MMIN    = 2;
   MMAX    = 20;
@@ -98,8 +96,6 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
     PSIPED = _PSIPED;
   if (_PSIRAT > 0.)
     PSIRAT = _PSIRAT;
-  if (_OMFIT > 0)
-    OMFIT = _OMFIT;
 
   // Sanity check
   if (NPSI < 1)
@@ -172,17 +168,7 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
       printf ("FLUX::SetParameters: Error - PSIPED must lie betweeen 0 and 1\n");
       exit (1);
     }
-  if (OMFIT && INTG)
-    {
-      printf ("FLUX:: gFile interpolation not implemented yet in OMFIT mode\n");
-      exit (1);
-    }
  
-   // Output PSIPED
-   FILE* Pfile = OpenFilew ((char*) "Outputs/Stage1/Psilim.txt");
-   fprintf (Pfile, "%16.9e %16.9e %16.9e\n", PSILIM, PSIPED, PSIRAT);
-   fclose (Pfile);
-   
    // Output calculation parameters
    printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
    printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
@@ -195,7 +181,7 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
 	   H0, ACC, ETA);
    
-   FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
    fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
    fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
    fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
@@ -207,26 +193,6 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
    fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
 	    H0, ACC, ETA);
    fclose (namelist);
-   
-   if (!OMFIT)
-     {
-       FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-       fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
-       fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
-       fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-       fprintf (monitor, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
-       fprintf (monitor, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NEOANG = %2d\n",
-		NPSI, NTHETA, NNC, PACK, NEOANG);
-       fprintf (monitor, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
-		NTOR, MMIN, MMAX, PSILIM, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
-       fprintf (monitor, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
-		H0, ACC, ETA);
-       fclose (monitor);
-     }
-   
-   FILE* file = OpenFilew ((char *) "Outputs/Stage2/NpsiNtor.txt");
-   fprintf (file, "%d %d\n", NPSI, NTOR);
-   fclose (file);
 }
 
 // #####################################

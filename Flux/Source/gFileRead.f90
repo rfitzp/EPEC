@@ -35,6 +35,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   double precision, dimension (:),    allocatable :: PSIN, T,     P,       TTp,    Pp,   Q,  CURR
   double precision, dimension (:),    allocatable :: R,    Z,     RBOUND,  ZBOUND, RLIM, ZLIM  
   double precision, dimension (:, :), allocatable :: PSI, PSIT
+  double precision, dimension (:),    allocatable :: xt, xp, xttp, xpp, xq, xcurr;
 
   character (len = *), parameter :: file = "Outputs/Stage1.nc"
 
@@ -42,6 +43,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   integer          :: para_d_id, para_id, NPARA = 9, bound_d_id, rbound_id, zbound_id
   integer          :: lim_d_id, rlim_id, zlim_id, R_d_id, R_id, Z_d_id, Z_id
   integer          :: PS_d_id (2), PS_id, PN_id, T_id, P_id, TTp_id, Pp_id, Q_id, C_id
+  integer          :: xt_id, xp_id, xttp_id, xpp_id, xq_id, xc_id
   double precision :: para (9)
 
   MU0 = 16. * atan(1.0) * 1.e-7
@@ -96,6 +98,12 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   allocate (CURR  (NRBOX))
   allocate (PSI   (NRBOX, NZBOX))
   allocate (PSIT  (NZBOX, NRBOX))
+  allocate (xt    (NRBOX))
+  allocate (xp    (NRBOX))
+  allocate (xttp  (NRBOX))
+  allocate (xpp   (NRBOX))
+  allocate (xq    (NRBOX))
+  allocate (xcurr (NRBOX))
 
   read (100, '(5e16.9)') ( T   (i),    i = 1, NRBOX)
   read (100, '(5e16.9)') ( P   (i),    i = 1, NRBOX)
@@ -173,26 +181,17 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
       end do
   end do
 
-  open  (unit = 101, file = 'Outputs/Stage1/Psi.txt')
   do i = 1, NRBOX
-     write (101, '(1000e17.9)') (PSI (i, j), j = 1, NZBOX)
-  end do
-  close (unit = 101)
-
-  open  (unit = 101, file = 'Outputs/Stage1/RawProfiles.txt')
-  write (101, '(7e17.9)') (PSIN (i), T (i), P (i), TTp (i), Pp (i), Q (i), CURR (i), i = 1, NRBOX)
-  close (unit = 101)
-
-  do i = 1, NRBOX
-     T    (i) = T    (i) /R0/B0
-     P    (i) = P    (i) *MU0/dabs(B0)/dabs(B0)
-     TTp  (i) = TTp  (i) /B0
-     Pp   (i) = Pp   (i) *MU0*R0*R0/dabs(B0)
-     CURR (i) = CURR (i) *MU0*R0/dabs(B0)
+     xt    (i) = T    (i) /R0/B0
+     xp    (i) = P    (i) *MU0/B0/B0
+     xttp  (i) = TTp  (i) /dabs(B0)
+     xpp   (i) = Pp   (i) *MU0*R0*R0/dabs(B0)
+     xcurr (i) = CURR (i) *MU0*R0/dabs(B0)
+     xq    (i) = Q    (i)
   end do
 
   open  (unit = 101, file = 'Outputs/Stage1/Profiles.txt')
-  write (101, '(7e17.9)') (PSIN (i), T (i), P (i), TTp (i), Pp (i), Q (i), CURR (i), i = 1, NRBOX)
+  write (101, '(7e17.9)') (PSIN (i), xt (i), xp (i), xttp (i), xpp (i), xq (i), xcurr (i), i = 1, NRBOX)
   close (unit = 101)
   
   open  (unit = 101, file = 'Outputs/Stage1/Points.txt')
@@ -231,6 +230,12 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   err = err + nf90_def_var (file_id, "Pp",         NF90_DOUBLE, R_d_id,     Pp_id)
   err = err + nf90_def_var (file_id, "Q",          NF90_DOUBLE, R_d_id,     Q_id)
   err = err + nf90_def_var (file_id, "J_phi",      NF90_DOUBLE, R_d_id,     C_id)
+  err = err + nf90_def_var (file_id, "t",          NF90_DOUBLE, R_d_id,     xt_id)
+  err = err + nf90_def_var (file_id, "p",          NF90_DOUBLE, R_d_id,     xp_id)
+  err = err + nf90_def_var (file_id, "ttp",        NF90_DOUBLE, R_d_id,     xttp_id)
+  err = err + nf90_def_var (file_id, "pp",         NF90_DOUBLE, R_d_id,     xpp_id)
+  err = err + nf90_def_var (file_id, "q",          NF90_DOUBLE, R_d_id,     xq_id)
+  err = err + nf90_def_var (file_id, "j_phi",      NF90_DOUBLE, R_d_id,     xc_id)
   err = err + nf90_def_var (file_id, "RBOUND",     NF90_DOUBLE, bound_d_id, rbound_id)
   err = err + nf90_def_var (file_id, "ZBOUND",     NF90_DOUBLE, bound_d_id, zbound_id)
   err = err + nf90_def_var (file_id, "RLIM",       NF90_DOUBLE, lim_d_id,   rlim_id)
@@ -249,6 +254,12 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   err = err + nf90_put_var (file_id, Pp_id,     Pp)
   err = err + nf90_put_var (file_id, Q_id,      Q)
   err = err + nf90_put_var (file_id, C_id,      CURR)
+  err = err + nf90_put_var (file_id, xt_id,     xt)
+  err = err + nf90_put_var (file_id, xp_id,     xp)
+  err = err + nf90_put_var (file_id, xttp_id,   xttp)
+  err = err + nf90_put_var (file_id, xpp_id,    xpp)
+  err = err + nf90_put_var (file_id, xq_id,     xq)
+  err = err + nf90_put_var (file_id, xc_id,     xcurr)
   err = err + nf90_put_var (file_id, rbound_id, RBOUND)
   err = err + nf90_put_var (file_id, zbound_id, ZBOUND)
   err = err + nf90_put_var (file_id, rlim_id,   RLIM)
@@ -279,5 +290,11 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   deallocate (ZLIM)
   deallocate (PSI)
   deallocate (PSIT)
+  deallocate (xt)
+  deallocate (xp)
+  deallocate (xttp)
+  deallocate (xpp)
+  deallocate (xq)
+  deallocate (xcurr)
 
 endsubroutine gFileRead

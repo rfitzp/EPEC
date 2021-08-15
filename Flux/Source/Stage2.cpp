@@ -199,7 +199,7 @@ void Flux::WriteStage2Netcdfc ()
   
   // Basic parameters
   int para_d, para;
-  double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, RAXIS, ZAXIS, q95, PSILIM, PSIRAT};
+  double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, Raxis, Zaxis, q95, PSILIM, PSIRAT};
   err += nc_def_dim (dataFile, "index", 11, &para_d);
   err += nc_def_var (dataFile, "Parameters", NC_DOUBLE, 1, &para_d, &para);
   nc_put_att_text   (dataFile, para, "Contents", strlen ("R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT"),
@@ -563,7 +563,7 @@ void Flux::Stage2ReadData ()
   // Read magnetic axis data
   // .......................
   file = OpenFiler ((char*) "Outputs/Stage1/Axis.txt");
-  if (fscanf (file, "%lf %lf %lf %lf", &RAXIS, &ZAXIS) != 2)
+  if (fscanf (file, "%lf %lf", &Raxis, &Zaxis) != 2)
     {
       printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/Axis.txt\n");
       exit (1);
@@ -610,17 +610,6 @@ void Flux::Stage2ReadData ()
   dZ2 = dZ*dZ;
   dR3 = dR*dR2;
   dZ3 = dZ*dZ2;
-
-  // .......................
-  // Read magnetic axis data
-  // .......................
-  file = OpenFiler ((char*) "Outputs/Stage1/Axis.txt");
-  if (fscanf (file, "%lf %lf %lf", &Raxis, &Zaxis) != 2)
-    {
-      printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/Axis.txt\n");
-      exit (1);
-    }	
-  fclose (file);
 
   // ..............................
   // Read boundary and limiter data
@@ -694,58 +683,6 @@ void Flux::Stage2ReadData ()
       }
 
   printf ("PsiAxis = %11.4e  PsiBoundary = %11.4e  PsiAxis /(R0*R0*B0) = %11.4e\n", PsiAxis, PsiBoundary, Psic);
-
-  // ...........................................
-  // Output Psi, PsiR, PsiZ, PsiRR, PsiRZ, PsiZZ
-  // ...........................................
-  file = OpenFilew ((char*) "Outputs/Stage2/Psi.txt");
-  for (int i = 0; i < NRPTS; i++)
-    {
-      for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ",  PSIARRAY (i, j));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-  file = OpenFilew ((char*) "Outputs/Stage2/PsiR.txt");
-  for (int i = 0; i < NRPTS; i++)
-    {
-      for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ", GetPsiR (RPTS[i], ZPTS[j]));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-  file = OpenFilew ((char*) "Outputs/Stage2/PsiZ.txt");
-  for (int i = 0; i < NRPTS; i++)
-    {
-      for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ", GetPsiZ (RPTS[i], ZPTS[j]));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-  file = OpenFilew ((char*) "Outputs/Stage2/PsiRR.txt");
-  for (int i = 0; i < NRPTS; i++)
-    {
-      for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ", GetPsiRR (RPTS[i], ZPTS[j]));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-  file = OpenFilew ((char*) "Outputs/Stage2/PsiRZ.txt");
-  for (int i = 0; i < NRPTS; i++)
-    {
-      for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ", GetPsiRZ (RPTS[i], ZPTS[j]));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-  file = OpenFilew ((char*) "Outputs/Stage2/PsiZZ.txt");
-  for (int i = 0; i < NRPTS; i++)
-    {
-      for (int j = 0; j < NZPTS; j++)
-	fprintf (file, "%16.9e ", GetPsiZZ (RPTS[i], ZPTS[j]));
-      fprintf (file, "\n");
-    }
-  fclose (file);
 
   // .............................
   // Read equilibrium profile data
@@ -836,11 +773,6 @@ void Flux::Stage2CalcQ ()
     Rs[L-2-l] = RPTS[l+ia];
   Rs[0]   = Raxis;
   Rs[L-1] = Rbound;
-
-  FILE* file = OpenFilew ((char*) "Outputs/Stage2/rs.txt");
-  for (int l = 0; l < L; l++)
-    fprintf (file, "%16.9e %16.9e\n", Rs[l], s[l]);
-  fclose (file);
 
   // ......................
   // Set up Stage2 Psi grid
@@ -996,22 +928,6 @@ void Flux::Stage2CalcQ ()
   ra     = rP[NPSI-1];
   printf ("q95 = %9.2e  r95/ra = %9.2e  qrat = %9.2e  rrat/ra = %9.2e  qa = %9.2e  ra = %9.2e  a = %9.2e (m)  Pped/P(0) = %9.2e\n",
 	  q95, r95 /ra, qrat, rrat/ra, qa, ra, ra*R0, Pped);
-
-  // ..................
-  // Output q95 and r95
-  // ..................
-  file = OpenFilew ((char*) "Outputs/Stage2/q95.txt");
-  fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", q95, r95 /ra, QP[0], QP[NPSI-1], qrat, rrat /ra);
-  fclose (file);
-
-  // ......................
-  // Output Stage2 profiles
-  // ......................
-  file = OpenFilew ((char*) "Outputs/Stage2/qr.txt");
-  for (int j = 0; j < NPSI; j++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", 
-	     rP[j] /ra, QP[j], QGP[j], P[j], GP[j], PP[j], GPP[j], PPP[j], QX[j], RP[j], RP1[j], Bt[j], Bt1[j], Bp[j], Bp1[j], QPN[j], A1[j], QPPN[j], A2[j], J0[j]);
-    fclose (file);
 }
 
 // ###################################
@@ -1159,39 +1075,6 @@ void Flux::Stage2CalcStraightAngle ()
   printf ("Calculating straight angle data at rational surfaces:\n");
   fflush (stdout);
   CalcStraightAngle ();
-
-  // ...........
-  // Output nres
-  // ...........
-  FILE* file = OpenFilew ((char*) "Outputs/Stage2/nres.txt");
-  fprintf (file, "%d\n", nres);
-  fclose (file);
-
-  // ..........
-  // Output Rst
-  // ..........
-  file = OpenFilew ((char*) "Outputs/Stage2/Rst.txt");
-  for (int k = 0; k < NTHETA; k++)
-    {
-      fprintf (file, "%16.9e ", th[k] /M_PI);
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_matrix_get (Rst, j, k));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-
-  // ..........
-  // Output Zst
-  // ..........
-  file = OpenFilew ((char*) "Outputs/Stage2/Zst.txt");
-  for (int k = 0; k < NTHETA; k++)
-    {
-      fprintf (file, "%16.9e ", th[k] /M_PI);
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_matrix_get (Zst, j, k));
-      fprintf (file, "\n");
-    }
-  fclose (file);
 }
 
 // ######################################################
@@ -1247,32 +1130,6 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 	gsl_matrix_set (factor, i, j, fac);
       }
 
-  // ..........
-  // Output Rnc
-  // ..........
-  FILE* file = OpenFilew ((char*) "Outputs/Stage2/Rnc.txt");
-  for (int k = 0; k < NTHETA; k++)
-    {
-      fprintf (file, "%16.9e ", Th[k] /M_PI);
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_matrix_get (Rnc, j, k));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-
-  // ..........
-  // Output Znc
-  // ..........
-  file = OpenFilew ((char*) "Outputs/Stage2/Znc.txt");
-  for (int k = 0; k < NTHETA; k++)
-    {
-      fprintf (file, "%16.9e ", Th[k] /M_PI);
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_matrix_get (Znc, j, k));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-
   // ..................................
   // Calculate |B| on rational surfaces
   // ..................................
@@ -1290,19 +1147,6 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 
 	gsl_matrix_set (Bnc, j, k, Bval);
       }
-
-  // ..........
-  // Output Bnc
-  // ..........
-  file = OpenFilew ((char*) "Outputs/Stage2/Bnc.txt");
-  for (int k = 0; k < NTHETA; k++)
-    {
-      fprintf (file, "%16.9e ", Th[k] /M_PI);
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_matrix_get (Bnc, j, k));
-      fprintf (file, "\n");
-    }
-  fclose (file);
 
   // .........................................
   // Calculate d|B|dTheta on rational surfaces
@@ -1340,19 +1184,6 @@ void Flux::Stage2CalcNeoclassicalAngle ()
 	gsl_matrix_set (Cnc, j, k, Carray[k]);
     }
   delete[] Carray;
-
-  // ..........
-  // Output Cnc
-  // ..........
-  file = OpenFilew ((char*) "Outputs/Stage2/Cnc.txt");
-  for (int k = 0; k < NTHETA; k++)
-    {
-      fprintf (file, "%16.9e ", Th[k]/M_PI);
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_matrix_get (Cnc, j, k));
-      fprintf (file, "\n");
-    }
-  fclose (file);
 }
 
 // ######################################################
@@ -1615,15 +1446,6 @@ void Flux::Stage2CalcMatrices ()
       printf ("\n");
     }
 
-  FILE* file = OpenFilew ("Outputs/Stage2/F_Matrix.txt");
-  for (int i = 0; i < nres; i++)
-    {
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_complex_abs (gsl_matrix_complex_get (FF, i, j)));
-      fprintf (file, "\n");
-    }
-  fclose (file);
-
   // ------------------
   // Calculate E-matrix
   // ------------------
@@ -1648,14 +1470,5 @@ void Flux::Stage2CalcMatrices ()
 	printf ("(%8.1e,%8.1e) ", GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
       printf ("\n");
     }
-
-  file = OpenFilew ("Outputs/Stage2/E_Matrix.txt");
-  for (int i = 0; i < nres; i++)
-    {
-      for (int j = 0; j < nres; j++)
-	fprintf (file, "%16.9e ", gsl_complex_abs (gsl_matrix_complex_get (EE, i, j)));
-      fprintf (file, "\n");
-    }
-  fclose (file);
 }
 

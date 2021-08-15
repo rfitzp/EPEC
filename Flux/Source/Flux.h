@@ -33,7 +33,6 @@
 // -g INTG   - override INTG value from namelist
 // -n NTOR   - override NTOR value from namelist
 // -m MMIN   - override MMIN value from namelist
-// -o        - flag to select OMFIT mode
 // -p PSILIM - override PSILIM value from namelist
 // -r PSIRAT - override PSIRAT value from namelist
 // -t TIME   - override TIME value from namelist
@@ -74,6 +73,7 @@
 // 1.18 - Added RMP coil calculation
 // 1.19 - Removed RMP coil calculation and E vectors. 
 //         Added NECTCDF output. Adapted to run with OMFIT.
+// 2.0  - Completely switched to OMFIT mode
 
 // #####################################################################################
 
@@ -82,8 +82,8 @@
 
 #define MAXFILENAMELENGTH 500
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 19
+#define VERSION_MAJOR 2
+#define VERSION_MINOR 0
 
 #include <stdio.h>
 #include <math.h>
@@ -131,9 +131,6 @@ class Flux
 {
  private:
 
-  // Control parameters read from command line
-  int OMFIT;      // Flag to select OMFIT mode
-  
   // Control parameters read from Inputs/Flux.nml
   int    NTOR;    // Toroidal mode number
   int    MMIN;    // Minimum poloidal mode number
@@ -164,8 +161,8 @@ class Flux
   double          ZLOW;     // Bounding box coordinate
   double          RRIGHT;   // Bounding box coordinate
   double          ZHIGH;    // Bounding box coordinate
-  double          RAXIS;    // Magnetic axis coordinate
-  double          ZAXIS;    // Magnetic axis coordinate
+  double          Raxis;    // Magnetic axis coordinate
+  double          Zaxis;    // Magnetic axis coordinate
   int             NRPTS;    // Number of R points
   double*         RPTS;     // R array
   int             NZPTS;    // Number of Z points
@@ -190,8 +187,6 @@ class Flux
  
   // Flux coordinate construction parameters
   double  Psic;        // Psi on magnetic axis
-  double  Raxis;       // R coordinate of magnetic axis
-  double  Zaxis;       // Z coordinate of magnetic axis
   double  Rbound;      // R coordinate of plasma boundary on inboard midplane
   double  Rbound1;     // R coordinate of plasma boundary on outboard midplane
   int     ia;          // R grid index of inboard plasma boundary at Z = Z_axis
@@ -308,7 +303,7 @@ public:
   // Constructor
   Flux ();
   // Solve problem
-  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT);
+  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
 
   // Evaluate right-hand sides of q/g equation
   int Rhs1 (double r, const double y[], double dydr[], void*);
@@ -326,7 +321,7 @@ public:
 private:
 
   // Set global parameters
-  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT, int _OMFIT);
+  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
   // Input gFile data and output Stage1 data
   void Stage1 ();
   // Input Stage1 data and output Stage2 data
