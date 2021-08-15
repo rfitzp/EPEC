@@ -365,7 +365,7 @@ class Neoclassical
   Array<double,1> w_nc_ik;    // Majority ion neoclassical frequencies (rad/s)
   Array<double,1> w_nc_Ik;    // Impurity ion neoclassical frequencies (rad/s)
   Array<double,1> w_nc_eek;   // Electron-electron neoclassical frequencies (rad/s)
-  Array<double,1> w_nc_eik;   // Electron-ion neocalssical frequencies (rad/s)
+  Array<double,1> w_nc_eik;   // Electron-ion neoclassical frequencies (rad/s)
   Array<double,1> w_E_Ik;     // ExB frequencies inferred from toroidal impurity ion rotation frequency (rad/s)
   Array<double,1> w_betak;    // Bootstrap frequencies (rad/s)
   Array<double,1> w_Omegk;    // Polarization frequencies (rad/s)
