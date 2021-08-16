@@ -728,5 +728,36 @@ where
 \end{equation}
 and $V_\theta^{\,nc}$ is specified in Eq.~(\ref{vtnc}).
 
+\begin{table}
+\centering
+\begin{tabular}{llll}\hline
+Name& Units & Description& Formula\\\hline&&&\\[-2.3ex]
+{\sf ne} & $10^{20}\,{\rm m}^{-3}$& Electron number density&\\
+{\sf te} & keV & Electron temperature&\\
+{\sf ni} & $10^{20}\,{\rm m}^{-3}$& Majority ion number density&\\
+{\sf ti} & keV & Majority ion temperature&\\
+{\sf nb} & $10^{20}\,{\rm m}^{-3}$& Fast ion number density&\\
+{\sf pb} & kPa & Fast ion pressure&\\
+{\sf ptot} & kPa & Total pressure&\\
+{\sf omeg} & krad/s& Impurity ion toroidal freqeuncy&$\omega_{\phi\,I}$\\
+{\sf omegp} &krad/s& Impurity ion poloidal poloidal&$-\omega_{\theta\,I}$\\
+{\sf omgvb} &krad/s& {\sf omeg}+{\sf omegp}&$\omega_{\phi\,I}-\omega_{\theta\,I}$\\
+{\sf omgpp} &krad/s& Impurity ion diamagnetic frequency &$-\omega_{\ast\,I}$\\
+{\sf omgeb} &krad/s& {\sf omgpp}+{\sf omgvb} &$\omega_E$\\
+{\sf er} &kV/m & &$R\,B_p\,\omega_E$\\
+{\sf ommvb} &krad/s& &$\omega_{\phi\,i}-\omega_{\ast\,i}$\\
+{\sf ommpp} &krad/s&Majority ion diamagnetic frequency&$-\omega_{\ast\,i}$\\
+{\sf omevb} &krad/s& &$\omega_{\phi\,e}-\omega_{\ast\,e}$\\
+{\sf omepp} &krad/s&Electron diamagnetic frequency&$-\omega_{\ast\,e}$\\
+{\sf kpol} &km/s/T&&$R\,\omega_{\theta\,I}/B_t$\\
+{\sf omghb} &&&$(R\,B_p)^2(d\omega_E/d\psi)/B_t$\\
+{\sf nz1} & $10^{20}\,{\rm m}^{-3}$& Impurity ion number density&\\
+{\sf vtor1} & km/s& Impurity ion toroidal velocity&$R\,\omega_{\phi\,I}$\\
+{\sf vpol1} & km/s& Impurity ion poloidal velocity&$(R\,B_p/B_t)\,\omega_{\theta\, I}$\\
+{\sf N Z A}&& N Z A of ion species&\\\hline
+\end{tabular}
+\caption{Contents of a pFile}
+\end{table}
+
 \end{document}
 
