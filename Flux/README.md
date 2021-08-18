@@ -1,4 +1,4 @@
-# FLUX
+# Program FLUX
 
 ## Description
 
@@ -14,7 +14,7 @@
    - blitz++ library (https://github.com/blitzpp/blitz)
    - gsl library (https://www.gnu.org/software/gsl)
    - BLAS library (http://www.netlib.org/blas)
-   - asymptote (for plots) (https://asymptote.sourceforge.io)
+   - NETCDF library (http://unidata.ucar.edu)
    
 ## Contents
 
@@ -28,7 +28,6 @@
 - *.f90: Fortran_90 source files
 - *.h: C++ header files
 - *.cpp: C++ source files
-- /Test: Test routine for toroidal functions
 	 
 ### /Inputs
 
@@ -37,7 +36,6 @@
 - /gFiles: Contains equilibrium gFiles for interpolation
   - Index: List of gFile names and experimental times
   - gFiles: Actual gFiles
-  - rFile: rFile
 	  
 ### /Outputs
 
@@ -45,20 +43,17 @@
 - /fFiles: Directory containing fFiles associated with interpolated gFiles
  - Index: List of fFile names and experimental times
  - fFiles: Actual fFiles
-- /Stage1: Data files from Stage 1 calculation
-- /Stage2: Data files from Stage 2 calculation
+- Stage1.nc: NETCDF data file from Stage 1 calculation
+- Stage2.nc: NETCDF data file from Stage 2 calculation
 	  
 ### /Plots
 
-- /Stage1
- - *.asy: Asymptote scripts to plot Stage 1 data
-- /Stage2
-  - *.asy: Asymptote scripts to plot Stage 2 data
+ - *.py: Python scripts to plot Stage 1 and Stage2 data
 
 ## gFile Format
 
     read (100, '(a48, 3i4)') string, i3, NRBOX, NZBOX
-    read (100, '(5e16.9)') RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero
+    read (100, '(5e16.9)') RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF
     read (100, '(5e16.9)') RAXIS, ZAXIS, PSIAXIS, PSIBOUND, B0
     read (100, '(5e16.9)') CURRENT, zero, zero, zero, zero
     read (100, '(5e16.9)') zero, zero, zero, zero, zero
@@ -79,8 +74,3 @@
   
   *Anything after this is ignored*
   
-## rFile Format
-
-    RPLUS RMINUS ZPLUS ZMINUS
-	
-  *First line is lFile, second is uFile, third is mFile*	

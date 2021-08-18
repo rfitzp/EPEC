@@ -40,11 +40,11 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   character (len = *), parameter :: file = "Outputs/Stage1.nc"
 
   integer          :: err = 0, file_id
-  integer          :: para_d_id, para_id, NPARA = 9, bound_d_id, rbound_id, zbound_id
+  integer          :: para_d_id, para_id, NPARA = 10, bound_d_id, rbound_id, zbound_id
   integer          :: lim_d_id, rlim_id, zlim_id, R_d_id, R_id, Z_d_id, Z_id
   integer          :: PS_d_id (2), PS_id, PN_id, T_id, P_id, TTp_id, Pp_id, Q_id, C_id
   integer          :: xt_id, xp_id, xttp_id, xpp_id, xq_id, xc_id
-  double precision :: para (9)
+  double precision :: para (10)
 
   MU0 = 16. * atan(1.0) * 1.e-7
 
@@ -66,15 +66,16 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
   RAXIS  = RAXIS                  /R0
   ZAXIS  = ZAXIS                  /R0
    
-  para (1) = R0
-  para (2) = dabs(B0)
-  para (3) = RLEFT
-  para (4) = RRIGHT
-  para (5) = ZLOW
-  para (6) = ZHIGH
-  para (7) = RAXIS
-  para (8) = ZAXIS 
-  para (9) = PSIAXIS /R0/R0/dabs(B0)
+  para (1)  = R0
+  para (2)  = dabs(B0)
+  para (3)  = RLEFT
+  para (4)  = RRIGHT
+  para (5)  = ZLOW
+  para (6)  = ZHIGH
+  para (7)  = RAXIS
+  para (8)  = ZAXIS 
+  para (9)  = PSIAXIS /R0/R0/dabs(B0)
+  para (10) = PSIBOUND /R0/R0/dabs(B0)
 
   allocate (R (NRBOX))
   allocate (Z (NZBOX))

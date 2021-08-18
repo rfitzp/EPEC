@@ -28,6 +28,7 @@ zhi = para[5]
 rax = para[6]
 zax = para[7]
 pax = para[8]
+pab = para[9]
 
 aspect = (zhi - zlow) / (rrgt - rlft)
 
@@ -36,7 +37,7 @@ fig.canvas.manager.set_window_title("FLUX: Stage1 Equilibrium")
 
 XX, YY = np.meshgrid(r, z, indexing='ij')
 ZZ = np.asarray(psi)
-levels = np.linspace(pax, 0.0, 40)
+levels = np.linspace(pax, pab, 40)
 
 plt.contour(XX, YY, ZZ, levels)
 

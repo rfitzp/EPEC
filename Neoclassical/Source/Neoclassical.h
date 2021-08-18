@@ -14,7 +14,6 @@
 // -f EXB      - override EXB value from namelist file
 // -h          - list options
 // -l LN       - override LN value from namelist file
-// -o          - flag to select OMFIT mode
 // -n NEUTRAL  - override NEUTRAL value from namelist file
 // -p INTP     - override INTP value from namelist file
 // -t TIME     - sets experimental time (ms)
@@ -69,13 +68,15 @@
 // 1.26 - Added calculation of alpha_b(e,i), alpha_c, and alpha_p
 // 1.27 - Added NETCDF output. Adapted ti run with OMFIT.
 
+// 2.1  - Compeltely went over to OMFIT mode
+
 // ################################################################
 
 #ifndef NEOCLASSICAL
 #define NEOCLASSICAL
 
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 27
+#define VERSION_MAJOR 2
+#define VERSION_MINOR 1
 #define MAXFILENAMELENGTH 500
 #define MAXPFILELINELENGTH 500
 
@@ -117,9 +118,6 @@ class Neoclassical
   // Control parameters
   // ------------------
 
-  // Read from command line
-  int OMFIT;       // Flag to select OMFIT mode
-
   // Read from Inputs/Neoclassical.nml
   double COULOMB;  // Coulomb logarithm
   int    NSMOOTH;  // Number of smoothing cycles for higher devivatives of profiles
@@ -130,7 +128,9 @@ class Neoclassical
   int    CATS;     // If != 0 then use only linear interpolation for cFiles
 
   int    EXB;      //  If == 0 then use ExB frequency profile from pFile
-                   //  If == 1 then use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical theory  
+                   //  If == 1 then use ExB frequency profile derived from pFile toroidal and poloidal velocity profiles
+                   //  If == 2 then use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical
+                   //   poloidal velocity profile
 
   int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
 
@@ -189,15 +189,16 @@ class Neoclassical
   // -------------------
 
   // Read from Inputs/pfile
-  Field ne;   // Electron number density (m^-3)
-  Field Te;   // Electron temperature (J)
-  Field ni;   // Majority ion number density (m^-3)
-  Field Ti;   // Majority ion temperature (J)
-  Field nI;   // Impurity ion number density (m^-3)
-  Field nb;   // Fast majority ion number density (m^-3)
-  Field wE;   // ExB frequency (rad/s)
-  Field wt;   // Impurity ion toroidal angular frequency (rad/s)
-  Field NZA;  // Ion data
+  Field ne;   // Electron number density from pFile (m^-3)
+  Field Te;   // Electron temperature from pFile (J)
+  Field ni;   // Majority ion number density from pFile (m^-3)
+  Field Ti;   // Majority ion temperature from pFile (J)
+  Field nI;   // Impurity ion number density from pFile (m^-3)
+  Field nb;   // Fast majority ion number density from pFile (m^-3)
+  Field wt;   // Impurity ion toroidal angular frequency from pFile (rad/s)
+  Field wp;   // Minus impurity ion poloidal angular frequency from pFile (rad/s)
+  Field wE;   // ExB frequency from pFile (rad/s)
+  Field NZA;  // Ion data from pFile
 
   int    NI;  // Charge number of majority ions
   double ZI;  // Ionization number of majority ions
@@ -213,29 +214,30 @@ class Neoclassical
   Field Chii; // Perpendicular ion energy diffusivity (m^2/s)
 
   // Profile data interpolated onto equilibrium grid
-  Array<double,1> n_e;    // Electron number density (m^-3)
-  Array<double,1> dn_edr; // Electron number density gradient (in r) (m^-4)
-  Array<double,1> T_e;    // Electron temperature (J)
-  Array<double,1> dT_edr; // Electron temperature gradient (in r) (J m^-1)
-  Array<double,1> n_i;    // Majority ion number density (m^-3)
-  Array<double,1> dn_idr; // Majority ion number density gradient (in r) (m^-4)
-  Array<double,1> T_i;    // Majority ion temperature (J)
-  Array<double,1> dT_idr; // Majority ion temperature gradient (in r) (J m^-1)
-  Array<double,1> n_b;    // Fast majority ion number density (m^-3)
-  Array<double,1> n_I;    // Impurity ion number density (m^-3)
-  Array<double,1> dn_Idr; // Impurity ion number density gradient (m^-4)
-  Array<double,1> T_I;    // Impurity ion temperature (J)
-  Array<double,1> dT_Idr; // Impurity ion temperature gradient (in r) (J m^-1)
-  Array<double,1> n_n;    // Neutral number density (m^-3)
-  Array<double,1> w_E;    // ExB frequency (rad/s)
-  Array<double,1> w_t;    // Impurity ion toroidal angular frequency (rad/s)
+  Array<double,1> n_e;    // Electron number density from pFile (m^-3)
+  Array<double,1> dn_edr; // Electron number density gradient (in r) from pFile (m^-4)
+  Array<double,1> T_e;    // Electron temperature from pFile (J)
+  Array<double,1> dT_edr; // Electron temperature gradient (in r) from pFile (J m^-1)
+  Array<double,1> n_i;    // Majority ion number density from pFile (m^-3)
+  Array<double,1> dn_idr; // Majority ion number density gradient (in r) from pFile (m^-4)
+  Array<double,1> T_i;    // Majority ion temperature from pFile (J)
+  Array<double,1> dT_idr; // Majority ion temperature gradient (in r) from pFile (J m^-1)
+  Array<double,1> n_b;    // Fast majority ion number density from pFile (m^-3)
+  Array<double,1> n_I;    // Impurity ion number density from pFile (m^-3)
+  Array<double,1> dn_Idr; // Impurity ion number density gradient from pFile (m^-4)
+  Array<double,1> T_I;    // Impurity ion temperature (assumed same as T_i) (J)
+  Array<double,1> dT_Idr; // Impurity ion temperature gradient (in r) (assumed same as dT_idr)(J m^-1)
+  Array<double,1> n_n;    // Neutral number density from namelist (m^-3)
+  Array<double,1> w_t;    // Impurity ion toroidal angular frequency from pFile (rad/s)
+  Array<double,1> w_p;    // Impurity ion poloidal angular frequency from pFile (rad/s)
+  Array<double,1> w_E;    // ExB frequency from pFile (rad/s)
   Array<double,1> Quasi;  // Quasi-nuetrality check
   Array<double,1> Z_eff;  // Effective ion charge number
   Array<double,1> alpha;  // Impurity strength parameter
-  Array<double,1> chip;   // Perpendicular momentum diffusivity (m^2 s^-1)
-  Array<double,1> chie;   // Perpendicular electron energy diffusivity (m^2 s^-1)
-  Array<double,1> chin;   // Perpendicular particle diffusivity (m^2 s^-1)
-  Array<double,1> chii;   // Perpendicular ion energy diffusivity (m^2 s^-1)
+  Array<double,1> chip;   // Perpendicular momentum diffusivity from cFile (m^2 s^-1)
+  Array<double,1> chie;   // Perpendicular electron energy diffusivity from cFile (m^2 s^-1)
+  Array<double,1> chin;   // Perpendicular particle diffusivity from cFile (m^2 s^-1)
+  Array<double,1> chii;   // Perpendicular ion energy diffusivity from cFile (m^2 s^-1)
 
   Array<double,1> dn_edP1; // Electron number density 1st derivative in PsiN (m^-3)
   Array<double,1> dT_edP1; // Electron temperature 1st derivative in PsiN (J)
@@ -294,31 +296,32 @@ class Neoclassical
   double tau_A;               // Central Alfven time (s)
   double P0;                  // Central (thermal) pressure (Pa)
   
-  Array<double,1> nek;        // Electron number densities (m^-3)
-  Array<double,1> dnedrk;     // Electron number density gradients (in r) (m^-4)
-  Array<double,1> Tek;        // Electron temperatures (J)
-  Array<double,1> dTedrk;     // Electron temperature gradients (in r) (J m^-1)
-  Array<double,1> nik;        // Majority ion number densities (m^-3)
-  Array<double,1> dnidrk;     // Majority ion number density gradients (in r) (m^-4)
-  Array<double,1> Tik;        // Majority ion temperatures (J)
-  Array<double,1> dTidrk;     // Majority ion temperature gradients (in r) (J m^-1)
-  Array<double,1> nbk;        // Fast majority ion numbers densities (m^-3)
-  Array<double,1> nIk;        // Impurity ion number densities (m^-3)
-  Array<double,1> dnIdrk;     // Impurity ion number density gradients (in r) (m^-4)
-  Array<double,1> TIk;        // Impurity ion temperatures (J)
-  Array<double,1> dTIdrk;     // Impurity ion temperature gradients (in r) (J m^-1)
-  Array<double,1> wEk;        // ExB frequencies (rad/s)
-  Array<double,1> wtk;        // Impurity ion toroidal rotation frequencies (rad/s)
+  Array<double,1> nek;        // Electron number densities from pFile (m^-3)
+  Array<double,1> dnedrk;     // Electron number density gradients (in r) from pFile (m^-4)
+  Array<double,1> Tek;        // Electron temperatures from pFile (J)
+  Array<double,1> dTedrk;     // Electron temperature gradients (in r) from pFile (J m^-1)
+  Array<double,1> nik;        // Majority ion number densities from pFile (m^-3)
+  Array<double,1> dnidrk;     // Majority ion number density gradients (in r) from pFile (m^-4)
+  Array<double,1> Tik;        // Majority ion temperatures from pFile (J)
+  Array<double,1> dTidrk;     // Majority ion temperature gradients (in r) from pFile (J m^-1)
+  Array<double,1> nbk;        // Fast majority ion numbers densities from pFile (m^-3)
+  Array<double,1> nIk;        // Impurity ion number densities from pFile (m^-3)
+  Array<double,1> dnIdrk;     // Impurity ion number density gradients (in r) from pFile (m^-4)
+  Array<double,1> TIk;        // Impurity ion temperatures (assumed same as Tik) (J)
+  Array<double,1> dTIdrk;     // Impurity ion temperature gradients (in r) (assumed same as dTidrk) (J m^-1)
+  Array<double,1> wtk;        // Impurity ion toroidal rotation frequencies from pFile (rad/s)
+  Array<double,1> wpk;        // Impurity ion poloidal rotation frequencies from pFile (rad/s)
+  Array<double,1> wEk;        // ExB frequencies from pFile (rad/s)
   Array<double,1> Zeffk;      // Effective ion charge numbers
   Array<double,1> Zeffik;     // Effective ion charge numbers
   Array<double,1> ZeffIk;     // Effective ion charge number
   Array<double,1> alphak;     // Impurity strength parameters
   Array<double,1> rhok;       // Relative mass densities
   Array<double,1> NNk;        // Flux-surfaced-averaged majority neutral number densities (m^-3)
-  Array<double,1> chipk;      // Perpendicular momentum diffusivities (m^2/s)
-  Array<double,1> chiek;      // Perpendicular electron energy diffusivities (m^2/s)
-  Array<double,1> chink;      // Perpendicular particle diffusivities (m^2/s)
-  Array<double,1> chiik;      // Perpendicular ion energy diffusivities (m^2/s)
+  Array<double,1> chipk;      // Perpendicular momentum diffusivities from cFile (m^2/s)
+  Array<double,1> chiek;      // Perpendicular electron energy diffusivities from cFile (m^2/s)
+  Array<double,1> chink;      // Perpendicular particle diffusivities from cFile (m^2/s)
+  Array<double,1> chiik;      // Perpendicular ion energy diffusivities from cFile (m^2/s)
   Array<double,1> alpbek;     // Bootstrap current parameter
   Array<double,1> alpbik;     // Bootstrap current parameter
   Array<double,1> alpck;      // Curvature parameter
@@ -362,11 +365,18 @@ class Neoclassical
   Array<double,1> w_ast_ek;   // Electron diamagnetic frequencies (rad/s)
   Array<double,1> w_ast_ik;   // Majority ion diamagnetic frequencies (rad/s)
   Array<double,1> w_ast_Ik;   // Impurity ion diamagnetic frequencies (rad/s)
+  Array<double,1> w_E0k;      // ExB frequencies from pFile (rad/s)
+  Array<double,1> w_E1k;      // ExB frequencies from pFile toroidal and poloidal velocity profiles (rad/s)
+  Array<double,1> w_E2k;      // ExB frequencies from pFile toroidal and neoclassical poloidal velocity profiles (rad/s)
+  Array<double,1> w_nc_I0k;   // Impurity ion neoclassical frequencies (rad/s)
+  Array<double,1> w_nc_I1k;   // Impurity ion neoclassical frequencies (rad/s)
+  Array<double,1> w_nc_I2k;   // Impurity ion neoclassical frequencies (rad/s)
+  Array<double,1> w_pnc_I0k;  // Impurity ion neoclassical poloidal frequencies (rad/s)
+  Array<double,1> w_pnc_I1k;  // Impurity ion neoclassical poloidal frequencies (rad/s)
+  Array<double,1> w_pnc_I2k;  // Impurity ion neoclassical poloidal frequencies (rad/s)
   Array<double,1> w_nc_ik;    // Majority ion neoclassical frequencies (rad/s)
-  Array<double,1> w_nc_Ik;    // Impurity ion neoclassical frequencies (rad/s)
   Array<double,1> w_nc_eek;   // Electron-electron neoclassical frequencies (rad/s)
   Array<double,1> w_nc_eik;   // Electron-ion neoclassical frequencies (rad/s)
-  Array<double,1> w_E_Ik;     // ExB frequencies inferred from toroidal impurity ion rotation frequency (rad/s)
   Array<double,1> w_betak;    // Bootstrap frequencies (rad/s)
   Array<double,1> w_Omegk;    // Polarization frequencies (rad/s)
 
@@ -456,8 +466,8 @@ class Neoclassical
   virtual ~Neoclassical () {}; // Destructor
 
   // Solve problem
-  void Solve  (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-	       int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT);            
+  void Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
+	      int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);            
  
   // -----------------------
   // Private class functions
@@ -466,7 +476,7 @@ class Neoclassical
 
   // Read discharge parameters
   void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS, int _OMFIT);
+			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);
   // Read equilibrium data
   void Read_Equilibrium ();
   // Read profile data
@@ -488,8 +498,8 @@ class Neoclassical
   // Calculate normalized quantities at rational surfaces
   void Get_Normalized ();
 
-  // Write Stage2 NETCDF file
-  void WriteStage2Netcdfc ();
+  // Write Stage3 NETCDF file
+  void WriteStage3Netcdfc ();
 
   // 1D interpolation function with nonuniform grid
   double Interpolate             (int I, Array<double,1> X, Array<double,1> Y, double x, int order);
