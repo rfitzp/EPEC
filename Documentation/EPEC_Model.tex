@@ -314,9 +314,61 @@ K_\theta(r) = \frac{R_0^{\,2}\,B_0^{\,2}\,g^{\,2}}{R^{\,2}\,\langle B^{\,2}\rang
 \end{equation}
 
 \section{Plasma Response in Inner Region}
+\subsection{Island Widths}
+Let ${\mit\Psi}_k= R_0\,B_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$, where $\hat{\mit\Psi}_k>0$  and $\varphi_k$ are both real quantities.
+The full width (in $r$) of the magnetic island chain at the
+$k$th resonant surface is
+\begin{equation}
+W_k = 4\,R_0\left(\frac{q\,}{g\,s}\right)^{1/2}_{r_k}\hat{\mit\Psi}_k^{\,1/2},
+\end{equation}
+where 
+\begin{equation}
+s(r) = \frac{d\ln q}{d\ln r}.
+\end{equation}
+
+\subsection{Critical Island Widths}
+The critical full island width (in $r$) which must be exceeded before the electron temperature is flattened within the
+magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
+\begin{equation}\label{e64g}
+\frac{W_{T_e\,k} }{r_k}= 5.07\left(\frac{\chi_e}{\chi_{\parallel\,e}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k},
+\end{equation}
+where $\chi_e(r)$ is the perpendicular electron energy diffusivity profile, $\epsilon =r/R_0$, 
+\begin{align}
+\chi_{\parallel\,e}&= \frac{\chi_{\parallel\,e}^{\rm brag}\,\chi_{\parallel\,e}^{\rm max}}{\chi_{\parallel\,e}^{\rm brag}+\chi_{\parallel\,e}^{\rm max}},\\[0.5ex]
+\chi_{\parallel\,e}^{\rm brag} &= 1.13\,\tau_{ee}\,v_{T\,e}^{\,2},\\[0.5ex]
+\chi_{\parallel\,e}^{\rm max} &= \frac{2\,R_0\,v_{T\,e}}{n\,s}\,\frac{r_k}{W_{T_e\,k}}.
+\end{align}
+Equation~(\ref{e64g}) must be solved iteratively for $W_{T_e\,k}/r_k$. 
+
+The critical full island width (in $r$) which must be exceeded before the ion temperature is flattened within the
+magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
+\begin{equation}\label{e64gg}
+\frac{W_{T_i\,k} }{r_k}= 5.07\left(\frac{\chi_i}{\chi_{\parallel\,i}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k},
+\end{equation}
+where $\chi_i(r)$ is the perpendicular ion energy diffusivity profile, 
+\begin{align}
+\chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{T_i\,k}}.
+\end{align}
+Equation~(\ref{e64gg}) must be solved iteratively for $W_{T_i\,k}/r_k$.
+
+The critical full island width (in $r$) which must be exceeded before the electron density is flattened within the
+magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
+\begin{equation}\label{e64ggg}
+\frac{W_{n_e\,k} }{r_k}= 5.07\left(\frac{D_\perp}{\chi_{\parallel\,i}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k},
+\end{equation}
+where $D_\perp(r)$ is the perpendicular particle diffusivity profile, 
+\begin{align}
+\chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{n_e\,k}}.
+\end{align}
+Equation~(\ref{e64ggg}) must be solved iteratively for $W_{n_e\,k}/r_k$.
+
 \subsection{Evolution Equations}
-Let ${\mit\Psi}_k= R_0\,B_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$, ${\mit\chi}_k= R_0\,B_0\,\hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$, and $E_{kk'}=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$,
-where $\hat{\mit\Psi}_k>0$, $\varphi_k$, $\hat{\chi}_k>0$, $\zeta_k$, $\hat{E}_{kk}'>0$, and $\xi_{kk'}$ are all real quantities. Furthermore,
+Let ${\mit\chi}_k= R_0\,B_0\,\hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$, and $E_{kk'}=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$,
+where  $\hat{\chi}_k>0$, $\zeta_k$, $\hat{E}_{kk}'>0$, and $\xi_{kk'}$ are all real quantities. Furthermore,
 let $X_k= \hat{\mit\Psi}_k\,\cos\varphi_k$ and $Y_k= \hat{\mit\Psi}_k\,\sin\varphi_k$. The resonant plasma response model at the 
 $k$th resonant surface takes the form
 \begin{align}\label{e21}
@@ -334,13 +386,12 @@ where
 \tau_A &= \left[\frac{\mu_0\,\rho(0)\,r_{100}^{\,2}}{B_0^{\,2}}\right]^{1/2},\\[0.5ex]
 \tau_R(r) &= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{ee},\\[0.5ex]
 \sigma_{ee}(r) &=\frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e},\\[0.5ex]
-\hat{W}_k &=\frac{2\,{\cal I}}{\epsilon_{100}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)^{1/2}_{r_k} (X_k^{\,2} + Y_k^{\,2})^{\,1/4},\\[0.5ex]
-\hat{W}_{T_e\,k} &= 2\,{\cal I}\left(\frac{\chi_e\,R_0}{v_{T\,e}\,r^{\,2}\,s\,n}\right)^{1/3}_{r_k},\\[0.5ex]
-\hat{W}_{T_i\,k} &= 2\,{\cal I}\left(\frac{\chi_i\,R_0}{v_{T\,e}\,r^{\,2}\,s\,n}\right)^{1/3}_{r_k},\\[0.5ex]
-\hat{W}_{n_e\,k} &= 2\,{\cal I}\left(\frac{D_\perp\,R_0}{v_{T\,e}\,r^{\,2}\,s\,n}\right)^{1/3}_{r_k},\\[0.5ex]
-s(r) &= \frac{d\ln q}{d\ln r},\\[0.5ex]
-\hat{\rho}_{\theta\,e} &= \left(\frac{2\,{\cal I}\,v_{T\,e}\,m_e\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
-\hat{\rho}_{\theta\,i} &= \left(\frac{2\,{\cal I}\,v_{T\,i}\,m_i\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
+\hat{W}_k &=\frac{{\cal I}\,W_k}{2\,r_k}=\frac{2\,{\cal I}}{\epsilon_{100}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)^{1/2}_{r_k} (X_k^{\,2} + Y_k^{\,2})^{\,1/4},\\[0.5ex]
+\hat{W}_{T_e\,k} &=\frac{{\cal I}\,W_{T_e\,k}}{2\,r_k} ,\\[0.5ex]
+\hat{W}_{T_i\,k} &= \frac{{\cal I}\,W_{T_i\,k}}{2\,r_k},\\[0.5ex]
+\hat{W}_{n_e\,k} &= \frac{{\cal I}\,W_{n_e\,k}}{2\,r_k},\\[0.5ex]
+\hat{\rho}_{\theta\,e} &=  \left(\frac{{\cal I}\,\rho_{\theta\,e}}{2\,r}\right)_{r_k}=\left(\frac{2\,{\cal I}\,v_{T\,e}\,m_e\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
+\hat{\rho}_{\theta\,i} &=  \left(\frac{{\cal I}\,\rho_{\theta\,i}}{2\,r}\right)_{r_k}= \left(\frac{2\,{\cal I}\,v_{T\,i}\,m_i\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
 \hat{\delta}_k &= \frac{\delta_{\rm linear}(r_k)}{R_0\,\epsilon_{100}\,\hat{r}_k},\\[0.5ex]
 \alpha_{b\,e\,k} &= -2\,{\cal I}\,I_g\left(\frac{\omega_{\ast\,e}+\omega_{{\rm nc}\,e}}{\omega_\beta}\right)_{r_k},\\[0.5ex]
 \alpha_{b\,i\,k} &= 2\,{\cal I}\,I_g\left[\frac{(n_i/n_e)\left(\omega_{\ast\,i}+\omega_{{\rm nc}\,i}\right)+(Z_I\,n_I/n_e)\left(\omega_{\ast\,I}+\omega_{{\rm nc}\,I}\right)}{\omega_\beta}\right]_{r_k},\\[0.5ex]
@@ -350,8 +401,7 @@ s(r) &= \frac{d\ln q}{d\ln r},\\[0.5ex]
 \omega_{\mit\Omega}(r)&= \frac{e\,g\,B_0\,s\,q}{m_i}.
 \end{align}
 Here, ${\cal I}=0.8227$, $I_g=1.58$, $I_p=1.38$, $\epsilon_{100}=r_{100}/R_0$, $\hat{r}=r/r_{100}$, $\hat{r}_k=r_k/r_{100}$, and $\hat{t}=t/\tau_A$. Furthermore, $\delta_{\rm linear}(r)$ is the linear layer width, whereas $\rho(r)$ is the plasma
-mass density profile. Moreover, $\chi_e(r)$, $\chi_i(r)$, and $D_\perp(r)$ are the perpendicular electron
-energy, ion energy, and particle diffusivity profile, respectively. 
+mass density profile. 
 
 
 The EPEC resonant plasma response model interpolates smoothly
@@ -390,7 +440,6 @@ linear layer width is
 \begin{equation}
 \frac{\delta_{\rm linear}}{r} = \frac{\pi\,|c|}{S^{\,1/3}}.
 \end{equation}
-
 
 \section{Plasma Angular Velocity Evolution}\label{a4}
 \subsection{Evolution Equations}
@@ -450,39 +499,43 @@ regime ($\hat{W}_k\gg \hat{\delta}_k$), it makes sense to adopt a model for the 
 \section{Pressure Reduction} \label{a5}
 The full width (in ${\mit\Psi}_N$)  of the magnetic separatrix of the island chain induced at the $k$th resonant surface is
 \begin{equation}
-W_k = 4\left[\frac{\hat{\mit\Psi}_k}{\sigma_k\,|\hat{{\mit\Psi}}_p(0)|}\right]^{1/2},
+\overline{W}_k = \left(\frac{d{\mit\Psi}_N}{dr}\right)_{r_k}\,W_k=4\left[\frac{\hat{\mit\Psi}_k}{\sigma_k\,|\hat{{\mit\Psi}}_p(0)|}\right]^{1/2},
 \end{equation}
-where $\sigma_k=\sigma(r_k)$, $\sigma(r) = d\ln q/d{\mit\Psi}_N$, and $\hat{\mit\Psi}_p(r) = {\mit\Psi}_p/(R_0^{\,2}\,B_0)$.  
+where 
+\begin{equation}
+\frac{d{\mit\Psi}_N}{dr} = \frac{r\,g}{R_0^{\,2}\,q\,|\hat{\mit\Psi}_p(0)|},
+\end{equation}
+$\sigma_k=\sigma(r_k)$, $\sigma(r) = d\ln q/d{\mit\Psi}_N$, and $\hat{\mit\Psi}_p(r) = {\mit\Psi}_p/(R_0^{\,2}\,B_0)$.  
 However, the halfway point between the inner and outer extremities of the separatrix is located at the flux-surface where ${\mit\Psi}_N = {\mit\Psi}_N(r_k) - A_k\,W_k^{\,2}/8$ and $A_k = [(1/3)\,(d^{\,2}q/d{\mit\Psi}_N^{\,2})/(dq/d{\mit\Psi}_N)]_{r_k}$.
 On average, the presence of a magnetic island chain of full width $W_k$ at the $k$th resonant surface
 causes the electron temperature, ion temperature,  and electron number density profiles to be flattened in  annular regions, centered on the
 halfway points between the inner and outer radii of the island separatrices, of widths (in ${\mit\Psi}_N$)
 \begin{align}
-\delta_{T_e\,k}& = \frac{2}{\pi}\,W_k\,\tanh\left(\frac{W_k}{W_{T_e\,k}}\right),\\[0.5ex]
-\delta_{T_i\,k}& = \frac{2}{\pi}\,W_k\,\tanh\left(\frac{W_k}{W_{T_i\,k}}\right),\\[0.5ex]
-\delta_{n_e\,k}& = \frac{2}{\pi}\,W_k\,\tanh\left(\frac{W_k}{W_{n_e\,k}}\right),
+\delta_{T_e\,k}& = \frac{2}{\pi}\,\overline{W}_k\,\tanh\left(\frac{\overline{W}_k}{\overline{W}_{T_e\,k}}\right),\\[0.5ex]
+\delta_{T_i\,k}& = \frac{2}{\pi}\,\overline{W}_k\,\tanh\left(\frac{\overline{W}_k}{\overline{W}_{T_i\,k}}\right),\\[0.5ex]
+\delta_{n_e\,k}& = \frac{2}{\pi}\,\overline{W}_k\,\tanh\left(\frac{\overline{W}_k}{\overline{W}_{n_e\,k}}\right),
 \end{align}
 respectively, where
 \begin{align}
-W_{T_e\,k} &= \left(\frac{\chi_{e}}{v_{T\,e}\,R_0}\,\frac{f^{\,2}}{n\,\sigma\,|\hat{\mit\Psi}_p(0)|^{\,2}}\right)^{1/3}_{r_k},\\[0.5ex]
-W_{T_i\,k} &= \left(\frac{\chi_{i}}{v_{T\,i}\,R_0}\,\frac{f^{\,2}}{n\,\sigma\,|\hat{\mit\Psi}_p(0)|^{\,2}}\right)^{1/3}_{r_k},\\[0.5ex]
-W_{n_e\,k} &= \left(\frac{D_\perp}{v_{T\,i}\,R_0}\,\frac{f^{\,2}}{n\,\sigma\,|\hat{\mit\Psi}_p(0)|^{\,2}}\right)^{1/3}_{r_k}.
+\overline{W}_{T_e\,k} &=  \left(\frac{d{\mit\Psi}_N}{dr}\right)_{r_k}\,W_{T_e\,k},\\[0.5ex]
+\overline{W}_{T_i\,k} &= \left(\frac{d{\mit\Psi}_N}{dr}\right)_{r_k}\,W_{T_i\,k},\\[0.5ex]
+\overline{W}_{n_e\,k} &= \left(\frac{d{\mit\Psi}_N}{dr}\right)_{r_k}\,W_{n_e\,k}.
 \end{align}
 
 The total change in the plasma pressure interior to the $j$th resonant surface due to the temperature and
 density flattening at the various resonant surfaces (assuming that the pressure at the LCFS is fixed) is
 \begin{align}
 {\mit\Delta}P_j &=\sum_{k=j,K} 
-\left\{\left[\delta_{n_e\,k}\,\frac{dn_e}{d{\mit\Psi}_N}\,T_e- \delta_{n_e\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}n_e}{d{\mit\Psi}_n^{\,2}}\,T_e\right)
+\left\{\left[\delta_{n_e\,k}\,\frac{dn_e}{d{\mit\Psi}_N}\,T_e- \delta_{n_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}n_e}{d{\mit\Psi}_n^{\,2}}\,T_e\right)
 + \delta_{n_e\,k}^{\,3}\,\frac{d^{\,3}n_e}{d{\mit\Psi}_N^{\,3}}\,\frac{T_e}{24}\right]\right.
 \nonumber\\[0.5ex]
-&\phantom{++}+\left[\delta_{T_e\,k}\,n_e\,\frac{dT_e}{d{\mit\Psi}_N}- \delta_{T_e\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+
+&\phantom{++}+\left[\delta_{T_e\,k}\,n_e\,\frac{dT_e}{d{\mit\Psi}_N}- \delta_{T_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+
  n_e\,\frac{d^{\,2}T_e}{d{\mit\Psi}_n^{\,2}}\right)
 + \delta_{T_e\,k}^{\,3}\,\frac{n_e}{24}\,\frac{d^{\,3}T_e}{d{\mit\Psi}_N^{\,3}}\right]\nonumber\\[0.5ex]
-&\phantom{++}+\left[\delta_{n_e\,k}\,\frac{dn_i}{d{\mit\Psi}_N}\,T_i- \delta_{n_e\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}
+&\phantom{++}+\left[\delta_{n_e\,k}\,\frac{dn_i}{d{\mit\Psi}_N}\,T_i- \delta_{n_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}
 \,T_i\right)+ \delta_{n_e\,k}^{\,3}\,\frac{d^{\,3}n_i}{d{\mit\Psi}_N^{\,3}}\,\frac{T_i}{24}\right]
 \nonumber\\[0.5ex]
-&\phantom{++}\left.+\left[\delta_{T_i\,k}\,n_i\,\frac{dT_i}{d{\mit\Psi}_N}- \delta_{T_i\,k}\,W_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+n_i\,\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\right)
+&\phantom{++}\left.+\left[\delta_{T_i\,k}\,n_i\,\frac{dT_i}{d{\mit\Psi}_N}- \delta_{T_i\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+n_i\,\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\right)
 + \delta_{T_i\,k}^{\,3}\,\frac{n_i}{24}\,\frac{d^{\,3}T_i}{d{\mit\Psi}_N^{\,3}}\right]\right\}_{r_k}.
 \end{align}
 where
