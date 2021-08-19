@@ -7,10 +7,10 @@
 //        Phase:: Phase               ()
 // void   Phase:: Solve               (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _LIN, int _MID, int _COPT,
 // 		                       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-//                                     double _CORE, int _FREQ, double _FFAC, int _OMFIT)
+//                                     double _CORE, int _FREQ, double _FFAC)
 // void   Phase:: Read_Data           (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _LIN, int _MID, int _COPT,
 //                                     double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-//                                     double _CORE, int _FREQ, double _FFAC, int _OMFIT)
+//                                     double _CORE, int _FREQ, double _FFAC)
 // void   Phase:: Scan_Shift          ()
 // void   Phase:: Calc_Velocity       ()
 // void   Phase:: Initialize          ()
@@ -78,14 +78,14 @@ Phase::Phase ()
 // ##############################
 void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		   double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ, int  _OMFIT)
+		   double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ)
 {
   // Start timer
   clock_t begin = clock ();
 
   // Read input data
   Read_Data (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS,
-	     _CORE, _FREQ, _FFAC, _CXD, _BOOT, _CURV, _POLZ, _OMFIT);
+	     _CORE, _FREQ, _FFAC, _CXD, _BOOT, _CURV, _POLZ);
   fflush (stdout);
 
   // Scan RMP phase shift
@@ -124,7 +124,7 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int 
 // ###########################
 void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		       double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ, int _OMFIT)
+		       double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ)
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -134,8 +134,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   // ......................................
   // Set default values of input parameters
   // ......................................
-  OMFIT = 0;
-
   NFLOW  = 200;
 
   STAGE5 = 1;
@@ -237,8 +235,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       IFLA = 1;
       IRMP = _IRMP;
     }
-  if (_OMFIT > 0)
-    OMFIT = _OMFIT;
   
   // .............................
   // Output calculation parameters
@@ -286,21 +282,11 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       printf ("PHASE:: Invalid MID value\n");
       exit (1);
     }
-  if (OMFIT && INTF)
-    {
-      printf ("NEOCLASSICAL:: fFile interpolation not implemented yet in OMFIT mode\n");
-      exit (1);
-    }
-  if (OMFIT && INTU)
-    {
-      printf ("NEOCLASSICAL:: uFile/lFile/mFile interpolation not implemented yet in OMFIT mode\n");
-      exit (1);
-    }
 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
 
-  FILE* namelist = OpenFilew ((char*) "Inputs/InputParameters.txt");
+  FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
@@ -310,20 +296,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   fprintf (namelist, "FREQ = %2d FFAC = %11.4e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
 	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
-  
-  if (!OMFIT)
-    {
-      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (monitor, "Git Hash     = "); fprintf (monitor, GIT_HASH);     fprintf (monitor, "\n");
-      fprintf (monitor, "Compile time = "); fprintf (monitor, COMPILE_TIME); fprintf (monitor, "\n");
-      fprintf (monitor, "Git Branch   = "); fprintf (monitor, GIT_BRANCH);   fprintf (monitor, "\n\n");
-      fprintf (monitor, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-      fprintf (monitor, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
-	       NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-      fprintf (monitor, "FREQ = %2d FFAC = %11.4e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	       FREQ, FFAC, CXD, BOOT, CURV, POLZ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
-      fclose (monitor);
-    }
 
   // .................
   // Interpolate fFile
@@ -378,12 +350,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       // Interpolate fFiles
       fFileInterp (fFileName, fFileTime, fFileNumber, TSTART);
     }
-   else
-    {
-      if (!OMFIT)
-	CallSystem ("cd Inputs; rm -rf fFile; ln -s ../../Flux/Outputs/fFile fFile");
-    }
-
+   
   // ...........................
   // Read data from program FLUX
   // ...........................
@@ -524,11 +491,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
  
       // Interpolate nFiles
       nFileInterp (nFileName, nFileTime, nFileNumber, TSTART);
-    }
-  else
-    {
-      if (!OMFIT)
-	CallSystem ("cd Inputs; rm -rf nFile; ln -s ../../Neoclassical/Outputs/nFile nFile");
     }
   
   // ...................................
@@ -899,16 +861,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and mFile\n");
 	  exit (1);
 	}
-
-      FILE* filem = OpenFilew ((char*) "Outputs/Stage4/mFile.txt");
-      for (int i = 0; i < nres1; i++)
-	{
-	  double br_unrc = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiM, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
-	  double br_full = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiM, i)) *  pow (rk (i), - double (mk (i)))                                    * fabs (B_0) /2./a (i);
-
-	  fprintf (filem, "%11.4e %11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br_unrc, br_full);
-	}
-      fclose (filem);
     }
 
   if (MID >= 2)
@@ -989,16 +941,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and uFile\n");
 	  exit (1);
 	}
-
-      FILE* fileu = OpenFilew ((char*) "Outputs/Stage4/uFile.txt");
-      for (int i = 0; i < nres1; i++)
-	{
-	  double br_unrc = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiU, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
-	  double br_full = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiU, i)) *  pow (rk (i), - double (mk (i)))                                    * fabs (B_0) /2./a (i);
-
-	  fprintf (fileu, "%11.4e %11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br_unrc, br_full);
-	}
-      fclose (fileu);
     }
 
   if (MID >= 1)
@@ -1078,61 +1020,21 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	  printf ("PHASE:: Error - minimum resonant q values do not match in nFile and lFile\n");
 	  exit (1);
 	}
-      
-      FILE* filel = OpenFilew ((char*) "Outputs/Stage4/lFile.txt");
-      for (int i = 0; i < nres1; i++)
-	{
-	  double br_unrc = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiL, i)) * (pow (rk (i), - double (mk (i))) - pow (rk (i), + double (mk (i)))) * fabs (B_0) /2./a (i);
-	  double br_full = 1.e4 * EEh (i, i) * gsl_complex_abs (gsl_vector_complex_get (ChiL, i)) *  pow (rk (i), - double (mk (i)))                                    * fabs (B_0) /2./a (i);
-
-	  fprintf (filel, "%11.4e %11.4e %11.4e %11.4e %11.4e\n", QIN[i], PSI[i], WWW[i], br_unrc, br_full);
-	}
-      fclose (filel);
     } 
  
-  if (!OMFIT)
-    {
-      file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/q.txt");
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e\n", q0, q95, qa, qrat, TSTART);
-      fclose (file);
-      
-      file = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/Chi.txt");
-      for (int i = 0; i < nres; i++)
-	{
-	  if (MID == 3)
-	    fprintf (file, "T = %11.4e  m = %3d  ChiU = (%11.4e, %11.4e)  ChiM = (%11.4e, %11.4e)  ChiL = (%11.4e, %11.4e)\n",
-		     TSTART, mk(i),
-		     GSL_REAL (gsl_vector_complex_get (ChiU, i)), GSL_IMAG (gsl_vector_complex_get (ChiU, i)),
-		     GSL_REAL (gsl_vector_complex_get (ChiM, i)), GSL_IMAG (gsl_vector_complex_get (ChiM, i)),
-		     GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
-	  else if (MID == 2)
-	    fprintf (file, "T = %11.4e  m = %3d  ChiU = (%11.4e, %11.4e)  ChiL = (%11.4e, %11.4e)\n",
-		     TSTART, mk(i),
-		     GSL_REAL (gsl_vector_complex_get (ChiU, i)), GSL_IMAG (gsl_vector_complex_get (ChiU, i)),
-		     GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
-	  else
-	    fprintf (file, "T = %11.4e  m = %3d  ChiL = (%11.4e, %11.4e)\n",
-		     TSTART, mk(i),
-		     GSL_REAL (gsl_vector_complex_get (ChiL, i)), GSL_IMAG (gsl_vector_complex_get (ChiL, i)));
-	}
-      fclose (file);
-    }
-  
   delete[] QIN; delete[] DRE; delete[] DIM; delete[] CRE; delete[] CIM; delete[] WWW; delete[] PSI;
- }
+}
 
 // ########################################################################
 // Function to calculate vacuum flux versus relative RMP coil current phase
 // ########################################################################
 void Phase::Scan_Shift ()
 {
-  FILE* file1 = OpenFilew ((char*) "Outputs/Stage4/chi.txt");
-  FILE* file2 = OpenFilew ((char*) "Outputs/Stage4/zeta.txt");
-  FILE* file3 = OpenFilew ((char*) "Outputs/Stage4/vac.txt");
-  
+  // Perform scan
   phase.resize (NPHA);
   wvac.resize  (nres, NPHA);
   double one = 1.;
+
   for (int i = 0; i < NPHA; i++)
     {
       double      pha   = double (i) * PMAX*M_PI /double (NPHA-1);
@@ -1142,9 +1044,6 @@ void Phase::Scan_Shift ()
       gsl_complex eikuh = gsl_complex_polar (one, - pha/2.);
       gsl_complex eiklh = gsl_complex_polar (one, + pha/2.);
 
-      fprintf (file1, "%e", pha /M_PI);
-      fprintf (file2, "%e", pha /M_PI);
-      fprintf (file3, "%e", pha /M_PI);
       for (int j = 0; j < nres; j++)
 	{
 	  gsl_complex hl, hu, hm, h;
@@ -1183,76 +1082,11 @@ void Phase::Scan_Shift ()
 	  double wv   = 4. * R_0 * fack (j) * sqrt (chi);
 
 	  wvac (j, i) = GetVacuumIslandWidth (j, chi);
-	    
-	  fprintf (file1, " %e", chi);
-	  fprintf (file2, " %e", zeta/M_PI);
-	  fprintf (file3, " %e", wv);	  
 	}
-      fprintf (file1, "\n");
-      fprintf (file2, "\n");
-      fprintf (file3, "\n");
     }
-
-  fclose (file1);
-  fclose (file2);
-  fclose (file3);
 
   // Write Stage 4 netcdf file
   WriteStage4Netcdfc ();
-
-  if (!OMFIT)
-    {
-      FILE* file4 = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/vac.txt");
-      
-      double      pha   = PMAX*M_PI /2.;
-      gsl_complex eiku  = gsl_complex_polar (one, - pha);
-      gsl_complex eikl  = gsl_complex_polar (one, + pha);
-      gsl_complex eikuh = gsl_complex_polar (one, - pha/2.);
-      gsl_complex eiklh = gsl_complex_polar (one, + pha/2.);
-      
-      for (int j = 0; j < nres; j++)
-	{
-	  gsl_complex hl, hu, hm, h;
-	  
-	  if (MID == 3)
-	    {
-	      hl = gsl_vector_complex_get (ChiL, j);
-	      hu = gsl_vector_complex_get (ChiU, j);
-	      hm = gsl_vector_complex_get (ChiM, j);
-	      
-	      hl = gsl_complex_mul (hl, eikl);
-	      hu = gsl_complex_mul (hu, eiku);
-	      
-	      h  = hl;
-	      h  = gsl_complex_add (h, hu);
-	      h  = gsl_complex_add (h, hm);
-	    }
-	  else if (MID == 2)
-	    {
-	      hl = gsl_vector_complex_get (ChiL, j);
-	      hu = gsl_vector_complex_get (ChiU, j);
-	      
-	      hl = gsl_complex_mul (hl, eiklh);
-	      hu = gsl_complex_mul (hu, eikuh);
-	      
-	      h  = hl;
-	      h  = gsl_complex_add (h, hu);
-	    }
-	  else
-	    {
-	      h = gsl_vector_complex_get (ChiL, j);
-	    }	  
-	  
-	  double chi     =   gsl_complex_abs (h);
-	  double zeta    = - gsl_complex_arg (h);
-	  double wv      = 4. * fack (j) * sqrt (chi) /a (j);
-	  double br_unrc = 1.e4 * EEh (j, j) * chi * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
-	  double br_full = 1.e4 * EEh (j, j) * chi *  pow (rk (j), - double (mk (j)))                                    * fabs (B_0) /2./a (j);
-	  
-	  fprintf (file4, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e\n", mk (j), rk (j), wv, TSTART, br_unrc, br_full);
-	}
-      fclose (file4);
-    }
 }
 
 // ####################################
@@ -1648,36 +1482,6 @@ void Phase::IslandDynamics ()
  
   int    cnt    = 0;
   double dt     = 1.e6; 
-  FILE*  file   = OpenFilew ((char*) "Outputs/Stage5/ntor.txt");
-  FILE*  file1  = OpenFilew ((char*) "Outputs/Stage5/Psi.txt");
-  FILE*  file2  = OpenFilew ((char*) "Outputs/Stage5/phi.txt");
-  FILE*  file3  = OpenFilew ((char*) "Outputs/Stage5/W.txt");
-  FILE*  file3a = OpenFilew ((char*) "Outputs/Stage5/Wdel.txt");
-  FILE*  file4  = OpenFilew ((char*) "Outputs/Stage5/omega.txt");
-  FILE*  file4a = OpenFilew ((char*) "Outputs/Stage5/omega0.txt");
-  FILE*  file4b = OpenFilew ((char*) "Outputs/Stage5/Omegat.txt");
-  FILE*  file4c = OpenFilew ((char*) "Outputs/Stage5/Omegap.txt");
-  FILE*  file4d = OpenFilew ((char*) "Outputs/Stage5/Er.txt");
-  FILE*  file4f = OpenFilew ((char*) "Outputs/Stage5/vp.txt");
-  FILE*  file5  = OpenFilew ((char*) "Outputs/Stage5/rmp.txt");
-  FILE*  file8; 
-  if (!OMFIT)
-    file8  = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/scan.txt");  
-  FILE*  file9  = OpenFilew ((char*) "Outputs/Stage5/deltane.txt");
-  FILE*  file10 = OpenFilew ((char*) "Outputs/Stage5/deltaTe.txt");
-  FILE*  file11 = OpenFilew ((char*) "Outputs/Stage5/dne.txt");
-  FILE*  file12 = OpenFilew ((char*) "Outputs/Stage5/dTe.txt");
-  FILE*  file13 = OpenFilew ((char*) "Outputs/Stage5/rkminus.txt");
-  FILE*  file14 = OpenFilew ((char*) "Outputs/Stage5/rkplus.txt");
-  FILE*  file15 = OpenFilew ((char*) "Outputs/Stage5/rkminusne.txt");
-  FILE*  file16 = OpenFilew ((char*) "Outputs/Stage5/rkplusne.txt");
-  FILE*  file17 = OpenFilew ((char*) "Outputs/Stage5/rkminusTe.txt");
-  FILE*  file18 = OpenFilew ((char*) "Outputs/Stage5/rkplusTe.txt");
-  FILE*  file19 = OpenFilew ((char*) "Outputs/Stage5/results.txt");
-  FILE*  file20 = OpenFilew ((char*) "Outputs/Stage5/optimize.txt");
-
-  fprintf (file, "%d\n", ntor (0));
-  fclose (file);
   fflush (stdout);
   
   printf ("......................\n");
@@ -1709,11 +1513,6 @@ void Phase::IslandDynamics ()
 	    printf ("m = %3d locks at t = %11.4e s  irmp = %11.4e kA  prmp/pi = %11.4e\n",
 		    mk (j), t*tau_A, irmp, prmp /M_PI);
 	 
-	    if (!OMFIT)
-	      fprintf (file8, "%16.9e %3d %16.9e %16.9e %16.9e %16.9e %3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		       q95, mk (j), rk (j), t*tau_A, irmp, prmp /M_PI, nres, q0, qa,
-		       GetNaturalFrequency (j)/tau_A/1.e3, wkl (j)/tau_A/1.e3, wke (j)/tau_A/1.e3, TIME, wkn (j)/tau_A/1.e3);
-	    
 	    lock (j) = 1;
 	  }
 
@@ -1723,105 +1522,39 @@ void Phase::IslandDynamics ()
 	  zcount += 1;
 	  dt = 0.;
 
-	  // Output reconnected fluxes
-	  fprintf (file1, "%16.9e ", t*tau_A);
 	  zTime[0] = t*tau_A/1.e-3;
-	  for (int j = 0; j < nres; j++)
-	    fprintf (file1, "%16.9e ", Psik (j));
-	  fprintf (file1, "\n");
 
 	  // Output phases of reconnected fluxes
-	  fprintf (file2, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
 	      double phase = atan2 (sin (phik (j) - zeta (j)), cos (phik (j) - zeta (j))) /M_PI;
-	      fprintf (file2, "%16.9e ", phase);
 	      zphi[j] = phase;
 	    }
-	  fprintf (file2, "\n");
-
-	  // Output island widths in r
-	  fprintf (file3, "%16.9e ", t*tau_A);
-	  for (int j = 0; j < nres; j++)
-	    fprintf (file3, "%16.9e ", GetIslandWidth (j) * R_0 /dPsiNdr (j));
-	  fprintf (file3, "\n");
-
-	  // Output ratios of island widths to linear layer widths
-	  fprintf (file3a, "%16.9e ", t*tau_A);
-	  for (int j = 0; j < nres; j++)
-	    fprintf (file3a, "%16.9e ", GetIslandWidth (j) * R_0 /dPsiNdr (j) /delk (j));
-	  fprintf (file3a, "\n");
 
 	  // Output modified natural frequencies
-	  fprintf (file4, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
-	      fprintf (file4, "%16.9e ", ww (j) /tau_A/1.e3);
 	      zomega[j] = ww (j) /tau_A/1.e3;
 	    }
-	  fprintf (file4, "\n");
 
 	  // Output unmodified natural frequencies
-	  fprintf (file4a, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
-	      fprintf (file4a, "%16.9e ", GetNaturalFrequency (j) /tau_A/1.e3);
 	      zomega0[j] = GetNaturalFrequency (j) /tau_A/1.e3;
 	    }
-	  fprintf (file4a, "\n");
-
-	  // Output changes in poloidal angular velocities
-	  fprintf (file4b, "%16.9e ", t*tau_A);
-	  for (int j = 0; j < nres; j++)
-	    fprintf (file4b, "%16.9e ", GetDeltaOmegaTheta (j));
-	  fprintf (file4b, "\n");
-
-	  // Output changes in toroidal angular velocities
-	  fprintf (file4c, "%16.9e ", t*tau_A);
-	  for (int j = 0; j < nres; j++)
-	    fprintf (file4c, "%16.9e ", GetDeltaOmegaPhi (j));
-	  fprintf (file4c, "\n");
-
-	  // Output changes in Er
-	  fprintf (file4d, "%16.9e ", t*tau_A);
-	  for (int j = 0; j < nres; j++)
-	    fprintf (file4d, "%16.9e ", GetDeltaEr (j));
-	  fprintf (file4d, "\n");
 
 	  // Output island phase velocities
-	  fprintf (file4f, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
-	      fprintf (file4f, "%16.9e ", vp (j) /tau_A/1.e3);
 	      zvph[j] = vp (j) /tau_A/1.e3;
 	    }
-	  fprintf (file4f, "\n");
 	  
 	  // Output RMP data
 	  CalcRMP (t);
-	  fprintf (file5, "%16.9e %16.9e %16.9e\n", t*tau_A, irmp, prmp /M_PI);
 	  zIrmp[0] = irmp;
 	  zPrmp[0] = prmp /M_PI;
 
-	  // Output coil current data
-	  double IU, IM, IL, PU, PM, PL;
-	  CalcCoil (t, IU, IM, IL, PU, PM, PL);
-	  
-	  int    k       = Findk ();
-	  double chikm   = chi (k);
-	  double chikp   = chi (k+1);
-	  double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
-	  double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
-	  double chik    = chikm * Weightm + chikp * Weightp;
-	  double chik1   = chi (0);
-
-	  fprintf (file20, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e \n", t*tau_A, IU, IM, IL, PU/M_PI, PM/M_PI, PL/M_PI, chik, chik1); 
-
 	  // Output island data
-	  fprintf (file9,  "%16.9e ", t*tau_A); fprintf (file10, "%16.9e ", t*tau_A); fprintf (file11, "%16.9e ", t*tau_A);
-	  fprintf (file12, "%16.9e ", t*tau_A); fprintf (file13, "%16.9e ", t*tau_A); fprintf (file14, "%16.9e ", t*tau_A);
-	  fprintf (file15, "%16.9e ", t*tau_A); fprintf (file16, "%16.9e ", t*tau_A); fprintf (file17, "%16.9e ", t*tau_A);
-	  fprintf (file18, "%16.9e ", t*tau_A);
 	  for (int j = 0; j < nres; j++)
 	    {
 	      // Calculate island width in PsiN
@@ -1849,11 +1582,7 @@ void Phase::IslandDynamics ()
 	      double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
 	      double deltaTik = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTik (j) * WcrTik (j));
 
-	      // Calculate density and temperature reductions
-	      double dnek = dnedrk (j) * deltanek;
-	      double dTek = dTedrk (j) * deltaTek;
-	  
-	      // Calculate pressure REDUCTION
+	      // Calculate pressure reduction
 	      double deltapk;
 	      if (HIGH)
 		{
@@ -1873,30 +1602,6 @@ void Phase::IslandDynamics ()
 		}
 	      zdP[j]  = deltapk /P0/Pped;
 	      zdP0[j] = deltapk /P0;
-
-	      // Output data
-	      fprintf (file9,  "%16.9e ", deltanek);
-	      fprintf (file10, "%16.9e ", deltaTek);
-	      fprintf (file11, "%16.9e ", dnek);
-	      fprintf (file12, "%16.9e ", dTek);
-	      fprintf (file13, "%16.9e ", rk (j) - Wrk /2./a (j)/R_0);
-	      fprintf (file14, "%16.9e ", rk (j) + Wrk /2./a (j)/R_0);
-	      fprintf (file15, "%16.9e ", rk (j) - deltanek /2./a (j)/R_0);
-	      fprintf (file16, "%16.9e ", rk (j) + deltanek /2./a (j)/R_0);
-	      fprintf (file17, "%16.9e ", rk (j) - deltaTek /2./a (j)/R_0);
-	      fprintf (file18, "%16.9e ", rk (j) + deltaTek /2./a (j)/R_0);
-
-	      fprintf (file19, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		       mk (j),
-		       rk (j),
-		       GetNaturalFrequency (j) /tau_A/1.e3,
-		       GetActualFrequency (j)  /tau_A/1.e3,
-		       t*tau_A,
-		       (Wrk /R_0) /a (j),
-		       PsiN (j),
-		       Wpk,
-		       Wvk,
-		       deltanek * dPsiNdr (j) /R_0, deltaTek * dPsiNdr (j) /R_0);
 
 	      // Output Netcdf data
 	      tstart[0] = size_t (zcount);
@@ -1924,36 +1629,17 @@ void Phase::IslandDynamics ()
 		  exit (1);
 		}
 	    }
-	  fprintf (file9,  "\n"); fprintf (file10, "\n"); fprintf (file11, "\n"); fprintf (file12, "\n");
-	  fprintf (file13, "\n"); fprintf (file14, "\n"); fprintf (file15, "\n"); fprintf (file16, "\n");
-	  fprintf (file17, "\n"); fprintf (file18, "\n");
 
 	  if (cnt%10 == 0)
 	    printf ("t(ms) = %11.4e  h(ms) = %11.4e  h/tau_A = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 	  cnt++;
-	  
-	  fflush (file1);  fflush (file2);  fflush (file3);  fflush (file4);  fflush (file5);
-	  fflush (file9);  fflush (file10); fflush (file11);
-	  fflush (file12); fflush (file13); fflush (file14); fflush (file15); fflush (file16);
-	  fflush (file17); fflush (file18); fflush (file3a); fflush (file4a); fflush (file19);
-	  fflush (file20); fflush (file4b); fflush (file4c); fflush (file4d);
-	  fflush (file4f);
 
-	  if (!OMFIT) fflush (file8);
 	  fflush (stdout);
 	}
     }
   while (t < Tend);
 
   printf ("t(ms) = %11.4e  h(ms) = %11.4e  h/tau_A = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
-
-  fclose (file1);  fclose (file2);  fclose (file3);  fclose (file4);  fclose (file5);
-  fclose (file9);  fclose (file10); fclose (file11); fclose (file12); fclose (file13);
-  fclose (file14); fclose (file15); fclose (file16); fclose (file17); fclose (file18); 
-  fclose (file3a); fclose (file4a); fclose (file19); fclose (file20); fclose (file4b); 
-  fclose (file4c); fclose (file4d); fclose (file4f);
-
-  if (!OMFIT) fclose (file8);
 
   err += nc_close (dataFile);
 
@@ -1962,192 +1648,15 @@ void Phase::IslandDynamics ()
       printf ("PHASE::IslandDynamics: Error closing Outputs/Stage5.nc\n");
       exit (1);
     }
+
+  // Save calculation for restart
+  Save ();
  
+  // Clean up
   delete[] zTime;   delete[] zIrmp;  delete[] zPrmp;  delete[] zphi;   delete[] zvph;    
   delete[] zomega0; delete[] zomega; delete[] zPsim;  delete[] zPsip;  delete[] zW;      
   delete[] zPsivm;  delete[] zPsivp; delete[] zWv;    delete[] zdP;    delete[] zdP0;    
   delete[] tstart;  delete[] tcount; delete[] dstart; delete[] dcount;
-
-  // Save calculation for restart
-  Save ();
-
-  if (!OMFIT)
-    {
-      // Output Stage6 data
-      FILE* filex = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega0.txt");
-      for (int j = 0; j < nres; j++)
-	fprintf (filex, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mk (j), rk (j), wkl (j) /tau_A/1.e3, wke (j) /tau_A/1.e3, wkn (j) /tau_A/1.e3, GetNaturalFrequency (j) /tau_A/1.e3, TIME, q95);
-      fclose (filex);
-      
-      FILE* filew = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/omega.txt");
-      for (int j = 0; j < nres; j++)
-	{
-	  // Calculate island width in PsiN
-	  double Wpk = GetIslandWidth (j);
-	  
-	  // Calculate island width in r
-	  double Wrk = R_0 * Wpk /dPsiNdr (j);
-	  
-	  // Calculate vacuum island width in PsiN
-	  double Wvk = GetVacuumIslandWidth (j);
-	  
-	  // Calculate density and temperature flattening widths in PsiN
-	  double deltanek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
-	  double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
-	  
-	  // Calculate radial magnetic field at edge
-	  double br_unrc = 1.e4 * EEh (j, j) * chi (j) * (pow (rk (j), - double (mk (j))) - pow (rk (j), + double (mk (j)))) * fabs (B_0) /2./a (j);
-	  double br_full = 1.e4 * EEh (j, j) * chi (j) *  pow (rk (j), - double (mk (j)))                                    * fabs (B_0) /2./a (j);
-	  
-	  // Calculate changes in poloidal angular velocity, toroidal angular velocity, toroidal velocity, ExB velocity, and radial electric field
-	  double Omegat = GetDeltaOmegaTheta (j);
-	  double Omegap = GetDeltaOmegaPhi   (j);
-	  double Vp     = GetDeltaVPhi       (j);
-	  double VEB    = GetDeltaVEB        (j);
-	  double Er     = GetDeltaEr         (j);
-	  double omega  = GetDeltaOmega      (j);
-	  
-	  // Calculate island phases and phase velocities
-	  double phi = atan2 (sin (phik (j) - zeta (j)), cos (phik (j) - zeta (j))) /M_PI;
-	  double vel = vp (j) /tau_A/1.e3;
-	  	  
-	  fprintf (filew, "%3d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		   mk (j),
-		   rk (j),
-		   GetNaturalFrequency (j) /tau_A/1.e3,
-		   GetActualFrequency  (j) /tau_A/1.e3,
-		   TIME,
-		   (Wrk /R_0) /a (j),
-		   PsiN (j),
-		   Wpk,
-		   Wvk,
-		   deltanek, deltaTek, q95, br_unrc, br_full,
-		   Omegat, Omegap, Vp, VEB, Er, omega, phi, vel);
-	}
-      fclose (filew);
-      
-      // Output pressure reduction data
-      FILE* filewx = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/deltap.txt");
-      double deltap = 0.; double deltac = 0.;
-      for (int j = 0; j < nres; j++)
-	{
-	  // Calculate island width in PsiN
-	  double Wpk = GetIslandWidth (j);
-	  
-	  // Calculate island width in r
-	  double Wrk = R_0 * Wpk /dPsiNdr (j);
-	  
-	  // Calculate density and temperature flattening widths in PsiN
-	  double deltanek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + Wcrnek (j) * Wcrnek (j));
-	  double deltaTek = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTek (j) * WcrTek (j));
-	  double deltaTik = (2./M_PI) * Wpk *Wrk*Wrk /(Wrk*Wrk + WcrTik (j) * WcrTik (j));
-	  
-	  // Calculate pressure decrement
-	  double deltapk;
-	  if (HIGH)
-	    {
-	      deltapk =
-		  deltanek * Factor1 (j) + deltanek * Wpk*Wpk * Factor5 (j) + deltanek*deltanek*deltanek * Factor9  (j)
-		+ deltaTek * Factor2 (j) + deltaTek * Wpk*Wpk * Factor6 (j) + deltaTek*deltaTek*deltaTek * Factor10 (j)
-		+ deltanek * Factor3 (j) + deltanek * Wpk*Wpk * Factor7 (j) + deltanek*deltanek*deltanek * Factor11 (j)
-		+ deltaTik * Factor4 (j) + deltaTik * Wpk*Wpk * Factor8 (j) + deltaTik*deltaTik*deltaTik * Factor12 (j);
-	    }
-	  else
-	    {
-	      deltapk =
-		  deltanek * Factor1 (j)
-		+ deltaTek * Factor2 (j)
-		+ deltanek * Factor3 (j)
-		+ deltaTik * Factor4 (j);
-	    }
-	  
-	  // Calculate culmulative pressure decrement
-	  deltap += 0.5 * (1. + tanh ((PsiN (j) - PSIPED) /Wpk)) * deltapk;
-	  deltac += 0.5 * (1. - tanh ((PsiN (j) - PSIPED) /Wpk)) * deltapk;
-	}
-      
-      fprintf (filewx, "%16.9e %16.9e %16.9e %16.9e\n", TIME, q95, deltap /P0/Pped, deltac /P0);
-      
-      fclose (filewx);
-      
-      // Output coil optimization data
-      double IU, IM, IL, PU, PM, PL;
-      CalcCoil (t, IU, IM, IL, PU, PM, PL);
-      
-      int    k       = Findk ();
-      double chikm   = chi (k);
-      double chikp   = chi (k+1);
-      double Weightm = (PsiN (k+1) - PSIPED)   /(PsiN (k+1) - PsiN (k));
-      double Weightp = (PSIPED     - PsiN (k)) /(PsiN (k+1) - PsiN (k));
-      double chik    = chikm * Weightm + chikp * Weightp;
-      double chik1   = chi (0);
-      
-      FILE* fileco = OpenFilea ((char*) "../IslandDynamics/Outputs/Stage6/opt.txt");
-      fprintf (fileco, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n", TIME, q95, IU, IM, IL, PU/M_PI, PM/M_PI, PL/M_PI, chik, chik1); 
-      fclose (fileco);
-    }
-      
-  // Output magnetic island chains versus theta
-  FILE* filep = OpenFilew ((char*) "Outputs/Stage5/islandt.txt");
-  int IMAX = 2000;
-  for (int i = 0; i < IMAX; i++)
-    {
-      double theta = 2.*M_PI * double (i) /double (IMAX - 1);
-      
-      double Xminus, Xplus;
-      for (int j = 0; j < nres; j++)
-	{
-	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * theta - phik (j)), Xminus, Xplus);
-	  fprintf (filep, "%d %e %e %e\n", mk (j), theta/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
-	}
-    }
-  fclose (filep);
-  
-  // Output magnetic island chains versus phi
-  FILE* fileq = OpenFilew ((char*) "Outputs/Stage5/islandp.txt");
-  for (int i = 0; i < IMAX; i++)
-    {
-      double phi = 2.*M_PI * double (i) /double (IMAX - 1);
-      
-      double Xminus, Xplus;
-      for (int j = 0; j < nres; j++)
-	{
-	  GetIslandLimits (j, Psik (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - phik (j)), Xminus, Xplus);
-	  fprintf (fileq, "%d %e %e %e\n", mk (j), phi/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
-	}
-    }
-  fclose (fileq);
-  
-  // Output vacuum magnetic island chains versus theta
-  FILE* filepv = OpenFilew ((char*) "Outputs/Stage5/islandtv.txt");
-  for (int i = 0; i < IMAX; i++)
-    {
-      double theta = 2.*M_PI * double (i) /double (IMAX - 1);
-      
-      double Xminus, Xplus;
-      for (int j = 0; j < nres; j++)
-	{
-	  GetIslandLimits (j, chi (j) * cos (double (mk (j)) * theta - zeta (j)), Xminus, Xplus);
-	  fprintf (filepv, "%d %e %e %e\n", mk (j), theta/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
-	}
-    }
-  fclose (filepv);
-  
-  // Output vacuum magnetic island chains versus phi
-  FILE* fileqv = OpenFilew ((char*) "Outputs/Stage5/islandpv.txt");
-  for (int i = 0; i < IMAX; i++)
-    {
-      double phi = 2.*M_PI * double (i) /double (IMAX - 1);
-      
-      double Xminus, Xplus;
-      for (int j = 0; j < nres; j++)
-	{
-	  GetIslandLimits (j, chi (j) * cos (double (mk (j)) * M_PI - double (ntor (j)) * phi - zeta (j)), Xminus, Xplus);
-	  fprintf (fileqv, "%d %e %e %e\n", mk (j), phi/M_PI, PsiN (j) + Xminus, PsiN (j) + Xplus);
-	}
-    }
-  fclose (fileqv);
 }
 
 // ###################################

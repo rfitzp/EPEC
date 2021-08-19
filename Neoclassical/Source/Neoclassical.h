@@ -291,6 +291,8 @@ class Neoclassical
   Array<double,1> C2;     // C2
   Array<double,1> DR;     // GGJ stability parameter
 
+  Array<double,2> EEh;    // Moduli of E-maxtrix elements 
+
   // Derived from profiles
   double rho0;                // Central mass density (kg/m^-3)
   double tau_A;               // Central Alfven time (s)

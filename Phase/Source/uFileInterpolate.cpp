@@ -248,14 +248,6 @@ void Phase::uFileInterpolateLinear (char* uFile1, double time1, char* uFile, dou
   printf ("uFile Interpolation:\n");
   printf ("%s %11.4e\n", uFile1, weight1);
 
-  if (!OMFIT)
-    {
-      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (monitor, "uFile Interpolation:\n");
-      fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
-      fclose (monitor);
-    }
-  
   // ........
   // Clean up
   // ........
@@ -472,15 +464,6 @@ void Phase::uFileInterpolateQuadratic (char* uFile1, double time1, char* uFile2,
   printf ("%s %11.4e\n", uFile1, weight1);
   printf ("%s %11.4e\n", uFile2, weight2);
 
-  if (!OMFIT)
-    {
-      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (monitor, "uFile Interpolation:\n");
-      fprintf (monitor, "%s %11.4e %3d %3d %3d\n", uFile1, weight1, nres_1, nres, nres_0);
-      fprintf (monitor, "%s %11.4e %3d %3d %3d\n", uFile2, weight2, nres_2, nres, nres_0);
-      fclose (monitor);
-    }
- 
   // ........
   // Clean up
   // ........
@@ -716,16 +699,6 @@ void Phase::uFileInterpolateCubic (char* uFile1, double time1, char* uFile2, dou
   printf ("%s %11.4e\n", uFile2, weight2);
   printf ("%s %11.4e\n", uFile3, weight3);
 
-  if (!OMFIT)
-    {
-      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (monitor, "uFile Interpolation:\n");
-      fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
-      fprintf (monitor, "%s %11.4e\n", uFile2, weight2);
-      fprintf (monitor, "%s %11.4e\n", uFile3, weight3);
-      fclose (monitor);
-    }
-  
   // ........
   // Clean up
   // ........
@@ -1019,17 +992,6 @@ void Phase::uFileInterpolateQuartic (char* uFile1, double time1, char* uFile2, d
   printf ("%s %11.4e\n", uFile3, weight3);
   printf ("%s %11.4e\n", uFile4, weight4);
 
-  if (!OMFIT)
-    {
-      FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (monitor, "uFile Interpolation:\n");
-      fprintf (monitor, "%s %11.4e\n", uFile1, weight1);
-      fprintf (monitor, "%s %11.4e\n", uFile2, weight2);
-      fprintf (monitor, "%s %11.4e\n", uFile3, weight3);
-      fprintf (monitor, "%s %11.4e\n", uFile4, weight4);
-      fclose (monitor);
-    }
-  
   // ........
   // Clean up
   // ........

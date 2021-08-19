@@ -104,7 +104,7 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
   // Calculate normalized quantites at rational surface and output nFile
   Get_Normalized ();
   fflush (stdout);
-   
+ 
   // Stop timer
   clock_t end        = clock ();
   double  time_spent = double (end - begin) /double (CLOCKS_PER_SEC);
@@ -356,6 +356,32 @@ void Neoclassical::Read_Equilibrium ()
       printf ("m = %3d  r = %11.4e  s = %11.4e  g = %11.4e  gm = %11.4e  Kt = %11.4e  Kast = %11.4e  Kthe = %11.4e  fc = %11.4e  akk = %11.4e  PsiN = %11.4e  q_hat = %11.4e  DR = %11.4e\n",
 	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j), q_hat (j), DR (j));
     }
+
+  int ini;
+  for (int j = 0; j < nres; j++)
+    for (int k = 0; k < nres; k++)
+      {
+	if (fscanf (file, "%d %d %lf %lf", &ini, &ini, &in, &in) != 4)
+	 {
+	   printf ("NEOCLASSICAL::Error reading fFile (4)\n");
+	   exit (1);
+	 }
+      }
+  
+  EEh.resize (nres, nres);
+   
+  for (int j = 0; j < nres; j++)
+    for (int k = 0; k < nres; k++)
+      {
+	double Ereal, Eimag;
+	if (fscanf (file, "%d %d %lf %lf", &ini, &ini, &Ereal, &Eimag) != 4)
+	 {
+	   printf ("NEOCLASSCICAL::Error reading fFile (5)\n");
+	   exit (1);
+	 }
+
+	EEh (j, k) = gsl_complex_abs (gsl_complex_rect (Ereal, Eimag));
+      }
 
   fclose (file);
 }
@@ -833,12 +859,39 @@ void Neoclassical::Get_Derived ()
   // ----------------------------------------------------------------------------
   WcritTek.resize (nres); WcritTik.resize (nres); Wcritnek.resize (nres);
 
-  
   for (int j = 0; j < nres; j++)
     {
-      WcritTek (j) = pow (chiek (j) /v_T_ek (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
-      WcritTik (j) = pow (chiik (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
-      Wcritnek (j) = pow (chink (j) /v_T_ik (j) /(rk (j)*a) /(rk (j)*a/R_0) /sk (j) /double (ntor), 1./3.) * rk (j) * a;
+      double x               = 1.;
+      double chi_para_e_brag = 1.13 * v_T_ek (j) * v_T_ek (j) /nu_eek (j);
+      for (int i = 0; i < 100; i++)
+	{
+	  double chi_para_e_max = 2. * R_0 * v_T_ek (j) /double (ntor) /sk (j) /x;
+	  double chi_para_e     = chi_para_e_brag * chi_para_e_max /(chi_para_e_brag + chi_para_e_max);
+
+	  x = 5.07 * pow (chiek (j) /chi_para_e, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
+	}
+      WcritTek (j) = x * rk (j) * a;
+
+      x = 1.;
+      double chi_para_i_brag = 1.95 * v_T_ik (j) * v_T_ik (j) /nu_iik (j);
+      for (int i = 0; i < 100; i++)
+	{
+	  double chi_para_i_max = 2. * R_0 * v_T_ik (j) /double (ntor) /sk (j) /x;
+	  double chi_para_i     = chi_para_i_brag * chi_para_i_max /(chi_para_i_brag + chi_para_i_max);
+
+	  x = 5.07 * pow (chiik (j) /chi_para_i, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
+	}
+      WcritTik (j) = x * rk (j) * a;
+
+      x = 1.;
+      for (int i = 0; i < 100; i++)
+	{
+	  double chi_para_i_max = 2. * R_0 * v_T_ik (j) /double (ntor) /sk (j) /x;
+	  double chi_para_i     = chi_para_i_brag * chi_para_i_max /(chi_para_i_brag + chi_para_i_max);
+
+	  x = 5.07 * pow (chink (j) /chi_para_i, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
+	}
+      Wcritnek (j) = x * rk (j) * a;
 
       printf ("m = %3d  WcritTe/a = %11.4e  WcritTi/a = %11.4e  Wcritne/a = %11.4e\n",
 	      mk (j), WcritTek (j)/a, WcritTik (j)/a, Wcritnek (j)/a);
@@ -1204,11 +1257,11 @@ void Neoclassical::Get_Frequencies ()
       w_pnc_I0k (j) = Kthek (j) * w_nc_I0k (j);
 
       // EXB = 1
-      w_E1k     (j)  = wtk (j) - w_ast_Ik (j) - wpk (j);
-      w_nc_I1k  (j)  = - G_Ii_00 (j) * w_E1k (j) - L_II_00 (j) * w_ast_Ik (j) - L_Ii_00 (j) * w_ast_ik (j)
+      w_E1k     (j) = wtk (j) - w_ast_Ik (j) - wpk (j);
+      w_nc_I1k  (j) = - G_Ii_00 (j) * w_E1k (j) - L_II_00 (j) * w_ast_Ik (j) - L_Ii_00 (j) * w_ast_ik (j)
 		       + L_II_01 (j) * (eta_Ik (j) /(1. + eta_Ik (j))) * w_ast_Ik (j)
 	               + L_Ii_01 (j) * (eta_ik (j) /(1. + eta_ik (j))) * w_ast_ik (j);;
-      w_pnc_I1k (j)  = Kthek (j) * w_nc_I1k (j);
+      w_pnc_I1k (j) = Kthek (j) * w_nc_I1k (j);
  
       // EXB = 2
       w_nc_I2k  (j)  = - L_II_00 (j) * w_ast_Ik (j) - L_Ii_00 (j) * w_ast_ik (j)
@@ -1417,6 +1470,7 @@ void Neoclassical::WriteStage3Netcdfc ()
       chii_x[i]  = chii(i);
     }
 
+  int*    mk_x          = new int[nres];
   double* PsiNk_x       = new double[nres];
   double* tau_Hk_x      = new double[nres];
   double* tau_Rk_x      = new double[nres];
@@ -1470,6 +1524,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   double* w_para_x      = new double[nres];  
   for (int i = 0; i < nres; i++)
     {
+      mk_x[i]          = mk(i);
       PsiNk_x[i]       = PsiNk(i);
       tau_Hk_x[i]      = tau_Hk(i);
       tau_Rk_x[i]      = tau_Rk(i) * Q_00(i);
@@ -1534,6 +1589,40 @@ void Neoclassical::WriteStage3Netcdfc ()
 			  + (ZII * nIk(i) /nek(i)) * (w_ast_Ik(i) + w_nc_I2k(i))) /1.e3;
     }
 
+  int NISLAND = 100;
+  Array<double,2> RHS (nres, NISLAND);
+  double WPSIMAX = 0.1;
+
+  for (int j = 0; j < nres; j++)
+    for (int i = 0; i < NISLAND; i++)
+      {
+	double wpsi = double (i+1) * WPSIMAX /double (NISLAND);
+	double wr   = R_0 * wpsi /dPsidr (j);
+	double wrh  = 0.8227 * wr /2. /rk(j) /a;
+	double wrce = WcritTek (j);
+	double wrci = WcritTik (j);
+	double wrcn = Wcritnek (j);
+	double rhoe = rhothek  (j);
+	double rhoi = rhothik  (j);
+
+	double rhs = - EEh (j, j) 
+	  + alpbek (j) * (wr*wr /(wrce*wrcn + rhoe*rhoe + wr*wr)) /wrh
+	  + alpbik (j) * (wr*wr /(wrci*wrcn + rhoi*rhoi + wr*wr)) /wrh
+	  + alpck  (j) * (wr*wr /(wrcn*wrcn             + wr*wr)) /wrh
+	  + alppk  (j) * (wr*wr /(wrci*wrcn + wr*wr)) * (wr*wr /(wrci*wrcn + wr*wr)) /wrh/wrh/wrh;
+
+	RHS (j, i) = rhs;
+      }
+
+  double* w_x   = new double [NISLAND];
+  double* rhs_x = new double [nres*NISLAND];
+  for (int j = 0; j < nres; j++)
+    for (int i = 0; i < NISLAND; i++)
+      rhs_x[i + j*NISLAND] = RHS (j, i);
+
+  for (int i = 0; i < NISLAND; i++)
+    w_x[i] = double (i+1) * WPSIMAX /double (NISLAND);
+  
   // Open file
   int err = 0, dataFile;
   err = nc_create ("Outputs/Stage3.nc", NC_CLOBBER, &dataFile);
@@ -1609,9 +1698,13 @@ void Neoclassical::WriteStage3Netcdfc ()
   int chii_y;
   err += nc_def_var (dataFile, "chi_i", NC_DOUBLE, 1, &PsiN_d, &chii_y);
 
-  // PsiNk
-  int nres_d, PsiNk_y;
+  // mk
+  int nres_d, mk_y;
   err += nc_def_dim (dataFile, "N_res", nres, &nres_d);
+  err += nc_def_var (dataFile, "m_k", NC_INT, 1, &nres_d, &mk_y);
+
+  // PsiNk
+  int PsiNk_y;
   err += nc_def_var (dataFile, "PsiN_k", NC_DOUBLE, 1, &nres_d, &PsiNk_y);
 
   // tau_Hk
@@ -1814,6 +1907,17 @@ void Neoclassical::WriteStage3Netcdfc ()
   int w_para_y;
   err += nc_def_var (dataFile, "w_para", NC_DOUBLE, 1, &nres_d, &w_para_y);
 
+  // w_psi
+  int island_d, w_y;
+  err += nc_def_dim (dataFile, "N_island", NISLAND, &island_d);
+  err += nc_def_var (dataFile, "w_psi", NC_DOUBLE, 1, &island_d, &w_y);
+  
+  // rhs
+  int rhs_d[2], rhs_y;
+  rhs_d[0] = nres_d;
+  rhs_d[1] = island_d;
+  err += nc_def_var (dataFile, "rhs", NC_DOUBLE, 2, rhs_d, &rhs_y);
+
   err += nc_enddef (dataFile);
 
   if (err != 0)
@@ -1839,6 +1943,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, chie_y,        chie_x);
   err += nc_put_var_double (dataFile, chin_y,        chin_x);
   err += nc_put_var_double (dataFile, chii_y,        chii_x);
+  err += nc_put_var_int    (dataFile, mk_y,          mk_x);
   err += nc_put_var_double (dataFile, PsiNk_y,       PsiNk_x);
   err += nc_put_var_double (dataFile, tau_Hk_y,      tau_Hk_x);
   err += nc_put_var_double (dataFile, tau_Rk_y,      tau_Rk_x);
@@ -1890,6 +1995,8 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, w_nc_e_y,      w_nc_e_x);
   err += nc_put_var_double (dataFile, w_th_i_y,      w_th_i_x);
   err += nc_put_var_double (dataFile, w_para_y,      w_para_x);
+  err += nc_put_var_double (dataFile, w_y,           w_x);
+  err += nc_put_var_double (dataFile, rhs_y,         rhs_x);
  
   if (err != 0)
     {
@@ -1920,7 +2027,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   delete[] fac11_x;    delete[] fac12_x;    delete[] w_nc_i_x;   delete[] w_nc_e_x;      delete[] w_th_i_x;  
   delete[] w_para_x;   delete[] w_EB0_x;    delete[] w_EB1_x;    delete[] w_EB2_x;       delete[] w_nc_I0_x;  
   delete[] w_nc_I1_x;  delete[] w_nc_I2_x;  delete[] w_pnc_I0_x; delete[] w_pnc_I1_x;    delete[] w_pnc_I2_x; 
-  delete[] w_tk_x;     delete[] w_pk_x;
+  delete[] w_tk_x;     delete[] w_pk_x;     delete[] rhs_x;      delete[] w_x;           delete[] mk_x;
 }
 
 // #######################################################################################

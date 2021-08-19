@@ -100,14 +100,15 @@
 // 2.25 - Added polarization terms into Rutherford equations
 // 2.26 - Allowed for EPEC RMP coil data
 // 2.27 - Removed EPEC RMP coil data. Added Netcdf output. Adapted for use with OMFIT.
+// 3.1  - Completely switched to OMFIT mode
 
 // #######################################################################
 
 #ifndef PHASE
 #define PHASE
 
-#define VERSION_MAJOR 2
-#define VERSION_MINOR 27
+#define VERSION_MAJOR 3
+#define VERSION_MINOR 1
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
 #define MAXULFILELINELENGTH 500
@@ -148,9 +149,6 @@ class Phase
   // ------------
   // Program data
   // ------------
-  
-  // Read from command line
-  int      OMFIT;  // Flag to select OMFIT mode
 
   // Read from Inputs/Phase.nml
   int      NFLOW;  // Number of flow harmonics included in model
@@ -379,7 +377,7 @@ class Phase
   // Solve problem
   void Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ, int _OMFIT);        
+	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);        
 
   // -----------------------
   // Private class functions
@@ -389,7 +387,7 @@ class Phase
   // Read data
   void Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
 		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ, int _OMFIT);
+		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors
