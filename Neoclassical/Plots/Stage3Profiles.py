@@ -6,7 +6,7 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 
-fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
+fn = root['NEOCLASSICAL']['OUTPUTS']['Stage3']
 ds = nc.Dataset(fn)
 
 psin = ds['PsiN']

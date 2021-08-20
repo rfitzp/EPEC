@@ -7,7 +7,7 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-fn = root['OUTPUTS']['FLUX']['Stage1']
+fn = root['FLUX']['OUTPUTS']['Stage1']
 ds = nc.Dataset(fn)
 
 para = ds['Parameters']

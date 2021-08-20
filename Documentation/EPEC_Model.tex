@@ -390,8 +390,8 @@ where
 \hat{W}_{T_e\,k} &=\frac{{\cal I}\,W_{T_e\,k}}{2\,r_k} ,\\[0.5ex]
 \hat{W}_{T_i\,k} &= \frac{{\cal I}\,W_{T_i\,k}}{2\,r_k},\\[0.5ex]
 \hat{W}_{n_e\,k} &= \frac{{\cal I}\,W_{n_e\,k}}{2\,r_k},\\[0.5ex]
-\hat{\rho}_{\theta\,e} &=  \left(\frac{{\cal I}\,\rho_{\theta\,e}}{2\,r}\right)_{r_k}=\left(\frac{2\,{\cal I}\,v_{T\,e}\,m_e\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
-\hat{\rho}_{\theta\,i} &=  \left(\frac{{\cal I}\,\rho_{\theta\,i}}{2\,r}\right)_{r_k}= \left(\frac{2\,{\cal I}\,v_{T\,i}\,m_i\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
+\hat{\rho}_{\theta\,e} &= \frac{2\,{\cal I}\,\rho_{\theta\,e}}{r}= \left(\frac{{\cal I}\,\rho_{\theta\,e}}{2\,r}\right)_{r_k}=\left(\frac{2\,{\cal I}\,v_{T\,e}\,m_e\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
+\hat{\rho}_{\theta\,i} &=  \frac{2\,{\cal I}\,\rho_{\theta\,i}}{r}= \left(\frac{{\cal I}\,\rho_{\theta\,i}}{2\,r}\right)_{r_k}= \left(\frac{2\,{\cal I}\,v_{T\,i}\,m_i\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
 \hat{\delta}_k &= \frac{\delta_{\rm linear}(r_k)}{R_0\,\epsilon_{100}\,\hat{r}_k},\\[0.5ex]
 \alpha_{b\,e\,k} &= -2\,{\cal I}\,I_g\left(\frac{\omega_{\ast\,e}+\omega_{{\rm nc}\,e}}{\omega_\beta}\right)_{r_k},\\[0.5ex]
 \alpha_{b\,i\,k} &= 2\,{\cal I}\,I_g\left[\frac{(n_i/n_e)\left(\omega_{\ast\,i}+\omega_{{\rm nc}\,i}\right)+(Z_I\,n_I/n_e)\left(\omega_{\ast\,I}+\omega_{{\rm nc}\,I}\right)}{\omega_\beta}\right]_{r_k},\\[0.5ex]
@@ -499,14 +499,14 @@ regime ($\hat{W}_k\gg \hat{\delta}_k$), it makes sense to adopt a model for the 
 \section{Pressure Reduction} \label{a5}
 The full width (in ${\mit\Psi}_N$)  of the magnetic separatrix of the island chain induced at the $k$th resonant surface is
 \begin{equation}
-\overline{W}_k = \left(\frac{d{\mit\Psi}_N}{dr}\right)_{r_k}\,W_k=4\left[\frac{\hat{\mit\Psi}_k}{\sigma_k\,|\hat{{\mit\Psi}}_p(0)|}\right]^{1/2},
+\overline{W}_k = \left(\frac{d{\mit\Psi}_N}{dr}\right)_{r_k}\,W_k=4\left(A_{i\,k}\,\hat{\mit\Psi}_k\right)^{1/2},
 \end{equation}
 where 
 \begin{equation}
 \frac{d{\mit\Psi}_N}{dr} = \frac{r\,g}{R_0^{\,2}\,q\,|\hat{\mit\Psi}_p(0)|},
 \end{equation}
-$\sigma_k=\sigma(r_k)$, $\sigma(r) = d\ln q/d{\mit\Psi}_N$, and $\hat{\mit\Psi}_p(r) = {\mit\Psi}_p/(R_0^{\,2}\,B_0)$.  
-However, the halfway point between the inner and outer extremities of the separatrix is located at the flux-surface where ${\mit\Psi}_N = {\mit\Psi}_N(r_k) - A_k\,W_k^{\,2}/8$ and $A_k = [(1/3)\,(d^{\,2}q/d{\mit\Psi}_N^{\,2})/(dq/d{\mit\Psi}_N)]_{r_k}$.
+$A_{1\,k}=A_1(r_k)$, $A_1 = 1/(\sigma\,|\hat{\mit\Psi}_p(0)|)$,  $\sigma(r) = d\ln q/d{\mit\Psi}_N$, and $\hat{\mit\Psi}_p(r) = {\mit\Psi}_p/(R_0^{\,2}\,B_0)$.  
+However, the halfway point between the inner and outer extremities of the separatrix is located at the flux-surface where ${\mit\Psi}_N = {\mit\Psi}_N(r_k) - A_2{\,k}\,W_k^{\,2}/8$ and $A_{2\,k} = [(1/3)\,(d^{\,2}q/d{\mit\Psi}_N^{\,2})/(dq/d{\mit\Psi}_N)]_{r_k}$.
 On average, the presence of a magnetic island chain of full width $W_k$ at the $k$th resonant surface
 causes the electron temperature, ion temperature,  and electron number density profiles to be flattened in  annular regions, centered on the
 halfway points between the inner and outer radii of the island separatrices, of widths (in ${\mit\Psi}_N$)
@@ -529,13 +529,13 @@ density flattening at the various resonant surfaces (assuming that the pressure 
 \left\{\left[\delta_{n_e\,k}\,\frac{dn_e}{d{\mit\Psi}_N}\,T_e- \delta_{n_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}n_e}{d{\mit\Psi}_n^{\,2}}\,T_e\right)
 + \delta_{n_e\,k}^{\,3}\,\frac{d^{\,3}n_e}{d{\mit\Psi}_N^{\,3}}\,\frac{T_e}{24}\right]\right.
 \nonumber\\[0.5ex]
-&\phantom{++}+\left[\delta_{T_e\,k}\,n_e\,\frac{dT_e}{d{\mit\Psi}_N}- \delta_{T_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+
+&\phantom{++}+\left[\delta_{T_e\,k}\,n_e\,\frac{dT_e}{d{\mit\Psi}_N}- \delta_{T_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_{2\,k}}{8}\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+
  n_e\,\frac{d^{\,2}T_e}{d{\mit\Psi}_n^{\,2}}\right)
 + \delta_{T_e\,k}^{\,3}\,\frac{n_e}{24}\,\frac{d^{\,3}T_e}{d{\mit\Psi}_N^{\,3}}\right]\nonumber\\[0.5ex]
-&\phantom{++}+\left[\delta_{n_e\,k}\,\frac{dn_i}{d{\mit\Psi}_N}\,T_i- \delta_{n_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}
+&\phantom{++}+\left[\delta_{n_e\,k}\,\frac{dn_i}{d{\mit\Psi}_N}\,T_i- \delta_{n_e\,k}\,\overline{W}_k^{\,2}\,\frac{A_{2\,k}}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}
 \,T_i\right)+ \delta_{n_e\,k}^{\,3}\,\frac{d^{\,3}n_i}{d{\mit\Psi}_N^{\,3}}\,\frac{T_i}{24}\right]
 \nonumber\\[0.5ex]
-&\phantom{++}\left.+\left[\delta_{T_i\,k}\,n_i\,\frac{dT_i}{d{\mit\Psi}_N}- \delta_{T_i\,k}\,\overline{W}_k^{\,2}\,\frac{A_k}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+n_i\,\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\right)
+&\phantom{++}\left.+\left[\delta_{T_i\,k}\,n_i\,\frac{dT_i}{d{\mit\Psi}_N}- \delta_{T_i\,k}\,\overline{W}_k^{\,2}\,\frac{A_{2\,k}}{8}\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+n_i\,\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\right)
 + \delta_{T_i\,k}^{\,3}\,\frac{n_i}{24}\,\frac{d^{\,3}T_i}{d{\mit\Psi}_N^{\,3}}\right]\right\}_{r_k}.
 \end{align}
 where

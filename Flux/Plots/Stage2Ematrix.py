@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-fn = root['OUTPUTS']['FLUX']['Stage2']
+fn = root['FLUX']['OUTPUTS']['Stage2']
 ds = nc.Dataset(fn)
 er = ds['E_real']
 ei = ds['E_imag']

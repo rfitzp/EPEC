@@ -7,7 +7,7 @@ import netCDF4 as nc
 import numpy as np
 import matplotlib.pyplot as plt
 
-fn = root['OUTPUTS']['PHASE']['Stage5']
+fn = root['PHASE']['OUTPUTS']['Stage5']
 ds = nc.Dataset(fn)
 
 time = ds['time']

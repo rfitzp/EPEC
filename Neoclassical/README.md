@@ -2,16 +2,18 @@
 
 ## Description
 
-   Program to read FLUX data from fFile(s), profile data from pFile(s) and cFiles(s), and write neoclassical data needed by PHASE to nFile
+   Program to read FLUX data from fFile(s), profile data from pFile(s) 
+   and cFiles(s), and write neoclassical data needed by PHASE to nFile
    - Stage 3:
-     Read input files, calculate neoclassical data at rational surfaces, and output nFile
+     Read input files, calculate neoclassical data at rational 
+     surfaces, and output nFile
 
 ## Requirements
 
    - blitz++ library (https://github.com/blitzpp/blitz)
    - gsl library (https://www.gnu.org/software/gsl)
    - BLAS library (http://www.netlib.org/blas)
-   - asymptote (for plots) (https://asymptote.sourceforge.io)
+   - NETCDF library (http://unidata.ucar.edu)
 
 ## Contents
 
@@ -47,12 +49,12 @@
 - /nFiles: Directory containing interpolated nFiles 
   - Index: List of nFile names and experimental times
   - nFiles: Actual nFiles
-- /Stage3: Data files from Stage 3 calculation
+- Stage3.nc: NETCDF data file from Stage 3 calculation
 	  
 ### /Plots
 
 - /Stage3
-  - *.asy: Asymtptote scripts to plot Stage 3 data
+  -*.py: Python scripts to plot Stage 3 data
 
 ## pFile Format
 
@@ -79,6 +81,10 @@
 	n "psinorm omeg(kRad/s) domeg/dpsiN"
 	for (int i = 0; i < n; i++)
 	PSI, WPHI, dWPHIdPSI
+
+	n "psinorm omegp(kRad/s) domegp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WTHE, dWTHEdPSI
 	
 	n "psinorm omgeb(kRad/s) domgeb/dpsiN"
 	for (int i = 0; i < n; i++)
@@ -98,9 +104,10 @@
  - NI:    Thermal ion number density (10^20/m^3)
  - TI:    Thermal ion temperature (keV)
  - NB:    Fast ion number density (10^20/m^3)
- - OMEG:  Impurity ion toroidal angular velocity on outboard midplane (krad/s)
- - OMGEB: ExB frequency (krad/s)
- - NZ1:   Impurity ion number density (10^20/m^3)
+ - WPHI:  Impurity ion toroidal angular velocity on outboard midplane (krad/s)
+ - WTHE:  Impurity ion toroidal angular velocity on outboard midplane (krad/s)	
+ - WEB:   ExB frequency (krad/s)
+ - NI :   Impurity ion number density (10^20/m^3)
  - N:     Ion atomic number
  - Z:     Ion charge (units of e)
  - A:     Ion mass number
