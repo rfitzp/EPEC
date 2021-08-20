@@ -7,17 +7,11 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    fn1 = root['OUTPUTS']['FLUX']['Stage2']
-except:
-    fn1 = '../../Flux/Outputs/Stage2.nc'
+fn1 = root['OUTPUTS']['FLUX']['Stage2']
 ds1 = nc.Dataset(fn1)
 psin = ds1['PsiN_res']
 
-try:
-    fn = root['OUTPUTS']['PHASE']['Stage5']
-except:
-    fn = '../Outputs/Stage5.nc'
+fn = root['OUTPUTS']['PHASE']['Stage5']
 ds = nc.Dataset(fn)
 time = ds['time']
 psim = ds['Psi_-']

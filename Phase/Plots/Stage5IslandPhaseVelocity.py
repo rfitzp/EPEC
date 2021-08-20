@@ -7,19 +7,13 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    fn = root['OUTPUTS']['PHASE']['Stage4']
-except:
-    fn = '../Outputs/Stage4.nc'
+fn = root['OUTPUTS']['PHASE']['Stage4']
 ds = nc.Dataset(fn)
 mpol = ds['m_pol']
 
 Mpol = np.asarray(mpol)
 
-try:
-    fn1 = root['OUTPUTS']['PHASE']['Stage5']
-except:
-    fn1 =  '../Outputs/Stage5.nc'
+fn1 = root['OUTPUTS']['PHASE']['Stage5']
 ds1 = nc.Dataset(fn1)
 time = ds1['time']
 ome = ds1['phi_dot']

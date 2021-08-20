@@ -7,10 +7,7 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    fn = root['OUTPUTS']['PHASE']['Stage4']
-except:
-    fn = '../Outputs/Stage4.nc'
+fn = root['OUTPUTS']['PHASE']['Stage4']
 ds = nc.Dataset(fn)
 mpol = ds['m_pol']
 pha = ds['phase']
