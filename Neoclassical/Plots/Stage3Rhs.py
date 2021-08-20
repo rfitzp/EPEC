@@ -7,14 +7,11 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
-except:
-    fn = "../Outputs/Stage3.nc"
+fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
 ds = nc.Dataset(fn)
 mpol = ds['m_k']
 w = ds['w_psi']
-rhs  = ds['rhs']
+rhs = ds['rhs']
 
 Mpol = np.asarray(mpol)
 W = np.asarray(w)
@@ -26,13 +23,13 @@ fig.canvas.manager.set_window_title("NEOCLASSICAL: Right-Hand Sides of Rutherfor
 nres = RHS.shape[0]
 nw = RHS.shape[1]
 
-nrows = int(nres /4)
+nrows = int(nres / 4)
 if nrows * 4 < nres:
     nrows = nrows + 1
 
 for n in range(nres):
     plt.subplot(nrows, 4, n + 1)
-    plt.xlim(0., W[nw - 1])
+    plt.xlim(0.0, W[nw - 1])
     ww = rhs[n]
     plt.plot(W, ww, color='blue', linewidth=2)
     plt.axhline(0.0, color='red', linewidth=0.5, linestyle='dotted')

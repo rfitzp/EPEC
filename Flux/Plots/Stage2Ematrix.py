@@ -8,10 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-try:
-    fn = root['OUTPUTS']['FLUX']['Stage2']
-except:
-    fn = '../Outputs/Stage2.nc'
+fn = root['OUTPUTS']['FLUX']['Stage2']
 ds = nc.Dataset(fn)
 er = ds['E_real']
 ei = ds['E_imag']

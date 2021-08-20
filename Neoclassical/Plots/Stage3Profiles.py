@@ -6,10 +6,7 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 
-try:
-    fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
-except:
-    fn = '../Outputs/Stage3.nc'
+fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
 ds = nc.Dataset(fn)
 
 psin = ds['PsiN']
@@ -25,7 +22,7 @@ w_p = ds['w_p']
 
 fig = plt.figure(figsize=(16.0, 8.0))
 fig.canvas.manager.set_window_title("FLUX: Stage3 Profiles")
-psilow = 0.
+psilow = 0.0
 
 plt.subplot(3, 3, 1)
 plt.xlim(psilow, 1.0)

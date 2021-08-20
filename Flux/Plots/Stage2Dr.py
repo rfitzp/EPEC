@@ -6,10 +6,7 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 
-try:
-    fn = root['OUTPUTS']['FLUX']['Stage2']
-except:
-    fn = '../Outputs/Stage2.nc'
+fn = root['OUTPUTS']['FLUX']['Stage2']
 ds = nc.Dataset(fn)
 
 dr = ds['DR_res']
@@ -17,7 +14,7 @@ pnr = ds['PsiN_res']
 
 fig = plt.figure()
 fig.canvas.manager.set_window_title("FLUX: Stage2 D_R Profile")
-psilow = pnr[0] -0.025
+psilow = pnr[0] - 0.025
 
 plt.xlim(psilow, 1.0)
 plt.plot(pnr, dr, 'r--', linewidth=0.4)

@@ -6,10 +6,7 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 
-try:
-    fn = root['OUTPUTS']['FLUX']['Stage2']
-except:
-    fn = '../Outputs/Stage2.nc'
+fn = root['OUTPUTS']['FLUX']['Stage2']
 ds = nc.Dataset(fn)
 
 psin = ds['PsiN_res']

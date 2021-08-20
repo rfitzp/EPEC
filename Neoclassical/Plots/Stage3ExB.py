@@ -7,10 +7,7 @@ import netCDF4 as nc
 import numpy as np
 import matplotlib.pyplot as plt
 
-try:
-    fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
-except:
-    fn = '../Outputs/Stage3.nc'
+fn = root['OUTPUTS']['NEOCLASSICAL']['Stage3']
 ds = nc.Dataset(fn)
 
 psin = ds['PsiN_k']
@@ -24,7 +21,7 @@ psilow = psin[0] - 0.025
 
 plt.xlim(psilow, 1.0)
 plt.plot(psin, web0, 'r--', linewidth=0.4)
-plt.plot(psin, web0, 'ro', markersize=5)
+plt.plot(psin, web0, 'ro', markersize=6)
 plt.plot(psin, web1, 'g--', linewidth=0.4)
 plt.plot(psin, web1, 'go', markersize=5)
 plt.plot(psin, web2, 'b--', linewidth=0.4)
