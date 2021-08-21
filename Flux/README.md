@@ -2,12 +2,14 @@
 
 ## Description
 
-   Program to read gFile(s) and write equilibrium data needed by NEOCLASSICAL and PHASE to fFile.
+   Program to read gFile(s) and write equilibrium data needed by NEOCLASSICAL 
+   and PHASE to fFile.
    - Stage 1:
      Read gFile and output equilibrium data for Stage 2
    - Stage 2:
-     Construct flux coordinate system. Calculate metric quantities. Locate rational surfaces.
-     Caculate neoclassical data. Calculate tearing stability matrix. 
+     Construct flux coordinate system. Calculate metric quantities. 
+     Locate rational surfaces. Calculate neoclassical data. Calculate 
+     tearing stability matrix. 
 	 
 ## Requirements
 
@@ -48,7 +50,7 @@
 	  
 ### /Plots
 
- - *.py: Python scripts to plot Stage 1 and Stage2 data
+ - *.py: Python scripts to plot Stage 1 and Stage 2 data
 
 ## gFile Format
 

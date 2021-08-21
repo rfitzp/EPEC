@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import make_interp_spline
 
-fn = root['OUTPUTS']['FLUX']['Stage1']
+fn = root['FLUX']['OUTPUTS']['Stage1']
 ds = nc.Dataset(fn)
 
 para = ds['Parameters']
@@ -24,7 +24,7 @@ pax = para[8]
 
 aspect = (zhi - zlow) / (rrgt - rlft)
 
-fn1 = root['OUTPUTS']['FLUX']['Stage2']
+fn1 = root['FLUX']['OUTPUTS']['Stage2']
 ds1 = nc.Dataset(fn1)
 rb = ds1['RBPTS']
 zb = ds1['ZBPTS']

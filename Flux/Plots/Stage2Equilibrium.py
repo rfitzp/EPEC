@@ -7,7 +7,7 @@ import netCDF4 as nc
 import numpy as np
 import matplotlib.pyplot as plt
 
-fn = root['OUTPUTS']['FLUX']['Stage1']
+fn = root['FLUX']['OUTPUTS']['Stage1']
 ds = nc.Dataset(fn)
 
 para = ds['Parameters']
@@ -23,7 +23,7 @@ pax = para[8]
 
 aspect = (zhi - zlow) / (rrgt - rlft)
 
-fn1 = root['OUTPUTS']['FLUX']['Stage2']
+fn1 = root['FLUX']['OUTPUTS']['Stage2']
 ds1 = nc.Dataset(fn1)
 psir = ds1['PSI_R']
 psiz = ds1['PSI_Z']

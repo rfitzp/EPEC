@@ -6,7 +6,7 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 
-fn = root['OUTPUTS']['FLUX']['Stage1']
+fn = root['FLUX']['OUTPUTS']['Stage1']
 ds = nc.Dataset(fn)
 
 psin = ds['PSI_N']

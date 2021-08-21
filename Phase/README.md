@@ -2,10 +2,13 @@
 
 ## Description
  
- Program to read FLUX data from fFile(s), NEOCLASSICAL data from nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), 
- and perform island dynamics simulation in fixed equilibrium. Final state of plasma saved in sFile.
+ Program to read FLUX data from fFile(s), NEOCLASSICAL data from 
+ nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), 
+ and perform island dynamics simulation in fixed equilibrium. 
+ Final state of plasma saved in sFile.
  - Stage 4:
-	  Read data and calculate vacuum island widths as function of RMP coil phase
+	  Read data and calculate vacuum island widths as 
+	  function of RMP coil phase
  - Stage 5:
 	  Perform island dynamics simulation
 
@@ -14,7 +17,7 @@
    - blitz++ library (https://github.com/blitzpp/blitz)
    - gsl library (https://www.gnu.org/software/gsl)
    - BLAS library (http://www.netlib.org/blas)
-   - asymptote (for plots) (https://asymptote.sourceforge.io)	
+   - NETCDF library (http://unidata.ucar.edu)
    
 ## Contents
 
@@ -32,7 +35,8 @@
 ### /Inputs
 
 - Phase.nml: Fortran_90 namelist control file
-- Waveform.nml: Fortran_90 namelist file specifing RMP coil current waveform
+- Waveform.nml: Fortran_90 namelist file specifing RMP 
+  coil current waveform
 - fFile: Data from FLUX
 - /fFiles: Contains fFiles for interpolation
   - Index: List of fFile names and experimental times
@@ -56,16 +60,14 @@
 	  
 ### /Outputs
 
-- sFile: File specifying final plasma state (use for restarting calculation)
-- /Stage4: Data files from Stage 4 calculation
-- /Stage5: Data files from Stage 5 calculation
+- sFile: File specifying final plasma state (used for 
+  restarting calculation)
+- Stage4.nc: NETCDF data files from Stage 4 calculation
+- Stage5.nc: NETCDF data files from Stage 5 calculation
 	  
 ### /Plots
 
-- /Stage4
-  - *.asy: Asymtptote scripts to plot Stage 4 data	
-- /Stage5
-  - *.asy: Asymtptote scripts to plot Stage 5 data		
+- *.py: Python scripts to plot Stage 4 and Stage 5 data		
 
 ## uFile, mFile, lFile Format
 
