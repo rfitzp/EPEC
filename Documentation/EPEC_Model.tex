@@ -335,7 +335,7 @@ magnetic separatrix of the magnetic island chain at the $k$th resonant surface i
 where $\chi_e(r)$ is the perpendicular electron energy diffusivity profile, $\epsilon =r/R_0$, 
 \begin{align}
 \chi_{\parallel\,e}&= \frac{\chi_{\parallel\,e}^{\rm brag}\,\chi_{\parallel\,e}^{\rm max}}{\chi_{\parallel\,e}^{\rm brag}+\chi_{\parallel\,e}^{\rm max}},\\[0.5ex]
-\chi_{\parallel\,e}^{\rm brag} &= 1.13\,\tau_{ee}\,v_{T\,e}^{\,2},\\[0.5ex]
+\chi_{\parallel\,e}^{\rm brag} &= \frac{1.55\,\tau_{ee}\,v_{T\,e}^{\,2}}{1+0.38\,Z_{\rm eff}},\\[0.5ex]
 \chi_{\parallel\,e}^{\rm max} &= \frac{2\,R_0\,v_{T\,e}}{n\,s}\,\frac{r_k}{W_{T_e\,k}}.
 \end{align}
 Equation~(\ref{e64g}) must be solved iteratively for $W_{T_e\,k}/r_k$. 
@@ -506,7 +506,7 @@ where
 \frac{d{\mit\Psi}_N}{dr} = \frac{r\,g}{R_0^{\,2}\,q\,|\hat{\mit\Psi}_p(0)|},
 \end{equation}
 $A_{1\,k}=A_1(r_k)$, $A_1 = 1/(\sigma\,|\hat{\mit\Psi}_p(0)|)$,  $\sigma(r) = d\ln q/d{\mit\Psi}_N$, and $\hat{\mit\Psi}_p(r) = {\mit\Psi}_p/(R_0^{\,2}\,B_0)$.  
-However, the halfway point between the inner and outer extremities of the separatrix is located at the flux-surface where ${\mit\Psi}_N = {\mit\Psi}_N(r_k) - A_{2\,k}\,W_k^{\,2}/8$ and $A_{2\,k} = [(1/3)\,(d^{\,2}q/d{\mit\Psi}_N^{\,2})/(dq/d{\mit\Psi}_N)]_{r_k}$.
+However, the halfway point between the inner and outer extremities of the separatrix is located at the flux-surface where ${\mit\Psi}_N = {\mit\Psi}_N(r_k) - A_{2\,k}\,W_k^{\,2}/8$, $A_{2\,k}=A_2(r_k)$, and $A_{2\,k} = [(1/3)\,(d^{\,2}q/d{\mit\Psi}_N^{\,2})/(dq/d{\mit\Psi}_N)]_{r_k}$.
 On average, the presence of a magnetic island chain of full width $W_k$ at the $k$th resonant surface
 causes the electron temperature, ion temperature,  and electron number density profiles to be flattened in  annular regions, centered on the
 halfway points between the inner and outer radii of the island separatrices, of widths (in ${\mit\Psi}_N$)
@@ -537,10 +537,10 @@ F_1 &=\frac{dn_e}{d{\mit\Psi}_N}\,T_e,\\[0.5ex]
 F_2 &=\frac{dT_e}{d{\mit\Psi}_N}\,n_e,\\[0.5ex]
 F_3 &=\frac{dn_i}{d{\mit\Psi}_N}\,T_i,\\[0.5ex]
 F_4 &=\frac{dT_i}{d{\mit\Psi}_N}\,n_i,\\[0.5ex]
-F_5& -\frac{A_2}{8}\,\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}n_e}{d{\mit\Psi}_n^{\,2}}\,T_e\right),\\[0.5ex]
-F_6& -\frac{A_2}{8}\,\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}T_e}{d{\mit\Psi}_n^{\,2}}\,n_e\right),\\[0.5ex]
-F_7& -\frac{A_2}{8}\,\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}\,T_i\right),\\[0.5ex]
-F_8& -\frac{A_2}{8}\,\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\,n_i\right),\\[0.5ex]
+F_5&= -\frac{A_2}{8}\,\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}n_e}{d{\mit\Psi}_n^{\,2}}\,T_e\right),\\[0.5ex]
+F_6&= -\frac{A_2}{8}\,\left(\frac{dn_e}{d{\mit\Psi}_N}\,\frac{dT_e}{d{\mit\Psi}_N}+\frac{d^{\,2}T_e}{d{\mit\Psi}_n^{\,2}}\,n_e\right),\\[0.5ex]
+F_7& =-\frac{A_2}{8}\,\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}n_i}{d{\mit\Psi}_n^{\,2}}\,T_i\right),\\[0.5ex]
+F_8& =-\frac{A_2}{8}\,\left(\frac{dn_i}{d{\mit\Psi}_N}\,\frac{dT_i}{d{\mit\Psi}_N}+\frac{d^{\,2}T_i}{d{\mit\Psi}_n^{\,2}}\,n_i\right),\\[0.5ex]
 F_9&=\frac{T_e}{24}\,\frac{d^{\,3}n_e}{d{\mit\Psi}_N^{\,3}},\\[0.5ex]
 F_{10}&=\frac{n_e}{24}\,\frac{d^{\,3}T_e}{d{\mit\Psi}_N^{\,3}},\\[0.5ex]
 F_{11}&=\frac{T_i}{24}\,\frac{d^{\,3}n_i}{d{\mit\Psi}_N^{\,3}},\\[0.5ex]
