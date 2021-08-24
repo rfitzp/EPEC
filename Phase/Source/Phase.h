@@ -248,6 +248,7 @@ class Phase
   Array<double,1> wkl;      // Normalized linear natural frequencies at resonant surfaces
   Array<double,1> wke;      // Normalized ExB natural frequencies at resonant surfaces
   Array<double,1> wkn;      // Normalized nonlinear natural frequencies at resonant surfaces
+  Array<double,1> etae;     // Relative electron temperature gradients at resonant surfaces
   Array<double,1> dnedrk;   // Electron density gradients at resonant surfaces (in r) (10^19/m^-4)
   Array<double,1> dTedrk;   // Electron temperature gradients at resonant surfaces (in r) (keV/m)
   Array<double,1> Wcrnek;   // Critical island widths for density flattening at resonant surfaces (in r) (m)

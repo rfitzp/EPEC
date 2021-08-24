@@ -533,10 +533,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   Factor5.resize (nres); Factor6.resize  (nres); Factor7.resize  (nres); Factor8.resize  (nres);
   Factor9.resize (nres); Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
   alphabe.resize (nres); alphabi.resize  (nres); alphac.resize   (nres); alphap.resize   (nres);
-  rhothe.resize  (nres); rhothi.resize   (nres);
+  rhothe.resize  (nres); rhothi.resize   (nres); etae.resize     (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk      (j), &ntor     (j), &rk       (j), &qk       (j), &rhok   (j),
 		&a       (j), &Sk       (j), &taumk    (j), &tautk    (j), &fack   (j),
 		&delk    (j), &wkl      (j), &wke      (j), &wkn      (j),
@@ -546,8 +546,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 		&Factor1 (j), &Factor2  (j), &Factor3  (j), &Factor4  (j),
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
 		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j),
-		&alphabe (j), &alphabi (j),  &alphac (j),   &alphap   (j), &rhothe (j),
-		&rhothi  (j)) != 48)
+		&alphabe (j), &alphabi  (j), &alphac (j),   &alphap   (j), &rhothe (j),
+		&rhothi  (j), &etae     (j)) != 49)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -2310,6 +2310,15 @@ double Phase::GetNaturalFrequency (int j)
 	  double w = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
 	  
 	  om = (wkl (j) + wkn (j) * w) /(1. + w);
+	}
+      else if (FREQ == 1)
+	{
+	  double w = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
+
+	  om =
+	      wkl (j) * (etae (j) /(1. + etae (j))) * (WcrTek (j)*WcrTek (j) /(WcrTek (j)*WcrTek (j) + w*w))
+	    + wkl (j) * (1.       /(1. + etae (j))) * (Wcrnek (j)*Wcrnek (j) /(Wcrnek (j)*Wcrnek (j) + w*w))
+	    + wkn (j)                               * (w*w                   /(Wcrnek (j)*Wcrnek (j) + w*w));
 	}
       else if (FREQ == 2)
 	{
