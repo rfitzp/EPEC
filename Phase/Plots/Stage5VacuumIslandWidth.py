@@ -7,21 +7,17 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-fn = root['PHASE']['OUTPUTS']['Stage4']
+fn = root['PHASE']['OUTPUTS']['Stage5']
 ds = nc.Dataset(fn)
+time = ds['time']
+wv = ds['W_vac']
+w = ds['W']
 mpol = ds['m_pol']
-
-Mpol = np.asarray(mpol)
-
-fn1 = root['PHASE']['OUTPUTS']['Stage5']
-ds1 = nc.Dataset(fn1)
-time = ds1['time']
-wv = ds1['W_vac']
-w = ds1['W']
 
 Time = np.asarray(time)
 Wv = np.asarray(wv)
 W = np.asarray(w)
+Mpol = np.asarray(mpol)
 
 fig = plt.figure(figsize=(12.0, 8.0))
 fig.canvas.manager.set_window_title("PHASE: Vacuum Island Widths")

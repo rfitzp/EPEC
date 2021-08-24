@@ -7,21 +7,17 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-fn = root['PHASE']['OUTPUTS']['Stage4']
+fn = root['PHASE']['OUTPUTS']['Stage5']
 ds = nc.Dataset(fn)
+time = ds['time']
+ome = ds['omega']
+om0 = ds['omega0']
 mpol = ds['m_pol']
-
-Mpol = np.asarray(mpol)
-
-fn1 = root['PHASE']['OUTPUTS']['Stage5']
-ds1 = nc.Dataset(fn1)
-time = ds1['time']
-ome = ds1['omega']
-om0 = ds1['omega0']
 
 Time = np.asarray(time)
 Ome = np.asarray(ome)
 Om0 = np.asarray(om0)
+Mpol = np.asarray(mpol)
 
 fig = plt.figure(figsize=(12.0, 8.0))
 fig.canvas.manager.set_window_title("PHASE: Island Actual Frequencies (krad/s)")

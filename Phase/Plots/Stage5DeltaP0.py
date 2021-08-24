@@ -7,19 +7,15 @@ import netCDF4 as nc
 import matplotlib.pyplot as plt
 import numpy as np
 
-fn = root['PHASE']['OUTPUTS']['Stage4']
+fn = root['PHASE']['OUTPUTS']['Stage5']
 ds = nc.Dataset(fn)
+time = ds['time']
+dp = ds['DeltaP0']
 mpol = ds['m_pol']
-
-Mpol = np.asarray(mpol)
-
-fn1 = root['PHASE']['OUTPUTS']['Stage5']
-ds1 = nc.Dataset(fn1)
-time = ds1['time']
-dp = ds1['DeltaP0']
 
 Time = np.asarray(time)
 DP = np.asarray(dp)
+Mpol = np.asarray(mpol)
 
 fig = plt.figure(figsize=(12.0, 8.0))
 fig.canvas.manager.set_window_title("PHASE: Pressure Reductions")

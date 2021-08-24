@@ -162,9 +162,10 @@ class Phase
 
   int      LIN;    // If != 0 then perform purely linear calculation
   int      FREQ;   // Natural frequency switch:
-                   //  If == 0 then use linear/nonlinear natural frequency
-                   //  If == 1 then use linear/ExB/nonlinear natural frequency 
-                   //  If == 2 then w_natural = FFAC * w_linear + (1-FFAC) * w_EB
+                   //  If == 0 then use linear/nonlinear natural frequency with linear layer width as switch
+                   //  If == 1 then use linear/nonlinear natural frequency with electron pressure flattening width as switch 
+                   //  If == 2 then use linear/ExB/nonlinear natural frequency 
+                   //  If == 3 then w_natural = FFAC * w_linear + (1 - FFAC) * w_EB
   double   FFAC;   // Natural frequency parameter (for FREQ = 2)
 
   int      CXD;    // If != 0 include charge exchange damping in plasma angular equations of motion

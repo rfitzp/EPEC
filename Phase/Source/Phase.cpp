@@ -272,7 +272,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
       printf ("PHASE:: Invalid COPT value\n");
       exit (1);
     }
-  if (FREQ < 0 || FREQ > 2)
+  if (FREQ < 0 || FREQ > 3)
     {
       printf ("PHASE:: Invalid FREQ value\n");
       exit (1);
@@ -1113,9 +1113,9 @@ void Phase::WriteStage4Netcdfc ()
     }
   
   // m_k
-  int S_d, mk_y;
-  err += nc_def_dim (dataFile, "i_res", nres, &S_d);
-  err += nc_def_var (dataFile, "m_pol", NC_INT, 1, &S_d, &mk_y);
+  int nres_d, mk_y;
+  err += nc_def_dim (dataFile, "i_res", nres, &nres_d);
+  err += nc_def_var (dataFile, "m_pol", NC_INT, 1, &nres_d, &mk_y);
 
   // phase
   int P_d, phase_y;
@@ -1129,7 +1129,7 @@ void Phase::WriteStage4Netcdfc ()
       DATA[j + i*NPHA] = wvac (i, j);
 
   int W_d[2], wvac_y; 
-  W_d[0] = S_d;
+  W_d[0] = nres_d;
   W_d[1] = P_d;
   err += nc_def_var (dataFile, "W_vacuum", NC_DOUBLE, 2, W_d, &wvac_y);
 
@@ -1367,6 +1367,14 @@ void Phase::IslandDynamics ()
   // .............................
   // Initialize Netcdf data arrays
   // .............................
+  int*    mk_x   = new int[nres];
+  double* PsiN_x = new double[nres];
+  for (int i = 0; i < nres; i++)
+    {
+      mk_x[i]   = mk(i);
+      PsiN_x[i] = PsiN(i);
+    }
+
   int     zcount  = -1;  
   double* zTime   = new double[1];   
   double* zIrmp   = new double[1];   
@@ -1407,9 +1415,15 @@ void Phase::IslandDynamics ()
       exit (1);
     }
 
-  int time_d, nres_d, dim[2];
+  int nres_d, mk_y;
+  err += nc_def_dim (dataFile, "i_res", nres, &nres_d);
+  err += nc_def_var (dataFile, "m_pol", NC_INT, 1, &nres_d, &mk_y);
+
+  int PsiN_y;
+  err += nc_def_var (dataFile, "PsiN_res", NC_DOUBLE, 1, &nres_d, &PsiN_y);
+
+  int time_d, dim[2];
   err += nc_def_dim (dataFile, "time",  NC_UNLIMITED, &time_d);
-  err += nc_def_dim (dataFile, "i_res", nres,         &nres_d);
   dim[0] = time_d;
   dim[1] = nres_d;
 
@@ -1465,6 +1479,9 @@ void Phase::IslandDynamics ()
       printf ("PHASE::IslandDynamics: Error defining variables in Outputs/Stage5.nc\n");
       exit (1);
     }
+
+  err += nc_put_var_int    (dataFile, mk_y,   mk_x);
+  err += nc_put_var_double (dataFile, PsiN_y, PsiN_x);
     
   // Integrate equations of motion
   chi.resize  (nres);
@@ -1656,7 +1673,8 @@ void Phase::IslandDynamics ()
   delete[] zTime;   delete[] zIrmp;  delete[] zPrmp;  delete[] zphi;   delete[] zvph;    
   delete[] zomega0; delete[] zomega; delete[] zPsim;  delete[] zPsip;  delete[] zW;      
   delete[] zPsivm;  delete[] zPsivp; delete[] zWv;    delete[] zdP;    delete[] zdP0;    
-  delete[] tstart;  delete[] tcount; delete[] dstart; delete[] dcount;
+  delete[] tstart;  delete[] tcount; delete[] dstart; delete[] dcount; delete[] mk_x;
+  delete[] PsiN_x;
 }
 
 // ###################################
@@ -2293,7 +2311,7 @@ double Phase::GetNaturalFrequency (int j)
 	  
 	  om = (wkl (j) + wkn (j) * w) /(1. + w);
 	}
-      else if (FREQ == 1)
+      else if (FREQ == 2)
 	{
 	  double w = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j))) /delk (j);
 

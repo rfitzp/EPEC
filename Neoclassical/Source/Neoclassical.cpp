@@ -862,7 +862,7 @@ void Neoclassical::Get_Derived ()
   for (int j = 0; j < nres; j++)
     {
       double x               = 1.;
-      double chi_para_e_brag = 1.13 * v_T_ek (j) * v_T_ek (j) /nu_eek (j);
+      double chi_para_e_brag = 1.55 /(1. + 0.38 * Zeffk (j)) * v_T_ek (j) * v_T_ek (j) /nu_eek (j);
       for (int i = 0; i < 100; i++)
 	{
 	  double chi_para_e_max = 2. * R_0 * v_T_ek (j) /double (ntor) /sk (j) /x;
@@ -1429,7 +1429,7 @@ void Neoclassical::Get_LayerWidths ()
 }
 
 // ####################################
-// Function to write Stage2 NETCDF file
+// Function to write Stage3 NETCDF file
 // ####################################
 void Neoclassical::WriteStage3Netcdfc ()
 {
