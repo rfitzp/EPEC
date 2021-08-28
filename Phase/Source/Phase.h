@@ -100,7 +100,9 @@
 // 2.25 - Added polarization terms into Rutherford equations
 // 2.26 - Allowed for EPEC RMP coil data
 // 2.27 - Removed EPEC RMP coil data. Added Netcdf output. Adapted for use with OMFIT.
-// 3.1  - Completely switched to OMFIT mode
+
+// 3.0  - Completely switched to OMFIT mode
+// 3.1  - Added POEM terms
 
 // #######################################################################
 
@@ -163,10 +165,10 @@ class Phase
   int      LIN;    // If != 0 then perform purely linear calculation
   int      FREQ;   // Natural frequency switch:
                    //  If == 0 then use linear/nonlinear natural frequency with linear layer width as switch
-                   //  If == 1 then use linear/nonlinear natural frequency with electron pressure flattening width as switch 
+                   //  If == 1 then use linear/nonlinear natural frequency with pressure flattening width as switch 
                    //  If == 2 then use linear/ExB/nonlinear natural frequency 
                    //  If == 3 then w_natural = FFAC * w_linear + (1 - FFAC) * w_EB
-  double   FFAC;   // Natural frequency parameter (for FREQ = 2)
+  double   FFAC;   // Natural frequency parameter (for FREQ = 3)
 
   int      CXD;    // If != 0 include charge exchange damping in plasma angular equations of motion
   int      BOOT;   // If != 0 include effect of bootstrap current in Rutherford equations
@@ -225,6 +227,9 @@ class Phase
   Array<double,2> EEh;    // Moduli of EE elements    
   Array<double,2> xih;    // Arguments of EE elements
   Array<double,1> A1;     // A1 values at rational surfaces
+  Array<double,1> Poem1;  // POEM island saturation terms at rational surfaces
+  Array<double,1> Poem2;  // POEM island saturation terms at rational surfaces
+  Array<double,1> Poem3;  // POEM island saturation terms at rational surfaces
 
   // ------------------------------
   // Data from program NEOCLASSICAL
@@ -249,6 +254,7 @@ class Phase
   Array<double,1> wke;      // Normalized ExB natural frequencies at resonant surfaces
   Array<double,1> wkn;      // Normalized nonlinear natural frequencies at resonant surfaces
   Array<double,1> etae;     // Relative electron temperature gradients at resonant surfaces
+  Array<double,1> etai;     // Relative ion temperature gradients at resonant surfaces
   Array<double,1> dnedrk;   // Electron density gradients at resonant surfaces (in r) (10^19/m^-4)
   Array<double,1> dTedrk;   // Electron temperature gradients at resonant surfaces (in r) (keV/m)
   Array<double,1> Wcrnek;   // Critical island widths for density flattening at resonant surfaces (in r) (m)

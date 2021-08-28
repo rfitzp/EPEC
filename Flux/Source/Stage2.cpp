@@ -14,6 +14,7 @@
 // void Flux:: Stage2CalcNeoclassicalAngle ()
 // void Flux:: Stage2CalcNeoclassicalPara  ()
 // void Flux:: Stage2CalcMatrices          ()
+// void Flux:: Stage2CalcTearing           ()
 
 #include "Flux.h"
 
@@ -69,10 +70,16 @@ void Flux::Stage2 ()
   Stage2CalcNeoclassicalPara ();
   fflush (stdout);
   
-  // ............................
-  // Calculate stability matrices
-  // ............................
+  // ....................................
+  // Calculate tearing stability matrices
+  // ....................................
   Stage2CalcMatrices ();
+  fflush (stdout);
+
+  // ...............................................
+  // Calculate cylindrical tearing stability indices
+  // ...............................................
+  Stage2CalcTearing ();
   fflush (stdout);
 
   // ..................
@@ -90,8 +97,8 @@ void Flux::Stage2 ()
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i], Poem1[i], Poem2[i], Poem3[i]);
   for (int i = 0; i < nres; i++)
     for (int j = 0; j < nres; j++)
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
@@ -113,8 +120,8 @@ void Flux::Stage2 ()
 	fprintf (file, "%16.9e %16.9e %16.9e\n",
 		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
       for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i]);
+	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i], Poem1[i], Poem2[i], Poem3[i]);
       for (int i = 0; i < nres; i++)
 	for (int j = 0; j < nres; j++)
 	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
@@ -146,6 +153,7 @@ void Flux::Stage2 ()
 
   delete[] PSIN; delete[] G;   delete[] Pr;
   delete[] GGp;  delete[] Prp; delete[] Q;
+  delete[] Jphi;
 
   delete[] s; delete[] Rs;
 
@@ -160,6 +168,8 @@ void Flux::Stage2 ()
   delete[] mres;    delete[] qres;  delete[] rres;  delete[] sres;
   delete[] gres;    delete[] Rres;  delete[] gmres; delete[] fcres;
   delete[] PsiNres; delete[] Rres1; delete[] A1res; delete[] A2res;
+  delete[] JP;      delete[] JPr;   delete[] JPrr;  delete[] alpres;
+  delete[] betres;  delete[] gamres;
 
   delete[] th; 
   gsl_matrix_free (Rst); gsl_matrix_free (Zst);
@@ -180,6 +190,9 @@ void Flux::Stage2 ()
   gsl_matrix_free (I4); gsl_matrix_free (I5); gsl_matrix_free (I6);
   
   gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
+
+  delete[] A;    delete[] B;      delete[] Deltap; delete[] Sigmap;
+  delete[] Poem1; delete[] Poem2; delete[] Poem3;
 }
 
 // ####################################
@@ -278,7 +291,26 @@ void Flux::WriteStage2Netcdfc ()
   // P_psi
   int Pp;
   err += nc_def_var (dataFile, "P_psi", NC_DOUBLE, 1, &Q_d, &Pp);
-  
+
+  // r/a
+  double* rra = new double[NPSI];
+  for (int j = 0; j < NPSI; j++)
+    rra [j] = rP[j] /ra;
+  int r_y;
+  err += nc_def_var (dataFile, "r", NC_DOUBLE, 1, &Q_d, &r_y);
+
+  // J
+  int J_y;
+  err += nc_def_var (dataFile, "J", NC_DOUBLE, 1, &Q_d, &J_y);
+
+  // dJdr
+  int dJdr_y;
+  err += nc_def_var (dataFile, "dJdr", NC_DOUBLE, 1, &Q_d, &dJdr_y);    
+
+  // d2Jdr2
+  int d2Jdr2_y;
+  err += nc_def_var (dataFile, "d2Jdr2", NC_DOUBLE, 1, &Q_d, &d2Jdr2_y);    
+    
   // m_res
   int S_d, mr;
   err += nc_def_dim (dataFile, "i_res", nres, &S_d);
@@ -427,42 +459,46 @@ void Flux::WriteStage2Netcdfc ()
     }
 
   // Write data
-  err += nc_put_var_double (dataFile, para,    parameters);
-  err += nc_put_var_double (dataFile, bound_r, RBPTS);
-  err += nc_put_var_double (dataFile, bound_z, ZBPTS);
-  err += nc_put_var_double (dataFile, R,       RPTS);
-  err += nc_put_var_double (dataFile, Z,       ZPTS);
-  err += nc_put_var_double (dataFile, psi,     DATA);
-  err += nc_put_var_double (dataFile, psi_r,   DATA1);
-  err += nc_put_var_double (dataFile, psi_z,   DATA2);
-  err += nc_put_var_double (dataFile, PN,      P);
-  err += nc_put_var_double (dataFile, Q,       QP);
-  err += nc_put_var_double (dataFile, Qp,      QPN);
-  err += nc_put_var_double (dataFile, G,       GP);
-  err += nc_put_var_double (dataFile, Gp,      GPP);
-  err += nc_put_var_double (dataFile, Px,      PP);
-  err += nc_put_var_double (dataFile, Pp,      PPP);
-  err += nc_put_var_int    (dataFile, mr,      mres);
-  err += nc_put_var_double (dataFile, PNr,     PsiNres);
-  err += nc_put_var_double (dataFile, qr,      qres);
-  err += nc_put_var_double (dataFile, sr,      sres);
-  err += nc_put_var_double (dataFile, gr,      gres);
-  err += nc_put_var_double (dataFile, gmr,     gmres);
-  err += nc_put_var_double (dataFile, fcr,     fcres);
-  err += nc_put_var_double (dataFile, ajr,     ajj);
-  err += nc_put_var_double (dataFile, qhr,     q_hat);
-  err += nc_put_var_double (dataFile, a1r,     A1res);
-  err += nc_put_var_double (dataFile, a2r,     A2res);
-  err += nc_put_var_double (dataFile, dr,      D_R);
-  err += nc_put_var_double (dataFile, rst,     DATA3);
-  err += nc_put_var_double (dataFile, zst,     DATA4);
-  err += nc_put_var_double (dataFile, rnc,     DATA5);
-  err += nc_put_var_double (dataFile, znc,     DATA6);
-  err += nc_put_var_double (dataFile, the,     DATA7);
-  err += nc_put_var_double (dataFile, bnc,     DATA10);
-  err += nc_put_var_double (dataFile, cnc,     DATA11);
-  err += nc_put_var_double (dataFile, ereal,   DATA8);
-  err += nc_put_var_double (dataFile, eimag,   DATA9);
+  err += nc_put_var_double (dataFile, para,     parameters);
+  err += nc_put_var_double (dataFile, bound_r,  RBPTS);
+  err += nc_put_var_double (dataFile, bound_z,  ZBPTS);
+  err += nc_put_var_double (dataFile, R,        RPTS);
+  err += nc_put_var_double (dataFile, Z,        ZPTS);
+  err += nc_put_var_double (dataFile, psi,      DATA);
+  err += nc_put_var_double (dataFile, psi_r,    DATA1);
+  err += nc_put_var_double (dataFile, psi_z,    DATA2);
+  err += nc_put_var_double (dataFile, PN,       P);
+  err += nc_put_var_double (dataFile, Q,        QP);
+  err += nc_put_var_double (dataFile, Qp,       QPN);
+  err += nc_put_var_double (dataFile, G,        GP);
+  err += nc_put_var_double (dataFile, Gp,       GPP);
+  err += nc_put_var_double (dataFile, Px,       PP);
+  err += nc_put_var_double (dataFile, Pp,       PPP);
+  err += nc_put_var_double (dataFile, r_y,      rra);
+  err += nc_put_var_double (dataFile, J_y,      JP);
+  err += nc_put_var_double (dataFile, dJdr_y,   JPr);
+  err += nc_put_var_double (dataFile, d2Jdr2_y, JPrr);
+  err += nc_put_var_int    (dataFile, mr,       mres);
+  err += nc_put_var_double (dataFile, PNr,      PsiNres);
+  err += nc_put_var_double (dataFile, qr,       qres);
+  err += nc_put_var_double (dataFile, sr,       sres);
+  err += nc_put_var_double (dataFile, gr,       gres);
+  err += nc_put_var_double (dataFile, gmr,      gmres);
+  err += nc_put_var_double (dataFile, fcr,      fcres);
+  err += nc_put_var_double (dataFile, ajr,      ajj);
+  err += nc_put_var_double (dataFile, qhr,      q_hat);
+  err += nc_put_var_double (dataFile, a1r,      A1res);
+  err += nc_put_var_double (dataFile, a2r,      A2res);
+  err += nc_put_var_double (dataFile, dr,       D_R);
+  err += nc_put_var_double (dataFile, rst,      DATA3);
+  err += nc_put_var_double (dataFile, zst,      DATA4);
+  err += nc_put_var_double (dataFile, rnc,      DATA5);
+  err += nc_put_var_double (dataFile, znc,      DATA6);
+  err += nc_put_var_double (dataFile, the,      DATA7);
+  err += nc_put_var_double (dataFile, bnc,      DATA10);
+  err += nc_put_var_double (dataFile, cnc,      DATA11);
+  err += nc_put_var_double (dataFile, ereal,    DATA8);
+  err += nc_put_var_double (dataFile, eimag,    DATA9);
  
   if (err != 0)
     {
@@ -482,7 +518,7 @@ void Flux::WriteStage2Netcdfc ()
   delete[] DATA;   delete[] DATA1, delete[] DATA2, delete[] D_R;
   delete[] DATA3;  delete[] DATA4; delete[] DATA5; delete[] DATA6;
   delete[] DATA7;  delete[] DATA8; delete[] DATA9; delete[] DATA10;
-  delete[] DATA11;
+  delete[] DATA11; delete[] rra;
  }
 
 // #############################################
@@ -693,11 +729,12 @@ void Flux::Stage2ReadData ()
   GGp  = new double[NRPTS]; // g dg/dpsi
   Prp  = new double[NRPTS]; // dp/dpsi
   Q    = new double[NRPTS]; // q
+  Jphi = new double[NRPTS]; // J_phi
   double dum;
 
   file = OpenFiler ((char*) "Outputs/Stage1/Profiles.txt");
   for (int i = 0; i < NRPTS; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf", &PSIN[i], &G[i], &Pr[i], &GGp[i], &Prp[i], &Q[i], &dum) != 7)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf", &PSIN[i], &G[i], &Pr[i], &GGp[i], &Prp[i], &Q[i], &Jphi[i]) != 7)
       {
 	printf ("FLUX::Stage2ReadData: Error reading Outputs/Stage1/Profiles.txt\n");
 	exit (1);
@@ -800,6 +837,9 @@ void Flux::Stage2CalcQ ()
   QPPN = new double[NPSI]; // d^2Q/dPsiN^2 array
   A1   = new double[NPSI]; // QP/QPN/fabs(Psic) array
   A2   = new double[NPSI]; // QPPN/QPN/3 array
+  JP   = new double[NPSI]; // J_phi
+  JPr  = new double[NPSI]; // dJ_phi/dr
+  JPrr = new double[NPSI]; // d^2J_phi/dr^2
   
   for (int j = 0; j < NPSI; j++)
     {
@@ -815,13 +855,12 @@ void Flux::Stage2CalcQ ()
   // .......................................
   for (int j = 0; j < NPSI; j++)
     {
-      double pval = 1. - P[j];
-
-      GP [j] = Interpolate (NRPTS, PSIN, G,   pval, 0);
-      PP [j] = Interpolate (NRPTS, PSIN, Pr,  pval, 0);
-      GPP[j] = Interpolate (NRPTS, PSIN, GGp, pval, 0) /GP[j];
-      PPP[j] = Interpolate (NRPTS, PSIN, Prp, pval, 0);
-      QX [j] = Interpolate (NRPTS, PSIN, Q,   pval, 0);
+      GP [j] = Interpolate (NRPTS, PSIN, G,    PsiN[j], 0);
+      PP [j] = Interpolate (NRPTS, PSIN, Pr,   PsiN[j], 0);
+      GPP[j] = Interpolate (NRPTS, PSIN, GGp,  PsiN[j], 0) /GP[j];
+      PPP[j] = Interpolate (NRPTS, PSIN, Prp,  PsiN[j], 0);
+      QX [j] = Interpolate (NRPTS, PSIN, Q,    PsiN[j], 0);
+      JP [j] = Interpolate (NRPTS, PSIN, Jphi, PsiN[j], 0);
     }
 
   // ...............................
@@ -906,11 +945,24 @@ void Flux::Stage2CalcQ ()
   CalcrP ();
   rP[0] = 0.;
 
-  // Perform diagnostic integration check (passes!)
-  //for (int j = 1; j < NPSI; j++)
-  //  printf ("r/a = %9.2e  PsiN = %9.2e  dPsiN/dr = %9.2e  r*g/|psi_c|/q = %9.2e  ratio = %9.2e\n",
-  //	    rP[j]/ra, PsiN[j], Interpolate (NPSI, rP, PsiN, rP[j], 1), rP[j]*GP[j]/fabs(Psic)/QP[j], rP[j]*GP[j]/fabs(Psic)/QP[j] /Interpolate (NPSI, rP, PsiN, rP[j], 1));
-
+  // ...............................................
+  // Calculate and smooth Jp, Jpr, and Jprr profiles
+  // ...............................................
+  for (int i = 0; i < NSMOOTH; i++)
+    Smoothing (NPSI, JP);
+  
+  for (int j = 0; j < NPSI; j++)
+    JPr [j] = Interpolate (NPSI, rP, JP, rP[j], 1);
+ 
+  for (int i = 0; i < NSMOOTH; i++)
+    Smoothing (NPSI, JPr);
+  
+  for (int j = 0; j < NPSI; j++)
+    JPrr[j] = Interpolate (NPSI, rP, JPr, rP[j], 1);
+    
+  for (int i = 0; i < NSMOOTH; i++)
+    Smoothing (NPSI, JPrr);
+ 
   // .................................
   // Find q95, r95, qrat, rrat, qa, ra
   // .................................
@@ -968,6 +1020,9 @@ void Flux::Stage2FindRational ()
   PsiNres = new double[nres];
   A1res   = new double[nres];
   A2res   = new double[nres];
+  alpres  = new double[nres];
+  betres  = new double[nres];
+  gamres  = new double[nres];
 
   for (int i = 0; i < nres; i++)
     {
@@ -1002,12 +1057,19 @@ void Flux::Stage2FindRational ()
       PsiNres[i] = Interpolate (NPSI, rP, PsiN, rres[i], 0);
       A1res  [i] = Interpolate (NPSI, rP, A1,   rres[i], 0);
       A2res  [i] = Interpolate (NPSI, rP, A2,   rres[i], 0);
+
+      alpres [i] = - Interpolate (NPSI, rP, JPr, rres[i], 0) * qres[i] /sres[i];
+      betres [i] = alpres[i] * (Interpolate (NPSI, rP, JPrr, rres[i], 0) /Interpolate (NPSI, rP, JPr, rres[i], 0)
+				+ (sres[i] - 1.) /rres[i]
+				- Interpolate (NPSI, rP, QP, rres[i], 2) /2. /Interpolate (NPSI, rP, QP, rres[i], 1));
+      gamres [i] = - Interpolate (NPSI, rP, JPrr, rres[i], 0) * qres[i] /sres[i];
     }
 
   printf ("Rational surface data:\n");
   for (int i = 0; i < nres; i++)
-    printf ("mpol = %3d  PsiNs = %9.2e  rs/ra = %9.2e  ss = %9.2e  residual = %9.2e  R = %9.2e  A1 = %9.2e  residual = %9.2e  A2 = %9.2e\n",
-	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i], 1. - (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i], A2res[i]);
+    printf ("mpol = %3d  PsiNs = %9.2e  rs/ra = %9.2e  ss = %9.2e  residual = %9.2e  R = %9.2e  A1 = %9.2e  residual = %9.2e  A2 = %9.2e  alp = %9.2e  bet = %9.2e  gam = %9.2e\n",
+	    mres[i], PsiNres[i], rres[i] /ra, sres[i], gmres[i], Rres1[i], A1res[i],
+	    1. - (gres[i]/sres[i]/qres[i]) *rres[i]*rres[i] /Psic/Psic /A1res[i], A2res[i], alpres[i], betres[i], gamres[i]);
    
   // .....................................
   // Confirm q values at rational surfaces
@@ -1375,12 +1437,12 @@ void Flux::Stage2CalcNeoclassicalPara ()
 	    mres[i], ajj[i], dPsidr[i], q_hat[i], C1res[i], C2res[i]);
 }
 
-// ############################
-// Calculate stability matrices
-// ############################
+// ####################################
+// Calculate tearing stability matrices
+// ####################################
 void Flux::Stage2CalcMatrices ()
 {
-  printf ("Calculating stability matrices:\n");
+  printf ("Calculating tearing stability matrices:\n");
   fflush (stdout);
   
   // ..................
@@ -1472,3 +1534,35 @@ void Flux::Stage2CalcMatrices ()
     }
 }
 
+// ###############################################
+// Calculate cylindrical tearing stability indices
+// ###############################################
+void Flux::Stage2CalcTearing ()
+{
+  printf ("Calculating cylindrical tearing stability indices:\n");
+  fflush (stdout);
+
+  A      = new double[nres];
+  B      = new double[nres];
+  Deltap = new double[nres];
+  Sigmap = new double[nres];
+  Poem1  = new double[nres];
+  Poem2  = new double[nres];
+  Poem3  = new double[nres];
+
+  for (int i = 0; i < nres; i++)
+    {
+      CalcTearingSolution (i);
+
+      A[i]     = alpres[i] * rres[i];
+      B[i]     = gamres[i] * rres[i] * rres[i];
+      Poem1[i] = 0.41 * A[i]*A[i];
+      Poem2[i] = 0.41 * (A[i]*A[i] * (log(1./rres[i]) + 4.85) - 0.5 * A[i] * Deltap[i] - B[i] - 0.44 * A[i]);
+      Poem3[i] = 0.80 * A[i]*A[i] - 0.27 * B[i] - 0.09 * A[i];
+ 
+
+      printf ("mpol = %3d rs/a = %9.2e Deltap = %9.2e Sigmap = %9.2e A = %9.2e B = %9.2e POEM1 = %9.2e POEM2 = %9.2e POEM3 = %9.2e\n",
+	      mres[i], rres[i]/ra, Deltap[i], Sigmap[i], A[i], B[i], Poem1[i], Poem2[i], Poem3[i]);
+      fflush (stdout);
+    }
+}

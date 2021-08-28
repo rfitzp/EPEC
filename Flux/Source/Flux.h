@@ -73,7 +73,9 @@
 // 1.18 - Added RMP coil calculation
 // 1.19 - Removed RMP coil calculation and E vectors. 
 //         Added NECTCDF output. Adapted to run with OMFIT.
+
 // 2.0  - Completely switched to OMFIT mode
+// 2.1  - Added cylindrical tearing mode calculation
 
 // #####################################################################################
 
@@ -83,7 +85,7 @@
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 0
+#define VERSION_MINOR 1
 
 #include <stdio.h>
 #include <math.h>
@@ -109,6 +111,8 @@ extern "C" int pRhs3 (double, const double[], double[], void*);
 extern "C" int pRhs4 (double, const double[], double[], void*);
 extern "C" int pRhs5 (double, const double[], double[], void*);
 extern "C" int pRhs6 (double, const double[], double[], void*);
+extern "C" int pRhs7 (double, const double[], double[], void*);
+extern "C" int pRhs8 (double, const double[], double[], void*);
 
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
@@ -153,6 +157,9 @@ class Flux
   double H0;      // Initial integration step-length for equilibirum flux surface integrals 
   double ACC;     // Integration accuracy for equilibrium flux surface integrals
   double ETA;     // Regularization factor for Green's function
+
+  double EPS;     // Cylindrical tearing solutions launched from magnetic axis at r = EPS 
+  double DELTA;   // Cylindrical tearing solutions integrated to r = r_s +/- DELTA 
   
   // Stage 1 parameters
   double          R0;       // Scale major radius (m)
@@ -182,6 +189,7 @@ class Flux
   double*         GGp;      // g dg/dPsi
   double*         Prp;      // dp/dPsi
   double*         Q;        // q(Psi)
+  double*         Jphi;     // J_phi(Psi)
 
   double          dR2, dZ2, dR3, dZ3;
  
@@ -204,6 +212,7 @@ class Flux
   double  Pped;        // Pedestal pressure / central pressure
 
   double  qgp, qgp1, qgp2;
+  int     ires;
 
   // Stage2 profile parameters
   double* P;           // Psi array
@@ -220,6 +229,7 @@ class Flux
   double* PP;          // P(Psi)
   double* GPP;         // dg/dPsi
   double* PPP;         // dP/dPsi
+  double* JP;          // J(Psi)
   double* S;           // sqrt(1 - Psi)
   double* QX;          // q(Psi) from gFile
   double* J0;          // GGJ integral
@@ -229,6 +239,8 @@ class Flux
   double* QPPN;        // d^2Q/dPsiN^2 array
   double* A1;          // QP/QPN/fabs(Psic) array
   double* A2;          // QPPN/QPN/3 array
+  double* JPr;         // dJ/dr
+  double* JPrr;        // d^2J/dr^2
 
   // Rational surface data
   int     nres;        // Number of rational surfaces
@@ -252,6 +264,9 @@ class Flux
   double* A2res;       // A2 values at rational surfaces
   double* C1res;       // C1 values at rational surfaces
   double* C2res;       // C2 values at rational surfaces
+  double* alpres;      // alpha values at rational surfaces
+  double* betres;      // beta values at rational surfaces
+  double* gamres;      // gamma' values at rational surfaces
 
   // Glasser-Greene-Johnson data
   double* J1;          // GGJ integral
@@ -288,9 +303,18 @@ class Flux
   double*     I7;      // Neoclassical integral
   double*     I8;      // Neoclassical integral
 
-  // Perturbed equilibrium data
+  // Tesring stability matrices
   gsl_matrix_complex* FF;  // F-matrix
   gsl_matrix_complex* EE;  // E-matrix
+
+  // Cylindrical tearing stability data
+  double* A;          // Island saturation parameters
+  double* B;          // Island saturation parameters
+  double* Deltap;     // Even parity tearing stability indices
+  double* Sigmap;     // Odd parity tearing stability indices
+  double* Poem1;      // Small-island POEM logarithmic saturation terms
+  double* Poem2;      // Small-island POEM saturation terms
+  double* Poem3;      // Large-island POEM saturation terms
 
   // Weights for Simpson's rule
   double          hh;
@@ -317,6 +341,10 @@ public:
   int Rhs5 (double r, const double y[], double dydr[], void*);
   // Evaluate right-hand sides of GGJ equation
   int Rhs6 (double r, const double y[], double dydr[], void*);
+  // Evaluate right-hand sides of tearing equation inside rational surface
+  int Rhs7 (double r, const double y[], double dydr[], void*);
+  // Evaluate right-hand sides of tearing equation outside rational surface
+  int Rhs8 (double r, const double y[], double dydr[], void*);
 
 private:
 
@@ -345,8 +373,10 @@ private:
   void Stage2CalcNeoclassicalAngle ();
   // Calculate Stage2 neoclassical parameters at rational surfaces
   void Stage2CalcNeoclassicalPara ();
-  // Calculate Stage2 stability matrices
+  // Calculate Stage2 tearing stability matrices
   void Stage2CalcMatrices ();
+  // Calculate Stage2 cylindrical tearing mode indices
+  void Stage2CalcTearing ();
 
   // Calculate q(P)/g(P) profile
   void CalcQGP ();
@@ -362,6 +392,8 @@ private:
   void CalcGamma ();
   // Calculate neoclassical angle data on rational surfaces
   void CalcNeoclassicalAngle ();
+  // Calculate tearing solutions
+  void CalcTearingSolution (int i);
 
   // gFile interpolation routines
   void gFileInterp          (vector<string> gFileName,   vector<double> gFileTime,   int gFileNumber, double time);

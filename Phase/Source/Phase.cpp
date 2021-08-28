@@ -383,10 +383,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   qhatk.resize (nres);
   C1k.resize   (nres);
   C2k.resize   (nres);
+  Poem1.resize (nres);
+  Poem2.resize (nres);
+  Poem3.resize (nres);
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &inr, &qhatk(j), &C1k(j), &C2k(j), &inr) != 18)
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &inr, &qhatk(j), &C1k(j), &C2k(j), &inr,
+		  &Poem1(j), &Poem2(j), &Poem3(j)) != 21)
 	{
 	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
 	  exit (1);
@@ -533,10 +537,10 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   Factor5.resize (nres); Factor6.resize  (nres); Factor7.resize  (nres); Factor8.resize  (nres);
   Factor9.resize (nres); Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
   alphabe.resize (nres); alphabi.resize  (nres); alphac.resize   (nres); alphap.resize   (nres);
-  rhothe.resize  (nres); rhothi.resize   (nres); etae.resize     (nres);
+  rhothe.resize  (nres); rhothi.resize   (nres); etae.resize     (nres); etai.resize     (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk      (j), &ntor     (j), &rk       (j), &qk       (j), &rhok   (j),
 		&a       (j), &Sk       (j), &taumk    (j), &tautk    (j), &fack   (j),
 		&delk    (j), &wkl      (j), &wke      (j), &wkn      (j),
@@ -546,8 +550,8 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 		&Factor1 (j), &Factor2  (j), &Factor3  (j), &Factor4  (j),
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
 		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j),
-		&alphabe (j), &alphabi  (j), &alphac (j),   &alphap   (j), &rhothe (j),
-		&rhothi  (j), &etae     (j)) != 49)
+		&alphabe (j), &alphabi  (j), &alphac   (j), &alphap   (j), &rhothe (j),
+		&rhothi  (j), &etae     (j), &etai     (j)) != 50)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -2315,10 +2319,12 @@ double Phase::GetNaturalFrequency (int j)
 	{
 	  double w = (0.8227/2.) * 4. * R_0 * fack (j) * sqrt (fabs (Psik (j)));
 
-	  om =
-	      wkl (j) * (etae (j) /(1. + etae (j))) * (WcrTek (j)*WcrTek (j) /(WcrTek (j)*WcrTek (j) + w*w))
-	    + wkl (j) * (1.       /(1. + etae (j))) * (Wcrnek (j)*Wcrnek (j) /(Wcrnek (j)*Wcrnek (j) + w*w))
-	    + wkn (j)                               * (w*w                   /(Wcrnek (j)*Wcrnek (j) + w*w));
+	  double facTe = (etae (j) /(1. + etae (j))) * (WcrTek (j)*WcrTek (j) /(WcrTek (j)*WcrTek (j) + w*w));
+	  double facne = (1.       /(1. + etae (j))) * (Wcrnek (j)*Wcrnek (j) /(Wcrnek (j)*Wcrnek (j) + w*w));
+	  double facTi = (etai (j) /(1. + etai (j))) * (w*w                   /(WcrTik (j)*WcrTik (j) + w*w));
+	  double facni = (1.       /(1. + etai (j))) * (w*w                   /(Wcrnek (j)*Wcrnek (j) + w*w));
+	  
+	  om = wke (j) + (wkl (j) - wke (j)) * (facTe + facne) + (wkn (j) - wke (j)) * (facTi + facni);
 	}
       else if (FREQ == 2)
 	{
@@ -2454,22 +2460,33 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 
   for (int j = 0; j < nres; j++)
     {
-      double Wk   = 0.8227 * R_0 * GetIslandWidth (j) /dPsiNdr (j) /2. /a (j)/R_0 /rk (j);
-      double WTek = 0.8227 * WcrTek (j) /2. /a (j)/R_0 /rk (j);
-      double WTik = 0.8227 * WcrTik (j) /2. /a (j)/R_0 /rk (j);
-      double Wnek = 0.8227 * Wcrnek (j) /2. /a (j)/R_0 /rk (j);
-      double rhek = 0.8227 * rhothe (j) /2. /a (j)/R_0 /rk (j);
-      double rhik = 0.8227 * rhothi (j) /2. /a (j)/R_0 /rk (j);
-      double face = Wk /(WTek*Wnek + rhek*rhek + Wk*Wk);
-      double faci = Wk /(WTik*Wnek + rhik*rhik + Wk*Wk);
-      //double facp = Wk /(WTik*Wnek + Wk*Wk) /(WTik*Wnek + Wk*Wk);
-      double facp = 1. /pow (WTik*Wnek + Wk*Wk, 1.5);
-      double facn = Wk /(Wnek*Wnek + Wk*Wk);
+      double W      = R_0 * GetIslandWidth (j) /dPsiNdr (j) /a (j)/R_0 /rk (j);
+      double Wk     = 0.8227 * R_0 * GetIslandWidth (j) /dPsiNdr (j) /2. /a (j)/R_0 /rk (j);
+      double WTek   = 0.8227 * WcrTek (j) /2. /a (j)/R_0 /rk (j);
+      double WTik   = 0.8227 * WcrTik (j) /2. /a (j)/R_0 /rk (j);
+      double Wnek   = 0.8227 * Wcrnek (j) /2. /a (j)/R_0 /rk (j);
+      double rhek   = 0.8227 * rhothe (j) /2. /a (j)/R_0 /rk (j);
+      double rhik   = 0.8227 * rhothi (j) /2. /a (j)/R_0 /rk (j);
+      double facbTe = (etae (j) /(1. + etae (j))) * Wk /(WTek*WTek + rhek*rhek + Wk*Wk);
+      double facbne = (1.       /(1. + etae (j))) * Wk /(Wnek*Wnek + rhek*rhek + Wk*Wk);
+      double facbTi = (etai (j) /(1. + etai (j))) * Wk /(WTik*WTik + rhik*rhik + Wk*Wk);
+      double facbni = (1.       /(1. + etai (j))) * Wk /(Wnek*Wnek + rhik*rhik + Wk*Wk);
+      double faccTe = (etae (j) /(1. + etae (j))) * Wk /(WTek*WTek + Wk*Wk);
+      double faccne = (1.       /(1. + etae (j))) * Wk /(Wnek*Wnek + Wk*Wk);
+      double faccTi = (etai (j) /(1. + etai (j))) * Wk /(WTik*WTik + Wk*Wk);
+      double faccni = (1.       /(1. + etai (j))) * Wk /(Wnek*Wnek + Wk*Wk);
+      double facc   =   (nek (j) /(nek (j) + nik (j))) * (faccTe + faccne)
+	              + (nik (j) /(nek (j) + nik (j))) * (faccTi + faccni);
+      double facpTi = (etai (j) /(1. + etai (j))) * Wk /(WTik*WTik + Wk*Wk) /(WTik*WTik + Wk*Wk);
+      double facpni = (1.       /(1. + etai (j))) * Wk /(Wnek*Wnek + Wk*Wk) /(Wnek*Wnek + Wk*Wk);
+ 
+      double boot = alphabe (j) * (facbTe + facbne) + alphabi (j) * (facbTi + facbni);
+      double curv = alphac  (j) * facc;
+      double polz = alphap  (j) * (facpTi + facpni);
+      double poem = ((Poem1 (j) * W * log (1./W) + Poem2 (j) * W) * WTek*WTek + Poem3 (j) * W * Wk*Wk) /(WTek*WTek + Wk*Wk);
       
-      Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j))
-	+ (alphabe (j) * face + alphabi (j) * faci + alphac (j) * facn + alphap (j) * facp) * Xk (j);
-      Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j))
-	+ (alphabe (j) * face + alphabi (j) * faci + alphac (j) * facn + alphap (j) * facp) * Yk (j);
+      Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j)) + (boot + curv + polz - poem) * Xk (j);
+      Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j)) + (boot + curv + polz - poem) * Yk (j);
       sink (j) = EEh (j, j) * chi (j) * sin (phik (j) - zeta (j));
 
       for (int k = 0; k < nres; k++)

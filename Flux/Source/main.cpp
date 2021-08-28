@@ -64,6 +64,24 @@ int pRhs6 (double r, const double y[], double dydr[], void* params)
   return status;
 }
 
+int pRhs7 (double r, const double y[], double dydr[], void* params)
+{
+  Flux flux = *(Flux*) params;
+
+  int status = flux.Rhs7 (r, y, dydr, NULL);
+
+  return status;
+}
+
+int pRhs8 (double r, const double y[], double dydr[], void* params)
+{
+  Flux flux = *(Flux*) params;
+
+  int status = flux.Rhs8 (r, y, dydr, NULL);
+
+  return status;
+}
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 int main (int argc, char** argv)

@@ -342,19 +342,23 @@ void Neoclassical::Read_Equilibrium ()
   C1.resize     (nres);
   C2.resize     (nres);
   DR.resize     (nres);
+  Poem1.resize  (nres);
+  Poem2.resize  (nres);
+  Poem3.resize  (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j),
-		  &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j), &C1 (j), &C2 (j), &DR (j)) != 18)
+		  &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j), &C1 (j), &C2 (j), &DR (j), &Poem1 (j), &Poem2 (j), &Poem3 (j)) != 21)
 	{
 	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);
 	}
       qk (j) = double (mk (j)) /double (ntor);
-      printf ("m = %3d  r = %11.4e  s = %11.4e  g = %11.4e  gm = %11.4e  Kt = %11.4e  Kast = %11.4e  Kthe = %11.4e  fc = %11.4e  akk = %11.4e  PsiN = %11.4e  q_hat = %11.4e  DR = %11.4e\n",
-	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j), q_hat (j), DR (j));
+      printf ("m = %3d  r = %9.2e  s = %9.2e  g = %9.2e  gm = %9.2e  Kt = %9.2e  Kast = %9.2e  Kthe = %9.2e  fc = %9.2e  akk = %9.2e  PsiN = %9.2e  q_hat = %9.2e  DR = %9.2e  Poem1 = %9.2e  Poem2 = %9.2e  Poem3 = %9.2e\n",
+	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j), q_hat (j), DR (j),
+	      Poem1 (j), Poem2 (j), Poem3 (j));
     }
 
   int ini;
@@ -455,8 +459,8 @@ void Neoclassical::Read_Profiles ()
   ZII = NZA.GetY      (0);
   AII = NZA.GetdYdX   (0);
 
-  printf ("NI  = %3d  ZI  = %11.4e  AI  = %11.4e\n", NI,  ZI,  AI);
-  printf ("NII = %3d  ZII = %11.4e  AII = %11.4e\n", NII, ZII, AII);
+  printf ("NI  = %3d  ZI  = %9.2e  AI  = %9.2e\n", NI,  ZI,  AI);
+  printf ("NII = %3d  ZII = %9.2e  AII = %9.2e\n", NII, ZII, AII);
 
   // Interpolate profiles onto existing psi grid
   double fac0 = dpsidr (0)      /a;
@@ -893,7 +897,7 @@ void Neoclassical::Get_Derived ()
 	}
       Wcritnek (j) = x * rk (j) * a;
 
-      printf ("m = %3d  WcritTe/a = %11.4e  WcritTi/a = %11.4e  Wcritne/a = %11.4e\n",
+      printf ("m = %3d  WcritTe/a = %9.2e  WcritTi/a = %9.2e  Wcritne/a = %9.2e\n",
 	      mk (j), WcritTek (j)/a, WcritTik (j)/a, Wcritnek (j)/a);
     }
 
@@ -915,7 +919,7 @@ void Neoclassical::Get_Derived ()
       w_betak  (j) = sk (j) * gk (j) * fabs (B_0) /mu_0 /nek (j) /R_0/R_0 /e /qk(j);
       w_Omegk  (j) = sk (j) * qk (j) * e * gk (j) * fabs (B_0) /AI /m_p;
 
-      printf ("m = %3d  wE = %11.4e  w_ast_e = %11.4e  w_ast_i = %11.4e  w_ast_I = %11.4e  w_beta = %11.4e  w_Omega = %11.4e\n",
+      printf ("m = %3d  wE = %9.2e  w_ast_e = %9.2e  w_ast_i = %9.2e  w_ast_I = %9.2e  w_beta = %9.2e  w_Omega = %9.2e\n",
 	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3, w_betak (j) /1.e3, w_Omegk (j) /1.e3);
     }
 
@@ -935,7 +939,7 @@ void Neoclassical::Get_Derived ()
       tau_thk (j) = 1. /nu_iik (j) / (1. + (qk(j) * R_0 /rk(j) /a) * (qk(j) * R_0 /rk(j) /a) /akk(j));
       tau_cxk (j) = 1. /NNk(j) /SVN;
 
-      printf ("m = %3d  P0 = %11.4e  tau_A = %11.4e  tau_R = %11.4e  tau_M = %11.4e  tau_th = %11.4e  tau_cx = %11.4e\n",
+      printf ("m = %3d  P0 = %9.2e  tau_A = %9.2e  tau_R = %9.2e  tau_M = %9.2e  tau_th = %9.2e  tau_cx = %9.2e\n",
 	      mk (j), P0 /1.e19/e/1.e3, tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j), tau_cxk (j));
     }
 
@@ -1003,7 +1007,7 @@ void Neoclassical::Get_Viscosities ()
       mu_01_e (j) = (5./2.) * y (6) - y (7);
       mu_11_e (j) = y (8) - 5. * y (7) + (25./4.) * y (6);
 
-      printf ("m = %3d  mu_i = (%11.4e, %11.4e, %11.4e)  mu_I = (%11.4e, %11.4e, %11.4e)  mu_e = (%11.4e, %11.4e, %11.4e)\n",
+      printf ("m = %3d  mu_i = (%9.2e, %9.2e, %9.2e)  mu_I = (%9.2e, %9.2e, %9.2e)  mu_e = (%9.2e, %9.2e, %9.2e)\n",
 	      mk (j), mu_00_i (j), mu_01_i (j), mu_11_i (j), mu_00_I (j), mu_01_I (j), mu_11_I (j), mu_00_e (j), mu_01_e (j), mu_11_e (j));
     }
 }
@@ -1317,7 +1321,7 @@ void Neoclassical::Get_Frequencies ()
 	  w_EB        (j) = - double (ntor) * (w_E2k (j));
 	}
 
-      printf ("m = %3d  w_linear = %11.4e  w_nonlinear = %11.4e  w_EB = %11.4e  w_ast_ik = %11.4e  w_ast_ek = %11.4e  w_nc_i = %11.4e  w_nc_e = %11.4e\n",
+      printf ("m = %3d  w_linear = %9.2e  w_nonlinear = %9.2e  w_EB = %9.2e  w_ast_ik = %9.2e  w_ast_ek = %9.2e  w_nc_i = %9.2e  w_nc_e = %9.2e\n",
 	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_ek (j) /1.e3, w_nc_ik (j) /1.e3, (w_nc_eek (j) + w_nc_eik (j)) /1.e3);
     }
   
@@ -1338,7 +1342,7 @@ void Neoclassical::Get_Frequencies ()
       rhothek (j) =   v_T_ek (j)      * m_e * qk (j) * R_0 /e /fabs(B_0) /gk (j) /rk (j) /a;
       rhothik (j) =   v_T_ik (j) * AI * m_p * qk (j) * R_0 /e /fabs(B_0) /gk (j) /rk (j) /a;
 
-      printf ("m = %3d  alpha_b_e = %11.4e  alpha_b_i = %11.4e  alpha_c = %11.4e  alpha_p = %11.4e  rho_th_e/a = %11.4e  rho_th_i/a = %11.4e\n",
+      printf ("m = %3d  alpha_b_e = %9.2e  alpha_b_i = %9.2e  alpha_c = %9.2e  alpha_p = %9.2e  rho_th_e/a = %9.2e  rho_th_i/a = %9.2e\n",
 	      mk (j), alpbek (j), alpbik (j), alpck (j), alppk (j), rhothek (j)/a, rhothik (j)/a);
     }
 }
@@ -1372,7 +1376,7 @@ void Neoclassical::Get_LayerWidths ()
       if (tauk (j) < TAUMIN)
 	tauk (j) = TAUMIN;
 
-      printf ("m = %3d  tau = %11.4e  P_E = %11.4e  P_M = %11.4e  D = %11.4e  Q_E = %11.4e  Q_e = %11.4e  Q_i = %11.4e\n",
+      printf ("m = %3d  tau = %9.2e  P_E = %9.2e  P_M = %9.2e  D = %9.2e  Q_E = %9.2e  Q_e = %9.2e  Q_i = %9.2e\n",
 	    mk (j), tauk (j), PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
     }
 
@@ -1589,36 +1593,59 @@ void Neoclassical::WriteStage3Netcdfc ()
 			  + (ZII * nIk(i) /nek(i)) * (w_ast_Ik(i) + w_nc_I2k(i))) /1.e3;
     }
 
-  int NISLAND = 100;
-  Array<double,2> RHS (nres, NISLAND);
-  double WPSIMAX = 0.1;
+  int NISLAND = 200;
+  Array<double,2> RHS1 (nres, NISLAND);
+  Array<double,2> RHS2 (nres, NISLAND);
+  double WPSIMAX = 0.2;
 
   for (int j = 0; j < nres; j++)
     for (int i = 0; i < NISLAND; i++)
       {
-	double wpsi = double (i+1) * WPSIMAX /double (NISLAND);
-	double wr   = R_0 * wpsi /dPsidr (j);
-	double wrh  = 0.8227 * wr /2. /rk(j) /a;
-	double wrce = WcritTek (j);
-	double wrci = WcritTik (j);
-	double wrcn = Wcritnek (j);
-	double rhoe = rhothek  (j);
-	double rhoi = rhothik  (j);
+	double wpsi   = double (i+1) * WPSIMAX /double (NISLAND);
+	double wr     = R_0 * wpsi /dPsidr (j);
+	double wrh    = 0.8227 * wr           /2. /rk(j) /a;
+	double wrce   = 0.8227 * WcritTek (j) /2. /rk(j) /a;
+	double wrci   = 0.8227 * WcritTik (j) /2. /rk(j) /a;
+	double wrcn   = 0.8227 * Wcritnek (j) /2. /rk(j) /a;
+	double rhoe   = 0.8227 * rhothek  (j) /2. /rk(j) /a;
+	double rhoi   = 0.8227 * rhothik  (j) /2. /rk(j) /a;
+	double facbTe = (eta_ek (j) /(1. + eta_ek (j))) * wr /(wrce*wrce + rhoe*rhoe + wr*wr);
+	double facbne = (1.         /(1. + eta_ek (j))) * wr /(wrcn*wrcn + rhoe*rhoe + wr*wr);
+	double facbTi = (eta_ik (j) /(1. + eta_ik (j))) * wr /(wrci*wrci + rhoi*rhoi + wr*wr);
+	double facbni = (1.         /(1. + eta_ik (j))) * wr /(wrcn*wrcn + rhoi*rhoi + wr*wr);
+	double faccTe = (eta_ek (j) /(1. + eta_ek (j))) * wr /(wrce*wrce + wr*wr);
+	double faccne = (1.         /(1. + eta_ek (j))) * wr /(wrcn*wrcn + wr*wr);
+	double faccTi = (eta_ik (j) /(1. + eta_ik (j))) * wr /(wrci*wrci + wr*wr);
+	double faccni = (1.         /(1. + eta_ik (j))) * wr /(wrcn*wrcn + wr*wr);
+	double facc   =   (nek (j) /(nek (j) + nik (j))) * (faccTe + faccne)
+	                + (nik (j) /(nek (j) + nik (j))) * (faccTi + faccni);
+	double facpTi = (eta_ik (j) /(1. + eta_ik (j))) * wr /(wrci*wrci + wr*wr) /(wrci*wrci + wr*wr);
+	double facpni = (1.         /(1. + eta_ik (j))) * wr /(wrcn*wrcn + wr*wr) /(wrcn*wrcn + wr*wr);
+ 
+	double boot  =   alpbek (j) * (facbTe + facbne) + alpbik (j) * (facbTi + facbni);
+	double curv  =   alpck  (j) * facc;
+	double polz  =   alppk  (j) * (facpTi + facpni);
+	double poem1 =   Poem1  (j) * (wr /rk (j) /a) * log (wr /rk(j) /a);
+	double poem2 = - Poem2  (j) * wr /rk(j) /a;
+	double poem3 = - Poem3  (j) * wr /rk(j) /a;
+	double poem  = ((poem1 + poem2) *  wrce*wrce + poem3 * wr*wr) /(wrce*wrce + wr*wr);
 
-	double rhs = - EEh (j, j) 
-	  + alpbek (j) * (wr*wr /(wrce*wrcn + rhoe*rhoe + wr*wr)) /wrh
-	  + alpbik (j) * (wr*wr /(wrci*wrcn + rhoi*rhoi + wr*wr)) /wrh
-	  + alpck  (j) * (wr*wr /(wrcn*wrcn             + wr*wr)) /wrh
-	  + alppk  (j) * (wr*wr /(wrci*wrcn + wr*wr)) * (wr*wr /(wrci*wrcn + wr*wr)) /wrh/wrh/wrh;
+	double rhs1 = - EEh (j, j) + poem;
+	double rhs2 = rhs1 + boot + curv + polz;
 
-	RHS (j, i) = rhs;
+	RHS1 (j, i) = rhs1;
+	RHS2 (j, i) = rhs2;
       }
 
-  double* w_x   = new double [NISLAND];
-  double* rhs_x = new double [nres*NISLAND];
+  double* w_x    = new double [NISLAND];
+  double* rhs1_x = new double [nres*NISLAND];
+  double* rhs2_x = new double [nres*NISLAND];
   for (int j = 0; j < nres; j++)
     for (int i = 0; i < NISLAND; i++)
-      rhs_x[i + j*NISLAND] = RHS (j, i);
+      {
+	rhs1_x[i + j*NISLAND] = RHS1 (j, i);
+	rhs2_x[i + j*NISLAND] = RHS2 (j, i);
+      }
 
   for (int i = 0; i < NISLAND; i++)
     w_x[i] = double (i+1) * WPSIMAX /double (NISLAND);
@@ -1913,10 +1940,11 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_def_var (dataFile, "w_psi", NC_DOUBLE, 1, &island_d, &w_y);
   
   // rhs
-  int rhs_d[2], rhs_y;
+  int rhs_d[2], rhs1_y, rhs2_y;
   rhs_d[0] = nres_d;
   rhs_d[1] = island_d;
-  err += nc_def_var (dataFile, "rhs", NC_DOUBLE, 2, rhs_d, &rhs_y);
+  err += nc_def_var (dataFile, "rhs1", NC_DOUBLE, 2, rhs_d, &rhs1_y);
+  err += nc_def_var (dataFile, "rhs2", NC_DOUBLE, 2, rhs_d, &rhs2_y);
 
   err += nc_enddef (dataFile);
 
@@ -1996,7 +2024,8 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, w_th_i_y,      w_th_i_x);
   err += nc_put_var_double (dataFile, w_para_y,      w_para_x);
   err += nc_put_var_double (dataFile, w_y,           w_x);
-  err += nc_put_var_double (dataFile, rhs_y,         rhs_x);
+  err += nc_put_var_double (dataFile, rhs1_y,        rhs1_x);
+  err += nc_put_var_double (dataFile, rhs2_y,        rhs2_x);
  
   if (err != 0)
     {
@@ -2027,7 +2056,8 @@ void Neoclassical::WriteStage3Netcdfc ()
   delete[] fac11_x;    delete[] fac12_x;    delete[] w_nc_i_x;   delete[] w_nc_e_x;      delete[] w_th_i_x;  
   delete[] w_para_x;   delete[] w_EB0_x;    delete[] w_EB1_x;    delete[] w_EB2_x;       delete[] w_nc_I0_x;  
   delete[] w_nc_I1_x;  delete[] w_nc_I2_x;  delete[] w_pnc_I0_x; delete[] w_pnc_I1_x;    delete[] w_pnc_I2_x; 
-  delete[] w_tk_x;     delete[] w_pk_x;     delete[] rhs_x;      delete[] w_x;           delete[] mk_x;
+  delete[] w_tk_x;     delete[] w_pk_x;     delete[] rhs1_x;     delete[] w_x;           delete[] mk_x;
+  delete[] rhs2_x;
 }
 
 // #######################################################################################
@@ -2054,7 +2084,7 @@ void Neoclassical::Get_Normalized ()
       printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
 	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j));
 
-      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+      fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                    rhok (j),
 	       a /R_0,                      Sk,                          tm,                         th,
 	       sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                       wkn, 
@@ -2065,7 +2095,7 @@ void Neoclassical::Get_Normalized ()
 	       Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
 	       Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3, tx,
 	       alpbek (j),                  alpbik (j),                  alpck (j),                  alppk (j),
-	       rhothek (j),                 rhothik (j),                 eta_ek (j));
+	       rhothek (j),                 rhothik (j),                 eta_ek (j),                 eta_ik (j));
 	       
     }
    fclose (file);
@@ -2089,7 +2119,7 @@ void Neoclassical::Get_Normalized ()
 	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
 	  double tx  = tau_cxk (j) /tau_A;
 
-	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
 		   a /R_0,                      Sk,                          tm,                         th,
 		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 
@@ -2100,7 +2130,7 @@ void Neoclassical::Get_Normalized ()
 		   Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
 		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx,
 		   alpbek (j),                  alpbik (j),                  alpck (j),                  alppk (j),
-		   rhothek (j),                 rhothik (j),                 eta_ek (j));
+		   rhothek (j),                 rhothik (j),                 eta_ek (j),                 eta_ik (j));
 	}
       fclose (file);
 
@@ -2309,7 +2339,7 @@ void Neoclassical::RK4Adaptive (double& x, Array<double,1>& y, double& h,
   // Abort if step-length falls below h_min
   if (fabs(h) < h_min)
     { 
-      //printf ("Neoclassical::RK4Adpative: Warning - |h| < hmin at x = %11.4e\n", x);
+      //printf ("Neoclassical::RK4Adpative: Warning - |h| < hmin at x = %9.2e\n", x);
       //exit (1);
       if (h >= 0.)
 	h = h_min;
@@ -2319,7 +2349,7 @@ void Neoclassical::RK4Adaptive (double& x, Array<double,1>& y, double& h,
 
   // Diagnose step
   if (diag) 
-    fprintf (file, "x = %11.4e hin = %11.4e err = %11.4e acc = %11.4e hest = %11.4e hout = %11.4e count = %3d\n", 
+    fprintf (file, "x = %9.2e hin = %9.2e err = %9.2e acc = %9.2e hest = %9.2e hout = %9.2e count = %3d\n", 
 	     x, hin, t_err, acc, h_est, h, count);
 
   // If truncation error acceptable take step 

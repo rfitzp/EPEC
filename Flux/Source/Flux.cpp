@@ -75,6 +75,9 @@ void Flux::SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TI
   H0      = 1.e-6;
   ACC     = 1.e-14;
   ETA     = 1.e-8;
+
+  EPS     = 1.e-4;
+  DELTA   = 1.e-7;
   
   // Read namelist file Inputs/Flux.nml
   NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NEOANG);

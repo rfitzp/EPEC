@@ -9,12 +9,15 @@
 // void Flux:: CalcStraightAngle     ()
 // void Flux:: CalcGamma             ()
 // void Flux:: CalcNeoclassicalAngle ()
+// void Flux:: CalcTearingSolution   (int i)
 // int  Flux:: Rhs1                  (double r, const double y[], double dydr[], void*)
 // int  Flux:: Rhs2                  (double r, const double y[], double dydr[], void*)
 // int  Flux:: Rhs3                  (double r, const double y[], double dydr[], void*)
 // int  Flux:: Rhs4                  (double r, const double y[], double dydr[], void*)
 // int  Flux:: Rhs5                  (double r, const double y[], double dydr[], void*)
 // int  Flux:: Rhs6                  (double r, const double y[], double dydr[], void*)
+// int  Flux:: Rhs7                  (double r, const double y[], double dydr[], void*)
+// int  Flux:: Rhs8                  (double r, const double y[], double dydr[], void*)
 
 #include "Flux.h"
 
@@ -324,6 +327,86 @@ void Flux::CalcNeoclassicalAngle ()
   delete[]                y;
 }
 
+// ######################################################################
+// Function to solve cylindrical tearinf problem for ith rational surface
+// ######################################################################
+void Flux::CalcTearingSolution (int i)
+{
+  gsl_odeiv2_system           sys7 = {pRhs7, NULL, 2, this};
+  gsl_odeiv2_system           sys8 = {pRhs8, NULL, 2, this};
+  const gsl_odeiv2_step_type* T    = gsl_odeiv2_step_rk8pd;
+  gsl_odeiv2_driver*          d    = gsl_odeiv2_driver_alloc_y_new (&sys7, T, H0, ACC/2., ACC/2.);
+  double*                     y    = new double [2]; 
+  double                      r, c, rin, rout;
+
+  ires = i;
+
+  double rs = rres[i];
+  double m  = double (mres[i]);
+  double a  = alpres[i];
+  double b  = betres[i];
+  double D  = DELTA;
+  double lD = log (DELTA);
+  
+  r    = EPS;
+  c    = Interpolate (NPSI, rP, JPrr, r, 0) /4. /(1. + m);
+  y[0] = 1. + c * r*r;
+  y[1] = 2. * c * r;
+  rin  = rs - D;
+  
+  int status = gsl_odeiv2_driver_apply (d, &r, rin, y); 
+  
+  if (status != GSL_SUCCESS)
+    {
+      printf ("Profile: status != GSL_SUCCESS\n");
+      exit (1);
+    }
+
+  double a1m = a * (1. + lD) - (m*m /rs/rs + b - 0.5 * a*a * (3. - 1./a/rs) + a*a * (1. - 1./a/rs) * (0.5 + lD)) * D;
+  double b1m = 0.5 - 0.5 * a * (2. - 1./a/rs) * D;
+  double a2m = 1. - a * D * lD;
+  double b2m = - 0.5 * D;
+  
+  double psim  = pow (r, m) * y[0];
+  double psipm = m * pow (r, m-1.) * y[0] + pow (r, m) * y[1];
+
+  double lm  = psipm /psim;
+  double SDm = (a2m * lm - a1m) /(b1m - b2m * lm);
+  
+  gsl_odeiv2_driver_free (d);
+
+  d    = gsl_odeiv2_driver_alloc_y_new (&sys8, T, - H0, ACC/2., ACC/2.);
+  r    = ra;
+  y[0] = 1.;
+  y[1] = 0.;
+  rout = rs + D;
+
+  status = gsl_odeiv2_driver_apply (d, &r, rout, y); 
+  
+  if (status != GSL_SUCCESS)
+    {
+      printf ("Profile: status != GSL_SUCCESS\n");
+      exit (1);
+    }
+
+  double a1p = a * (1. + lD) + (m*m /rs/rs + b - 0.5 * a*a * (3. - 1./a/rs) + a*a * (1. - 1./a/rs) * (0.5 + lD)) * D;
+  double b1p = 0.5 + 0.5 * a * (2. - 1./a/rs) * D;
+  double a2p = 1. + a * D * lD;
+  double b2p = + 0.5 * D;
+  
+  double psip  = pow (r, -m) * y[0];
+  double psipp = - m * pow (r, -m-1.) * y[0] + pow (r, -m) * y[1];
+
+  double lp  = psipp /psip;
+  double SDp = (a2p * lp - a1p) /(b1p - b2p * lp);
+  
+  gsl_odeiv2_driver_free (d);
+  delete[]                y;
+
+  Deltap[i] = rs * 0.5 * (SDp - SDm);
+  Sigmap[i] = rs * 0.5 * (SDp + SDm);
+}
+
 // #####################################################
 // Function to evaluate right-hand sides of q/g equation
 // #####################################################
@@ -456,6 +539,48 @@ int Flux::Rhs6 (double r, const double y[], double dydr[], void*)
   dydr[5] = y[0]       * inp2 * (1./2./M_PI /fabs(Psic)) * fac;
   dydr[6] = y[0] * b2  * inp2 * (1./2./M_PI /fabs(Psic)) * fac;
   dydr[7] = y[0] * ib2 * inp2 * (1./2./M_PI /fabs(Psic)) * fac;
+     
+  return GSL_SUCCESS;
+}
+
+// #################################################################################
+// Function to evaluate right-hand sides of tearing equation inside rational surface
+// #################################################################################
+int Flux::Rhs7 (double r, const double y[], double dydr[], void*)
+{
+  // y[0] - f     
+  // y[1] - f'
+
+  double m = double (mres[ires]);
+  double n = double (NTOR);
+
+  double q   = Interpolate (NPSI, rP, QP,  r, 0);
+  double Jp  = Interpolate (NPSI, rP, JPr, r, 0);
+  double fac = Jp /r /(1./q - n/m);
+
+  dydr[0] = y[1];
+  dydr[1] = - (1. + 2. * m) * y[1] /r + fac * y[0];
+      
+  return GSL_SUCCESS;
+}
+
+// ##################################################################################
+// Function to evaluate right-hand sides of tearing equation outside rational surface
+// ##################################################################################
+int Flux::Rhs8 (double r, const double y[], double dydr[], void*)
+{
+  // y[0] - g     
+  // y[1] - g'
+
+  double m = double (mres[ires]);
+  double n = double (NTOR);
+
+  double q   = Interpolate (NPSI, rP, QP,  r, 0);
+  double Jp  = Interpolate (NPSI, rP, JPr, r, 0);
+  double fac = Jp /r /(1./q - n/m);
+
+  dydr[0] = y[1];
+  dydr[1] = - (1. - 2. * m) * y[1] /r + fac * y[0];
      
   return GSL_SUCCESS;
 }

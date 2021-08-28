@@ -115,7 +115,7 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
 
   do i = 1, NRBOX
      PSIN (i) = dble (i-1) /RMAX
-     CURR (i) = - R0 * Pp(i) - TTp(i) /R0/MU0
+     CURR (i) = - R (i) * Pp (i) - TTp (i) /R (i) /MU0
   end do   
 
   read (100, '(2i5)') NBOUND, NLIM
@@ -187,8 +187,8 @@ subroutine gFileRead () bind (c, name = 'gFileRead')
      xp    (i) = P    (i) *MU0/B0/B0
      xttp  (i) = TTp  (i) /dabs(B0)
      xpp   (i) = Pp   (i) *MU0*R0*R0/dabs(B0)
-     xcurr (i) = CURR (i) *MU0*R0/dabs(B0)
      xq    (i) = Q    (i)
+     xcurr (i) = CURR (i) *MU0*R0/dabs(B0)
   end do
 
   open  (unit = 101, file = 'Outputs/Stage1/Profiles.txt')

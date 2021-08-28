@@ -68,7 +68,8 @@
 // 1.26 - Added calculation of alpha_b(e,i), alpha_c, and alpha_p
 // 1.27 - Added NETCDF output. Adapted ti run with OMFIT.
 
-// 2.1  - Compeltely went over to OMFIT mode
+// 2.0  - Completely went over to OMFIT mode
+// 2.1  - Added POEM terms in Rutherford equation
 
 // ################################################################
 
@@ -290,6 +291,9 @@ class Neoclassical
   Array<double,1> C1;     // C1
   Array<double,1> C2;     // C2
   Array<double,1> DR;     // GGJ stability parameter
+  Array<double,1> Poem1;  // Poem terms for right-hand side of Rutherford equations
+  Array<double,1> Poem2;  // Poem terms for right-hand side of Rutherford equations
+  Array<double,1> Poem3;  // Poem terms for right-hand side of Rutherford equations
 
   Array<double,2> EEh;    // Moduli of E-maxtrix elements 
 
@@ -324,25 +328,25 @@ class Neoclassical
   Array<double,1> chiek;      // Perpendicular electron energy diffusivities from cFile (m^2/s)
   Array<double,1> chink;      // Perpendicular particle diffusivities from cFile (m^2/s)
   Array<double,1> chiik;      // Perpendicular ion energy diffusivities from cFile (m^2/s)
-  Array<double,1> alpbek;     // Bootstrap current parameter
-  Array<double,1> alpbik;     // Bootstrap current parameter
-  Array<double,1> alpck;      // Curvature parameter
-  Array<double,1> alppk;      // Polarization current parameter
-  Array<double,1> rhothek;    // Electron poloidal gyroradius (m)
-  Array<double,1> rhothik;    // Majority ion poloidal gyroradius (m)
+  Array<double,1> alpbek;     // Bootstrap current parameters
+  Array<double,1> alpbik;     // Bootstrap current parameters
+  Array<double,1> alpck;      // Curvature parameters
+  Array<double,1> alppk;      // Polarization current parameters
+  Array<double,1> rhothek;    // Electron poloidal gyroradii (m)
+  Array<double,1> rhothik;    // Majority ion poloidal gyroradii (m)
 
-  Array<double,1> dnedP1k;    // Electron number density 1st derivative wrt PsiN (m^-3)
-  Array<double,1> dTedP1k;    // Electron temperature 1st derivative wrt PsiN (J)
-  Array<double,1> dnidP1k;    // Ion number density 1st derivative wrt PsiN (m^-3)
-  Array<double,1> dTidP1k;    // Ion temperature 1st derivative wrt PsiN (J)
-  Array<double,1> dnedP2k;    // Electron number density 2nd derivative wrt PsiN (m^-3)
-  Array<double,1> dTedP2k;    // Electron temperature 2nd derivative wrt PsiN (J)
-  Array<double,1> dnidP2k;    // Ion number density 2nd derivative wrt PsiN (m^-3)
-  Array<double,1> dTidP2k;    // Ion temperature 2nd derivative wrt PsiN (J)
-  Array<double,1> dnedP3k;    // Electron number density 3rd derivative wrt PsiN (m^-3)
-  Array<double,1> dTedP3k;    // Electron temperature 3rd derivative wrt PsiN (J)
-  Array<double,1> dnidP3k;    // Ion number density 3rd derivative wrt PsiN (m^-3)
-  Array<double,1> dTidP3k;    // Ion temperature 3rd derivative wrt PsiN (J)
+  Array<double,1> dnedP1k;    // Electron number density 1st derivatives wrt PsiN (m^-3)
+  Array<double,1> dTedP1k;    // Electron temperature 1st derivatives wrt PsiN (J)
+  Array<double,1> dnidP1k;    // Ion number density 1st derivatives wrt PsiN (m^-3)
+  Array<double,1> dTidP1k;    // Ion temperature 1st derivatives wrt PsiN (J)
+  Array<double,1> dnedP2k;    // Electron number density 2nd derivatives wrt PsiN (m^-3)
+  Array<double,1> dTedP2k;    // Electron temperature 2nd derivatives wrt PsiN (J)
+  Array<double,1> dnidP2k;    // Ion number density 2nd derivatives wrt PsiN (m^-3)
+  Array<double,1> dTidP2k;    // Ion temperature 2nd derivatives wrt PsiN (J)
+  Array<double,1> dnedP3k;    // Electron number density 3rd derivatives wrt PsiN (m^-3)
+  Array<double,1> dTedP3k;    // Electron temperature 3rd derivatives wrt PsiN (J)
+  Array<double,1> dnidP3k;    // Ion number density 3rd derivatives wrt PsiN (m^-3)
+  Array<double,1> dTidP3k;    // Ion temperature 3rd derivatives wrt PsiN (J)
 
   Array<double,1> v_T_ek;     // Electron thermal velocities (m/s)
   Array<double,1> v_T_ik;     // Majority ion thermal velocities (m/s)
@@ -392,21 +396,21 @@ class Neoclassical
 
   Array<double,1> Sk;         // Lundquist numbers   
   Array<double,1> tauk;       // Ratio of diamagnetic frequencies
-  Array<double,1> PEk;        // Perpendicular particle/energy transport parameter
-  Array<double,1> PMk;        // Perpendicular momentum transport parameter
-  Array<double,1> Dk;         // Semi-collisional parameter
-  Array<double,1> QEk;        // ExB frequency parameter
-  Array<double,1> Qek;        // Electron diamagnetic frequency parameter
-  Array<double,1> Qik;        // Ion diamagnetic frequency parameter
-  Array<double,1> delk;       // Linear layer width (m)
+  Array<double,1> PEk;        // Perpendicular particle/energy transport parameters
+  Array<double,1> PMk;        // Perpendicular momentum transport parameters
+  Array<double,1> Dk;         // Semi-collisional parameters
+  Array<double,1> QEk;        // ExB frequency parameters
+  Array<double,1> Qek;        // Electron diamagnetic frequency parameters
+  Array<double,1> Qik;        // Ion diamagnetic frequency parameters
+  Array<double,1> delk;       // Linear layer widths (m)
   
-  Array<double,1> gt;         // Fraction of trapped particles
-  Array<double,1> nu_P_e;     // Electron bananna/plateau collisionality parameter
-  Array<double,1> nu_P_i;     // Majority ion bananna/plateau collisionality  parameter
-  Array<double,1> nu_P_I;     // Impurity ion bananna/plateau collisionality parameter
-  Array<double,1> nu_PS_e;    // Electron plateau/Pfirsch-Schluter collisionality parameter
-  Array<double,1> nu_PS_i;    // Majority ion plateau/Pfirsch-Schluter collisionality parameter
-  Array<double,1> nu_PS_I;    // Impurity ion plateau/Pfirsch-Schluter collisionality parameter
+  Array<double,1> gt;         // Fractions of trapped particles
+  Array<double,1> nu_P_e;     // Electron bananna/plateau collisionality parameters
+  Array<double,1> nu_P_i;     // Majority ion bananna/plateau collisionality  parameters
+  Array<double,1> nu_P_I;     // Impurity ion bananna/plateau collisionality parameters
+  Array<double,1> nu_PS_e;    // Electron plateau/Pfirsch-Schluter collisionality parameters
+  Array<double,1> nu_PS_i;    // Majority ion plateau/Pfirsch-Schluter collisionality parameters
+  Array<double,1> nu_PS_I;    // Impurity ion plateau/Pfirsch-Schluter collisionality parameters
   Array<double,1> x_iI;       // Ratios of ion thermal speeds
   Array<double,1> x_Ii;       // Inverse ratios of ion thermal speeds
   
@@ -426,26 +430,26 @@ class Neoclassical
   // -----------------------
   // Neoclassical parameters
   // -----------------------
-  Array<double,1> G_ii_00;  // Neoclassical majority ion flow parameter
-  Array<double,1> L_ii_00;  // Neoclassical majority ion flow parameter
-  Array<double,1> L_ii_01;  // Neoclassical majority ion flow parameter
-  Array<double,1> L_iI_00;  // Neoclassical majority ion flow parameter
-  Array<double,1> L_iI_01;  // Neoclassical majority ion flow parameter
+  Array<double,1> G_ii_00;  // Neoclassical majority ion flow parameters
+  Array<double,1> L_ii_00;  // Neoclassical majority ion flow parameters
+  Array<double,1> L_ii_01;  // Neoclassical majority ion flow parameters
+  Array<double,1> L_iI_00;  // Neoclassical majority ion flow parameters
+  Array<double,1> L_iI_01;  // Neoclassical majority ion flow parameters
 
-  Array<double,1> G_Ii_00;  // Neoclassical impurity ion flow parameter
-  Array<double,1> L_Ii_00;  // Neoclassical impurity ion flow parameter
-  Array<double,1> L_Ii_01;  // Neoclassical impurity ion flow parameter
-  Array<double,1> L_II_00;  // Neoclassical impurity ion flow parameter
-  Array<double,1> L_II_01;  // Neoclassical impurity ion flow parameter
+  Array<double,1> G_Ii_00;  // Neoclassical impurity ion flow parameters
+  Array<double,1> L_Ii_00;  // Neoclassical impurity ion flow parameters
+  Array<double,1> L_Ii_01;  // Neoclassical impurity ion flow parameters
+  Array<double,1> L_II_00;  // Neoclassical impurity ion flow parameters
+  Array<double,1> L_II_01;  // Neoclassical impurity ion flow parameters
 
-  Array<double,1> G_ei_00;  // Neoclassical electron flow parameter
-  Array<double,1> L_ee_00;  // Neoclassical electron flow parameter
-  Array<double,1> L_ee_01;  // Neoclassical electron flow parameter
-  Array<double,1> L_ei_00;  // Neoclassical electron flow parameter
-  Array<double,1> L_ei_01;  // Neoclassical electron flow parameter
-  Array<double,1> L_eI_00;  // Neoclassical electron flow parameter
-  Array<double,1> L_eI_01;  // Neoclassical electron flow parameter
-  Array<double,1> Q_00;     // Neoclassical electron flow parameter
+  Array<double,1> G_ei_00;  // Neoclassical electron flow parameters
+  Array<double,1> L_ee_00;  // Neoclassical electron flow parameters
+  Array<double,1> L_ee_01;  // Neoclassical electron flow parameters
+  Array<double,1> L_ei_00;  // Neoclassical electron flow parameters
+  Array<double,1> L_ei_01;  // Neoclassical electron flow parameters
+  Array<double,1> L_eI_00;  // Neoclassical electron flow parameters
+  Array<double,1> L_eI_01;  // Neoclassical electron flow parameters
+  Array<double,1> Q_00;     // Neoclassical electron flow parameters
 
   // ...................
   // Natural frequencies

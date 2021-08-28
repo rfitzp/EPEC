@@ -1,0 +1,174 @@
+\documentclass[notitlepage,12pt]{article}
+\pdfoutput = 1
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\allowdisplaybreaks
+
+\title{\bf Cylindrical Tearing Mode Analysis}
+\date{\today}
+\author{Richard Fitzpatrick}
+
+\begin{document}
+\maketitle
+
+\section{Normalization}
+All lengths are normalized to $R_0$. All magnetic field-strengths are normalized to $B_0$. All current densities are
+normalized to $B_0/(R_0\,\mu_0)$. 
+
+\section{Coordinates}
+Adopt cylindrical coordinates $r$, $\theta$, $z$. 
+
+\section{Plasma Equilibrium}
+The equilibrium magnetic field is written
+\begin{equation}
+{\bf B} = \nabla{\mit\Psi}(r)\times{\bf e}_z + {\bf e}_z.
+\end{equation}
+So, 
+\begin{align}
+B_r &= 0,\\[0.5ex]
+B_\theta &= -\frac{d{\mit\Psi}}{dr},\\[0.5ex]
+B_z &= 1.
+\end{align}
+The safety-factor profile is
+\begin{equation}
+q(r) = \frac{r\,B_z}{B_\theta}= \frac{r}{B_\theta}.
+\end{equation}
+The equilibrium current density is written
+\begin{equation}
+{\bf J} = J_z(r)\,{\bf e}_z,
+\end{equation}
+where
+\begin{equation}
+J_z = \frac{1}{r}\,\frac{d(r\,B_\theta)}{dr} =\frac{1}{r}\,\frac{d}{dr}\!\left(\frac{r^{\,2}}{q}\right)=\frac{2-s}{q},
+\end{equation}
+where
+\begin{equation}
+s(r) = \frac{d\ln q}{dr}.
+\end{equation}
+
+\section{Cylindrical Tearing Mode Equation}
+Let 
+\begin{align}
+{\bf b} &= \nabla\left[\psi(r)\,{\rm e}^{\,{\rm i}\,(m\,\theta-n\,z)}\right]\times{\bf e}_z\,\\[0.5ex]
+{\bf j} &\simeq -\left[\frac{1}{r}\,\frac{d}{dr}\!\left(r\,\frac{d\psi}{dr}\right)-\frac{m^{\,2}}{r^{\,2}}\,\psi\right]{\rm e}^{\,{\rm i}\,(m\,\theta-n\,z)}\,{\bf e}_z,
+\end{align}
+be the perturbed magnetic field and current density, respectively. Here, we have assumed that  $r\ll 1$. Linearized  force balance
+yields
+\begin{equation}
+({\bf J}\cdot\nabla)\,{\bf b} +({\bf j}\cdot\nabla)\,{\bf B} -({\bf B}\cdot\nabla)\,{\bf j} - ({\bf b}\cdot\nabla)\,{\bf J} = 0.
+\end{equation}
+The $z$ component of the previous equation gives the cylindrical tearing mode equation:
+\begin{equation}
+\frac{d^{\,2}\psi}{dr^{\,2}}+\frac{1}{r}\,\frac{d\psi}{dr} - \frac{m^{\,2}}{r^{\,2}}\,\psi - \frac{J_z'\,\psi}{r\,(1/q-n/m)} = 0,
+\end{equation}
+where $'\equiv d/dr$.
+
+\section{Behavior in Vicinity of Rational Surface}
+Suppose that $q(r_s)=m/n$. Let $\rho = r-r_s$. Expanding the previous equation about $r=r_s$, we obtain
+\begin{equation}
+\frac{d^{\,2}\psi}{d\rho^{\,2}} + \frac{1}{r_s}\left(1-\frac{\rho}{r_s}\right)\frac{d\psi}{d\rho} - \frac{m^{\,2}}{r_s^{\,2}}\left(1-\frac{2\,\rho}{r_s}\right)\psi - 
+\left(\frac{\alpha}{\rho} + \beta\right)\psi = 0,
+\end{equation}
+where
+\begin{align}
+\alpha &= -\left(\frac{q\,J_z'}{s}\right)_{r=r_s},\\[0.5ex]
+\beta &= \alpha\left(\frac{J_z''}{J_z'} +\frac{s-1}{r_s}-\frac{q''}{2\,q'}\right)_{r=r_s}.
+\end{align}
+We obtain
+\begin{align}
+\psi(\rho) &= {\mit\Psi}\left[1+\left(\frac{{\mit\Sigma}'\pm{\mit\Delta}'}{2}\right)\rho\right.\nonumber\\[0.5ex]
+&\left.\phantom{===}+\left\{\alpha\left(\frac{{\mit\Sigma}'\pm{\mit\Delta}'}{4}\right)\left(1-\frac{1}{\alpha\,r_s}\right)+\frac{1}{2}\left[
+\frac{m^{\,2}}{r_s^{\,2}} +\beta - \frac{\alpha^{\,2}}{2}\left(3-\frac{1}{\alpha\,r_s}\right)\right]\right\}\rho^{\,2}\right.\nonumber\\[0.5ex]
+&\left.\phantom{===}+\alpha\left\{\rho + \frac{\alpha}{2}\left(1-\frac{1}{\alpha\,r_s}\right)\rho^{\,2}\right\}\ln|\rho|+{\cal O}(\rho^{\,3})
+\right].
+\end{align}
+Here, the plus sign corresponds to $\rho>0$, whereas the minus sign corresponds to $\rho<0$.
+It follows that
+\begin{align}
+\psi'(\rho) &= {\mit\Psi}\left[\frac{{\mit\Sigma}'\pm{\mit\Delta}'}{2}+\alpha\right.\nonumber\\[0.5ex]
+&\left.\phantom{===}+\left\{\alpha\left(\frac{{\mit\Sigma}'\pm{\mit\Delta}'}{2}\right)\left(1-\frac{1}{\alpha\,r_s}\right)+
+\frac{m^{\,2}}{r_s^{\,2}} +\beta - \frac{\alpha^{\,2}}{2}\left(3-\frac{1}{\alpha\,r_s}\right)
++\frac{\alpha^{\,2}}{2}\left(1-\frac{1}{\alpha\,r_s}\right)\right\}\rho\right.\nonumber\\[0.5ex]
+&\left.\phantom{===}+\alpha\,\ln|\rho| + \alpha^{\,2}\left(1-\frac{1}{\alpha\,r_s}\right)\rho\,\ln|\rho|+{\cal O}(\rho^{\,2})
+\right].
+\end{align}
+Now,
+\begin{equation}
+\lambda_+\equiv \left.\frac{\psi'}{\psi}\right|_{\rho =\delta} = \frac{a_{1+}+b_{1+}\,({\mit\Sigma}'+{\mit\Delta'})}{a_{2+}+ b_{2+}\,({\mit\Sigma}'+{\mit\Delta'})},
+\end{equation}
+where
+\begin{align}
+a_{1+}&= \alpha\,(1+\ln\delta)+\left\{
+\frac{m^{\,2}}{r_s^{\,2}} +\beta - \frac{\alpha^{\,2}}{2}\left(3-\frac{1}{\alpha\,r_s}\right)
++\alpha^{\,2}\left(1-\frac{1}{\alpha\,r_s}\right)\left(\frac{1}{2}+\ln\delta\right)\right\}\delta,\\[0.5ex]
+b_{1+} &=\frac{1}{2}+ \frac{\alpha}{2}\left(2-\frac{1}{\alpha\,r_s}\right)\delta,\\[0.5ex]
+a_{2+} &= 1+\alpha\,\delta\,\ln\delta,\\[0.5ex]
+b_{2+} &= \frac{\delta}{2}.
+\end{align}
+It follows that
+\begin{equation}
+{\mit\Sigma}'+ {\mit\Delta}' = \frac{a_{2+}\,\lambda_+ - a_{1+}}{b_{1+}-b_{2+}\,\lambda_+}.
+\end{equation}
+Likewise,
+\begin{equation}
+\lambda_-\equiv \left.\frac{\psi'}{\psi}\right|_{\rho =-\delta} = \frac{a_{1-}+b_{1-}\,({\mit\Sigma}'-{\mit\Delta'})}{a_{2-}+ b_{2-}\,({\mit\Sigma}'-{\mit\Delta'})},
+\end{equation}
+where
+\begin{align}
+a_{1-}&= \alpha\,(1+\ln\delta)-\left\{
+\frac{m^{\,2}}{r_s^{\,2}} +\beta - \frac{\alpha^{\,2}}{2}\left(3-\frac{1}{\alpha\,r_s}\right)
++\alpha^{\,2}\left(1-\frac{1}{\alpha\,r_s}\right)\left(\frac{1}{2}+\ln\delta\right)\right\}\delta,\\[0.5ex]
+b_{1-} &=\frac{1}{2}- \frac{\alpha}{2}\left(2-\frac{1}{\alpha\,r_s}\right)\delta,\\[0.5ex]
+a_{2-} &= 1-\alpha\,\delta\,\ln\delta,\\[0.5ex]
+b_{2-} &= -\frac{\delta}{2}.
+\end{align}
+It follows that
+\begin{equation}
+{\mit\Sigma}'- {\mit\Delta}' = \frac{a_{2-}\,\lambda_- - a_{1-}}{b_{1-}-b_{2-}\,\lambda_-}.
+\end{equation}
+
+\section{Solution Launched from Magnetic Axis}
+Let
+\begin{equation}
+\psi(r) = r^{\,m}\,f(r).
+\end{equation}
+It follows that
+\begin{equation}
+\psi'(r) = m\,r^{\,m-1}\,f + r^{\,m}\,f'.
+\end{equation}
+The cylindrical tearing mode equation transforms into
+\begin{equation}
+f'' + (1+2\,m)\,\frac{f'}{r} - \frac{J_z'\,f}{r\,(1/q-n/m)} = 0.
+\end{equation}
+The well-behaved solution launched from the magnetic axis is such that
+\begin{equation}
+f(r) = 1 +\left[\frac{c}{4\,(1+m)}\right]r^{\,2},
+\end{equation}
+where 
+\begin{equation}
+c = \left(\frac{J_z''}{1/q-n/m}\right)_{r=0}.
+\end{equation}
+
+\section{Solution Launched from Plasma Boundary}
+Suppose that the plasma boundary lies at $r=a$. 
+Let
+\begin{equation}
+\psi(r) = r^{-m}\,g(r).
+\end{equation}
+It follows that
+\begin{equation}
+\psi'(r) = -m\,r^{-m-1}\,g+ r^{-m}\,g'.
+\end{equation}
+The cylindrical tearing mode equation transforms into
+\begin{equation}
+g'' + (1-2\,m)\,\frac{g'}{r} - \frac{J_z'\,g}{r\,(1/q-n/m)} = 0.
+\end{equation}
+The well-behaved solution launched from the plasma boundary is such that
+\begin{align}
+g(a) &= 1,\\[0.5ex]
+g'(a) &= 0.
+\end{align}
+
+
+\end{document}
