@@ -120,34 +120,32 @@ class Neoclassical
   // ------------------
 
   // Read from Inputs/Neoclassical.nml
-  double COULOMB;  // Coulomb logarithm
-  int    NSMOOTH;  // Number of smoothing cycles for higher devivatives of profiles
-
-  int    INTP;     // If != 0 then use interpolated pFile
-  int    INTF;     // If != 0 then use interpolated fFile
-  int    INTC;     // If != 0 then use interpolated cFile
-  int    CATS;     // If != 0 then use only linear interpolation for cFiles
-
   int    EXB;      //  If == 0 then use ExB frequency profile from pFile
                    //  If == 1 then use ExB frequency profile derived from pFile toroidal and poloidal velocity profiles
                    //  If == 2 then use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical
                    //   poloidal velocity profile
 
   int    IMPURITY; // Impurity switch. If != 0 then single impurity species included in calculation
-
   int    NEUTRAL;  // Neutral switch.  If != 0 then majority ion neutrals included in calculation
   int    NTYPE;    // If == 0 then neutral density distribution exponential. If == 1 then neutral density distribution Lorentzian.
   double NN;       // Flux-surface averaged majority neutral density at plasma boundary (PSI=1) (m^-3)
   double LN;       // Flux-surface averaged majority neutral density decay lengthscale (m)
   double SVN;      // Majority ion/neutral charge exchange rate constant (m^3 /s)
   double YN;       // Majority neutral peaking factor on flux-surfaces
-  double EN;       // Ratio of majority neutral to ion temperatures
+  double EN;       // Ratio of majority neutral to ion temperatures  double COULOMB;  // Coulomb logarithm
+
+  int    INTF;     // If != 0 then use interpolated fFile
+  int    INTP;     // If != 0 then use interpolated pFile
+  int    INTC;     // If != 0 then use interpolated cFile
+  int    CATS;     // If != 0 then use only linear interpolation for cFiles
 
   double TIME;     // Experimental time (ms)
 
   double TAUMIN;   // Minimum allowed value of tau (i.e., ratio of electon to ion diamagnetic frequencies)
                    //  1+tau must be positive otherwise layer width calculation fails.
-
+  int    NSMOOTH;  // Number of smoothing cycles for higher devivatives of profiles
+  double COULOMB;  // Coulomb logarithm
+ 
   // ------------------
   // Physical constants
   // ------------------

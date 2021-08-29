@@ -2237,32 +2237,30 @@ void Neoclassical::Rhs (double x, Array<double,1>& y, Array<double,1>& dydx)
 //  Function to advance set of coupled first-order o.d.e.s by single step
 //  using adaptive fourth-order Runge-Kutta scheme
 //
-//     x       ... independent variable
-//     y       ... array of dependent variables
-//     h       ... step-length
-//     t_err   ... actual truncation error per step 
-//     acc     ... desired truncation error per step
-//     S       ... step-length cannot change by more than this factor from
+//   x       ... independent variable
+//   y       ... array of dependent variables
+//   h       ... step-length
+//   t_err   ... actual truncation error per step 
+//   acc     ... desired truncation error per step
+//   S       ... step-length cannot change by more than this factor from
 //                  step to step
-//     rept    ... number of step recalculations		  
-//     maxrept ... maximum allowable number of step recalculations		  
-//     h_min   ... minimum allowable step-length
-//     h_max   ... maximum allowable step-length
-//     flag    ... controls manner in which truncation error is calculated	
+//   rept    ... number of step recalculations		  
+//   maxrept ... maximum allowable number of step recalculations		  
+//   h_min   ... minimum allowable step-length
+//   h_max   ... maximum allowable step-length
+//   flag    ... controls manner in which truncation error is calculated	
 //
 //  Function advances equations by single step whilst attempting to maintain 
 //  constant truncation error per step of acc:
 //
-//    flag = 0 ... error is absolute
-//    flag = 1 ... error is relative
-//    flag = 2 ... error is mixed
+//   flag = 0 ... error is absolute
+//   flag = 1 ... error is relative
+//   flag = 2 ... error is mixed
 //
 //  If step-length falls below h_min then routine aborts
 // #########################################################################
-void Neoclassical::RK4Adaptive (double& x, Array<double,1>& y, double& h, 
-				double& t_err, double acc, double S, int& rept,
-				int maxrept, double h_min, double h_max, int flag, 
-				int diag, FILE* file)
+void Neoclassical::RK4Adaptive (double& x, Array<double,1>& y, double& h, double& t_err, double acc, double S, int& rept,
+				int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
 {
   int neqns = y.extent (0);
   Array<double,1> y0 (neqns), y1 (neqns);
@@ -2372,9 +2370,9 @@ void Neoclassical::RK4Adaptive (double& x, Array<double,1>& y, double& h,
 // #####################################################################
 // Function to advance set of coupled first-order o.d.e.s by single step
 // using fixed step-length fourth-order Runge-Kutta scheme.
-//     x       ... independent variable
-//     y       ... array of dependent variables
-//     h       ... step-length
+//  x  ... independent variable
+//  y  ... array of dependent variables
+//  h  ... step-length
 // #####################################################################
 void Neoclassical::RK4Fixed (double& x, Array<double,1>& y, double h)
 {

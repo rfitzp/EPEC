@@ -433,13 +433,13 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
  
   fclose (file);
 
-  printf ("R_0 = %11.4e  B_0 = %11.4e  nres = %3d\n", R_0, B_0, nres);
+  printf ("R_0 = %10.3e  B_0 = %10.3e  nres = %3d\n", R_0, B_0, nres);
 
   printf ("E-matrix:\n");
   for (int i = 0; i < nres; i++)
     {
       for (int j = 0; j < nres; j++)
-	printf ("(%9.2e,%9.2e) ", GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
+	printf ("(%10.3e,%10.3e) ", GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
       printf ("\n");
     }
  
@@ -518,7 +518,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	nres = nresn;
     }
 
-  printf ("tau_A = %11.4e  P0 = %11.4e\n", tau_A, P0);
+  printf ("tau_A = %10.3e  P0 = %10.3e\n", tau_A, P0);
 
   // Normalize times
   for (int i = 0; i < NCTRL; i++)
@@ -786,7 +786,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   ChiM   = gsl_vector_complex_calloc (nres);
 
   double SCALEFACTOR = SCALE;
-  printf ("SCALEFACTOR = %11.4e\n", SCALEFACTOR);
+  printf ("SCALEFACTOR = %10.3e\n", SCALEFACTOR);
 
   if (MID == 3)
     {
@@ -855,7 +855,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
-	    printf ("GPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+	    printf ("GPEC: q = %10.3e  Psi = %10.3e  PsiN = %10.3e  Delta = (%10.3e, %10.3e)  Chi = (%10.3e, %10.3e)  W_UNRE = %10.3e  W_UNRE/W_GPEC = %10.3e  W_FULL/W_GPEC = %10.3e\n",
 		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
@@ -935,7 +935,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 	    
-	    printf ("GPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+	    printf ("GPEC: q = %10.3e  Psi = %10.3e  PsiN = %10.3e  Delta = (%10.3e, %10.3e)  Chi = (%10.3e, %10.3e)  W_UNRE = %10.3e  W_UNRE/W_GPEC = %10.3e  W_FULL/W_GPEC = %10.3e\n",
 		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
@@ -1014,7 +1014,7 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 	    double WUNRE = 4. * sqrt (A1 (i) * Psi);
 	    double WFULL = sqrt (FFh (i, i) * EEh (i, i)) * WUNRE;
 
-	    printf ("GPEC: q = %11.4e  Psi = %11.4e  PsiN = %11.4e  Delta = (%11.4e, %11.4e)  Chi = (%11.4e, %11.4e)  W_UNRE = %11.4e  W_UNRE/W_GPEC = %11.4e  W_FULL/W_GPEC = %11.4e\n",
+	    printf ("GPEC: q = %10.3e  Psi = %10.3e  PsiN = %10.3e  Delta = (%10.3e, %10.3e)  Chi = (%10.3e, %10.3e)  W_UNRE = %10.3e  W_UNRE/W_GPEC = %10.3e  W_FULL/W_GPEC = %10.3e\n",
 		    QIN[i], PSI[i], PsiN(i), DRE[i], DIM[i], CRE[i], CIM[i], WUNRE, WUNRE/WWW[i], WFULL/WWW[i]);
 	  }
       fclose (file);
@@ -1041,7 +1041,7 @@ void Phase::Scan_Shift ()
 
   for (int i = 0; i < NPHA; i++)
     {
-      double      pha   = double (i) * PMAX*M_PI /double (NPHA-1);
+      double      pha   = - PMAX*M_PI/2. + double (i) * PMAX*M_PI /double (NPHA-1);
       phase (i)         = pha;
       gsl_complex eiku  = gsl_complex_polar (one, - pha);
       gsl_complex eikl  = gsl_complex_polar (one, + pha);
@@ -1531,7 +1531,7 @@ void Phase::IslandDynamics ()
 	  {
 	    CalcRMP (t); 
 
-	    printf ("m = %3d locks at t = %11.4e s  irmp = %11.4e kA  prmp/pi = %11.4e\n",
+	    printf ("m = %3d locks at t = %10.3e s  irmp = %10.3e kA  prmp/pi = %10.3e\n",
 		    mk (j), t*tau_A, irmp, prmp /M_PI);
 	 
 	    lock (j) = 1;
@@ -1652,7 +1652,7 @@ void Phase::IslandDynamics ()
 	    }
 
 	  if (cnt%10 == 0)
-	    printf ("t(ms) = %11.4e  h(ms) = %11.4e  h/tau_A = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
+	    printf ("t(ms) = %10.3e h(ms) = %10.3e h/tau_A = %10.3e irmp(kA) = %10.3e prmp/pi = %10.3e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 	  cnt++;
 
 	  fflush (stdout);
@@ -1660,7 +1660,7 @@ void Phase::IslandDynamics ()
     }
   while (t < Tend);
 
-  printf ("t(ms) = %11.4e  h(ms) = %11.4e  h/tau_A = %11.4e  irmp(kA) = %11.4e  prmp/pi = %11.4e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
+  printf ("t(ms) = %10.3e h(ms) = %10.3e h/tau_A = %10.3e irmp(kA) = %10.3e prmp/pi = %10.3e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 
   err += nc_close (dataFile);
 
@@ -2539,32 +2539,30 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 //  Function to advance set of coupled first-order o.d.e.s by single step
 //  using adaptive fourth-order Runge-Kutta scheme
 //
-//     x       ... independent variable
-//     y       ... array of dependent variables
-//     h       ... step-length
-//     t_err   ... actual truncation error per step 
-//     acc     ... desired truncation error per step
-//     S       ... step-length cannot change by more than this factor from
+//   x       ... independent variable
+//   y       ... array of dependent variables
+//   h       ... step-length
+//   t_err   ... actual truncation error per step 
+//   acc     ... desired truncation error per step
+//   S       ... step-length cannot change by more than this factor from
 //                  step to step
-//     rept    ... number of step recalculations		  
-//     maxrept ... maximum allowable number of step recalculations		  
-//     h_min   ... minimum allowable step-length
-//     h_max   ... maximum allowable step-length
-//     flag    ... controls manner in which truncation error is calculated	
+//   rept    ... number of step recalculations		  
+//   maxrept ... maximum allowable number of step recalculations		  
+//   h_min   ... minimum allowable step-length
+//   h_max   ... maximum allowable step-length
+//   flag    ... controls manner in which truncation error is calculated	
 //
 //  Function advances equations by single step whilst attempting to maintain 
 //  constant truncation error per step of acc:
 //
-//    flag = 0 ... error is absolute
-//    flag = 1 ... error is relative
-//    flag = 2 ... error is mixed
+//   flag = 0 ... error is absolute
+//   flag = 1 ... error is relative
+//   flag = 2 ... error is mixed
 //
 //  If step-length falls below h_min then routine aborts
 // ######################################################################
-void Phase::RK4Adaptive (double& x, Array<double,1>& y, double& h, 
-			 double& t_err, double acc, double S, int& rept,
-			 int maxrept, double h_min, double h_max, int flag, 
-			 int diag, FILE* file)
+void Phase::RK4Adaptive (double& x, Array<double,1>& y, double& h, double& t_err, double acc, double S, int& rept,
+			 int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
 {
   int neqns = y.extent (0);
   Array<double,1> y0 (neqns), y1 (neqns);
@@ -2641,7 +2639,7 @@ void Phase::RK4Adaptive (double& x, Array<double,1>& y, double& h,
   // Abort if step-length falls below h_min
   if (fabs (h) < h_min)
     { 
-      //printf ("Phase::RK4Adpative: Warning - |h| < hmin at x = %11.4e\n", x);
+      //printf ("Phase::RK4Adpative: Warning - |h| < hmin at x = %10.3e\n", x);
       //exit (1);
       if (h >= 0.)
 	h = h_min;
@@ -2651,7 +2649,7 @@ void Phase::RK4Adaptive (double& x, Array<double,1>& y, double& h,
 
   // Diagnose step
   if (diag) 
-    fprintf (file, "x = %11.4e hin = %11.4e err = %11.4e acc = %11.4e hest = %11.4e hout = %11.4e count = %3d\n", 
+    fprintf (file, "x = %10.3e hin = %10.3e err = %10.3e acc = %10.3e hest = %10.3e hout = %10.3ey count = %3d\n", 
 	     x, hin, t_err, acc, h_est, h, count);
 
   // If truncation error acceptable take step 
@@ -2674,9 +2672,9 @@ void Phase::RK4Adaptive (double& x, Array<double,1>& y, double& h,
 // #####################################################################
 // Function to advance set of coupled first-order o.d.e.s by single step
 // using fixed step-length fourth-order Runge-Kutta scheme.
-//     x       ... independent variable
-//     y       ... array of dependent variables
-//     h       ... step-length
+//  x ... independent variable
+//  y ... array of dependent variables
+//  h ... step-length
 // #####################################################################
 void Phase::RK4Fixed (double& x, Array<double,1>& y, double h)
 {

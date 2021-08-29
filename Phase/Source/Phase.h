@@ -138,8 +138,7 @@ using namespace blitz;
 // Namelist function
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ,
-			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -153,16 +152,23 @@ class Phase
   // ------------
 
   // Read from Inputs/Phase.nml
-  int      NFLOW;  // Number of flow harmonics included in model
+  double   PMAX;   // Stage 4 phase scan from - PMAX*M_PI/2 to +PMAX*M_PI/2
+  int      NPHA;   // Number of points in phase scan
 
   int      STAGE5; // If != 0 then Stage5 calculation performed, otherwise calculation terminates after Stage4
-  int      INTF;   // If != 0 then use interpolated fFile 
-  int      INTN;   // If != 0 then use interpolated nFile
-  int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
-  int      NATS;   // If != 0 then use linear-only nFile interpolation
-  int      OLD;    // If != 0 then initialize new calculation
+  double   TSTART; // Simulation start time (ms)
+  double   TEND;   // Simulation end time (ms)
+  double   DT;     // Data recorded every DT seconds
 
-  int      LIN;    // If != 0 then perform purely linear calculation
+  int      MID;    // Number of RMP coil sets (1, 2, or 3)
+                   // If == 1 requires lFile
+                   // If == 2 requires lFile and uFile
+                   // If == 3 requires lFile, uFile, and mFile
+  int      COPT;   // If == 0 then no coil current optimization
+                   // If == 1 then coil currents optimized in restricted fashion to maximize drive at closest rational surface to pedestal top
+                   // If == 2 then coil currents optimized in unrestricted fashion to maximize drive at closest rational surface to pedestal top
+                   // If == 3 then coil currents optimized in unrestricted fashion to maximize drive at pedestal top and minimize drive in core
+  double   CORE;   // Core drive minimization factor for COPT = 3 (0.0 = no minimization, 1.0 = complete minmization)
   int      FREQ;   // Natural frequency switch:
                    //  If == 0 then use linear/nonlinear natural frequency with linear layer width as switch
                    //  If == 1 then use linear/nonlinear natural frequency with pressure flattening width as switch 
@@ -170,37 +176,31 @@ class Phase
                    //  If == 3 then w_natural = FFAC * w_linear + (1 - FFAC) * w_EB
   double   FFAC;   // Natural frequency parameter (for FREQ = 3)
 
+  int      LIN;    // If != 0 then perform purely linear calculation
   int      CXD;    // If != 0 include charge exchange damping in plasma angular equations of motion
   int      BOOT;   // If != 0 include effect of bootstrap current in Rutherford equations
   int      CURV;   // If != 0 include effect of magnetic field-line curvature in Rutherford equations
   int      POLZ;   // If != 0 include effect of ion polarization current in Rutherford equations
- 
-  int      MID;    // Number of RMP coil sets (1, 2, or 3)
-  int      COPT;   // If == 0 then no coil current optimization
-                   // If == 1 then coil currents optimized in restricted fashion to maximize drive at closest rational surface to pedestal top
-                   // If == 2 then coil currents optimized in unrestricted fashion to maximize drive at closest rational surface to pedestal top
-                   // If == 3 then coil currents optimized in unrestricted fashion to maximize drive at pedestal top and minimize drive in core
-  double   CORE;   // Core drive minimization factor for COPT = 3 (0.0 = no minimization, 1.0 = complete minmization)
-  
-  double   SCALE;  // GPEC scalefactor
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
-  int      HIGH;   // If != 0 use higher-order transport analysis
+
+  int      INTF;   // If != 0 then use interpolated fFile 
+  int      INTN;   // If != 0 then use interpolated nFile
+  int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
+  int      NATS;   // If != 0 then use linear-only nFile interpolation
   int      RATS;   // If != 0 use linear-only interpolation for uFiles/mFiles/lFiles
+  int      OLD;    // If != 0 then restart old calculation
 
-  double   PMAX;   // Stage 4 phase scan from 0 to PMAX*M_PI
-  int      NPHA;   // Number of points in phase scan
-
-  double   TSTART; // Simulation start time (ms)
-  double   TEND;   // Simulation end time (ms)
-  double   DT;     // Data recorded every DT seconds
-
-  double   IRMP;   // RMP current (kA)
-  int      IFLA;   // If != 0 then set all ICTRL values to IRMP (triggered if IRMP >= 0)
+  int      HIGH;   // If != 0 use higher-order transport analysis
+  double   SCALE;  // GPEC scalefactor
+  int      NFLOW;  // Number of flow harmonics included in model
 
   int      NCTRL;  // Number of control points
   double*  TCTRL;  // Control times (ms)
   double*  ICTRL;  // Peak current flowing in RMP coils (kA) at control times
   double*  PCTRL;  // Relative phases of RMP coil currents (units of pi) at control times
+
+  double   IRMP;   // RMP current (kA)
+  int      IFLA;   // If != 0 then set all ICTRL values to IRMP (triggered if IRMP >= 0)
 
   // ----------------------
   // Data from program FLUX

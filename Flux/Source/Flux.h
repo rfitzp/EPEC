@@ -152,11 +152,11 @@ class Flux
   int    NTHETA;  // Number of points in theta grid
   int    NNC;     // Number of neoclassical harmonics
   int    NSMOOTH; // Number of smoothing cycles for higher derivatives of q
-  int    NEOANG;  // Flag for using neoclassical angle in E-matrix calculation
 
   double H0;      // Initial integration step-length for equilibirum flux surface integrals 
   double ACC;     // Integration accuracy for equilibrium flux surface integrals
   double ETA;     // Regularization factor for Green's function
+  int    NEOANG;  // Flag for using neoclassical angle in E-matrix calculation
 
   double EPS;     // Cylindrical tearing solutions launched from magnetic axis at r = EPS 
   double DELTA;   // Cylindrical tearing solutions integrated to r = r_s +/- DELTA 

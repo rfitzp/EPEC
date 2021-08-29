@@ -1,0 +1,24 @@
+#!/bin/bash 
+
+machine=$(uname -n)
+
+if [[ "$machine" == *"iris"* ]]
+then
+  host="iris"
+elif [[ "$machine" == *"CNS"* ]]
+then
+  host="utexas"
+fi
+
+if [[ "$host" == "iris" ]]
+then
+    module purge
+    module load netcdf
+  LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cscratch/fitzpatrickr/lib
+    export LD_LIBRARY_PATH
+elif  [[ "$host" == "utexas" ]]
+then
+    :
+fi
+
+./phase -o 1
