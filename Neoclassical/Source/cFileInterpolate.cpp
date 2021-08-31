@@ -212,11 +212,6 @@ void Neoclassical::cFileInterpolateLinear (char* cFile1, double time1, char* cFi
 
   printf ("cFile Interpolation:\n");
   printf ("%s %11.4e\n", cFile1, weight1);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (file, "cFile Interpolation:\n");
-  fprintf (file, "%s %11.4e\n", cFile1, weight1);
-  fclose (monitor);
 }
 
 void Neoclassical::cFileInterpolateQuadratic (char* cFile1, double time1, char* cFile2, double time2, char* cFile, double time)
@@ -334,12 +329,6 @@ void Neoclassical::cFileInterpolateQuadratic (char* cFile1, double time1, char* 
   printf ("cFile Interpolation:\n");
   printf ("%s %11.4e\n", cFile1, weight1);
   printf ("%s %11.4e\n", cFile2, weight2);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (file, "cFile Interpolation:\n");
-  fprintf (file, "%s %11.4e\n", cFile1, weight1);
-  fprintf (file, "%s %11.4e\n", cFile2, weight2);
-  fclose (monitor);
 }
 
 void Neoclassical::cFileInterpolateCubic (char* cFile1, double time1, char* cFile2, double time2, char* cFile3, double time3, char* cFile, double time)
@@ -495,13 +484,6 @@ void Neoclassical::cFileInterpolateCubic (char* cFile1, double time1, char* cFil
   printf ("%s %11.4e\n", cFile1, weight1);
   printf ("%s %11.4e\n", cFile2, weight2);
   printf ("%s %11.4e\n", cFile3, weight3);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (file, "cFile Interpolation:\n");
-  fprintf (file, "%s %11.4e\n", cFile1, weight1);
-  fprintf (file, "%s %11.4e\n", cFile2, weight2);
-  fprintf (file, "%s %11.4e\n", cFile3, weight3);
-  fclose (monitor);
 }
 
 void Neoclassical::cFileInterpolateQuartic (char* cFile1, double time1, char* cFile2, double time2, char* cFile3, double time3, char* cFile4,
@@ -698,13 +680,5 @@ void Neoclassical::cFileInterpolateQuartic (char* cFile1, double time1, char* cF
   printf ("%s %11.4e\n", cFile2, weight2);
   printf ("%s %11.4e\n", cFile3, weight3);
   printf ("%s %11.4e\n", cFile4, weight4);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (file, "cFile Interpolation:\n");
-  fprintf (file, "%s %11.4e\n", cFile1, weight1);
-  fprintf (file, "%s %11.4e\n", cFile2, weight2);
-  fprintf (file, "%s %11.4e\n", cFile3, weight3);
-  fprintf (file, "%s %11.4e\n", cFile4, weight4);
-  fclose (monitor);
 }
 

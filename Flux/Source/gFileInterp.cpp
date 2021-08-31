@@ -129,12 +129,6 @@ void Flux::gFileInterpLinear (char* gFile1, double time1, char* gFile, double ti
 
   fclose (file);
 
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  double weight1 = 1.;
-  fprintf (monitor, "gFile Interpolation:\n");
-  fprintf (monitor, "%s %16.9e\n", gFile1, weight1);
-  fclose (monitor);
-  
   gFileInterpolateLinear ();
 }
 
@@ -152,14 +146,6 @@ void Flux::gFileInterpQuadratic (char* gFile1, double time1, char* gFile2, doubl
 
   fclose (file);
 
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  double weight1 = (time - time2) /(time1 - time2);
-  double weight2 = (time - time1) /(time2 - time1);
-  fprintf (monitor, "gFile Interpolation:\n");
-  fprintf (monitor, "%s %16.9e\n", gFile1, weight1);
-  fprintf (monitor, "%s %16.9e\n", gFile2, weight2);
-  fclose (monitor);
-  
   gFileInterpolateQuadratic ();
 }
 
@@ -178,16 +164,6 @@ void Flux::gFileInterpCubic (char* gFile1, double time1, char* gFile2, double ti
   fprintf (file, "%16.9e\n", time);
 
   fclose (file);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  double weight1 = (time - time2) * (time - time3) /(time1 - time2) /(time1 - time3);
-  double weight2 = (time - time1) * (time - time3) /(time2 - time1) /(time2 - time3);
-  double weight3 = (time - time1) * (time - time2) /(time3 - time1) /(time3 - time2);
-  fprintf (monitor, "gFile Interpolation:\n");
-  fprintf (monitor, "%s %16.9e\n", gFile1, weight1);
-  fprintf (monitor, "%s %16.9e\n", gFile2, weight2);
-  fprintf (monitor, "%s %16.9e\n", gFile3, weight3);
-  fclose (monitor);
 
   gFileInterpolateCubic ();
 }
@@ -209,18 +185,6 @@ void Flux::gFileInterpQuartic (char* gFile1, double time1, char* gFile2, double 
   fprintf (file, "%16.9e\n", time);
 
   fclose (file);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  double weight1 = (time - time2) * (time - time3) * (time - time4) /(time1 - time2) /(time1 - time3) /(time1 - time4);
-  double weight2 = (time - time1) * (time - time3) * (time - time4) /(time2 - time1) /(time2 - time3) /(time2 - time4);
-  double weight3 = (time - time1) * (time - time2) * (time - time4) /(time3 - time1) /(time3 - time2) /(time3 - time4);
-  double weight4 = (time - time1) * (time - time2) * (time - time3) /(time4 - time1) /(time4 - time2) /(time4 - time3);
-  fprintf (monitor, "gFile Interpolation:\n");
-  fprintf (monitor, "%s %16.9e\n", gFile1, weight1);
-  fprintf (monitor, "%s %16.9e\n", gFile2, weight2);
-  fprintf (monitor, "%s %16.9e\n", gFile3, weight3);
-  fprintf (monitor, "%s %16.9e\n", gFile4, weight4);
-  fclose (monitor);
 
   gFileInterpolateQuartic ();
 }

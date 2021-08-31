@@ -539,7 +539,6 @@ void Neoclassical::Read_Profiles ()
       w_p    (j) = - InterpolateField (wp, psi (j), 0);
       w_t    (j) = InterpolateField (wt, psi (j), 0);
       w_E    (j) = InterpolateField (wE, psi (j), 0);
-      printf ("j = %d w_E = %e\n", j, w_E (j));
       n_I    (j) = InterpolateField (nI, psi (j), 0);
       dn_Idr (j) = InterpolateField (nI, psi (j), 1) * dpsidr (j) /a;
       T_I    (j) = InterpolateField (Ti, psi (j), 0);
@@ -2139,10 +2138,6 @@ void Neoclassical::Get_Normalized ()
       fprintf (file, "%s %19.6e\n", filename, TIME);
       fclose (file);
 
-      file = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-      fprintf (file, "Wrote nFile %s\n", filename);
-      fclose (file);
-      
       delete[] filename;
      }
    

@@ -185,7 +185,7 @@ class Phase
 
   int      INTF;   // If != 0 then use interpolated fFile 
   int      INTN;   // If != 0 then use interpolated nFile
-  int      INTU;   // If != 0 then use interpolated uFile, mFile, and lFile
+  int      INTU;   // If != 0 then use interpolated lFile, uFile, and mFile
   int      NATS;   // If != 0 then use linear-only nFile interpolation
   int      RATS;   // If != 0 use linear-only interpolation for uFiles/mFiles/lFiles
   int      OLD;    // If != 0 then restart old calculation
