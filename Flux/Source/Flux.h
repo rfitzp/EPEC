@@ -25,28 +25,14 @@
 // All lengths normalized to R_0.
 // All magnetic field-stengths normalized to B_0.
 
-// .....................
-// Command line options:
-// .....................
-
-// -h        - lists options
-// -g INTG   - override INTG value from namelist
-// -n NTOR   - override NTOR value from namelist
-// -m MMIN   - override MMIN value from namelist
-// -p PSILIM - override PSILIM value from namelist
-// -r PSIRAT - override PSIRAT value from namelist
-// -t TIME   - override TIME value from namelist
-// -M MMAX   - override MMAX value from namelist
-// -P PSIPED - override PSIPED value from namelist
-
 // ...................
 // Inputs and outputs:
 // ...................
 // Calculation control parameters in namelist file Inputs/Flux.nml
 
 // Equilibrium in Inputs/gFile or Inputs/gFiles
-// Intermediate data in folder Outputs/Stage1/
-// Final data in folder Outputs/Stage2/
+// Intermediate data in Outputs/Stage1.nc
+// Final data in Outputs/Stage2.nc
 // Data passed to programs NEOCLASSICAL and PHASE output to Outputs/fFile or Outputs/fFiles
 
 // .........
@@ -76,6 +62,7 @@
 
 // 2.0  - Completely switched to OMFIT mode
 // 2.1  - Added cylindrical tearing mode calculation
+// 2.2  - Removed command line options
 
 // #####################################################################################
 
@@ -85,7 +72,7 @@
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 1
+#define VERSION_MINOR 2
 
 #include <stdio.h>
 #include <math.h>
@@ -327,7 +314,7 @@ public:
   // Constructor
   Flux ();
   // Solve problem
-  void Solve (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
+  void Solve ();
 
   // Evaluate right-hand sides of q/g equation
   int Rhs1 (double r, const double y[], double dydr[], void*);
@@ -349,7 +336,7 @@ public:
 private:
 
   // Set global parameters
-  void SetParameters (int _INTG, int _NTOR, int _MMIN, int _MMAX, double _TIME, double _PSILIM, double _PSIPED, double _PSIRAT);
+  void SetParameters ();
   // Input gFile data and output Stage1 data
   void Stage1 ();
   // Input Stage1 data and output Stage2 data

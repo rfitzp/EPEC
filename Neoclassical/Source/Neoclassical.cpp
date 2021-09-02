@@ -3,11 +3,8 @@
 // PROGRAM ORGANIZATION:
 // 
 //        Neoclassical:: Neoclassical         ()
-// void   Neoclassical:: Solve                (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-//			                        int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
-// void   Neoclassical:: Read_Parameters      (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-// 				                int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
-// void   Neoclassical:: Read_Equilibrium     ()
+// void   Neoclassical:: Solve                ()
+// void   Neoclassical:: Read_Parameters      ()
 // void   Neoclassical:: Read_Profiles        ()
 // void   Neoclassical:: Get_Derived          ()
 // void   Neoclassical:: Get_Viscosities      ()
@@ -60,14 +57,10 @@ Neoclassical::Neoclassical ()
 // ##############
 // Solve problem
 // ##############
-void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-			  int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
+void Neoclassical::Solve ()
 {
-  // Start timer
-  clock_t begin = clock ();
-
   // Read discharge parameters
-  Read_Parameters (_NEUTRAL, _IMPURITY, _EXB, _INTP, _INTF, _INTC, _NTYPE, _NN, _LN, _YN, _TIME, _CATS);
+  Read_Parameters ();
   fflush (stdout);
   
   // Read equilibrium data
@@ -104,22 +97,12 @@ void Neoclassical::Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int 
   // Calculate normalized quantites at rational surface and output nFile
   Get_Normalized ();
   fflush (stdout);
- 
-  // Stop timer
-  clock_t end        = clock ();
-  double  time_spent = double (end - begin) /double (CLOCKS_PER_SEC);
-
-  // Print exit message
-  printf ("********************************************************************\n");
-  printf ("PROGRAM NEOCLASSICAL:: Normal termination: Wall time = %11.4e s\n", time_spent);
-  printf ("********************************************************************\n");
 }
 
 // ####################################
 // Read Neoclassical control parameters
 // ####################################
-void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-				    int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS)
+void Neoclassical::Read_Parameters ()
 {
   // Set default values of control parameters
   EXB      = 0;
@@ -149,40 +132,6 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
  
   // Read namelist
   NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH, &CATS, &TAUMIN);
-
-  // Override namelist values with command line option values
-  if (_NEUTRAL > -1)
-    NEUTRAL = _NEUTRAL;
-  if (_IMPURITY > -1)
-    IMPURITY = _IMPURITY;
-  if (_EXB != -999999)
-    EXB = _EXB;
-  if (_TIME > 0.)
-    TIME = _TIME;
-  if (_NTYPE > -1)
-    NTYPE = _NTYPE;
-  if (_NN > 0.)
-    NN = _NN;
-  if (_LN > 0.)
-    LN = _LN;
-  if (_YN > 0.)
-    YN = _YN;
-  if (_INTP > -1)
-    INTP = _INTP;
-  if (_INTF > -1)
-    INTF = _INTF;
-  if (_INTC > -1)
-    INTC = _INTC;
-  if (_CATS > -1)
-    CATS = _CATS;
-
-  // Output input parameters
-  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
-  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
-  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-  printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
-	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
 
   // Sanity check
   if (YN < 0.)
@@ -225,7 +174,15 @@ void Neoclassical::Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _
       printf ("NEOCLASSICAL::Read_Parameters: Error invalid TAUMIN value\n");
       exit (1);
     }
- 
+
+  // Output input parameters
+  printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
+  printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
+  printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
+  printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
+  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
+	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
+  
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
@@ -2098,48 +2055,6 @@ void Neoclassical::Get_Normalized ()
 	       
     }
    fclose (file);
-   
-   if (INTP != 0)
-     {
-      char* filename = new char[MAXFILENAMELENGTH];
-      sprintf (filename, "Outputs/nFiles/n.%d", int (TIME));
-      file = OpenFilew (filename);
-      fprintf (file, "%4d %16.9e %16.9e\n", nres, tau_A, P0 /1.e19/e/1.e3);
- 
-      for (int j = 0; j < nres; j++)
-	{
-	  double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
-	    / (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
-	  double Sk  = tau_Rk (j) * Q_00 (j) /tau_A;
-	  double wkl = w_linear (j) * tau_A;
-	  double wke = w_EB (j) * tau_A;
-	  double wkn = w_nonlinear (j) * tau_A;
-	  double tm  = tau_Mk (j) /tau_A;
-	  double th  = tau_thk (j) /mu_00_i (j) /tau_A;
-	  double tx  = tau_cxk (j) /tau_A;
-
-	  fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		   mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
-		   a /R_0,                      Sk,                          tm,                         th,
-		   sqrt (qk (j)/gk (j)/sk (j)), delk (j),                    wkl,                        wke,                        wkn, 
-		   dnedrk (j) /1.e19,           dTedrk (j) /e/1.e3,          Wcritnek (j),               WcritTek (j),               WcritTik (j),
-		   akk(j),                      gk (j),                      dPsidr (j),                 PsiNk (j),                  nek (j) /1.e19,
-		   nik (j) /1.e19,              Tek (j) /e/1.e3,             Tik (j) /e/1.e3,            dnidrk (j) /1.e19,          dTidrk (j) /e/1.e3,
-		   Factor1 (j) /1.e19/e/1.e3,   Factor2  (j) /1.e19/e/1.e3,  Factor3  (j) /1.e19/e/1.e3, Factor4  (j) /1.e19/e/1.e3,
-		   Factor5 (j) /1.e19/e/1.e3,   Factor6  (j) /1.e19/e/1.e3,  Factor7  (j) /1.e19/e/1.e3, Factor8  (j) /1.e19/e/1.e3,
-		   Factor9 (j) /1.e19/e/1.e3,   Factor10 (j) /1.e19/e/1.e3,  Factor11 (j) /1.e19/e/1.e3, Factor12 (j) /1.e19/e/1.e3 , tx,
-		   alpbek (j),                  alpbik (j),                  alpck (j),                  alppk (j),
-		   rhothek (j),                 rhothik (j),                 eta_ek (j),                 eta_ik (j));
-	}
-      fclose (file);
-
-      sprintf (filename, "n.%d", int (TIME));
-      file = OpenFilea ((char*) "Outputs/nFiles/Index");
-      fprintf (file, "%s %19.6e\n", filename, TIME);
-      fclose (file);
-
-      delete[] filename;
-     }
    
    printf ("\n");
 }

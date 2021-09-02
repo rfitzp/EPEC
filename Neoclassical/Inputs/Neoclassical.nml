@@ -23,7 +23,7 @@
 ! Flag for fFile interpolation
  INTP = 0	   
 ! Flag for pFile interpolation
-  INTC = 0       
+ INTC = 0       
 ! Flag for cFile interpolation
  CATS = 1       
 ! Flag for linear-only interpolation of cFiles

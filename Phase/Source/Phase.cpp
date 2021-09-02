@@ -5,12 +5,8 @@
 // #####################
 
 //        Phase:: Phase               ()
-// void   Phase:: Solve               (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _LIN, int _MID, int _COPT,
-// 		                       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-//                                     double _CORE, int _FREQ, double _FFAC)
-// void   Phase:: Read_Data           (int _STAGE5, int _INTF, int _INTN, int _INTU, int _OLD, int _LIN, int _MID, int _COPT,
-//                                     double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-//                                     double _CORE, int _FREQ, double _FFAC)
+// void   Phase:: Solve               ()
+// void   Phase:: Read_Data           ()
 // void   Phase:: Scan_Shift          ()
 // void   Phase:: Calc_Velocity       ()
 // void   Phase:: Initialize          ()
@@ -76,16 +72,10 @@ Phase::Phase ()
 // ##############################
 // Function to perform simulation
 // ##############################
-void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
-		   double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		   double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ)
+void Phase::Solve ()
 {
-  // Start timer
-  clock_t begin = clock ();
-
   // Read input data
-  Read_Data (_STAGE5, _INTF, _INTN, _INTU, _NATS, _OLD, _LIN, _MID, _COPT, _TSTART, _TEND, _SCALE, _CHIR, _IRMP, _HIGH, _RATS,
-	     _CORE, _FREQ, _FFAC, _CXD, _BOOT, _CURV, _POLZ);
+  Read_Data ();
   fflush (stdout);
 
   // Scan RMP phase shift
@@ -108,23 +98,12 @@ void Phase::Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int 
   gsl_vector_complex_free (DeltaU);  gsl_vector_complex_free (DeltaL);
   gsl_vector_complex_free (DeltaM);  gsl_vector_complex_free (ChiU);
   gsl_vector_complex_free (ChiL);    gsl_vector_complex_free (ChiM);
-
-  // Stop timer
-  clock_t end        = clock ();
-  double  time_spent = double (end - begin) /double (CLOCKS_PER_SEC);
-
-  // Print exit message
-  printf ("*************************************************************\n");
-  printf ("PROGRAM PHASE:: Normal termination: Wall time = %11.4e s\n", time_spent);
-  printf ("*************************************************************\n");
 }
 
 // ###########################
 // Function to read input data
 // ###########################
-void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
-		       double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		       double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ)
+void Phase::Read_Data ()
 {
   // Output version information
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
@@ -185,65 +164,6 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
 
   TT.resize (NCTRL);
   
-  // Override namelist values with command line options
-  if (_STAGE5 > -1)
-    STAGE5 = _STAGE5;
-  if (_INTF > -1)
-    INTF = _INTF;
-  if (_INTN > -1)
-    INTN = _INTN;
-  if (_INTU > -1)
-    INTU = _INTU;
-  if (_OLD > -1)
-    OLD = _OLD;
-  if (_NATS > -1)
-    NATS = _NATS;
-  if (_LIN > -1)
-    LIN = _LIN;
-  if (_MID > -1)
-    MID = _MID;
-  if (_FREQ > -1)
-    FREQ = _FREQ;
-  if (_FFAC > -1.e6)
-    FFAC = _FFAC;
-  if (_HIGH > -1)
-    HIGH = _HIGH;
-  if (_RATS > -1)
-    RATS = _RATS;
-  if (_COPT > -1)
-    COPT = _COPT;
-  if (_CXD > -1)
-    CXD = _CXD;
-  if (_BOOT > -1)
-    BOOT = _BOOT;
-  if (_CURV > -1)
-    CURV = _CURV;
-  if (_POLZ > -1)
-    POLZ = _POLZ;
-  if (_CORE > -1.e6)
-    CORE = _CORE;
-  if (_TSTART > -1.e6)
-    TSTART = _TSTART;
-  if (_TEND > -1.e6)
-    TEND = _TEND;
-  if (_SCALE > -1.e6)
-    SCALE = _SCALE;
-  if (_CHIR > -1.e6)
-    CHIR = _CHIR;
-  if (_IRMP > -1.e6)
-    {
-      IFLA = 1;
-      IRMP = _IRMP;
-    }
-  
-  // .............................
-  // Output calculation parameters
-  // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
-	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  printf ("FREQ = %2d FFAC = %11.4e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
-
   // ............
   // Sanity check
   // ............
@@ -286,6 +206,14 @@ void Phase::Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, 
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
 
+  // .............................
+  // Output calculation parameters
+  // .............................
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
+	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
+  printf ("FREQ = %2d FFAC = %11.4e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
+	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");

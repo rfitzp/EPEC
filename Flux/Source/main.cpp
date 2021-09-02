@@ -92,92 +92,22 @@ int main (int argc, char** argv)
   printf ("\n############\nProgram FLUX\n############\n");
   printf ("Version: %1d.%1d\n", VERSION_MAJOR, VERSION_MINOR);
   
-  // ........................
-  // Get command line options
-  // ........................
-  int c;
-  char* nvalue = NULL; char* mvalue = NULL; char* Mvalue = NULL;
-  char* tvalue = NULL; char* gvalue = NULL; char* pvalue = NULL;
-  char* Pvalue = NULL; char* rvalue = NULL; 
-  opterr = 0;
-  
-  while ((c = getopt (argc, argv, "hg:n:m:p:t:M:P:r")) != -1)
-    switch (c)
-      {
-      case 'h':
-	printf ("Options:\n");
-	printf ("-h        - list options\n");
-	printf ("-g INTG   - set interpolation flag INTG\n");
-	printf ("-n NTOR   - set toroidal mode number to NTOR\n");
-	printf ("-m MMIN   - set minumum poloidal mode number to MMIN\n");
-	printf ("-p PSILIM - set maximum PsiN for safety-factor caclulation to PSILIM\n");
-	printf ("-r PSIRAT - set maximum PsiN for rational surface to PSIRAT\n");
-	printf ("-t TIME   - set experimental time to TIME\n");
-	printf ("-M MMAX   - set maximum poloidal mode number to MMAX\n");
-	printf ("-P PSIPED - set PsiNat top of pedestal to PSIPED\n");
-	exit (0);
-      case 'g':
-	gvalue = optarg;
-	break;
-      case 'n':
-	nvalue = optarg;
- 	break;
-      case 'm':
-	mvalue = optarg;
-	break;
-      case 'p':
-	pvalue = optarg;
-	break;
-      case 't':
-	tvalue = optarg;
-	break;
-      case 'r':
-	rvalue = optarg;
-	break;
-      case 'M':
-	Mvalue = optarg;
-	break;
-      case 'P':
-	Pvalue = optarg;
-	break;
-      case '?':
-	if (optopt == 'n' || optopt == 'm' || optopt == 'M' || optopt == 't' || optopt == 'g' || optopt == 'p'  || optopt == 'r' || optopt == 'P')
-	  printf ("Option = %c requires an argument\n", optopt);
-	  else if (isprint (optopt))
-	    printf ("Unknown option '-%c'\n", optopt);
-	  else
-	    printf ("Unknown option character `\\x%x'\n", optopt);
-	return 1;
-      default:
-	abort ();
-      }
-
-  int    _NTOR = -1, _MMIN   = -1,  _MMAX   = -1,  _INTG   = -1;
-  double _TIME = 0., _PSILIM = -1., _PSIPED = -1., _PSIRAT = -1.;
-  
-  if (nvalue != NULL)
-    _NTOR = atoi (nvalue);
-  if (mvalue != NULL)
-    _MMIN = atoi (mvalue);
-  if (Mvalue != NULL)
-    _MMAX = atoi (Mvalue);
-  if (tvalue != NULL)
-    _TIME = double (atof (tvalue));
-  if (pvalue != NULL)
-    _PSILIM = double (atof (pvalue));
-  if (Pvalue != NULL)
-    _PSIPED = double (atof (Pvalue));
-  if (rvalue != NULL)
-    _PSIRAT = double (atof (rvalue));
-  if (gvalue != NULL)
-    _INTG = atoi (gvalue);
-
-  fflush (stdout);
-
   // .................
   // Call program FLUX
   // .................
   Flux flux;
-  flux.Solve (_INTG, _NTOR, _MMIN, _MMAX, _TIME, _PSILIM, _PSIPED, _PSIRAT);
+  clock_t begin = clock ();
+  flux.Solve ();
+
+  clock_t end = clock ();
+  double time_spent = double (end - begin) /double(CLOCKS_PER_SEC);
+
+  // ..................
+  // Print exit message
+  // ..................
+  printf ("*************************************************************\n");
+  printf ("PROGRAM FLUX:: Normal termination: Wall time = %11.4e s\n", time_spent);
+  printf ("*************************************************************\n");
+
   return 0;
 }

@@ -108,37 +108,6 @@ void Flux::Stage2 ()
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
 	       GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
   fclose (file);
-
-  if (INTG > 0)
-    {
-      char* filename = new char[MAXFILENAMELENGTH];
-      sprintf (filename, "Outputs/fFiles/f.%d", int (TIME));
-      file = OpenFilew (filename);
-      fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %d %d %d %16.9e %16.9e %16.9e %16.9e\n",
-	       R0, B0, ra * R0, q95, r95 /ra, qrat, rrat/ra, QP[0], QP[NPSI-1], NPSI, NTOR, nres, PSILIM, PSIPED, Pped, PSIRAT);
-      for (int j = 0; j < NPSI; j++)
-	fprintf (file, "%16.9e %16.9e %16.9e\n",
-		 1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
-      for (int i = 0; i < nres; i++)
-	fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-		 mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i], Poem1[i], Poem2[i], Poem3[i]);
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < nres; j++)
-	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
-		   GSL_REAL (gsl_matrix_complex_get (FF, i, j)), GSL_IMAG (gsl_matrix_complex_get (FF, i, j)));
-      for (int i = 0; i < nres; i++)
-	for (int j = 0; j < nres; j++)
-	  fprintf (file, "%d %d %16.9e %16.9e\n", i, j,
-		   GSL_REAL (gsl_matrix_complex_get (EE, i, j)), GSL_IMAG (gsl_matrix_complex_get (EE, i, j)));
-      fclose (file);
-
-      sprintf (filename, "f.%d", int (TIME));
-      file = OpenFilea ((char*) "Outputs/fFiles/Index");
-      fprintf (file, "%s %19.6e\n", filename, TIME);
-      fclose (file);
-      
-      delete[] filename;
-    }
   
   // ........
   // Clean up

@@ -5,37 +5,6 @@
 // with resonant magnetic perturbation in toroidal tokamak plasma.
 // Reads data from programs FLUX, NEOCLASSICAL, and GPEC.
 
-// .....................
-// Command line options:
-// .....................
-
-// -c CHIR   - overrides CHIR value from namelist file
-// -f INTF   - overrides INTF value from namelist file
-// -h        - list options
-// -i IRMP   - set RMP current to IRMP (kA)
-// -l LIN    - overdes LIN value from namelist file
-// -m MID    - overrides MID value from namelist file
-// -n INTN   - overrides INTN value from namelist file
-// -o OLD    - overrides OLD value from namelist file
-// -r RATS   - ovverides RATS value from namelist file
-// -s STAGE5 - overrides STAGE5 value from namelist file
-// -t TSTART - sets simulation start time (ms)
-// -u INTU   - overrides INTU value from namelist file
-// -B BOOT   - overrides BOOT value from namelist file
-// -C COPT   - overrides COPT value from namelist file
-// -D CORE   - overrides CORE value from namelist file
-// -F FREQ   - overrides FREQ value from namelist file
-// -G FFAC   - overrides FFAC value from namelist file
-// -H HIGH   - overrides HIGH value from namelist file
-// -N NATS   - overrides NATS value from namelist file
-// -O        - flag to select OMFIT mode
-// -P POLZ   - ovverides POLZ value from namelist file
-// -S SCALE  - overrides SCALE value from namelist file
-// -T TEND   - sets simulation end time (ms)
-// -V CURV   - overrides CURV value from namelist file
-// -X CXD    - overrides CXD value from namelist file
-
-// ...................
 // Inputs and outputs:
 // ...................
 // Calculation control parameters in namelist file Inputs/Phase.nml
@@ -45,9 +14,8 @@
 // NEOCLASSICAL data in Inputs/nFile or Inputs/nFiles
 // GPEC data in Inputs/uFile, Inputs/mFile, Inputs/lFile or Inputs/uFiles, Inputs/mFiles, Inputs/lFiles
 
-// Intermediate data in folder Outputs/Stage4
-// Final data in folder Outputs/Stage5
-// Scan data in folder ../IslandDynamics/Outputs/Stage6
+// Intermediate data in Stage4.nc
+// Final data in Stage5.nc or Stage5/*.nc
 
 // ............................
 // Major stages in calculation:
@@ -103,6 +71,7 @@
 
 // 3.0  - Completely switched to OMFIT mode
 // 3.1  - Added POEM terms
+// 3.2  - Removed command line options
 
 // #######################################################################
 
@@ -110,7 +79,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 3
-#define VERSION_MINOR 1
+#define VERSION_MINOR 2
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
 #define MAXULFILELINELENGTH 500
@@ -383,19 +352,9 @@ class Phase
   virtual ~Phase () {};  
 
   // Solve problem
-  void Solve (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
-	      double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-	      double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);        
-
-  // -----------------------
-  // Private class functions
-  // -----------------------
- private:
-
+  void Solve ();
   // Read data
-  void Read_Data (int _STAGE5, int _INTF, int _INTN, int _INTU, int _NATS, int _OLD, int _LIN, int _MID, int _COPT,
-		  double _TSTART, double _TEND, double _SCALE, double _CHIR, double _IRMP, int _HIGH, int _RATS,
-		  double _CORE, int _FREQ, double _FFAC, int _CXD, int _BOOT, int _CURV, int _POLZ);
+  void Read_Data ();
   // Calculate vacuum flux versus relative phases of RMP coil currents
   void Scan_Shift ();
   // Calculate velocity factors

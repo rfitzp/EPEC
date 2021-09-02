@@ -5,24 +5,6 @@
 // phase velocities, and neoclassical resistivities, at rational 
 // surfaces in tokamak plasma.
 
-// .....................
-// Command line options:
-// .....................
-
-// -c INTC     - override INTC value from namelist file
-// -e INTF     - override INTF value from namelist file
-// -f EXB      - override EXB value from namelist file
-// -h          - list options
-// -l LN       - override LN value from namelist file
-// -n NEUTRAL  - override NEUTRAL value from namelist file
-// -p INTP     - override INTP value from namelist file
-// -t TIME     - sets experimental time (ms)
-// -y YN       - override YN value from namelist file
-// -C CATS     - override CATS value from namelist file
-// -I IMPURITY - override IMPURITY value from namelist file
-// -N NN       - override NN value from namelist file
-// -T NTYPE    - override NTYPE value from namelist file
-
 // ...................
 // Inputs and outputs:
 // ...................
@@ -32,8 +14,8 @@
 // Profile data in Inputs/pFile or Inputs pFiles
 // Transport data in Inputs/cFile or Inputs/cFiles
 
-// Intermediate data in folder Outputs/Stage3
-// Final data passed to program PHASE in file Outputs/nFile or Outputs/nFiles
+// Final data in Outputs/Stage3.nc
+// Data passed to program PHASE in file Outputs/nFile or Outputs/nFiles
 
 // .........
 // Versions:
@@ -70,6 +52,7 @@
 
 // 2.0  - Completely went over to OMFIT mode
 // 2.1  - Added POEM terms in Rutherford equation
+// 2.2  - Removed command line options
 
 // ################################################################
 
@@ -77,7 +60,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 1
+#define VERSION_MINOR 2
 #define MAXFILENAMELENGTH 500
 #define MAXPFILELINELENGTH 500
 
@@ -470,8 +453,7 @@ class Neoclassical
   virtual ~Neoclassical () {}; // Destructor
 
   // Solve problem
-  void Solve (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-	      int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);            
+  void Solve ();           
  
   // -----------------------
   // Private class functions
@@ -479,8 +461,7 @@ class Neoclassical
  private:
 
   // Read discharge parameters
-  void Read_Parameters (int _NEUTRAL, int _IMPURITY, int _EXB, int _INTP, int _INTF,
-			int _INTC, int _NTYPE, double _NN, double _LN, double _YN, double _TIME, int _CATS);
+  void Read_Parameters ();
   // Read equilibrium data
   void Read_Equilibrium ();
   // Read profile data

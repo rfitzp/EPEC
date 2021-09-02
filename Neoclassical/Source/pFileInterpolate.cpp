@@ -1207,25 +1207,6 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
 		}
 	    }
 	}
-      else if (strstr (s, "omegp(") != NULL)
-	{
-	  // Read omegp field (assumed units krad/s)
-	  wp_flag_1 = 1;
-	  printf ("Reading omegp from pFile_1 - n = %4d:\n", n);
-	  wp_1.resize (n);
-	  for (int i = 0; i < n; i++)
-	    {
-	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
-		{
-		  printf ("NEOCLASSICAL::pFileInterpolateCubic: Error reading omegp\n");
-		  exit (1);
-		}
-	      else
-		{
-		  wp_1.PushData (i, x, y, dydx);
-		}
-	    }
-	}
       else if (strstr (s, "omeg(") != NULL)
 	{
 	  // Read omeg field (assumed units krad/s)
@@ -1245,7 +1226,26 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
 		}
 	    }
 	}
-      else if (strstr (s, "nz1") != NULL)
+      else if (strstr (s, "omegp(") != NULL)
+	{
+	  // Read omegp field (assumed units krad/s)
+	  wp_flag_1 = 1;
+	  printf ("Reading omegp from pFile_1 - n = %4d:\n", n);
+	  wp_1.resize (n);
+	  for (int i = 0; i < n; i++)
+	    {
+	      if (fscanf (file, "%lf %lf %lf", &x, &y, &dydx) != 3)
+		{
+		  printf ("NEOCLASSICAL::pFileInterpolateCubic: Error reading omegp\n");
+		  exit (1);
+		}
+	      else
+		{
+		  wp_1.PushData (i, x, y, dydx);
+		}
+	    }
+	}
+    else if (strstr (s, "nz1") != NULL)
 	{
 	  // Read nz1 field (assumed units 10^20 m^-3)
 	  nI_flag_1 = 1;
@@ -2066,9 +2066,9 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
 		}
 	    }
 	}
-      else if (strstr (s, "omep(") != NULL)
+      else if (strstr (s, "omegp(") != NULL)
 	{
-	  // Read omep field (assumed units krad/s)
+	  // Read omegp field (assumed units krad/s)
 	  wp_flag_1 = 1;
 	  printf ("Reading omegp from pFile_1 - n = %4d:\n", n);
 	  wp_1.resize (n);
@@ -2797,7 +2797,7 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
 		}
 	    }
 	}
-      else if (strstr (s, "omeg(") != NULL)
+      else if (strstr (s, "omegp(") != NULL)
 	{
 	  // Read omegp field (assumed units krad/s)
 	  wp_flag_4 = 1;
