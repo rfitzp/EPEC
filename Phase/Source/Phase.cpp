@@ -1587,6 +1587,7 @@ void Phase::IslandDynamics ()
 	}
     }
   while (t < Tend);
+  RK4Fixed (t, y, Tend - t);
 
   printf ("t(ms) = %10.3e h(ms) = %10.3e h/tau_A = %10.3e irmp(kA) = %10.3e prmp/pi = %10.3e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 
