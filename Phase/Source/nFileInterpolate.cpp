@@ -194,7 +194,8 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
 		  &u26_1(j), &u27_1(j), &u28_1(j), &u29_1(j), &u30_1(j),
 		  &u31_1(j), &u32_1(j), &u33_1(j), &u34_1(j), &u35_1(j),
 		  &u36_1(j), &u37_1(j), &u38_1(j), &u39_1(j), &u40_1(j),
-		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j), &u46_1(j), &u47_1(j), &u48_1(j)) != 50);
+		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j),
+		  &u46_1(j), &u47_1(j), &u48_1(j)) != 50);
 	{
 	  printf ("PHASE::nFileInterpolateLinear: Error reading nFile_1 (2)\n");
 	  exit (1);
@@ -300,16 +301,13 @@ void Phase::nFileInterpolateLinear (char* nFile1, double time1, char* nFile, dou
 	     u26_0(j), u27_0(j), u28_0(j), u29_0(j), u30_0(j),
 	     u31_0(j), u32_0(j), u33_0(j), u34_0(j), u35_0(j),
 	     u36_0(j), u37_0(j), u38_0(j), u39_0(j), u40_0(j),
-	     u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j), u46_0(j), u47_0(j), u48_0(j));
+	     u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j),
+	     u46_0(j), u47_0(j), u48_0(j));
   
   fclose (file);
   
   printf ("nFile Interpolation:\n");
   printf ("%s %11.4e\n", nFile1, weight1);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "%s %11.4e\n", nFile1, weight1);
-  fclose (monitor);
 }
 
 void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2, double time2, char* nFile, double time)
@@ -376,7 +374,8 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
 		  &u26_1(j), &u27_1(j), &u28_1(j), &u29_1(j), &u30_1(j),
 		  &u31_1(j), &u32_1(j), &u33_1(j), &u34_1(j), &u35_1(j),
 		  &u36_1(j), &u37_1(j), &u38_1(j), &u39_1(j), &u40_1(j),
-		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j), &u46_1(j), &u47_1(j), &u48_1(j)) != 50)
+		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j),
+		  &u46_1(j), &u47_1(j), &u48_1(j)) != 50)
 	{
 	  printf ("PHASE::nFileInterpolateQuadratic: Error reading nFile_1 (2)\n");
 	  exit (1);
@@ -420,7 +419,8 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
 		  &u26_2(j), &u27_2(j), &u28_2(j), &u29_2(j), &u30_2(j),
 		  &u31_2(j), &u32_2(j), &u33_2(j), &u34_2(j), &u35_2(j),
 		  &u36_2(j), &u37_2(j), &u38_2(j), &u39_2(j), &u40_2(j),
-		  &u41_2(j), &u42_2(j), &u43_2(j), &u44_2(j), &u45_2(j), &u46_2(j), &u47_2(j), &u48_2(j)) != 50)
+		  &u41_2(j), &u42_2(j), &u43_2(j), &u44_2(j), &u45_2(j),
+		  &u46_2(j), &u47_2(j), &u48_2(j)) != 50)
 	{
 	  printf ("PHASE::nFileInterpolateQuadratic: Error reading nFile_2 (2)\n");
 	  exit (1);
@@ -541,18 +541,14 @@ void Phase::nFileInterpolateQuadratic (char* nFile1, double time1, char* nFile2,
 	      u26_0(j), u27_0(j), u28_0(j), u29_0(j), u30_0(j),
 	      u31_0(j), u32_0(j), u33_0(j), u34_0(j), u35_0(j),
 	      u36_0(j), u37_0(j), u38_0(j), u39_0(j), u40_0(j),
-	      u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j), u46_0(j), u47_0(j), u48_0(j));
+	      u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j),
+	      u46_0(j), u47_0(j), u48_0(j));
   
   fclose (file);
   
   printf ("nFile Interpolation:\n");
   printf ("%s %11.4e\n", nFile1, weight1);
   printf ("%s %11.4e\n", nFile2, weight2);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "%s %11.4e\n", nFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", nFile2, weight2);
-  fclose (monitor);
 }
   
 void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, double time2, char* nFile3, double time3, char* nFile, double time)
@@ -628,7 +624,8 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
 		  &u26_1(j), &u27_1(j), &u28_1(j), &u29_1(j), &u30_1(j),
 		  &u31_1(j), &u32_1(j), &u33_1(j), &u34_1(j), &u35_1(j),
 		  &u36_1(j), &u37_1(j), &u38_1(j), &u39_1(j), &u40_1(j),
-		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j), &u46_1(j), &u47_1(j), &u48_1(j)) != 50)
+		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j),
+		  &u46_1(j), &u47_1(j), &u48_1(j)) != 50)
 	{
 	  printf ("PHASE::nFileInterpolateCubic: Error reading nFile_1 (2)\n");
 	  exit (1);
@@ -672,7 +669,8 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
 		  &u26_2(j), &u27_2(j), &u28_2(j), &u29_2(j), &u30_2(j),
 		  &u31_2(j), &u32_2(j), &u33_2(j), &u34_2(j), &u35_2(j),
 		  &u36_2(j), &u37_2(j), &u38_2(j), &u39_2(j), &u40_2(j),
-		  &u41_2(j), &u42_2(j), &u43_2(j), &u44_2(j), &u45_2(j), &u46_2(j), &u47_2(j), &u48_2(j)) != 50)
+		  &u41_2(j), &u42_2(j), &u43_2(j), &u44_2(j), &u45_2(j),
+		  &u46_2(j), &u47_2(j), &u48_2(j)) != 50)
 	{
 	  printf ("PHASE::nFileInterpolateCubic: Error reading nFile_2 (2)\n");
 	  exit (1);
@@ -716,7 +714,8 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
 		  &u26_3(j), &u27_3(j), &u28_3(j), &u29_3(j), &u30_3(j),
 		  &u31_3(j), &u32_3(j), &u33_3(j), &u34_3(j), &u35_3(j),
 		  &u36_3(j), &u37_3(j), &u38_3(j), &u39_3(j), &u40_3(j),
-		  &u41_3(j), &u42_3(j), &u43_3(j), &u44_3(j), &u45_3(j), &u46_3(j), &u47_3(j), &u48_3(j)) != 50)
+		  &u41_3(j), &u42_3(j), &u43_3(j), &u44_3(j), &u45_3(j),
+		  &u46_3(j), &u47_3(j), &u48_3(j)) != 50)
  	{
 	  printf ("PHASE::nFileInterpolateCubic: Error reading nFile_3 (2)\n");
 	  exit (1);
@@ -860,7 +859,8 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
 	      u26_0(j), u27_0(j), u28_0(j), u29_0(j), u30_0(j),
 	      u31_0(j), u32_0(j), u33_0(j), u34_0(j), u35_0(j),
 	      u36_0(j), u37_0(j), u38_0(j), u39_0(j), u40_0(j),
-	      u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j), u46_0(j), u47_0(j), u48_0(j));
+	      u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j),
+	      u46_0(j), u47_0(j), u48_0(j));
   
   fclose (file);
   
@@ -868,12 +868,6 @@ void Phase::nFileInterpolateCubic (char* nFile1, double time1, char* nFile2, dou
   printf ("%s %11.4e\n", nFile1, weight1);
   printf ("%s %11.4e\n", nFile2, weight2);
   printf ("%s %11.4e\n", nFile3, weight3);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "%s %11.4e\n", nFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", nFile2, weight2);
-  fprintf (monitor, "%s %11.4e\n", nFile3, weight3);
-  fclose (monitor);
 }
 
 void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, double time2, char* nFile3, double time3,
@@ -945,7 +939,7 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   u31_1.resize  (nres_1); u32_1.resize  (nres_1); u33_1.resize (nres_1); u34_1.resize (nres_1); u35_1.resize (nres_1);
   u36_1.resize  (nres_1); u37_1.resize  (nres_1); u38_1.resize (nres_1); u39_1.resize (nres_1); u40_1.resize (nres_1);
   u41_1.resize  (nres_1); u42_1.resize  (nres_1); u43_1.resize (nres_1); u44_1.resize (nres_1); u45_1.resize (nres_1);
-  u46_1.resize  (nres_1); u47_1.resize  (nres_1);
+  u46_1.resize  (nres_1); u47_1.resize  (nres_1); u48_1.resize (nres_1);
     
   for (int j = 0; j < nres_1; j++)
     {
@@ -959,7 +953,8 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
 		  &u26_1(j), &u27_1(j), &u28_1(j), &u29_1(j), &u30_1(j),
 		  &u31_1(j), &u32_1(j), &u33_1(j), &u34_1(j), &u35_1(j),
 		  &u36_1(j), &u37_1(j), &u38_1(j), &u39_1(j), &u40_1(j),
-		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j), &u46_1(j), &u47_1(j), &u48_1(j)) != 50)
+		  &u41_1(j), &u42_1(j), &u43_1(j), &u44_1(j), &u45_1(j),
+		  &u46_1(j), &u47_1(j), &u48_1(j)) != 50)
       	{
 	  printf ("PHASE::nFileInterpolateQuartic: Error reading nFile_1 (2)\n");
 	  exit (1);
@@ -1047,7 +1042,8 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
 		  &u26_3(j), &u27_3(j), &u28_3(j), &u29_3(j), &u30_3(j),
 		  &u31_3(j), &u32_3(j), &u33_3(j), &u34_3(j), &u35_3(j),
 		  &u36_3(j), &u37_3(j), &u38_3(j), &u39_3(j), &u40_3(j),
-		  &u41_3(j), &u42_3(j), &u43_3(j), &u44_3(j), &u45_3(j), &u46_3(j), &u47_3(j), &u48_3(j)) != 50)
+		  &u41_3(j), &u42_3(j), &u43_3(j), &u44_3(j), &u45_3(j),
+		  &u46_3(j), &u47_3(j), &u48_3(j)) != 50)
 	{
 	  printf ("PHASE::nFileInterpolateQuartic: Error reading nFile_3 (2)\n");
 	  exit (1);
@@ -1091,7 +1087,8 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
 		  &u26_4(j), &u27_4(j), &u28_4(j), &u29_4(j), &u30_4(j),
 		  &u31_4(j), &u32_4(j), &u33_4(j), &u34_4(j), &u35_4(j),
 		  &u36_4(j), &u37_4(j), &u38_4(j), &u39_4(j), &u40_4(j),
-		  &u41_4(j), &u42_4(j), &u43_4(j), &u44_4(j), &u45_4(j), &u46_4(j), &u47_4(j), &u48_4(j)) != 50)
+		  &u41_4(j), &u42_4(j), &u43_4(j), &u44_4(j), &u45_4(j),
+		  &u46_4(j), &u47_4(j), &u48_4(j)) != 50)
 	{
 	  printf ("PHASE::nFileInterpolateQuartic: Error reading nFile_4 (2)\n");
 	  exit (1);
@@ -1251,7 +1248,8 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
 	      u26_0(j), u27_0(j), u28_0(j), u29_0(j), u30_0(j),
 	      u31_0(j), u32_0(j), u33_0(j), u34_0(j), u35_0(j),
 	      u36_0(j), u37_0(j), u38_0(j), u39_0(j), u40_0(j),
-	      u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j), u46_0(j), u47_0(j), u48_0(j));
+	      u41_0(j), u42_0(j), u43_0(j), u44_0(j), u45_0(j),
+	      u46_0(j), u47_0(j), u48_0(j));
   
   fclose (file);
   
@@ -1260,12 +1258,5 @@ void Phase::nFileInterpolateQuartic (char* nFile1, double time1, char* nFile2, d
   printf ("%s %11.4e\n", nFile2, weight2);
   printf ("%s %11.4e\n", nFile3, weight3);
   printf ("%s %11.4e\n", nFile4, weight4);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "%s %11.4e\n", nFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", nFile2, weight2);
-  fprintf (monitor, "%s %11.4e\n", nFile3, weight3);
-  fprintf (monitor, "%s %11.4e\n", nFile4, weight4);
-  fclose (monitor);
 }
   

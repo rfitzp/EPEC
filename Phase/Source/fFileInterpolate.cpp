@@ -317,11 +317,6 @@ void Phase::fFileInterpolateLinear (char* fFile1, double time1, char* fFile, dou
   
   printf ("fFile Interpolation:\n");
   printf ("%s %11.4e\n", fFile1, weight1);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "fFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", fFile1, weight1);
-  fclose  (monitor);
 }
 
 void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2, double time2, char* fFile, double time)
@@ -620,12 +615,6 @@ void Phase::fFileInterpolateQuadratic (char* fFile1, double time1, char* fFile2,
   printf ("fFile Interpolation:\n");
   printf ("%s %11.4e\n", fFile1, weight1);
   printf ("%s %11.4e\n", fFile2, weight2);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "fFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", fFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", fFile2, weight2);
-  fclose  (monitor);
 }
 
 void Phase::fFileInterpolateCubic (char* fFile1, double time1, char* fFile2, double time2, char* fFile3, double time3, char* fFile, double time)
@@ -1023,13 +1012,6 @@ void Phase::fFileInterpolateCubic (char* fFile1, double time1, char* fFile2, dou
   printf ("%s %11.4e\n", fFile1, weight1);
   printf ("%s %11.4e\n", fFile2, weight2);
   printf ("%s %11.4e\n", fFile3, weight3);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "fFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", fFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", fFile2, weight2);
-  fprintf (monitor, "%s %11.4e\n", fFile3, weight3);
-  fclose (monitor);
 }
 
 void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, double time2, char* fFile3, double time3,
@@ -1313,7 +1295,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   u10_4.resize  (nres_4); u11_4.resize (nres_4); u12_4.resize (nres_4);
   u13_4.resize  (nres_4); u14_4.resize (nres_4); u15_4.resize (nres_4);
   u16_4.resize  (nres_4); u17_4.resize (nres_4); u18_4.resize (nres_4);
-  u19_4.resize  (nres_4); u19_4.resize (nres_4);
+  u19_4.resize  (nres_4); u20_4.resize (nres_4);
   
   for (int j = 0; j < nres_4; j++)
     {
@@ -1519,13 +1501,5 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   printf ("%s %11.4e\n", fFile2, weight2);
   printf ("%s %11.4e\n", fFile3, weight3);
   printf ("%s %11.4e\n", fFile4, weight4);
-
-  FILE* monitor = OpenFilea ((char*) "../IslandDynamics/Outputs/monitor.txt");
-  fprintf (monitor, "fFile Interpolation:\n");
-  fprintf (monitor, "%s %11.4e\n", fFile1, weight1);
-  fprintf (monitor, "%s %11.4e\n", fFile2, weight2);
-  fprintf (monitor, "%s %11.4e\n", fFile3, weight3);
-  fprintf (monitor, "%s %11.4e\n", fFile4, weight4);
-  fclose  (monitor);
 }
   
