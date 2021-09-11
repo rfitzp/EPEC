@@ -129,9 +129,12 @@ void Neoclassical::Read_Parameters ()
   NSMOOTH  = 100;
 
   TAUMIN   = - 0.8;
+  DMAX     = 10.;
+  DMIN     = 0.01;
  
   // Read namelist
-  NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME, &COULOMB, &NSMOOTH, &CATS, &TAUMIN);
+  NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME,
+		&COULOMB, &NSMOOTH, &CATS, &TAUMIN, &DMIN, &DMAX);
 
   // Sanity check
   if (YN < 0.)
@@ -174,22 +177,27 @@ void Neoclassical::Read_Parameters ()
       printf ("NEOCLASSICAL::Read_Parameters: Error invalid TAUMIN value\n");
       exit (1);
     }
+  if (DMIN < 0. || DMAX < DMIN)
+     {
+      printf ("NEOCLASSICAL::Read_Parameters: Error invalid DMIN/DMAX value\n");
+      exit (1);
+    }
 
   // Output input parameters
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
-	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
+  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e DMIN = %11.4e DMAX = %11.4e\n",
+	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, DMIN, DMAX);
   
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.nml and command line options):\n");
-  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e\n",
-	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e DMIN = %11.4e DMAX = %11.4e\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, DMIN, DMAX);
   fclose (namelist);
 }
 
@@ -720,6 +728,23 @@ void Neoclassical::Get_Derived ()
       chiek  (j) = Interpolate (NPSI, rr, chie,   rk (j), 0);
       chink  (j) = Interpolate (NPSI, rr, chin,   rk (j), 0);
       chiik  (j) = Interpolate (NPSI, rr, chii,   rk (j), 0);
+
+      if (chipk (j) < DMIN)
+	chipk (j) = DMIN;
+      if (chipk (j) > DMAX)
+	chipk (j) = DMAX;
+      if (chiek (j) < DMIN)
+	chiek (j) = DMIN;
+      if (chiek (j) > DMAX)
+	chiek (j) = DMAX;
+      if (chink (j) < DMIN)
+	chink (j) = DMIN;
+      if (chink (j) > DMAX)
+	chink (j) = DMAX;
+      if (chiik (j) < DMIN)
+	chiik (j) = DMIN;
+      if (chiik (j) > DMAX)
+	chiik (j) = DMAX;
 
       rhok   (j) = (AI * (nik (j) + nbk (j)) + AII * nIk (j)) * m_p /rho0;
       Zeffik (j) =       (ZII - Zeffk (j)) /(ZII - 1.);

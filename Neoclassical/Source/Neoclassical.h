@@ -53,6 +53,7 @@
 // 2.0  - Completely went over to OMFIT mode
 // 2.1  - Added POEM terms in Rutherford equation
 // 2.2  - Removed command line options
+// 2.3  - Added DMIN/DMAX
 
 // ################################################################
 
@@ -86,7 +87,8 @@ using namespace blitz;
 // Namelist function
 extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* EXB, int* INTP, int* INTF, int* INTC, 
 			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN,
-			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS, double* TAUMIN);
+			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS, double* TAUMIN,
+			      double* DMIN, double* DMAX);
 
 // ############
 // Class header
@@ -119,8 +121,11 @@ class Neoclassical
 
   int    INTF;     // If != 0 then use interpolated fFile
   int    INTP;     // If != 0 then use interpolated pFile
+
   int    INTC;     // If != 0 then use interpolated cFile
   int    CATS;     // If != 0 then use only linear interpolation for cFiles
+  double DMIN;     // Minimum allowed value of diffusivities at resonant surfaces (m^2/s)
+  double DMAX;     // Maximum allowed value of diffusivities at resonant surfaces (m^2/s)
 
   double TIME;     // Experimental time (ms)
 

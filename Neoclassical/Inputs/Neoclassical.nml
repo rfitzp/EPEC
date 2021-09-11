@@ -29,6 +29,10 @@
 ! Flag for linear-only interpolation of cFiles
  TIME = 0.	   
 ! Experimental time (ms) (only relevant with interpolation of pFiles/fFiles/cFiles)
+ DMIN = 0.01
+! Minimum allowed value of diffusvities at resonant surfaces (m^2/s)
+ DMAX = 10
+! Maximum allowed value of diffusvities at resonant surfaces (m^2/s)
  TAUMIN = -0.8	   
 ! Minimum allowed value of tau
  COULOMB = 17.	   
