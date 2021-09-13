@@ -1,13 +1,9 @@
 # RESCALE
 
 ## Description
-    Rescales equilibrium gFile to change q_95 by modifying toroidal plasma current 
-    while keeping B_toroidal the same
+    Rescales equilibrium gFile and pFile to change q_95 by modifying
+    toroidal plasma current while keeping B_toroidal the same
 
-## Requirements
-
-   - asymptote (for plots) (https://asymptote.sourceforge.io)	
-   
 ## Contents	
 
 ### /Documentation
@@ -16,21 +12,21 @@
 ### /Source 
 - Makefile: GNU makefile 
 - *.f90: Fortran_90 source files
+- *.h: C++ header files
+- *.cpp: C++ source files
  
 ### /Inputs
-- gFile: Initial gFile
 - Rescale.nml: Namelist file
+- gFile: Initial gFile
+- pFile: Initial pFile
 	
 ### /Outputs
 - gFile: Rescaled gFile
  	
-### /Plots 
-- *.asy: Asymptote scripts to plot rescaled equilibrium
-
-## gFile Format
+### gFile Format
 
     read (100, '(a48, 3i4)') string, i3, NRBOX, NZBOX
-    read (100, '(5e16.9)') RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero
+    read (100, '(5e16.9)') RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF
     read (100, '(5e16.9)') RAXIS, ZAXIS, PSIAXIS, PSIBOUND, B0
     read (100, '(5e16.9)') CURRENT, zero, zero, zero, zero
     read (100, '(5e16.9)') zero, zero, zero, zero, zero
@@ -51,3 +47,112 @@
   
   *Anything after this is ignored*
   
+### pFile Format
+
+	n "psinorm ne(10^20/m^3) dnedpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, NE, dNEdPSI
+	
+	n "psinorm te(KeV) dtedpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, TE, dTEdPSI
+	
+	n "psinorm ni(10^20/m^3) dnidpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, NI, dNIdPSI
+	
+	n "psinorm ti(KeV) dtidpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, TI, dTIdPSI
+	
+	n "psinorm nb(10^20/m^3) dpbdpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, NB, dNBdPSI
+
+	n "psinorm pb(kPa) dnbdpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, PB, dPBdPSI
+
+	n "psinorm ptot(kPa) dptotdpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, PTOT, dPTOTdPSI
+	
+	n "psinorm omeg(kRad/s) domeg/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WPHI, dWPHIdPSI
+
+	n "psinorm omegp(kRad/s) domegp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WTHE, dWTHEdPSI
+
+	n "psinorm omegvb(kRad/s) domevb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WVB, dWVBdPSI
+
+	n "psinorm omegpp(kRad/s) domepp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WPP, dWPPdPSI
+	
+	n "psinorm omgeb(kRad/s) domgeb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WEB, dWEBdPSI
+
+	n "psinorm er(kV/m) der/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, ER, dERdPSI
+
+	n "psinorm ommvb(kRad/s) dommvb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WMVB, dWMVBdPSI
+
+	n "psinorm ommpp(kRad/s) dommpp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WMPP, dWMPPdPSI
+
+	n "psinorm omevb(kRad/s) domevb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WEVB, dWEVBdPSI
+
+	n "psinorm omepp(kRad/s) domepp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WEPP, dWEPPdPSI
+
+	n "psinorm kpol(km/s/T) dkpol/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, KPOL, dKPOLdPSI
+
+	n "psinorm omghb() domghb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WMGB, dWMGBdPSI
+	
+	n "psinorm nz1(10^20/m^3) dnz1dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, NI, dNIdPSI
+
+	n "psinorm vtor1(km/s) dvtor1psiN"
+	for (int i = 0; i < n; i++)
+	PSI, VTOR1, dVTOR1dPSI
+
+	n "psinorm vpol1(km/s) dvpol1psiN"
+	for (int i = 0; i < n; i++)
+	PSI, VPOL1, dVPOL1dPSI
+	
+	n "N Z A of ION SPECIES"
+	for (int i = 0; i < n; i++)
+	N, Z, A (i=0 impurity, i=1 majority; i=2 fast)
+
+ - PSI:   Normalized poloidal flux
+ - NE:    Electron number density (10^20/m^3)
+ - TE:    Electron temperature (keV)
+ - NI:    Thermal ion number density (10^20/m^3)
+ - TI:    Thermal ion temperature (keV)
+ - NB:    Fast ion number density (10^20/m^3)
+ - WPHI:  Impurity ion toroidal angular velocity on outboard midplane (krad/s)
+ - WTHE:  Impurity ion toroidal angular velocity on outboard midplane (krad/s)	
+ - WEB:   ExB frequency (krad/s)
+ - NI :   Impurity ion number density (10^20/m^3)
+ - N:     Ion atomic number
+ - Z:     Ion charge (units of e)
+ - A:     Ion mass number
+
+ *Fields can occur in any order. Additional fields are ignored.*

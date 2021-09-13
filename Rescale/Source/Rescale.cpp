@@ -42,6 +42,9 @@ void Rescale::pFileRescale ()
       exit (1);
     }
 
+  // Open output pfile
+  FILE* file1 = OpenFilew ((char*) "Outputs/pFile");
+ 
   do
     {
       // Read field
@@ -81,9 +84,17 @@ void Rescale::pFileRescale ()
 
       field.Rescale (A1);
 
+      // Output field to output pFile
+      fprintf (file1, "%d %s\n", n, s);
+      for (int i = 0; i < n; i++)
+	fprintf (file1, "%e %e %e\n", field.GetX(i), field.GetY(i), field.GetdYdX(i));
+      
+
       printf ("pFile field: %-34s:  rescale factor = %11.4e\n", s, A1);
     }
   while (1);
+
+  fclose (file); fclose (file1);
 }
 
 // #####################################

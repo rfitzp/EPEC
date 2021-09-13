@@ -56,7 +56,7 @@
 - /Stage3
   -*.py: Python scripts to plot Stage 3 data
 
-## pFile Format
+### pFile Format
 
 	n "psinorm ne(10^20/m^3) dnedpsiN"
 	for (int i = 0; i < n; i++)
@@ -74,9 +74,17 @@
 	for (int i = 0; i < n; i++)
 	PSI, TI, dTIdPSI
 	
-	n "psinorm nb(10^20/m^3) dnbdpsiN"
+	n "psinorm nb(10^20/m^3) dpbdpsiN"
 	for (int i = 0; i < n; i++)
 	PSI, NB, dNBdPSI
+
+	n "psinorm pb(kPa) dnbdpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, PB, dPBdPSI
+
+	n "psinorm ptot(kPa) dptotdpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, PTOT, dPTOTdPSI
 	
 	n "psinorm omeg(kRad/s) domeg/dpsiN"
 	for (int i = 0; i < n; i++)
@@ -85,14 +93,58 @@
 	n "psinorm omegp(kRad/s) domegp/dpsiN"
 	for (int i = 0; i < n; i++)
 	PSI, WTHE, dWTHEdPSI
+
+	n "psinorm omegvb(kRad/s) domevb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WVB, dWVBdPSI
+
+	n "psinorm omegpp(kRad/s) domepp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WPP, dWPPdPSI
 	
 	n "psinorm omgeb(kRad/s) domgeb/dpsiN"
 	for (int i = 0; i < n; i++)
 	PSI, WEB, dWEBdPSI
+
+	n "psinorm er(kV/m) der/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, ER, dERdPSI
+
+	n "psinorm ommvb(kRad/s) dommvb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WMVB, dWMVBdPSI
+
+	n "psinorm ommpp(kRad/s) dommpp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WMPP, dWMPPdPSI
+
+	n "psinorm omevb(kRad/s) domevb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WEVB, dWEVBdPSI
+
+	n "psinorm omepp(kRad/s) domepp/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WEPP, dWEPPdPSI
+
+	n "psinorm kpol(km/s/T) dkpol/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, KPOL, dKPOLdPSI
+
+	n "psinorm omghb() domghb/dpsiN"
+	for (int i = 0; i < n; i++)
+	PSI, WMGB, dWMGBdPSI
 	
 	n "psinorm nz1(10^20/m^3) dnz1dpsiN"
 	for (int i = 0; i < n; i++)
 	PSI, NI, dNIdPSI
+
+	n "psinorm vtor1(km/s) dvtor1psiN"
+	for (int i = 0; i < n; i++)
+	PSI, VTOR1, dVTOR1dPSI
+
+	n "psinorm vpol1(km/s) dvpol1psiN"
+	for (int i = 0; i < n; i++)
+	PSI, VPOL1, dVPOL1dPSI
 	
 	n "N Z A of ION SPECIES"
 	for (int i = 0; i < n; i++)
@@ -111,10 +163,10 @@
  - N:     Ion atomic number
  - Z:     Ion charge (units of e)
  - A:     Ion mass number
- 
+
  *Fields can occur in any order. Additional fields are ignored.*
  
- ## cFile Format
+ ### cFile Format
  
     n
     for (int i = 0; i < n; i++)
