@@ -16,7 +16,8 @@
 \begin{document}
 \maketitle
 
-\section{Grad-Shafranov Equation}
+\section{Rescaling gFile}
+\subsection{Grad-Shafranov Equation}
 The Grad-Shafranov equation takes the form
 \begin{equation}
 \frac{\partial^{\,2}\psi}{\partial R^{\,2}}-\frac{1}{R}\,\frac{\partial\psi}{\partial R} + \frac{\partial^{\,2}\psi}{\partial Z^{\,2}} = -R^{\,2}\,\frac{dP}{d\psi} - \frac{1}{2}\,\frac{dT^{\,2}}{d\psi},
@@ -27,7 +28,7 @@ j_\phi &= -R\,\frac{dP}{d\psi}- \frac{1}{2\,R}\,\frac{dT^{\,2}}{d\psi},\\[0.5ex]
 q &= \frac{T}{2\pi}\oint_\psi \frac{dl}{R\,|\nabla \psi|}.
 \end{align}
 
-\section{Type I Rescaling}
+\subsection{Type I Rescaling}
 The following rescaling of variables leaves the Grad-Shafranov equation invariant:
 \begin{align}
 R_{\rm new}&=R_{\rm old},\\[0.5ex]
@@ -42,7 +43,7 @@ I_{\phi\,{\rm new}} &= a_1\,I_{\phi\,{\rm old}},\\[0.5ex]
 q_{\rm new} &= q_{\rm old}.
 \end{align} 
 
-\section{Type II Rescaling}
+\subsection{Type II Rescaling}
 The following rescaling of variable also leaves the Grad-Shafranov equation invariant:
 \begin{align}
 R_{\rm new}&=R_{\rm old},\\[0.5ex]
@@ -57,7 +58,7 @@ I_{\phi\,{\rm new}} &=I_{\phi\,{\rm old}},\\[0.5ex]
 q_{\rm new} &= \frac{T_{\rm new}}{T_{\rm old}}\,q_{\rm old}.
 \end{align} 
 
-\section{Program {\sc RESCALE}}
+\subsection{Program {\sc RESCALE}}
 Let
 \begin{equation}
 {\mit\Psi}_N = \frac{\psi - \psi_{\rm axis}}{\psi_{\rm separatrix}-\psi_{\rm axis}}.
@@ -111,7 +112,36 @@ q_{\rm new\,new} &= q_{\rm new}= q_{\rm old}\sqrt{1 +\left(\frac{q_{95\,{\rm tar
 Note that
 \begin{align}
 q_{95\,{\rm new\,new}} &= q_{95\,{\rm target}},\\[0.5ex]
-T_{1\,{\rm new\,new}} &= T_{1\,{\rm old}}.
+T_{1\,{\rm new\,new}} &= T_{1\,{\rm old}},\\[0.5ex]
+P_{\rm new\,new} &=a_1^{\,2}\,P_{\rm old}.
+\end{align}
+
+\section{Rescaling pFile}
+The variables in pFiles are rescaled as follows:
+\begin{align}
+{\sf ne} &\rightarrow a_1\,{\sf ne},\\[0.5ex]
+{\sf te} &\rightarrow a_1\,{\sf te},\\[0.5ex]
+{\sf ni}& \rightarrow a_1\,{\sf ni},\\[0.5ex]
+{\sf ti}&\rightarrow a_1\,{\sf ti},\\[0.5ex]
+{\sf nb} &\rightarrow a_1\, {\sf nb},\\[0.5ex]
+{\sf pb} &\rightarrow a_1^{\,2}\,{\sf pb},\\[0.5ex]
+{\sf ptot} &\rightarrow a_1^{\,2}\,{\sf ne},\\[0.5ex]
+{\sf omeg} &\rightarrow a_1\,{\sf omeg},\\[0.5ex]
+{\sf omegp}& \rightarrow a_1\,{\sf omegp},\\[0.5ex]
+{\sf omegvb}&\rightarrow a_1\,{\sf omegvb},\\[0.5ex]
+{\sf omegpp} &\rightarrow a_1\, {\sf omegpp},\\[0.5ex]
+{\sf omegeb} &\rightarrow a_1\,{\sf omegeb},\\[0.5ex]
+{\sf er} &\rightarrow a_1\,{\sf er},\\[0.5ex]
+{\sf ommvb}& \rightarrow a_1\,{\sf ommvb},\\[0.5ex]
+{\sf ommpp}&\rightarrow a_1\,{\sf ommpp},\\[0.5ex]
+{\sf omevb} &\rightarrow a_1\, {\sf omevb},\\[0.5ex]
+{\sf omepp} &\rightarrow a_1\,{\sf omepp},\\[0.5ex]
+{\sf kpol} &\rightarrow a_1\,{\sf kpol},\\[0.5ex]
+{\sf omghb}& \rightarrow a_1\,{\sf omghb},\\[0.5ex]
+{\sf nz1}&\rightarrow a_1\,{\sf nz1},\\[0.5ex]
+{\sf vtor1} &\rightarrow a_1\, {\sf vtor1},\\[0.5ex]
+{\sf vpol1} &\rightarrow a_1\,{\sf vpol1},\\[0.5ex]
+{\sf N\,Z\,A} &\rightarrow {\sf N\,Z\,A}.
 \end{align}
 
 \end{document}

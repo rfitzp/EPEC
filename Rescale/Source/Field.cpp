@@ -67,3 +67,15 @@ double Field::GetdYdX (int i)
   return dYdX[i];
 }
 
+void Field::Rescale (double a1)
+{
+  for (int i = 0; i < N; i++)
+    {
+      Y[i]    *= a1;
+      dYdX[i] *= a1;
+    }
+}
+
+
+
+

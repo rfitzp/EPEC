@@ -1,9 +1,9 @@
 Module Function_Defs_0
 
   interface
-     subroutine NameListRead (SCALE, q_95_new, OPOINT, XPOINT) 
+     subroutine NameListRead (q_95_new, OPOINT, XPOINT) 
 
-       integer          :: SCALE, OPOINT, XPOINT
+       integer          :: OPOINT, XPOINT
        double precision :: q_95_new
   
  
@@ -11,14 +11,14 @@ Module Function_Defs_0
   end interface   
 
   interface
-     subroutine ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+     subroutine ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
           B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
        
        character (len = 100) :: string
        
        integer :: i3, NRBOX, NZBOX, NBOUND, NLIM
        
-       double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+       double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
        
        double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
        
@@ -28,14 +28,14 @@ Module Function_Defs_0
   end interface
 
   interface
-     subroutine WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+     subroutine WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
           B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
 
        character (len = 100) :: string
        
        integer :: i3, NRBOX, NZBOX, NBOUND, NLIM
        
-       double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+       double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
        
        double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
        

@@ -1,6 +1,5 @@
 &RESCALE_CONTROL
-	SCALE  = 1     ! Flag for rescaling equilibrium
-	Q_95   = 2.88  ! Target q_95 value
-	OPOINT = 0     ! Flag for finding new O-point
-	XPOINT = 0     ! Flag for finding new X-point
+	Q_95   = 3.5   ! Target q_95 value
+	OPOINT = 1     ! Flag for finding new O-point
+	XPOINT = 1     ! Flag for finding new X-point
 &end

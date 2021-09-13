@@ -1,9 +1,9 @@
-F_OBJECT = Function_Defs_0.o Function_Defs_1.o Function_Defs_2.o Rescale.o
-F_SOURCE = Function_Defs_0.f90 Function_Defs_1.f90 Function_Defs_2.f90 Rescale.f90
+F_OBJECT = Function_Defs_0.o Function_Defs_1.o Function_Defs_2.o gFileRescale.o
+F_SOURCE = Function_Defs_0.f90 Function_Defs_1.f90 Function_Defs_2.f90 gFileRescale.f90
 
-C_HEADER = 
-C_OBJECT =
-C_SOURCE =
+C_HEADER = Rescale.h Field.h
+C_OBJECT = main.o Rescale.o Field.o
+C_SOURCE = main.cpp Rescale.cpp Field.cpp
 
 GIT_HASH             = `git rev-parse HEAD`
 COMPILE_TIME         = `date -u +'%Y-%m-%d %H:%M:%S UTC'`
