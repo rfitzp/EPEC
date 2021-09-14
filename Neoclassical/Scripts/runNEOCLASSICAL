@@ -4,10 +4,13 @@ machine=$(uname -n)
 
 if [[ "$machine" == *"iris"* ]]
 then
-  host="iris"
+    host="iris"
 elif [[ "$machine" == *"CNS"* ]]
 then
-  host="utexas"
+    host="utexas"
+elif [[ "$machine" == *"Richard"* ]]
+then
+    host="utexas"     
 fi
 
 if [[ "$host" == "iris" ]]

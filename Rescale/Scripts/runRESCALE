@@ -10,7 +10,7 @@ then
     host="utexas"
 elif [[ "$machine" == *"Richard"* ]]
 then
-  host="utexas" 
+  host="utexas"    
 fi
 
 if [[ "$host" == "iris" ]]
@@ -24,4 +24,4 @@ then
     :
 fi
 
-./flux
+./rescale
