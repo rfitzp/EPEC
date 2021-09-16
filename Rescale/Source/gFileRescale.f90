@@ -16,7 +16,12 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
 
   use Function_Defs_0
 
+  use, intrinsic :: iso_c_binding, only: c_double
   implicit none
+
+  real (kind = c_double), intent (inout) :: q95_old
+  real (kind = c_double), intent (inout) :: q95_new
+  real (kind = c_double), intent (inout) :: a1
 
   character (len = 100) :: string
   
@@ -24,7 +29,7 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
   
   double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
   double precision :: RLEFT, RRIGHT, ZLOW, ZHIGH, RMAX, ZMAX
-  double precision :: x95, q95, T95, Tedge, q95_new, q95_old, a2, a1, Tnew, Told, qnew, qold
+  double precision :: x95, q95, T95, Tedge, a2, Tnew, Told, qnew, qold
   double precision :: Pold, Pnew, Psiold, Psinew, dR, dZ, RO, ZO, RX, ZX
  
   double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM, RR, ZZ
