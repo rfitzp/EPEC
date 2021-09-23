@@ -9,7 +9,8 @@
    - Stage 2:
      Construct flux coordinate system. Calculate metric quantities. 
      Locate rational surfaces. Calculate neoclassical data. Calculate 
-     tearing stability matrix. 
+     tearing stability matrix. Calulate GGJ data. Calculate island
+     saturation data.
 	 
 ## Requirements
 
@@ -22,7 +23,7 @@
 
 ### /Documentation
 
-- Flux.tex: Latex description of program algorithm
+- Flux.pdf: Description of program algorithm
 	  
 ### /Source
 
@@ -35,7 +36,7 @@
 
 - Flux.nml: Fortran_90 namelist control file
 - gFile: Equilibrium gFile
-- /gFiles: Contains equilibrium gFiles for interpolation
+- /gFiles: Directory containing equilibrium gFiles for interpolation
   - Index: List of gFile names and experimental times
   - gFiles: Actual gFiles
 	  

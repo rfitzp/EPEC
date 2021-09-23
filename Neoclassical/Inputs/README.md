@@ -3,12 +3,12 @@
 ## Contents
 
 - Neoclassical.nml: Fortran_90 namelist file
-- fFile: fFile (usually symbolic link)
-- /fFiles: Directory containing fFiles used for interpolated equilibria (usually symbolic link)
-- pFile: pFile (usually symbolic link)
-- /pFiles: Directory containing pFiles used for interpolated equilibria (usually symbolic link)
-- cFile: cFile (usually symbolic link)
-- /cFiles: Directory containing cFiles used for interpolated equilibria (usually symbolic link)
+- fFile: fFile 
+- /fFiles: Directory containing fFiles used for interpolated equilibria 
+- pFile: pFile 
+- /pFiles: Directory containing pFiles used for interpolated equilibria 
+- cFile: cFile 
+- /cFiles: Directory containing cFiles used for interpolated equilibria 
 
 */fFiles must contain fFiles as well as Index which lists fFile names and experimental times in two columns*
 

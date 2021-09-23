@@ -18,7 +18,7 @@
 ## Contents
 
 ### /Documentation
-- Neoclassical.tex: Latex description of program algorithm
+- Neoclassical.pdf: Description of program algorithm
 	  
 ### /Source
 
@@ -31,15 +31,15 @@
 
 - Neoclassical.nml: Fortran_90 namelist control file
 - fFile: Data from PHASE
-- /fFiles: Contains fFiles for interpolation
+- /fFiles: Directory containing fFiles for interpolation
   - Index: List of fFile names and experimental times
   - fFiles: Actual fFiles
 - pFile: Profile data
-- /pFiles: Contains pFiles for interpolation
+- /pFiles: Directory containing pFiles for interpolation
   - Index: List of pFile names and experimental times
   - pFiles: Actual pFiles
 - cFile: Perpendicular diffusivity data
-- /cFiles: Contains cFiles for interpolation
+- /cFiles: Directory containing cFiles for interpolation
   - Index: List of cFile names and experimental times
   - cFiles: Actual cFiles
 	  

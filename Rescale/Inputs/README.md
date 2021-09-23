@@ -1,5 +1,5 @@
 # Directory containing input files for RESCALE
 
-- Rescale.nml: Nemlist file
+- Rescale.nml: Namelist file
 - gFile: Input gFile
 

@@ -23,7 +23,7 @@
 
 ### /Documentation
 
-- Phase.tex: Latex description of program algorithm
+- Phase.pdf: Description of program algorithm
 	  
 ### /Source
 
@@ -38,23 +38,23 @@
 - Waveform.nml: Fortran_90 namelist file specifing RMP 
   coil current waveform
 - fFile: Data from FLUX
-- /fFiles: Contains fFiles for interpolation
+- /fFiles: Directory containing fFiles for interpolation
   - Index: List of fFile names and experimental times
   - fFiles: Actual fFiles
 - nFile: Data from NEOCLASSICAL
-- /nFiles: Contains nFiles for interpolation
+- /nFiles: Directory containing nFiles for interpolation
   - Index: List of nFile names and experimental times
   - nFiles: Actual nFiles
 - uFile: GPEC data for upper RMP coil set
-- /uFiles: Contains uFiles for interpolation
+- /uFiles: Directory containing uFiles for interpolation
   - Index: List of uFile names and experimental times
   - uFiles: Actual uFiles
 - mFile: GPEC data for (optional) middle RMP coil set
-- /mFiles: Contains mFiles for interpolation
+- /mFiles: Directory containing mFiles for interpolation
   - Index: List of mFile names and experimental times
   - mFiles: Actual mFiles
 - uFile: GPEC data for lower RMP coil set
-- /uFiles: Contains uFiles for interpolation
+- /uFiles: Directory containing uFiles for interpolation
   - Index: List of uFile names and experimental times
   - mFiles: Actual uFiles
 	  

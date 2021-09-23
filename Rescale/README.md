@@ -7,7 +7,7 @@
 ## Contents	
 
 ### /Documentation
-- Rescale.tex: Latex description of program algorithm
+- Rescale.pdf: Description of program algorithm
 
 ### /Source 
 - Makefile: GNU makefile 

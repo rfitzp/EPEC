@@ -1,10 +1,9 @@
  &EPEC_CONTROL
- TSTART = 0.
-! Simulation start time (ms)
- TEND = 2.e3
-! Simulation end time (ms)
- DT = 10.
-! Time interval between sucessive fFile/nFile calculations (ms)
- DDT = 1.
-! Time interval between successive PHASE runs (ms)
- /
+ TSTART = 2000
+ TEND = 4500
+ QSTART = 4.1
+ QEND = 2.9
+ DTR = 50
+ DTF = 10
+ DTP = 1
+/
