@@ -89,6 +89,62 @@ at the various resonant magnetic flux-surfaces in the plasma in response to the 
 \end{equation}
 where $q_k= m_k/n$, and $a_{kk}(r) = \oint |\nabla r|^{-2}\,d\theta/(2\pi)$. 
 
+\subsection{Cylindrical Tearing Mode Equation}
+The cylindrical tearing mode equation for the eigenfunction, $\psi(r)$,  of the $m_k$, $n$ tearing mode takes the form
+\begin{equation}
+\frac{d^{\,2}\psi}{dr^{\,2}}+ \frac{1}{r}\,\frac{d\psi}{dr}-\frac{m_k^{\,2}}{r^{\,2}}\,\psi - \frac{\hat{J}_\phi'\,\psi}{r\,(1/q-n/m_k)}=0.
+\end{equation}
+Here, 
+\begin{equation}
+\hat{J}_\phi(r) = - \frac{\mu_0\,R_0\,R}{B_0}\,\frac{dP}{d{\mit\Psi}_p} - R_0^{\,2}\,B_0\,g\,\frac{dg}{d{\mit\Psi}_p},
+\end{equation}
+where $P({\mit\Psi}_p)$ is the total plasma pressure,  the previous expression is evaluated on the outboard mid-plane, and
+$\hat{J}_\phi'\equiv d\hat{J}_\phi/dr$. 
+
+Suppose that the plasma is surrounded by a thin resistive wall of time constant
+$\tau_w$, located at $r=r_w>r_{100}$. The quantities ${\mit\Delta}_k^{nw}$ and ${\mit\Sigma}_k^{nw}$
+are defined as 
+\begin{align}
+{\mit\Delta}_k^{nw}&= \lim_{\delta\rightarrow 0}
+\left[\left.\frac{r\,\psi'_{nw}}{\psi_{nw}}\right|_{r_k+\delta}
+- \left.\frac{r\,\psi'_{nw}}{\psi_{nw}}\right|_{r_k-\delta}\right],\\[0.5ex]
+{\mit\Sigma}_k^{nw} &= \lim_{\delta\rightarrow 0}\left[\left.\frac{r\,\psi'_{nw}}{\psi_{nw}}\right|_{r_k+\delta}+ \left.\frac{r\,\psi'_{nw}}{\psi_{nw}}\right|_{r_k-\delta}
+-2\,A_k\,(1+\ln\delta)\right],
+\end{align}
+where 
+\begin{align}
+A_k &= -\left(\frac{r\,q\,\hat{J}_\phi'}{s}\right)_{r_k},\\[0.5ex]
+s(r) &= \frac{d\ln q}{d\ln r}.
+\end{align}
+Here, $\psi_{nw}(r)$ is a solution of the cylindrical tearing mode equation that is well-behaved at $r=0$,
+continuous at $r=r_k$, and satisfies 
+\begin{equation}
+\left.\frac{r\,\psi'_{nw}}{\psi_{nw}}\right|_{r_{100}} = -m.
+\end{equation}
+ Moreover, $\psi'\equiv d\psi/dr$. 
+
+The quantities ${\mit\Delta}_k^{pw}$ and ${\mit\Sigma}_k^{\,pw}$
+are defined as 
+\begin{align}
+{\mit\Delta}_k^{nw}&= \lim_{\delta\rightarrow 0}
+\left[\left.\frac{r\,\psi'_{pw}}{\psi_{pw}}\right|_{r_k+\delta}
+- \left.\frac{r\,\psi'_{pw}}{\psi_{pw}}\right|_{r_k-\delta}\right],\\[0.5ex]
+{\mit\Sigma}_k^{\,pw} &= \lim_{\delta\rightarrow 0}\left[\left.\frac{r\,\psi'_{pw}}{\psi_{pw}}\right|_{r_k+\delta}+ \left.\frac{r\,\psi'_{pw}}{\psi_{pw}}\right|_{r_k-\delta}
+-2\,A_k\,(1+\ln\delta)\right].
+\end{align}
+Here, $\psi_{pw}(r)$ is a solution of the cylindrical tearing mode equation that is well-behaved at $r=0$,
+continuous at $r=r_k$, and satisfies 
+\begin{equation}
+\left.\frac{r\,\psi'_{pw}}{\psi_{pw}}\right|_{r_{100}} = -m\left[\frac{1+(r_{100}/r_w)^{\,2m}}{1-(r_{100}/r_w)^{\,2m}}\right].
+\end{equation}
+It is also helpful to define
+\begin{align}
+{\mit\Sigma}_{kw} &= \frac{2m\,(r_{100}/r_w)^{\,m}}{1-(r_{100}/r_w)^{\,2m}}\,\frac{\psi_{pw}(r_{100})}{\psi_{pw}(r_k)},\\[0.5ex]
+{\mit\Delta}_{kw} &= -\frac{{\mit\Sigma}_{kw}^{\,2}}{{\mit\Delta}^{nw}_k-{\mit\Delta}^{pw}_k},\\[0.5ex]
+B_k &= -\left(\frac{r^{\,2}\,q\,\hat{J}_\phi''}{s}\right)_{r_k},
+\end{align}
+where $\hat{J}_\phi'' \equiv d^2\hat{J}_\phi/dr^{\,2}$. 
+
 \section{Neoclassical Physics}\label{appb}
 \subsection{Plasma Species}\label{a3}
 The plasma is assumed to consist of three (charged) species; namely,  electrons ($e$), majority ions ($i$), and impurity ions
@@ -314,142 +370,11 @@ K_\theta(r) = \frac{R_0^{\,2}\,B_0^{\,2}\,g^{\,2}}{R^{\,2}\,\langle B^{\,2}\rang
 \end{equation}
 
 \section{Plasma Response in Inner Region}
-\subsection{Island Widths}
-Let ${\mit\Psi}_k= R_0\,B_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$, where $\hat{\mit\Psi}_k>0$  and $\varphi_k$ are both real quantities.
-The full width (in $r$) of the magnetic island chain at the
-$k$th resonant surface is
-\begin{equation}
-W_k = 4\,R_0\left(\frac{q\,}{g\,s}\right)^{1/2}_{r_k}\hat{\mit\Psi}_k^{\,1/2},
-\end{equation}
-where 
-\begin{equation}
-s(r) = \frac{d\ln q}{d\ln r}.
-\end{equation}
-
-\subsection{Critical Island Widths}
-The critical full island width (in $r$) which must be exceeded before the electron temperature is flattened within the
-magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
-\begin{equation}\label{e64g}
-\frac{W_{T_e\,k} }{r_k}= 5.07\left(\frac{\chi_e}{\chi_{\parallel\,e}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k},
-\end{equation}
-where $\chi_e(r)$ is the perpendicular electron energy diffusivity profile, $\epsilon =r/R_0$, 
-\begin{align}
-\chi_{\parallel\,e}&= \frac{\chi_{\parallel\,e}^{\rm brag}\,\chi_{\parallel\,e}^{\rm max}}{\chi_{\parallel\,e}^{\rm brag}+\chi_{\parallel\,e}^{\rm max}},\\[0.5ex]
-\chi_{\parallel\,e}^{\rm brag} &= \frac{1.55\,\tau_{ee}\,v_{T\,e}^{\,2}}{1+0.38\,Z_{\rm eff}},\\[0.5ex]
-\chi_{\parallel\,e}^{\rm max} &= \frac{2\,R_0\,v_{T\,e}}{n\,s}\,\frac{r_k}{W_{T_e\,k}}.
-\end{align}
-Equation~(\ref{e64g}) must be solved iteratively for $W_{T_e\,k}/r_k$. 
-
-The critical full island width (in $r$) which must be exceeded before the ion temperature is flattened within the
-magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
-\begin{equation}\label{e64gg}
-\frac{W_{T_i\,k} }{r_k}= 5.07\left(\frac{\chi_i}{\chi_{\parallel\,i}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k},
-\end{equation}
-where $\chi_i(r)$ is the perpendicular ion energy diffusivity profile, 
-\begin{align}
-\chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
-\chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
-\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{T_i\,k}}.
-\end{align}
-Equation~(\ref{e64gg}) must be solved iteratively for $W_{T_i\,k}/r_k$.
-
-The critical full island width (in $r$) which must be exceeded before the electron density is flattened within the
-magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
-\begin{equation}\label{e64ggg}
-\frac{W_{n_e\,k} }{r_k}= 5.07\left(\frac{D_\perp}{\chi_{\parallel\,i}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k},
-\end{equation}
-where $D_\perp(r)$ is the perpendicular particle diffusivity profile, 
-\begin{align}
-\chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
-\chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
-\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{n_e\,k}}.
-\end{align}
-Equation~(\ref{e64ggg}) must be solved iteratively for $W_{n_e\,k}/r_k$.
-
-\subsection{Evolution Equations}
-Let ${\mit\chi}_k= R_0\,B_0\,\hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$, and $E_{kk'}=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$,
-where  $\hat{\chi}_k>0$, $\zeta_k$, $\hat{E}_{kk}'>0$, and $\xi_{kk'}$ are all real quantities. Furthermore,
-let $X_k= \hat{\mit\Psi}_k\,\cos\varphi_k$ and $Y_k= \hat{\mit\Psi}_k\,\sin\varphi_k$. The resonant plasma response model at the 
-$k$th resonant surface takes the form
-\begin{align}\label{e21}
-&\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dX_k}{d\hat{t}} 
-+\hat{\varpi}_k\,Y_k\right)= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'}  -\sin\xi_{kk'}\,Y_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k\nonumber\\[0.5ex]&\phantom{=====}+\left(f_{b\,k} +f_{c\,k}+f_{p\,k}-f_{s\,k}\right)X_k,\\[0.5ex]
-&\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dY_k}{d\hat{t}} -\hat{\varpi}_k\,X_k\right)
-= \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,Y_{k'}
-+\sin\xi_{kk'}\,X_{k'}) + \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k\nonumber\\[0.5ex]&\phantom{=====}+\left(
-f_{b\,k} +f_{c\,k}+f_{p\,k}-f_{s\,k}\right)Y_k,\label{e22}
-\end{align}
-where
-\begin{align}\label{e23}
-{\cal S}_k&=\frac{\tau_R(r_k)}{\tau_A},\\[0.5ex]
-\tau_A &= \left[\frac{\mu_0\,\rho(0)\,r_{100}^{\,2}}{B_0^{\,2}}\right]^{1/2},\\[0.5ex]
-\tau_R(r) &= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{ee},\\[0.5ex]
-\sigma_{ee}(r) &=\frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e},\\[0.5ex]
-f_{b\,k} &= f_{b\,e\,k}+f_{b\,i\,k},\\[0.5ex]
-f_{b\,e\,k} &= \alpha_{b\,e\,k}\left(f_{b\,T_e\,k} + f_{b\,n_e\,k}\right),\\[0.5ex]
-f_{b\,i\,k} &= \alpha_{b\,i\,k}\left(f_{b\,T_i\,k} + f_{b\,n_i\,k}\right),\\[0.5ex]
-f_{b\,T_e\,k}&=\left(\frac{\eta_e}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_e\,k}^{\,2}+\hat{\rho}_{\theta\,e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{b\,n_e\,k}&=\left(\frac{1}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{\rho}_{\theta\,e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{b\,T_i\,k}&=\left(\frac{\eta_i}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_i\,k}^{\,2}+\hat{\rho}_{\theta\,i\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{b\,n_i\,k}&=\left(\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{\rho}_{\theta\,i\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{c\,k} &= \alpha_{c\,k}\left(f_{c\,T_e\,k} + f_{c\,n_e\,k} + f_{c\,T_i\,k} + f_{c\,n_i\,k}\right),\\[0.5ex]
-f_{c\,T_e\,k}&=\left(\frac{n_e}{n_e+n_i}\,\frac{\eta_e}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{c\,n_e\,k}&=\left(\frac{n_e}{n_e+n_i}\,\frac{1}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{c\,T_i\,k}&=\left(\frac{n_i}{n_e+n_i}\,\frac{\eta_i}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_i\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{c\,n_i\,k}&=\left(\frac{n_i}{n_e+n_i}\,\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
-f_{p\,k} &= \alpha_{p\,k}\left(f_{p\,T_i\,k} + f_{p\,n_i\,k}\right),\\[0.5ex]
-f_{p\,T_i\,k}&=\left(\frac{\eta_i}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{(\hat{W}_{T_i\,k}^{\,2}+\hat{W}_k^{\,2})^{\,2}},\\[0.5ex]
-f_{p\,n_i\,k}&=\left(\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{(\hat{W}_{n_e\,k}^{\,2}+\hat{W}_k^{\,2})^{\,2}},\\[0.5ex]
-\hat{W}_k &=\frac{{\cal I}\,W_k}{2\,r_k}=\frac{2\,{\cal I}}{\epsilon_{100}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)^{1/2}_{r_k} (X_k^{\,2} + Y_k^{\,2})^{\,1/4},\\[0.5ex]
-\hat{W}_{T_e\,k} &=\frac{{\cal I}\,W_{T_e\,k}}{2\,r_k} ,\\[0.5ex]
-\hat{W}_{T_i\,k} &= \frac{{\cal I}\,W_{T_i\,k}}{2\,r_k},\\[0.5ex]
-\hat{W}_{n_e\,k} &= \frac{{\cal I}\,W_{n_e\,k}}{2\,r_k},\\[0.5ex]
-\hat{\rho}_{\theta\,e\, k} &= \left(\frac{{\cal I}\,\rho_{\theta\,e}}{2\,r}\right)_{r_k}=\left(\frac{2\,{\cal I}\,v_{T\,e}\,m_e\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
-\hat{\rho}_{\theta\,i\,k} &= \left(\frac{{\cal I}\,\rho_{\theta\,i}}{2\,r}\right)_{r_k}= \left(\frac{2\,{\cal I}\,v_{T\,i}\,m_i\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
-\hat{\delta}_k &= \frac{\delta_{\rm linear}(r_k)}{R_0\,\epsilon_{100}\,\hat{r}_k},\\[0.5ex]
-\alpha_{b\,e\,k} &= -2\,{\cal I}\,I_g\left(\frac{\omega_{\ast\,e}+\omega_{{\rm nc}\,e}}{\omega_\beta}\right)_{r_k},\\[0.5ex]
-\alpha_{b\,i\,k} &= 2\,{\cal I}\,I_g\left[\frac{(n_i/n_e)\left(\omega_{\ast\,i}+\omega_{{\rm nc}\,i}\right)+(Z_I\,n_I/n_e)\left(\omega_{\ast\,I}+\omega_{{\rm nc}\,I}\right)}{\omega_\beta}\right]_{r_k},\\[0.5ex]
-\alpha_{c\,k} &= 2\,{\cal I}\,I_g\,D_R(r_k),\\[0.5ex]
-\alpha_{p\,k} &= 8\,{\cal I}^{\,3}\, I_p\left[\frac{(\omega_{\ast\,i}+\omega_{{\rm nc}\,i})\,\omega_{{\rm nc}\,i}}{\omega_\beta\,\omega_{\mit\Omega}}\right]_{r_k},\\[0.5ex]
-\omega_{\beta}(r)&= \frac{s\,g\,B_0}{\mu_0\,n_e\,e\,R_0^{\,2}\,q},\\[0.5ex]
-\omega_{\mit\Omega}(r)&= \frac{e\,g\,B_0\,s\,q}{m_i},\\[0.5ex]
-f_{s\,k} &=\frac{f_{s\,1\,k} \,\hat{W}_{T_e\,k}^{\,2}+ f_{s\,2\,k} \,\hat{W}_k^{\,2}}{\hat{W}_{T_e\,k}^{\,2}+ \hat{W}_k^{\,2}},\\[0.5ex]
-f_{s\,1\,k} &= P_{1\,k}\,\frac{W_k}{r_k}\,\ln\left(\frac{r_k}{W_k}\right)+ P_{2\,k}\,\frac{W_k}{r_k},\\[0.5ex]
-f_{s\,2\,k} &= P_{3\,k}\,\frac{W_k}{r_k},\\[0.5ex]
-P_{1\,k} &= 0.41\,A_k^{\,2},\\[0.5ex]
-P_{2\,k} &= 0.41\left(A_k^{\,2}\left[\ln\left(\frac{1}{r_k}\right)+4.85\right] - \frac{{\mit\Sigma}_k'\,A_k}{2} - B_k - 0.44\,A_k\right),\\[0.5ex]
-P_{3\,k} &= 0.8\,A_k^{\,2} - 0.27\,B_k-0.09\,A_k,\\[0.5ex]
-A_k &= -\left(\frac{r\,q\,\hat{J}_\phi'}{s}\right)_{r_k},\\[0.5ex]
-B_k &= -\left(\frac{r^{\,2}\,q\,\hat{J}_\phi''}{s}\right)_{r_k}.
-\end{align}
-Here, ${\cal I}=0.8227$, $I_g=1.58$, $I_p=1.38$, $\epsilon_{100}=r_{100}/R_0$, $\hat{r}=r/r_{100}$, $\hat{r}_k=r_k/r_{100}$, and $\hat{t}=t/\tau_A$. Furthermore, $\delta_{\rm linear}(r)$ is the linear layer width, whereas $\rho(r)$ is the plasma
-mass density profile. Finally,
-\begin{equation}
-\hat{J}_\phi(r) = - \frac{\mu_0\,R_0\,R}{B_0}\,\frac{dP}{d{\mit\Psi}_p} - R_0^{\,2}\,B_0\,g\,\frac{dg}{d{\mit\Psi}_p},
-\end{equation}
-where $P({\mit\Psi}_p)$ is the total plasma pressure,  the previous expression is evaluated on the outboard mid-plane, and
-$\hat{J}_\phi'\equiv d\hat{J}_\phi/dr$, $\hat{J}_\phi''\equiv d^{\,2}\hat{J}_\phi/dr^{\,2}$. 
-
-The quantity ${\mit\Sigma}_k'$ is
-defined as
-\begin{equation}
-{\mit\Sigma}_k' = \lim_{\delta\rightarrow 0}\left[\left.\frac{r\,\psi'}{\psi}\right|_{r_k-\delta}+ \left.\frac{r\,\psi'}{\psi}\right|_{r_k+\delta}
--2\,A_k\,(1+\ln\delta)\right],
-\end{equation}
-where $\psi(r)$ is the solution of 
-\begin{equation}
-\frac{d^{\,2}\psi}{dr^{\,2}}+ \frac{1}{r}\,\frac{d\psi}{dr}-\frac{m^{\,2}}{r^{\,2}}\,\psi - \frac{\hat{J}_\phi'\,\psi}{r\,(1/q-n/m_k)}=0
-\end{equation}
-that is well-behaved at $r=0$, and satisfies $r\,\psi'/\psi = -m$ at $r=r_{100}$. Here, $\psi'\equiv d\psi/dr$. 
-
-Note that the EPEC resonant plasma response model interpolates smoothly
-between the linear regime and the
-nonlinear Rutherford regime. The linear regime corresponds to $\hat{W}_k\ll\hat{\delta}_k$, whereas the nonlinear
-region corresponds to $\hat{W}_k\gg\hat{\delta}_k$.  
-
-\subsection{Linear Layer Width}\label{linear}
+\subsection{Linear Layer Widths}\label{linear}
 Let
 \begin{align}
+\tau_R(r) &= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{ee},\\[0.5ex]
+\sigma_{ee}(r) &=\frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e},\\[0.5ex]
 \tau_H(r) &= \frac{R_0}{B_0\,g}\,\frac{\sqrt{\mu_0\,\rho}}{n\,s},\\[0.5ex]
 \tau_E(r) &= \frac{r^{\,2}}{D_\perp + (2/3)\,\chi_e},\\[0.5ex]
 \tau_M(r) &= \frac{R_0^{\,2}\,q^{\,2}}{\chi_\phi},\\[0.5ex]
@@ -462,8 +387,10 @@ D(r)&= \frac{5}{3}\,S^{\,1/3}\,\frac{\rho_s}{r},\\[0.5ex]
 Q_E(r)&= S^{\,1/3}\,n\,\omega_E\,\tau_H,\\[0.5ex]
 Q_{e,i}(r)&= -S^{\,1/3}\,n\,\omega_{\ast\,e,i}\,\tau_H
 \end{align}
+Here, $\chi_e(r)$, $D_\perp(r)$, and $\chi_\phi(r)$ are the perpendicular electron energy, particle,
+and toroidal momentum diffusivity profiles, respectively. 
 The constant-$\psi$ linear layer width is determined from the solution of
-\begin{equation}
+\begin{equation}\label{e87}
 \frac{d^{\,2}\,Y}{dp^{\,2}} -\left[\frac{-Q_E\,(Q_E-Q_i)+{\rm i}\,(Q_E-Q_i)\,(P_M+P_E)\,p^{\,2}+
 P_M\,P_E\,p^{\,4}}
 {{\rm i}\,(Q_E-Q_e) +\{P_E + {\rm i}\,(Q_E-Q_i)\,D^{\,2}\}\,p^{\,2}+(1+\tau)\,P_M\,D^{\,2}\,p^{\,4}}
@@ -476,8 +403,154 @@ Y(p) = Y_0\left[1 - c\,p+{\cal O}(p^{\,2})\right].
 then the 
 linear layer width is 
 \begin{equation}
-\frac{\delta_{\rm linear}}{r} = \frac{\pi\,|c|}{S^{\,1/3}}.
+\delta_{\rm linear}(r) = \frac{\pi\,|c|\,r}{S^{\,1/3}}.
 \end{equation}
+Note that Eq.~(\ref{e87}) can only be solved when $1+\tau>0$. 
+
+\subsection{Island Widths}
+Let ${\mit\Psi}_k= R_0\,B_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$, where $\hat{\mit\Psi}_k>0$  and $\varphi_k$ are both real quantities.
+The full width (in $r$) of the magnetic island chain at the
+$k$th resonant surface is
+\begin{equation}
+W_k = 4\,R_0\left(\frac{q\,}{g\,s}\right)^{1/2}_{r_k}\hat{\mit\Psi}_k^{\,1/2}.
+\end{equation}
+
+\subsection{Critical Island Widths}
+The critical full island width (in $r$) which must be exceeded before the electron temperature is flattened within the
+magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
+\begin{equation}\label{e64g}
+W_{T_e\,k} = 5.07\left(\frac{\chi_e}{\chi_{\parallel\,e}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k}r_k,
+\end{equation}
+where $\epsilon =r/R_0$, and 
+\begin{align}
+\chi_{\parallel\,e}&= \frac{\chi_{\parallel\,e}^{\rm brag}\,\chi_{\parallel\,e}^{\rm max}}{\chi_{\parallel\,e}^{\rm brag}+\chi_{\parallel\,e}^{\rm max}},\\[0.5ex]
+\chi_{\parallel\,e}^{\rm brag} &= \frac{1.55\,\tau_{ee}\,v_{T\,e}^{\,2}}{1+0.38\,Z_{\rm eff}},\\[0.5ex]
+\chi_{\parallel\,e}^{\rm max} &= \frac{2\,R_0\,v_{T\,e}}{n\,s}\,\frac{r_k}{W_{T_e\,k}}.
+\end{align}
+Equation~(\ref{e64g}) must be solved iteratively for $W_{T_e\,k}/r_k$. 
+
+The critical full island width (in $r$) which must be exceeded before the ion temperature is flattened within the
+magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
+\begin{equation}\label{e64gg}
+W_{T_i\,k}= 5.07\left(\frac{\chi_i}{\chi_{\parallel\,i}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k}r_k,
+\end{equation}
+where $\chi_i(r)$ is the perpendicular ion energy diffusivity profile, 
+\begin{align}
+\chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{T_i\,k}}.
+\end{align}
+Equation~(\ref{e64gg}) must be solved iteratively for $W_{T_i\,k}/r_k$.
+
+The critical full island width (in $r$) which must be exceeded before the electron density is flattened within the
+magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
+\begin{equation}\label{e64ggg}
+W_{n_e\,k}= 5.07\left(\frac{D_\perp}{\chi_{\parallel\,i}}\right)^{1/4}_{r_k}\left(\frac{1}{\epsilon\,s\,n}\right)^{1/2}_{r_k}r_k,
+\end{equation}
+where 
+\begin{align}
+\chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
+\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{n_e\,k}}.
+\end{align}
+Equation~(\ref{e64ggg}) must be solved iteratively for $W_{n_e\,k}/r_k$.
+
+\subsection{Resonant Plasma Response Model}
+Let ${\mit\chi}_k= R_0\,B_0\,\hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$, and $E_{kk'}=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$,
+where  $\hat{\chi}_k>0$, $\zeta_k$, $\hat{E}_{kk}'>0$, and $\xi_{kk'}$ are all real quantities. Furthermore,
+let $X_k= \hat{\mit\Psi}_k\,\cos\varphi_k$ and $Y_k= \hat{\mit\Psi}_k\,\sin\varphi_k$. The resonant plasma response model at the 
+$k$th resonant surface takes the form
+\begin{align}\label{e21}
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dX_k}{d\hat{t}} 
++\hat{\varpi}_k\,Y_k\right)&= f_k\,X_k+ \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'}  -\sin\xi_{kk'}\,Y_{k'})\nonumber\\[0.5ex] &\phantom{=}+ {\mit\Sigma}_{kw}\,U_k + \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k,\\[0.5ex]
+\left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dY_k}{d\hat{t}} -\hat{\varpi}_k\,X_k\right)
+&= f_k\,Y_k + \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,Y_{k'}
++\sin\xi_{kk'}\,X_{k'}) \nonumber\\[0.5ex]
+&\phantom{=}+ {\mit\Sigma}_{kw}\,V_k+ \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k,\label{e22}\\[0.5ex]
+\hat{\tau}_w\,\frac{dU_k}{d\hat{t}} &={\mit\Delta}_{kw}\, U_k+ {\mit\Sigma}_{kw}\,X_k,\\[0.5ex]
+\hat{\tau}_w\,\frac{dV_k}{d\hat{t}} &={\mit\Delta}_{kw}\, V_k+ {\mit\Sigma}_{kw}\,Y_k,
+\end{align}
+where
+\begin{align}\label{e23}
+\hat{W}_k &=\frac{{\cal I}\,W_k}{2\,r_k}=\frac{2\,{\cal I}}{\epsilon_{100}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)^{1/2}_{r_k} (X_k^{\,2} + Y_k^{\,2})^{\,1/4},\\[0.5ex]
+\hat{\delta}_k &= \frac{\delta_{\rm linear}(r_k)}{R_0\,\epsilon_{100}\,\hat{r}_k},\\[0.5ex]
+{\cal S}_k&=\frac{\tau_R(r_k)}{\tau_A},\\[0.5ex]
+\tau_A &= \left[\frac{\mu_0\,\rho(0)\,r_{100}^{\,2}}{B_0^{\,2}}\right]^{1/2},\\[0.5ex]
+\hat{\tau}_w &= \frac{\tau_w}{\tau_A},\\[0.5ex]
+f_k &=f_{b\,k}+f_{c\,k} + f_{p\,k} + f_{w\,k} + f_{s\,k},
+\end{align}
+Here, ${\cal I} = 0.8227$, $\epsilon_{100}=r_{100}/R_0$, $\hat{r}=r/r_{100}$, $\hat{r}_k=r_k/r_{100}$, $\hat{t}=t/\tau_A$, and $\rho(r)$ is the plasma
+mass density profile.
+
+The perturbed bootstrap current terms take the form
+\begin{align}
+f_{b\,k} &= f_{b\,e\,k}+f_{b\,i\,k},\\[0.5ex]
+f_{b\,e\,k} &= \alpha_{b\,e\,k}\left(f_{b\,T_e\,k} + f_{b\,n_e\,k}\right),\\[0.5ex]
+f_{b\,i\,k} &= \alpha_{b\,i\,k}\left(f_{b\,T_i\,k} + f_{b\,n_i\,k}\right),\\[0.5ex]
+f_{b\,T_e\,k}&=\left(\frac{\eta_e}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_e\,k}^{\,2}+\hat{\rho}_{\theta\,e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
+f_{b\,n_e\,k}&=\left(\frac{1}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{\rho}_{\theta\,e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
+f_{b\,T_i\,k}&=\left(\frac{\eta_i}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_i\,k}^{\,2}+\hat{\rho}_{\theta\,i\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
+f_{b\,n_i\,k}&=\left(\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{\rho}_{\theta\,i\,k}^{\,2}+\hat{W}_k^{\,2}},
+\end{align}
+where
+\begin{align}
+\alpha_{b\,e\,k} &= -2\,{\cal I}\,I_g\left(\frac{\omega_{\ast\,e}+\omega_{{\rm nc}\,e}}{\omega_\beta}\right)_{r_k},\\[0.5ex]
+\alpha_{b\,i\,k} &= 2\,{\cal I}\,I_g\left[\frac{(n_i/n_e)\left(\omega_{\ast\,i}+\omega_{{\rm nc}\,i}\right)+(Z_I\,n_I/n_e)\left(\omega_{\ast\,I}+\omega_{{\rm nc}\,I}\right)}{\omega_\beta}\right]_{r_k},\\[0.5ex]
+\omega_{\beta}(r)&= \frac{s\,g\,B_0}{\mu_0\,n_e\,e\,R_0^{\,2}\,q},\\[0.5ex]
+\hat{W}_{T_e\,k} &=\frac{{\cal I}\,W_{T_e\,k}}{2\,r_k} ,\\[0.5ex]
+\hat{W}_{T_i\,k} &= \frac{{\cal I}\,W_{T_i\,k}}{2\,r_k},\\[0.5ex]
+\hat{W}_{n_e\,k} &= \frac{{\cal I}\,W_{n_e\,k}}{2\,r_k},\\[0.5ex]
+\hat{\rho}_{\theta\,e\, k} &= \left(\frac{{\cal I}\,\rho_{\theta\,e}}{2\,r}\right)_{r_k}=\left(\frac{2\,{\cal I}\,v_{T\,e}\,m_e\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},\\[0.5ex]
+\hat{\rho}_{\theta\,i\,k} &= \left(\frac{{\cal I}\,\rho_{\theta\,i}}{2\,r}\right)_{r_k}= \left(\frac{2\,{\cal I}\,v_{T\,i}\,m_i\,q\,R_0}{e\,B_0\,g\,r^{\,2}}\right)_{r_k},
+\end{align}
+and $I_g = 1.58$.
+
+The curvature terms take the form
+\begin{align}
+f_{c\,k} &= \alpha_{c\,k}\left(f_{c\,T_e\,k} + f_{c\,n_e\,k} + f_{c\,T_i\,k} + f_{c\,n_i\,k}\right),\\[0.5ex]
+f_{c\,T_e\,k}&=\left(\frac{n_e}{n_e+n_i}\,\frac{\eta_e}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
+f_{c\,n_e\,k}&=\left(\frac{n_e}{n_e+n_i}\,\frac{1}{1+\eta_e}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
+f_{c\,T_i\,k}&=\left(\frac{n_i}{n_e+n_i}\,\frac{\eta_i}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{T_i\,k}^{\,2}+\hat{W}_k^{\,2}},\\[0.5ex]
+f_{c\,n_i\,k}&=\left(\frac{n_i}{n_e+n_i}\,\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{\hat{W}_{n_e\,k}^{\,2}+\hat{W}_k^{\,2}},
+\end{align}
+where
+\begin{align}
+\alpha_{c\,k} &= 2\,{\cal I}\,I_g\,D_R(r_k).
+\end{align}
+Here, $D_R(r)$ is the Glasser-Greene-Johnson resistive interchange stability parameter.
+
+The ion polarization terms take the form
+\begin{align}
+f_{p\,k} &= \alpha_{p\,k}\left(f_{p\,T_i\,k} + f_{p\,n_i\,k}\right),\\[0.5ex]
+f_{p\,T_i\,k}&=\left(\frac{\eta_i}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{(\hat{W}_{T_i\,k}^{\,2}+\hat{W}_k^{\,2})^{\,2}},\\[0.5ex]
+f_{p\,n_i\,k}&=\left(\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{(\hat{W}_{n_e\,k}^{\,2}+\hat{W}_k^{\,2})^{\,2}},
+\end{align}
+where
+\begin{align}
+\alpha_{p\,k} &= 8\,{\cal I}^{\,3}\, I_p\left[\frac{(\omega_{\ast\,i}+\omega_{{\rm nc}\,i})\,\omega_{{\rm nc}\,i}}{\omega_\beta\,\omega_{\mit\Omega}}\right]_{r_k},\\[0.5ex]
+\omega_{\mit\Omega}(r)&= \frac{e\,g\,B_0\,s\,q}{m_i}
+\end{align}
+where $I_=1.38$. 
+
+The wall stabilization terms take the form
+\begin{equation}
+f_{w\,k} = \frac{{\mit\Sigma}_{kw}^{\,2}}{{\mit\Delta}_{kw}}.
+\end{equation}
+
+Finally, the island saturation terms take the form 
+\begin{align}
+f_{s\,k} &=-\left(\frac{f_{s\,1\,k} \,\hat{W}_{T_e\,k}^{\,2}+ f_{s\,2\,k} \,\hat{W}_k^{\,2}}{\hat{W}_{T_e\,k}^{\,2}+ \hat{W}_k^{\,2}}\right),\\[0.5ex]
+f_{s\,1\,k} &= P_{1\,k}\,\frac{W_k}{r_k}\,\ln\left(\frac{r_k}{W_k}\right)+ P_{2\,k}\,\frac{W_k}{r_k},\\[0.5ex]
+f_{s\,2\,k} &= P_{3\,k}\,\frac{W_k}{r_k},\\[0.5ex]
+P_{1\,k} &= 0.41\,A_k^{\,2},\\[0.5ex]
+P_{2\,k} &= 0.41\left(A_k^{\,2}\left[\ln\left(\frac{1}{r_k}\right)+4.85\right] - \frac{{\mit\Sigma}_k^{nw}\,A_k}{2} - B_k - 0.44\,A_k\right),\\[0.5ex]
+P_{3\,k} &= 0.8\,A_k^{\,2} - 0.27\,B_k-0.09\,A_k.
+\end{align}
+
+Note that the EPEC resonant plasma response model interpolates smoothly
+between the linear regime and the
+nonlinear Rutherford regime. The linear regime corresponds to $\hat{W}_k\ll\hat{\delta}_k$, whereas the nonlinear
+region corresponds to $\hat{W}_k\gg\hat{\delta}_k$.  
 
 \section{Plasma Angular Velocity Evolution}\label{a4}
 \subsection{Evolution Equations}
@@ -498,11 +571,12 @@ RMP, and how these modifications affect the natural frequencies. The evolution e
 \frac{n^{\,2}\,[z_p(\hat{r}_k)]^{\,2}}{\hat{\rho}_k\,[J_1(j_{0,p})]^{\,2}}\,\delta\hat{T}_k,
 \end{align}
 where
-\begin{equation}\label{e24a}
-\delta \hat{T}_k=\sum_{k'=1,K}\hat{E}_{kk'}\,\hat{\mit\Psi}_k\,\hat{\mit\Psi}_{k'}\,\sin(\varphi_k-\varphi_{k'}-\xi_{kk'})+\hat{E}_{kk}\,\hat{\mit\Psi}_k\,\hat{\chi}_k\,\sin(\varphi_k-\zeta_k).
-\end{equation}
+\begin{align}\label{e24a}
+\delta \hat{T}_k&= \sum_{k'=1,K}\hat{E}_{kk'}\left[(Y_k\,X_{k'}-X_k\,Y_{k'})\,\cos\xi_{kk'}- (X_k\,X_{k'}+Y_k\,Y_{k'})\,\sin\xi_{kk'}\right]\nonumber\\[0.5ex]
+&\phantom{=}+{\mit\Sigma}_{kw}\,(Y_k\,U_k-X_k\,V_k)+\hat{E}_{kk'}\,\hat{\chi}_k\,(Y_k\,\cos\zeta_k-X_k\,\sin\zeta_k).
+\end{align}
 Here, $Q_k = Q(r_k)$, $\hat{\rho}_k=\rho(r_k)/\rho(0)$, $\hat{\tau}_{M\,k}= r_{100}^{\,2}/[\chi_\phi(r_k)\,\tau_A]$,  $\hat{\tau}_{\theta\,k}=\tau_\theta(r_k)/\tau_A$, $\hat{\tau}_{{\rm cx}\,k} =\tau_{{\rm cx}}(r_k)/\tau_A$. 
-Moreover, $\chi_\phi(r)$ is the perpendicular toroidal momentum diffusivity profile, whereas
+Moreover, 
 \begin{equation}\label{a70}
 \tau_\theta(r) = \left. \frac{\tau_{ii}}{\mu_{00}^i}\right/\left(1+\frac{q^{\,2}\,R_0^{\,2}}{r^{\,2}\,a_{kk}}\right).
 \end{equation}
@@ -520,7 +594,7 @@ Q^{\,2}(r) =\frac{q^{\,2}\,R_0^{\,2}}{2\,r^{\,2}}\left.\left(\left\langle\frac{1
 \subsection{Natural Frequencies}
 According to linear tearing mode theory, in the absence of the RMP, the natural frequency of the tearing mode resonant at the $k$th resonant surface is given by
 \begin{equation}\label{elin}
- \varpi_{e,k} = - n\,(\omega_E+\omega_{\ast\,e})_{r_k}.
+ \varpi_{e\,k} = - n\,(\omega_E+\omega_{\ast\,e})_{r_k}.
 \end{equation}
 According to nonlinear tearing mode theory, in the absence of the RMP, 
 the natural frequency of the tearing mode resonant at the $k$th resonant surface is given by
