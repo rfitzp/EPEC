@@ -140,14 +140,14 @@ continuous at $r=r_k$, and satisfies
 It is also helpful to define
 \begin{align}
 {\mit\Sigma}_{kw} &= \frac{2m\,(r_{100}/r_w)^{\,m}}{1-(r_{100}/r_w)^{\,2m}}\,\frac{\psi_{pw}(r_{100})}{\psi_{pw}(r_k)},\\[0.5ex]
-{\mit\Delta}_{kw} &= -\frac{{\mit\Sigma}_{kw}^{\,2}}{{\mit\Delta}^{nw}_k-{\mit\Delta}^{pw}_k},\\[0.5ex]
+{\mit\Delta}_{kw} &= -\left(\frac{{\mit\Sigma}_{kw}^{\,2}}{{\mit\Delta}^{nw}_k-{\mit\Delta}^{pw}_k}\right),\\[0.5ex]
 B_k &= -\left(\frac{r^{\,2}\,q\,\hat{J}_\phi''}{s}\right)_{r_k},
 \end{align}
-where $\hat{J}_\phi'' \equiv d^2\hat{J}_\phi/dr^{\,2}$. 
+where $\hat{J}_\phi'' \equiv d^{\,2}\hat{J}_\phi/dr^{\,2}$. 
 
 \section{Neoclassical Physics}\label{appb}
 \subsection{Plasma Species}\label{a3}
-The plasma is assumed to consist of three (charged) species; namely,  electrons ($e$), majority ions ($i$), and impurity ions
+The plasma is assumed to consist of three (charged) species (with Maxwellian distribution functions); namely,  electrons ($e$), majority ions ($i$), and impurity ions
 ($I$).  The charges of the  three species are $e_e=-e$, $e_i= e$, and $e_I=Z_I\,e$, respectively, where
 $e$ is the magnitude of the electron charge. 
 Quasi-neutrality demands that
@@ -376,6 +376,7 @@ Let
 \tau_R(r) &= \mu_0\,r^{\,2}\,\sigma_{ee}\,Q_{00}^{ee},\\[0.5ex]
 \sigma_{ee}(r) &=\frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e},\\[0.5ex]
 \tau_H(r) &= \frac{R_0}{B_0\,g}\,\frac{\sqrt{\mu_0\,\rho}}{n\,s},\\[0.5ex]
+\rho(r)&= m_i\left[n_i(r) + n_b(r)\right] + m_I\,n_I(r),\\[0.5ex]
 \tau_E(r) &= \frac{r^{\,2}}{D_\perp + (2/3)\,\chi_e},\\[0.5ex]
 \tau_M(r) &= \frac{R_0^{\,2}\,q^{\,2}}{\chi_\phi},\\[0.5ex]
 \rho_s (r)&= \frac{\sqrt{m_i\,T_e}}{e\,B_0\,g},\\[0.5ex]
@@ -388,7 +389,7 @@ Q_E(r)&= S^{\,1/3}\,n\,\omega_E\,\tau_H,\\[0.5ex]
 Q_{e,i}(r)&= -S^{\,1/3}\,n\,\omega_{\ast\,e,i}\,\tau_H
 \end{align}
 Here, $\chi_e(r)$, $D_\perp(r)$, and $\chi_\phi(r)$ are the perpendicular electron energy, particle,
-and toroidal momentum diffusivity profiles, respectively. 
+and toroidal momentum diffusivity profiles, respectively. Moreover, $n_b(r)$ is the number density of fast (as opposed to thermal) majority ions. 
 The constant-$\psi$ linear layer width is determined from the solution of
 \begin{equation}\label{e87}
 \frac{d^{\,2}\,Y}{dp^{\,2}} -\left[\frac{-Q_E\,(Q_E-Q_i)+{\rm i}\,(Q_E-Q_i)\,(P_M+P_E)\,p^{\,2}+
@@ -425,9 +426,9 @@ where $\epsilon =r/R_0$, and
 \begin{align}
 \chi_{\parallel\,e}&= \frac{\chi_{\parallel\,e}^{\rm brag}\,\chi_{\parallel\,e}^{\rm max}}{\chi_{\parallel\,e}^{\rm brag}+\chi_{\parallel\,e}^{\rm max}},\\[0.5ex]
 \chi_{\parallel\,e}^{\rm brag} &= \frac{1.55\,\tau_{ee}\,v_{T\,e}^{\,2}}{1+0.38\,Z_{\rm eff}},\\[0.5ex]
-\chi_{\parallel\,e}^{\rm max} &= \frac{2\,R_0\,v_{T\,e}}{n\,s}\,\frac{r_k}{W_{T_e\,k}}.
+\chi_{\parallel\,e}^{\rm max} &= \frac{2\,R_0\,v_{T\,e}}{n\,s}\,\frac{r_k}{W_{T_e\,k}}\label{e64d}
 \end{align}
-Equation~(\ref{e64g}) must be solved iteratively for $W_{T_e\,k}/r_k$. 
+Equations~(\ref{e64g})--(\ref{e64d}) must be solved iteratively for $W_{T_e\,k}/r_k$. 
 
 The critical full island width (in $r$) which must be exceeded before the ion temperature is flattened within the
 magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
@@ -438,9 +439,9 @@ where $\chi_i(r)$ is the perpendicular ion energy diffusivity profile,
 \begin{align}
 \chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
 \chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
-\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{T_i\,k}}.
+\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{T_i\,k}}.\label{e64rr}
 \end{align}
-Equation~(\ref{e64gg}) must be solved iteratively for $W_{T_i\,k}/r_k$.
+Equations~(\ref{e64gg})--(\ref{e64rr}) must be solved iteratively for $W_{T_i\,k}/r_k$.
 
 The critical full island width (in $r$) which must be exceeded before the electron density is flattened within the
 magnetic separatrix of the magnetic island chain at the $k$th resonant surface is
@@ -451,9 +452,9 @@ where
 \begin{align}
 \chi_{\parallel\,i}&= \frac{\chi_{\parallel\,i}^{\rm brag}\,\chi_{\parallel\,i}^{\rm max}}{\chi_{\parallel\,i}^{\rm brag}+\chi_{\parallel\,i}^{\rm max}},\\[0.5ex]
 \chi_{\parallel\,i}^{\rm brag} &= 1.95\,\tau_{ii}\,v_{T\,i}^{\,2},\\[0.5ex]
-\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{n_e\,k}}.
+\chi_{\parallel\,i}^{\rm max} &= \frac{2\,R_0\,v_{T\,i}}{n\,s}\,\frac{r_k}{W_{n_e\,k}}.\label{e64fff}
 \end{align}
-Equation~(\ref{e64ggg}) must be solved iteratively for $W_{n_e\,k}/r_k$.
+Equations~(\ref{e64ggg})--(\ref{e64fff}) must be solved iteratively for $W_{n_e\,k}/r_k$.
 
 \subsection{Resonant Plasma Response Model}
 Let ${\mit\chi}_k= R_0\,B_0\,\hat{\chi}_k\,{\rm e}^{-{\rm i}\,\zeta_k}$, and $E_{kk'}=\hat{E}_{kk'}\,{\rm e}^{-{\rm i}\,\xi_{kk'}}$,
@@ -479,10 +480,13 @@ where
 \hat{\tau}_w &= \frac{\tau_w}{\tau_A},\\[0.5ex]
 f_k &=f_{b\,k}+f_{c\,k} + f_{p\,k} + f_{w\,k} + f_{s\,k},
 \end{align}
-Here, ${\cal I} = 0.8227$, $\epsilon_{100}=r_{100}/R_0$, $\hat{r}=r/r_{100}$, $\hat{r}_k=r_k/r_{100}$, $\hat{t}=t/\tau_A$, and $\rho(r)$ is the plasma
-mass density profile.
+Here, ${\cal I} = 0.8227$, $\epsilon_{100}=r_{100}/R_0$, $\hat{r}=r/r_{100}$, $\hat{r}_k=r_k/r_{100}$, and $\hat{t}=t/\tau_A$. Note that the EPEC resonant plasma response model interpolates smoothly
+between the linear regime and the
+nonlinear Rutherford regime. The linear regime corresponds to $\hat{W}_k\ll\hat{\delta}_k$, whereas the nonlinear
+region corresponds to $\hat{W}_k\gg\hat{\delta}_k$.  
 
-The perturbed bootstrap current terms take the form
+
+The perturbed bootstrap current terms in the response model take the form
 \begin{align}
 f_{b\,k} &= f_{b\,e\,k}+f_{b\,i\,k},\\[0.5ex]
 f_{b\,e\,k} &= \alpha_{b\,e\,k}\left(f_{b\,T_e\,k} + f_{b\,n_e\,k}\right),\\[0.5ex]
@@ -530,7 +534,7 @@ where
 \alpha_{p\,k} &= 8\,{\cal I}^{\,3}\, I_p\left[\frac{(\omega_{\ast\,i}+\omega_{{\rm nc}\,i})\,\omega_{{\rm nc}\,i}}{\omega_\beta\,\omega_{\mit\Omega}}\right]_{r_k},\\[0.5ex]
 \omega_{\mit\Omega}(r)&= \frac{e\,g\,B_0\,s\,q}{m_i}
 \end{align}
-where $I_=1.38$. 
+and  $I_p=1.38$. 
 
 The wall stabilization terms take the form
 \begin{equation}
@@ -547,10 +551,6 @@ P_{2\,k} &= 0.41\left(A_k^{\,2}\left[\ln\left(\frac{1}{r_k}\right)+4.85\right] -
 P_{3\,k} &= 0.8\,A_k^{\,2} - 0.27\,B_k-0.09\,A_k.
 \end{align}
 
-Note that the EPEC resonant plasma response model interpolates smoothly
-between the linear regime and the
-nonlinear Rutherford regime. The linear regime corresponds to $\hat{W}_k\ll\hat{\delta}_k$, whereas the nonlinear
-region corresponds to $\hat{W}_k\gg\hat{\delta}_k$.  
 
 \section{Plasma Angular Velocity Evolution}\label{a4}
 \subsection{Evolution Equations}
@@ -573,7 +573,7 @@ RMP, and how these modifications affect the natural frequencies. The evolution e
 where
 \begin{align}\label{e24a}
 \delta \hat{T}_k&= \sum_{k'=1,K}\hat{E}_{kk'}\left[(Y_k\,X_{k'}-X_k\,Y_{k'})\,\cos\xi_{kk'}- (X_k\,X_{k'}+Y_k\,Y_{k'})\,\sin\xi_{kk'}\right]\nonumber\\[0.5ex]
-&\phantom{=}+{\mit\Sigma}_{kw}\,(Y_k\,U_k-X_k\,V_k)+\hat{E}_{kk'}\,\hat{\chi}_k\,(Y_k\,\cos\zeta_k-X_k\,\sin\zeta_k).
+&\phantom{=}+{\mit\Sigma}_{kw}\,(Y_k\,U_k-X_k\,V_k)+\hat{E}_{kk}\,\hat{\chi}_k\,(Y_k\,\cos\zeta_k-X_k\,\sin\zeta_k).
 \end{align}
 Here, $Q_k = Q(r_k)$, $\hat{\rho}_k=\rho(r_k)/\rho(0)$, $\hat{\tau}_{M\,k}= r_{100}^{\,2}/[\chi_\phi(r_k)\,\tau_A]$,  $\hat{\tau}_{\theta\,k}=\tau_\theta(r_k)/\tau_A$, $\hat{\tau}_{{\rm cx}\,k} =\tau_{{\rm cx}}(r_k)/\tau_A$. 
 Moreover, 

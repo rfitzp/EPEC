@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Script to fetch documentation files from EPEC module
+
+#################################################
+# Set this variable to directory containing OMFIT
+#################################################
+OMFIT_SOURCE=~/EPEC/OMFIT-source
+export OMFIT_SOURCE
+
+# Get documetation files
+EPEC_MODULE=$OMFIT_SOURCE/modules/EPEC
+export EPEC_MODULE
+
+f=$EPEC_MODULE/Epec.rst
+cp -f "$f" "$target"
+
+f=$EPEC_MODULE/EPEC/INPUTS/EpecNamelist.rst
+cp -f "$f" Epec.rst
+
+f=$EPEC_MODULE/FLUX/Flux.rst
+cp -f "$f" Flux.rst
+
+f=$EPEC_MODULE/FLUX/INPUTS/FluxNamelist.rst
+cp -f "$f" FluxNamelist.rst
+
+f=$EPEC_MODULE/NEOCLASSICAL/Neoclassical.rst
+cp -f "$f" Neoclassical.rst
+
+f=$EPEC_MODULE/NEOCLASSICAL/INPUTS/NeoclassicalNamelist.rst
+cp -f "$f" NeoclassicalNamelist.rst
+
+f=$EPEC_MODULE/PHASE/Phase.rst
+cp -f "$f" Phase.rst
+
+f=$EPEC_MODULE/PHASE/INPUTS/PhaseNamelist.rst
+cp -f "$f" PhaseNamelist.rst
+
+f=$EPEC_MODULE/RESCALE/Rescale.rst
+cp -f "$f" Rescale.rst
+
+f=$EPEC_MODULE/RESCALE/INPUTS/RescaleNamelist.rst
+cp -f "$f" RescaleNamelist.rst
+

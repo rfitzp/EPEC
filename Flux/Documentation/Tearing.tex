@@ -185,69 +185,48 @@ The {\em no wall}\/ solution is such that
 g_{nw}(a) &= 1,\\[0.5ex]
 g'_{nw}(a) &= 0.
 \end{align}
-Let the associated ${\mit\Sigma}'$ and ${\mit\Delta}'$ values be denoted ${\mit\Sigma}'_{nw}$ and ${\mit\Delta}'_{nw}$,
+Let the associated $r_s\,{\mit\Sigma}'$ and $r_s\,{\mit\Delta}'$ values be denoted ${\mit\Sigma}^{nw}$ and ${\mit\Delta}^{nw}$,
 respectively. 
 The {\em perfect wall}\/ solution is such that
 \begin{align}
 g_{pw}(a) &= 1,\\[0.5ex]
-g'_{pw}(a) &= -\frac{2\,m/a}{(r_w/a)^{\,2m}-1}.
+g'_{pw}(a) &= -\frac{2m/a}{(r_w/a)^{\,2m}-1}.
 \end{align}
-Let the associated ${\mit\Sigma}'$ and ${\mit\Delta}'$ values be denoted ${\mit\Sigma}'_{pw}$ and ${\mit\Delta}'_{pw}$,
+Let the associated $r_s\,{\mit\Sigma}'$ and $r_s\,{\mit\Delta}'$ values be denoted ${\mit\Sigma}^{pw}$ and ${\mit\Delta}^{pw}$,
 respectively. 
 
 Asymptotic matching in the presence of the wall yields
 \begin{align}
-{\mit\Delta\Psi}_s&= E_{ss}\,{\mit\Psi}_s + E_{sw}\,{\mit\Psi}_w,\\[0.5ex]
-{\mit\Delta\Psi}_w &= E_{ww}\,{\mit\Psi}_w + E_{sw}\,{\mit\Psi}_s.
+{\mit\Delta\Psi}_s&= {\mit\Delta}^{pw}\,{\mit\Psi}_s + {\mit\Sigma}_{w}\,{\mit\Psi}_w,\\[0.5ex]
+{\mit\Delta\Psi}_w &= {\mit\Delta}_w\,{\mit\Psi}_w + {\mit\Sigma}_w\,{\mit\Psi}_s.
 \end{align}
 Here, ${\mit\Psi}_s\equiv \psi(r_s)$, ${\mit\Psi}_w\equiv \psi(r_w)$, and 
 \begin{align}
 {\mit\Delta\Psi}_s&\equiv\left[r\,\frac{d\psi}{dr}\right]_{r_s-}^{r_s+},\\[0.5ex]
 {\mit\Delta\Psi}_w&\equiv\left[r\,\frac{d\psi}{dr}\right]_{r_w-}^{r_w+}.
 \end{align}
- Moreover, 
-$E_{ss}$, $E_{sw}$, and $E_{ww}$ are real parameters. We can
+  We can
 make the identifications
 \begin{align}
-\hat{\mit\Delta}'_{pw} &= \left.\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}\right|_{{\mit\Psi}_w=0}=E_{ss},\\[0.5ex]
-\hat{\mit\Delta}'_{nw} &= \left.\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}\right|_{{\mit\Delta\Psi}_w=0}=E_{ss}- \frac{E_{sw}^{\,2}}{E_{ww}},\\[0.5ex]
-E_{sw} &= \frac{2m\,(r_s/r_w)^m}{[1-(a/r_w)^{2m}]\,g_{pw}(r_s)},
+{\mit\Delta}^{nw} &= \left.\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}\right|_{{\mit\Delta\Psi}_w=0}={\mit\Delta}^{pw}- \frac{{\mit\Sigma}_w^{\,2}}{{\mit\Delta}_w},\\[0.5ex]
+{\mit\Sigma}_w&= \frac{2m\,(r_s/r_w)^m}{[1-(a/r_w)^{2m}]\,g_{pw}(r_s)}.
 \end{align}
-where $\hat{\mit\Delta}'_{pw}\equiv r_s\,{\mit\Delta}'_{pw}$, et cetera. 
 Hence,
 \begin{align}
-E_{ww} &= -\frac{E_{sw}^{\,2}}{\hat{\mit\Delta}'_{nw} -\hat{\mit\Delta}'_{pw}}.
+{\mit\Delta}_w &= -\left(\frac{{\mit\Sigma}_w^{\,2}}{{\mit\Delta}^{nw} -{\mit\Delta}^{pw}}\right).
 \end{align}
 
 Standard analysis reveals that 
 \begin{align}
-{\mit\Delta\Psi}_w &= - {\rm i}\,\omega\,\tau_w\,{\mit\Psi}_w,\\[0.5ex]
-\int_{r_w-}^{r_w+} j_z\,dr& = \frac{{\rm i}\,\omega\,\tau_w\,{\mit\Psi}_w\,{\rm e}^{\,{\rm i}\,(m\,\theta-n\,z-\omega\,t)}}{\mu_0\,r_w},
+{\mit\Delta\Psi}_w &= \tau_w\,\frac{d{\mit\Psi}_w}{dt},
 \end{align}
 where
 \begin{equation}
 \tau_w = \frac{\mu_0\,\delta_w\,r_w}{\eta_w}.
 \end{equation}
-
-Let
-\begin{equation}
-\hat{\mit\Delta}'(\omega)= {\rm Re}\left(\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}\right).
-\end{equation}
 It follows that
-\begin{equation}
-\hat{\mit\Delta}'(\omega) = \hat{\mit\Delta}'_{nw} - (\hat{\mit\Delta}'_{nw}-\hat{\mit\Delta}'_{pw})\left(\frac{\omega^2}{\omega^{\,2} + \omega_w^{\,2}}\right),
-\end{equation}
-where
-\begin{equation}
-\omega_w = -\frac{E_{ww}}{\tau_w}.
-\end{equation}
-The net poloidal torque acting on the rational surface is minus that acting on the wall. Hence,
-\begin{equation}
-T_\theta = -\frac{1}{2}\,r_w\,\int_{r_w-}^{r_w+}\oint\int_{0}^{2\pi\,R_0} j_z\, b_r^{\ast}\,r\,dr\,d\theta\,dz.
-\end{equation}
-It follows that
-\begin{equation}
-T_\theta =- \frac{2\pi^{\,2}\,R_0}{\mu_0}\,m\,({\mit\Delta}'_{nw}-{\mit\Delta}'_{pw})\left(\frac{\omega\,\omega_w}{\omega^{\,2}+
-\omega_w^{\,2}}\right)|{\mit\Psi}_s|^{\,2}.
-\end{equation}
+\begin{align}
+{\mit\Delta\Psi}_s &= {\mit\Delta}^{pw}\,{\mit\Psi}_s + {\mit\Sigma}_w\,{\mit\Psi}_w,\\[0.5ex]
+\tau_w\,\frac{d{\mit\Psi}_w}{dt} &= {\mit\Delta}_w\,{\mit\Psi}_w + {\mit\Sigma}_w\,{\mit\Psi}_s.
+\end{align}
 \end{document}

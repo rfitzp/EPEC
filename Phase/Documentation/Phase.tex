@@ -227,15 +227,15 @@ Fundamental equation:
 \begin{align}\label{e1}
 \left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{d}{d\hat{t}} + {\rm i}\,\hat{\varpi}_k\right){\mit\Psi}_k& =f_k\,{\mit\Psi}_k
 +\sum_{k'=1,K}E_{kk'}\,{\mit\Psi}_{k'}+
-E_{sw\,k}\,{\mit\Psi}_{w\,k}+ \hat{E}_{kk}\,\chi_k,\\[0.5ex]
-\hat{\tau}_w\,\frac{d{\mit\Psi}_{w\,k}}{d\hat{t}}&= E_{ww\,k}\,{\mit\Psi}_{w\,k} +E_{sw\,k}\,{\mit\Psi}_k,\label{e2d}
+{\mit\Delta}_{kw}\,{\mit\Psi}_{w\,k}+ \hat{E}_{kk}\,\chi_k,\\[0.5ex]
+\hat{\tau}_w\,\frac{d{\mit\Psi}_{w\,k}}{d\hat{t}}&= {\mit\Delta}_{kw}\,{\mit\Psi}_{w\,k} +{\mit\Sigma}_{kw}\,{\mit\Psi}_k,\label{e2d}
 \end{align}
 where $\hat{\tau}_w = \tau_w/\tau_A$, 
 \begin{align}
 {\cal S}_k&=\frac{\tau_R(\hat{r}_k)}{\tau_A},\\[0.5ex]
 \hat{W}_k &=\frac{2\,{\cal I}}{\hat{a}\,\hat{r}_k}\left(\frac{q}{g\,s}\right)_{\hat{r}_k}^{1/2} |\hat{\mit\Psi}_k|^{\,1/2},\\[0.5ex]
 \hat{\delta}_k &= \frac{\delta_{\rm linear}(\hat{r}_k)}{R_0\,\hat{a}\,\hat{r}_k},\\[0.5ex]
-f_k&=f_{b\,k}+f_{c\,k}+f_{p\,k}-f_{s\,k}+ \frac{E_{sw\,k}^{\,2}}{E_{ww\,k}},
+f_k&=f_{b\,k}+f_{c\,k}+f_{p\,k}+f_{w\,k}+f_{s\,k},
 \end{align}
 with ${\cal I}=0.8227$, and
 \begin{align}
@@ -270,11 +270,12 @@ f_{p\,n_i\,k}&=\left(\frac{1}{1+\eta_i}\right)_{r_k}\,\frac{\hat{W}_k}{(\hat{W}_
 \alpha_{p\,k} &= 8\,{\cal I}^{\,3}\, I_p\left[\frac{(\omega_{\ast\,i}+\omega_{{\rm nc}\,i})\,\omega_{{\rm nc}\,i}}{\omega_\beta\,\omega_{\mit\Omega}}\right]_{r_k},\\[0.5ex]
 \omega_{\beta}(r)&= \frac{s\,g\,B_0}{\mu_0\,n_e\,e\,R_0^{\,2}\,q},\\[0.5ex]
 \omega_{\mit\Omega}(r)&= \frac{e\,g\,B_0\,s\,q}{m_i},\\[0.5ex]
-f_{s\,k} &=\frac{f_{s\,1\,k} \,\hat{W}_{T_e\,k}^{\,2}+ f_{s\,2\,k} \,\hat{W}_k^{\,2}}{\hat{W}_{T_e\,k}^{\,2}+ \hat{W}_k^{\,2}},\\[0.5ex]
+f_{w\,k} &= \frac{{\mit\Sigma}_{kw}^{\,2}}{{\mit\Delta}_{kw}},\\[0.5ex]
+f_{s\,k} &=-\left(\frac{f_{s\,1\,k} \,\hat{W}_{T_e\,k}^{\,2}+ f_{s\,2\,k} \,\hat{W}_k^{\,2}}{\hat{W}_{T_e\,k}^{\,2}+ \hat{W}_k^{\,2}}\right),\\[0.5ex]
 f_{s\,1\,k} &= P_{1\,k}\,\frac{W_k}{r_k}\,\ln\left(\frac{r_k}{W_k}\right)+ P_{2\,k}\,\frac{W_k}{r_k},\\[0.5ex]
 f_{s\,2\,k} &= P_{3\,k}\,\frac{W_k}{r_k},\\[0.5ex]
 P_{1\,k} &= 0.41\,A_k^{\,2},\\[0.5ex]
-P_{2\,k} &= 0.41\left(A_k^{\,2}\left[\ln\left(\frac{1}{r_k}\right)+4.85\right] - \frac{{\mit\Sigma}_{nw\,k}'\,A_k}{2} - B_k - 0.44\,A_k\right),\\[0.5ex]
+P_{2\,k} &= 0.41\left(A_k^{\,2}\left[\ln\left(\frac{1}{r_k}\right)+4.85\right] - \frac{{\mit\Sigma}^{nw}_k\,A_k}{2} - B_k - 0.44\,A_k\right),\\[0.5ex]
 P_{3\,k} &= 0.8\,A_k^{\,2} - 0.27\,B_k-0.09\,A_k,\\[0.5ex]
 A_k &= -\left(\frac{r\,q\,\hat{J}_\phi'}{s}\right)_{r_k},\\[0.5ex]
 B_k &= -\left(\frac{r^{\,2}\,q\,\hat{J}_\phi''}{s}\right)_{r_k}.
@@ -286,8 +287,8 @@ Let
 \begin{align}
 X_k &= \hat{\mit\Psi}_k\,\cos\varphi_k,\\[0.5ex]
 Y_k &= \hat{\mit\Psi}_k\,\sin\varphi_k,\\[0.5ex]
-X_{w\,k} &= \hat{\mit\Psi}_{w\,k}\,\cos\varphi_{w\,k},\\[0.5ex]
-Y_{w\,k} &= \hat{\mit\Psi}_{w\,k}\,\sin\varphi_{w\,k}.
+U_{k} &= \hat{\mit\Psi}_{w\,k}\,\cos\varphi_{w\,k},\\[0.5ex]
+V_{k} &= \hat{\mit\Psi}_{w\,k}\,\sin\varphi_{w\,k}.
 \end{align}
 So, Eqs.~(\ref{e1})  and (\ref{e2d}) give
 \begin{align}
@@ -295,20 +296,20 @@ So, Eqs.~(\ref{e1})  and (\ref{e2d}) give
 f_k\,(X_k - {\rm i}\,Y_k)\\[0.5ex]
 &\phantom{=}+
 \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'} - {\rm i}\,\sin\xi_{kk'})\,(X_{k'} - {\rm i}\,Y_{k'})\nonumber\\[0.5ex]
-&\phantom{=}+ E_{sw\,k}\,(X_{w\,k} - {\rm i}\,Y_{w\,k})+ \hat{E}_{kk}\,\hat{\chi}_k\,(\cos\zeta_k - {\rm i }\,\sin\zeta_k),\nonumber\\[0.5ex]
-\hat{\tau}_w\,\frac{d}{d\hat{t}}\,(X_{w\,k} - {\rm i}\,Y_{w\,k})&=E_{ww\,k}\,(X_{w\,k} 
-- {\rm i}\,Y_{w\,k})+E_{sw\,k}\,(X_{k} - {\rm i}\,Y_{k}).\nonumber
+&\phantom{=}+ {\mit\Sigma}_{kw}\,(U_{k} - {\rm i}\,V_{k})+ \hat{E}_{kk}\,\hat{\chi}_k\,(\cos\zeta_k - {\rm i }\,\sin\zeta_k),\nonumber\\[0.5ex]
+\hat{\tau}_w\,\frac{d}{d\hat{t}}\,(U_{k} - {\rm i}\,V_{k})&={\mit\Delta}_{kw}\,(U_{k} 
+- {\rm i}\,V_{k})+{\mit\Sigma}_{kw}\,(X_{k} - {\rm i}\,Y_{k}).\nonumber
 \end{align}
 Follows that
 \begin{align}
 \left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dX_k}{d\hat{t}} 
 +\hat{\varpi}_k\,Y_k\right)&= f_k\,X_k+\sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,X_{k'}  -\sin\xi_{kk'}\,Y_{k'}) \\[0.5ex]
-&\phantom{=}+E_{sw\,k}\,X_{w\,k}+ \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k,\nonumber\\[0.5ex]
+&\phantom{=}+{\mit\Sigma}_{kw}\,U_k+ \hat{E}_{kk}\,\hat{\chi}_k\,\cos\zeta_k,\nonumber\\[0.5ex]
 \left(\hat{W}_k +\hat{\delta}_k\right){\cal S}_k\left(\frac{dY_k}{d\hat{t}} -\hat{\varpi}_k\,X_k\right)&= f_k\,Y_k+ \sum_{k'=1,K}\hat{E}_{kk'}\,(\cos\xi_{kk'}\,Y_{k'}
 +\sin\xi_{kk'}\,X_{k'})\\[0.5ex]
-&\phantom{=} +E_{sw\,k}\,Y_{w\,k}+ \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k,\nonumber\\[0.5ex]
-\hat{\tau}_w\,\frac{dX_{w\,k}}{d\hat{t}}&= E_{ww\,k}\,X_{w\,k}+ E_{sw\,k}\,X_k,\\[0.5ex]
-\hat{\tau}_w\,\frac{dY_{w\,k}}{d\hat{t}}&= E_{ww\,k}\,Y_{w\,k}+ E_{sw\,k}\,Y_k.
+&\phantom{=} +{\mit\Sigma}_{kw}\,V_k+ \hat{E}_{kk}\,\hat{\chi}_k\,\sin\zeta_k,\nonumber\\[0.5ex]
+\hat{\tau}_w\,\frac{d U_k}{d\hat{t}}&= {\mit\Delta}_{kw}\,U_k+ {\mit\Sigma}_{kw}\,X_k,\\[0.5ex]
+\hat{\tau}_w\,\frac{dV_k}{d\hat{t}}&= {\mit\Delta}_{kw}\,V_k+ {\mit\Sigma}_{kw}\,Y_k.
 \end{align}
 where
 \begin{equation}\label{e23}
@@ -318,9 +319,14 @@ where
 Note, finally, that
 \begin{align}
 \delta \hat{T}_k &= \sum_{k'\neq k} \hat{E}_{kk'}\,\hat{\mit\Psi}_k\,\hat{\mit\Psi}_{k'}\,\sin(\varphi_k-\varphi_{k'}-\xi_{kk'}) 
-+E_{sw\,k}\,\hat{\mit\Psi}_k\,\hat{\mit\Psi}_{w\,k}\,\sin(\varphi_k-\varphi_{w\,k})\nonumber\\[0.5ex]
++{\mit\Sigma}_{kw}\,\hat{\mit\Psi}_k\,\hat{\mit\Psi}_{w\,k}\,\sin(\varphi_k-\varphi_{w\,k})\nonumber\\[0.5ex]
 &\phantom{=}
-+ \hat{E}_{kk'}\,\hat{\mit\Psi}_k\,\hat{\chi}_k\,\sin(\varphi_k-\zeta_k).
++ \hat{E}_{kk}\,\hat{\mit\Psi}_k\,\hat{\chi}_k\,\sin(\varphi_k-\zeta_k),
+\end{align}
+or
+\begin{align}
+\delta \hat{T}_k&= \sum_{k'=1,K}\hat{E}_{kk'}\left[(Y_k\,X_{k'}-X_k\,Y_{k'})\,\cos\xi_{kk'}- (X_k\,X_{k'}+Y_k\,Y_{k'})\,\sin\xi_{kk'}\right]\nonumber\\[0.5ex]
+&\phantom{=}+{\mit\Sigma}_{kw}\,(Y_k\,U_k-X_k\,V_k)+\hat{E}_{kk}\,\hat{\chi}_k\,(Y_k\,\cos\zeta_k-X_k\,\sin\zeta_k).
 \end{align}
 
 \section{Coil Optimization}
