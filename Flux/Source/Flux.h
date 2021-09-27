@@ -63,6 +63,7 @@
 // 2.0  - Completely switched to OMFIT mode
 // 2.1  - Added cylindrical tearing mode calculation
 // 2.2  - Removed command line options
+// 2.3  - Added resistive wall
 
 // #####################################################################################
 
@@ -72,7 +73,7 @@
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 2
+#define VERSION_MINOR 3
 
 #include <stdio.h>
 #include <math.h>
@@ -104,7 +105,7 @@ extern "C" int pRhs8 (double, const double[], double[], void*);
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
 			      double* ACC, double* ETA, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
-			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NEOANG);
+			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NEOANG, double* RW);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -133,6 +134,8 @@ class Flux
 
   int    INTG;    // If != 0 then use interpolated gFile
   double TIME;    // Experimental time (ms)
+
+  double RW;      // Radius of resistive wall (units of minor radius)
 
   int    NPSI;    // Number of points in PsiN grid
   double PACK;    // Packing index for PsiN grid
@@ -295,13 +298,17 @@ class Flux
   gsl_matrix_complex* EE;  // E-matrix
 
   // Cylindrical tearing stability data
-  double* A;          // Island saturation parameters
-  double* B;          // Island saturation parameters
-  double* Deltap;     // Even parity tearing stability indices
-  double* Sigmap;     // Odd parity tearing stability indices
-  double* Poem1;      // Small-island POEM logarithmic saturation terms
-  double* Poem2;      // Small-island POEM saturation terms
-  double* Poem3;      // Large-island POEM saturation terms
+  double* A;         // Island saturation parameters
+  double* B;         // Island saturation parameters
+  double* Delta_nw;  // Even parity tearing stability indices th no wall
+  double* Sigma_nw;  // Odd parity tearing stability indices with no wall
+  double* Delta_pw;  // Even parity tearing stability indices with perfect wall
+  double* Sigma_pw;  // Odd parity tearing stability indices with perfect wall
+  double* Delta_w;   // Wall stability index
+  double* Sigma_w;   // Plasma/wall coupling index
+  double* Poem1;     // Small-island POEM logarithmic saturation terms
+  double* Poem2;     // Small-island POEM saturation terms
+  double* Poem3;     // Large-island POEM saturation terms
 
   // Weights for Simpson's rule
   double          hh;
@@ -379,8 +386,10 @@ private:
   void CalcGamma ();
   // Calculate neoclassical angle data on rational surfaces
   void CalcNeoclassicalAngle ();
-  // Calculate tearing solutions
-  void CalcTearingSolution (int i);
+  // Calculate no wall cylindrical tearing solutions
+  void CalcTearingSolutionNoWall (int i);
+  // Calculate perfect wall cylindrical tearing solutions
+  void CalcTearingSolutionPerfectWall (int i);
 
   // gFile interpolation routines
   void gFileInterp          (vector<string> gFileName,   vector<double> gFileTime,   int gFileNumber, double time);

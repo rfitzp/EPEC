@@ -15,6 +15,8 @@
 ! Flag for interpolating gFiles
  TIME = 0.	 
 ! Experimental time (ms) (only relevant when INTG = 1)
+ RW = 1.2
+! Radius of resisitve wall (units of minor radius)     
  NPSI = 512	
 ! Number of points in PsiN grid
  PACK = 2.    

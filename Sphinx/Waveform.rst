@@ -1,3 +1,11 @@
+WAVEFORM
+========
+
+Keywords
+--------
+
+namelist
+
 Short Description
 -----------------
 
@@ -6,11 +14,11 @@ Description of WAVEFORM namelist
 Namelist Variables
 ------------------
 
-* NCTRL 
+NCTRL 
   Number of control points
-* TCTRL 
+TCTRL 
   List of control times (ms)
-* ICTRL 
+ICTRL 
   List of control currents (kA)
-* PCTRL 
+PCTRL 
   List of relative phases of RMP coil currents (units of PI)

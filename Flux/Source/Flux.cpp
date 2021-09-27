@@ -52,6 +52,8 @@ void Flux::SetParameters ()
 
   INTG    = 0;
   TIME    = 0.;
+
+  RW      = 1.2;
   
   NPSI    = 256;
   PACK    = 1.;
@@ -68,7 +70,7 @@ void Flux::SetParameters ()
   DELTA   = 1.e-7;
   
   // Read namelist file Inputs/Flux.nml
-  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NEOANG);
+  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NEOANG, &RW);
 
   // Sanity check
   if (NPSI < 1)
@@ -141,30 +143,35 @@ void Flux::SetParameters ()
       printf ("FLUX::SetParameters: Error - PSIPED must lie betweeen 0 and 1\n");
       exit (1);
     }
+  if (RW <= 1.)
+     {
+      printf ("FLUX::SetParameters: Error - RW must be greater than unity\n");
+      exit (1);
+    }
  
    // Output calculation parameters
    printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
    printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
    printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
    printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
-   printf ("NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NEOANG = %2d\n",
+   printf ("NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d\n",
 	   NPSI, NTHETA, NNC, PACK, NEOANG);
-   printf ("NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
-	   NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
-   printf ("H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
-	   H0, ACC, ETA);
+   printf ("NTOR = %2d  MMIN = %2d  MMAX = %2d  PSILIM = %10.3e  PSIRAT = %10.3e  PSIPED = %10.3e  TIME = %10.3e  INTG = %2d  RW = %10.3e\n",
+	   NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, RW);
+   printf ("H0 = %10.3e  ACC = %10.3e  ETA = %10.3e  NSMOOTH = %3d\n",
+	   H0, ACC, ETA, NSMOOTH);
    
    FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
    fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
    fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
    fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
    fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
-   fprintf (namelist, "NPSI = %4d         NTHETA = %4d         NNC  = %3d          PACK   = %11.4e  NEOANG = %2d\n",
+   fprintf (namelist, "NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d\n",
 	    NPSI, NTHETA, NNC, PACK, NEOANG);
-   fprintf (namelist, "NTOR = %2d           MMIN   = %2d           MMAX =  %2d          PSILIM = %11.4e  PSIRAT = %11.4e  PSIPED = %11.4e  TIME = %11.4e  INTG = %2d  NSMOOTH = %3d\n",
-	    NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, NSMOOTH);
-   fprintf (namelist, "H0   = %11.4e  ACC    = %11.4e  ETA  = %11.4e\n",
-	    H0, ACC, ETA);
+   fprintf (namelist, "NTOR = %2d  MMIN = %2d  MMAX = %2d  PSILIM = %10.3e  PSIRAT = %10.3e  PSIPED = %10.3e  TIME = %10.3e  INTG = %2d  RW = %10.3e\n",
+	    NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, RW);
+   fprintf (namelist, "H0 = %10.3e  ACC = %10.3e  ETA = %10.3e  NSMOOTH = %3d\n",
+	    H0, ACC, ETA, NSMOOTH);
    fclose (namelist);
 }
 

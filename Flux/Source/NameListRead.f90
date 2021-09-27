@@ -5,7 +5,7 @@
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN, MMAX,&
-     PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG) &
+     PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG, RW) &
      bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -28,9 +28,10 @@ subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN
   real    (kind = c_double), intent (inout) :: TIME
   real    (kind = c_double), intent (inout) :: PSIPED
   real    (kind = c_double), intent (inout) :: PSIRAT
+  real    (kind = c_double), intent (inout) :: RW
     
   namelist /FLUX_CONTROL/ INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN, MMAX,&
-       PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG
+       PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG, RW
   
   open  (unit = 100, file = 'Inputs/Flux.nml', status = 'old')
   read  (unit = 100, nml  = FLUX_CONTROL)

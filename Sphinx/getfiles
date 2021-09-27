@@ -36,6 +36,9 @@ cp -f "$f" Phase.rst
 f=$EPEC_MODULE/PHASE/INPUTS/PhaseNamelist.rst
 cp -f "$f" PhaseNamelist.rst
 
+f=$EPEC_MODULE/PHASE/INPUTS/Waveform.rst
+cp -f "$f" Waveform.rst
+
 f=$EPEC_MODULE/RESCALE/Rescale.rst
 cp -f "$f" Rescale.rst
 

@@ -97,8 +97,8 @@ void Flux::Stage2 ()
     fprintf (file, "%16.9e %16.9e %16.9e\n",
 	     1. - P[j], rP[j] /ra, - ra * Interpolate (NPSI, rP, P, rP[j], 1));
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i], Poem1[i], Poem2[i], Poem3[i]);
+    fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     mres[i], rres[i]/ra, sres[i], gres[i], gmres[i], Ktres[i], Kares[i], fcres[i], ajj[i], PsiNres[i], dPsidr[i], Khres[i], A1res[i], A2res[i], q_hat[i], C1res[i], C2res[i], E[i]+F[i]+H[i]*H[i], Poem1[i], Poem2[i], Poem3[i], Delta_w[i], Sigma_w[i]);
   for (int i = 0; i < nres; i++)
     for (int j = 0; j < nres; j++)
       fprintf (file, "%d %d %16.9e %16.9e\n", mres[i], mres[j],
@@ -156,8 +156,9 @@ void Flux::Stage2 ()
   
   gsl_matrix_complex_free (FF); gsl_matrix_complex_free (EE);
 
-  delete[] A;    delete[] B;      delete[] Deltap; delete[] Sigmap;
-  delete[] Poem1; delete[] Poem2; delete[] Poem3;
+  delete[] A;        delete[] B;       delete[] Delta_nw; delete[] Sigma_nw;
+  delete[] Poem1;    delete[] Poem2;   delete[] Poem3;    delete[] Delta_pw;
+  delete[] Sigma_pw; delete[] Delta_w; delete[] Sigma_w;
 }
 
 // ####################################
@@ -1507,27 +1508,32 @@ void Flux::Stage2CalcTearing ()
   printf ("Calculating cylindrical tearing stability indices:\n");
   fflush (stdout);
 
-  A      = new double[nres];
-  B      = new double[nres];
-  Deltap = new double[nres];
-  Sigmap = new double[nres];
-  Poem1  = new double[nres];
-  Poem2  = new double[nres];
-  Poem3  = new double[nres];
+  A        = new double[nres];
+  B        = new double[nres];
+  Delta_nw = new double[nres];
+  Sigma_nw = new double[nres];
+  Delta_pw = new double[nres];
+  Sigma_pw = new double[nres];
+  Delta_w  = new double[nres];
+  Sigma_w  = new double[nres];
+  Poem1    = new double[nres];
+  Poem2    = new double[nres];
+  Poem3    = new double[nres];
 
   for (int i = 0; i < nres; i++)
     {
-      CalcTearingSolution (i);
+      CalcTearingSolutionNoWall      (i);
+      CalcTearingSolutionPerfectWall (i);
+      Delta_w[i] = - Sigma_w[i]*Sigma_w[i] /(Delta_nw[i] - Delta_pw[i]);
 
       A[i]     = alpres[i] * rres[i];
       B[i]     = gamres[i] * rres[i] * rres[i];
       Poem1[i] = 0.41 * A[i]*A[i];
-      Poem2[i] = 0.41 * (A[i]*A[i] * (log(1./rres[i]) + 4.85) - 0.5 * A[i] * Deltap[i] - B[i] - 0.44 * A[i]);
+      Poem2[i] = 0.41 * (A[i]*A[i] * (log(1./rres[i]) + 4.85) - 0.5 * A[i] * Sigma_nw[i] - B[i] - 0.44 * A[i]);
       Poem3[i] = 0.80 * A[i]*A[i] - 0.27 * B[i] - 0.09 * A[i];
  
-
-      printf ("mpol = %3d rs/a = %9.2e Deltap = %9.2e Sigmap = %9.2e A = %9.2e B = %9.2e POEM1 = %9.2e POEM2 = %9.2e POEM3 = %9.2e\n",
-	      mres[i], rres[i]/ra, Deltap[i], Sigmap[i], A[i], B[i], Poem1[i], Poem2[i], Poem3[i]);
+      printf ("mpol = %3d rs/a = %9.2e Deltanw = %9.2e Sigmanw = %9.2e Deltapw = %9.2e Sigmapw  = %9.2e Deltaw = %9.2e Sigmaw = %9.2e A = %9.2e B = %9.2e POEM1 = %9.2e POEM2 = %9.2e POEM3 = %9.2e\n",
+	      mres[i], rres[i]/ra, Delta_nw[i], Sigma_nw[i], Delta_pw[i], Sigma_pw[i], Delta_w[i], Sigma_w[i], A[i], B[i], Poem1[i], Poem2[i], Poem3[i]);
       fflush (stdout);
     }
 }

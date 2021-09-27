@@ -45,8 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="NeoclassicalNamelist.html">NEOCLASSICAL NAMELIST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Phase.html">PHASE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhaseNamelist.html">PHASE NAMELIST</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Short Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Waveform.html#namelist-variables">Namelist Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">WAVEFORM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Rescale.html">RESCALE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RescaleNamelist.html">RESCALE NAMELIST</a></li>
 </ul>
@@ -833,22 +832,29 @@ RMP coil phase</p>
 <div class="line"><br /></div>
 </div>
 </section>
+</section>
+<section id="waveform">
+<h1>WAVEFORM<a class="headerlink" href="#waveform" title="Permalink to this headline">¶</a></h1>
 <section id="id24">
-<h2>Short Description<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
-<p>Description of WAVEFORM namelist</p>
+<h2>Keywords<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h2>
+<p>namelist</p>
 </section>
 <section id="id25">
-<h2>Namelist Variables<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p>NCTRL
-Number of control points</p></li>
-<li><p>TCTRL
-List of control times (ms)</p></li>
-<li><p>ICTRL
-List of control currents (kA)</p></li>
-<li><p>PCTRL
-List of relative phases of RMP coil currents (units of PI)</p></li>
-</ul>
+<h2>Short Description<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h2>
+<p>Description of WAVEFORM namelist</p>
+</section>
+<section id="id26">
+<h2>Namelist Variables<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>NCTRL</dt><dd><p>Number of control points</p>
+</dd>
+<dt>TCTRL</dt><dd><p>List of control times (ms)</p>
+</dd>
+<dt>ICTRL</dt><dd><p>List of control currents (kA)</p>
+</dd>
+<dt>PCTRL</dt><dd><p>List of relative phases of RMP coil currents (units of PI)</p>
+</dd>
+</dl>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -856,23 +862,23 @@ List of relative phases of RMP coil currents (units of PI)</p></li>
 </section>
 <section id="rescale">
 <h1>RESCALE<a class="headerlink" href="#rescale" title="Permalink to this headline">¶</a></h1>
-<section id="id26">
-<h2>Short Description<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h2>
+<section id="id27">
+<h2>Short Description<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h2>
 <p>Program to rescale equilibrium and profile data needed by EPEC.</p>
 </section>
-<section id="id27">
-<h2>Keywords<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h2>
+<section id="id28">
+<h2>Keywords<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
 <p>rescale, equilibrium</p>
 </section>
-<section id="id28">
-<h2>Long Description<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h2>
+<section id="id29">
+<h2>Long Description<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h2>
 <p>Program to read gFile and pFile, rescale equilibrium
 such that Q95 takes a different value but the toroidal
 magnetic field remains the same, and write out new
 gFile and pFile</p>
 </section>
-<section id="id29">
-<h2>Contents<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h2>
+<section id="id30">
+<h2>Contents<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>/Inputs:</dt><dd><dl class="simple">
 <dt>Rescale.nml:</dt><dd><p>Fortran_90 namelist control file</p>
@@ -892,8 +898,8 @@ gFile and pFile</p>
 </dd>
 </dl>
 </section>
-<section id="id30">
-<h2>gFile Format<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h2>
+<section id="id31">
+<h2>gFile Format<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">read (100, ‘(a48, 3i4)’) string, i3, NRBOX, NZBOX</div>
 <div class="line">read (100, ‘(5e16.9)’) RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF</div>
@@ -922,8 +928,8 @@ gFile and pFile</p>
 </div>
 <p><em>Anything after this is ignored</em></p>
 </section>
-<section id="id31">
-<h2>pFile Format<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h2>
+<section id="id32">
+<h2>pFile Format<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">n “psinorm ne(10^20/m^3) dnedpsiN”</div>
 <div class="line">for (int i = 0; i &lt; n; i++)</div>
@@ -1075,16 +1081,16 @@ gFile and pFile</p>
 </section>
 <section id="rescale-namelist">
 <h1>RESCALE NAMELIST<a class="headerlink" href="#rescale-namelist" title="Permalink to this headline">¶</a></h1>
-<section id="id32">
-<h2>Short Description<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
+<section id="id33">
+<h2>Short Description<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h2>
 <p>Description of RESCALE namelist</p>
 </section>
-<section id="id33">
-<h2>Keywords<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h2>
+<section id="id34">
+<h2>Keywords<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h2>
 <p>namelist</p>
 </section>
-<section id="id34">
-<h2>Namelist Variables<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h2>
+<section id="id35">
+<h2>Namelist Variables<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>Q_95</dt><dd><p>Target Q95 value</p>
 </dd>
@@ -1123,8 +1129,7 @@ gFile and pFile</p>
 <li class="toctree-l1"><a class="reference internal" href="NeoclassicalNamelist.html">NEOCLASSICAL NAMELIST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Phase.html">PHASE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="PhaseNamelist.html">PHASE NAMELIST</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Waveform.html">Short Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Waveform.html#namelist-variables">Namelist Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Waveform.html">WAVEFORM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Rescale.html">RESCALE</a></li>
 <li class="toctree-l1"><a class="reference internal" href="RescaleNamelist.html">RESCALE NAMELIST</a></li>
 </ul>
