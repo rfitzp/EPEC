@@ -54,6 +54,7 @@
 // 2.1  - Added POEM terms in Rutherford equation
 // 2.2  - Removed command line options
 // 2.3  - Added DMIN/DMAX
+// 2.4  - Added resistive wall
 
 // ################################################################
 
@@ -61,7 +62,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 2
+#define VERSION_MINOR 3
 #define MAXFILENAMELENGTH 500
 #define MAXPFILELINELENGTH 500
 
@@ -280,6 +281,8 @@ class Neoclassical
   Array<double,1> Poem1;  // Poem terms for right-hand side of Rutherford equations
   Array<double,1> Poem2;  // Poem terms for right-hand side of Rutherford equations
   Array<double,1> Poem3;  // Poem terms for right-hand side of Rutherford equations
+  Array<double,1> Deltaw; // Wall stability index
+  Array<double,1> Sigmaw; // Wall/plasma coupling index
 
   Array<double,2> EEh;    // Moduli of E-maxtrix elements 
 

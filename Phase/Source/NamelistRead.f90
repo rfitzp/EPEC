@@ -1,8 +1,8 @@
-! Function to read PHASE namelist
+! Function to read PHASE namelist and WAVEFORM namelist
 
 subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, MID, COPT,&
-     DT, TSTART, TEND, SCALE, PMAX, CHIR, HIGH, RATS, CORE, FFAC, CXD, BOOT, CURV, POLZ,&
-     NCTRL, xTCTRL, xICTRL, xPCTRL) bind (c, name = 'NameListRead')
+     DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, FFAC, CXD, BOOT, CURV, POLZ,&
+     TAUW, NCTRL, xTCTRL, xICTRL, xPCTRL) bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
   implicit none
@@ -33,7 +33,9 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   real    (kind = c_double), intent (inout) :: PMAX
   real    (kind = c_double), intent (inout) :: CHIR
   real    (kind = c_double), intent (inout) :: CORE
-
+  real    (kind = c_double), intent (inout) :: TAUW
+  real    (kind = c_double), intent (inout) :: TOFF
+  
   real (kind = c_double), dimension (*), intent (inout) :: xTCTRL 
   real (kind = c_double), dimension (*), intent (inout) :: xICTRL 
   real (kind = c_double), dimension (*), intent (inout) :: xPCTRL
@@ -46,7 +48,7 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   double precision :: pi
  
   namelist /PHASE_CONTROL/ STAGE5, NFLOW, INTF, INTN, INTU, NATS, OLD, FREQ, FFAC, LIN, MID, COPT, DT,&
-       TSTART, TEND, SCALE, PMAX, CHIR, HIGH, RATS, CORE, CXD, BOOT, CURV, POLZ
+       TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, CXD, BOOT, CURV, POLZ, TAUW
   namelist /WAVEFORM_CONTROL/  NCTRL
   namelist /WAVEFORM/ TCTRL, ICTRL, PCTRL
   

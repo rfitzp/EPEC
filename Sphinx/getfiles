@@ -13,10 +13,10 @@ EPEC_MODULE=$OMFIT_SOURCE/modules/EPEC
 export EPEC_MODULE
 
 f=$EPEC_MODULE/Epec.rst
-cp -f "$f" "$target"
+cp -f "$f" Epec.rst
 
 f=$EPEC_MODULE/EPEC/INPUTS/EpecNamelist.rst
-cp -f "$f" Epec.rst
+cp -f "$f" EpecNamelist.rst
 
 f=$EPEC_MODULE/FLUX/Flux.rst
 cp -f "$f" Flux.rst

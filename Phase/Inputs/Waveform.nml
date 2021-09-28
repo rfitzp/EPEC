@@ -1,7 +1,7 @@
  &WAVEFORM_CONTROL
  NCTRL = 2          
 ! Number of control points
- /
+/
  &WAVEFORM
  TCTRL = 0.0, 2.e3
 ! Control times (ms)

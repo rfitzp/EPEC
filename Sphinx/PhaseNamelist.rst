@@ -66,6 +66,8 @@ CURV
   Flag for including magnetic field-line curvature in Rutherford equations
 POLZ
   Flag for including ion polarization current in Rutherford equations
+TAUW
+  Time constant of resistive wall (ms)
 CHIR
   Maximum Chirikov parameter for vacuum islands
 INTF

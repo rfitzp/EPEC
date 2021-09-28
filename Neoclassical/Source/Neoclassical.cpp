@@ -310,20 +310,23 @@ void Neoclassical::Read_Equilibrium ()
   Poem1.resize  (nres);
   Poem2.resize  (nres);
   Poem3.resize  (nres);
+  Deltaw.resize (nres);
+  Sigmaw.resize (nres);
 
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &mk (j), &rk (j), &sk (j), &gk (j), &gmk (j), &Ktk (j), &Kastk (j), &fck (j), &akk (j), &PsiNk (j),
-		  &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j), &C1 (j), &C2 (j), &DR (j), &Poem1 (j), &Poem2 (j), &Poem3 (j)) != 21)
+		  &dPsidr (j), &Kthek (j), &in, &A2 (j), &q_hat (j), &C1 (j), &C2 (j), &DR (j), &Poem1 (j),
+		  &Poem2 (j), &Poem3 (j), &Deltaw (j), &Sigmaw (j)) != 23)
 	{
 	  printf ("NEOCLASSICAL:Read_Equilibrium: Error reading fFile (3)\n");
 	  exit (1);
 	}
       qk (j) = double (mk (j)) /double (ntor);
-      printf ("m = %3d  r = %9.2e  s = %9.2e  g = %9.2e  gm = %9.2e  Kt = %9.2e  Kast = %9.2e  Kthe = %9.2e  fc = %9.2e  akk = %9.2e  PsiN = %9.2e  q_hat = %9.2e  DR = %9.2e  Poem1 = %9.2e  Poem2 = %9.2e  Poem3 = %9.2e\n",
+      printf ("m = %3d  r = %9.2e  s = %9.2e  g = %9.2e  gm = %9.2e  Kt = %9.2e  Kast = %9.2e  Kthe = %9.2e  fc = %9.2e  akk = %9.2e  PsiN = %9.2e  q_hat = %9.2e  DR = %9.2e  Poem1 = %9.2e  Poem2 = %9.2e  Poem3 = %9.2e  Deltaw = %9.2e  Sigmaw = %9.2e\n",
 	      mk (j), rk (j), sk (j), gk (j), gmk (j), Ktk (j), Kastk (j), Kthek (j), fck (j), akk (j), PsiNk (j), q_hat (j), DR (j),
-	      Poem1 (j), Poem2 (j), Poem3 (j));
+	      Poem1 (j), Poem2 (j), Poem3 (j), Deltaw (j), Sigmaw (j));
     }
 
   int ini;
@@ -1577,6 +1580,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   int NISLAND = 200;
   Array<double,2> RHS1 (nres, NISLAND);
   Array<double,2> RHS2 (nres, NISLAND);
+  Array<double,2> RHS3 (nres, NISLAND);
   double WPSIMAX = 0.2;
 
   for (int j = 0; j < nres; j++)
@@ -1606,6 +1610,7 @@ void Neoclassical::WriteStage3Netcdfc ()
 	double boot  =   alpbek (j) * (facbTe + facbne) + alpbik (j) * (facbTi + facbni);
 	double curv  =   alpck  (j) * facc;
 	double polz  =   alppk  (j) * (facpTi + facpni);
+	double wall  =   Sigmaw (j) * Sigmaw (j) /Deltaw (j);
 	double poem1 =   Poem1  (j) * (wr /rk (j) /a) * log (wr /rk(j) /a);
 	double poem2 = - Poem2  (j) * wr /rk(j) /a;
 	double poem3 = - Poem3  (j) * wr /rk(j) /a;
@@ -1613,19 +1618,23 @@ void Neoclassical::WriteStage3Netcdfc ()
 
 	double rhs1 = - EEh (j, j) + poem;
 	double rhs2 = rhs1 + boot + curv + polz;
+	double rhs3 = rhs1 + boot + curv + polz + wall;
 
 	RHS1 (j, i) = rhs1;
 	RHS2 (j, i) = rhs2;
+	RHS3 (j, i) = rhs3;
       }
 
   double* w_x    = new double [NISLAND];
   double* rhs1_x = new double [nres*NISLAND];
   double* rhs2_x = new double [nres*NISLAND];
+  double* rhs3_x = new double [nres*NISLAND];
   for (int j = 0; j < nres; j++)
     for (int i = 0; i < NISLAND; i++)
       {
 	rhs1_x[i + j*NISLAND] = RHS1 (j, i);
 	rhs2_x[i + j*NISLAND] = RHS2 (j, i);
+	rhs3_x[i + j*NISLAND] = RHS3 (j, i);
       }
 
   for (int i = 0; i < NISLAND; i++)
@@ -1921,11 +1930,12 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_def_var (dataFile, "w_psi", NC_DOUBLE, 1, &island_d, &w_y);
   
   // rhs
-  int rhs_d[2], rhs1_y, rhs2_y;
+  int rhs_d[2], rhs1_y, rhs2_y, rhs3_y;
   rhs_d[0] = nres_d;
   rhs_d[1] = island_d;
   err += nc_def_var (dataFile, "rhs1", NC_DOUBLE, 2, rhs_d, &rhs1_y);
   err += nc_def_var (dataFile, "rhs2", NC_DOUBLE, 2, rhs_d, &rhs2_y);
+  err += nc_def_var (dataFile, "rhs3", NC_DOUBLE, 2, rhs_d, &rhs3_y);
 
   err += nc_enddef (dataFile);
 
@@ -2007,6 +2017,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, w_y,           w_x);
   err += nc_put_var_double (dataFile, rhs1_y,        rhs1_x);
   err += nc_put_var_double (dataFile, rhs2_y,        rhs2_x);
+  err += nc_put_var_double (dataFile, rhs3_y,        rhs3_x);
  
   if (err != 0)
     {
@@ -2038,7 +2049,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   delete[] w_para_x;   delete[] w_EB0_x;    delete[] w_EB1_x;    delete[] w_EB2_x;       delete[] w_nc_I0_x;  
   delete[] w_nc_I1_x;  delete[] w_nc_I2_x;  delete[] w_pnc_I0_x; delete[] w_pnc_I1_x;    delete[] w_pnc_I2_x; 
   delete[] w_tk_x;     delete[] w_pk_x;     delete[] rhs1_x;     delete[] w_x;           delete[] mk_x;
-  delete[] rhs2_x;
+  delete[] rhs2_x;     delete[] rhs3_x;
 }
 
 // #######################################################################################

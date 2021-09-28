@@ -178,11 +178,11 @@ void Flux::WriteStage2Netcdfc ()
   
   // Basic parameters
   int para_d, para;
-  double parameters[11] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, Raxis, Zaxis, q95, PSILIM, PSIRAT};
-  err += nc_def_dim (dataFile, "index", 11, &para_d);
+  double parameters[12] = {R0, B0, RLEFT, ZLOW, RRIGHT, ZHIGH, Raxis, Zaxis, q95, PSILIM, PSIRAT, PSIPED};
+  err += nc_def_dim (dataFile, "index", 12, &para_d);
   err += nc_def_var (dataFile, "Parameters", NC_DOUBLE, 1, &para_d, &para);
-  nc_put_att_text   (dataFile, para, "Contents", strlen ("R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT"),
-		     "R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT");
+  nc_put_att_text   (dataFile, para, "Contents", strlen ("R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT PSIPED"),
+		     "R0 B0 RLEFT ZLOW RRIGH ZHIGH RAXIS ZAXIS q95 PSILIM PSIRAT PSIPED");
   
   // Plasma boundary
   int bound_d, bound_r, bound_z;

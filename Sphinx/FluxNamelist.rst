@@ -30,6 +30,8 @@ INTG
   Flag for interpolating gFiles
 TIME 
   Experimental time (ms) (only relevant when INTG = 1)
+RW
+  Radius of resistive wall (units of minor radius)
 NPSI 
   Number of points in PsiN grid
 PACK

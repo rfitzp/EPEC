@@ -148,6 +148,9 @@ void Phase::Read_Data ()
   CHIR   = 1.;
   HIGH   = 1;
   RATS   = 1;
+
+  TAUW   = 1.;
+  TOFF   = 0.;
   
   // Read input data from namelists (Inputs/Phase.nml, Inputs/Waveform.nml)
   printf ("........................................................................................\n");
@@ -159,8 +162,8 @@ void Phase::Read_Data ()
   PCTRL = new double[MAXCONTROLPOINTNUMBER];
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
-		&DT, &TSTART, &TEND, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
-		&CXD, &BOOT, &CURV, &POLZ, &NCTRL, TCTRL, ICTRL, PCTRL);
+		&DT, &TSTART, &TEND, &TOFF, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
+		&CXD, &BOOT, &CURV, &POLZ, &TAUW, &NCTRL, TCTRL, ICTRL, PCTRL);
 
   TT.resize (NCTRL);
   
@@ -202,27 +205,37 @@ void Phase::Read_Data ()
       printf ("PHASE:: Invalid MID value\n");
       exit (1);
     }
-
+  if (TAUW < 0.)
+    {
+      printf ("PHASE:: Invalid TAUW value\n");
+      exit (1);
+    }
+  if (TOFF < 0.)
+    {
+      printf ("PHASE:: Invalid TOFF value\n");
+      exit (1);
+    }
+  
   for (int i = 0; i < NCTRL; i++)
-    printf ("T = %11.4e  IRMP = %11.4e  PRMP/pi = %11.4e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
+    printf ("T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
 
   // .............................
   // Output calculation parameters
   // .............................
-  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d\n",
+  printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  printf ("FREQ = %2d FFAC = %11.4e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e NCTRL = %4d IRMP = %10.3e\n",
+	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, NCTRL, IRMP);
   
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
-  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %11.4e HIGH = %2d RATS = %2d \n",
+  fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d \n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  fprintf (namelist, "FREQ = %2d FFAC = %11.4e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d DT = %11.4e TSTART = %11.4e TEND = %11.4e SCALE = %11.4e PMAX = %11.4e CHIR = %11.4e NCTRL = %4d IRMP = %11.4e\n",
-	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, DT, TSTART, TEND, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e NCTRL = %4d IRMP = %10.3e\n",
+	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, NCTRL, IRMP);
   fclose (namelist);
 
   // .................
@@ -302,25 +315,27 @@ void Phase::Read_Data ()
     {
       if (fscanf (file, "%lf %lf %lf", &inr, &inr, &inr) != 3)
 	{
-	  printf ("NEOCLASSICAL: Error reading fFile (2)\n");
+	  printf ("PHASE: Error reading fFile (2)\n");
 	  exit (1);
 	}
     }
 
-  A1.resize    (nres);
-  qhatk.resize (nres);
-  C1k.resize   (nres);
-  C2k.resize   (nres);
-  Poem1.resize (nres);
-  Poem2.resize (nres);
-  Poem3.resize (nres);
+  A1.resize     (nres);
+  qhatk.resize  (nres);
+  C1k.resize    (nres);
+  C2k.resize    (nres);
+  Poem1.resize  (nres);
+  Poem2.resize  (nres);
+  Poem3.resize  (nres);
+  Deltaw.resize (nres);
+  Sigmaw.resize (nres);
   for (int j = 0; j < nres; j++)
     {
-      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+      if (fscanf (file, "%d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		  &ini, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &inr, &A1(j), &inr, &qhatk(j), &C1k(j), &C2k(j), &inr,
-		  &Poem1(j), &Poem2(j), &Poem3(j)) != 21)
+		  &Poem1(j), &Poem2(j), &Poem3(j), &Deltaw(j), &Sigmaw(j)) != 23)
 	{
-	  printf ("NEOCLASSICAL: Error reading fFile (3)\n");
+	  printf ("PHASE: Error reading fFile (3)\n");
 	  exit (1);
 	}
     }
@@ -454,6 +469,8 @@ void Phase::Read_Data ()
   dTT    = DT         *1.e-3/tau_A;
   Tstart = TSTART     *1.e-3/tau_A;
   Tend   = TEND       *1.e-3/tau_A;
+  Toff   = TOFF       *1.e-3/tau_A;
+  tauw   = TAUW       *1.e-3/tau_A;
 
   mk.resize      (nres); ntor.resize     (nres); rk.resize       (nres); qk.resize       (nres); rhok.resize   (nres);
   a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres); tauxk.resize  (nres);
@@ -1149,10 +1166,14 @@ void Phase::Initialize ()
   // Initialize variables
   for (int j = 0; j < nres; j++)
     {
-      Psik (j) = 0.;
-      phik (j) = 0.;
-      Xk   (j) = 0.;
-      Yk   (j) = 0.;
+      Psik  (j) = 0.;
+      phik  (j) = 0.;
+      Xk    (j) = 0.;
+      Yk    (j) = 0.;
+      Psiwk (j) = 0.;
+      phiwk (j) = 0.;
+      Uk    (j) = 0.;
+      Vk    (j) = 0.;
  
       for (int i = 0; i < NFLOW; i++)
 	{
@@ -1184,6 +1205,8 @@ void Phase::Initialize ()
       
       Array<double,1> _Psik    (_nres);
       Array<double,1> _phik    (_nres);
+      Array<double,1> _Psiwk   (_nres);
+      Array<double,1> _phiwk   (_nres);
       Array<double,2> _alphakp (_nres, _NFLOW);
       Array<double,2> _betakp  (_nres, _NFLOW);
       Array<int,1>    _lock    (_nres);
@@ -1191,7 +1214,7 @@ void Phase::Initialize ()
 
       int in;
       for (int j = 0; j < _nres; j++)
-	if (fscanf (file, "%d %lf %lf %d %lf\n", &in, &_Psik (j), &_phik (j), &_lock (j), &_ww (j)) != 5)
+	if (fscanf (file, "%d %lf %lf %lf %lf %d %lf\n", &in, &_Psik (j), &_phik (j), &_Psiwk (j), &_phiwk (j), &_lock (j), &_ww (j)) != 7)
 	  {
 	    printf ("PHASE: Error reading sFile (2)\n");
 	    exit (1);
@@ -1214,22 +1237,30 @@ void Phase::Initialize ()
 
       for (int j = 0; j < _nres; j++)
 	{
-	  Psik (j) = _Psik (j);
-	  phik (j) = _phik (j);
-	  Xk   (j) = Psik (j) * cos (phik (j));
-	  Yk   (j) = Psik (j) * sin (phik (j));
- 	  lock (j) = _lock (j);
-	  ww   (j) = _ww   (j);
+	  Psik  (j) = _Psik (j);
+	  phik  (j) = _phik (j);
+	  Xk    (j) = Psik (j) * cos (phik (j));
+	  Yk    (j) = Psik (j) * sin (phik (j));
+	  Psiwk (j) = _Psiwk (j);
+	  phiwk (j) = _phiwk (j);
+	  Uk    (j) = Psiwk (j) * cos (phiwk (j));
+	  Vk    (j) = Psiwk (j) * sin (phiwk (j));
+ 	  lock  (j) = _lock (j);
+	  ww    (j) = _ww   (j);
 	}
 
       for (int j = _nres; j < nres; j++)
 	{
-	  Psik (j) = 0.;
-	  phik (j) = 0.;
-	  Xk   (j) = 0.;
-	  Yk   (j) = 0.;
- 	  lock (j) = 0.;
-	  ww   (j) = GetActualFrequency (j);
+	  Psik  (j) = 0.;
+	  phik  (j) = 0.;
+	  Xk    (j) = 0.;
+	  Yk    (j) = 0.;
+	  Psiwk (j) = 0.;
+	  phiwk (j) = 0.;
+	  Uk    (j) = 0.;
+	  Vk    (j) = 0.;
+ 	  lock  (j) = 0.;
+	  ww    (j) = GetActualFrequency (j);
 	}
 
       for (int j = 0; j < _nres; j++)
@@ -1269,7 +1300,7 @@ void Phase::Save ()
   fprintf (file, "%d %d\n", nres, NFLOW);
 
   for (int j = 0; j < nres; j++)
-    fprintf (file, "%3d %19.6e %19.6e %2d %19.6e\n", j, Psik (j), phik (j), lock (j), ww (j));
+    fprintf (file, "%3d %19.6e %19.6e %19.6e %19.6e %2d %19.6e\n", j, Psik (j), phik (j), Psiwk (j), phiwk (j), lock (j), ww (j));
 
   for (int j = 0; j < nres; j++)
     for (int i = 0; i < NFLOW; i++)
@@ -1288,6 +1319,10 @@ void Phase::IslandDynamics ()
   phik.resize    (nres);
   Xk.resize      (nres);
   Yk.resize      (nres);
+  Psiwk.resize   (nres);
+  phiwk.resize   (nres);
+  Uk.resize      (nres);
+  Vk.resize      (nres);
   alphakp.resize (nres, NFLOW);
   betakp.resize  (nres, NFLOW);
   lock.resize    (nres);
@@ -1322,7 +1357,10 @@ void Phase::IslandDynamics ()
   double* zPsivp  = new double[nres];  
   double* zWv     = new double[nres];     
   double* zdP     = new double[nres];     
-  double* zdP0    = new double[nres];  
+  double* zdP0    = new double[nres];
+  double* zTRmp   = new double[nres];
+  double* zTWall  = new double[nres];
+  double* zTTear  = new double[nres];
 
   size_t* tstart = new size_t[1];
   size_t* tcount = new size_t[1];
@@ -1393,16 +1431,25 @@ void Phase::IslandDynamics ()
   err += nc_def_var (dataFile, "Psi_+",    NC_DOUBLE, 2, dim,     &yPsip);
   
   int yPsivm;
-  err += nc_def_var (dataFile, "Psi_v-",   NC_DOUBLE, 2, dim,    &yPsivm);
+  err += nc_def_var (dataFile, "Psi_v-",   NC_DOUBLE, 2, dim,     &yPsivm);
 
   int yPsivp;
-  err += nc_def_var (dataFile, "Psi_v+",   NC_DOUBLE, 2, dim,    &yPsivp);
+  err += nc_def_var (dataFile, "Psi_v+",   NC_DOUBLE, 2, dim,     &yPsivp);
 
   int ydP;
   err += nc_def_var (dataFile, "DeltaP",   NC_DOUBLE, 2, dim,     &ydP);
 
   int ydP0;
   err += nc_def_var (dataFile, "DeltaP0",  NC_DOUBLE, 2, dim,     &ydP0);
+
+  int yTRmp;
+  err += nc_def_var (dataFile, "T_Rmp",    NC_DOUBLE, 2, dim,     &yTRmp);
+
+  int yTWall;
+  err += nc_def_var (dataFile, "T_Wall",   NC_DOUBLE, 2, dim,     &yTWall);
+
+  int yTTear;
+  err += nc_def_var (dataFile, "T_Tear",   NC_DOUBLE, 2, dim,     &yTTear);
 
   err += nc_enddef (dataFile);
 
@@ -1421,16 +1468,19 @@ void Phase::IslandDynamics ()
 
   double          t, h, t_err;
   int             rept, step = 0, skip = 0; count = 0;
-  Array<double,1> y    (2*nres*(1+NFLOW));
-  Array<double,1> dydt (2*nres*(1+NFLOW));
+  Array<double,1> y    (2*nres*(2+NFLOW));
+  Array<double,1> dydt (2*nres*(2+NFLOW));
   Array<double,1> wwo  (nres);
 
-  t = Tstart;
+  if (OLD == 0)
+    t = Tstart - Toff;
+  else
+    t = Tstart;
   h = h0;
   Pack (y);
  
   int    cnt    = 0;
-  double dt     = 1.e6; 
+  double dt     = dTT - 1.e-15; 
   fflush (stdout);
   
   printf ("......................\n");
@@ -1445,7 +1495,15 @@ void Phase::IslandDynamics ()
       RK4Adaptive (t, y, h, t_err, acc, 2., rept, maxrept, hmin, hmax, 2, 0, NULL);
       Unpack (y);
 
-      dt += h;
+      if (OLD == 0)
+	{
+	  if (t > Tstart)
+	    dt += h;
+	  else
+	    dt += 0.;
+	}
+      else
+	dt += h;
       
       // Update time in ms
       TIME = t * tau_A * 1.e3;
@@ -1552,6 +1610,9 @@ void Phase::IslandDynamics ()
 	      zdP[j]  = deltapk /P0/Pped;
 	      zdP0[j] = deltapk /P0;
 
+	      // Calculate electromagnetic torques
+	      GetElectromagneticTorques (y, zTRmp, zTWall, zTTear);
+
 	      // Output Netcdf data
 	      tstart[0] = size_t (zcount);
 	      dstart[0] = size_t (zcount);
@@ -1571,6 +1632,9 @@ void Phase::IslandDynamics ()
 	      err += nc_put_vara_double (dataFile, yPsivp,  dstart, dcount, zPsivp);
 	      err += nc_put_vara_double (dataFile, ydP ,    dstart, dcount, zdP);
 	      err += nc_put_vara_double (dataFile, ydP0,    dstart, dcount, zdP0);
+	      err += nc_put_vara_double (dataFile, yTRmp,   dstart, dcount, zTRmp);
+	      err += nc_put_vara_double (dataFile, yTWall,  dstart, dcount, zTWall);
+	      err += nc_put_vara_double (dataFile, yTTear,  dstart, dcount, zTTear);
 
 	      if (err != 0)
 		{
@@ -1607,7 +1671,7 @@ void Phase::IslandDynamics ()
   delete[] zomega0; delete[] zomega; delete[] zPsim;  delete[] zPsip;  delete[] zW;      
   delete[] zPsivm;  delete[] zPsivp; delete[] zWv;    delete[] zdP;    delete[] zdP0;    
   delete[] tstart;  delete[] tcount; delete[] dstart; delete[] dcount; delete[] mk_x;
-  delete[] PsiN_x;
+  delete[] PsiN_x;  delete[] zTRmp;  delete[] zTWall; delete[] zTTear; 
 }
 
 // ###################################
@@ -2161,6 +2225,8 @@ void Phase::Pack (Array<double,1> y)
     {
       y (cnt) = Xk (j); cnt++;
       y (cnt) = Yk (j); cnt++;
+      y (cnt) = Uk (j); cnt++;
+      y (cnt) = Vk (j); cnt++;
       for (int i = 0; i < NFLOW; i++)
 	{
 	  y (cnt) = alphakp (j, i); cnt++;
@@ -2177,10 +2243,14 @@ void Phase::Unpack (Array<double,1> y)
   int cnt = 0;
   for (int j = 0; j < nres; j++)
     {
-      Xk   (j) = y (cnt); cnt++;
-      Yk   (j) = y (cnt); cnt++;
-      Psik (j) = sqrt (Xk (j) * Xk (j) + Yk (j) * Yk (j));
-      phik (j) = atan2 (Yk (j), Xk (j));
+      Xk    (j) = y (cnt); cnt++;
+      Yk    (j) = y (cnt); cnt++;
+      Uk    (j) = y (cnt); cnt++;
+      Vk    (j) = y (cnt); cnt++;
+      Psik  (j) = sqrt (Xk (j) * Xk (j) + Yk (j) * Yk (j));
+      phik  (j) = atan2 (Yk (j), Xk (j));
+      Psiwk (j) = sqrt (Uk (j) * Uk (j) + Vk (j) * Vk (j));
+      phiwk (j) = atan2 (Vk (j), Uk (j));
       for (int i = 0; i < NFLOW; i++)
 	{
 	  alphakp (j, i) = y (cnt); cnt++;
@@ -2193,6 +2263,7 @@ void Phase::Unpack (Array<double,1> y)
 // Function to pack right-hand sides into single vector
 // ####################################################
 void Phase::PackRhs (Array<double,1> XkRHS, Array<double,1> YkRHS,
+		     Array<double,1> UkRHS, Array<double,1> VkRHS,
 		     Array<double,2> alphakpRHS, Array<double,2> betakpRHS,
 		     Array<double,1> dydt)
 {
@@ -2201,6 +2272,8 @@ void Phase::PackRhs (Array<double,1> XkRHS, Array<double,1> YkRHS,
     {
       dydt (cnt) = XkRHS (j); cnt++;
       dydt (cnt) = YkRHS (j); cnt++;
+      dydt (cnt) = UkRHS (j); cnt++;
+      dydt (cnt) = VkRHS (j); cnt++;
       for (int i = 0; i < NFLOW; i++)  
 	{
 	  dydt (cnt) = alphakpRHS (j, i); cnt++;
@@ -2375,6 +2448,23 @@ double Phase::GetDeltaEr (int j)
   return R_0 * B_0 * dPsiNdr (j) * delta_EB;
 }
 
+// ##################################################################
+// Function to calculate electromagnetic torques at rational surfaces
+// ##################################################################
+void Phase::GetElectromagneticTorques (Array<double,1 >& y, double* T_Rmp, double* T_Wall, double* T_Tear)
+{
+  Unpack (y);
+
+  for (int j = 0; j < nres; j++)
+    {
+      T_Rmp [j] = EEh (j, j) * Psik (j) * chi (j) * sin (phik (j) - zeta (j));
+      T_Wall[j] = Sigmaw (j) * Psik (j) * Psiwk (j) * sin (phik (j) - phiwk (j));
+      T_Tear[j] = 0.;
+      for (int k = 0; k < nres; k++)
+	T_Tear[j] +=  EEh (j, k) * Psik (j) * Psik (k) * sin (phik (j) - phik (k) - xih (j, k));
+    }
+}
+
 // ###############################################################
 // Function to evaluate right-hand sides of differential equations
 // ###############################################################
@@ -2412,11 +2502,12 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
       double boot = alphabe (j) * (facbTe + facbne) + alphabi (j) * (facbTi + facbni);
       double curv = alphac  (j) * facc;
       double polz = alphap  (j) * (facpTi + facpni);
+      double wall = Sigmaw (j) * Sigmaw (j) /Deltaw (j);
       double poem = ((Poem1 (j) * W * log (1./W) + Poem2 (j) * W) * WTek*WTek + Poem3 (j) * W * Wk*Wk) /(WTek*WTek + Wk*Wk);
       
-      Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j)) + (boot + curv + polz - poem) * Xk (j);
-      Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j)) + (boot + curv + polz - poem) * Yk (j);
-      sink (j) = EEh (j, j) * chi (j) * sin (phik (j) - zeta (j));
+      Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j)) + (boot + curv + polz + wall - poem) * Xk (j) + Sigmaw (j) * Uk (j);
+      Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j)) + (boot + curv + polz + wall - poem) * Yk (j) + Sigmaw (j) * Vk (j);
+      sink (j) = EEh (j, j) * chi (j) * sin (phik (j) - zeta (j)) + Sigmaw (j) * Psiwk (j) * sin (phik (j) - phiwk (j));
 
       for (int k = 0; k < nres; k++)
 	{
@@ -2428,6 +2519,8 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 
   Array<double,1> XkRHS      (nres);
   Array<double,1> YkRHS      (nres);
+  Array<double,1> UkRHS      (nres);
+  Array<double,1> VkRHS      (nres);
   Array<double,2> alphakpRHS (nres, NFLOW);
   Array<double,2> betakpRHS  (nres, NFLOW);
 
@@ -2447,6 +2540,9 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
 	  XkRHS (j) = - omega * Yk (j) + Cosk (j) /Sk (j) /(Wk + dk);
 	  YkRHS (j) = + omega * Xk (j) + Sink (j) /Sk (j) /(Wk + dk);
 	}
+
+      UkRHS (j) = (Deltaw (j) * Uk (j) + Sigmaw (j) * Xk (j)) /tauw;
+      VkRHS (j) = (Deltaw (j) * Vk (j) + Sigmaw (j) * Yk (j)) /tauw;
       
       for (int i = 0; i < NFLOW; i++)
 	{
@@ -2461,7 +2557,7 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
       vp (j) = (YkRHS (j) * Xk (j) - XkRHS (j) * Yk (j)) / (Xk (j)*Xk (j) + Yk(j) * Yk(j));
     }
 
-  PackRhs (XkRHS, YkRHS, alphakpRHS, betakpRHS, dydt);
+  PackRhs (XkRHS, YkRHS, UkRHS, VkRHS, alphakpRHS, betakpRHS, dydt);
 }
 
 // ######################################################################

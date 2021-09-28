@@ -72,6 +72,8 @@
 // 3.0  - Completely switched to OMFIT mode
 // 3.1  - Added POEM terms
 // 3.2  - Removed command line options
+// 3.3  - Added resistive wall
+// 3.4  - Added TOFF and electromagnetic torques
 
 // #######################################################################
 
@@ -79,7 +81,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 3
-#define VERSION_MINOR 2
+#define VERSION_MINOR 4
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
 #define MAXULFILELINELENGTH 500
@@ -106,8 +108,9 @@ using namespace blitz;
 
 // Namelist function
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
-			      double* DT, double* TSTART, double* TEND, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
+			      double* DT, double* TSTART, double* TEND, double* TOFF, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
+			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ, double* TAUW, 
+			      int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL);
 
 // ############
 // Class header
@@ -128,6 +131,7 @@ class Phase
   double   TSTART; // Simulation start time (ms)
   double   TEND;   // Simulation end time (ms)
   double   DT;     // Data recorded every DT seconds
+  double   TOFF;   // If OLD == 0 then run simulation for TOFF ms before recording data
 
   int      MID;    // Number of RMP coil sets (1, 2, or 3)
                    // If == 1 requires lFile
@@ -150,6 +154,9 @@ class Phase
   int      BOOT;   // If != 0 include effect of bootstrap current in Rutherford equations
   int      CURV;   // If != 0 include effect of magnetic field-line curvature in Rutherford equations
   int      POLZ;   // If != 0 include effect of ion polarization current in Rutherford equations
+
+  double   TAUW;   // Wall time constant (ms)
+  
   double   CHIR;   // Maximum allowable Chirikov parameter for vacuum islands
 
   int      INTF;   // If != 0 then use interpolated fFile 
@@ -199,6 +206,8 @@ class Phase
   Array<double,1> Poem1;  // POEM island saturation terms at rational surfaces
   Array<double,1> Poem2;  // POEM island saturation terms at rational surfaces
   Array<double,1> Poem3;  // POEM island saturation terms at rational surfaces
+  Array<double,1> Deltaw; // Wall stability index
+  Array<double,1> Sigmaw; // Plasma/wall coupling constant
 
   // ------------------------------
   // Data from program NEOCLASSICAL
@@ -207,6 +216,7 @@ class Phase
   // Read from Inputs/nFile
   double          tau_A;    // Alfven time (s)
   double          P0;       // Central thermal pressure (10^19 m^-3 keV)
+  double          tauw;     // Normalized wall time constant
   Array<int,1>    mk;       // Resonant poloidal mode numbers
   Array<int,1>    ntor;     // Resonant toroidal mode number
   Array<double,1> rk;       // Minor radii of resonant surfaces / a
@@ -301,6 +311,7 @@ class Phase
   double          TIME;    // Time in ms
   double          Tstart;  // Normalized simulation start time
   double          Tend;    // Normalized simulation end time
+  double          Toff;    // Normalized offset time
   Array<double,1> TT;      // Normalized control times
   double          dTT;     // Normalized recording time interval
   double          irmp;    // Peak current flowing in RMP coils (kA) at current time
@@ -309,6 +320,10 @@ class Phase
   Array<double,1> phik;    // Helical phases of reconnected fluxes at resonant surfaces
   Array<double,1> Xk;      // Cartesian components of reconnected fluxes at resonant surfaces
   Array<double,1> Yk;      // Cartesian components of reconnected fluxes at resonant surfaces
+  Array<double,1> Psiwk;   // Normalized magnitutudes of fluxes at resonant wall
+  Array<double,1> phiwk;   // Helical phases of fluxes at wall
+  Array<double,1> Uk;      // Cartesian components of fluxes at wall
+  Array<double,1> Vk;      // Cartesian components of fluxes at wall
   Array<double,2> alphakp; // Poloidal velocity factors
   Array<double,2> betakp;  // Toroidal velocity factors
   Array<double,1> ww;      // Island frequencies
@@ -389,6 +404,7 @@ class Phase
   void Unpack (Array<double,1> y);
   // Pack right-hand sides into single vector
   void PackRhs (Array<double,1> XkRHS,      Array<double,1> YkRHS,
+		Array<double,1> UkRHS,      Array<double,1> VkRHS,
 		Array<double,2> alphakpRHS, Array<double,2> betakpRHS,
 		Array<double,1> dydt);
   // Calculate natural frequency
@@ -409,6 +425,8 @@ class Phase
   double GetDeltaVEB (int j);
   // Calculate change in Er (kV/m)
   double GetDeltaEr (int j);
+  // Calculate electromagnetic torques at rational surfaces
+  void GetElectromagneticTorques (Array<double,1 >& y, double* T_Rmp, double* T_Wall, double* T_Tear);
   // Evaluate right-hand sides of differential equations
   void Rhs (double x, Array<double,1>& y, Array<double,1>& dydx);
   // Adaptive-step integration routine

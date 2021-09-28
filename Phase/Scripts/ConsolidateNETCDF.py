@@ -52,6 +52,9 @@ for k in filenames.keys():
             psivp = np.asarray(ds['Psi_v+'])
             deltap = np.asarray(ds['DeltaP'])
             deltap0 = np.asarray(ds['DeltaP0'])
+            trmp = np.asarray(ds['T_Rmp'])
+            twall = np.asarray(ds['T_Wall'])
+            ttear = np.asarray(ds['T_Tear'])
             lock = 0
         else:
             time = np.append(time, np.asarray(ds['time']), 0)
@@ -69,6 +72,9 @@ for k in filenames.keys():
             psivp = np.append(psivp, np.asarray(ds['Psi_v+']), 0)
             deltap = np.append(deltap, np.asarray(ds['DeltaP']), 0)
             deltap0 = np.append(deltap0, np.asarray(ds['DeltaP0']), 0)
+            trmp = np.append(trmp, np.asarray(ds['T_Rmp']), 0)
+            twall = np.append(twall, np.asarray(ds['T_Wall']), 0)
+            ttear = np.append(ttear, np.asarray(ds['T_Tear']), 0)
             
     ncfilename = 'Outputs/ncFiles1/' + str(k) + '.nc'    
     ncfile = nc.Dataset(ncfilename, 'w')
@@ -92,6 +98,9 @@ for k in filenames.keys():
     ypsivp = ncfile.createVariable('Psi_v+', np.double, ('time', 'i_res'))
     ydeltap = ncfile.createVariable('DeltaP', np.double, ('time', 'i_res'))
     ydeltap0 = ncfile.createVariable('DeltaP0', np.double, ('time', 'i_res'))
+    ytrmp = ncfile.createVariable('T_Rmp', np.double, ('time', 'i_res'))
+    ytwall = ncfile.createVariable('T_Wall', np.double, ('time', 'i_res'))
+    yttear = ncfile.createVariable('T_Tear', np.double, ('time', 'i_res'))
 
     ympol[:] = mpol
     ypsin[:] = psin
@@ -110,6 +119,9 @@ for k in filenames.keys():
     ypsivp[:,:] = psivp
     ydeltap[:,:] = deltap
     ydeltap0[:,:] = deltap0
+    ytrmp[:,:] = trmp
+    ytwall[:,:] = twall
+    yttear[:,:] = ttear
 
     ncfile.close()
 

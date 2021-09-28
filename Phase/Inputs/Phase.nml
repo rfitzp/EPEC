@@ -9,6 +9,8 @@
 ! Simulation end time (ms)
  DT = 0.1   
 ! Data recorded every DT ms
+ TOFF = 1.
+! If not restarting calculation run simulation for TOFF ms before recording data 
  MID = 1     
 ! Number of coil sets:
 !  1 - requires lFile
@@ -39,6 +41,8 @@
 ! Flag for including magnetic field-line curvature in Rutherford equations
  POLZ = 0     
 ! Flag for including ion polarization current in Rutherford equations
+ TAUW
+! Time constant of resistive wall (ms) 
  CHIR = 4.    
 ! Maximum Chirikov parameter for vacuum islands
  INTF = 0     

@@ -15,7 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="EPEC NAMELIST" href="Epec.html" />
+    <link rel="next" title="EPEC" href="Epec.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,7 +37,7 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Epec.html">EPEC NAMELIST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Epec.html">EPEC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EpecNamelist.html">EPEC NAMELIST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Flux.html">FLUX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FluxNamelist.html">FLUX NAMELIST</a></li>
@@ -54,14 +54,86 @@
 <div class="line"><br /></div>
 </div>
 </section>
-<section id="epec-namelist">
-<h1>EPEC NAMELIST<a class="headerlink" href="#epec-namelist" title="Permalink to this headline">¶</a></h1>
+<section id="epec">
+<h1>EPEC<a class="headerlink" href="#epec" title="Permalink to this headline">¶</a></h1>
 <section id="short-description">
 <h2>Short Description<a class="headerlink" href="#short-description" title="Permalink to this headline">¶</a></h2>
-<p>Description of EPEC namelist</p>
+<p>Suite of programs to simulate island dynamics in presence of RMP</p>
 </section>
 <section id="keywords">
 <h2>Keywords<a class="headerlink" href="#keywords" title="Permalink to this headline">¶</a></h2>
+<p>island, dynamics, RMP, GPEC</p>
+</section>
+<section id="long-description">
+<h2>Long Description<a class="headerlink" href="#long-description" title="Permalink to this headline">¶</a></h2>
+<p>Suite of programs to simulate multi-harmonic magnetic island chain dynamics
+in presence of resonant magnetic perturbation in time-varying toroidal
+tokamak equilibrium.</p>
+</section>
+<section id="relevant-publications">
+<h2>Relevant Publications<a class="headerlink" href="#relevant-publications" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>R. Fitzpatrick, SangKyeun Kim, and Jaehyun Lee.
+<em>Modeling of q95 windows for the suppression of edge localized modes by resonant magnetic perturbations in the KSTAR tokamak</em>.
+Phys. Plasmas <strong>28</strong>, 082511 (2021).</p></li>
+<li><p>R. Fitzpatrick.
+<em>Further modeling of q95 windows for the suppression of edge localized modes by resonant magnetic perturbations in the DIII-D tokamak</em>.
+Phys. Plasmas <strong>28</strong>, 022503 (2021).</p></li>
+<li><p>R. Fitzpatrick.
+<em>Modeling q95 windows for the suppression of edge localized modes by resonant magnetic perturbations in the DIII-D tokamak</em>.
+Phys. Plasmas <strong>27</strong>, 102511 (2020).</p></li>
+<li><p>R. Fitzpatrick, and A.O. Nelson.
+<em>An improved theory of the response of DIII-D H-mode discharges to static resonant magnetic perturbations and its implications for the suppression of edge localized modes</em>.
+Phys. Plasmas <strong>27</strong>, 072501 (2020).</p></li>
+</ul>
+</section>
+<section id="weblinks">
+<h2>Weblinks<a class="headerlink" href="#weblinks" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="http://farside.ph.utexas.edu/img/EPEC-documentation/epec.html">EPEC Homepage</a></p></li>
+<li><p><a class="reference external" href="http://farside.ph.utexas.edu/talks/ifs2021.pdf">Asymptotic Matching Approach to Modeling Tearing Mode Dynamics in Tokamak Plasmas</a></p></li>
+<li><p><a class="reference external" href="http://farside.ph.utexas.edu/talks/PoPWebinar.pdf">Predicting Stability Windows in q95 for RMP-Induced ELM Suppression in H-Mode Tokamak Discharges</a></p></li>
+</ul>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<dl class="option-list">
+<dt><kbd><span class="option">/FLUX</span></kbd></dt>
+<dd><p>Program to read gFile(s) and write equilibrium data needed by
+NEOCLASSICAL and PHASE to fFile(s)</p>
+</dd>
+<dt><kbd><span class="option">/NEOCLASSICAL</span></kbd></dt>
+<dd><p>Program to read FLUX data from fFile(s), profile data from pFile(s)
+and cFiles(s), and write neoclassical data needed by PHASE to nFile(s)</p>
+</dd>
+<dt><kbd><span class="option">/PHASE</span></kbd></dt>
+<dd><p>Program to read FLUX data from fFile(s), NEOCLASSICAL data from
+nFile(s), GPEC data from uFile(s), mFiles(s), and lFile(s), and
+perform island dynamics simulation. Final
+state of plasma saved in sFile.</p>
+</dd>
+<dt><kbd><span class="option">/RESCALE</span></kbd></dt>
+<dd><p>Program to rescale equilibrium gFile (and pFile) so as to modify q95 by modifying
+toroidal plasma current while keeping toroidal magnetic field the same</p>
+</dd>
+<dt><kbd><span class="option">/GPEC</span></kbd></dt>
+<dd><p>Independent OMFIT module used to calculate ideal-MHD response of tokamak
+plasma equilibirum to resonant magnetic perturbation</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</section>
+</section>
+<section id="epec-namelist">
+<h1>EPEC NAMELIST<a class="headerlink" href="#epec-namelist" title="Permalink to this headline">¶</a></h1>
+<section id="id1">
+<h2>Short Description<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Description of EPEC namelist</p>
+</section>
+<section id="id2">
+<h2>Keywords<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <p>namelist</p>
 </section>
 <section id="namelist-variables">
@@ -87,51 +159,18 @@
 </div>
 </section>
 </section>
-<section id="id1">
-<h1>EPEC NAMELIST<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<section id="id2">
-<h2>Short Description<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>Description of EPEC namelist</p>
-</section>
-<section id="id3">
-<h2>Keywords<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<p>namelist</p>
-</section>
-<section id="id4">
-<h2>Namelist Variables<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<dl class="simple">
-<dt>TSTART</dt><dd><p>Simulation start time (ms)</p>
-</dd>
-<dt>TEND</dt><dd><p>Simulation end time (ms)</p>
-</dd>
-<dt>QSTART</dt><dd><p>Initial Q95 for RESCALE scan</p>
-</dd>
-<dt>QEND</dt><dd><p>Final Q95 for RESCALE scan</p>
-</dd>
-<dt>DTR</dt><dd><p>Time interval between successive RESCALE calculations (ms)</p>
-</dd>
-<dt>DTF</dt><dd><p>Time interval between successive fFile/nFile calculations (ms)</p>
-</dd>
-<dt>DTP</dt><dd><p>Time interval between successive PHASE runs (ms)</p>
-</dd>
-</dl>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-</section>
-</section>
 <section id="flux">
 <h1>FLUX<a class="headerlink" href="#flux" title="Permalink to this headline">¶</a></h1>
-<section id="id5">
-<h2>Short Description<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<section id="id3">
+<h2>Short Description<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <p>Program to calculate equilibrium data needed by EPEC.</p>
 </section>
-<section id="id6">
-<h2>Keywords<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<section id="id4">
+<h2>Keywords<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <p>equilibrium</p>
 </section>
-<section id="long-description">
-<h2>Long Description<a class="headerlink" href="#long-description" title="Permalink to this headline">¶</a></h2>
+<section id="id5">
+<h2>Long Description<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <p>Program to read gFile(s) and write plasma equilibrium data needed by
 NEOCLASSICAL and PHASE to fFile(s).</p>
 <dl class="simple">
@@ -144,8 +183,8 @@ saturation data.</p>
 </dd>
 </dl>
 </section>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<section id="id6">
+<h2>Contents<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>Inputs:</dt><dd><dl class="simple">
 <dt>Flux.nml:</dt><dd><p>Fortran_90 namelist control file</p>
@@ -252,6 +291,8 @@ saturation data.</p>
 <dt>INTG</dt><dd><p>Flag for interpolating gFiles</p>
 </dd>
 <dt>TIME</dt><dd><p>Experimental time (ms) (only relevant when INTG = 1)</p>
+</dd>
+<dt>RW</dt><dd><p>Radius of resistive wall (units of minor radius)</p>
 </dd>
 <dt>NPSI</dt><dd><p>Number of points in PsiN grid</p>
 </dd>
@@ -807,6 +848,8 @@ RMP coil phase</p>
 </dd>
 <dt>POLZ</dt><dd><p>Flag for including ion polarization current in Rutherford equations</p>
 </dd>
+<dt>TAUW</dt><dd><p>Time constant of resistive wall (ms)</p>
+</dd>
 <dt>CHIR</dt><dd><p>Maximum Chirikov parameter for vacuum islands</p>
 </dd>
 <dt>INTF</dt><dd><p>Flag for fFile interpolation</p>
@@ -1121,7 +1164,7 @@ gFile and pFile</p>
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Epec.html">EPEC NAMELIST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Epec.html">EPEC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EpecNamelist.html">EPEC NAMELIST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Flux.html">FLUX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FluxNamelist.html">FLUX NAMELIST</a></li>
@@ -1138,7 +1181,7 @@ gFile and pFile</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="Epec.html" title="next chapter">EPEC NAMELIST</a></li>
+      <li>Next: <a href="Epec.html" title="next chapter">EPEC</a></li>
   </ul></li>
 </ul>
 </div>

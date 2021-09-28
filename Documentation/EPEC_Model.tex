@@ -89,6 +89,38 @@ at the various resonant magnetic flux-surfaces in the plasma in response to the 
 \end{equation}
 where $q_k= m_k/n$, and $a_{kk}(r) = \oint |\nabla r|^{-2}\,d\theta/(2\pi)$. 
 
+\subsection{Glasser-Greene-Johnson Data}
+Let us write
+\begin{equation}
+{\bf B} = \nabla\phi\times\nabla\psi_p+g(\psi_p)\,\nabla\phi.
+\end{equation}
+The angle $\theta^{\,\ast}$ is defined such that
+\begin{equation}
+\nabla\phi\times\nabla\psi_p\cdot\nabla\theta^{\,\ast} = \gamma(\psi_p)\,B.
+\end{equation}
+Let
+\begin{align}
+J_1(\psi_p) &= \oint\frac{1}{B}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
+J_2(\psi_p) &= \oint B\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
+J_3(\psi_p) &= \oint\frac{1}{B^{\,3}}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
+J_4(\psi_p) &= \oint\frac{1}{B\,|\nabla\psi_p|^{\,2}}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
+J_5(\psi_p) &= \oint\frac{B}{|\nabla\psi_p|^{\,2}}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
+J_6(\psi_p) &= \oint\frac{1}{B^{\,3}\,|\nabla\psi_p|^{\,2}}\,\frac{d\theta^{\,\ast}}{2\pi}.
+\end{align}
+It follows that
+\begin{align}
+E(\psi_p) &= - \frac{dP/d\psi_p}{(dq/d\psi_p)^{\,2}}\,\frac{1}{\gamma}\left[\frac{d}{d\psi_p}\!\left(\frac{J_1}{\gamma}\right) - g\,\frac{dq}{d\psi_p}\,\frac{J_1}{J_2}\right]J_5,\\[0.5ex]
+F(\psi_p) &= \frac{(dP/d\psi_p)^{\,2}}{(dq/d\psi_p)^{\,2}}\,\frac{1}{\gamma^{\,2}}\left[g^{\,2}\left(J_5\,J_6- J_4^{\,2}\right)+ J_5\,J_3\right],
+\\[0.5ex]
+H(\psi_p)&= \frac{dP/d\psi_p}{dq/d\psi_p}\,\frac{g}{\gamma}\left(J_4 - \frac{J_1\,J_5}{J_2}\right),
+\end{align}
+where $P(\psi_p)$ is the total plasma pressure. 
+Finally,
+\begin{equation}
+D_R(\psi_p)= E + F + H^{\,2}.
+\end{equation}
+
+
 \subsection{Cylindrical Tearing Mode Equation}
 The cylindrical tearing mode equation for the eigenfunction, $\psi(r)$,  of the $m_k$, $n$ tearing mode takes the form
 \begin{equation}
