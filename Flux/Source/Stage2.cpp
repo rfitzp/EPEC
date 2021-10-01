@@ -1505,7 +1505,7 @@ void Flux::Stage2CalcMatrices ()
 // ###############################################
 void Flux::Stage2CalcTearing ()
 {
-  printf ("Calculating cylindrical tearing stability indices:\n");
+  printf ("Calculating cylindrical tearing data:\n");
   fflush (stdout);
 
   A        = new double[nres];

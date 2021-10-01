@@ -4,43 +4,44 @@
 // PROGRAM ORGANIZATION:
 // #####################
 
-//        Phase:: Phase               ()
-// void   Phase:: Solve               ()
-// void   Phase:: Read_Data           ()
-// void   Phase:: Scan_Shift          ()
-// void   Phase:: Calc_Velocity       ()
-// void   Phase:: Initialize          ()
-// void   Phase:: Save                ()
-// void   Phase:: IslandDynamics      ()
-// void   Phase:: CalcRMP             (double t)
-// void   Phase:: CalcCoil            (double t, double& IU, double& IM, double& IL, double& PU, double& PM, double& PL)
-// int    Phase:: Findk               ()
-// double Phase:: FindMax             (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
-// double Phase:: FindMin             (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
-// void   Phase:: ThreeCoil           (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML, double Delta, double& fun, double& deriv, double& dderiv)
-// void   Phase:: CalcChiZeta         (double t)
-// void   Phase:: Pack                (Array<double,1> y)
-// void   Phase:: Unpack              (Array<double,1> y)
-// void   Phase:: PackRhs             (Array<double,1> XkRHS, Array<double,1> YkRHS,
-//		                       Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
-// double Phase:: GetNaturalFrequency (int j)
-// double Phase:: GetActualFrequency  (int j)
-// double Phase:: GetDeltaOmega       (int j)
-// double Phase:: GetDeltaOmegaTheta  (int j)
-// double Phase:: GetDeltaOmegaPhi    (int j)
-// double Phase:: GetDeltaVPhi        (int j)
-// double Phase:: GetDeltaVParallel   (int j)
-// double Phase:: GetDeltaVEB         (int j)
-// double Phase:: GetDeltaEr          (int j)
-// void   Phase:: Rhs                 (double t, Array<double,1>& y, Array<double,1>& dydt)
-// void   Phase:: RK4Adaptive         (double& x, Array<double,1>& y, double& h, 
-//			               double& t_err, double acc, double S, int& rept,
-//			               int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
-// void   Phase:: RK4Fixed            (double& x, Array<double,1>& y, double h)
-// FILE*  Phase:: OpenFilew           (char* filename)
-// FILE*  Phase:: OpenFiler           (char* filename)
-// FILE*  Phase:: OpenFilea           (char* filename)
-// void   Phase:: CallSystem          (char* command)
+//        Phase:: Phase                     ()
+// void   Phase:: Solve                     ()
+// void   Phase:: Read_Data                 ()
+// void   Phase:: Scan_Shift                ()
+// void   Phase:: Calc_Velocity             ()
+// void   Phase:: Initialize                ()
+// void   Phase:: Save                      ()
+// void   Phase:: IslandDynamics            ()
+// void   Phase:: CalcRMP                   (double t)
+// void   Phase:: CalcCoil                  (double t, double& IU, double& IM, double& IL, double& PU, double& PM, double& PL)
+// int    Phase:: Findk                     ()
+// double Phase:: FindMax                   (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
+// double Phase:: FindMin                   (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML)
+// void   Phase:: ThreeCoil                 (double XUM, double XUL, double XML, double gammaUM, double gammaUL, double gammaML, double Delta, double& fun, double& deriv, double& dderiv)
+// void   Phase:: CalcChiZeta               (double t)
+// void   Phase:: Pack                      (Array<double,1> y)
+// void   Phase:: Unpack                    (Array<double,1> y)
+// void   Phase:: PackRhs                   (Array<double,1> XkRHS, Array<double,1> YkRHS,
+//		                             Array<double,2> alphakpRHS, Array<double,2> betakpRHS, Array<double,1> dydt)
+// double Phase:: GetNaturalFrequency       (int j)
+// double Phase:: GetActualFrequency        (int j)
+// double Phase:: GetDeltaOmega             (int j)
+// double Phase:: GetDeltaOmegaTheta        (int j)
+// double Phase:: GetDeltaOmegaPhi          (int j)
+// double Phase:: GetDeltaVPhi              (int j)
+// double Phase:: GetDeltaVParallel         (int j)
+// double Phase:: GetDeltaVEB               (int j)
+// double Phase:: GetDeltaEr                (int j)
+// void   Phase:: GetElectromagneticTorques (Array<double,1 >& y, double* T_Rmp, double* T_Wall, double* T_Tear)
+// void   Phase:: Rhs                       (double t, Array<double,1>& y, Array<double,1>& dydt)
+// void   Phase:: RK4Adaptive               (double& x, Array<double,1>& y, double& h, 
+//			                     double& t_err, double acc, double S, int& rept,
+//			                     int maxrept, double h_min, double h_max, int flag, int diag, FILE* file)
+// void   Phase:: RK4Fixed                  (double& x, Array<double,1>& y, double h)
+// FILE*  Phase:: OpenFilew                 (char* filename)
+// FILE*  Phase:: OpenFiler                 (char* filename)
+// FILE*  Phase:: OpenFilea                 (char* filename)
+// void   Phase:: CallSystem                (char* command)
 
 #include "Phase.h"
 
@@ -205,7 +206,7 @@ void Phase::Read_Data ()
       printf ("PHASE:: Invalid MID value\n");
       exit (1);
     }
-  if (TAUW < 0.)
+  if (TAUW <= 0.)
     {
       printf ("PHASE:: Invalid TAUW value\n");
       exit (1);
@@ -2455,13 +2456,14 @@ void Phase::GetElectromagneticTorques (Array<double,1 >& y, double* T_Rmp, doubl
 {
   Unpack (y);
 
+  double normalization = - 2.*M_PI*M_PI * R_0*R_0*R_0 * B_0*B_0 * double(ntor(0)) /mu_0;
   for (int j = 0; j < nres; j++)
     {
-      T_Rmp [j] = EEh (j, j) * Psik (j) * chi (j) * sin (phik (j) - zeta (j));
-      T_Wall[j] = Sigmaw (j) * Psik (j) * Psiwk (j) * sin (phik (j) - phiwk (j));
+      T_Rmp [j] = normalization * EEh (j, j) * Psik (j) * chi (j) * sin (phik (j) - zeta (j));
+      T_Wall[j] = normalization * Sigmaw (j) * Psik (j) * Psiwk (j) * sin (phik (j) - phiwk (j));
       T_Tear[j] = 0.;
       for (int k = 0; k < nres; k++)
-	T_Tear[j] +=  EEh (j, k) * Psik (j) * Psik (k) * sin (phik (j) - phik (k) - xih (j, k));
+	T_Tear[j] +=  normalization * EEh (j, k) * Psik (j) * Psik (k) * sin (phik (j) - phik (k) - xih (j, k));
     }
 }
 

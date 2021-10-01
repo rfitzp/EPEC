@@ -1313,7 +1313,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   u10_4.resize  (nres_4); u11_4.resize (nres_4); u12_4.resize (nres_4);
   u13_4.resize  (nres_4); u14_4.resize (nres_4); u15_4.resize (nres_4);
   u16_4.resize  (nres_4); u17_4.resize (nres_4); u18_4.resize (nres_4);
-  u19_4.resize  (nres_4); u19_4.resize (nres_4); u21_4.resize (nres_4);
+  u19_4.resize  (nres_4); u20_4.resize (nres_4); u21_4.resize (nres_4);
   u22_4.resize  (nres_4);
   
   for (int j = 0; j < nres_4; j++)
@@ -1506,7 +1506,7 @@ void Phase::fFileInterpolateQuartic (char* fFile1, double time1, char* fFile2, d
   for (int j = 0; j < nres_0; j++)
     fprintf (file, "%d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	     mres_0(j), u1_0(j), u2_0(j), u3_0(j), u4_0(j), u5_0(j), u6_0(j), u7_0(j), u8_0(j), u9_0(j), u10_0(j), u11_0(j), u12_0(j),
-	     u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j));
+	     u13_0(j), u14_0(j), u15_0(j), u16_0(j), u17_0(j), u18_0(j), u19_0(j), u20_0(j), u21_0(j), u22_0(j));
   for (int j = 0; j < nres_0; j++)
     for (int k = 0; k < nres_0; k++)
       fprintf (file, "%d %d %16.9e %16.9e\n",

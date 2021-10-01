@@ -18,6 +18,11 @@
 
 \section{Rescaling gFile}
 \subsection{Grad-Shafranov Equation}
+Let $R$, $\phi$, $Z$ be a set of cylindrical coordinates. 
+The equilibrium magnetic field is written
+\begin{equation}
+{\bf B} = \nabla\phi\times\nabla\psi + T(\psi)\,\nabla\phi.
+\end{equation}
 The Grad-Shafranov equation takes the form
 \begin{equation}
 \frac{\partial^{\,2}\psi}{\partial R^{\,2}}-\frac{1}{R}\,\frac{\partial\psi}{\partial R} + \frac{\partial^{\,2}\psi}{\partial Z^{\,2}} = -R^{\,2}\,\frac{dP}{d\psi} - \frac{1}{2}\,\frac{dT^{\,2}}{d\psi},
@@ -25,7 +30,7 @@ The Grad-Shafranov equation takes the form
 where
 \begin{align}
 j_\phi &= -R\,\frac{dP}{d\psi}- \frac{1}{2\,R}\,\frac{dT^{\,2}}{d\psi},\\[0.5ex]
-q &= \frac{T}{2\pi}\oint_\psi \frac{dl}{R\,|\nabla \psi|}.
+q(\psi) &= \frac{T}{2\pi}\oint_\psi \frac{dl}{R\,|\nabla \psi|}.
 \end{align}
 
 \subsection{Type I Rescaling}
@@ -44,7 +49,7 @@ q_{\rm new} &= q_{\rm old}.
 \end{align} 
 
 \subsection{Type II Rescaling}
-The following rescaling of variable also leaves the Grad-Shafranov equation invariant:
+The following rescaling of variables also leaves the Grad-Shafranov equation invariant:
 \begin{align}
 R_{\rm new}&=R_{\rm old},\\[0.5ex]
 Z_{\rm new}&=Z_{\rm old},\\[0.5ex]
@@ -55,16 +60,32 @@ P_{\rm new} &=P_{\rm old}.
 It follows that
 \begin{align}
 I_{\phi\,{\rm new}} &=I_{\phi\,{\rm old}},\\[0.5ex]
-q_{\rm new} &= \frac{T_{\rm new}}{T_{\rm old}}\,q_{\rm old}.
+q_{\rm new} &=\frac{T_{\rm new}}{T_{\rm old}}\, q_{\rm old}.
 \end{align} 
 
-\subsection{Program {\sc RESCALE}}
+\subsection{Type III Recaling}
+The following rescaling of variables also leaves the Grad-Shafranov equation invariant:
+\begin{align}
+R_{\rm new}&=a_3\,R_{\rm old},\\[0.5ex]
+Z_{\rm new}&=a_3\,Z_{\rm old},\\[0.5ex]
+\psi_{\rm new} &=a_3^{\,2}\,\psi_{\rm old},\\[0.5ex]
+T_{\rm new} &=a_3\,T_{\rm old},\\[0.5ex]
+P_{\rm new} &=P_{\rm old}.
+\end{align}
+It follows that
+\begin{align}
+I_{\phi\,{\rm new}} &=a_3^{-1}\,I_{\phi\,{\rm old}},\\[0.5ex]
+q_{\rm new} &= q_{\rm old}.
+\end{align} 
+
+\section{Rescaling Classes}
+\subsection{$q_{95}$ Rescaling}
 Let
 \begin{equation}
 {\mit\Psi}_N = \frac{\psi - \psi_{\rm axis}}{\psi_{\rm separatrix}-\psi_{\rm axis}}.
 \end{equation}
 
-Program {\sc RESCALE} first performs a type II rescaling such that 
+First, perform a Type II rescaling such that 
 \begin{equation}
 a_2 = \left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)T_{95\,{\rm old}}^{\,2},
 \end{equation}
@@ -85,7 +106,7 @@ I_{\phi\,{\rm new}} &=I_{\phi\,{\rm old}},\\[0.5ex]
 q_{\rm new} &= q_{\rm old}\sqrt{1 +\left(\frac{q_{95\,{\rm target}}^{\,2}}{q_{95\,{\rm old}}^{\,2}}-1\right)\frac{T_{95\,{\rm old}}^{\,2}}{T_{\rm old}^{\,2}}}.
 \end{align} 
 
-Program {\sc RESCALE} then performs a type I rescaling such that 
+Next, perform a Type I rescaling such that 
 \begin{equation}
 a_1 = \frac{T_{1\,{\rm old}}}{T_{1\,{\rm new}}},
 \end{equation}
@@ -112,11 +133,180 @@ q_{\rm new\,new} &= q_{\rm new}= q_{\rm old}\sqrt{1 +\left(\frac{q_{95\,{\rm tar
 Note that
 \begin{align}
 q_{95\,{\rm new\,new}} &= q_{95\,{\rm target}},\\[0.5ex]
-T_{1\,{\rm new\,new}} &= T_{1\,{\rm old}},\\[0.5ex]
+T_{{\rm new\,new}}^{\,2} &= a_1^{\,2}\,T_{{\rm old}}^{\,2} + (1-a_1^{\,2})\,T_{1\,{\rm old}}^{\,2},\\[0.5ex]
 P_{\rm new\,new} &=a_1^{\,2}\,P_{\rm old}.
 \end{align}
 
+\subsection{$n_e$ Rescaling}
+Perform Type I rescaling with $\alpha_1 =a_n^{\,1/2}$. So,
+\begin{align}
+R&\rightarrow R,\\[0.5ex]
+P&\rightarrow a_n\,P,\\[0.5ex]
+T&\rightarrow a_n^{1/2}\,T,\\[0.5ex]
+\psi&\rightarrow a_n^{\,1/2}\,\psi.
+\end{align}
+Follows that
+\begin{align}
+B_{p,t}&\rightarrow a_n^{\,1/2}\,B_{p,t},\\[0.5ex]
+q_{95}&\rightarrow q_{95}.
+\end{align}
+Let
+\begin{align}
+n_a&\rightarrow a_n\,n_a,\\[0.5ex]
+T_a&\rightarrow T_a.
+\end{align}
+Here, $a\equiv e, i, b, I$. 
+Follows that
+\begin{equation}
+\omega_{\ast\,a} \rightarrow a_n^{-1/2}\,\omega_{\ast\,a}.
+\end{equation}
+Assuming that
+\begin{align}
+\omega_{\theta\,a}&\rightarrow a_n^{-1/2}\,\omega_{\theta\,a},\\[0.5ex]
+\omega_E&\rightarrow\omega_E,
+\end{align}
+we require 
+\begin{align}
+\omega_{\phi\,a}\rightarrow \omega_{\phi\,a}+(a_n^{-1/2}-1)\,(\omega_{\ast\,a}+\omega_{\theta\,a}).
+\end{align}
+
+\subsection{$T_e$ Rescaling}
+Perform Type I rescaling with $\alpha_1 =a_T^{\,1/2}$. So,
+\begin{align}
+R&\rightarrow R,\\[0.5ex]
+P&\rightarrow a_T\,P,\\[0.5ex]
+T&\rightarrow a_T^{1/2}\,T,\\[0.5ex]
+\psi&\rightarrow a_T^{\,1/2}\,\psi.
+\end{align}
+Follows that
+\begin{align}
+B_{p,t}&\rightarrow a_T^{\,1/2}\,B_{p,t},\\[0.5ex]
+q_{95}&\rightarrow q_{95}.
+\end{align}
+Let
+\begin{align}
+n_a&\rightarrow n_a,\\[0.5ex]
+T_a&\rightarrow a_T\,T_a.
+\end{align}
+Follows that
+\begin{equation}
+\omega_{\ast\,a} \rightarrow a_T^{\,1/2}\,\omega_{\ast\,a}.
+\end{equation}
+Assuming that
+\begin{align}
+\omega_{\theta\,a}&\rightarrow a_T^{\,1/2}\,\omega_{\theta\,a},\\[0.5ex]
+\omega_E&\rightarrow\omega_E,
+\end{align}
+we require 
+\begin{align}
+\omega_{\phi\,a}\rightarrow \omega_{\phi\,a}+(a_T^{\,1/2}-1)\,(\omega_{\ast\,a}+\omega_{\theta\,a}).
+\end{align}
+
+\subsection{$R$ Rescaling}
+Perform a Type 3 rescaling with $a_3=a_R$.
+It follows that
+\begin{align}
+R&\rightarrow a_R\,R,\\[0.5ex]
+P&\rightarrow P,\\[0.5ex]
+R&\rightarrow a_R\,T,\\[0.5ex]
+\psi&\rightarrow a_R^{\,2}.
+\end{align}
+Follows that
+\begin{align}
+B_{t,p} &\rightarrow a_R\,B_{t,p},\\[0.5ex]
+q_{95}&\rightarrow q_{95}.
+\end{align}
+ Let
+\begin{align}
+n_a&\rightarrow n_a,\\[0.5ex]
+T_a&\rightarrow T_a,
+\end{align}
+so
+\begin{equation}
+\omega_{\ast\,a} \rightarrow a_R^{-2}\,\omega_{\ast\,a}.
+\end{equation}
+Assuming that
+\begin{align}
+\omega_{\theta\,a}&\rightarrow a_R^{-2}\,\omega_{\theta\,a},\\[0.5ex]
+\omega_E &\rightarrow \omega_E,
+\end{align}
+we require
+\begin{equation}
+\omega_{\phi\,a}\rightarrow \omega_{\phi\,a} + (a_R^{\,-2}-1)\,(\omega_{\ast\,a}+\omega_{\theta\,a}).
+\end{equation}
+
+\subsection{$P$ Rescaling}
+Let 
+\begin{align}
+R&\rightarrow a_R\,R,\\[0.5ex]
+P&\rightarrow P + a_P,\\[0.5ex]
+T&\rightarrow T,\\[0.5ex]
+\psi&\rightarrow a_R^{\,2}.
+\end{align}
+\begin{align}
+B_{t,p} &\rightarrow a_R\,B_{t,p},\\[0.5ex]
+q_{95}&\rightarrow q_{95}.
+\end{align}
+Let
+\begin{align}
+n_a&\rightarrow n_a +\frac{a_P}{T_a},\\[0.5ex]
+T_a&\rightarrow T_a,
+\end{align}
+so
+\begin{equation}
+\omega_{\ast\,a} \rightarrow \omega_{\ast\,a}.
+\end{equation}
+Assuming that
+\begin{align}
+\omega_{\theta\,a}&\rightarrow\omega_{\theta\,a},\\[0.5ex]
+\omega_E &\rightarrow \omega_E,
+\end{align}
+we require
+\begin{equation}
+\omega_{\phi\,a}\rightarrow \omega_{\phi\,a}.
+\end{equation}
+
+\subsection{$\omega_E$ Rescaling}
+Do not rescale equilibrium. So,
+\begin{align}
+R&\rightarrow R,\\[0.5ex]
+P&\rightarrow P,\\[0.5ex]
+T&\rightarrow T,\\[0.5ex]
+\psi&\rightarrow\psi.
+\end{align}
+Follows that
+\begin{align}
+B_{p,t}&\rightarrow B_{p,t},\\[0.5ex]
+q_{95}&\rightarrow q_{95}.
+\end{align}
+Let
+\begin{align}
+n_a&\rightarrow n_a,\\[0.5ex]
+T_a&\rightarrow T_a,
+\end{align}
+so
+\begin{equation}
+\omega_{\ast\,a} \rightarrow \omega_{\ast\,a}.
+\end{equation}
+Assuming that
+\begin{align}
+\omega_{\theta\,a}&\rightarrow \omega_{\theta\,a},\\[0.5ex]
+\omega_E &\rightarrow a_E\,\omega_E,
+\end{align}
+we require 
+\begin{equation}
+\omega_{\phi\,a}\rightarrow \omega_{\phi\,a} + (a_E-1)\,\omega_E.
+\end{equation}
+
+\subsection{$\chi_\phi$ Rescaling}
+Let everything stay the same, except
+\begin{align}
+\chi_{\phi,e,i} &= \rightarrow a_\phi\,\chi_{\phi\,e\,i},\\[0.5ex]
+D_\perp &= \rightarrow a_\phi\,D_\perp.
+\end{align}
+
 \section{Rescaling pFile}
+\subsection{$q_{95}$ Rescaling}
 The variables in pFiles are rescaled as follows:
 \begin{align}
 {\sf ne} &\rightarrow a_1\,{\sf ne},\\[0.5ex]
@@ -126,23 +316,25 @@ The variables in pFiles are rescaled as follows:
 {\sf nb} &\rightarrow a_1\, {\sf nb},\\[0.5ex]
 {\sf pb} &\rightarrow a_1^{\,2}\,{\sf pb},\\[0.5ex]
 {\sf ptot} &\rightarrow a_1^{\,2}\,{\sf ne},\\[0.5ex]
-{\sf omeg} &\rightarrow a_1\,{\sf omeg},\\[0.5ex]
-{\sf omegp}& \rightarrow a_1\,{\sf omegp},\\[0.5ex]
-{\sf omegvb}&\rightarrow a_1\,{\sf omegvb},\\[0.5ex]
-{\sf omegpp} &\rightarrow a_1\, {\sf omegpp},\\[0.5ex]
-{\sf omegeb} &\rightarrow a_1\,{\sf omegeb},\\[0.5ex]
+{\sf omeg} &\rightarrow {\sf omeg},\\[0.5ex]
+{\sf omegp}& \rightarrow {\sf omegp},\\[0.5ex]
+{\sf omegvb}&\rightarrow {\sf omegvb},\\[0.5ex]
+{\sf omegpp} &\rightarrow {\sf omegpp},\\[0.5ex]
+{\sf omegeb} &\rightarrow {\sf omegeb},\\[0.5ex]
 {\sf er} &\rightarrow a_1\,{\sf er},\\[0.5ex]
-{\sf ommvb}& \rightarrow a_1\,{\sf ommvb},\\[0.5ex]
-{\sf ommpp}&\rightarrow a_1\,{\sf ommpp},\\[0.5ex]
-{\sf omevb} &\rightarrow a_1\, {\sf omevb},\\[0.5ex]
-{\sf omepp} &\rightarrow a_1\,{\sf omepp},\\[0.5ex]
-{\sf kpol} &\rightarrow a_1\,{\sf kpol},\\[0.5ex]
+{\sf ommvb}& \rightarrow{\sf ommvb},\\[0.5ex]
+{\sf ommpp}&\rightarrow {\sf ommpp},\\[0.5ex]
+{\sf omevb} &\rightarrow  {\sf omevb},\\[0.5ex]
+{\sf omepp} &\rightarrow {\sf omepp},\\[0.5ex]
+{\sf kpol} &\rightarrow {\sf kpol},\\[0.5ex]
 {\sf omghb}& \rightarrow a_1\,{\sf omghb},\\[0.5ex]
 {\sf nz1}&\rightarrow a_1\,{\sf nz1},\\[0.5ex]
-{\sf vtor1} &\rightarrow a_1\, {\sf vtor1},\\[0.5ex]
+{\sf vtor1} &\rightarrow {\sf vtor1},\\[0.5ex]
 {\sf vpol1} &\rightarrow a_1\,{\sf vpol1},\\[0.5ex]
 {\sf N\,Z\,A} &\rightarrow {\sf N\,Z\,A}.
 \end{align}
+
+
 
 \end{document}
 
