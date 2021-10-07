@@ -67,15 +67,39 @@ double Field::GetdYdX (int i)
   return dYdX[i];
 }
 
-void Field::Rescale (double a1)
+void Field::Rescale (double scale)
 {
   for (int i = 0; i < N; i++)
     {
-      Y[i]    *= a1;
-      dYdX[i] *= a1;
+      Y[i]    *= scale;
+      dYdX[i] *= scale;
     }
 }
 
+void Field::Shift (double shift)
+{
+  for (int i = 0; i < N; i++)
+    {
+      Y[i] += shift;
+    }
+}
 
+void Field::ShiftScale (Field& A, double shift)
+{
+  for (int i = 0; i < N; i++)
+    {
+      Y[i] += A.GetY (i) * shift;
+    }
+}
+
+void Field::Copy (Field& copy)
+{
+  copy.resize (N);
+
+  for (int i = 0; i < N; i++)
+    {
+      copy.PushData (i, X[i], Y[i], dYdX[i]);
+    }
+}
 
 

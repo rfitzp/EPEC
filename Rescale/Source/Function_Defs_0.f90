@@ -1,10 +1,10 @@
 Module Function_Defs_0
 
   interface
-     subroutine NameListRead (q_95_new, OPOINT, XPOINT) 
+     subroutine NameListRead (TYPE, SCALE, PSHIFT, WSHIFT, Q95, OPOINT, XPOINT) 
 
-       integer          :: OPOINT, XPOINT
-       double precision :: q_95_new
+       integer          :: TYPE, OPOINT, XPOINT
+       double precision :: SCALE, PSHIFT, WSHIFT, Q95
   
  
      end subroutine namelistRead
@@ -22,7 +22,7 @@ Module Function_Defs_0
        
        double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
        
-       double precision, dimension (:, :), allocatable :: PSI
+       double precision, dimension (:, :), allocatable :: Psi
        
      end subroutine ReadgFile
   end interface
@@ -39,13 +39,13 @@ Module Function_Defs_0
        
        double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
        
-       double precision, dimension (:, :), allocatable :: PSI
+       double precision, dimension (:, :), allocatable :: Psi
     
      end subroutine WritegFile
   end interface
 
   interface
-     subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, p)
+     subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, p)
 
        integer :: NRBOX, NZBOX
 
@@ -53,7 +53,7 @@ Module Function_Defs_0
        
        double precision, dimension (:), allocatable :: RR, ZZ
        
-       double precision, dimension (:, :), allocatable :: PSI
+       double precision, dimension (:, :), allocatable :: Psi
     
      end subroutine FindOXPoint
   end interface

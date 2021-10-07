@@ -33,13 +33,16 @@ class Field
 
   void resize (int n);
   
-  int    GetN ();
-  void   PushData (int i, double  x, double  y, double  dydx);
-  void   PullData (int i, double& x, double& y, double& dydx);
-  double GetX     (int i);
-  double GetY     (int i);
-  double GetdYdX  (int i);
-  void   Rescale  (double A1);
+  int    GetN       ();
+  void   PushData   (int i, double  x, double  y, double  dydx);
+  void   PullData   (int i, double& x, double& y, double& dydx);
+  double GetX       (int i);
+  double GetY       (int i);
+  double GetdYdX    (int i);
+  void   Rescale    (double scale);
+  void   Shift      (double shift);
+  void   ShiftScale (Field& A, double shift);
+  void   Copy       (Field& copy);
   
   // -----------------------
   // Private class functions

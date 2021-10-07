@@ -14,10 +14,8 @@ rescale, equilibrium
 Long Description
 -----------------
 
-Program to read gFile and pFile, rescale equilibrium
-such that Q95 takes a different value but the toroidal
-magnetic field remains the same, and write out new
-gFile and pFile
+Program to read gFile, pFile, and cFile, rescale equilibrium,
+and write out new gFile, pFile, and cFile
 	 
 Contents
 --------
@@ -29,12 +27,16 @@ Contents
    Initial gFile
   pFile:
    Initial pFile
+  cFile:
+   Initial cFile
 	  
 /Outputs:
   gFile:
    Rescaled gFile
   pFile:
-   Rescaled pFile  
+   Rescaled pFile
+  cFile
+   Rescaled cFile
 	  
 gFile Format
 ------------
@@ -184,3 +186,21 @@ A:
   Ion mass number
 
 *Fields can occur in any order. Additional fields are ignored.*
+
+cFile Format
+------------
+ 
+| n
+| for (int i = 0; i < n; i++)
+| PSI, CHI_PHI, CHI_E, D_PERP, CHI_I
+	
+PSI:
+ Normalized poloidal flux	
+CHI_PSI:
+ Perpendicular toroidal momentum diffusivity (m^2/s)
+CHI_E:
+ Perpendicular electron energy diffusivity (m^2/s)
+D_PERP:
+ Perpendicular particle diffusivity (m^2/s)
+CHI_I:
+ Perpendicular ion energy diffusivity (m^2/s)

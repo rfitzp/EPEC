@@ -1,7 +1,7 @@
 Module Function_Defs_1
 
   interface
-     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+     double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, Psi)
 
        integer :: NRBOX, NZBOX
        
@@ -9,7 +9,7 @@ Module Function_Defs_1
        
        double precision, dimension (:), allocatable :: RR, ZZ
        
-       double precision, dimension (:, :), allocatable :: PSI
+       double precision, dimension (:, :), allocatable :: Psi
        
      end function GetPsi
   end interface

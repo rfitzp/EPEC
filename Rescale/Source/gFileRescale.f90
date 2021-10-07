@@ -2,7 +2,451 @@
 
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 !
-! Function to rescale plasma equilibrium gFile
+! Function to perform Type 0 rescaling of gFile
+!
+! No rescaling
+!
+! Initial gFile in Inputs/gFile
+! Rescaled gFile in Outputs/gFile
+!
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+subroutine gFileRescaleType0 () bind (c, name = 'gFileRescaleType0')
+
+  use Function_Defs_0
+
+  implicit none
+
+  character (len = 100) :: string
+  
+  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM 
+  
+  double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+  double precision :: RLEFT, RRIGHT, ZLOW, ZHIGH, RMAX, ZMAX
+  
+  double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
+  
+  double precision, dimension (:, :), allocatable :: Psi
+ 
+  ! ................
+  ! Read input gFile
+  ! ................
+
+  call ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+
+  ! ..................
+  ! Write output gFile
+  ! ..................
+
+  call WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+   
+  ! ........
+  ! Clean up
+  ! ........
+  
+  deallocate (T)
+  deallocate (P)
+  deallocate (TTp)
+  deallocate (Pp)
+  deallocate (Q)
+  deallocate (Psi)
+  deallocate (RBOUND)
+  deallocate (ZBOUND)
+  deallocate (RLIM)
+  deallocate (ZLIM)
+  
+end subroutine gFileRescaleType0
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!
+! Function to perform Type I rescaling of gFile
+!
+! Rescaling such that current increases by factor A
+! at constant beta and q95
+!
+! Initial gFile in Inputs/gFile
+! Rescaled gFile in Outputs/gFile
+!
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+subroutine gFileRescaleTypeI (A, OPOINT, XPOINT) bind (c, name = 'gFileRescaleTypeI')
+
+  use Function_Defs_0
+
+  use, intrinsic :: iso_c_binding, only: c_int, c_double
+  implicit none
+
+  real    (kind = c_double), intent (inout) :: A
+  integer (kind = c_int),    intent (inout) :: OPOINT
+  integer (kind = c_int),    intent (inout) :: XPOINT
+
+  character (len = 100) :: string
+  
+  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM 
+  
+  double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+  double precision :: RLEFT, RRIGHT, ZLOW, ZHIGH, RMAX, ZMAX
+  double precision :: dR, dZ, RO, ZO, RX, ZX
+ 
+  double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM, RR, ZZ
+  
+  double precision, dimension (:, :), allocatable :: Psi
+ 
+  ! ................
+  ! Read input gFile
+  ! ................
+
+  call ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+
+  allocate (RR (NRBOX))
+  allocate (ZZ (NZBOX))
+
+  ! ..........
+  ! Rescale B0
+  ! ..........
+  B0 = A * B0
+
+  ! ...............
+  ! Setup R, Z grid
+  ! ...............
+ 
+  RLEFT  = RBOXLFT 
+  RRIGHT = RBOXLFT + RBOXLEN
+  ZLOW   = - ZBOXLEN /2. + ZOFF
+  ZHIGH  =   ZBOXLEN /2. + ZOFF
+
+  RMAX = dble (NRBOX-1)
+  do i = 1, NRBOX
+     RR (i) = RLEFT + (RRIGHT - RLEFT) * dble (i-1) /RMAX
+  enddo
+
+  ZMAX = dble (NZBOX-1)
+  do j = 1, NZBOX
+     ZZ (j) =  ZLOW + (ZHIGH - ZLOW) * dble (j-1) /ZMAX
+  enddo
+
+  ! ...................
+  ! Rescale equilibrium
+  ! ...................
+  
+  do i = 1, NRBOX
+
+     do j = 1, NZBOX
+        Psi (i, j) = A * Psi (i, j)
+     enddo
+     
+     T   (i) = A   * T   (i)
+     TTp (i) = A   * TTp (i)
+     P   (i) = A*A * P   (i)
+     Pp  (i) = A   * Pp  (i)
+     Q   (i) =       Q   (i)
+
+  enddo
+
+  PSIAXIS  = A * PSIAXIS
+  PSIBOUND = A * PSIBOUND
+  CURRENT  = A * CURRENT
+
+  ! ............
+  ! Find O-point
+  ! ............
+
+  dR = 1.e-2
+  dZ = 1.e-2
+
+  RO = RAXIS
+  ZO = ZAXIS
+
+  if (OPOINT /= 0) then
+     call FindOXPoint (RO, ZO, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, PSIAXIS)
+  end if
+
+  RAXIS = RO
+  ZAXIS = ZO
+
+  ! ...................................
+  ! Find X-point (assume lower X-point)
+  ! ...................................
+
+  ZX = ZAXIS
+  do i = 1, NBOUND
+     if (ZBOUND (i) < ZX) then
+        ZX = ZBOUND (i)
+        RX = RBOUND (i)
+     endif
+  enddo
+
+  if (XPOINT /= 0) then
+     call FindOXPoint (RX, ZX, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, PSIBOUND)
+  end if
+ 
+  ! ..................
+  ! Write output gFile
+  ! ..................
+
+  call WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+   
+  ! ........
+  ! Clean up
+  ! ........
+  
+  deallocate (T)
+  deallocate (P)
+  deallocate (TTp)
+  deallocate (Pp)
+  deallocate (Q)
+  deallocate (Psi)
+  deallocate (RBOUND)
+  deallocate (ZBOUND)
+  deallocate (RLIM)
+  deallocate (ZLIM)
+  deallocate (RR)
+  deallocate (ZZ)
+  
+end subroutine gFileRescaleTypeI
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!
+! Function to perform Type II rescaling of gFile
+!
+! Rescaling such that size increases by factor A
+! at constant beta and q95
+!
+! Initial gFile in Inputs/gFile
+! Rescaled gFile in Outputs/gFile
+!
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+subroutine gFileRescaleTypeII (A, OPOINT, XPOINT) bind (c, name = 'gFileRescaleTypeII')
+
+  use Function_Defs_0
+
+  use, intrinsic :: iso_c_binding, only: c_int, c_double
+  implicit none
+
+  real    (kind = c_double), intent (inout) :: A
+  integer (kind = c_int),    intent (inout) :: OPOINT
+  integer (kind = c_int),    intent (inout) :: XPOINT
+
+  character (len = 100) :: string
+  
+  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM
+  
+  double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+  double precision :: RLEFT, RRIGHT, ZLOW, ZHIGH, RMAX, ZMAX
+  double precision :: dR, dZ, RO, ZO, RX, ZX
+ 
+  double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM, RR, ZZ
+  
+  double precision, dimension (:, :), allocatable :: Psi
+ 
+  ! ................
+  ! Read input gFile
+  ! ................
+
+  call ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+
+  allocate (RR (NRBOX))
+  allocate (ZZ (NZBOX))
+
+  ! ...............
+  ! Setup R, Z grid
+  ! ...............
+
+  RBOXLEN = A * RBOXLEN
+  ZBOXLEN = A * ZBOXLEN
+  R0      = A * R0
+  RBOXLFT = A * RBOXLFT
+  ZOFF    = A * ZOFF
+  RAXIS   = A * RAXIS
+  ZAXIS   = A * ZAXIS
+  
+  RLEFT  = RBOXLFT 
+  RRIGHT = RBOXLFT + RBOXLEN
+  ZLOW   = - ZBOXLEN /2. + ZOFF
+  ZHIGH  =   ZBOXLEN /2. + ZOFF
+
+  RMAX = dble (NRBOX-1)
+  do i = 1, NRBOX
+     RR (i) = RLEFT + (RRIGHT - RLEFT) * dble (i-1) /RMAX
+  enddo
+
+  ZMAX = dble (NZBOX-1)
+  do j = 1, NZBOX
+     ZZ (j) =  ZLOW + (ZHIGH - ZLOW) * dble (j-1) /ZMAX
+  enddo
+
+  do i = 1, NBOUND
+     RBOUND (i) = A * RBOUND (i)
+     ZBOUND (i) = A * ZBOUND (i)
+  end do
+
+  do i = 1, NLIM
+     RLIM (i) = A * RLIM (i)
+     ZLIM (i) = A * ZLIM (i)
+  end do
+
+   ! ...................
+  ! Rescale equilibrium
+  ! ...................
+  
+  do i = 1, NRBOX
+
+     do j = 1, NZBOX
+        Psi (i, j) = A*A * Psi (i, j)
+     enddo
+
+     T   (i) = A * T   (i)
+     TTp (i) =     TTp (i) 
+     P   (i) =     P   (i)
+     Pp  (i) =     Pp  (i) /A/A
+     Q   (i) =     Q   (i)
+ 
+  enddo
+
+  PSIAXIS  = A*A * PSIAXIS
+  PSIBOUND = A*A * PSIBOUND
+  CURRENT  = A   * CURRENT
+
+  ! ............
+  ! Find O-point
+  ! ............
+
+  dR = 1.e-2
+  dZ = 1.e-2
+
+  RO = RAXIS
+  ZO = ZAXIS
+
+  if (OPOINT /= 0) then
+     call FindOXPoint (RO, ZO, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, PSIAXIS)
+  end if
+
+  RAXIS = RO
+  ZAXIS = ZO
+
+  ! ...................................
+  ! Find X-point (assume lower X-point)
+  ! ...................................
+
+  ZX = ZAXIS
+  do i = 1, NBOUND
+     if (ZBOUND (i) < ZX) then
+        ZX = ZBOUND (i)
+        RX = RBOUND (i)
+     endif
+  enddo
+
+  if (XPOINT /= 0) then
+     call FindOXPoint (RX, ZX, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, PSIBOUND)
+  end if
+ 
+  ! ..................
+  ! Write output gFile
+  ! ..................
+
+  call WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+   
+  ! ........
+  ! Clean up
+  ! ........
+  
+  deallocate (T)
+  deallocate (P)
+  deallocate (TTp)
+  deallocate (Pp)
+  deallocate (Q)
+  deallocate (Psi)
+  deallocate (RBOUND)
+  deallocate (ZBOUND)
+  deallocate (RLIM)
+  deallocate (ZLIM)
+  deallocate (RR)
+  deallocate (ZZ)
+  
+end subroutine gFileRescaleTypeII
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!
+! Function to perform Type III rescaling of gFile
+!
+! Rescaling such that pressure shifted by constant
+! factor at constant beta and q95
+!
+! Initial gFile in Inputs/gFile
+! Rescaled gFile in Outputs/gFile
+!
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+subroutine gFileRescaleTypeIII (PSHIFT) bind (c, name = 'gFileRescaleTypeIII')
+
+  use Function_Defs_0
+
+  use, intrinsic :: iso_c_binding, only: c_int, c_double
+  implicit none
+
+  real    (kind = c_double), intent (inout) :: PSHIFT
+
+  character (len = 100) :: string
+  
+  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM, i95
+  
+  double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
+ 
+  double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
+  
+  double precision, dimension (:, :), allocatable :: Psi
+ 
+  ! ................
+  ! Read input gFile
+  ! ................
+
+  call ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+
+  ! ...................
+  ! Rescale equilibrium
+  ! ...................
+  
+  do i = 1, NRBOX
+
+   P (i) = P (i) + PSHIFT
+
+  enddo
+ 
+  ! ..................
+  ! Write output gFile
+  ! ..................
+
+  call WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, RAXIS, ZAXIS, PSIAXIS, PSIBOUND,&
+       B0, CURRENT, T, P, TTp, Pp, Q, Psi, NBOUND, NLIM, RBOUND, ZBOUND, RLIM, ZLIM)
+   
+  ! ........
+  ! Clean up
+  ! ........
+  
+  deallocate (T)
+  deallocate (P)
+  deallocate (TTp)
+  deallocate (Pp)
+  deallocate (Q)
+  deallocate (Psi)
+  deallocate (RBOUND)
+  deallocate (ZBOUND)
+  deallocate (RLIM)
+  deallocate (ZLIM)
+  
+end subroutine gFileRescaleTypeIII
+
+! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+!
+! Function to perform Type 7 rescaling of gFile
 !
 ! Rescaling such that q_95 = q_95_target but
 ! vacuum toroidal magnetic field remains constant
@@ -12,35 +456,31 @@
 !
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
+subroutine gFileRescaleType7 (Q95_NEW, OPOINT, XPOINT, q95_old, a1) bind (c, name = 'gFileRescaleType7')
 
   use Function_Defs_0
 
-  use, intrinsic :: iso_c_binding, only: c_double
+  use, intrinsic :: iso_c_binding, only: c_int, c_double
   implicit none
 
-  real (kind = c_double), intent (inout) :: q95_old
-  real (kind = c_double), intent (inout) :: q95_new
-  real (kind = c_double), intent (inout) :: a1
+  real    (kind = c_double), intent (inout) :: Q95_NEW
+  integer (kind = c_int),    intent (inout) :: OPOINT
+  integer (kind = c_int),    intent (inout) :: XPOINT
+  real    (kind = c_double), intent (inout) :: q95_old
+  real    (kind = c_double), intent (inout) :: a1
 
   character (len = 100) :: string
   
-  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM, i95, SCALE, OPOINT, XPOINT
+  integer :: i, j, i3, NRBOX, NZBOX, NBOUND, NLIM, i95
   
   double precision :: RBOXLEN, ZBOXLEN, R0, RBOXLFT, ZOFF, zero, RAXIS, ZAXIS, B0, PSIAXIS, PSIBOUND, CURRENT
   double precision :: RLEFT, RRIGHT, ZLOW, ZHIGH, RMAX, ZMAX
-  double precision :: x95, q95, T95, Tedge, a2, Tnew, Told, qnew, qold
-  double precision :: Pold, Pnew, Psiold, Psinew, dR, dZ, RO, ZO, RX, ZX
+  double precision :: x95, q95, T95, Tedge, a2, Tnew, Told, dR, dZ, RO, ZO, RX, ZX
  
   double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM, RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
  
-  ! ..................
-  ! Read namelist file
-  ! ..................
-  call NameListRead (q95_new, OPOINT, XPOINT)
-
   ! ................
   ! Read input gFile
   ! ................
@@ -57,8 +497,8 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
  
   RLEFT  = RBOXLFT 
   RRIGHT = RBOXLFT + RBOXLEN
-  ZLOW   = -ZBOXLEN /2. + ZOFF
-  ZHIGH  =  ZBOXLEN /2. + ZOFF
+  ZLOW   = - ZBOXLEN /2. + ZOFF
+  ZHIGH  =   ZBOXLEN /2. + ZOFF
 
   RMAX = dble (NRBOX-1)
   do i = 1, NRBOX
@@ -85,7 +525,7 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
   ! Rescale equilibrium
   ! ...................
 
-  a2 = (q95_new*q95_new /q95/q95 - 1.) * T95*T95
+  a2 = (Q95_NEW*Q95_NEW /q95/q95 - 1.) * T95*T95
   
   do i = 1, NRBOX
      Told = T (i)
@@ -96,35 +536,23 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
      endif
      T (i) = Tnew
 
-     qold  = Q (i)
-     qnew  = qold * Tnew /Told
-     Q (i) = qnew
-  enddo
+     Q (i) = Q (i) * Tnew /Told
+   enddo
 
   a1 = Tedge /T (NRBOX)
  
   do i = 1, NRBOX
-     Told  = T (i)
-     Tnew  = a1 * Told
-     T (i) = Tnew
-
-     Told    = TTp (i)
-     Tnew    = a1 * Told
-     TTp (i) = Tnew
-
-     Pold  = P (i)
-     Pnew  = a1*a1 * Pold
-     P (i) = Pnew
-
-     Pold   = Pp (i)
-     Pnew   = a1 * Pold
-     Pp (i) = Pnew
 
      do j = 1, NZBOX
-        Psiold     = Psi (i, j)
-        Psinew     = a1 * Psiold
-        Psi (i, j) = Psinew
+        Psi (i, j) = a1 * Psi (i, j)
      enddo
+
+     T  (i)  = a1    * T   (i)
+     TTp (i) = a1    * TTp (i)
+     P  (i)  = a1*a1 * P   (i) 
+     Pp (i)  = a1    * Pp  (i)
+     Q  (i)  =         Q   (i)
+
   enddo
 
   PSIAXIS  = a1 * PSIAXIS
@@ -147,21 +575,21 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
   dR = 1.e-2
   dZ = 1.e-2
 
-  RO = Raxis
-  ZO = Zaxis
+  RO = RAXIS
+  ZO = ZAXIS
 
   if (OPOINT /= 0) then
-     call FindOXPoint (RO, ZO, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, PSIAXIS)
+     call FindOXPoint (RO, ZO, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, PSIAXIS)
   end if
 
-  Raxis = RO
-  Zaxis = ZO
+  RAXIS = RO
+  ZAXIS = ZO
 
   ! ...................................
   ! Find X-point (assume lower X-point)
   ! ...................................
 
-  ZX = Zaxis
+  ZX = ZAXIS
   do i = 1, NBOUND
      if (ZBOUND (i) < ZX) then
         ZX = ZBOUND (i)
@@ -170,7 +598,7 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
   enddo
 
   if (XPOINT /= 0) then
-     call FindOXPoint (RX, ZX, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, PSIBOUND)
+     call FindOXPoint (RX, ZX, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, PSIBOUND)
   end if
  
   ! ..................
@@ -189,7 +617,7 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
   deallocate (TTp)
   deallocate (Pp)
   deallocate (Q)
-  deallocate (PSI)
+  deallocate (Psi)
   deallocate (RBOUND)
   deallocate (ZBOUND)
   deallocate (RLIM)
@@ -197,20 +625,26 @@ subroutine gFileRescale (q95_old, q95_new, a1) bind (c, name = 'gFileRescale')
   deallocate (RR)
   deallocate (ZZ)
   
-end subroutine gFileRescale
+end subroutine gFileRescaleType7
 
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ! Function to read Rescale namelist
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-subroutine NameListRead (Q_95, OPOINT, XPOINT) 
+subroutine NameListRead (TYPE, SCALE, PSHIFT, WSHIFT, Q95, OPOINT, XPOINT) bind (c, name = 'NameListRead')
 
+  use, intrinsic :: iso_c_binding, only: c_int, c_double
   implicit none
 
-  integer          OPOINT, XPOINT
-  double precision Q_95
+  integer (kind = c_int),    intent (inout) :: TYPE
+  integer (kind = c_int),    intent (inout) :: OPOINT
+  integer (kind = c_int),    intent (inout) :: XPOINT
+  real    (kind = c_double), intent (inout) :: SCALE
+  real    (kind = c_double), intent (inout) :: PSHIFT
+  real    (kind = c_double), intent (inout) :: WSHIFT
+  real    (kind = c_double), intent (inout) :: Q95
   
-  namelist /RESCALE_CONTROL/ Q_95, OPOINT, XPOINT
+  namelist /RESCALE_CONTROL/ TYPE, SCALE, PSHIFT, WSHIFT, Q95, OPOINT, XPOINT
   
   open  (unit = 100, file = 'Inputs/Rescale.nml', status = 'old')
   read  (unit = 100, nml  = RESCALE_CONTROL)
@@ -235,7 +669,7 @@ subroutine ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, Z
  
   double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   open (unit = 100, file = 'Inputs/gFile', status = 'old')
   
@@ -257,7 +691,7 @@ subroutine ReadgFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, Z
   read (100, '(5e16.9)') (TTp (i), i = 1, NRBOX)
   read (100, '(5e16.9)') (Pp  (i), i = 1, NRBOX)
   
-  read (100, '(5e16.9)') ((PSI  (i, j), i = 1, NRBOX), j = 1, NZBOX)
+  read (100, '(5e16.9)') ((Psi  (i, j), i = 1, NRBOX), j = 1, NZBOX)
 
   read (100, '(5e16.9)') (Q (i), i = 1, NRBOX)
 
@@ -292,7 +726,7 @@ subroutine WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, 
  
   double precision, dimension (:), allocatable :: T, P, TTp, Pp, Q, RBOUND, ZBOUND, RLIM, ZLIM
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   open (unit = 100, file = 'Outputs/gFile', status = 'unknown')
 
@@ -307,7 +741,7 @@ subroutine WritegFile (string, i3, NRBOX, NZBOX, RBOXLEN, ZBOXLEN, R0, RBOXLFT, 
   write (100, '(5e16.9)')  (P   (i), i = 1, NRBOX)
   write (100, '(5e16.9)')  (TTp (i), i = 1, NRBOX)
   write (100, '(5e16.9)')  (Pp  (i), i = 1, NRBOX)
-  write (100, '(5e16.9)')  ((PSI  (i, j), i = 1, NRBOX), j = 1, NZBOX)
+  write (100, '(5e16.9)')  ((Psi  (i, j), i = 1, NRBOX), j = 1, NZBOX)
   write (100, '(5e16.9)')  (Q (i), i = 1, NRBOX)
   write (100, '(2i5)')      NBOUND, NLIM
   write (100, '(5e16.9)')  (RBOUND (i), ZBOUND (i), i = 1, NBOUND)
@@ -321,7 +755,7 @@ end subroutine WritegFile
 ! Subroutine to return interpolated Psi
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
+double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, Psi)
 
   implicit none
 
@@ -331,7 +765,7 @@ double precision function GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   i = 1 + int ((R - RR (1)) /(RR (2) - RR (1)))
   j = 1 + int ((Z - ZZ (1)) /(ZZ (2) - ZZ (1)))
@@ -347,7 +781,7 @@ end function GetPsi
 ! Subroutine to return interpolated dPsi/dR
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR)
 
   use Function_Defs_1
 
@@ -357,12 +791,12 @@ double precision function GetPsiR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   R1 = R - dR
   R2 = R + dR
 
-  GetPsiR = (GetPsi (R2, Z, NRBOX, NZBOX, RR, ZZ, PSI) - GetPsi (R1, Z, NRBOX, NZBOX, RR, ZZ, PSI)) /2./dR
+  GetPsiR = (GetPsi (R2, Z, NRBOX, NZBOX, RR, ZZ, Psi) - GetPsi (R1, Z, NRBOX, NZBOX, RR, ZZ, Psi)) /2./dR
 
 end function GetPsiR
 
@@ -370,7 +804,7 @@ end function GetPsiR
 ! Subroutine to return interpolated dPsi/dZ
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
+double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dZ)
 
   use Function_Defs_1
   
@@ -382,12 +816,12 @@ double precision function GetPsiZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   Z1 = Z - dZ
   Z2 = Z + dZ
 
-  GetPsiZ = (GetPsi (R, Z2, NRBOX, NZBOX, RR, ZZ, PSI) - GetPsi (R, Z1, NRBOX, NZBOX, RR, ZZ, PSI)) /2./dZ
+  GetPsiZ = (GetPsi (R, Z2, NRBOX, NZBOX, RR, ZZ, Psi) - GetPsi (R, Z1, NRBOX, NZBOX, RR, ZZ, Psi)) /2./dZ
 
 end function GetPsiZ
 
@@ -395,7 +829,7 @@ end function GetPsiZ
 ! Subroutine to return interpolated d^2Psi/dR^2
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR)
 
   use Function_Defs_1
   
@@ -407,13 +841,13 @@ double precision function GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   R1 = R - dR
   R2 = R + dR
 
-  GetPsiRR = (GetPsi (R2, Z, NRBOX, NZBOX, RR, ZZ, PSI) - 2. * GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)&
-       + GetPsi (R1, Z, NRBOX, NZBOX, RR, ZZ, PSI)) /dR/dR
+  GetPsiRR = (GetPsi (R2, Z, NRBOX, NZBOX, RR, ZZ, Psi) - 2. * GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, Psi)&
+       + GetPsi (R1, Z, NRBOX, NZBOX, RR, ZZ, Psi)) /dR/dR
 
 end function GetPsiRR
 
@@ -421,7 +855,7 @@ end function GetPsiRR
 ! Subroutine to return interpolated d^2Psi/dZ^2
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
+double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dZ)
 
   use Function_Defs_1
   
@@ -433,13 +867,13 @@ double precision function GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   Z1 = Z - dZ
   Z2 = Z + dZ
 
-  GetPsiZZ = (GetPsi (R, Z2, NRBOX, NZBOX, RR, ZZ, PSI) - 2. * GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)&
-       +  GetPsi (R, Z1, NRBOX, NZBOX, RR, ZZ, PSI)) /dZ/dZ
+  GetPsiZZ = (GetPsi (R, Z2, NRBOX, NZBOX, RR, ZZ, Psi) - 2. * GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, Psi)&
+       +  GetPsi (R, Z1, NRBOX, NZBOX, RR, ZZ, Psi)) /dZ/dZ
 
 end function GetPsiZZ
 
@@ -447,7 +881,7 @@ end function GetPsiZZ
 ! Subroutine to return interpolated d^2Psi/dRdZ
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR)
 
   use Function_Defs_1
   
@@ -459,15 +893,15 @@ double precision function GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   R1 = R - dR
   R2 = R + dR
   Z1 = Z - dR
   Z2 = Z + dR
 
-  GetPsiRZ = (GetPsi (R2, Z2, NRBOX, NZBOX, RR, ZZ, PSI) - GetPsi (R1, Z2, NRBOX, NZBOX, RR, ZZ, PSI)&
-       -  GetPsi (R2, Z1, NRBOX, NZBOX, RR, ZZ, PSI) + GetPsi (R1, Z1, NRBOX, NZBOX, RR, ZZ, PSI)) /4./dR/dR
+  GetPsiRZ = (GetPsi (R2, Z2, NRBOX, NZBOX, RR, ZZ, Psi) - GetPsi (R1, Z2, NRBOX, NZBOX, RR, ZZ, Psi)&
+       -  GetPsi (R2, Z1, NRBOX, NZBOX, RR, ZZ, Psi) + GetPsi (R1, Z1, NRBOX, NZBOX, RR, ZZ, Psi)) /4./dR/dR
 
 end function GetPsiRZ
 
@@ -475,7 +909,7 @@ end function GetPsiRZ
 ! Subroutine to find O- and X-points
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, p)
+subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR, dZ, p)
 
   use Function_Defs_1
   use Function_Defs_2
@@ -488,24 +922,22 @@ subroutine FindOXPoint (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR, dZ, p)
 
   double precision, dimension (:), allocatable :: RR, ZZ
   
-  double precision, dimension (:, :), allocatable :: PSI
+  double precision, dimension (:, :), allocatable :: Psi
 
   do i = 1, 50
      
-     pr  = GetPsiR  (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
-     pz  = GetPsiZ  (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
-     prr = GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
-     pzz = GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dZ)
-     prz = GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, PSI, dR)
+     pr  = GetPsiR  (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR)
+     pz  = GetPsiZ  (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dZ)
+     prr = GetPsiRR (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR)
+     pzz = GetPsiZZ (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dZ)
+     prz = GetPsiRZ (R, Z, NRBOX, NZBOX, RR, ZZ, Psi, dR)
 
      det = prr*pzz - prz*prz
 
      R = R + (prz*pz - pzz*pr) /det
      Z = Z + (prz*pr - prr*pz) /det
 
-     p = GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, PSI)
-
-     !print *, 'i = ', i, 'R = ', R, 'Z = ', Z, 'Psi = ', p
+     p = GetPsi (R, Z, NRBOX, NZBOX, RR, ZZ, Psi)
      
   enddo
 

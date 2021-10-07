@@ -45,10 +45,8 @@
 </section>
 <section id="long-description">
 <h2>Long Description<a class="headerlink" href="#long-description" title="Permalink to this headline">¶</a></h2>
-<p>Program to read gFile and pFile, rescale equilibrium
-such that Q95 takes a different value but the toroidal
-magnetic field remains the same, and write out new
-gFile and pFile</p>
+<p>Program to read gFile, pFile, and cFile, rescale equilibrium,
+and write out new gFile, pFile, and cFile</p>
 </section>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
@@ -60,12 +58,16 @@ gFile and pFile</p>
 </dd>
 <dt>pFile:</dt><dd><p>Initial pFile</p>
 </dd>
+<dt>cFile:</dt><dd><p>Initial cFile</p>
+</dd>
 </dl>
 </dd>
 <dt>/Outputs:</dt><dd><dl class="simple">
 <dt>gFile:</dt><dd><p>Rescaled gFile</p>
 </dd>
 <dt>pFile:</dt><dd><p>Rescaled pFile</p>
+</dd>
+<dt>cFile</dt><dd><p>Rescaled cFile</p>
 </dd>
 </dl>
 </dd>
@@ -247,6 +249,26 @@ gFile and pFile</p>
 </dd>
 </dl>
 <p><em>Fields can occur in any order. Additional fields are ignored.</em></p>
+</section>
+<section id="cfile-format">
+<h2>cFile Format<a class="headerlink" href="#cfile-format" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">n</div>
+<div class="line">for (int i = 0; i &lt; n; i++)</div>
+<div class="line">PSI, CHI_PHI, CHI_E, D_PERP, CHI_I</div>
+</div>
+<dl class="simple">
+<dt>PSI:</dt><dd><p>Normalized poloidal flux</p>
+</dd>
+<dt>CHI_PSI:</dt><dd><p>Perpendicular toroidal momentum diffusivity (m^2/s)</p>
+</dd>
+<dt>CHI_E:</dt><dd><p>Perpendicular electron energy diffusivity (m^2/s)</p>
+</dd>
+<dt>D_PERP:</dt><dd><p>Perpendicular particle diffusivity (m^2/s)</p>
+</dd>
+<dt>CHI_I:</dt><dd><p>Perpendicular ion energy diffusivity (m^2/s)</p>
+</dd>
+</dl>
 </section>
 </section>
 

@@ -104,15 +104,15 @@ q_{\rm new} &=\left(\frac{T_{\rm new}}{T_{\rm old}}\right) q_{\rm old}.
 \end{align} 
 
 \section{Rescaling Plasma Equilibrium}
-\subsection{$n_e$ Rescaling}
-Perform Type I rescaling with $a_1 =a_n^{\,1/2}$. So,
+\subsection{Type 1 Rescaling}
+Perform Type I rescaling with $a_1 =a_n^{\,1/2}$. It follows that 
 \begin{align}
 R&\rightarrow R,\\[0.5ex]
 T&\rightarrow a_n^{1/2}\,T,\\[0.5ex]
 \psi&\rightarrow a_n^{\,1/2}\,\psi,\\[0.5ex]
-P&\rightarrow a_n\,P.
+P&\rightarrow a_n\,P,
 \end{align}
-Follows that
+and 
 \begin{align}
 B_{p,t}&\rightarrow a_n^{\,1/2}\,B_{p,t},\\[0.5ex]
 q_{95}&\rightarrow q_{95}.
@@ -123,29 +123,29 @@ n_a&\rightarrow a_n\,n_a,\\[0.5ex]
 T_a&\rightarrow T_a.
 \end{align}
 Here, $a\equiv e, i, b, I$. 
-Follows that
+It follows that
 \begin{equation}
 \omega_{\ast\,a} \rightarrow a_n^{-1/2}\,\omega_{\ast\,a}.
 \end{equation}
 Assuming that
 \begin{align}
 \omega_{\theta\,a}&\rightarrow a_n^{-1/2}\,\omega_{\theta\,a},\\[0.5ex]
-\omega_E&\rightarrow\omega_E,
+\omega_E&\rightarrow a_n^{-1/2}\,\omega_E,
 \end{align}
 we require 
 \begin{align}
-\omega_{\phi\,a}\rightarrow \omega_{\phi\,a}+(a_n^{-1/2}-1)\,(\omega_{\ast\,a}+\omega_{\theta\,a}).
+\omega_{\phi\,a}\rightarrow  a_n^{-1/2}\,\omega_{\phi\,a}.
 \end{align}
 
-\subsection{$T_e$ Rescaling}
-Perform Type I rescaling with $a_1 =a_T^{\,1/2}$. So,
+\subsection{Type 2 Rescaling}
+Perform Type I rescaling with $a_1 =a_T^{\,1/2}$. It follows that
 \begin{align}
 R&\rightarrow R,\\[0.5ex]
 T&\rightarrow a_T^{1/2}\,T,\\[0.5ex]
 \psi&\rightarrow a_T^{\,1/2}\,\psi,\\[0.5ex]
-P&\rightarrow a_T\,P.
+P&\rightarrow a_T\,P,
 \end{align}
-Follows that
+and 
 \begin{align}
 B_{p,t}&\rightarrow a_T^{\,1/2}\,B_{p,t},\\[0.5ex]
 q_{95}&\rightarrow q_{95}.
@@ -153,32 +153,32 @@ q_{95}&\rightarrow q_{95}.
 Let
 \begin{align}
 n_a&\rightarrow n_a,\\[0.5ex]
-T_a&\rightarrow a_T\,T_a.
+T_a&\rightarrow a_T\,T_a,
 \end{align}
-Follows that
+so
 \begin{equation}
 \omega_{\ast\,a} \rightarrow a_T^{\,1/2}\,\omega_{\ast\,a}.
 \end{equation}
 Assuming that
 \begin{align}
 \omega_{\theta\,a}&\rightarrow a_T^{\,1/2}\,\omega_{\theta\,a},\\[0.5ex]
-\omega_E&\rightarrow\omega_E,
+\omega_E&\rightarrow a_T^{\,1/2}\,\omega_E,
 \end{align}
 we require 
 \begin{align}
-\omega_{\phi\,a}\rightarrow \omega_{\phi\,a}+(a_T^{\,1/2}-1)\,(\omega_{\ast\,a}+\omega_{\theta\,a}).
+\omega_{\phi\,a}\rightarrow a_T^{\,1/2}\,\omega_{\phi\,a}.
 \end{align}
 
-\subsection{$R$ Rescaling}
+\subsection{Type 3 Rescaling}
 Perform a Type II rescaling with $a_2=a_R$.
 It follows that
 \begin{align}
 R&\rightarrow a_R\,R,\\[0.5ex]
 T&\rightarrow a_R\,T,\\[0.5ex]
 \psi&\rightarrow a_R^{\,2}\,\psi,\\[0.5ex]
-P&\rightarrow P.
+P&\rightarrow P,
 \end{align}
-Follows that
+and 
 \begin{align}
 B_{t,p} &\rightarrow B_{t,p},\\[0.5ex]
 q_{95}&\rightarrow q_{95}.
@@ -195,22 +195,30 @@ so
 Assuming that
 \begin{align}
 \omega_{\theta\,a}&\rightarrow a_R^{-2}\,\omega_{\theta\,a},\\[0.5ex]
-\omega_E &\rightarrow \omega_E,
+\omega_E &\rightarrow a_R^{-2}\,\omega_E,
 \end{align}
 we require
 \begin{equation}
-\omega_{\phi\,a}\rightarrow \omega_{\phi\,a} + (a_R^{\,-2}-1)\,(\omega_{\ast\,a}+\omega_{\theta\,a}).
+\omega_{\phi\,a}\rightarrow a_R^{-2}\,\omega_{\phi\,a}.
 \end{equation}
 
-\subsection{$P$ Rescaling}
+\subsection{Type 4 Rescaling}
+Let everything stay the same, except
+\begin{align}
+\chi_{\phi,e,i} & \rightarrow a_\phi\,\chi_{\phi,e,i},\\[0.5ex]
+D_\perp & \rightarrow a_\phi\,D_\perp.
+\end{align}
+
+\subsection{Type 5 Rescaling}
 Perform a Type III rescaling with $a_3=a_P$. 
-Let 
+It follows that
 \begin{align}
 R&\rightarrow R,\\[0.5ex]
-P&\rightarrow P + a_P,\\[0.5ex]
 T&\rightarrow T,\\[0.5ex]
-\psi&\rightarrow \psi.
+\psi&\rightarrow \psi,\\[0.5ex]
+P&\rightarrow P + a_P,
 \end{align}
+and 
 \begin{align}
 B_{t,p} &\rightarrow B_{t,p},\\[0.5ex]
 q_{95}&\rightarrow q_{95}.
@@ -236,15 +244,15 @@ we require
 \omega_{\phi\,a}\rightarrow \omega_{\phi\,a}.
 \end{equation}
 
-\subsection{$\omega_E$ Rescaling}
-Do not rescale equilibrium. So,
+\subsection{Type 6 Rescaling}
+Do not rescale equilibrium. It follows that
 \begin{align}
 R&\rightarrow R,\\[0.5ex]
 \psi&\rightarrow\psi,\\[0.5ex]
 T&\rightarrow T,\\[0.5ex]
-P&\rightarrow P.
+P&\rightarrow P,
 \end{align}
-Follows that
+and 
 \begin{align}
 B_{p,t}&\rightarrow B_{p,t},\\[0.5ex]
 q_{95}&\rightarrow q_{95}.
@@ -268,14 +276,7 @@ we require
 \omega_{\phi\,a}\rightarrow \omega_{\phi\,a} + a_E.
 \end{equation}
 
-\subsection{$\chi_\phi$ Rescaling}
-Let everything stay the same, except
-\begin{align}
-\chi_{\phi,e,i} & \rightarrow a_\phi\,\chi_{\phi,e,i},\\[0.5ex]
-D_\perp & \rightarrow a_\phi\,D_\perp.
-\end{align}
-
-\subsection{$q_{95}$ Rescaling}
+\subsection{Type 7 Rescaling}
 Let
 \begin{equation}
 {\mit\Psi}_N = \frac{\psi - \psi_{\rm axis}}{\psi_{\rm separatrix}-\psi_{\rm axis}}.
