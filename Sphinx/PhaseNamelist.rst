@@ -24,6 +24,8 @@ TEND
   Simulation end time (ms)
 DT 
   Data recorded every DT ms
+TOFF
+  If not restarting calculation run simulation for TOFF ms before recording data   
 MID
   Number of coil sets:
    1:

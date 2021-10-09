@@ -114,44 +114,55 @@ void Phase::Read_Data ()
   // ......................................
   // Set default values of input parameters
   // ......................................
-  NFLOW  = 200;
+  NFLOW   = 200;
 
-  STAGE5 = 1;
+  STAGE5  = 1;
 
-  INTF   = 0;
-  INTN   = 0;
-  INTU   = 0;
-  NATS   = 0;
-  OLD    = 0;
+  INTF    = 0;
+  INTN    = 0;
+  INTU    = 0;
+  NATS    = 0;
+  OLD     = 0;
 
-  LIN    = 0;
-  FREQ   = 0;
-  FFAC   = 0.;
+  LIN     = 0;
+  FREQ    = 0;
+  FFAC    = 0.;
 
-  CXD    = 1;
-  BOOT   = 1;
-  CURV   = 1;
-  POLZ   = 1;
+  CXD     = 1;
+  BOOT    = 1;
+  CURV    = 1;
+  POLZ    = 1;
 
-  MID    = 2;
-  IRMP   = -1.e6;
-  IFLA   = 0;
-  COPT   = 0;
-  CORE   = 1.;
+  MID     = 2;
+  COPT    = 0;
+  CORE    = 1.;
 
-  DT     = 1.e-5;
-  TSTART = 0.;
-  TEND   = 1.e6;
+  DT      = 1.e-5;
+  TSTART  = 0.;
+  TEND    = 1.e6;
 
-  SCALE  = 2.;
-  PMAX   = 4.;
-  NPHA   = 361;
-  CHIR   = 1.;
-  HIGH   = 1;
-  RATS   = 1;
+  SCALE   = 2.;
+  PMAX    = 4.;
+  NPHA    = 361;
+  CHIR    = 1.;
+  HIGH    = 1;
+  RATS    = 1;
 
-  TAUW   = 1.;
-  TOFF   = 0.;
+  TAUW    = 1.;
+  TOFF    = 0.;
+
+  TYPE    = 1;
+  SSTART  = 10.;
+  SEND    = 15.;
+  WAMOD   = 0.;
+  WPMOD   = 0.;
+  SAMP    = 1.;
+  SPHA    = 0.;
+  BACK    = 0.1;
+  RPERIOD = 1000.;
+  RSTART  = 0.;
+  REND    = 4.;
+  RPHA    = 0.5;
   
   // Read input data from namelists (Inputs/Phase.nml, Inputs/Waveform.nml)
   printf ("........................................................................................\n");
@@ -164,7 +175,8 @@ void Phase::Read_Data ()
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
 		&DT, &TSTART, &TEND, &TOFF, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
-		&CXD, &BOOT, &CURV, &POLZ, &TAUW, &NCTRL, TCTRL, ICTRL, PCTRL);
+		&CXD, &BOOT, &CURV, &POLZ, &TAUW, &TYPE, &NCTRL, TCTRL, ICTRL, PCTRL,
+		&SSTART, &SEND, &WAMOD, &WPMOD, &SAMP, &SPHA, &BACK, &RPERIOD, &RSTART, &REND, &RPHA);
 
   TT.resize (NCTRL);
   
@@ -216,6 +228,21 @@ void Phase::Read_Data ()
       printf ("PHASE:: Invalid TOFF value\n");
       exit (1);
     }
+  if (SSTART > SEND)
+    {
+      printf ("PHASE:: SSTART must be less than SEND\n");
+      exit (1);
+    }
+  if (TYPE < 0 || TYPE > 1)
+    {
+      printf ("PHASE:: Invalid TYPE value\n");
+      exit (1);
+    }
+  if (RPERIOD <= 0.)
+    {
+      printf ("PHASE:: Invalid RPERIOD value\n");
+      exit (1);
+    }
   
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
@@ -225,8 +252,10 @@ void Phase::Read_Data ()
   // .............................
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e NCTRL = %4d IRMP = %10.3e\n",
-	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
+	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
+  printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA = %10.3e\n",
+	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA);
   
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
@@ -235,8 +264,10 @@ void Phase::Read_Data ()
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d \n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e NCTRL = %4d IRMP = %10.3e\n",
-	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, NCTRL, IRMP);
+  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
+	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
+  fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA = %10.3e\n",
+	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA);
   fclose (namelist);
 
   // .................
@@ -467,11 +498,18 @@ void Phase::Read_Data ()
   // Normalize times
   for (int i = 0; i < NCTRL; i++)
     TT (i) = TCTRL[i] *1.e-3/tau_A;
-  dTT    = DT         *1.e-3/tau_A;
-  Tstart = TSTART     *1.e-3/tau_A;
-  Tend   = TEND       *1.e-3/tau_A;
-  Toff   = TOFF       *1.e-3/tau_A;
-  tauw   = TAUW       *1.e-3/tau_A;
+  dTT     = DT        *1.e-3/tau_A;
+  Tstart  = TSTART    *1.e-3/tau_A;
+  Tend    = TEND      *1.e-3/tau_A;
+  Toff    = TOFF      *1.e-3/tau_A;
+  tauw    = TAUW      *1.e-3/tau_A;
+  SSTART  = SSTART    *1.e-3/tau_A;
+  SEND    = SEND      *1.e-3/tau_A;
+  RPERIOD = RPERIOD   *1.e-3/tau_A;
+
+  // Normalize frequencies
+  WAMOD = WAMOD * tau_A/1.e-3;
+  WPMOD = WPMOD * tau_A/1.e-3;
 
   mk.resize      (nres); ntor.resize     (nres); rk.resize       (nres); qk.resize       (nres); rhok.resize   (nres);
   a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres); tauxk.resize  (nres);
@@ -483,10 +521,10 @@ void Phase::Read_Data ()
   Factor5.resize (nres); Factor6.resize  (nres); Factor7.resize  (nres); Factor8.resize  (nres);
   Factor9.resize (nres); Factor10.resize (nres); Factor11.resize (nres); Factor12.resize (nres);
   alphabe.resize (nres); alphabi.resize  (nres); alphac.resize   (nres); alphap.resize   (nres);
-  rhothe.resize  (nres); rhothi.resize   (nres); etae.resize     (nres); etai.resize     (nres);
+  rhothe.resize  (nres); rhothi.resize   (nres); etae.resize     (nres); etai.resize     (nres); chipk.resize  (nres);
 
   for (int j = 0; j < nres; j++)
-    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+    if (fscanf (file, "%d %d %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
 		&mk      (j), &ntor     (j), &rk       (j), &qk       (j), &rhok   (j),
 		&a       (j), &Sk       (j), &taumk    (j), &tautk    (j), &fack   (j),
 		&delk    (j), &wkl      (j), &wke      (j), &wkn      (j),
@@ -497,7 +535,7 @@ void Phase::Read_Data ()
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
 		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j),
 		&alphabe (j), &alphabi  (j), &alphac   (j), &alphap   (j), &rhothe (j),
-		&rhothi  (j), &etae     (j), &etai     (j)) != 50)
+		&rhothi  (j), &etae     (j), &etai     (j), chipk     (j)) != 51)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -1346,7 +1384,13 @@ void Phase::IslandDynamics ()
   int     zcount  = -1;  
   double* zTime   = new double[1];   
   double* zIrmp   = new double[1];   
-  double* zPrmp   = new double[1];   
+  double* zPrmp   = new double[1];
+  double* zIU     = new double[1];   
+  double* zIM     = new double[1];
+  double* zIL     = new double[1];
+  double* zPU     = new double[1];   
+  double* zPM     = new double[1];
+  double* zPL     = new double[1];   
   double* zphi    = new double[nres];    
   double* zvph    = new double[nres];    
   double* zomega0 = new double[nres]; 
@@ -1362,6 +1406,34 @@ void Phase::IslandDynamics ()
   double* zTRmp   = new double[nres];
   double* zTWall  = new double[nres];
   double* zTTear  = new double[nres];
+  double* ztlock  = new double[nres];
+  double* zIlock  = new double[nres];
+  double* znelock = new double[nres];
+  double* zTelock = new double[nres];
+  double* zCplock = new double[nres];
+  double* zB0lock = new double[nres];
+  double* zR0lock = new double[nres];
+  double* zwllock = new double[nres];
+  double* zwelock = new double[nres];
+  double* zwnlock = new double[nres];
+  double* zbrlock = new double[nres];
+  double* zWlock  = new double[nres];
+
+  for (int i = 0; i < nres; i++)
+    {
+      ztlock[i]  = -1000.;
+      zIlock[i]  = 0.;
+      znelock[i] = 0.;
+      zTelock[i] = 0.;
+      zCplock[i] = 0.;
+      zB0lock[i] = 0.;
+      zR0lock[i] = 0.;
+      zwllock[i] = 0.;
+      zwelock[i] = 0.;
+      zwnlock[i] = 0.;
+      zbrlock[i] = 0.;
+      zWlock[i]  = 0.;
+    }
 
   size_t* tstart = new size_t[1];
   size_t* tcount = new size_t[1];
@@ -1407,6 +1479,24 @@ void Phase::IslandDynamics ()
   int yPrmp;
   err += nc_def_var (dataFile, "Prmp",     NC_DOUBLE, 1, &time_d, &yPrmp);
 
+  int yIU;
+  err += nc_def_var (dataFile, "IU",       NC_DOUBLE, 1, &time_d, &yIU);
+
+  int yIM;
+  err += nc_def_var (dataFile, "IM",       NC_DOUBLE, 1, &time_d, &yIM);
+
+  int yIL;
+  err += nc_def_var (dataFile, "IL",       NC_DOUBLE, 1, &time_d, &yIL);
+
+  int yPU;
+  err += nc_def_var (dataFile, "PU",       NC_DOUBLE, 1, &time_d, &yPU);
+
+  int yPM;
+  err += nc_def_var (dataFile, "PM",       NC_DOUBLE, 1, &time_d, &yPM);
+
+  int yPL;
+  err += nc_def_var (dataFile, "PL",       NC_DOUBLE, 1, &time_d, &yPL);
+
   int yphi;
   err += nc_def_var (dataFile, "phi",      NC_DOUBLE, 2, dim,     &yphi);
 
@@ -1451,6 +1541,42 @@ void Phase::IslandDynamics ()
 
   int yTTear;
   err += nc_def_var (dataFile, "T_Tear",   NC_DOUBLE, 2, dim,     &yTTear);
+
+  int ytlock;
+  err += nc_def_var (dataFile, "t_lock",   NC_DOUBLE, 1, &nres_d, &ytlock);
+
+  int yIlock;
+  err += nc_def_var (dataFile, "I_lock",   NC_DOUBLE, 1, &nres_d, &yIlock);
+
+  int ynelock;
+  err += nc_def_var (dataFile, "ne_lock",  NC_DOUBLE, 1, &nres_d, &ynelock);
+
+  int yTelock;
+  err += nc_def_var (dataFile, "Te_lock",  NC_DOUBLE, 1, &nres_d, &yTelock);
+
+  int yCplock;
+  err += nc_def_var (dataFile, "Cp_lock",  NC_DOUBLE, 1, &nres_d, &yCplock);
+
+  int yB0lock;
+  err += nc_def_var (dataFile, "B0_lock",  NC_DOUBLE, 1, &nres_d, &yB0lock);
+
+  int yR0lock;
+  err += nc_def_var (dataFile, "R0_lock",  NC_DOUBLE, 1, &nres_d, &yR0lock);
+
+  int ywllock;
+  err += nc_def_var (dataFile, "wl_lock",  NC_DOUBLE, 1, &nres_d, &ywllock);
+
+  int ywelock;
+  err += nc_def_var (dataFile, "we_lock",  NC_DOUBLE, 1, &nres_d, &ywelock);
+
+  int ywnlock;
+  err += nc_def_var (dataFile, "wn_lock",  NC_DOUBLE, 1, &nres_d, &ywnlock);
+
+  int ybrlock;
+  err += nc_def_var (dataFile, "br_lock",  NC_DOUBLE, 1, &nres_d, &ybrlock);
+
+  int yWlock;
+  err += nc_def_var (dataFile, "W_lock",   NC_DOUBLE, 1, &nres_d, &yWlock);
 
   err += nc_enddef (dataFile);
 
@@ -1516,10 +1642,24 @@ void Phase::IslandDynamics ()
       for (int j = 0; j < nres; j++)
 	if (ww (j) * wwo (j) < 0. && lock (j) == 0)
 	  {
-	    CalcRMP (t); 
+	    CalcRMP     (t);
+	    CalcChiZeta (t);
 
 	    printf ("m = %3d locks at t = %10.3e s  irmp = %10.3e kA  prmp/pi = %10.3e\n",
 		    mk (j), t*tau_A, irmp, prmp /M_PI);
+
+	    ztlock[j]  = t *tau_A/1.e-3;
+	    zIlock[j]  = irmp;
+	    znelock[j] = nek(j);
+	    zTelock[j] = Tek(j);
+	    zCplock[j] = chipk(j);
+	    zB0lock[j] = B_0;
+	    zR0lock[j] = R_0;
+	    zwllock[j] = wkl(j) /tau_A/1.e3;
+	    zwelock[j] = wke(j) /tau_A/1.e3;
+	    zwnlock[j] = wkl(j) /tau_A/1.e3;
+	    zbrlock[j] = double (mk(j)) * chi (j) /rk(j) /a(j);
+	    zWlock[j]  = GetIslandWidth (j);
 	 
 	    lock (j) = 1;
 	  }
@@ -1561,6 +1701,15 @@ void Phase::IslandDynamics ()
 	  CalcRMP (t);
 	  zIrmp[0] = irmp;
 	  zPrmp[0] = prmp /M_PI;
+
+	  double IU, IM, IL, PU, PM, PL;
+	  CalcCoil (t, IU, IM, IL, PU, PM, PL);
+	  zIU[0] = IU;
+	  zIM[0] = IM;
+	  zIL[0] = IL;
+	  zPU[0] = PU /M_PI;
+	  zPM[0] = PM /M_PI;
+	  zPL[0] = PL /M_PI;
 
 	  // Output island data
 	  for (int j = 0; j < nres; j++)
@@ -1621,6 +1770,12 @@ void Phase::IslandDynamics ()
 	      err += nc_put_vara_double (dataFile, yTime,   tstart, tcount, zTime);
 	      err += nc_put_vara_double (dataFile, yIrmp,   tstart, tcount, zIrmp);
 	      err += nc_put_vara_double (dataFile, yPrmp,   tstart, tcount, zPrmp);
+	      err += nc_put_vara_double (dataFile, yIU,     tstart, tcount, zIU);
+	      err += nc_put_vara_double (dataFile, yIM,     tstart, tcount, zIM);
+	      err += nc_put_vara_double (dataFile, yIL,     tstart, tcount, zIL);
+	      err += nc_put_vara_double (dataFile, yPU,     tstart, tcount, zPU);
+	      err += nc_put_vara_double (dataFile, yPM,     tstart, tcount, zPM);
+	      err += nc_put_vara_double (dataFile, yPL,     tstart, tcount, zPL);
 	      err += nc_put_vara_double (dataFile, yphi,    dstart, dcount, zphi);
 	      err += nc_put_vara_double (dataFile, yvph,    dstart, dcount, zvph);
 	      err += nc_put_vara_double (dataFile, yomega0, dstart, dcount, zomega0);
@@ -1656,6 +1811,25 @@ void Phase::IslandDynamics ()
 
   printf ("t(ms) = %10.3e h(ms) = %10.3e h/tau_A = %10.3e irmp(kA) = %10.3e prmp/pi = %10.3e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 
+  err += nc_put_var_double (dataFile, ytlock,  ztlock);
+  err += nc_put_var_double (dataFile, yIlock,  zIlock);
+  err += nc_put_var_double (dataFile, ynelock, znelock);
+  err += nc_put_var_double (dataFile, yTelock, zTelock);
+  err += nc_put_var_double (dataFile, yCplock, zCplock);
+  err += nc_put_var_double (dataFile, yB0lock, zB0lock);
+  err += nc_put_var_double (dataFile, yR0lock, zR0lock);
+  err += nc_put_var_double (dataFile, ywllock, zwllock);
+  err += nc_put_var_double (dataFile, ywelock, zwelock);
+  err += nc_put_var_double (dataFile, ywnlock, zwnlock);
+  err += nc_put_var_double (dataFile, ybrlock, zbrlock);
+  err += nc_put_var_double (dataFile, yWlock,  zWlock);
+
+  if (err != 0)
+    {
+      printf ("PHASE::IslandDynamics: Error writing locking data to Outputs/Stage5.nc\n");
+      exit (1);
+    }
+  
   err += nc_close (dataFile);
 
   if (err != 0)
@@ -1668,11 +1842,15 @@ void Phase::IslandDynamics ()
   Save ();
  
   // Clean up
-  delete[] zTime;   delete[] zIrmp;  delete[] zPrmp;  delete[] zphi;   delete[] zvph;    
-  delete[] zomega0; delete[] zomega; delete[] zPsim;  delete[] zPsip;  delete[] zW;      
-  delete[] zPsivm;  delete[] zPsivp; delete[] zWv;    delete[] zdP;    delete[] zdP0;    
-  delete[] tstart;  delete[] tcount; delete[] dstart; delete[] dcount; delete[] mk_x;
-  delete[] PsiN_x;  delete[] zTRmp;  delete[] zTWall; delete[] zTTear; 
+  delete[] zTime;   delete[] zIrmp;   delete[] zPrmp;   delete[] zphi;    delete[] zvph;    
+  delete[] zomega0; delete[] zomega;  delete[] zPsim;   delete[] zPsip;   delete[] zW;      
+  delete[] zPsivm;  delete[] zPsivp;  delete[] zWv;     delete[] zdP;     delete[] zdP0;    
+  delete[] tstart;  delete[] tcount;  delete[] dstart;  delete[] dcount;  delete[] mk_x;
+  delete[] PsiN_x;  delete[] zTRmp;   delete[] zTWall;  delete[] zTTear;  delete[] zIU;
+  delete[] zIM;     delete[] zIL;     delete[] zPU;     delete[] zPM;     delete[] zPL;
+  delete[] ztlock;  delete[] zIlock;  delete[] znelock; delete[] zTelock; delete[] zCplock;
+  delete[] zB0lock; delete[] zR0lock; delete[] zwllock; delete[] zwelock; delete[] zwnlock;
+  delete[] zbrlock; delete[] zWlock;
 }
 
 // ###################################
@@ -1680,29 +1858,60 @@ void Phase::IslandDynamics ()
 // ###################################
 void Phase::CalcRMP (double t)
 {
-  if (t <= TT (0))
+  // Type 1 programmed waveform
+  if (TYPE == 1)
     {
-      irmp = ICTRL[0];
-      prmp = PCTRL[0];
-    }
-  else if (t >= TT (NCTRL-1))
-    {
-      irmp = ICTRL[NCTRL-1];
-      prmp = PCTRL[NCTRL-1];
-    }
-  else
-    {
-      for (int i = 0; i < NCTRL-1; i++)
+      if (t <= TT (0))
 	{
-	  if ((t > TT (i)) && (t < TT (i+1)))
+	  irmp = ICTRL[0];
+	  prmp = PCTRL[0];
+	}
+      else if (t >= TT (NCTRL-1))
+	{
+	  irmp = ICTRL[NCTRL-1];
+	  prmp = PCTRL[NCTRL-1];
+	}
+      else
+	{
+	  for (int i = 0; i < NCTRL-1; i++)
 	    {
-	      if (IFLA)
-		irmp = IRMP;
-	      else
-		irmp = ((t - TT (i)) * ICTRL[i+1] + (TT (i+1) - t) * ICTRL[i]) /(TT (i+1) - TT (i));
-	      prmp = ((t - TT (i)) * PCTRL[i+1] + (TT (i+1) - t) * PCTRL[i]) /(TT (i+1) - TT (i));
+	      if ((t > TT (i)) && (t < TT (i+1)))
+		{
+		  irmp = ((t - TT (i)) * ICTRL[i+1] + (TT (i+1) - t) * ICTRL[i]) /(TT (i+1) - TT (i));
+		  prmp = ((t - TT (i)) * PCTRL[i+1] + (TT (i+1) - t) * PCTRL[i]) /(TT (i+1) - TT (i));
+		}
 	    }
 	}
+    }
+
+  // Type 2 spike waveform
+  if (TYPE == 2)
+    {
+      if (t < SSTART)
+	{
+	  irmp = BACK;
+	  prmp = RPHA; 
+	}
+      else if (t >= SSTART && t <= SEND)
+	{
+	  irmp = SAMP * cos ((t - SSTART) * WAMOD);
+	  prmp = RPHA + (t - SSTART) * WPMOD;
+	}
+      else
+	{
+	  irmp = BACK;
+	  prmp = RPHA;
+	}
+    }
+
+  // Type 3 repeated rmap waveform
+  if (TYPE == 3)
+    {
+      int    i    = int (t /RPERIOD);
+      double toff = t = double (i) * RPERIOD;
+
+      irmp = RSTART + (REND - RSTART) * toff /RPERIOD;
+      prmp = RPHA;
     }
 }
 

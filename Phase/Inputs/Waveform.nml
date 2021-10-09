@@ -1,12 +1,41 @@
  &WAVEFORM_CONTROL
+ TYPE = 1
+! Waveform type (1=programmed, 2=spike, 3=repeated ramp) 
  NCTRL = 2          
-! Number of control points
+! Number of control points in Type 1 programmed waveform
 /
- &WAVEFORM
+ &TYPE1_WAVEFORM
  TCTRL = 0.0, 2.e3
 ! Control times (ms)
  ICTRL = 0.0, 5.0
-! Control currents (kA)
+! Control RMP coil currents (kA)
  PCTRL = 0.0, 0.0
 ! Relative phase of RMP coil currents (units of PI)
  /
+ &TYPE2_WAVEFORM
+ SSTART = 10.
+! Time of start of RMP spike (ms)
+ SEND = 15.
+! Time of end of RMP spike (ms)
+ WAMOD = 0.
+! Amplitude modulation frequency of RMP coil currents during spike (krad/s)
+ WPMOD = 0.
+! Relative phase velocity of RMP coil currents during spike (krad/s)
+ SAMP = 1.
+! RMP coil currents at start of spike spike (kA)
+ SPHA = 0.5
+! Relative phase of RMP coil currents at start of spike (units of PI)
+ BACK = 0.1
+! Background RMP coil currents (kA)
+ / 
+ &TYPE3_WAVEFORM
+ RPERIOD = 1000.
+! Repeated RMP repetition period (ms) 
+ RSTART = 0.
+! RMP coil currents at start of ramp (first ramp starts at t=0) (kA)
+ REND = 4.
+! RMP coil currents at end of ramp (kA)
+ RPHA = 0.5
+! Relative phase of RMP coil currents during ramp (units of PI)
+ / 
+

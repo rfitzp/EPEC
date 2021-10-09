@@ -22,7 +22,7 @@
 !  1 - maximize drive at resonant surface closest to top of pedestal (restricted)
 !  2 - maximize drive at resonant surface closest to top of pedestal (unrestricted)
 !  3 - maximize drive at resonant surface closest to top of pedestal and minimize drive at innermost resonant surface (unrestricted)
- CORE   = 1.    
+ CORE = 1.    
 ! Core drive minimization factor when COPT = 3 (0.0 = no minimization, 1.0 = complete minmization)
  FREQ = 0     
 ! Switch for selecting natural frequency type:
@@ -41,7 +41,7 @@
 ! Flag for including magnetic field-line curvature in Rutherford equations
  POLZ = 0     
 ! Flag for including ion polarization current in Rutherford equations
- TAUW
+ TAUW = 1.0
 ! Time constant of resistive wall (ms) 
  CHIR = 4.    
 ! Maximum Chirikov parameter for vacuum islands
@@ -53,7 +53,7 @@
  ! Flag for uFile/mFile/lFile interpolation
  NATS = 0     
 ! Flag for linear-only nFile interpolation
- RATS   = 1     
+ RATS = 1     
 ! Flag for linear-only interpolation of uFiles/mFiles/lFiles
  OLD = 0     
 ! Flag for restarting old calculation

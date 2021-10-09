@@ -1,8 +1,10 @@
 ! Function to read PHASE namelist and WAVEFORM namelist
 
-subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, MID, COPT,&
-     DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, FFAC, CXD, BOOT, CURV, POLZ,&
-     TAUW, NCTRL, xTCTRL, xICTRL, xPCTRL) bind (c, name = 'NameListRead')
+subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, MID, COPT, DT,&
+     TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, FFAC, CXD, BOOT, CURV, POLZ, TAUW,&
+     TYPE, NCTRL, xTCTRL, xICTRL, xPCTRL,&
+     SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA)&
+     bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
   implicit none
@@ -25,6 +27,7 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   integer (kind = c_int),    intent (inout) :: BOOT
   integer (kind = c_int),    intent (inout) :: CURV
   integer (kind = c_int),    intent (inout) :: POLZ
+  integer (kind = c_int),    intent (inout) :: TYPE
   real    (kind = c_double), intent (inout) :: FFAC
   real    (kind = c_double), intent (inout) :: DT
   real    (kind = c_double), intent (inout) :: TSTART
@@ -35,7 +38,18 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   real    (kind = c_double), intent (inout) :: CORE
   real    (kind = c_double), intent (inout) :: TAUW
   real    (kind = c_double), intent (inout) :: TOFF
-  
+  real    (kind = c_double), intent (inout) :: SSTART
+  real    (kind = c_double), intent (inout) :: SEND
+  real    (kind = c_double), intent (inout) :: WAMOD
+  real    (kind = c_double), intent (inout) :: WPMOD
+  real    (kind = c_double), intent (inout) :: SAMP
+  real    (kind = c_double), intent (inout) :: SPHA
+  real    (kind = c_double), intent (inout) :: BACK
+  real    (kind = c_double), intent (inout) :: RPERIOD
+  real    (kind = c_double), intent (inout) :: RSTART
+  real    (kind = c_double), intent (inout) :: REND
+  real    (kind = c_double), intent (inout) :: RPHA
+
   real (kind = c_double), dimension (*), intent (inout) :: xTCTRL 
   real (kind = c_double), dimension (*), intent (inout) :: xICTRL 
   real (kind = c_double), dimension (*), intent (inout) :: xPCTRL
@@ -49,8 +63,10 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
  
   namelist /PHASE_CONTROL/ STAGE5, NFLOW, INTF, INTN, INTU, NATS, OLD, FREQ, FFAC, LIN, MID, COPT, DT,&
        TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, CXD, BOOT, CURV, POLZ, TAUW
-  namelist /WAVEFORM_CONTROL/  NCTRL
-  namelist /WAVEFORM/ TCTRL, ICTRL, PCTRL
+  namelist /WAVEFORM_CONTROL/ TYPE, NCTRL
+  namelist /TYPE1_WAVEFORM/ TCTRL, ICTRL, PCTRL
+  namelist /TYPE2_WAVEFORM/ SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK
+  namelist /TYPE3_WAVEFORM/ RPERIOD, RSTART, REND, RPHA
   
   open  (unit = 100, file = 'Inputs/Phase.nml', status = 'old')
   read  (unit = 100, nml  = PHASE_CONTROL) 
@@ -63,7 +79,9 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   allocate (ICTRL (NCTRL))
   allocate (PCTRL (NCTRL))
 
-  read  (unit = 100, nml  = WAVEFORM)
+  read  (unit = 100, nml  = TYPE1_WAVEFORM)
+  read  (unit = 100, nml  = TYPE2_WAVEFORM)
+  read  (unit = 100, nml  = TYPE3_WAVEFORM)
 
   close (unit = 100)
   
@@ -73,6 +91,9 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
      xICTRL (i) = ICTRL (i)
      xPCTRL (i) = PCTRL (i) * pi
   enddo
+
+  SPHA = SPHA * pi;
+  RPHA = RPHA * pi;
  
   deallocate (TCTRL)
   deallocate (ICTRL)
