@@ -34,6 +34,20 @@ else ifeq ($(NNAME), iris)
      C_COMPILER = g++ -O3
      C_FLAGS    = -w $(VERSION_FLAGS)
      C_INCLUDE  = -I$(NCINC) -I$(HONE)/include 
-     C_LIBS	= -L$(NCLIB) -L$(HOME)/lib  $(LIB)  
+     C_LIBS	= -L$(NCLIB) -L$(HOME)/lib  $(LIB)
 
+else
+
+     #########
+     # Default
+     #########
+     F_COMPILER = gfortran
+     F_FLAGS    =
+     F_INCLUDE  = -I/usr/include
+
+     C_COMPILER = clang++ -O3
+     C_FLAGS    = -w $(VERSION_FLAGS)
+     C_INCLUDE  = -I/usr/include
+     C_LIBS     = -L/usr/lib -L/usr/lib/libgcc -lgfortran -lgsl -lgslcblas  -lnetcdf -lnetcdff
+     
 endif
