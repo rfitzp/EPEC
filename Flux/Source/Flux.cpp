@@ -153,7 +153,7 @@ void Flux::SetParameters ()
    printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
    printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
    printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
-   printf ("Input Parameters (from Inputs/Flux.nml and command line options):\n");
+   printf ("Input Parameters (from Inputs/Flux.nml):\n");
    printf ("NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d\n",
 	   NPSI, NTHETA, NNC, PACK, NEOANG);
    printf ("NTOR = %2d  MMIN = %2d  MMAX = %2d  PSILIM = %10.3e  PSIRAT = %10.3e  PSIPED = %10.3e  TIME = %10.3e  INTG = %2d  RW = %10.3e\n",
@@ -165,7 +165,7 @@ void Flux::SetParameters ()
    fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
    fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
    fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-   fprintf (namelist, "Input Parameters (from Inputs/Flux.nml and command line options):\n");
+   fprintf (namelist, "Input Parameters (from Inputs/Flux.nml):\n");
    fprintf (namelist, "NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d\n",
 	    NPSI, NTHETA, NNC, PACK, NEOANG);
    fprintf (namelist, "NTOR = %2d  MMIN = %2d  MMAX = %2d  PSILIM = %10.3e  PSIRAT = %10.3e  PSIPED = %10.3e  TIME = %10.3e  INTG = %2d  RW = %10.3e\n",

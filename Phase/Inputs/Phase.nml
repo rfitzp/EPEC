@@ -57,7 +57,7 @@
 ! Flag for linear-only interpolation of uFiles/mFiles/lFiles
  OLD = 0     
 ! Flag for restarting old calculation
-  HIGH = 1     
+ HIGH = 1     
 ! Flag for higher-order transport analysis
  SCALE = 2.    
 ! GPEC scalefactor

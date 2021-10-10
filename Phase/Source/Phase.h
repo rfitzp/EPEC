@@ -137,9 +137,9 @@ class Phase
   double  TOFF;    // If OLD == 0 then run simulation for TOFF ms before recording data
 
   int     MID;     // Number of RMP coil sets (1, 2, or 3)
-                   // If == 1 requires lFile
-                   // If == 2 requires lFile and uFile
-                   // If == 3 requires lFile, uFile, and mFile
+                   //  If == 1 requires lFile
+                   //  If == 2 requires lFile and uFile
+                   //  If == 3 requires lFile, uFile, and mFile
   int     COPT;    // If == 0 then no coil current optimization
                    // If == 1 then coil currents optimized in restricted fashion to maximize drive at closest rational surface to pedestal top
                    // If == 2 then coil currents optimized in unrestricted fashion to maximize drive at closest rational surface to pedestal top

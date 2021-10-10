@@ -114,43 +114,35 @@ void Phase::Read_Data ()
   // ......................................
   // Set default values of input parameters
   // ......................................
-  NFLOW   = 200;
-
+  PMAX    = 4.;
+  NPHA    = 361;
   STAGE5  = 1;
-
-  INTF    = 0;
-  INTN    = 0;
-  INTU    = 0;
-  NATS    = 0;
-  OLD     = 0;
-
-  LIN     = 0;
+  TSTART  = 0.;
+  TEND    = 1.e6;
+  DT      = 1.e-5;
+  TOFF    = 0.;
+  MID     = 2;
+  COPT    = 0;
+  CORE    = 1.;
   FREQ    = 0;
   FFAC    = 0.;
-
+  LIN     = 0;
   CXD     = 1;
   BOOT    = 1;
   CURV    = 1;
   POLZ    = 1;
-
-  MID     = 2;
-  COPT    = 0;
-  CORE    = 1.;
-
-  DT      = 1.e-5;
-  TSTART  = 0.;
-  TEND    = 1.e6;
-
-  SCALE   = 2.;
-  PMAX    = 4.;
-  NPHA    = 361;
-  CHIR    = 1.;
-  HIGH    = 1;
-  RATS    = 1;
-
   TAUW    = 1.;
-  TOFF    = 0.;
-
+  CHIR    = 1.;
+  INTF    = 0;
+  INTN    = 0;
+  INTU    = 0;
+  NATS    = 0;
+  RATS    = 1;
+  OLD     = 0;
+  HIGH    = 1;
+  SCALE   = 2.;
+  NFLOW   = 200;
+ 
   TYPE    = 1;
   SSTART  = 10.;
   SEND    = 15.;
@@ -165,9 +157,9 @@ void Phase::Read_Data ()
   RPHA    = 0.5;
   
   // Read input data from namelists (Inputs/Phase.nml, Inputs/Waveform.nml)
-  printf ("........................................................................................\n");
-  printf ("Input parameters (from Inputs/Phase.nml, Inputs/Waveform.nml, and command line options):\n");
-  printf ("........................................................................................\n");
+  printf ("..............................................................\n");
+  printf ("Input parameters (from Inputs/Phase.nml, Inputs/Waveform.nml):\n");
+  printf ("..............................................................\n");
 
   TCTRL = new double[MAXCONTROLPOINTNUMBER];
   ICTRL = new double[MAXCONTROLPOINTNUMBER];
@@ -261,7 +253,7 @@ void Phase::Read_Data ()
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
-  fprintf (namelist, "Input parameters (from Inputs/Phase.nml and command line options):\n");
+  fprintf (namelist, "Input parameters (from Inputs/Phase.nml):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d \n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
   fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
