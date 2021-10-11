@@ -1,42 +1,21 @@
  &NEOCLASSICAL_CONTROL
- EXB = 1       
-! Switch for calculating ExB frequency from neoclassical theory:
-!  0 - use ExB frequency profile from pFile 
-!  1 - use ExB frequency profile derived from pFile toroidal velocity profile and neoclassical theory 
+ EXB = 2       
  IMPURITY = 1	   
-! Flag for inclusion of impurities in calculation
  NEUTRAL = 1       
-! Flag for inclusion of neutrals in claculation
  NTYPE = 1       
-! If 0/1 then flux-surface averaged neutral density distribution exponential/Lorentzian
- NN = 5e16   
-! Flux-surface averaged neutral density on LCFS (m^-3)
+ NN = 1.e16   
  LN = 1.3e-2  
-! Flux-surface average neutral density decay lengthscale (m)
  YN = 1.5     
-! Neutral peaking factor at X-point
  SVN = 4.e-14  
-! Charge exchange rate constant (m^3/s)
  EN = 1.      
-! Incoming neutral energy/ion energy
  INTF = 0       
-! Flag for fFile interpolation
  INTP = 0	   
-! Flag for pFile interpolation
  INTC = 0       
-! Flag for cFile interpolation
- CATS = 1       
-! Flag for linear-only interpolation of cFiles
- TIME = 0.	   
-! Experimental time (ms) (only relevant with interpolation of pFiles/fFiles/cFiles)
+ CATS = 1
  DMIN = 0.01
-! Minimum allowed value of diffusvities at resonant surfaces (m^2/s)
- DMAX = 10
-! Maximum allowed value of diffusvities at resonant surfaces (m^2/s)
+ DMAX = 10.
+ TIME = 0.	   
  TAUMIN = -0.8	   
-! Minimum allowed value of tau
  COULOMB = 17.	   
-! Coulomb logarithm
  NSMOOTH = 100     
-! Number of smoothing cycles for higher derivatives of profiles
  / 

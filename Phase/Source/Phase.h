@@ -231,7 +231,6 @@ class Phase
   // Read from Inputs/nFile
   double          tau_A;    // Alfven time (s)
   double          P0;       // Central thermal pressure (10^19 m^-3 keV)
-  double          tauw;     // Normalized wall time constant
   Array<int,1>    mk;       // Resonant poloidal mode numbers
   Array<int,1>    ntor;     // Resonant toroidal mode number
   Array<double,1> rk;       // Minor radii of resonant surfaces / a
@@ -328,8 +327,14 @@ class Phase
   double          Tstart;  // Normalized simulation start time
   double          Tend;    // Normalized simulation end time
   double          Toff;    // Normalized offset time
-  Array<double,1> TT;      // Normalized control times
+  Array<double,1> TT;      // Normalized type1 waveform control times
   double          dTT;     // Normalized recording time interval
+  double          tauw;    // Normalized wall time constant
+  double          Sstart;  // Normaized type 2 RMP spike start time
+  double          Send;    // Normaized type 2 RMP spike end time
+  double          Rperiod; // Normaized type 3 RMP repeated ramp repeat time
+  double          Wamod;   // Normalized type 2 RMP spike amplitude modulation frequency
+  double          Wpmod;   // Normalized type 2 RMP spike phase velocity
   double          irmp;    // Peak current flowing in RMP coils (kA) at current time
   double          prmp;    // Relative phases of RMP coil currents (radians) at current time
   Array<double,1> Psik;    // Normalized magnitutudes of reconnected fluxes at resonant surfaces

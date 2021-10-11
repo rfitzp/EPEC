@@ -236,9 +236,6 @@ void Phase::Read_Data ()
       exit (1);
     }
   
-  for (int i = 0; i < NCTRL; i++)
-    printf ("T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
-
   // .............................
   // Output calculation parameters
   // .............................
@@ -246,8 +243,10 @@ void Phase::Read_Data ()
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
   printf ("FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
 	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
-  printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA = %10.3e\n",
-	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA);
+  printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
+	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
+  for (int i = 0; i < NCTRL; i++)
+    printf ("T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
   
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
@@ -258,8 +257,10 @@ void Phase::Read_Data ()
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
   fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
 	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
-  fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA = %10.3e\n",
-	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA);
+  fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
+	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
+  for (int i = 0; i < NCTRL; i++)
+    fprintf (namelist, "T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
   fclose (namelist);
 
   // .................
@@ -495,13 +496,13 @@ void Phase::Read_Data ()
   Tend    = TEND      *1.e-3/tau_A;
   Toff    = TOFF      *1.e-3/tau_A;
   tauw    = TAUW      *1.e-3/tau_A;
-  SSTART  = SSTART    *1.e-3/tau_A;
-  SEND    = SEND      *1.e-3/tau_A;
-  RPERIOD = RPERIOD   *1.e-3/tau_A;
+  Sstart  = SSTART    *1.e-3/tau_A;
+  Send    = SEND      *1.e-3/tau_A;
+  Rperiod = RPERIOD   *1.e-3/tau_A;
 
   // Normalize frequencies
-  WAMOD = WAMOD * tau_A/1.e-3;
-  WPMOD = WPMOD * tau_A/1.e-3;
+  Wamod = WAMOD * tau_A/1.e-3;
+  Wpmod = WPMOD * tau_A/1.e-3;
 
   mk.resize      (nres); ntor.resize     (nres); rk.resize       (nres); qk.resize       (nres); rhok.resize   (nres);
   a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres); tauxk.resize  (nres);
@@ -527,7 +528,7 @@ void Phase::Read_Data ()
 		&Factor5 (j), &Factor6  (j), &Factor7  (j), &Factor8  (j),
 		&Factor9 (j), &Factor10 (j), &Factor11 (j), &Factor12 (j), &tauxk (j),
 		&alphabe (j), &alphabi  (j), &alphac   (j), &alphap   (j), &rhothe (j),
-		&rhothi  (j), &etae     (j), &etai     (j), chipk     (j)) != 51)
+		&rhothi  (j), &etae     (j), &etai     (j), &chipk    (j)) != 51)
       {
 	printf ("PHASE::Error reading nFile (2)\n");
 	exit (1);
@@ -1884,10 +1885,10 @@ void Phase::CalcRMP (double t)
 	  irmp = BACK;
 	  prmp = RPHA; 
 	}
-      else if (t >= SSTART && t <= SEND)
+      else if (t >= Sstart && t <= Send)
 	{
-	  irmp = SAMP * cos ((t - SSTART) * WAMOD);
-	  prmp = RPHA + (t - SSTART) * WPMOD;
+	  irmp = SAMP * cos ((t - SSTART) * Wamod);
+	  prmp = RPHA + (t - SSTART) * Wpmod;
 	}
       else
 	{
@@ -1899,10 +1900,10 @@ void Phase::CalcRMP (double t)
   // Type 3 repeated rmap waveform
   if (TYPE == 3)
     {
-      int    i    = int (t /RPERIOD);
-      double toff = t = double (i) * RPERIOD;
+      int    i    = int (t /Rperiod);
+      double toff = t = double (i) * Rperiod;
 
-      irmp = RSTART + (REND - RSTART) * toff /RPERIOD;
+      irmp = RSTART + (REND - RSTART) * toff /Rperiod;
       prmp = RPHA;
     }
 }
