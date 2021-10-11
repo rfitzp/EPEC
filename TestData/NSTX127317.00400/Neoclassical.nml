@@ -1,0 +1,21 @@
+ &NEOCLASSICAL_CONTROL
+ EXB = 2       
+ IMPURITY = 1	   
+ NEUTRAL = 1       
+ NTYPE = 1       
+ NN = 1.e16   
+ LN = 1.3e-2  
+ YN = 1.5     
+ SVN = 4.e-14  
+ EN = 1.      
+ INTF = 0       
+ INTP = 0	   
+ INTC = 0       
+ CATS = 1
+ DMIN = 0.01
+ DMAX = 10.
+ TIME = 0.	   
+ TAUMIN = -0.8	   
+ COULOMB = 17.	   
+ NSMOOTH = 100     
+ / 

@@ -1,0 +1,24 @@
+ &WAVEFORM_CONTROL
+ TYPE = 1
+ NCTRL = 2         
+ /
+ &TYPE1_WAVEFORM
+ TCTRL = -5., 200.
+ ICTRL = 0.0, 1.0
+ PCTRL = 0.0, 0.0
+ /
+ &TYPE2_WAVEFORM
+ SSTART = 10
+ SEND = 15
+ WAMOD = 0.
+ WPMOD = 0.
+ SAMP = 1.
+ SPHA = 0.5
+ BACK = 0.1
+ / 
+ &TYPE3_WAVEFORM
+ RPERIOD = 1000.
+ RSTART = 0.
+ REND = 4.
+ RPHA = 0.5
+ / 

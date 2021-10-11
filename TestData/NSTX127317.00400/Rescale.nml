@@ -1,0 +1,9 @@
+&RESCALE_CONTROL
+        TYPE   = 7     ! Rescaling type (1=density, 2=temperature, 3=size, 4=chi, 5=pressure, 6=wE, 7=q)
+	SCALE  = 1.5   ! Rescaling factor (TYPE=1,2,3,4)
+	PSHIFT = 1.    ! Pressure profile shift factor (kPa) (TYPE=5)
+	WSHIFT = 1.    ! ExB frequency profile shift factor (krad/s) (TYPE=6)	
+	Q95    = 3.5   ! Target safety-factor at 95% flux surface (TYPE=7)
+	OPOINT = 1     ! Flag for finding new O-point
+	XPOINT = 1     ! Flag for finding new X-point
+&end
