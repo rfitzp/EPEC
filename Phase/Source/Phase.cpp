@@ -146,10 +146,9 @@ void Phase::Read_Data ()
   TYPE    = 1;
   SSTART  = 10.;
   SEND    = 15.;
-  WAMOD   = 0.;
-  WPMOD   = 0.;
   SAMP    = 1.;
   SPHA    = 0.;
+  SPVE    = 0.;
   BACK    = 0.1;
   RPERIOD = 1000.;
   RSTART  = 0.;
@@ -168,7 +167,7 @@ void Phase::Read_Data ()
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
 		&DT, &TSTART, &TEND, &TOFF, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
 		&CXD, &BOOT, &CURV, &POLZ, &TAUW, &TYPE, &NCTRL, TCTRL, ICTRL, PCTRL,
-		&SSTART, &SEND, &WAMOD, &WPMOD, &SAMP, &SPHA, &BACK, &RPERIOD, &RSTART, &REND, &RPHA);
+		&SSTART, &SEND, &SAMP, &SPHA, &SPVE, &BACK, &RPERIOD, &RSTART, &REND, &RPHA);
 
   TT.resize (NCTRL);
   
@@ -225,7 +224,7 @@ void Phase::Read_Data ()
       printf ("PHASE:: SSTART must be less than SEND\n");
       exit (1);
     }
-  if (TYPE < 0 || TYPE > 1)
+  if (TYPE < 0 || TYPE > 3)
     {
       printf ("PHASE:: Invalid TYPE value\n");
       exit (1);
@@ -243,8 +242,8 @@ void Phase::Read_Data ()
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
   printf ("FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
 	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
-  printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
-	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
+  printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e SAMP = %10.3e SPHA/pi = %10.3e SPVE = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
+	  TYPE, NCTRL, SSTART, SEND, SAMP, SPHA/M_PI, SPVE, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
   for (int i = 0; i < NCTRL; i++)
     printf ("T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
   
@@ -257,8 +256,8 @@ void Phase::Read_Data ()
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
   fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
 	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
-  fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e WAMOD = %10.3e WPMOD = %10.3e SAMP = %10.3e SPHA = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
-	  TYPE, NCTRL, SSTART, SEND, WAMOD, WPMOD, SAMP, SPHA, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
+  fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e SAMP = %10.3e SPHA/pi = %10.3e SPVE = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
+	   TYPE, NCTRL, SSTART, SEND, SAMP, SPHA/M_PI, SPVE, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
   for (int i = 0; i < NCTRL; i++)
     fprintf (namelist, "T = %10.3e  IRMP = %10.3e  PRMP/pi = %10.3e\n", TCTRL[i], ICTRL[i], PCTRL[i]/M_PI);
   fclose (namelist);
@@ -501,8 +500,7 @@ void Phase::Read_Data ()
   Rperiod = RPERIOD   *1.e-3/tau_A;
 
   // Normalize frequencies
-  Wamod = WAMOD * tau_A/1.e-3;
-  Wpmod = WPMOD * tau_A/1.e-3;
+  Spve = SPVE * tau_A/1.e-3;
 
   mk.resize      (nres); ntor.resize     (nres); rk.resize       (nres); qk.resize       (nres); rhok.resize   (nres);
   a.resize       (nres); Sk.resize       (nres); taumk.resize    (nres); tautk.resize    (nres); tauxk.resize  (nres);
@@ -1887,8 +1885,8 @@ void Phase::CalcRMP (double t)
 	}
       else if (t >= Sstart && t <= Send)
 	{
-	  irmp = SAMP * cos ((t - SSTART) * Wamod);
-	  prmp = RPHA + (t - SSTART) * Wpmod;
+	  irmp = SAMP;
+	  prmp = RPHA;
 	}
       else
 	{
@@ -1944,7 +1942,28 @@ void Phase::CalcCoil (double t, double& IU, double& IM, double& IL, double& PU, 
 	  PM = 0.;
 	  PL = 0.;
 	}
-    }
+
+      // Add type 2 phase velocity
+      if (TYPE == 2)
+	if (t >= Sstart && t <= Send)
+	  {
+	    PU += Spve * (t - Sstart);
+	    PM += Spve * (t - Sstart);
+	    PL += Spve * (t - Sstart);
+	    PU = atan2 (sin(PU), cos(PU));
+	    PM = atan2 (sin(PM), cos(PM));
+	    PL = atan2 (sin(PL), cos(PL));
+	  }
+	else if (t > Send)
+	  {
+	    PU += Spve * (Send - Sstart);
+	    PM += Spve * (Send - Sstart);
+	    PL += Spve * (Send - Sstart);
+	    PU = atan2 (sin(PU), cos(PU));
+	    PM = atan2 (sin(PM), cos(PM));
+	    PL = atan2 (sin(PL), cos(PL));
+	  }
+      }
   else if (COPT == 1)
     {
       if (MID == 3)

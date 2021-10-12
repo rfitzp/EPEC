@@ -1,3 +1,5 @@
+# Makefile for Program RESCALE
+
 F_OBJECT = Function_Defs_0.o Function_Defs_1.o Function_Defs_2.o gFileRescale.o
 F_SOURCE = Function_Defs_0.f90 Function_Defs_1.f90 Function_Defs_2.f90 gFileRescale.f90
 

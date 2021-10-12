@@ -112,7 +112,7 @@ extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int
 			      double* DT, double* TSTART, double* TEND, double* TOFF, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
 			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ, double* TAUW, 
 			      int* TYPE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL,
-			      double* SSTART, double* SEND, double* WAMOD, double* WPMOD, double* SAMP, double* SPHA, double* BACK,
+			      double* SSTART, double* SEND, double* SAMP, double* SPHA, double* SPVE, double* BACK,
 			      double* RPERIOD, double* RSTART, double* REND, double* RPHA);
 
 // ############
@@ -184,8 +184,9 @@ class Phase
   double  SEND;    // Time of end of RMP spike (ms)
   double  WAMOD;   // Amplitude modulation frequency of RMP coil currents duing spike (krad/s)
   double  WPMOD;   // Realtive phase velocity of RMP coil currents during spike (krad/s)
-  double  SAMP;    // RMP coils currents at start of spike (kA)
+  double  SAMP;    // RMP coils current amplitudes at start of spike (kA)
   double  SPHA;    // Relative phase of RMP coil currents at start of spike (units of PI)
+  double  SPVE;    // Phase velocity of RMP coil currents during spike (krad/s)
   double  BACK;    // Background RMP coil currents (kA)
 
   double  RPERIOD; // Repeated RMP ramp repetition period (ms) 
@@ -332,9 +333,8 @@ class Phase
   double          tauw;    // Normalized wall time constant
   double          Sstart;  // Normaized type 2 RMP spike start time
   double          Send;    // Normaized type 2 RMP spike end time
+  double          Spve;    // Normalized type 2 RMP phase velocity
   double          Rperiod; // Normaized type 3 RMP repeated ramp repeat time
-  double          Wamod;   // Normalized type 2 RMP spike amplitude modulation frequency
-  double          Wpmod;   // Normalized type 2 RMP spike phase velocity
   double          irmp;    // Peak current flowing in RMP coils (kA) at current time
   double          prmp;    // Relative phases of RMP coil currents (radians) at current time
   Array<double,1> Psik;    // Normalized magnitutudes of reconnected fluxes at resonant surfaces

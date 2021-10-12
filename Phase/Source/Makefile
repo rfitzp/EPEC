@@ -1,3 +1,5 @@
+# Makefile for Porgram PHASE
+
 F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90
 

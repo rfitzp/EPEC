@@ -1,3 +1,5 @@
+# Makefile for Program NEOCLASSICAL
+
 F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90
 

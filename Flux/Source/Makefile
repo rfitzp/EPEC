@@ -1,3 +1,5 @@
+# Makefile for Program FLUX
+
 F_OBJECT = NameListRead.o gFileRead.o gFileInterpolate.o
 F_SOURCE = NameListRead.f90 gFileRead.f90 gFileInterpolate.f90
 

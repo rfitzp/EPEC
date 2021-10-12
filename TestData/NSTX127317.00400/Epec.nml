@@ -1,6 +1,9 @@
  &EPEC_CONTROL
  TSTART = 2000
  TEND = 4500
+ PSTART = -1
+ PEND = -1
+ MPOL = -1
  DTR = 50
  DTF = 10
  DTP = 1
