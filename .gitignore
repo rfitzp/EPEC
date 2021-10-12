@@ -11,7 +11,7 @@
 *.gz
 #*
 *.nc
-.DS_Store
+**/.DS_Store
 *.txt
 *.fig
 *.fig.bak

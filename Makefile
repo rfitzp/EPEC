@@ -33,7 +33,7 @@ test1:
 	(cd Neoclassical; ./neoclassical)
 	(cp Neoclassical/Outputs/nFile Phase/Inputs/nFile)	
 	(cd Phase; ./phase)
-	(cd TestData/DIIID145380.3400; ./ChecksumTest
+	(cd TestData/DIIID145380.3400; ./ChecksumTest)
 test2:
 	(cp TestData/KSTAR18594.6450/Flux.nml Flux/Inputs/Flux.nml)
 	(cp TestData/KSTAR18594.6450/gFile Flux/Inputs/gFile)
