@@ -42,6 +42,7 @@
 	  
 ### /Outputs
 
+- /Stage1: Directory containing Stage1 equilibrium data
 - fFile: File containing data for NEOCLASSICAL and PHASE
 - /fFiles: Directory containing fFiles associated with interpolated gFiles
  - Index: List of fFile names and experimental times
