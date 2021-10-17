@@ -18,6 +18,12 @@ TSTART
   Simulation start time (ms)
 TEND
   Simulation end time (ms)
+PSTART
+  Start time for PHASE/EPEC plots (ignored if negative) (ms)
+PEND
+  End time for PHASE/EPEC plots (ignored if negative) (ms)
+MPOL
+  PHASE/EPEC plots only show data for mode with poloidal mode number MPOL (ignored if negative)   
 DTR
   Time interval between successive RESCALE calculations (ms)
 DTF

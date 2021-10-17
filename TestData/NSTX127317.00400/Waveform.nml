@@ -21,4 +21,12 @@
  REND = 4.
  RPHA = 0.5
  /
- 
+ &NTM_TRIGGER
+ MPOL   = 3
+ AMIN   = 0.01
+ AMAX   = 0.2
+ DA     = 5.e-3
+ PSTART = 0.1
+ PEND   = 20.
+ DP     = 0.01
+ /
