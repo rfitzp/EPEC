@@ -29,4 +29,7 @@
  PSTART = 0.1
  PEND   = 20.
  DP     = 0.01
+ FSTART = -10.
+ FEND   = 10.
+ DF     = 0.01
  /

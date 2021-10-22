@@ -1895,11 +1895,11 @@ void Phase::CalcRMP (double t)
 	}
     }
 
-  // Type 3 repeated rmap waveform
+  // Type 3 repeated ramp waveform
   if (TYPE == 3)
     {
       int    i    = int (t /Rperiod);
-      double toff = t = double (i) * Rperiod;
+      double toff = double (i) * Rperiod;
 
       irmp = RSTART + (REND - RSTART) * toff /Rperiod;
       prmp = RPHA;
@@ -1947,18 +1947,18 @@ void Phase::CalcCoil (double t, double& IU, double& IM, double& IL, double& PU, 
       if (TYPE == 2)
 	if (t >= Sstart && t <= Send)
 	  {
-	    PU += Spve * (t - Sstart);
-	    PM += Spve * (t - Sstart);
-	    PL += Spve * (t - Sstart);
+	    PU -= Spve * (t - Sstart);
+	    PM -= Spve * (t - Sstart);
+	    PL -= Spve * (t - Sstart);
 	    PU = atan2 (sin(PU), cos(PU));
 	    PM = atan2 (sin(PM), cos(PM));
 	    PL = atan2 (sin(PL), cos(PL));
 	  }
 	else if (t > Send)
 	  {
-	    PU += Spve * (Send - Sstart);
-	    PM += Spve * (Send - Sstart);
-	    PL += Spve * (Send - Sstart);
+	    PU -= Spve * (Send - Sstart);
+	    PM -= Spve * (Send - Sstart);
+	    PL -= Spve * (Send - Sstart);
 	    PU = atan2 (sin(PU), cos(PU));
 	    PM = atan2 (sin(PM), cos(PM));
 	    PL = atan2 (sin(PL), cos(PL));

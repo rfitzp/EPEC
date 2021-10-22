@@ -1,0 +1,970 @@
+\documentclass[notitlepage,12pt]{article}
+\usepackage {amsmath}
+\pdfoutput = 1 
+\usepackage {graphicx}
+\usepackage{fullpage}
+\allowdisplaybreaks
+\newcommand {\bpsi} {\mbox{\boldmath$\psi$}}
+\newcommand {\brho} {\mbox{\boldmath$\rho$}}
+\newcommand{\bmu}{\mbox{\boldmath$\mu$}}
+\newcommand{\bzeta}{\mbox{\boldmath$\zeta$}}
+\newcommand{\bpi}{\mbox{\boldmath$\pi$}}
+\newcommand{\bsigma}{\mbox{\boldmath$\sigma$}}
+\newcommand{\bomega}{\mbox{\boldmath$\omega$}}
+
+\begin{document}
+\title{\bf Tearing Modes in Tokamak Plasmas}
+\author{R.~Fitzpatrick\,\footnote{rfitzp@utexas.edu}\\
+Institute for Fusion Studies,\\  Department of Physics,\\  University of Texas at Austin,\\  Austin TX 78712, USA}
+\maketitle
+
+\section{Fluid Theory}
+\subsection{Fundamental Quantities}
+Consider an idealized tokamak plasma consisting of an equal number of electrons, with
+mass $m_e$ and charge $-e$ (here, $e$ denotes the  magnitude of the electron
+charge), and ions, with  mass $m_i$ and charge $+e$. We shall employ 
+the symbol
+\begin{equation}
+T_s = \frac{1}{3} \,m_s\, \langle v_s^{2}\rangle
+\end{equation}
+to denote a {\em kinetic temperature}\/   measured in units of energy.
+Here, $v$ is a particle speed, and the angular brackets denote an
+ensemble average (Reif 1965). The kinetic temperature of species $s$ is a measure of 
+the mean kinetic energy of particles of
+that species. (Here, $s$ represents either $e$ for electrons, or $i$ for ions.) In tokamak plasma physics, kinetic temperature
+is invariably measured in {\em electron-volts}\/ \index{electron-volt} (1 joule is equivalent to
+$6.24\times 10^{18}$\,eV). 
+
+Quasi-neutrality demands that
+\begin{equation}
+n_i \simeq n_e, 
+\end{equation}
+where $n_s$ is the {\em particle number density} (that is, the number of particles 
+per cubic meter) of species $s$ (Fitzpatrick 2015). 
+
+We can
+estimate typical particle speeds in terms of the so-called {\em thermal speed}, 
+\begin{equation}\label{e1.3}
+v_{t\,s} = \left(\frac{2\,T_s}{m_s}\right)^{1/2}.
+\end{equation}
+
+In a tokamak plasma,  the ambient magnetic field, 
+${\bf B}$,  is strong enough to significantly alter charged particle
+trajectories. In particular,
+magnetized plasmas are highly  anisotropic, responding differently to
+forces that are parallel and perpendicular to the direction
+of ${\bf B}$. As is well known, charged particles respond to the Lorentz force
+by freely streaming in the direction of ${\bf B}$, while executing
+circular  {\em gyro-orbits} in the plane perpendicular to ${\bf B}$ (Fitzpatrick 2008). 
+The typical   {\em gyroradius}\/ of a charged particle 
+gyrating in a
+magnetic field is given by
+\begin{equation}
+\rho_s = \frac{v_{t\,s}}{{\mit\Omega}_s},
+\end{equation}
+where
+\begin{equation}
+{\mit\Omega}_s = \frac{e\,B}{m_s}
+\end{equation}
+is the  {\em gyrofrequency}\/ associated with the
+gyration. 
+
+The electron-ion and ion-ion {\em collision times}\/ are
+written
+\begin{equation}\label{e3.74}
+\tau_e = \frac{6\sqrt{2}\pi^{3/2}\,\epsilon_0^{2}\,\sqrt{m_e}\,\,T_e^{3/2}}
+{\ln{\mit\Lambda}_c\, e^4\, n_e},
+\end{equation}
+and\index{collision!time!ion-ion}
+\begin{equation}\label{e3.75}
+\tau_i = \frac{ 12\pi^{3/2}\,\epsilon_0^{2}\,\sqrt{m_i}\,\,T_i^{3/2}}
+{\ln{\mit\Lambda}_c\, e^4\, n_e},
+\end{equation}
+respectively (Fitzpatrick 2015). 
+Here, $\ln{\mit\Lambda}_c\simeq 15$ is 
+the  {\em Coulomb logarithm}\/ (Richardson 2019). Note that $\tau_e$ is the typical time required for the cumulative effect of electron-ion collisions to
+deviate the path of an electron through $90^\circ$. Likewise, $\tau_i$ is the typical time required for the cumulative effect of ion-ion collisions to
+deviate the path of an ion through $90^\circ$. 
+
+\subsection{Braginskii Equations}
+The electron and ion fluid equations in a collisional plasma
+take the form:
+\begin{align}\label{e3.79a}
+\frac{dn}{dt} + n\,\nabla\cdot{\bf V}_e &= 0,\\[0.5ex]
+m_e \,n\,\frac{d {\bf V}_e}{dt} + \nabla p_e+ \nabla\cdot \bpi_e + e\, n\,
+({\bf E} + {\bf V}_e\times {\bf B})& = {\bf F},\\[0.5ex]
+\frac{3}{2}\frac{d p_e}{dt} + \frac{5}{2}\,p_e\,\nabla\cdot{\bf V}_e
++ \bpi_e:\nabla{\bf V}_e+ \nabla\cdot{\bf q}_e &= w_e,\label{e3.79c}
+\end{align}
+and
+\begin{align}\label{e3.80a}
+\frac{dn}{dt} + n\,\nabla\cdot{\bf V}_i &= 0,\\[0.5ex]
+m_i \,n\,\frac{d {\bf V}_i}{dt} + \nabla p_i + \nabla\cdot \bpi_i - e\, n\,
+({\bf E} + {\bf V}_i\times {\bf B})& =- {\bf F},\\[0.5ex]
+\frac{3}{2}\frac{d p_i}{dt} + \frac{5}{2}\,p_i\,\nabla\cdot{\bf V}_i
++ \bpi_i:\nabla{\bf V}_i+ \nabla\cdot{\bf q}_i &= w_i,\label{e3.80c}
+\end{align}
+respectively. 
+Equations (\ref{e3.79a})--(\ref{e3.79c}) and (\ref{e3.80a})--(\ref{e3.80c})  are called the {\em Braginskii equations}, because they were first obtained
+in a celebrated article by S.I.~Braginskii (Braginskii 1965). Here, ${\bf V}_s$ is the species-$s$ flow velocity, $p_s=n\,T_s$ is the 
+species-$s$ scalar
+pressure, $\bpi_s$ is the species-$s$ viscosity tensor, ${\bf F}$ is the collisional friction force density, ${\bf q}_s$ is the species-$s$ heat flux density, $w_s$ is the species-$s$ collisional heating rate density, and ${\bf E}$ is the ambient electric field strength. Moreover, $d/dt\equiv \partial/\partial t + {\bf V}_e\cdot\nabla$ in the electron fluid equations, (\ref{e3.79a})--(\ref{e3.79c}), whereas  $d/dt\equiv \partial/\partial t + {\bf V}_i\cdot\nabla$ in the ion fluid equations,  (\ref{e3.80a})--(\ref{e3.80c}). 
+
+A tokamak plasma is highly magnetized. In other words, 
+\begin{equation}
+{\mit\Omega}_i\,\tau_i, \,\,\,{\mit\Omega}_e\, \tau_e \gg 1,
+\end{equation}
+ which implies that the electron and ion gyroradii are much  smaller than the
+corresponding mean-free-paths between $90^\circ$ collisional scattering events. In this limit, a standard two-Laguerre-polynomial
+Chapman-Enskog closure scheme (Chapman \& Cowling 1953) yields
+\begin{align}\label{e3.91a}
+{\bf F}&= n\,e\left(\frac{{\bf j}_\parallel}{\sigma_\parallel}
++\frac{{\bf j}_\perp}{\sigma_\perp}\right) -0.71\,n\,\nabla_\parallel T_e
+-\frac{3\,n}{2\,{\mit\Omega}_e\,\tau_e}\,{\bf b}\times\nabla_\perp T_e,
+\\[0.5ex]
+w_i &= \frac{3\,m_e}{m_i} \frac{n\,(T_e-T_i)}{\tau_e},\\[0.5ex]
+w_e &= -w_i + \frac{ {\bf j}\cdot {\bf F} }{n \,e}.
+\end{align}
+Here, ${\bf b}={\bf B}/B$ is a unit vector parallel to the magnetic field, and ${\bf j}= n\,e\,({\bf V}_i-{\bf V}_e)$ is the net plasma current density. 
+Moreover, the {\em parallel electrical conductivity}, $\sigma_\parallel$,  is given by
+\begin{equation}\label{e3.83}
+\sigma_\parallel = 1.96\,\frac{n \,e^2\,\tau_e}{m_e}.
+\end{equation} 
+whereas the {\em perpendicular electrical conductivity}, $\sigma_\perp$,  takes the form
+\begin{equation}\label{e3.92}
+\sigma_\perp = 0.51\,\sigma_\parallel = \frac{n\,e^2\,\tau_e}{m_e}.
+\end{equation}
+Note that $\nabla_\parallel(\cdots) \equiv [{\bf b}\cdot\nabla
+(\cdots)]\,{\bf b}$ denotes a
+gradient parallel to the magnetic field, whereas $\nabla_\perp \equiv
+ \nabla-\nabla_\parallel$ denotes a gradient perpendicular to the magnetic
+field. Likewise, ${\bf j}_\parallel \equiv ({\bf b}\cdot{\bf j})\,{\bf b}$
+represents the component of the plasma current flowing parallel to the
+magnetic field, whereas ${\bf j}_\perp \equiv {\bf j} - {\bf j}_\parallel$
+represents the perpendicular component of the plasma current.
+
+In a highly magnetized plasma, the electron and ion heat flux densities are written 
+\begin{align}
+{\bf q}_e &= -\kappa_\parallel^e\,\nabla_\parallel T_e -\kappa_\perp^e\,
+\nabla_\perp T_e
+-\kappa_\times^e\,{\bf b}\times\nabla_\perp T_e- 0.71\,\frac{T_e}{e}\,{\bf j}_\parallel-
+\frac{3\,T_e}{2\,{\mit\Omega}_e\,\tau_e\,e}\,{\bf b}\times{\bf j}_\perp,\label{e3.94a}\\[0.5ex]
+{\bf q}_i &= -\kappa_\parallel^i\,\nabla_\parallel T_i -\kappa_\perp^i\,
+\nabla_\perp T_i
++\kappa_\times^i\,{\bf b}\times\nabla_\perp T_i,\label{e3.94b}
+\end{align}
+respectively. Here, the {\em parallel thermal conductivities}, which control the diffusion of heat parallel to magnetic field-lines, are 
+given by
+\begin{align}\label{e3.87a}
+\kappa_\parallel^e &= 3.2\,\,\frac{n\,\tau_e\,T_e}{m_e},\\[0.5ex]
+\kappa_\parallel^i &= 3.9\,\,\frac{n\,\tau_i\,T_i}{m_i},\label{e3.87b}
+\end{align} 
+whereas the {\em perpendicular thermal conductivities}, which control the diffusion of heat perpendicular to magnetic flux-surfaces, take the form
+\begin{align}
+\kappa_\perp^e &= 4.7\,\frac{n\,T_e}{m_e\,{\mit\Omega}_e^{\,2}\,\tau_e},\\[0.5ex]
+\kappa_\perp^i &= 2\, \frac{n\,T_i}{m_i\,{\mit\Omega}_i^{\,2}\,\tau_i}.
+\end{align}
+Finally, the {\em cross thermal conductivities}, which control the flow of heat within magnetic flux-surfaces,  are written
+\begin{align}
+\kappa_\times^e &= \frac{5\,n\,T_e}{2\,m_e\,{\mit\Omega}_e},\\[0.5ex]
+\kappa_\times^i &=\frac{5\,n\,T_i}{2\,m_i\,{\mit\Omega}_i}.
+\end{align}
+
+In order to describe the viscosity tensor in a magnetized plasma, it is
+helpful to define the {\em rate-of-strain tensor} \index{rate-of-strain tensor} 
+\begin{equation}
+W_{\alpha\beta} = \frac{\partial V_\alpha}{\partial r_\beta}
++ \frac{\partial V_\beta}{\partial r_\alpha} - \frac{2}{3} \,\nabla\cdot{\bf V}\,
+\delta_{\alpha\beta}.
+\end{equation}
+Obviously, there is a separate rate-of-strain tensor for the electron and ion
+fluids. It is easily demonstrated that this tensor is zero if the plasma
+translates, or rotates as a rigid body, or if it undergoes isotropic
+compression. Thus, the rate-of-strain tensor measures the  deformation  of
+plasma volume elements. 
+
+In a highly magnetized plasma, the viscosity tensor is best described as the
+sum of  five component tensors,
+\begin{equation}
+\bpi  = \sum_{n=0,4} \bpi_n,
+\end{equation}
+where 
+\begin{equation}
+\bpi_0 = - 3\,\eta_0\,\left({\bf b}{\bf b} - \frac{1}{3}\,{\bf I}\right)
+\left({\bf b}{\bf b} - \frac{1}{3}\,{\bf I}\right): \nabla {\bf V},
+\end{equation}
+with
+\begin{equation}
+\bpi_1 =- \eta_1\left[{\bf I}_\perp \cdot{\bf W}\cdot{\bf I}_\perp
++ \frac{1}{2}\,{\bf I}_\perp\,({\bf b}\cdot{\bf W}\cdot{\bf b})\right],
+\end{equation}
+and
+\begin{equation}
+\bpi_2 = -4\,\eta_1\,\left({\bf I}_\perp\cdot
+{\bf W}\cdot{\bf b}{\bf b}
++ {\bf b}{\bf b}\cdot{\bf W} \cdot{\bf I}_\perp\right).
+\end{equation}
+plus
+\begin{equation}
+\bpi_3 = \frac{\eta_3}{2}\,\left( {\bf b}\times 
+{\bf W}\cdot{\bf I}_\perp - {\bf I}_\perp\cdot{\bf W}\times{\bf b}
+\right),
+\end{equation}
+and
+\begin{equation}
+\bpi_4 = 2\,\eta_3\,\left({\bf b} \times{\bf W} \cdot {\bf b}{\bf b}
+- {\bf b}{\bf b} \cdot{\bf W} \times{\bf b}\right).
+\end{equation}
+Here, ${\bf I}$ is the identity tensor, and 
+${\bf I}_\perp = {\bf I} - {\bf b}{\bf b}$. The previous 
+expressions are valid for both electrons and ions. 
+
+The tensor $\bpi_0$ describes what is known as {\em parallel viscosity}.
+This is a viscosity that controls the variation along magnetic field-lines of the
+velocity component parallel to  field-lines.
+ The parallel
+viscosity coefficients are given by 
+\begin{align}\label{e3.89a}
+\eta_0^e &= 0.73\,n\,\tau_e\,T_e,\\[0.5ex]
+\eta_0^i &= 0.96\,n\,\tau_i\,T_i,\label{e3.89b}
+\end{align}
+
+The tensors $\bpi_1$ and $\bpi_2$ describe what is known
+as {\em perpendicular viscosity}. This is a viscosity
+that controls the variation perpendicular to magnetic field-lines
+of the velocity components perpendicular to field-lines. The perpendicular
+viscosity coefficients are given by
+\begin{align}
+\eta_1^e &= 0.51\, \frac{n\,T_e}{{\mit\Omega}_e^{\,2}\,\tau_e},\\[0.5ex]
+\eta_1^i &= \frac{3\, n\,T_i}{10\,{\mit\Omega}_i^{\,2}\,\tau_i}.
+\end{align}
+
+Finally, the tensors $\bpi_3$ and $\bpi_4$ describe what is known
+as {\em gyroviscosity}. This is not really viscosity at all, because the
+associated viscous stresses are always perpendicular to the velocity, implying that
+there is no dissipation ({\rm i.e.}, viscous heating) associated with
+this effect. The gyroviscosity coefficients are given by 
+\begin{align}
+\eta_3^e &= -\frac{n\,T_e}{2\,{\mit\Omega}_e} ,\\[0.5ex]
+\eta_3^i &= \frac{n\,T_i}{2\,{\mit\Omega}_i}.
+\end{align}
+
+\subsection{Normalization of Braginskii Equations}\label{s3.9}
+As we have just seen, the Braginskii equations contain terms that describe a
+very wide range of different physical phenomena. For this reason, they are
+extremely complicated. Fortunately, however, it is not generally 
+necessary to retain all of
+the terms in these equations when investigating tearing mode dynamics in tokamak plasmas. In this section, we shall attempt to construct a systematic
+normalization scheme for the Braginskii equations that will, hopefully, enable us
+to determine which terms to keep, and which to discard, when investigating
+tearing mode dynamics. 
+
+ It is convenient to split the friction force
+${\bf F}$ into a component ${\bf F}_U$ corresponding to resistivity, and a
+component ${\bf F}_T$ corresponding to the thermal force. Thus,
+\begin{equation}
+{\bf F} = {\bf F}_U+{\bf F}_T,
+\end{equation}
+where
+\begin{align}
+{\bf F}_U&= n\,e\left(\frac{{\bf j}_\parallel}{\sigma_\parallel}
++\frac{{\bf j}_\perp}{\sigma_\perp}\right), \\[0.5ex]
+{\bf F}_T &= - 0.71\,n\,\nabla_\parallel T_e
+-\frac{3\,n}{2\,{\mit\Omega}_e\,\tau_e}\,{\bf b}\times\nabla_\perp T_e.
+\end{align}
+Likewise, the electron collisional energy gain term $w_e$ is split
+into a component $-w_i$ corresponding to the energy lost to the ions (in the
+ion rest frame), a component $w_U$ corresponding to work done by the friction
+force ${\bf F}_U$, and a component $w_T$ corresponding to work done by the
+thermal force ${\bf F}_T$. Thus,
+\begin{equation}
+w_e = -w_i + w_U + w_T,
+\end{equation}
+where
+\begin{align}
+w_U &= \frac{{\bf j}\cdot{\bf F}_U}{n\,e},\\[0.5ex]
+w_T&= \frac{{\bf j}\cdot{\bf F}_T}{n\,e}.
+\end{align}
+Finally, it is helpful to split the electron heat flux density ${\bf q}_e$ into
+a diffusive component ${\bf q}_{Te}$ and a convective component ${\bf q}_{Ue}$. 
+Thus,
+\begin{equation}
+{\bf q}_e = {\bf q}_{Te} + {\bf q}_{Ue},
+\end{equation}
+where
+\begin{align}
+{\bf q}_{Te} &=-\kappa_\parallel^e\,\nabla_\parallel T_e -\kappa_\perp^e\,
+\nabla_\perp T_e
+-\kappa_\times^e\,{\bf b}\times\nabla_\perp T_e,\\[0.5ex]
+{\bf q}_{Ue}&=  0.71\,\frac{T_e}{e}\,{\bf j}_\parallel-
+\frac{3\,T_e}{2\,{\mit\Omega}_e\,\tau_e\,e}\,{\bf b}\times{\bf j}_\perp.
+\end{align}
+
+Let us, first of all, consider the electron fluid equations, which can
+be written:
+\begin{align}
+\frac{dn}{dt} + n\,\nabla\cdot{\bf V}_e &= 0,\\[0.5ex]
+m_e\, n\,\frac{d {\bf V}_e}{dt} + \nabla p_e+ \nabla\cdot \bpi_e + e\, n\,
+({\bf E} + {\bf V}_e\times {\bf B})& = {\bf F}_U +{\bf F}_T,\\[0.5ex]
+\frac{3}{2}\frac{d p_e}{dt} + \frac{5}{2}\,p_e\,\nabla\cdot{\bf V}_e
++ \bpi_e:\nabla{\bf V}_e+ \nabla\cdot{\bf q}_{Te} 
++ \nabla\cdot{\bf q}_{Ue} &= -w_i+w_U + w_T.
+\end{align}
+Let $\bar{n}$, $\bar{v}_e$, $\bar{\tau}_e$, $\bar{l}_e=\bar{v}_e\,\bar{\tau}_e$, $\bar{B}$,
+and $\bar{\rho}_e =\bar{ v}_e/(e\bar{B}/m_e)$,  be typical values
+of the particle density, the electron thermal velocity, the electron collision time, the electron
+mean-free-path between collisions,  the magnetic field-strength, and the
+electron gyroradius,  respectively. 
+Suppose that the typical spatial variation lengthscale of fluid variables is $L$. Let
+ \begin{align}
+\delta_e &=\frac{\bar{\rho}_e}{L},\\[0.5ex]
+\zeta_e &= \frac{\bar{\rho}_e}{\bar{l}_e},\\[0.5ex]
+\mu &= \sqrt{\frac{m_e}{m_i}}.
+\end{align}
+All three of these parameters are assumed to be  small
+compared to unity. Finally, the typical electron flow velocity is assumed to be of order $\delta_e\,\bar{v}_e$. This corresponds
+to the so-called {\em drift ordering}\/ in which the flow velocity is comparable to the curvature and grad-B particle
+drift velocities (Fitzpatrick 2015). The drift ordering is appropriate to tearing modes in tokamak plasmas, which are comparatively
+slowly growing instabilities. 
+
+ We
+define the following normalized quantities: {\small
+\begin{align}
+\hat{n} &= \frac{n}{\bar{n}},&
+\hat{v}_e &= \frac{v_e}{\bar{v}_e}, &
+\hat{\bf r} &= \frac{{\bf r}}{ L},\nonumber\\[0.5ex]
+\widehat{\nabla} &= L\,\nabla, &
+\hat{t} &= \frac{\delta_e\,\bar{v}_e\,t}{L}, &
+\widehat{\bf V}_e &= \frac{{\bf V}_e}{\delta_e\,\bar{v}_e}, \nonumber\\[0.5ex]
+\widehat{\bf B}&= \frac{{\bf B}}{\bar{B}}, &
+\widehat{\bf E}& = \frac{{\bf E}}{ \delta_e\,\bar{v}_e\,\bar{B}},&
+\widehat{\bf j}& =\frac{{\bf j} }{n\,e\,\delta_e\,\bar{v}_e}, \nonumber\\[0.5ex]
+\hat{p}_e &= \frac{p_e}{m_e\,\bar{n}\,\bar{v}_e^{2}}, &
+\widehat{\bpi}_e&= \frac{\bpi_e}{\delta_e^{\,2}\,\zeta_e^{-1}\,m_e\,\bar{n}\,\bar{v}_e^{2}}, &
+\widehat{\bf q}_{Te}& = \frac{{\bf q}_{Te} }{ \delta_e\,\zeta_e^{-1}\,m_e\,\bar{n}\,\bar{v}_e^{3}}, \nonumber\\[0.5ex]
+\widehat{\bf q}_{Ue} &= \frac{{\bf q}_{Ue} }{\delta_e\,m_e\,\bar{n}\,\bar{v}_e^{3}}, &
+\widehat{\bf F}_U &= \frac{{\bf F}_U}{\zeta_e\,m_e\,\bar{n}\,\bar{v}_e^{2}/L}, &
+\widehat{\bf F}_T &= \frac{{\bf F}_T}{m_e\,\bar{n}\,\bar{v}_e^{2}/L},\nonumber\\[0.5ex]
+\widehat{w}_i &= \frac{w_i}{\delta_e^{-1}\,\zeta_e\,\mu^2\, m_e\,\bar{n}\,\bar{v}_e^{3}/L},&
+\widehat{w}_U &= \frac{w_U}{\delta_e\,\zeta_e\, m_e\,\bar{n}\,\bar{v}_e^{3}/L},&
+\widehat{w}_T &= \frac{w_T}{\delta_e\, m_e\,\bar{n}\,\bar{v}_e^{3}/L}.\nonumber
+\end{align}}
+
+The normalization procedure is designed to make all hatted quantities ${\cal O}(1)$.
+The normalization of the electric field is chosen 
+ such that the ${\bf E}\times{\bf B}$
+velocity is of  similar magnitude to the electron fluid velocity. Note that the parallel viscosity
+makes an ${\cal O}(1)$ contribution to $\widehat{\bpi}_e$, whereas the gyroviscosity
+makes an ${\cal O}(\zeta_e)$ contribution, and the perpendicular viscosity only 
+makes an ${\cal O}(\zeta_e^{2})$ contribution. Likewise, the parallel thermal
+conductivity 
+makes an ${\cal O}(1)$ contribution to $\widehat{\bf q}_{Te}$, whereas the cross
+conductivity 
+makes an ${\cal O}(\zeta_e)$ contribution, and the perpendicular conductivity only 
+makes an ${\cal O}(\zeta_e^{2})$ contribution. Similarly, the parallel components
+of ${\bf F}_T$ and ${\bf q}_{Ue}$ are ${\cal O}(1)$, whereas the perpendicular
+components are ${\cal O}(\zeta_e)$. 
+
+The normalized electron fluid equations take the form:
+\begin{align}
+\frac{d\hat{n}}{d\hat{t}} + \hat{n}\,\widehat{\nabla}\cdot\widehat{\bf V}_e &=0,\label{e3.113a}\\[0.5ex]
+\hat{n}\,\frac{d\widehat{\bf V}_e}{d\hat{t}} +
+\delta_e^{-2}\,\widehat{\nabla}\hat{p}_e +\zeta_e^{-1}\,\widehat{\nabla}
+\cdot\widehat{\bpi}_e  
++ \delta_e^{-2}\,\hat{n}\,(\widehat{\bf E} + \widehat{\bf V}_e
+\times\widehat{\bf B}) &= \delta_e^{-2}\,\zeta_e\,\widehat{\bf F}_U +\delta_e^{-2}\,\widehat{\bf F}_T, \\[0.5ex]
+\frac{3}{2}\frac{d\hat{p}_e}{d\hat{t}} + \frac{5}{2}\,
+\hat{p}_e\,\widehat{\nabla}\cdot\widehat{\bf V}_e + \delta_e^{2}\,
+\zeta_e^{-1}\,\widehat{\bpi}_e : \widehat{\nabla}\cdot\widehat{\bf V}_e&\nonumber\label{e3.113c}\\[0.5ex] 
++\zeta_e^{-1} \,\widehat{\nabla}\cdot\widehat{\bf q}_{Te}
+ +\widehat{\nabla}\cdot\widehat{\bf q}_{Ue} 
+&= -\delta_e^{-2}\,\zeta_e\,\mu^2\,\widehat{w}_i + \zeta_e\,
+\widehat{w}_U +\widehat{w}_T.
+\end{align}
+The only large or small (compared to unity) quantities in these equations are the
+parameters $\delta_e$, $\zeta_e$, and $\mu$. 
+Here, $d/d\hat{t}\equiv\partial /\partial\hat{t} +
+ \widehat{\bf V}_e\cdot\widehat{\nabla}$. It is assumed that $T_e\sim T_i$.
+
+Let us now consider the ion fluid equations, which can be written:
+\begin{align}
+\frac{dn}{dt} + n\,\nabla\cdot{\bf V}_i &= 0,\\[0.5ex]
+m_i\, n\,\frac{d {\bf V}_i}{dt} + \nabla p_i + \nabla\cdot \bpi_i - e\, n\,
+({\bf E} + {\bf V}_i\times {\bf B})& =- {\bf F}_U -{\bf F}_T,\\[0.5ex]
+\frac{3}{2}\frac{d p_i}{dt} + \frac{5}{2}\,p_i\,\nabla \cdot {\bf V}_i
++ \bpi_i:\nabla{\bf V}_i+ \nabla\cdot{\bf q}_i & =w_i.
+\end{align}
+It is convenient to adopt a normalization scheme for the ion equations
+which is similar to, but independent of, that employed to normalize the
+electron equations. Let  $\bar{n}$, $\bar{v}_i$, $\bar{l}_i$, $\bar{B}$,
+and $\bar{\rho}_i =\bar{ v}_i/(e\bar{B}/m_i)$,  be typical values
+of the particle density, the ion  thermal velocity, the ion
+mean-free-path between collisions,  the magnetic field-strength, and the
+ion gyroradius,  respectively. 
+Suppose that 
+the typical spatial variation lengthscale of fluid quantities is $L$. Let
+ \begin{align}
+\delta_i &= \frac{\bar{\rho}_i}{L},\\[0.5ex]
+\zeta_i &= \frac{\bar{\rho}_i}{\bar{l}_i},\\[0.5ex]
+\mu &= \sqrt{\frac{m_e}{m_i}}.
+\end{align}
+All three of these parameters are assumed to be  small 
+compared to unity.  As before, we adopt the drift ordering in which the typical ion flow velocity is assumed to be of order $\delta_i\,\bar{v}_i$. 
+
+We
+define the following normalized quantities: 
+\begin{align}
+\hat{n} &=\frac{ n}{\bar{n}},&
+\hat{v}_i &= \frac{v_i}{\bar{v}_i},& 
+\hat{\bf r} &= \frac{{\bf r}}{ L}, \nonumber\\[0.5ex]
+\widehat{\nabla} &= L\,\nabla, &
+\hat{t} &= \frac{\delta_i\,\bar{v}_i\,t}{L}, &
+\widehat{\bf V}_i &= \frac{{\bf V}_i}{\delta_i\,\bar{v}_i}, \nonumber\\[0.5ex]
+\widehat{\bf B}&= \frac{{\bf B}}{\bar{B}}, &
+\widehat{\bf E} &= \frac{{\bf E}}{ \delta_i\,\bar{v}_i\,\bar{B}},&
+\widehat{\bf j} &=\frac{{\bf j} }{ n\,e\,\delta_i\,\bar{v}_i},\nonumber\\[0.5ex]
+ \hat{p}_i &=\frac{ p_i}{m_i\,\bar{n}\,\bar{v}_i^{2}}, &
+ \widehat{\bpi}_i&= \frac{\bpi_i}{\delta_i^{\,2}\,\zeta_i^{-1}\,m_i\,\bar{n}\,\bar{v}_i^{2}}, &
+\widehat{\bf q}_{i} &= \frac{{\bf q}_{i} }{ \delta_i\,\zeta_i^{-1}\,m_i\,\bar{n}\,\bar{v}_i^{3}},  \nonumber\\[0.5ex]
+\widehat{\bf F}_U &= \frac{{\bf F}_U}{ \zeta_i\,\mu\,m_i\,\bar{n}\,\bar{v}_i^{2}/L}, &
+\widehat{\bf F}_T &=\frac{ {\bf F}_T}{m_i\,\bar{n}\,\bar{v}_i^{2}/L},&
+\widehat{w}_i& = \frac{w_i}{\delta_i^{-1}\,\zeta_i\,\mu\, m_i\,\bar{n}\,\bar{v}_i^{3}/L}.\nonumber
+\end{align}
+
+As before, the normalization procedure is designed to make all hatted quantities ${\cal O}(1)$.
+The normalization of the electric field is chosen 
+ such that the ${\bf E}\times{\bf B}$
+velocity is of similar  magnitude to the ion fluid velocity. Note that the parallel viscosity
+makes an ${\cal O}(1)$ contribution to $\widehat{\bpi}_i$, whereas the gyroviscosity
+makes an ${\cal O}(\zeta_i)$ contribution, and the perpendicular viscosity only 
+makes an ${\cal O}(\zeta_i^{2})$ contribution. Likewise, the parallel thermal
+conductivity 
+makes an ${\cal O}(1)$ contribution to $\widehat{\bf q}_{i}$, whereas the cross
+conductivity 
+makes an ${\cal O}(\zeta_i)$ contribution, and the perpendicular conductivity only 
+makes an ${\cal O}(\zeta_i^{2})$ contribution. Similarly, the parallel component
+of ${\bf F}_T$ is  ${\cal O}(1)$, whereas the perpendicular
+component is  ${\cal O}(\zeta_i\,\mu)$. 
+
+The normalized ion fluid equations take the form:
+\begin{align}\label{e3.116a}
+\frac{d\hat{n}}{d\hat{t}} + \hat{n}\,\widehat{\nabla}\cdot\widehat{\bf V}_i &=0,\\[0.5ex]
+\hat{n}\,\frac{d\widehat{\bf V}_i}{d\hat{t}} +
+\delta_i^{-2}\,\widehat{\nabla}\hat{p}_i+\zeta_i^{-1}\,\widehat{\nabla}
+\cdot\widehat{\bpi}_i  
+-\delta_i^{-2}\,\hat{n}\,(\widehat{\bf E} + \widehat{\bf V}_i
+\times\widehat{\bf B}) &=-\delta_i^{-2}\,\zeta_i\,\mu\,\widehat{\bf F}_U
+ - \delta_i^{-2}\,\widehat{\bf F}_T, \\[0.5ex]
+\frac{3}{2}\frac{d\hat{p}_i}{d\hat{t}} + \frac{5}{2}\,
+\hat{p}_i\,\widehat{\nabla}\cdot\widehat{\bf V}_i + \delta_i^{2}\,
+\zeta_i^{-1}\,\widehat{\bpi}_i : \widehat{\nabla}\cdot\widehat{\bf V}_i
++\zeta_i^{-1} \,\widehat{\nabla}\cdot\widehat{\bf q}_{i}
+&= \delta_i^{-2}\,\zeta_i\,\mu\,\widehat{w}_i. \label{e3.116c}
+\end{align}
+The only large or small (compared to unity) quantities in these equations are the
+parameters $\delta_i$, $\zeta_i$, and $\mu$. 
+Here, $d/d\hat{t}\equiv\partial /\partial\hat{t} +
+ \widehat{\bf V}_i\cdot\widehat{\nabla}$.
+
+\subsection{Lowest-Order Fluid Equations}
+If we restore dimensions to the Braginskii equations then we can write them in the form
+\begin{align}
+\frac{\partial n}{\partial t} + \nabla\cdot(n\,{\bf V}_e) &= 0,\label{e3.151a}\\[0.5ex]
+m_e\, n\,\frac{\partial  {\bf V}_e}{\partial t} +
+m_e\, n\,({\bf V}_e\cdot\nabla){\bf V}_e+
+ [\delta_e^{-2}]\,\nabla p_e+
+[\zeta_e^{-1}]\, \nabla\cdot \bpi_e &\label{e3.151b}\\[0.5ex]
+ +[\delta_e^{-2}]\,e\, n\,
+({\bf E} + {\bf V}_e\times {\bf B})& =[\delta_e^{-2}\,\zeta_e]\, {\bf F}_U + [\delta_e^{-2}]\,
+{\bf F}_T,\nonumber\\[0.5ex]
+\frac{3}{2}\frac{\partial  p_e}{\partial t} + \frac{3}{2}
+ \,({\bf V}_e\cdot\nabla)\, p_e 
++ \frac{5}{2}\,p_e\,\nabla\cdot{\bf V}_e+[\delta_e^{\,2}\,\zeta_e^{-1}]\, \bpi_e:\nabla{\bf V}_e&\label{e3.151c}\\[0.5ex]
++ [\zeta_e^{-1}]\,\nabla\cdot{\bf q}_{Te} +\nabla\cdot{\bf q}_{Ue}  &=-[\delta_e^{-2}\,\zeta_e\,\mu^2]\,
+ w_i+ [\zeta_e]\,w_U + w_T,\nonumber
+\end{align}
+and
+\begin{align}\label{e3.152a}
+\frac{\partial n}{\partial t} +\nabla\cdot(n\,{\bf V}_i) &= 0,\\[0.5ex]
+m_i \,n\,\frac{\partial  {\bf V}_i}{\partial t} +
+m_i \,n\,({\bf V}_i\cdot\nabla) {\bf V}_i +
+ [\delta_i^{-2}]\,\nabla p_i + 
+[\zeta_i^{-1}]\,\nabla\cdot \bpi_i &\label{e3.152b}\\[0.5ex]
+- [\delta_i^{-2}]\,e \,n\,
+({\bf E} + {\bf V}_i\times {\bf B})& =-[\delta_i^{-2}\,\zeta_i\,\mu]\, {\bf F}_U - [\delta_i^{-2}]\,{\bf F}_T,
+\nonumber\\[0.5ex]
+\frac{3}{2}\frac{\partial  p_i}{\partial t} +   \frac{3}{2}
+ \,({\bf V}_i\cdot\nabla) \,p_i
++ \frac{5}{2}\,p_i\,\nabla\cdot{\bf V}_i+[\delta_i^{\,2}\,\zeta_i^{-1}]\, \bpi_i:\nabla{\bf V}_i\nonumber\\[0.5ex]
++ [\zeta_i^{-1}]\,\nabla\cdot{\bf q}_i &= [\delta_i^{-2}\,\zeta_i\,\mu]\,w_i.\label{e3.152c}
+\end{align}
+The terms in square brackets are just to remind us that the terms they precede are smaller or larger than the
+other terms in the equations (by the corresponding terms within the brackets). 
+
+If we assume that $\delta_e\sim \zeta_e\sim \mu$ then the dominant terms in the electron energy conservation equation
+(\ref{e3.151c}) yield
+\begin{equation}
+\nabla\cdot{\bf q}_{T_e}\simeq \nabla\cdot(-\kappa_\parallel^e\,\nabla_\parallel T_e)\simeq 0,
+\end{equation}
+which implies that 
+\begin{equation}
+{\bf B}\cdot\nabla T_e=0. \label{e75}
+\end{equation}
+In other words, the parallel electron heat conductivity in a tokamak plasma is usually
+sufficiently large that it forces the electron temperature to be constant on magnetic flux-surfaces. 
+Likewise, if we assume that $\delta_i\sim \zeta_i\sim \mu$ then the dominant terms in the ion energy conservation equation
+(\ref{e3.152c}) yield
+\begin{equation}
+\nabla\cdot{\bf q}_{T_i}\simeq \nabla\cdot(-\kappa_\parallel^i\,\nabla_\parallel T_i)\simeq 0,
+\end{equation}
+which implies that 
+\begin{equation}
+{\bf B}\cdot\nabla T_i=0.\label{e77}
+\end{equation}
+In other words, the parallel ion heat conductivity in a tokamak plasma is usually
+sufficiently large that it forces the ion temperature to be constant on magnetic flux-surfaces. 
+
+ The dominant terms in the electron and ion momentum conservation equations,
+(\ref{e3.151b}) and (\ref{e3.152b}), respectively, yield
+\begin{align}\label{e78}
+\nabla p_e + n\,e\,({\bf E}+{\bf V}_e\times {\bf B}) &\simeq 0,\\[0.5ex]
+\nabla p_i - n\,e\,({\bf E}+{\bf V}_i\times {\bf B}) &\simeq 0.\label{e79}
+\end{align}
+The sum of the preceding two equations gives
+\begin{equation}\label{e80}
+ {\bf j}\times {\bf B} \simeq-\nabla p,
+\end{equation}
+where $p=p_e+p_i$. In other words, a conventional tokamak plasma exists in a state in which electromagnetic
+forces exactly balance the  total scalar pressure force. 
+It follows from the previous equation that 
+\begin{equation}
+{\bf B}\cdot\nabla p\simeq 0.
+\end{equation}
+In other words, the pressure in a conventional tokamak plasma is constant on magnetic flux-surfaces. 
+ However, given that $p=n\,(T_e+T_i)$, and making use of Eqs.~(\ref{e75}) and (\ref{e77}), we deduce that 
+\begin{equation}
+{\bf B}\cdot\nabla n\simeq 0.
+\end{equation}
+In other words, the particle density in a conventional tokamak plasma is also  constant on
+magnetic flux-surfaces. 
+
+ Taking the difference of the electron and ion particle
+conservation equations, (\ref{e3.151a}) and (\ref{e3.152a}), respectively, we obtain
+\begin{equation}\label{e82}
+\nabla\cdot {\bf j} = 0.
+\end{equation}
+ Equations~(\ref{e80}) and (\ref{e82}) can be combined to give
+\begin{equation}\label{e84}
+({\bf B}\cdot\nabla)\,{\bf j } - ({\bf j}\cdot\nabla)\,{\bf B} \simeq {\bf 0}.
+\end{equation}
+
+Finally, Equations~(\ref{e78}) and (\ref{e79}) imply that
+\begin{align}
+{\bf V}_{\perp\,e} &\simeq {\bf V}_E + {\bf V}_{\ast\,e},\\[0.5ex]
+{\bf V}_{\perp\,i} &\simeq {\bf V}_E + {\bf V}_{\ast\,i},
+\end{align}
+where
+\begin{equation}
+{\bf V}_e = \frac{{\bf E}\times {\bf B}}{B^2}
+\end{equation}
+is the {\em E-cross-B drift velocity}, and
+\begin{align}
+{\bf V}_{\ast\,e}&= \frac{\nabla p_e\times {\bf B}}{e\,n\,B^2},\\[0.5ex]
+{\bf V}_{\ast\,i}&=- \frac{\nabla p_i\times {\bf B}}{e\,n\,B^2},
+\end{align}
+are termed the {\em electron diamagnetic velocity}\/ and the {\em ion diamagnetic velocity}, respectively. 
+
+\section{Cylindrical Tearing Mode Theory}
+\subsection{Tokamak Equilibrium}
+Consider a large aspect-ratio tokamak plasma equilibrium with whose magnetic flux-surfaces map out (almost) concentric circles in the poloidal plane. 
+Let us employ a conventional set of right-handed cylindrical coordinates, $r$, $\theta$, $z$. The
+equilibrium magnetic flux-surfaces lie on surfaces of constant $r$. The system is
+assumed to be periodic in the $z$ (`toroidal') direction, with periodicity length $2\pi\,R_0$, 
+where $R_0$ is the simulated {\em major radius}\/ of the plasma. The {\em safety-factor}\/ profile takes the form
+\begin{equation}\label{e90}
+q(r)= \frac{r\,B_z}{R_0\,B_\theta(r)},
+\end{equation}
+where $B_z$ is the constant `toroidal' magnetic field-strength, and $B_\theta(r)$ is
+the poloidal magnetic field-strength. It is assumed that $q\sim{\cal O}(1)$. 
+The equilibrium `toroidal' current density
+satisfies
+\begin{equation}
+\mu_0\,j_z(r) = \frac{(r\,B_\theta)'}{r},
+\end{equation}
+where $'$ denotes $d/dr$. Finally, the standard large aspect-ratio
+tokamak orderings,  
+\begin{equation}\label{e92}
+\frac{r}{R_0}\ll 1,~~~ \frac{B_\theta}{B_z}\ll 1,
+\end{equation}
+are adopted (Fitzpatrick 1993). 
+
+\subsection{Perturbed Magnetic Field}
+Consider a tearing mode perturbation that has $m$ periods in the poloidal direction,
+and $n$ periods in the `toroidal' direction, where $m/n\sim {\cal O}(1)$.  We can write the perturbed magnetic field in the form
+\begin{equation}\label{e93}
+\delta{\bf B} \simeq \nabla\times (\psi\,{\bf e}_z),
+\end{equation}
+where
+\begin{equation}\label{e93a}
+\psi(r,\theta,\phi,t)= \psi(r,t)\,\exp[{\rm i}\,(m\,\theta-n\,\phi)].
+\end{equation}
+Here, $\phi=z/R_0$ is a simulated toroidal angle. The perturbed current density becomes
+\begin{equation}\label{e94}
+\mu_0\,\delta {\bf j} \simeq - \nabla^2\psi\,{\bf e}_z.
+\end{equation}
+
+\subsection{Cylindrical Tearing Mode Equation}
+The tearing perturbation is governed by the linearized version of Equation~(\ref{e84}), which yields
+\begin{equation}\label{e96}
+(\delta{\bf B}\cdot \nabla)\,{\bf j} + ({\bf B}\cdot\nabla)\,\delta{\bf j} - (\delta{\bf j}\cdot\nabla)\,{\bf B} - 
+({\bf j}\cdot\nabla)\,\delta {\bf B}\simeq {\bf 0}.
+\end{equation}
+Making use of Equations~(\ref{e90})--(\ref{e94}), the $z$-component of the previous equation gives
+the {\em cylindrical tearing mode equation}\/ (Fitzpatrick 1993),
+\begin{equation}
+\frac{\partial^2\psi}{dr^2} + \frac{1}{r}\,\frac{\partial\psi}{\partial r}-\frac{m^2}{r^2}\,\psi - \frac{J_z'\,\psi}{r\,(1/q-n/m)}\simeq 0,
+\end{equation}
+where 
+\begin{equation}
+J_z(r)= \frac{R_0\,\mu_0\,j_z(r)}{B_z}.
+\end{equation}
+
+\subsection{Solution in Presence of Perfectly-Conducting Wall}\label{perfect}
+Suppose that the plasma occupies the region $0\leq r\leq a$, where $a$ is the plasma {\em minor radius}. It follows that
+$J_z(r)=0$ for $r>a$. Suppose that the plasma is surrounded by a concentric perfectly-conducting wall of radius $r_w>a$. An appropriate
+physical solution of the cylindrical tearing mode equation takes the form
+\begin{equation}\label{e99}
+\psi(r,t)= {\mit\Psi}_s(t)\,\hat{\psi}_s(r),
+\end{equation}
+where the real function $\hat{\psi}_s(r)$ is a solution of 
+\begin{equation}\label{e100}
+\frac{d^2\hat{\psi}_s}{dr^2} + \frac{1}{r}\,\frac{d\hat{\psi}_s}{dr}-\frac{m^2}{r^2}\,\hat{\psi}_s - \frac{J_z'\,\hat{\psi}_s}{r\,(1/q-n/m)}\simeq 0
+\end{equation}
+that satisfies
+\begin{align}\label{e101}
+\hat{\psi}_s(0) &= 0,\\[0.5ex]
+\hat{\psi}_s(r_s) &= 1,\label{e102}\\[0.5ex]
+\hat{\psi}_s(r\geq r_w) &= 0.\label{e103}
+\end{align}
+
+Note that Equation~(\ref{e100}) is singular at the so-called {\em resonant}\/ magnetic flux-surface, radius $r=r_s$, at which 
+\begin{equation}\label{e104}
+q(r_s)= \frac{m}{n}.
+\end{equation}
+At the resonant surface, ${\bf k}\cdot{\bf B}=0$, where ${\bf k} = (0,\,m/r,\,-n/R_0)$ is the wavevector of the tearing perturbation. 
+The value of $\psi(r,t)$ at the resonant surface---namely, ${\mit\Psi}_s(t)$---is known as the {\em reconnected magnetic flux}. 
+Note that ${\mit\Psi}_s$ is, in general, a complex quantity. 
+Let $\rho=(r-r_s)/r_s$. 
+The solution of Equation~(\ref{e100}) in the vicinity of the resonant surface is
+\begin{equation}\label{e105}
+\hat{\psi}_s(\rho) = 1 + {\mit\Delta}_{s+}\,\rho + \alpha_s\,\rho\,\ln|\rho| + {\cal O}(\rho^2)
+\end{equation}
+for $\rho>0$, and
+\begin{equation}\label{e106}
+\hat{\psi}_s(\rho) = 1 + {\mit\Delta}_{s-}\,\rho + \alpha_s\,\rho\,\ln|\rho| + {\cal O}(\rho^2)
+\end{equation}
+for $\rho<0$. Here, 
+\begin{align}
+\alpha_s& =- \left(\frac{r\,q\,J_z'}{s}\right)_{r=r_s},\\[0.5ex]
+s(r) &= \frac{r\,q'}{q}.
+\end{align}
+Moreover,  the real parameters ${\mit\Delta}_{s+}$ and  ${\mit\Delta}_{s-}$ are fully determined by Equation~(\ref{e100})
+and the boundary conditions (\ref{e101})--(\ref{e103}). Note that, in general, $\psi$ is continuous across the resonant surface,
+whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial \psi/\partial r$ implies the presence of a radially
+thin current sheet  at the resonant surface. This current sheet can only be resolved by retaining more terms in the perturbed plasma equation of motion, (\ref{e96}). 
+
+The complex quantity
+\begin{equation}
+{\mit\Delta\Psi}_s = \left[r\,\frac{\partial \psi}{\partial r}\right]_{r_{s-}}^{r_{s+}}
+\end{equation}
+parameterizes the amplitude and phase of the current sheet flowing at the resonant surface. Matching the solutions
+in the so-called {\em inner region}\/ (i.e., the region of the plasma in the immediate vicinity of the resonant surface)
+and the so-called {\em outer region}\/ (i.e., everywhere in the plasma other than the inner region) with the help
+of Equations~(\ref{e99}), (\ref{e105}), and ({\ref{e106}), we obtain
+\begin{equation}
+{\mit\Delta\Psi}_s = E_{ss}\,{\mit\Psi}_s,
+\end{equation}
+where $E_{ss}= {\mit\Delta}_{s+}-{\mit\Delta}_{s-}$ is a real quantity determined by the solution in the outer region. 
+
+\subsection{Solution in Presence of Resistive Wall}\label{resistive}
+Suppose, now, that the wall at $r=r_w$ possesses a finite resistivity, but is surrounded by a second perfectly-conducting wall
+located at radius $r_c>r_w$.
+The solution in the outer region can be written
+\begin{equation}\label{e111}
+\psi(r,t) = {\mit\Psi}_s(t)\,\hat{\psi}_s(r) + {\mit\Psi}_w(t)\,\hat{\psi}_w(r),
+\end{equation}
+where the real function $\hat{\psi}_s(r)$ is specified in the previous section, and the real function  $\hat{\psi}_w(r)$ is a solution of 
+\begin{equation}\label{e100a}
+\frac{d^2\hat{\psi}_w}{dr^2} + \frac{1}{r}\,\frac{d\hat{\psi}_w}{dr}-\frac{m^2}{r^2}\,\hat{\psi}_w - \frac{J_z'\,\hat{\psi}_w}{r\,(1/q-n/m)}\simeq 0
+\end{equation}
+that satisfies
+\begin{align}\label{e101a}
+\hat{\psi}_w(r\leq r_s) &= 0,\\[0.5ex]
+\hat{\psi}_w(r_w) &= 1,\label{e102a}\\[0.5ex]
+\hat{\psi}_w(r\geq r_c) &= 0.\label{e103a}
+\end{align}
+It is easily seen that
+\begin{equation}\label{e117}
+\hat{\psi}_w(r_w< r < r_c) = \frac{(r/r_c)^{-m} - (r/r_c)^m}{(r_w/r_c)^{-m} - (r_w/r_c)^m}.
+\end{equation}
+
+In general, $\psi$ is continuous across the wall, whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial\psi/\partial r$ is caused by the currents induced in the wall. The complex quantity ${\mit\Psi}_w(t)$ determines the amplitude and
+phase of the perturbed magnetic flux that penetrates the wall. The complex quantity
+\begin{equation}\label{e118}
+{\mit\Delta\Psi}_w = \left[r\,\frac{\partial\psi}{\partial r}\right]_{r_{w-}}^{r_{w+}}
+\end{equation}
+parameterizes the amplitude and phase of the current sheet flowing in the wall.
+Simultaneously matching the outer solution (\ref{e111}) across the resonant surface and the wall yields
+\begin{align}
+{\mit\Delta\Psi}_s &= E_{ss}\,{\mit\Psi}_s + E_{sw}\,{\mit\Psi}_w,\\[0.5ex]
+{\mit\Delta\Psi}_w &= E_{ws}\,{\mit\Psi}_s+ E_{ww}\,{\mit\Psi}_w
+\end{align}
+(Fitzpatrick 1993).
+Here,
+\begin{align}
+E_{ww}&= \left[r\,\frac{d\hat{\psi}_w}{dr}\right]_{r_{w-}}^{r_{w+}},\\[0.5ex]
+E_{sw} &=\left[r\,\frac{{d\hat\psi}_w}{dr}\right]_{r=r_{s+}},\label{e121}\\[0.5ex]
+E_{ws} &=-\left[r\,\frac{{d\hat\psi}_s}{dr}\right]_{r=r_{w-}}\label{e122}
+\end{align}
+are real quantities determined by the solution in the outer region.
+
+Equations~(\ref{e100}) and (\ref{e100a}) can be combined to give
+\begin{equation}
+\frac{d}{dr}\!\left(\hat{\psi}_s\,r\,\frac{d\hat{\psi}_w}{dr} - \hat{\psi}_w\,r\,\frac{d\hat{\psi}_s}{dr}\right) = 0.
+\end{equation}
+If we integrate the previous equation from $r=r_{s+}$ to $r=r_{w-}$, making use of Equations~(\ref{e102}), (\ref{e103}), (\ref{e101a}), (\ref{e102a}), (\ref{e121}),
+and (\ref{e122}), then we obtain
+\begin{equation}\label{e123}
+E_{sw} = E_{ws}
+\end{equation}
+(Fitzpatrick 1993). 
+
+\subsection{Resistive Wall Physics}
+It is clear from Equation~(\ref{e93}) that
+\begin{equation}
+\delta {\bf A} \simeq \psi\,{\bf e}_z,
+\end{equation}
+where $\delta {\bf A}$ is the perturbed magnetic vector potential. 
+Hence, the perturbed electric field can be written
+\begin{equation}
+\delta {\bf E} \simeq -\nabla\delta{\mit\Phi} - \frac{\partial\psi}{\partial t}\,{\bf e}_z,
+\end{equation}
+where $\delta{\mit\Phi}$ is the perturbed electric scalar potential. 
+Assuming that $|\nabla\delta{\mit\Phi}|\sim |\partial\psi/\partial t|$, the $z$-component of the previous
+equation yields
+\begin{equation}
+\delta E_z\simeq -\frac{\partial\psi}{\partial t},
+\end{equation}
+where use has been made of the large aspect-ratio orderings (\ref{e92}). Within the wall, we
+can write
+\begin{equation}
+\delta E_z \simeq -\frac{d{\mit\Psi}_w}{dt}.
+\end{equation}
+Here, we are making use of the so-called {\em thin wall approximation}, according to which $\psi$ is assumed to only vary weakly in $r$ across
+the wall. Ohm's law implies that
+\begin{equation}
+\delta j_z = \frac{\delta E_z}{\eta_w} = -\frac{1}{\eta_w}\,\frac{d{\mit\Psi}_w}{dt}
+\end{equation}
+within the wall, where $\eta_w$ is the wall resistivity. Equations~(\ref{e94}) and (\ref{e118}) yield
+\begin{equation}\label{e132}
+{\mit\Delta\Psi}_w = -\mu_0\int_{r_{w-}}^{r_{w+}}r\,\delta j_z\,dr.
+\end{equation}
+Suppose that the radial thickness of the wall is $\delta_w\ll r_w$. The previous two equations yield
+\begin{equation}\label{e133}
+{\mit\Delta\Psi}_w = \tau_w\,\frac{d{\mit\Psi}_w}{dt},
+\end{equation}
+where
+\begin{equation}
+\tau_w = \frac{\mu_0\,r_w\,\delta_w}{\eta_w}
+\end{equation}
+is the so-called {\em time constant}\/ of the wall (Fitzpatrick 1993). The thin wall approximation is
+valid as long as
+\begin{equation}
+\frac{r_w}{\delta_w}\gg \tau_w\left|\frac{d\ln{\mit\Psi}_w}{dt}\right|.
+\end{equation}
+
+\subsection{Resonant Layer Physics}
+By analogy with Equation~(\ref{e133}), we can write
+\begin{equation}
+{\mit\Delta\Psi}_s = \tau_s\left(\frac{d{\mit\Psi}_w}{dt} + {\rm i}\,\varpi_s\,{\mit\Psi}_s\right).
+\end{equation}
+Here, $\tau_s$ is the {\em reconnection time}, whereas $\varpi_s$ is the so-called {\em natural frequency}. 
+The natural frequency is the phase velocity of the tearing mode when the wall is perfectly conducting. The
+natural frequency is non-zero because the reconnected flux in the resonant layer is convected by the local plasma
+flow (Fitzpatrick 1993). 
+
+\subsection{Solution in Presence of External Magnetic Field-Coil}
+Suppose that the perfectly-conducting wall at $r=r_c$ is replaced by a magnetic field-coil that carries a
+helical current possesing $m$ periods in the poloidal direction, and $n$ periods in the `toroidal' direction. Let the current density in the coil
+take the form
+\begin{equation}\label{e135}
+\delta j_z = -\frac{I_c(t)}{r_c}\,\delta(r-r_c)\,{\rm e}^{\,{\rm i}\,(m\,\theta-n\,\phi)}.
+\end{equation}
+Here, the complex quantity $I_c(t)$ parameterizes the amplitude and phase of the helical current flowing in the field-coil. 
+
+The solution in the outer region can be written
+\begin{equation}
+\psi(r,t) = {\mit\Psi}_s(t)\,\hat{\psi}_s(r) + {\mit\Psi}_w(t)\,\hat{\psi}_w(r) + {\mit\Psi}_c\,\hat{\psi}_c(r),
+\end{equation}
+where the real functions $\hat{\psi}_s(r)$ and $\hat{\psi}_w(r)$ are specified in Sections~\ref{perfect} and \ref{resistive}, respectively. 
+Moreover, 
+the real function  $\hat{\psi}_c(r)$ is a solution of 
+\begin{equation}\label{e100b}
+\frac{d^2\hat{\psi}_c}{dr^2} + \frac{1}{r}\,\frac{d\hat{\psi}_c}{dr}-\frac{m^2}{r^2}\,\hat{\psi}_c\simeq 0
+\end{equation}
+that satisfies
+\begin{align}
+\hat{\psi}_c(r\leq r_w) &= 0,\\[0.5ex]
+\hat{\psi}_c(r_c) &= 1,\\[0.5ex]
+\hat{\psi}_c(\infty) &= 0.
+\end{align}
+It is easily seen that
+\begin{align}
+\hat{\psi}_c(r\leq r_w) &= 0,\\[0.5ex]
+\hat{\psi}_c(r_w<r \leq r_c) &= \frac{(r/r_w)^m-(r/r_w)^{-m}}{(r_c/r_w)^m - (r_c/r_w)^{-m}},\label{e142}\\[0.5ex]
+\hat{\psi}_c(r> r_c) &=\left(\frac{r}{r_c}\right)^{-m}.\label{e143}
+\end{align}
+
+In general, $\psi$ is continuous across the field-coil, whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial\psi/\partial r$ is caused by the currents flowing in the coil. The complex quantity ${\mit\Psi}_c(t)$ determines the amplitude and
+phase of the perturbed magnetic flux at the coil. The complex quantity
+\begin{equation}\label{e118a}
+{\mit\Delta\Psi}_c = \left[r\,\frac{\partial\psi}{\partial r}\right]_{r_{c-}}^{r_{c+}}
+\end{equation}
+parameterizes the amplitude and phase of the current sheet flowing in the coil.
+It follows from Equations~(\ref{e93a}), (\ref{e94}), and (\ref{e135})  that
+\begin{equation}
+{\mit\Delta\Psi}_c = \mu_0\,I_c.
+\end{equation}
+
+Simultaneously matching the outer solution across the resonant surface, the wall, and the field-coil, we
+obtain
+\begin{align}\label{e146}
+{\mit\Delta\Psi}_s &= E_{ss}\,{\mit\Psi}_s + E_{sw}\,{\mit\Psi}_w,\\[0.5ex]
+{\mit\Delta\Psi}_w &= E_{ws}\,{\mit\Psi}_s + E_{ww}\,{\mit\Psi}_w + E_{wc}\,{\mit\Psi}_c,\\[0.5ex]
+{\mit\Delta\Psi}_c&= E_{cw}\,{\mit\Psi}_w + E_{cc}\,{\mit\Psi}_c. \label{e148}
+\end{align}
+Here,  
+\begin{align}
+E_{cc} &= \left[r\,\frac{d\hat{\psi}_c}{dr}\right]_{r_{c-}}^{r_{c+}}=- \frac{2m}{1-(r_w/r_c)^{2m}},\\[0.5ex]
+E_{wc}&= \left[r\,\frac{d\hat{\psi}_c}{dr}\right]_{r_{w+}} = \frac{2m\,(r_w/r_c)^m}{1-(r_w/r_c)^{2m}},\label{e150a}\\[0.5ex]
+E_{cw}&=- \left[r\,\frac{d\hat{\psi}_w}{dr}\right]_{r_{c-}} = \frac{2m\,(r_w/r_c)^m}{1-(r_w/r_c)^{2m}},\label{e151}
+\end{align}
+where use has been made of Equations~(\ref{e117}), (\ref{e142}), and (\ref{e143}). 
+
+\subsection{Electromagnetic Torques}
+The flux-surface integrated poloidal and `toroidal' electromagnetic torque densities acting on the plasma
+can be written
+\begin{align}
+T_\theta(r) &= \oint\oint R_0\,r^{\,2}\,{\bf j}\times {\bf B}\cdot {\bf e}_\theta\,d\theta\,d\phi,\\[0.5ex]
+T_\phi(r) &= \oint\oint R_0^{\,2}\,r\,{\bf j}\times {\bf B}\cdot {\bf e}_z\,d\theta\,d\phi,
+\end{align}
+respectively. However, according to Equation~(\ref{e80}),
+\begin{equation}\label{e150}
+{\bf j}\times {\bf B} \simeq -\nabla p.
+\end{equation}
+Given that the scalar pressure is a single-valued function of $\theta$ and $\phi$, it immediately follows
+that $T_\theta=T_\phi = 0$ throughout the plasma. The only exception to this rule occurs in the immediate vicinity of the
+resonant surface, where Equation~(\ref{e150}) breaks down. It follows that we can write
+\begin{align}
+T_\theta(r) &= T_{\theta\,s}\,\delta(r-r_s),\\[0.5ex]
+T_\phi(r) &= T_{\phi\,s}\,\delta(r-r_s),
+\end{align}
+where
+\begin{align}\label{e153}
+T_{\theta\,s} &=  \frac{1}{4}\int_{r_{s-}}^{r_{s+}}\oint\oint R_0\,r^{\,2}\,(\delta j_z\,\delta B_r^{\,\ast} + \delta j_z^{\,\ast}\,\delta B_r)\,dr\,d\theta\,d\phi,\\[0.5ex]
+T_{\phi\,s} &=  -\frac{1}{4}\int_{r_{s-}}^{r_{s+}}\oint\oint R_0^{\,2}\,r\,(\delta j_\theta\,\delta B_r^{\,\ast} + \delta j_\theta^{\,\ast}\,\delta B_r)\,dr\,d\theta\,d\phi
+\end{align}
+are the net poloidal and `toroidal' torques, respectively, acting at the resonant surface. 
+Note that the equilibrium torques are zero because $B_r=0$. Furthermore, the linear (in perturbed quantities) torques 
+average to zero over the flux-surface. Hence, the largest non-zero torques  are quadratic in perturbed quantities. 
+According to Equation~(\ref{e82}), 
+\begin{equation}
+\nabla \cdot \delta {\bf j} = {\rm i}\left(\frac{m}{r}\,\delta j_\theta - \frac{n}{R_0}\,\delta j_z\right) = 0,
+\end{equation}
+where $\delta{\bf j}$ is the density of the current sheet flowing at the resonant surface, and we have made use
+of the fact that $\delta j_r\simeq 0$. 
+ It follows from the previous three equations that
+\begin{equation}\label{e156}
+T_{\phi\,s} = - \frac{n}{m}\,T_{\theta\,s}.
+\end{equation}
+Finally, Equations~(\ref{e93}), (\ref{e94}), (\ref{e153}), and (\ref{e156}) imply that
+\begin{align}\label{e157}
+T_{\theta\,s} &= -\frac{2\pi^2\,R_0\,m}{\mu_0}\,{\rm Im}({\mit\Delta\Psi}_s\,{\mit\Psi}_s^{\,\ast}),\\[0.5ex]
+T_{\phi\,s} &= \frac{2\pi^2\,R_0\,n}{\mu_0}\,{\rm Im}({\mit\Delta\Psi}_s\,{\mit\Psi}_s^{\,\ast})
+\end{align}
+(Fitzpatrick 1993).
+
+By analogy with the previous analysis,  the net poloidal and `toroidal' electromagnetic torques acting on the
+resistive wall are 
+\begin{align}
+T_{\theta\,w} &= -\frac{2\pi^2\,R_0\,m}{\mu_0}\,{\rm Im}({\mit\Delta\Psi}_w\,{\mit\Psi}_w^{\,\ast}),\\[0.5ex]
+T_{\phi\,w} &= \frac{2\pi^2\,R_0\,n}{\mu_0}\,{\rm Im}({\mit\Delta\Psi}_w\,{\mit\Psi}_w^{\,\ast}),
+\end{align}
+respectively. 
+Finally, 
+the net poloidal and `toroidal' electromagnetic torques acting on the
+magnetic field-coil are 
+\begin{align}
+T_{\theta\,c} &= -\frac{2\pi^2\,R_0\,m}{\mu_0}\,{\rm Im}({\mit\Delta\Psi}_c\,{\mit\Psi}_c^{\,\ast}),\\[0.5ex]
+T_{\phi\,c} &= \frac{2\pi^2\,R_0\,n}{\mu_0}\,{\rm Im}({\mit\Delta\Psi}_c\,{\mit\Psi}_c^{\,\ast}),\label{e166}
+\end{align}
+respectively. 
+
+It follows from Equations~(\ref{e146})--(\ref{e148}) that
+\begin{align}
+{\rm Im}({\mit\Delta\Psi}_s\,{\mit\Psi}_s^{\,\ast}) &= E_{sw}\,{\rm Im}({\mit\Psi}_w\,{\mit\Psi}_s^{\,\ast}),\\[0.5ex]
+{\rm Im}({\mit\Delta\Psi}_w\,{\mit\Psi}_w^{\,\ast}) &= E_{ws}\,{\rm Im}({\mit\Psi}_s\,{\mit\Psi}_w^{\,\ast})+E_{wc}\,{\rm Im}({\mit\Psi}_c\,{\mit\Psi}_w^{\,\ast}),\\[0.5ex]
+ {\rm Im}({\mit\Delta\Psi}_c\,{\mit\Psi}_c^{\,\ast}) &=E_{cw}\,{\rm Im}({\mit\Psi}_w\,{\mit\Psi}_c^{\,\ast}).
+ \end{align}
+ Thus,
+ \begin{align}
+ {\rm Im}({\mit\Delta\Psi}_s\,{\mit\Psi}_s^{\,\ast})+ {\rm Im}({\mit\Delta\Psi}_w\,{\mit\Psi}_w^{\,\ast}) + {\rm Im}({\mit\Delta\Psi}_c\,{\mit\Psi}_c^{\,\ast}) & = (E_{sw}-E_{ws})\,{\rm Im}({\mit\Psi}_w\,{\mit\Psi}_s^{\,\ast}) \nonumber\\[0.5ex]
+ &\phantom{=}+ (E_{wc}-E_{cw})\,{\rm Im}({\mit\Psi}_c\,{\mit\Psi}_w^{\,\ast}).
+ \end{align}
+ However, according to Equations~(\ref{e123}), (\ref{e150a}), and (\ref{e151}), $E_{sw}=E_{ws}$ and $E_{wc}=E_{cw}$. 
+We deduce that
+ \begin{equation} 
+  {\rm Im}({\mit\Delta\Psi}_s\,{\mit\Psi}_s^{\,\ast})+ {\rm Im}({\mit\Delta\Psi}_w\,{\mit\Psi}_w^{\,\ast}) + {\rm Im}({\mit\Delta\Psi}_c\,{\mit\Psi}_c^{\,\ast})=0.
+  \end{equation}
+Hence, Equations~(\ref{e157})--(\ref{e166})   yield
+\begin{align}
+T_{\theta\,s} + T_{\theta\,w}+T_{\theta\,c} &= 0,\\[0.5ex]
+T_{\phi\,s} + T_{\phi\,w}+T_{\phi\,c} &= 0.
+\end{align}
+In other words, the plasma/wall/field-coil system exerts zero net poloidal electromagnetic torque and zero net toroidal electromagnetic
+torque on itself. 
+
+\subsection{Plasma Angular Equations of Motion}
+We can write
+\begin{align}
+{\mit\Omega}_\theta(r,t)&= {\mit\Omega}_{\theta\,0}(r) + {\mit\Delta\Omega}_\theta(r,t),\\[0.5ex]
+{\mit\Omega}_\phi(r,t)&= {\mit\Omega}_{\phi\,0}(r) + {\mit\Delta\Omega}_\phi(r,t),
+\end{align}
+where ${\mit\Omega}_\theta(r,t)$ and ${\mit\Omega}_\phi(r,t)$ are the poloidal and 	`toroidal' plasma angular velocity profiles, respectively. [To be more exact,  ${\mit\Omega}_\theta(r,t)$ and ${\mit\Omega}_\phi(r,t)$ are the ion fluid angular velocity
+profiles.] Moreover, ${\mit\Omega}_{\theta\,0}(r)$ and ${\mit\Omega}_{\phi\,0}(r)$ are the corresponding unperturbed profiles,
+and ${\mit\Delta\Omega}_{\theta}(r,t)$ and ${\mit\Delta\Omega}_{\phi}(r,t)$ are the respective modifications to the profiles
+induced by the electromagnetic torques that develop at the resonant surface. The modifications to the angular
+velocity profiles are governed by the poloidal and toroidal angular equations of motion of the plasma, which
+take the respective forms
+\begin{align}
+4\pi^2\,R_0\left[(1+2\,q^2)\,\rho\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial t}-\frac{\partial}{\partial r}\!\left(
+\mu\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right) + \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta\right] = T_{\theta\,s}\,\delta(r-r_s),\\[0.5ex]
+4\pi^2\,R_0^{\,3}\left[\rho\,r\,\frac{\partial{\mit\Delta\Omega}_\phi}{\partial t}-\frac{\partial}{\partial r}\!\left(
+\mu\,r\,\frac{\partial{\mit\Delta\Omega}_\phi}{\partial r}\right) \right] = T_{\phi\,s}\,\delta(r-r_s).
+\end{align}
+Here, $\rho(r)$ is the plasma mass density profile, $\mu(r)$ is the anomalous plasma perpendicular ion viscosity
+(due to plasma turbulence), and $\tau_\theta(r)$ is the characteristic time at which neoclassical
+parallel viscosity relaxes the plasma poloidal angular velocity profile. 
+  
+\section*{Bibliography}
+\begin{description}
+\item Braginskii, S.I.\ 1965. {\em Transport Processes in a Plasma}. In {\em Reviews of Plasma Physics}. Consultants Bureau. Volume~1, 205.
+\item Chapman, S., and Cowling, T.G.\ 1953. {\em The Mathematical Theory of Non-Uniform Gases}. Cambridge.
+\item Fitzpatrick, R.\ 1993. {\em Interaction of Tearing Modes with External Structures in Cylindrical Geometry}, Nucl.\ Fusion {\bf 33}, 1049 (1993). 
+\item Fitzpatrick, R.\ 2008. {\em Maxwell's Equations and the Principles of Electromagnetism}. Jones \& Bartlett.
+\item Fitzpatrick, R.\ 2015. {\em Plasma Physics: An Introduction}. Taylor \& Francis, CRC Press. 
+\item Reif, F.\ 1965. {\em Fundamentals of Statistical and Thermal Physics}. McGraw-Hill.
+\item Richardson, A.S.\ 2019. {\em 2019 NRL Plasma Formulary}.  Naval Research Laboratory.
+\end{description}
+
+\end{document}
