@@ -532,7 +532,7 @@ sufficiently large that it forces the ion temperature to be constant on magnetic
 \end{align}
 The sum of the preceding two equations gives
 \begin{equation}\label{e80}
- {\bf j}\times {\bf B} \simeq-\nabla p,
+ {\bf j}\times {\bf B} \simeq\nabla p,
 \end{equation}
 where $p=p_e+p_i$. In other words, a conventional tokamak plasma exists in a state in which electromagnetic
 forces exactly balance the  total scalar pressure force. 
@@ -576,7 +576,7 @@ are termed the {\em electron diamagnetic velocity}\/ and the {\em ion diamagneti
 
 \section{Cylindrical Tearing Mode Theory}
 \subsection{Tokamak Equilibrium}
-Consider a large aspect-ratio tokamak plasma equilibrium with whose magnetic flux-surfaces map out (almost) concentric circles in the poloidal plane. 
+Consider a large aspect-ratio, toroidal,  tokamak plasma equilibrium whose magnetic flux-surfaces map out (almost) concentric circles in the poloidal plane. 
 Let us employ a conventional set of right-handed cylindrical coordinates, $r$, $\theta$, $z$. The
 equilibrium magnetic flux-surfaces lie on surfaces of constant $r$. The system is
 assumed to be periodic in the $z$ (`toroidal') direction, with periodicity length $2\pi\,R_0$, 
@@ -612,9 +612,10 @@ Here, $\phi=z/R_0$ is a simulated toroidal angle. The perturbed current density 
 \begin{equation}\label{e94}
 \mu_0\,\delta {\bf j} \simeq - \nabla^2\psi\,{\bf e}_z.
 \end{equation}
+It is assumed that $|\delta{\bf B}|\ll |{\bf B}|$. 
 
 \subsection{Cylindrical Tearing Mode Equation}
-The tearing perturbation is governed by the linearized version of Equation~(\ref{e84}), which yields
+To lowest order, the tearing perturbation is governed by the linearized version of Equation~(\ref{e84}), which yields
 \begin{equation}\label{e96}
 (\delta{\bf B}\cdot \nabla)\,{\bf j} + ({\bf B}\cdot\nabla)\,\delta{\bf j} - (\delta{\bf j}\cdot\nabla)\,{\bf B} - 
 ({\bf j}\cdot\nabla)\,\delta {\bf B}\simeq {\bf 0}.
@@ -669,9 +670,9 @@ for $\rho<0$. Here,
 s(r) &= \frac{r\,q'}{q}.
 \end{align}
 Moreover,  the real parameters ${\mit\Delta}_{s+}$ and  ${\mit\Delta}_{s-}$ are fully determined by Equation~(\ref{e100})
-and the boundary conditions (\ref{e101})--(\ref{e103}). Note that, in general, $\psi$ is continuous across the resonant surface,
+and the boundary conditions (\ref{e101})--(\ref{e103}). Note that, in general, $\psi$ is continuous across the resonant surface (in accordance with Maxwell's equations),
 whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial \psi/\partial r$ implies the presence of a radially
-thin current sheet  at the resonant surface. This current sheet can only be resolved by retaining more terms in the perturbed plasma equation of motion, (\ref{e96}). 
+thin, helical,  current sheet  at the resonant surface. This current sheet can only be resolved by retaining more terms in the perturbed plasma equation of motion, (\ref{e96}). 
 
 The complex quantity
 \begin{equation}
@@ -708,12 +709,12 @@ It is easily seen that
 \hat{\psi}_w(r_w< r < r_c) = \frac{(r/r_c)^{-m} - (r/r_c)^m}{(r_w/r_c)^{-m} - (r_w/r_c)^m}.
 \end{equation}
 
-In general, $\psi$ is continuous across the wall, whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial\psi/\partial r$ is caused by the currents induced in the wall. The complex quantity ${\mit\Psi}_w(t)$ determines the amplitude and
+In general, $\psi$ is continuous across the wall (in accordance with Maxwell's equations), whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial\psi/\partial r$ is caused by the currents induced in the wall. The complex quantity ${\mit\Psi}_w(t)$ determines the amplitude and
 phase of the perturbed magnetic flux that penetrates the wall. The complex quantity
 \begin{equation}\label{e118}
 {\mit\Delta\Psi}_w = \left[r\,\frac{\partial\psi}{\partial r}\right]_{r_{w-}}^{r_{w+}}
 \end{equation}
-parameterizes the amplitude and phase of the current sheet flowing in the wall.
+parameterizes the amplitude and phase of the helical current sheet flowing in the wall.
 Simultaneously matching the outer solution (\ref{e111}) across the resonant surface and the wall yields
 \begin{align}
 {\mit\Delta\Psi}_s &= E_{ss}\,{\mit\Psi}_s + E_{sw}\,{\mit\Psi}_w,\\[0.5ex]
@@ -769,7 +770,7 @@ within the wall, where $\eta_w$ is the wall resistivity. Equations~(\ref{e94}) a
 \begin{equation}\label{e132}
 {\mit\Delta\Psi}_w = -\mu_0\int_{r_{w-}}^{r_{w+}}r\,\delta j_z\,dr.
 \end{equation}
-Suppose that the radial thickness of the wall is $\delta_w\ll r_w$. The previous two equations yield
+Suppose that the radial thickness of the wall is $\delta_w\ll r_w$. The previous two equations give
 \begin{equation}\label{e133}
 {\mit\Delta\Psi}_w = \tau_w\,\frac{d{\mit\Psi}_w}{dt},
 \end{equation}
@@ -788,14 +789,15 @@ By analogy with Equation~(\ref{e133}), we can write
 \begin{equation}
 {\mit\Delta\Psi}_s = \tau_s\left(\frac{d{\mit\Psi}_w}{dt} + {\rm i}\,\varpi_s\,{\mit\Psi}_s\right).
 \end{equation}
-Here, $\tau_s$ is the {\em reconnection time}, whereas $\varpi_s$ is the so-called {\em natural frequency}. 
+Here, $\tau_s$ is the {\em reconnection time}\/ (i.e., the typical timescale on which magnetic reconnection takes place in the
+resonant layer surrounding the resonant surface), whereas $\varpi_s$ is the so-called {\em natural frequency}. 
 The natural frequency is the phase velocity of the tearing mode when the wall is perfectly conducting. The
 natural frequency is non-zero because the reconnected flux in the resonant layer is convected by the local plasma
 flow (Fitzpatrick 1993). 
 
 \subsection{Solution in Presence of External Magnetic Field-Coil}
 Suppose that the perfectly-conducting wall at $r=r_c$ is replaced by a magnetic field-coil that carries a
-helical current possesing $m$ periods in the poloidal direction, and $n$ periods in the `toroidal' direction. Let the current density in the coil
+helical current possesing $m$ periods in the poloidal direction, and $n$ periods in the `toroidal' direction. Let the current density in the field-coil
 take the form
 \begin{equation}\label{e135}
 \delta j_z = -\frac{I_c(t)}{r_c}\,\delta(r-r_c)\,{\rm e}^{\,{\rm i}\,(m\,\theta-n\,\phi)}.
@@ -825,7 +827,7 @@ It is easily seen that
 \hat{\psi}_c(r> r_c) &=\left(\frac{r}{r_c}\right)^{-m}.\label{e143}
 \end{align}
 
-In general, $\psi$ is continuous across the field-coil, whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial\psi/\partial r$ is caused by the currents flowing in the coil. The complex quantity ${\mit\Psi}_c(t)$ determines the amplitude and
+In general, $\psi$ is continuous across the field-coil (in accordance with Maxwell's equations), whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial\psi/\partial r$ is caused by the currents flowing in the coil. The complex quantity ${\mit\Psi}_c(t)$ determines the amplitude and
 phase of the perturbed magnetic flux at the coil. The complex quantity
 \begin{equation}\label{e118a}
 {\mit\Delta\Psi}_c = \left[r\,\frac{\partial\psi}{\partial r}\right]_{r_{c-}}^{r_{c+}}
@@ -851,21 +853,27 @@ E_{cw}&=- \left[r\,\frac{d\hat{\psi}_w}{dr}\right]_{r_{c-}} = \frac{2m\,(r_w/r_c
 \end{align}
 where use has been made of Equations~(\ref{e117}), (\ref{e142}), and (\ref{e143}). 
 
-\subsection{Electromagnetic Torques}
+\subsection{Electromagnetic Torques}\label{storque}
 The flux-surface integrated poloidal and `toroidal' electromagnetic torque densities acting on the plasma
 can be written
-\begin{align}
-T_\theta(r) &= \oint\oint R_0\,r^{\,2}\,{\bf j}\times {\bf B}\cdot {\bf e}_\theta\,d\theta\,d\phi,\\[0.5ex]
-T_\phi(r) &= \oint\oint R_0^{\,2}\,r\,{\bf j}\times {\bf B}\cdot {\bf e}_z\,d\theta\,d\phi,
+\begin{align}\label{e152}
+T_\theta(r) &= \left\langle r\,{\bf j}\times {\bf B}\cdot {\bf e}_\theta\right\rangle\\[0.5ex]
+T_\phi(r) &= \left\langle R_0\,{\bf j}\times {\bf B}\cdot {\bf e}_z\right\rangle,
 \end{align}
-respectively. However, according to Equation~(\ref{e80}),
+respectively, 
+where
+\begin{equation}
+\left\langle\cdots\right\rangle \equiv \oint\oint r\,R_0\,(\cdots)\,d\theta\,d\phi
+\end{equation}
+is the flux-surface average operator. 
+ However, according to Equation~(\ref{e80}),
 \begin{equation}\label{e150}
-{\bf j}\times {\bf B} \simeq -\nabla p.
+{\bf j}\times {\bf B} \simeq \nabla p.
 \end{equation}
 Given that the scalar pressure is a single-valued function of $\theta$ and $\phi$, it immediately follows
 that $T_\theta=T_\phi = 0$ throughout the plasma. The only exception to this rule occurs in the immediate vicinity of the
 resonant surface, where Equation~(\ref{e150}) breaks down. It follows that we can write
-\begin{align}
+\begin{align}\label{e156a}
 T_\theta(r) &= T_{\theta\,s}\,\delta(r-r_s),\\[0.5ex]
 T_\phi(r) &= T_{\phi\,s}\,\delta(r-r_s),
 \end{align}
@@ -931,10 +939,36 @@ Hence, Equations~(\ref{e157})--(\ref{e166})   yield
 T_{\theta\,s} + T_{\theta\,w}+T_{\theta\,c} &= 0,\\[0.5ex]
 T_{\phi\,s} + T_{\phi\,w}+T_{\phi\,c} &= 0.
 \end{align}
-In other words, the plasma/wall/field-coil system exerts zero net poloidal electromagnetic torque and zero net toroidal electromagnetic
-torque on itself. 
+In other words, the plasma/wall/field-coil system exerts zero net poloidal electromagnetic torque, and zero net toroidal electromagnetic
+torque, on itself. 
 
 \subsection{Plasma Angular Equations of Motion}
+The sum of the electron fluid equation of motion, (\ref{e3.151b}), and the ion fluid equation of motion, (\ref{e3.152b}), yields the plasma equation of motion, 
+\begin{equation}
+\rho\,\frac{\partial  {\bf V}_i}{\partial t} +
+\rho\,({\bf V}_i\cdot\nabla) {\bf V}_i +
+ [\delta_i^{-2}]\,\nabla p + 
+[\zeta_i^{-1}]\,\nabla\cdot \bpi_i-[\delta_i^{-2}]\,{\bf j}\times {\bf B} =0,\label{e175}
+\end{equation}
+where $\rho=m_i\,n$ is the plasma mass density.
+Here, we have neglected electron inertial terms with respect to ion inertial terms (because the
+former are order $m_e/m_i$ smaller than the latter). We have also neglected electron viscosity terms
+with respect to ion viscosity terms (because the
+former are order $\sqrt{m_e/m_i}$ smaller than the latter). Recall that the terms in square brackets are to remind us that the terms they precede are larger than the
+other terms in the equations (by the corresponding terms within the brackets). 
+
+Taking the flux-surface average of the scalar product of $r\,{\bf e}_\theta$ with the plasma equation of motion, (\ref{e175}), we obtain 
+\begin{equation}
+\left\langle\rho\,\frac{\partial (r\,V_{\theta\,i})}{\partial t} \right\rangle 
++\left\langle \rho\left[V_{r\,i}\,\frac{\partial (r\,V_{\theta\,i})}{\partial r} + V_{z\,i}\,\frac{\partial(r\, V_{\theta\,i})}{\partial z}
+\right]\right\rangle + [\zeta_i^{-1}]\,\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle
+= [\delta_i^{-2}]\,T_{\theta\,s}\,\delta(r-r_s),
+\end{equation}
+where use has been made of Equations~(\ref{e152}) and (\ref{e156a}). Note that the dominant $\nabla p$ term
+has averaged to zero. Moreover, because $T_{\theta\,s}$ is quadratic in perturbed quantities (see Section~\ref{storque}), it is plausible that the right-hand side of the previous equation is not a dominant term [i.e., it is not ${\cal O}(\delta_i^{-2})$ larger than the
+other terms in the equation]. 
+
+
 We can write
 \begin{align}
 {\mit\Omega}_\theta(r,t)&= {\mit\Omega}_{\theta\,0}(r) + {\mit\Delta\Omega}_\theta(r,t),\\[0.5ex]
