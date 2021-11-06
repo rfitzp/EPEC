@@ -3,6 +3,8 @@
 \pdfoutput = 1 
 \usepackage {graphicx}
 \usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \allowdisplaybreaks
 \newcommand {\bpsi} {\mbox{\boldmath$\psi$}}
 \newcommand {\brho} {\mbox{\boldmath$\rho$}}
@@ -37,9 +39,7 @@ to denote a {\em kinetic temperature}\/   measured in units of energy.
 Here, $v$ is a particle speed, and the angular brackets denote an
 ensemble average (Reif 1965). The kinetic temperature of species $s$ is a measure of 
 the mean kinetic energy of particles of
-that species. (Here, $s$ represents either $e$ for electrons, or $i$ for ions.) In tokamak plasma physics, kinetic temperature
-is invariably measured in {\em electron-volts}\/ \index{electron-volt} (1 joule is equivalent to
-$6.24\times 10^{18}$\,eV). 
+that species. (Here, $s$ represents either $e$ for electrons, or $i$ for ions.) 
 
 Quasi-neutrality demands that
 \begin{equation}
@@ -112,11 +112,11 @@ m_i \,n\,\frac{d_i {\bf V}_i}{dt} + \nabla p_i + \nabla\cdot \bpi_i - e\, n\,
 \end{align}
 respectively. 
 Equations (\ref{e3.79a})--(\ref{e3.80c})  are called the {\em Braginskii equations}, because they were first obtained
-in a celebrated article by S.I.~Braginskii (Braginskii 1965). Here, $n$ is the electron number density, ${\bf V}_s$ is the species-$s$ flow velocity, $p_s=n\,T_s$ is the 
+in a celebrated article by S.I.~Braginskii (Braginskii 1965). Here, $n$ is the electron number density, ${\bf V}_s$ the species-$s$ flow velocity, $p_s=n\,T_s$ the 
 species-$s$ scalar
-pressure, $\bpi_s$ is the species-$s$ viscosity tensor, ${\bf F}$ is the collisional friction force density, ${\bf q}_s$ is the species-$s$ heat flux density, $w_s$ is the species-$s$ collisional heating rate density, and ${\bf E}$ is the ambient electric field-strength. Moreover, $d_e/dt\equiv \partial/\partial t + {\bf V}_e\cdot\nabla$ in the electron fluid equations, (\ref{e3.79a})--(\ref{e3.79c}), whereas  $d_i/dt\equiv \partial/\partial t + {\bf V}_i\cdot\nabla$ in the ion fluid equations,  (\ref{e3.80a})--(\ref{e3.80c}). 
+pressure, $\bpi_s$ the species-$s$ viscosity tensor, ${\bf F}$ the collisional friction force density, ${\bf q}_s$  the species-$s$ heat flux density, $w_s$ the species-$s$ collisional heating rate density, and ${\bf E}$  the ambient electric field-strength. Moreover, $d_e/dt\equiv \partial/\partial t + {\bf V}_e\cdot\nabla$ and   $d_i/dt\equiv \partial/\partial t + {\bf V}_i\cdot\nabla$. 
 
-A tokamak plasma is highly magnetized. In other words, 
+A tokamak plasma is {\em highly magnetized}. In other words, 
 \begin{equation}
 {\mit\Omega}_i\,\tau_i, \,\,\,{\mit\Omega}_e\, \tau_e \gg 1,
 \end{equation}
@@ -131,12 +131,12 @@ Chapman-Enskog closure scheme (Chapman \& Cowling 1953) yields
 w_i &= \frac{3\,m_e}{m_i} \frac{n\,(T_e-T_i)}{\tau_e},\\[0.5ex]
 w_e &= -w_i + \frac{ {\bf j}\cdot {\bf F} }{n \,e}.
 \end{align}
-Here, ${\bf b}={\bf B}/B$ is a unit vector parallel to the magnetic field, and ${\bf j}= n\,e\,({\bf V}_i-{\bf V}_e)$ is the net plasma current density. 
-Moreover, the {\em parallel electrical conductivity}, $\sigma_\parallel$,  is given by
+Here, ${\bf b}={\bf B}/B$ is a unit vector parallel to the magnetic field, and ${\bf j}= n\,e\,({\bf V}_i-{\bf V}_e)$ is the plasma current density. 
+Moreover, the {\em parallel electrical conductivity}\/ is given by
 \begin{equation}\label{e3.83}
 \sigma_\parallel = 1.96\,\frac{n \,e^2\,\tau_e}{m_e}.
 \end{equation} 
-whereas the {\em perpendicular electrical conductivity}, $\sigma_\perp$,  takes the form
+whereas the {\em perpendicular electrical conductivity}\/ takes the form
 \begin{equation}\label{e3.92}
 \sigma_\perp = 0.51\,\sigma_\parallel = \frac{n\,e^2\,\tau_e}{m_e}.
 \end{equation}
@@ -145,35 +145,35 @@ Note that $\nabla_\parallel(\cdots) \equiv [{\bf b}\cdot\nabla
 gradient parallel to the magnetic field, whereas $\nabla_\perp \equiv
  \nabla-\nabla_\parallel$ denotes a gradient perpendicular to the magnetic
 field. Likewise, ${\bf j}_\parallel \equiv ({\bf b}\cdot{\bf j})\,{\bf b}$
-represents the component of the plasma current flowing parallel to the
+represents the component of the plasma current density  flowing parallel to the
 magnetic field, whereas ${\bf j}_\perp \equiv {\bf j} - {\bf j}_\parallel$
-represents the perpendicular component of the plasma current.
+represents the perpendicular component of the plasma current density.
 
 In a highly magnetized plasma, the electron and ion heat flux densities are written 
 \begin{align}
-{\bf q}_e &= -\kappa_\parallel^e\,\nabla_\parallel T_e -\kappa_\perp^e\,
+{\bf q}_e &= -\kappa_{\parallel\,e}\,\nabla_\parallel T_e -\kappa_{\perp\,e}\,
 \nabla_\perp T_e
--\kappa_\times^e\,{\bf b}\times\nabla_\perp T_e- 0.71\,\frac{T_e}{e}\,{\bf j}_\parallel-
+-\kappa_{\times\,e}\,{\bf b}\times\nabla_\perp T_e- 0.71\,\frac{T_e}{e}\,{\bf j}_\parallel-
 \frac{3\,T_e}{2\,{\mit\Omega}_e\,\tau_e\,e}\,{\bf b}\times{\bf j}_\perp,\label{e3.94a}\\[0.5ex]
-{\bf q}_i &= -\kappa_\parallel^i\,\nabla_\parallel T_i -\kappa_\perp^i\,
+{\bf q}_i &= -\kappa_{\parallel\,i}\,\nabla_\parallel T_i -\kappa_{\perp\,i}\,
 \nabla_\perp T_i
-+\kappa_\times^i\,{\bf b}\times\nabla_\perp T_i,\label{e3.94b}
++\kappa_{\times\,i}\,{\bf b}\times\nabla_\perp T_i,\label{e3.94b}
 \end{align}
 respectively. Here, the {\em parallel thermal conductivities}, which control the diffusion of heat parallel to magnetic field-lines, are 
 given by
 \begin{align}\label{e3.87a}
-\kappa_\parallel^e &= 3.2\,\,\frac{n\,\tau_e\,T_e}{m_e},\\[0.5ex]
-\kappa_\parallel^i &= 3.9\,\,\frac{n\,\tau_i\,T_i}{m_i},\label{e3.87b}
+\kappa_{\parallel\,e} &= 3.2\,\,\frac{n\,\tau_e\,T_e}{m_e},\\[0.5ex]
+\kappa_{\parallel\,i} &= 3.9\,\,\frac{n\,\tau_i\,T_i}{m_i},\label{e3.87b}
 \end{align} 
 whereas the {\em perpendicular thermal conductivities}, which control the diffusion of heat perpendicular to magnetic flux-surfaces, take the form
 \begin{align}
-\kappa_\perp^e &= 4.7\,\frac{n\,T_e}{m_e\,{\mit\Omega}_e^{\,2}\,\tau_e},\\[0.5ex]
-\kappa_\perp^i &= 2\, \frac{n\,T_i}{m_i\,{\mit\Omega}_i^{\,2}\,\tau_i}.
+\kappa_{\perp\,e} &= 4.7\,\frac{n\,T_e}{m_e\,{\mit\Omega}_e^{\,2}\,\tau_e},\\[0.5ex]
+\kappa_{\perp\,i} &= 2\, \frac{n\,T_i}{m_i\,{\mit\Omega}_i^{\,2}\,\tau_i}.
 \end{align}
 Finally, the {\em cross thermal conductivities}, which control the flow of heat within magnetic flux-surfaces,  are written
 \begin{align}
-\kappa_\times^e &= \frac{5\,n\,T_e}{2\,m_e\,{\mit\Omega}_e},\\[0.5ex]
-\kappa_\times^i &=\frac{5\,n\,T_i}{2\,m_i\,{\mit\Omega}_i}.
+\kappa_{\times\,e} &= \frac{5\,n\,T_e}{2\,m_e\,{\mit\Omega}_e},\\[0.5ex]
+\kappa_{\times\,i} &=\frac{5\,n\,T_i}{2\,m_i\,{\mit\Omega}_i}.
 \end{align}
 
 In order to describe the viscosity tensor in a magnetized plasma, it is
@@ -231,8 +231,8 @@ velocity component parallel to  field-lines.
  The parallel
 viscosity coefficients are given by 
 \begin{align}\label{e3.89a}
-\eta_0^e &= 0.73\,n\,\tau_e\,T_e,\\[0.5ex]
-\eta_0^i &= 0.96\,n\,\tau_i\,T_i,\label{e3.89b}
+\eta_{0\,e} &= 0.73\,n\,\tau_e\,T_e,\\[0.5ex]
+\eta_{0\,i} &= 0.96\,n\,\tau_i\,T_i.\label{e3.89b}
 \end{align}
 
 The tensors $\bpi_1$ and $\bpi_2$ describe what is known
@@ -241,8 +241,8 @@ that controls the variation perpendicular to magnetic field-lines
 of the velocity components perpendicular to field-lines. The perpendicular
 viscosity coefficients are given by
 \begin{align}
-\eta_1^e &= 0.51\, \frac{n\,T_e}{{\mit\Omega}_e^{\,2}\,\tau_e},\\[0.5ex]
-\eta_1^i &= \frac{3\, n\,T_i}{10\,{\mit\Omega}_i^{\,2}\,\tau_i}.
+\eta_{1\,e} &= 0.51\, \frac{n\,T_e}{{\mit\Omega}_e^{\,2}\,\tau_e},\\[0.5ex]
+\eta_{1\,i} &= \frac{3\, n\,T_i}{10\,{\mit\Omega}_i^{\,2}\,\tau_i}.
 \end{align}
 
 Finally, the tensors $\bpi_3$ and $\bpi_4$ describe what is known
@@ -251,23 +251,23 @@ associated viscous stresses are always perpendicular to the velocity, implying t
 there is no dissipation ({\rm i.e.}, viscous heating) associated with
 this effect. The gyroviscosity coefficients are given by 
 \begin{align}
-\eta_3^e &= -\frac{n\,T_e}{2\,{\mit\Omega}_e} ,\\[0.5ex]
-\eta_3^i &= \frac{n\,T_i}{2\,{\mit\Omega}_i}.
+\eta_{3\,e} &= -\frac{n\,T_e}{2\,{\mit\Omega}_e} ,\\[0.5ex]
+\eta_{3\,i} &= \frac{n\,T_i}{2\,{\mit\Omega}_i}.
 \end{align}
 
 \subsection{Normalization of Braginskii Equations}\label{s3.9}
 As we have just seen, the Braginskii equations contain terms that describe a
 very wide range of different physical phenomena. For this reason, they are
-extremely complicated. Fortunately, however, it is not generally 
+extremely complicated in nature. Fortunately, however, it is not generally 
 necessary to retain all of
-the terms in these equations when investigating tearing mode dynamics in tokamak plasmas. In this section, we shall attempt to construct a systematic
-normalization scheme for the Braginskii equations that will, hopefully, enable us
+the terms in these equations when investigating tearing mode dynamics in tokamak plasmas. In this section, we shall construct a systematic
+normalization scheme for the Braginskii equations that will enable us
 to determine which terms to keep, and which to discard, when investigating
 tearing mode dynamics. 
 
- It is convenient to split the friction force density
-${\bf F}$ into a component ${\bf F}_U$ corresponding to resistivity, and a
-component ${\bf F}_T$ corresponding to the so-called {\em thermal force}. Thus,
+ It is convenient to split the friction force density,
+${\bf F}$, into a component, ${\bf F}_U$, corresponding to resistivity, and a
+component, ${\bf F}_T$, corresponding to the so-called {\em thermal force density}. Thus,
 \begin{equation}
 {\bf F} = {\bf F}_U+{\bf F}_T,
 \end{equation}
@@ -276,13 +276,13 @@ where
 {\bf F}_U&= n\,e\left(\frac{{\bf j}_\parallel}{\sigma_\parallel}
 +\frac{{\bf j}_\perp}{\sigma_\perp}\right), \\[0.5ex]
 {\bf F}_T &= - 0.71\,n\,\nabla_\parallel T_e
--\frac{3\,n}{2\,{\mit\Omega}_e\,\tau_e}\,{\bf b}\times\nabla_\perp T_e.
+-\frac{3\,n}{2\,{\mit\Omega}_e\,\tau_e}\,{\bf b}\times\nabla_\perp T_e.\label{e43}
 \end{align}
-Likewise, the electron collisional energy gain term $w_e$ is split
-into a component $-w_i$ corresponding to the energy lost to the ions (in the
-ion rest frame), a component $w_U$ corresponding to work done by the friction
-force ${\bf F}_U$, and a component $w_T$ corresponding to work done by the
-thermal force ${\bf F}_T$. Thus,
+Likewise, the electron collisional energy gain term, $w_e$, is split
+into a component, $-w_i$, corresponding to the energy lost per unit volume to the ions (in the
+ion rest frame), a component, $w_U$, corresponding to work done by the friction
+force density, ${\bf F}_U$, and a component, $w_T$, corresponding to work done by the
+thermal force density, ${\bf F}_T$. Thus,
 \begin{equation}
 w_e = -w_i + w_U + w_T,
 \end{equation}
@@ -291,17 +291,17 @@ where
 w_U &= \frac{{\bf j}\cdot{\bf F}_U}{n\,e},\\[0.5ex]
 w_T&= \frac{{\bf j}\cdot{\bf F}_T}{n\,e}.
 \end{align}
-Finally, it is helpful to split the electron heat flux density ${\bf q}_e$ into
-a diffusive component ${\bf q}_{Te}$ and a convective component ${\bf q}_{Ue}$. 
+Finally, it is helpful to split the electron heat flux density, ${\bf q}_e$, into
+a diffusive component, ${\bf q}_{Te}$, and a convective component, ${\bf q}_{Ue}$. 
 Thus,
 \begin{equation}
 {\bf q}_e = {\bf q}_{Te} + {\bf q}_{Ue},
 \end{equation}
 where
 \begin{align}
-{\bf q}_{Te} &=-\kappa_\parallel^e\,\nabla_\parallel T_e -\kappa_\perp^e\,
+{\bf q}_{Te} &=-\kappa_{\parallel\,e}\,\nabla_\parallel T_e -\kappa_{\perp\,e}\,
 \nabla_\perp T_e
--\kappa_\times^e\,{\bf b}\times\nabla_\perp T_e,\\[0.5ex]
+-\kappa_{\times\,e}\,{\bf b}\times\nabla_\perp T_e,\\[0.5ex]
 {\bf q}_{Ue}&=  0.71\,\frac{T_e}{e}\,{\bf j}_\parallel-
 \frac{3\,T_e}{2\,{\mit\Omega}_e\,\tau_e\,e}\,{\bf b}\times{\bf j}_\perp.
 \end{align}
@@ -359,7 +359,7 @@ define the following normalized quantities: {\small
 The normalization procedure is designed to make all hatted quantities ${\cal O}(1)$.
 The normalization of the electric field is chosen 
  such that the ${\bf E}\times{\bf B}$
-velocity is of  similar magnitude to the electron fluid velocity. Note that the parallel viscosity
+velocity is of  similar magnitude to the electron diamagnetic velocity.  (See Section~\ref{lowest}.) Note that the parallel viscosity
 makes an ${\cal O}(1)$ contribution to $\widehat{\bpi}_e$, whereas the gyroviscosity
 makes an ${\cal O}(\zeta_e)$ contribution, and the perpendicular viscosity only 
 makes an ${\cal O}(\zeta_e^{2})$ contribution. Likewise, the parallel thermal
@@ -440,7 +440,7 @@ define the following normalized quantities:
 As before, the normalization procedure is designed to make all hatted quantities ${\cal O}(1)$.
 The normalization of the electric field is chosen 
  such that the ${\bf E}\times{\bf B}$
-velocity is of similar  magnitude to the ion fluid velocity. Note that the parallel viscosity
+velocity is of similar  magnitude to the ion diamagnetic velocity. Note that the parallel viscosity
 makes an ${\cal O}(1)$ contribution to $\widehat{\bpi}_i$, whereas the gyroviscosity
 makes an ${\cal O}(\zeta_i)$ contribution, and the perpendicular viscosity only 
 makes an ${\cal O}(\zeta_i^{2})$ contribution. Likewise, the parallel thermal
@@ -504,13 +504,13 @@ m_i \,n\,({\bf V}_i\cdot\nabla) {\bf V}_i +
 + \frac{5}{2}\,p_i\,\nabla\cdot{\bf V}_i+[\delta_i^{\,2}\,\zeta_i^{-1}]\, \bpi_i:\nabla{\bf V}_i\nonumber\\[0.5ex]
 + [\zeta_i^{-1}]\,\nabla\cdot{\bf q}_i &= [\delta_i^{-2}\,\zeta_i\,\mu]\,w_i.\label{e3.152c}
 \end{align}
-The terms in square brackets are there to remind us that the terms they precede are smaller or larger than the
-other terms in the equations (by the corresponding terms within the brackets). 
+The factors in square brackets are there to remind us that the terms they precede are smaller or larger than the
+other terms in the equations (by the corresponding factors within the brackets). 
 
 If we assume that $\delta_e\sim \zeta_e\sim \mu\ll 1$ then the dominant terms in the electron energy conservation equation
 (\ref{e3.151c}) yield
 \begin{equation}
-\nabla\cdot{\bf q}_{T_e}\simeq \nabla\cdot(-\kappa_\parallel^e\,\nabla_\parallel T_e)\simeq 0,
+\nabla\cdot{\bf q}_{T_e}\simeq \nabla\cdot(-\kappa_{\parallel\,e}\,\nabla_\parallel T_e)\simeq 0,
 \end{equation}
 which implies that 
 \begin{equation}
@@ -521,7 +521,7 @@ sufficiently large that it forces the electron temperature to be constant on mag
 Likewise, if we assume that $\delta_i\sim \zeta_i\sim \mu\ll 1$ then the dominant terms in the ion energy conservation equation
 (\ref{e3.152c}) yield
 \begin{equation}
-\nabla\cdot{\bf q}_{T_i}\simeq \nabla\cdot(-\kappa_\parallel^i\,\nabla_\parallel T_i)\simeq 0,
+\nabla\cdot{\bf q}_{T_i}\simeq \nabla\cdot(-\kappa_{\parallel\,i}\,\nabla_\parallel T_i)\simeq 0,
 \end{equation}
 which implies that 
 \begin{equation}
@@ -540,13 +540,12 @@ The sum of the preceding two equations gives
 \begin{equation}\label{e80}
  {\bf j}\times {\bf B} \simeq\nabla p,
 \end{equation}
-where $p=p_e+p_i$. In other words, a conventional tokamak plasma exists in a state in which electromagnetic
-forces exactly balance the  total scalar pressure force. 
+where $p=p_e+p_i$. In other words, a conventional tokamak plasma exists in a state in which the magnetic force density exactly balances the  total scalar pressure force density. 
 It follows from the previous equation that 
 \begin{equation}
 {\bf B}\cdot\nabla p\simeq 0.
 \end{equation}
-In other words, the pressure in a conventional tokamak plasma is constant on magnetic flux-surfaces. 
+In other words, the total pressure in a conventional tokamak plasma is constant on magnetic flux-surfaces. 
  However, given that $p=n\,(T_e+T_i)$, and making use of Eqs.~(\ref{e75}) and (\ref{e77}), we deduce that 
 \begin{equation}
 {\bf B}\cdot\nabla n\simeq 0.
@@ -581,7 +580,7 @@ is the {\em E-cross-B drift velocity}\/ (otherwise known as  the ${\bf E}\times 
 \end{align}
 are termed the {\em electron diamagnetic velocity}\/ and the {\em ion diamagnetic velocity}, respectively (Fitzpatrick 2015). 
 
-\section{Cylindrical Tearing Mode Theory}
+\section{Cylindrical Tearing Mode Theory}\label{cyl}
 \subsection{Introduction}
 The aim of this section is to describe the simplest theory of tearing mode dynamics in tokamak plasmas, according to which the plasma
 equilibrium is approximated as a periodic cylinder. 
@@ -611,7 +610,7 @@ are adopted (Fitzpatrick 1993).
 
 \subsection{Perturbed Magnetic Field}
 Consider a tearing mode perturbation that has $m$ periods in the poloidal direction,
-and $n$ periods in the toroidal direction, where $m/n\sim {\cal O}(1)$.  We can write the perturbed magnetic field in the form
+and $n$ periods in the toroidal direction, where $m/n\sim {\cal O}(1)$.  We can write the perturbed magnetic field in the divergence-free form
 \begin{equation}\label{e93}
 \delta{\bf B} \simeq \nabla\times (\psi\,{\bf e}_z),
 \end{equation}
@@ -632,7 +631,7 @@ To lowest order, the tearing perturbation is governed by the linearized version 
 ({\bf j}\cdot\nabla)\,\delta {\bf B}\simeq {\bf 0}.
 \end{equation}
 Making use of Equations~(\ref{e90})--(\ref{e94}), the $z$-component of the previous equation gives
-the {\em cylindrical tearing mode equation}\/ (Fitzpatrick 1993),
+the {\em cylindrical tearing mode equation}\/ (Wesson 1978; Fitzpatrick 1993),
 \begin{equation}
 \frac{\partial^2\psi}{\partial r^2} + \frac{1}{r}\,\frac{\partial\psi}{\partial r}-\frac{m^2}{r^2}\,\psi - \frac{J_z'\,\psi}{r\,(1/q-n/m)}\simeq 0,
 \end{equation}
@@ -643,9 +642,9 @@ J_z(r)= \frac{R_0\,\mu_0\,j_z(r)}{B_z}.
 
 \subsection{Solution in Presence of Perfectly-Conducting Wall}\label{perfect}
 Suppose that the plasma occupies the region $0\leq r\leq a$, where $a$ is the plasma {\em minor radius}. It follows that
-$J_z(r)=0$ for $r>a$. Let the plasma be surrounded by a concentric perfectly-conducting wall of radius $r_w>a$. 
-(By definition, $a\ll R_0$ in a large aspect-ratio tokamak.) An appropriate
-physical solution of the cylindrical tearing mode equation takes the form
+$J_z(r)=0$ for $r>a$. Let the plasma be surrounded by a concentric, rigid, radially-thin, perfectly-conducting, wall of radius $r_w>a$. 
+(By definition, $a\ll R_0$ in a large aspect-ratio tokamak. In most circumstances, the wall represents the metal vacuum vessel that surrounds  the plasma.) An appropriate
+physical solution of the cylindrical tearing mode equation takes the separable form
 \begin{equation}\label{e99}
 \psi(r,t)= {\mit\Psi}_s(t)\,\hat{\psi}_s(r),
 \end{equation}
@@ -679,28 +678,27 @@ for $\rho>0$, and
 for $\rho<0$. Here, 
 \begin{align}
 \alpha_s& =- \left(\frac{r\,q\,J_z'}{s}\right)_{r=r_s},\\[0.5ex]
-s(r) &= \frac{r\,q'}{q}.
+s(r) &= \frac{r\,q'}{q}.\label{shear}
 \end{align}
 Moreover,  the real parameters ${\mit\Delta}_{s+}$ and  ${\mit\Delta}_{s-}$ are fully determined by Equation~(\ref{e100})
 and the boundary conditions (\ref{e101})--(\ref{e103}). Note that, in general, $\psi$ is continuous across the resonant surface (in accordance with Maxwell's equations),
-whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial \psi/\partial r$ implies the presence of a radially
-thin, helical,  current sheet  at the resonant surface. This current sheet can only be resolved by retaining more terms in the perturbed plasma equation of motion, (\ref{e96}). 
+whereas $\partial\psi/\partial r$ is discontinuous. The discontinuity in $\partial \psi/\partial r$ implies the presence of a radially-thin, helical,  current sheet  at the resonant surface. This current sheet can only be resolved by retaining more terms in the perturbed plasma equation of motion, (\ref{e96}). (See Section~\ref{linear}.) 
 
 The complex quantity
-\begin{equation}
+\begin{equation}\label{e109}
 {\mit\Delta\Psi}_s = \left[r\,\frac{\partial \psi}{\partial r}\right]_{r_{s-}}^{r_{s+}}
 \end{equation}
 parameterizes the amplitude and phase of the current sheet flowing at the resonant surface. Matching the solutions
 in the so-called {\em inner region}\/ (i.e., the region of the plasma in the immediate vicinity of the resonant surface)
 and the so-called {\em outer region}\/ (i.e., everywhere in the plasma other than the inner region) with the help
 of Equations~(\ref{e99}), (\ref{e105}), and (\ref{e106}), we obtain
-\begin{equation}
+\begin{equation}\label{e110}
 {\mit\Delta\Psi}_s = E_{ss}\,{\mit\Psi}_s,
 \end{equation}
-where $E_{ss}= {\mit\Delta}_{s+}-{\mit\Delta}_{s-}$ is a real quantity that is known as the {\em tearing stability index}\/ (Furth, et al., 1963). 
+where $E_{ss}= {\mit\Delta}_{s+}-{\mit\Delta}_{s-}$ is a real quantity that is known as the {\em tearing stability index}\/ (Furth, et al.\ 1963). 
 
 \subsection{Solution in Presence of Resistive Wall}\label{resistive}
-Suppose, now, that the wall at $r=r_w$ possesses a finite resistivity, but is surrounded by a second perfectly-conducting wall
+Suppose, now, that the wall at $r=r_w$ possesses a finite electrical resistivity, but is surrounded by a second perfectly-conducting wall
 located at radius $r_c>r_w$.
 The solution in the outer region can be written
 \begin{equation}\label{e111}
@@ -773,7 +771,7 @@ can write
 \begin{equation}
 \delta E_z \simeq -\frac{d{\mit\Psi}_w}{dt}.
 \end{equation}
-Here, we are making use of the so-called {\em thin wall approximation}, according to which $\psi$ is assumed to only vary weakly in $r$ inside 
+Here, we are making use of the so-called {\em thin wall approximation}, according to which $\psi$ is assumed to only vary weakly in $r$ across 
 the wall. Ohm's law implies that
 \begin{equation}
 \delta j_z = \frac{\delta E_z}{\eta_w} = -\frac{1}{\eta_w}\,\frac{d{\mit\Psi}_w}{dt}
@@ -808,8 +806,8 @@ natural frequency is non-zero because the reconnected flux in the resonant layer
 flow (Fitzpatrick 1993). 
 
 \subsection{Solution in Presence of External Magnetic Field-Coil}
-Suppose that the perfectly-conducting wall at $r=r_c$ is replaced by a magnetic field-coil that carries a
-helical current possesing $m$ periods in the poloidal direction, and $n$ periods in the toroidal direction. Let the current density in the field-coil
+Suppose that the perfectly-conducting wall at $r=r_c$ is replaced by a radially-thin, magnetic field-coil that carries a
+helical current possessing $m$ periods in the poloidal direction, and $n$ periods in the toroidal direction. Let the current density in the field-coil
 take the form
 \begin{equation}\label{e135}
 \delta j_z = \frac{I_c(t)}{r_c}\,\delta(r-r_c)\,{\rm e}^{\,{\rm i}\,(m\,\theta-n\,\varphi)}.
@@ -902,7 +900,7 @@ According to Equation~(\ref{e82}),
 \nabla \cdot \delta {\bf j} = {\rm i}\left(\frac{m}{r}\,\delta j_\theta - \frac{n}{R_0}\,\delta j_z\right) = 0,
 \end{equation}
 where $\delta{\bf j}$ is the density of the current sheet flowing at the resonant surface, and we have made use
-of the fact that $\delta j_r\simeq 0$ in a radially thin current sheet. 
+of the fact that $\delta j_r$ is negligible in a radially-thin current sheet (Fitzpatrick 1993). 
  It follows from the previous three equations that
 \begin{equation}\label{e156}
 T_{\varphi\,s} = - \frac{n}{m}\,T_{\theta\,s}.
@@ -967,8 +965,8 @@ where $\rho=m_i\,n$ is the plasma mass density.
 Here, we have neglected electron inertial terms with respect to ion inertial terms (because the
 former are order $m_e/m_i$ smaller than the latter). We have also neglected electron viscosity terms
 with respect to ion viscosity terms (because the
-former are order $\sqrt{m_e/m_i}$ smaller than the latter). (See Sections~\ref{sbrag} and \ref{s3.9}.) Recall that the terms in square brackets are there to remind us that the terms they precede are larger than the
-other terms in the equation (by the corresponding terms within the brackets). 
+former are order $\sqrt{m_e/m_i}$ smaller than the latter). (See Sections~\ref{sbrag} and \ref{s3.9}.) Recall that the factors in square brackets are there to remind us that the terms they precede are larger than the
+other terms in the equation (by the corresponding factors within the brackets). 
 
 Taking  the scalar product of $r\,{\bf e}_\theta$ with the plasma equation of motion, (\ref{e175}), and integrating around magnetic
 flux-surfaces, we obtain 
@@ -983,11 +981,11 @@ has averaged to zero. Moreover, because $T_{\theta\,s}$ is quadratic in perturbe
 other terms in the equation]. To be more exact, if $|\delta {\bf B}|/|{\bf B}|\sim \delta_i$ then the right-hand side ceases to be a dominant term in the equation. 
 
 The largest contribution to $\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle$
-comes from the ion parallel viscosity tensor acting on the zeroth-order (in perturbed quantities) ion flow. (See Section~\ref{sbrag}.)  However, this contribution averages to zero in a cylindrical plasma in which $B_z$
+comes from the ion parallel viscosity tensor acting on the zeroth-order (in perturbed quantities) ion flow. (See Section~\ref{sbrag}.)  However, this contribution averages to zero in a cylindrical plasma, in which $B_z$
 is constant on magnetic flux-surfaces. Of course, in reality, in a large aspect-ratio tokamak plasma, 
 $B_z$ varies slightly around magnetic flux-surfaces, being larger on the inboard side of the torus than on the outboard side (Wesson 2011). This variation gives rise to a residual contribution to $\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle$.
 It is plausible that this contribution is not a dominant term in Equation~(\ref{e176})  [i.e., it is not ${\cal O}(\zeta_i^{-1})$ larger than the
-other terms in the equation]. To be more exact, if the residual contribution is ${\cal O}(\zeta_i)$ times smaller than the original contribution then  $\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle$ ceases to be a dominant term in the equation.
+other terms in the equation]. To be more exact, if the residual contribution is ${\cal O}(\zeta_i)$ times smaller than the non-averaged  contribution then  $\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle$ ceases to be a dominant term in the equation.
 
 According to the previous discussion, it is plausible that all terms appearing in Equation~(\ref{e176}) are of approximately equal
 magnitude when the inertial and viscous terms are evaluated with the zeroth-order ion flow, which can be written
@@ -1004,22 +1002,22 @@ viscosity tensor is greatly enhanced above the value predicted by the Braginskii
 plasma turbulence (Wesson 2011). Hence, it is reasonable to include the contribution of the enhanced perpendicular
 viscosity tensor to $\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle$. Our model form for $\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle$ is written
 \begin{equation}\label{e178}
-\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu\,r^{\,3}\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right].
+\langle r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\rangle = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right].
 \end{equation}
 Here, $\rho(r)$ is the equilibrium plasma mass density profile, $\tau_\theta(r)$ is the {\em poloidal flow-damping time}\/ (which
 is generally of order $\tau_i$), ${\mit\Omega}_{\theta\,{\rm nc}}(r)$ is the neoclassical poloidal angular velocity profile, and
-$\mu(r)$ is a phenomenological perpendicular viscosity due to plasma turbulence. 
+$\mu_\perp(r)$ is a phenomenological perpendicular viscosity due to plasma turbulence. 
 
 When evaluated with the zeroth-order ion flow, Equation~(\ref{e176}) reduces to 
 \begin{equation}\label{e179}
-4\pi^2\,R_0\left[\rho\,r^{\,3}\,\frac{\partial {\mit\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu\,r^{\,3}\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[\rho\,r^{\,3}\,\frac{\partial {\mit\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right]
 =T_{\theta\,s}\,\delta(r-r_s)+ S_\theta,
 \end{equation}
 where use has been made of Equation~(\ref{e178}). 
-Here, we have added a source term, $S_\theta(r)$, to the equation. Let ${\mit\Omega}_{\theta\,0}(r)$ be the 
+Here, we have added a source term, $S_\theta(r)$, to the equation in order to account for the equilibrium poloidal flow. Let ${\mit\Omega}_{\theta\,0}(r)$ be the 
 unperturbed (by the tearing mode) ion poloidal angular velocity profile. It follows that 
 \begin{equation}
-S_\theta = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_{\theta\,0}-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{d}{d r}\!\left(\mu\,r^{\,3}\,\frac{d{\mit\Omega}_{\theta\,0}}{d r}\right)\right].
+S_\theta = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_{\theta\,0}-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{d}{d r}\!\left(\mu_\perp\,r^{\,3}\,\frac{d{\mit\Omega}_{\theta\,0}}{d r}\right)\right].
 \end{equation}
 Hence, writing
 \begin{equation}
@@ -1029,14 +1027,14 @@ where ${\mit\Delta\Omega}_{\theta}(r,t)$ is the  modification to the ion poloida
 induced by the poloidal electromagnetic torque that develops at the resonant surface, Equation~(\ref{e179})
 yields 
 \begin{equation}
-4\pi^2\,R_0\left[\rho\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[\rho\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
 =T_{\theta\,s}\,\delta(r-r_s).
 \end{equation}
 There is one further refinement that we can make to the previous equation. It turns out that neoclassical poloidal
 flow damping gives rise to an enhancement of poloidal ion inertia by a factor of $1+2\,q^{\,2}$ (Hirshman 1978). Hence,
 our final version of the perturbed plasma poloidal angular equation of motion becomes 
 \begin{equation}\label{e182}
-4\pi^2\,R_0\left[(1+2\,q^{\,2})\,\rho\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[(1+2\,q^{\,2})\,\rho\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
 =T_{\theta\,s}\,\delta(r-r_s).
 \end{equation}
 
@@ -1050,7 +1048,7 @@ unperturbed (by the tearing mode) ion toroidal angular velocity profile, and ${\
 induced by the toroidal electromagnetic torque that develops at the resonant surface. The perturbed ion toroidal angular
 equation of motion is written
 \begin{equation}\label{e185}
-4\pi^2\,R_0^{\,3}\left[\rho\,r\,\frac{\partial {\mit\Delta\Omega}_\varphi}{\partial t}-\frac{\partial}{\partial r}\!\left(\mu\,r\,\frac{\partial{\mit\Delta\Omega}_\varphi}{\partial r}\right)\right]
+4\pi^2\,R_0^{\,3}\left[\rho\,r\,\frac{\partial {\mit\Delta\Omega}_\varphi}{\partial t}-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r\,\frac{\partial{\mit\Delta\Omega}_\varphi}{\partial r}\right)\right]
 =T_{\varphi\,s}\,\delta(r-r_s).
 \end{equation}
 Note that the ion parallel viscosity tensor does not give rise to damping of the toroidal flow profile. Furthermore, there is  no
@@ -1063,14 +1061,14 @@ Equations~(\ref{e182}) and (\ref{e185}) are subject to the boundary conditions
 \end{align}
 The boundary conditions (\ref{e186}) merely ensure that the ion angular velocities remain finite at the magnetic axis. 
 On the other  hand, the boundary conditions (\ref{e187}) are a consequence of the action of {\em charge exchange}\/ with electrically neutral particles emitted isotropically from the wall  in the edge regions of the plasma
-(Brau, et al., 1983; Fitzpatrick 1993; Monier-Garbet, et al., 1997). Charge exchange with neutrals gives rise to 
+(Brau, et al.\ 1983; Fitzpatrick 1993; Monier-Garbet, et al.\ 1997). Charge exchange with neutrals gives rise to 
 dominant damping torques acting at the edge of the plasma that relax the edge ion angular velocities  toward  particular values. Moreover, the
 electromagnetic torques that develop at the resonant surface are not large enough, compared with the charge-exchange torques,
 to significantly modify the edge ion angular velocities (Fitzpatrick 1993). 
 
 \subsection{Solution of Plasma Angular Equations of Motion}
 In general, the perturbed angular velocity profiles, ${\mit\Delta\Omega}_\theta(r,t)$ and ${\mit\Delta\Omega}_\varphi(r,t)$, are
-localized in the vicinity of the resonant surface (Fitzpatrick 1993). Hence, it is reasonable to write the perturbed angular
+localized in the vicinity of the resonant surface (Fitzpatrick 1993). Hence, it is reasonable to express  the perturbed angular
 equations of motion, (\ref{e182}) and (\ref{e185}), in the simplified  forms
 \begin{align}\label{e188}
 4\pi^2\,R_0\left[(1+2\,q_s^{\,2})\,\rho_s\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho_s}{\tau_{\theta\,s}}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\mu_s\frac{\partial}{\partial r}\!\left(r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
@@ -1078,7 +1076,7 @@ equations of motion, (\ref{e182}) and (\ref{e185}), in the simplified  forms
 4\pi^2\,R_0^{\,3}\left[\rho_s\,r\,\frac{\partial {\mit\Delta\Omega}_\varphi}{\partial t}-\mu_s\frac{\partial}{\partial r}\!\left(r\,\frac{\partial{\mit\Delta\Omega}_\varphi}{\partial r}\right)\right]
 =T_{\varphi\,s}\,\delta(r-r_s),\label{e189}
 \end{align}
-where $q_s=q(r_s)$, $\rho_s=\rho(r_s)$, $\tau_{\theta\,s}=\tau_\theta(r_s)$, and $\mu_s=\mu(r_s)$. 
+where $q_s=q(r_s)$, $\rho_s=\rho(r_s)$, $\tau_{\theta\,s}=\tau_\theta(r_s)$, and $\mu_s=\mu_\perp(r_s)$. 
 
 Let us write
 \begin{align}\label{e190}
@@ -1106,14 +1104,14 @@ and
 
 Equations~(\ref{e188}) and (\ref{e189}) yield
 \begin{align}\label{e198}
-(1+2\,q_k^{\,2})\,\frac{d\alpha_p}{dt} + \left(\frac{1}{\tau_{\theta\,s}}+\frac{j_{1,p}^{\,2}}{\tau_{M\,s}}\right)\alpha_p
-&= \frac{m^{2}\,[y_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,\epsilon^{\,2}\,[J_2(j_{1,p})]^{\,2}}\,
+(1+2\,q_k^{\,2})\,\frac{d\alpha_p}{dt} + \left(\frac{1}{\tau_{\theta\,s}}+\frac{j_{1,p}^{\,2}}{\tau_{M}}\right)\alpha_p
+&= \frac{m^{2}\,[y_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,\epsilon_a^{\,2}\,[J_2(j_{1,p})]^{\,2}}\,
 {\rm Im}({\mit\Delta\hat{\Psi}_s}\,\hat{\mit\Psi}_s^{\,\ast}),\\[0.5ex]
-\frac{d\beta_p}{dt} + \frac{j_{0,p}^{\,2}}{\tau_{M\,s}}\,\beta_p
+\frac{d\beta_p}{dt} + \frac{j_{0,p}^{\,2}}{\tau_{M}}\,\beta_p
 &= \frac{n^{2}\,[z_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,[J_1(j_{0,p})]^{\,2}}\,
 {\rm Im}({\mit\Delta\hat{\Psi}_s}\,\hat{\mit\Psi}_s^{\,\ast}).\label{e199}
 \end{align}
-Here, $\tau_{M\,s} =\rho_s\,a^{\,2}/\mu_s$ is the {\em momentum confinement time}, $\tau_A = (\mu_0\,\rho_s\,a^{\,2}/B_z^{\,2})^{1/2}$ is the {\em Alfv\'{e}n time}, $\epsilon=a/R_0\ll 1$ is the {\em inverse aspect-ratio}\/ of the plasma,
+Here, $\tau_{M} =\rho_s\,a^{\,2}/\mu_s$ is the {\em momentum confinement time}, $\tau_A = (\mu_0\,\rho_s\,a^{\,2}/B_z^{\,2})^{1/2}$ is the {\em Alfv\'{e}n time}, $\epsilon_a=a/R_0\ll 1$ is the {\em inverse aspect-ratio}\/ of the plasma,
 ${\mit\Delta\Psi}_s = R_0\,B_z\,{\mit\Delta\hat{\Psi}}_s$, and ${\mit\Psi}_s = R_0\,B_z\,\hat{\mit\Psi}_s$. Moreover,
 use has been made of Equations~(\ref{e157}), (\ref{e158}), and (\ref{e190})--(\ref{e197}). 
 
@@ -1125,7 +1123,7 @@ surface will modify the convection velocity. Consequently, the natural frequency
  \varpi_s(t) = \varpi_{s\,0} + ({\bf k}\cdot {\mit\Delta}{\bf V}_i)_{r=r_s}=
  \varpi_{s\,0} + m\,{\mit\Delta\Omega}_\theta(r_s,t) - n\,{\mit\Delta\Omega}_\varphi(r_s,t),
 \end{equation}
-where $\varpi_{s\,0}$ is the unperturbed natural frequency. The previous expression is known as the {\em no-slip constraint}\/ (Fitzpatrick 1993), and has been verified experimentally (Vahala, et al., 1980). 
+where $\varpi_{s\,0}$ is the unperturbed natural frequency. The previous expression is known as the {\em no-slip constraint}\/ (Fitzpatrick 1993), and has been verified experimentally (Vahala, et al.\ 1980). 
 It follows from Equations~(\ref{e190})
 and (\ref{e191}) that
 \begin{equation}\label{e201}
@@ -1141,12 +1139,12 @@ magnetic flux at the resonant surface:
 \tau_w\,\frac{d\hat{\mit\Psi}_w}{dt} &= E_{sw}\,\hat{\mit\Psi}_s +\tilde{E}_{ww}\,\hat{\mit\Psi}_w
 +\hat{I}_c,\\[0.5ex]
 \varpi_s(t)& = \varpi_{s\,0} - \sum_{p=1,\infty}\left[\alpha_p(t)+\beta_p(t)\right],\\[0.5ex]
-(1+2\,q_k^{\,2})\,\frac{d\alpha_p}{dt} + \left(\frac{1}{\tau_{\theta\,s}}+\frac{j_{1,p}^{\,2}}{\tau_{M\,s}}\right)\alpha_p
-&= \frac{m^{2}\,[y_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,\epsilon^{\,2}\,[J_2(j_{1,p})]^{\,2}}
+(1+2\,q_k^{\,2})\,\frac{d\alpha_p}{dt} + \left(\frac{1}{\tau_{\theta\,s}}+\frac{j_{1,p}^{\,2}}{\tau_{M}}\right)\alpha_p
+&= \frac{m^{2}\,[y_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,\epsilon_a^{\,2}\,[J_2(j_{1,p})]^{\,2}}
 \,E_{sw}\,{\rm Im}(\hat{\mit\Psi}_w\,\hat{\mit\Psi}_s^{\,\ast}),\\[0.5ex]
-\frac{d\beta_p}{dt} + \frac{j_{0,p}^{\,2}}{\tau_{M\,s}}\,\beta_p
+\frac{d\beta_p}{dt} + \frac{j_{0,p}^{\,2}}{\tau_{M}}\,\beta_p
 &= \frac{n^{2}\,[z_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,[J_1(j_{0,p})]^{\,2}}\,
-E_{sw}\,{\rm Im}(\hat{\mit\Psi}_w\,\hat{\mit\Psi}_s^{\,\ast}).
+E_{sw}\,{\rm Im}(\hat{\mit\Psi}_w\,\hat{\mit\Psi}_s^{\,\ast}).\label{e206}
 \end{align}
 Here, 
 \begin{align}
@@ -1154,15 +1152,15 @@ Here,
 \tilde{E}_{ww} &= E_{ww} + \frac{2m\,(r_w/r_c)^{2m}}{1-(r_w/r_c)^{2m}}.\label{e208}
 \end{align}
 
-\section{Reduced Drift-MHD Resonant Plasma Response Model}
+\section{Reduced Drift-MHD Resonant  Response Model}
 \subsection{Introduction}
-Equations~(\ref{e202})--(\ref{e208}) contain two quantities---namely, the reconnection time, $\tau_s$, and the unperturbed
+Equations~(\ref{e202})--(\ref{e206}) contain two quantities---namely, the reconnection time, $\tau_s$, and the unperturbed
 natural frequency, $\varpi_{s\,0}$---that can only be determined by solving for the plasma response in the radially thin resonant layer surrounding the resonant surface. Unfortunately, determining the resonant plasma response is not a straightforward task. The
 problem is that the small characteristic lengthscale in the resonant region (i.e., the resonant layer width) causes the fundamental ordering parameters
 $\delta_e$ and $\delta_i$ (see Section~\ref{s3.9}) to take values that are of order unity. Consequently, most of the simplifications described in
 Section~\ref{lowest} are not applicable in the resonant layer. In particular, many of the terms in the Braginskii equations (see Section~\ref{sbrag}) that are negligible in the outer region (e.g., plasma resistivity) have to be taken into account in the resonant layer. 
 
-A tearing mode is a modified shear-Alfv\'{e}n wave (Hazeltine \& Meiss 1985), and has very little connection with the compressible-Alfv\'{e}n wave. For instance, the resonance condition, ${\bf k}\cdot{\bf B}=0$, which determines the position of the resonant
+A tearing mode is a modified shear-Alfv\'{e}n wave (Hazeltine \& Meiss 1985), and has very little connection with a compressible-Alfv\'{e}n wave. For instance, the resonance condition, ${\bf k}\cdot{\bf B}=0$, which determines the position of the resonant
 surface, is identical to the resonance condition for a  shear-Alfv\'{e}n wave, but differs substantially from that of a  compressible-Alfv\'{e}n wave (Fitzpatrick 2015). Hence, one very effective way of simplifying the resonant layer equations is to remove the
 physics of a compressible-Alfv\'{e}n wave from them altogether, in the process converting a drift-magnetohydrodynamical (MHD) response model
 into a so-called {\em reduced}\/ drift-MHD response model (Strauss 1976; Hazeltine, et al.\ 1985; Furuya, et al.\ 2003). The aim of
@@ -1175,7 +1173,7 @@ response of the plasma.
 the following parameters:
 \begin{align}
 n_0 &= n(r_s),\\[0.5ex]
-p_0&= p(r_s),\\[0.5ex]
+p_0&= p(r_s),\label{e210}\\[0.5ex]
 \eta_e &=\left.\frac{d\ln T_e}{d\ln n}\right|_{r=r_s},\label{e211}\\[0.5ex]
 \eta_i &= \left.\frac{d\ln T_i}{d\ln n}\right|_{r=r_s},\\[0.5ex]
 \tau &= \left(\frac{T_e}{T_i}\right)_{r=r_s}\left(\frac{1+\eta_e}{1+\eta_i}\right),\label{e213}
@@ -1196,11 +1194,11 @@ To lowest order, the electron and ion diamagnetic velocities take the respective
 \end{align}
 (See Section~\ref{lowest}.)
 The so-called {\em MHD velocity}, which is the velocity of a fictional `MHD fluid',  is defined
-\begin{equation}
+\begin{equation}\label{e217}
 {\bf V} = {\bf V}_E + V_{\parallel\,i}\,{\bf b},
 \end{equation}
 where ${\bf V}_E$ is the ${\bf E}\times {\bf B}$ velocity, and $V_{\parallel\,i}$ is the parallel component of the ion
-fluid velocity. The lowest order electron and ion fluid velocities take the respective forms:
+fluid velocity. The lowest-order electron and ion fluid velocities take the respective forms:
 \begin{align}
 {\bf V}_e &= {\bf V} +{\bf V}_{\ast\,i}-\frac{{\bf j}}{n_0\,e},\\[0.5ex]
 {\bf V}_i &= {\bf V} + {\bf V}_{\ast\,i}.
@@ -1210,7 +1208,7 @@ fluid velocity. The lowest order electron and ion fluid velocities take the resp
 Following Hazeltine \& Meiss 1992, if we neglect electron inertia and electron viscosity  in the electron equation of motion, (\ref{e3.79b}), then
 we obtain the {\em generalized Ohm's law}: 
 \begin{equation}\label{e220}
-{\bf E} + {\bf V}\times {\bf B} + \frac{1}{e\,n_0}\left[\nabla p + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\nabla p)\,{\bf b} -{\bf j}\times{\bf b}\right] \simeq \eta_\parallel\,{\bf j}_\parallel + \eta_\perp\,{\bf j}_\perp.
+{\bf E} + {\bf V}\times {\bf B} + \frac{1}{e\,n_0}\!\left[\nabla p + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\nabla p)\,{\bf b} -{\bf j}\times{\bf b}\right] \simeq \eta_\parallel\,{\bf j}_\parallel + \eta_\perp\,{\bf j}_\perp.
 \end{equation}
 Here, $\eta_\parallel=1/\sigma_\parallel$ and $\eta_\perp=1/\sigma_\perp$ are the parallel and perpendicular plasma
 resistivities,  respectively. (See Section~\ref{sbrag}.) We have neglected the cross term in Equation~(\ref{e3.91a})
@@ -1219,13 +1217,11 @@ because it is a factor $({\mit\Omega}_e\,\tau_e)^{-1}$  smaller than $\nabla p$.
 Next, we can add the electron and ion equations of motion, (\ref{e3.79b}) and (\ref{e3.80b}), again neglecting electron inertia and electron viscosity, 
 to give the {\em plasma equation of motion}: 
 \begin{equation}
-n_0\,m_i\left[\frac{\partial {\bf V}}{\partial t} + ({\bf V}\cdot\nabla ){\bf V} + \frac{1}{1+\tau}\,({\bf V}_\ast\cdot\nabla){\bf V}_E\right]
+n_0\,m_i\!\left[\frac{\partial {\bf V}}{\partial t} + ({\bf V}\cdot\nabla ){\bf V} + \frac{1}{1+\tau}\,({\bf V}_\ast\cdot\nabla){\bf V}_E\right]
 + \nabla p + \nabla\cdot\bpi_i - {\bf j}\times {\bf B}\simeq 0.
 \end{equation}
 Here, $\nabla\cdot\bpi_i$ includes the contribution from the anomalous (i.e., enhanced due to the action of small-scale plasma turbulence) perpendicular viscosity tensor. The contribution from the gyroviscosity tensor,
-which is the same size as the ion inertial terms, has already been incorporated into the equation (Hazeltine \& Meiss 1992). We are neglecting the contribution of the parallel viscosity tensor  because we
-expect it to be much smaller than its nominal magnitude in a large aspect-ratio tokamak
-plasma. 
+which is the same size as the ion inertial terms, has already been incorporated into the equation (Hazeltine \& Meiss 1992). For the moment, we are neglecting the contribution of the parallel viscosity tensor. 
 
 Finally, we can combine the electron and ion energy evolution equations, (\ref{e3.79c}) and (\ref{e3.80c}), to obtain
 a {\em plasma energy evolution equation}:
@@ -1249,7 +1245,7 @@ and compressible-Alfv\'{e}n wave dynamics. The system of equations is completed 
 \subsection{Normalization Scheme}
 Let $l$ be a typical variation lengthscale in the resonant layer. The {\em Alfv\'{e}n velocity}, which is the typical phase
 velocity of compressible Alfv\'{e}n waves, is defined
-\begin{equation}
+\begin{equation}\label{e226a}
 V_A = \frac{B_z}{\sqrt{\mu_0\,n_0\,m_i}}.
 \end{equation}
 It is helpful to define the  {\em collisionless ion skin-depth}: 
@@ -1265,7 +1261,7 @@ $\hat{\bf j} = {\bf j}/(B_z/\mu_0\,l)$, $\hat{\eta}_{\parallel,\perp} = \eta_{\p
 $\hat{{\bf V}}_{\ast,i}= {\bf V}_{\ast,i}/V_A$, $\hat{V}_{\parallel\,i}= V_{\parallel\,i}/V_A$, $\hat{p} = p/(B_z^{\,2}/\mu_0)$, $\hat{p}_0 = p_0/(B_z^{\,2}/\mu_0)$, $\hat{\bpi}_{i} = \bpi_{i}/(B_z^{\,2}/\mu_0)$,
 $\hat{\bf q} = {\bf q} /(B_z^{\,2}\,V_A/\mu_0)$. Equations~(\ref{e220})--(\ref{e226}) yield
 \begin{align}\label{e227}
-\hat{\bf E} + \hat{\bf V}\times \hat{\bf B} + \hat{d}_i\left[\hat{\nabla} \hat{p} + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\hat{\nabla} \hat{p})\,{\bf b} + \hat{\nabla}\cdot\hat{\bpi}_e-\hat{\bf j}\times\hat{\bf b}\right] &\simeq \hat{\eta}_\parallel\,\hat{\bf j}_\parallel+ \hat{\eta}_\perp\,\hat{\bf j}_\perp,\\[0.5ex]
+\hat{\bf E} + \hat{\bf V}\times \hat{\bf B} + \hat{d}_i\!\left[\hat{\nabla} \hat{p} + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\hat{\nabla} \hat{p})\,{\bf b} + \hat{\nabla}\cdot\hat{\bpi}_e-\hat{\bf j}\times\hat{\bf b}\right] &\simeq \hat{\eta}_\parallel\,\hat{\bf j}_\parallel+ \hat{\eta}_\perp\,\hat{\bf j}_\perp,\\[0.5ex]
 \frac{\partial \hat{\bf V}}{\partial \hat{t}} 
 + (\hat{\bf V}\cdot\hat{\nabla} )\hat{\bf V} + 
 \frac{1}{1+\tau}\,(\hat{\bf V}_\ast\cdot\hat{\nabla})\hat{\bf V}_E
@@ -1295,11 +1291,11 @@ Let us write (Fitzpatrick \& Waelbroeck 2009)
 \begin{equation}\label{e238}
 \hat{\bf B} \simeq (1+ \delta b)\,{\bf n} + \hat{\nabla}\psi\times {\bf n},
 \end{equation}
-which automatically satisfies Equation~(\ref{e230}). (Here, we are assuming that $|r-r_s|\ll a$ inside the resonant layer.) Here, $\delta b(\hat{x},\zeta)$ and $\psi(\hat{x},\zeta)$ are assumed to be small
+which automatically satisfies Equation~(\ref{e230}). (Recall that we are assuming that $|r-r_s|\ll r_s$ inside the resonant layer.) Here, $\delta b(\hat{x},\zeta)$ and $\psi(\hat{x},\zeta)$ are assumed to be small
 compared to unity, which merely indicates that the perturbed magnetic field due to the tearing mode is small compared to the
 equilibrium magnetic field.  We can write
 \begin{equation}
-\hat{\bf E} \simeq \left(\hat{E}_\parallel- \frac{\partial \psi}{\partial \hat{t}}\right){\bf n} + \hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}}\right)\times {\bf n} + \hat{\nabla}\phi,
+\hat{\bf E} \simeq \left(\hat{E}_\parallel- \frac{\partial \psi}{\partial \hat{t}}\right)\!{\bf n} + \hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}}\right)\times {\bf n} + \hat{\nabla}\phi,
 \end{equation}
 which automatically satisfies Equation~(\ref{e231}) provided that
 \begin{equation}
@@ -1320,7 +1316,7 @@ We can write
 \hat{p}\simeq  \frac{\beta}{{\mit\Gamma}} + \delta p,
 \end{equation}
 where 
-\begin{equation}
+\begin{equation}\label{e244}
 \beta= {\mit\Gamma}\,\hat{p}_0= \frac{{\mit\Gamma}\,p_0\,\mu_0}{B_z^{\,2}}.
 \end{equation}
  Here, $\delta p(\hat{x},\zeta)$ is assumed to be first order in small
@@ -1334,21 +1330,23 @@ It follows that
  The normalized drift-MHD equations, (\ref{e227})--(\ref{e229}), yield 
  \begin{align}\label{e247}
  \hat{d}_i\,\hat{\nabla}(\delta p + \delta b)\nonumber\\[0.5ex]+ \left(\hat{E}_{\parallel}-\frac{\partial\psi}{\partial \hat{t}} - [\psi,\phi]+ \frac{\hat{d}_i\,[\psi,\delta p]}{1+\tau}\left(1-\frac{0.71\,\eta_e\,\tau}{1+\eta_e}\right)
- + \hat{d}_i\,[\psi,\delta b]+ \hat{\eta}_\parallel\,\hat{\nabla}^2\psi\right){\bf n}\nonumber\\[0.5ex]
+ + \hat{d}_i\,[\psi,\delta b]+ \hat{\eta}_\parallel\,J\right){\bf n}\nonumber\\[0.5ex]
  +\hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}} + {\mit\Xi} -\hat{\eta}_\perp\,\delta b\right)\times {\bf n} + \frac{\hat{d}_i}{2}\,\hat{\nabla}\delta b^{\,2}- b_z\,\hat{\nabla}\phi + \hat{V}_{\parallel\,i}\,\hat{\nabla}\psi
-+  \hat{d}_i\,\hat{\nabla}^2\psi\,\hat{\nabla}\psi \simeq 0,\\[0.5ex]
++  \hat{d}_i\,J\,\hat{\nabla}\psi \simeq 0,\\[0.5ex]
  \hat{\nabla}(\delta p + \delta b) + \left(\frac{\partial \hat{V}_{\parallel\,i}}{\partial \hat{t}} + [\hat{V}_{\parallel\,i},\phi] + [\psi,\delta b]\right){\bf n}\nonumber\\[0.5ex]
  +\hat{\nabla}\!\left(\frac{\partial\phi}{\partial \hat{t}} - \frac{\hat{d}_i\,[\phi,\delta p]}{2\,(1+\tau)}\right)\times {\bf n} 
  + \frac{1}{2}\,\hat{\nabla}\!
  \left(\hat{V}_\perp^{\,2}+ \frac{\hat{\bf V}_\ast\cdot\hat{\bf V}_E }{1+\tau}+ \delta b^{\,2}\right)  \nonumber\\[0.5ex]
--\hat{\nabla}^2\phi\,\hat{\nabla}\phi + \frac{\hat{d}_i}{2\,(1+\tau)}\left(\hat{\nabla}^2\phi\,\hat{\nabla}\delta p +\hat{\nabla}^2\delta p\,\hat{\nabla}\phi\right) + \hat{\nabla}^2\psi\,\hat{\nabla}\psi + \hat{\nabla}\cdot\hat{\bpi}_i \simeq 0,\label{e248}\\[0.5ex]
+-\hat{\nabla}^2\phi\,\hat{\nabla}\phi + \frac{\hat{d}_i}{2\,(1+\tau)}\left(\hat{\nabla}^2\phi\,\hat{\nabla}\delta p +\hat{\nabla}^2\delta p\,\hat{\nabla}\phi\right) + J\,\hat{\nabla}\psi + \hat{\nabla}\cdot\hat{\bpi}_i \simeq 0,\label{e248}\\[0.5ex]
 \frac{\partial \delta p}{\partial \hat{t}} + [\delta p,\phi] +\beta\,\hat{\nabla}^2{\mit\Xi} + \frac{2}{3}\,\hat{\nabla}\cdot \hat{\bf q}\simeq 0,\label{e249}
  \end{align}
  where use has been made of Equation~(\ref{e232}), and
- \begin{equation}
- [A,B] \equiv \hat{\nabla} A\times \hat{\nabla} B\cdot{\bf n}.
- \end{equation}
- Here, $\hat{d}_i$ and $\beta$ are assumed to be zeroth order in small quantities, $\hat{\eta}_\parallel$ and $\hat{\eta}_\perp$ are assumed to be first order, while $\hat{\nabla}\cdot \hat{\bpi}_{i}$ and $\hat{\nabla}\cdot\hat{\bf q}$ are assumed to be second order. 
+ \begin{align}
+ [A,B] &\equiv \hat{\nabla} A\times \hat{\nabla} B\cdot{\bf n},\\[0.5ex]
+ J &= -\frac{2}{q_s\,\hat{R}_0}+ \hat{\nabla}^2\psi,\label{eJ}
+ \end{align}
+ with $R_0=R_0/l$. 
+ Here, $\hat{d}_i$ and $\beta$ are assumed to be zeroth order in small quantities, $J$, $1/\hat{R}_0$, $\hat{\eta}_\parallel$, and $\hat{\eta}_\perp$ are assumed to be first order, while $\hat{\nabla}\cdot \hat{\bpi}_{i}$ and $\hat{\nabla}\cdot\hat{\bf q}$ are assumed to be second order. 
  
  To first order in small quantities, both Equations~(\ref{e247}) and (\ref{e248}) yield
  \begin{equation}
@@ -1356,14 +1354,10 @@ It follows that
  \end{equation}
  which is simply an expression of lowest-order equilibrium force balance. The scalar product of Equation~(\ref{e247}) with ${\bf n}$ gives
  \begin{equation}\label{e252}
- \frac{\partial\psi}{\partial\hat{t}}\simeq [\phi,\psi] +\hat{d}_i\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{0.71\,\eta_e}{1+\eta_e}\right)
- [\delta p,\psi] + \hat{\eta}_\parallel\,J + \hat{E}_\parallel,
+ \frac{\partial\psi}{\partial\hat{t}}\simeq [\phi,\psi] +\hat{d}_i\!\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{0.71\,\eta_e}{1+\eta_e}\right)
+ [\delta p,\psi] + \hat{\eta}_\parallel\,J + \hat{E}_\parallel.
  \end{equation}
- where
- \begin{equation}
- J = \hat{\nabla}^2\psi.
- \end{equation}
- The scalar product of Equation~(\ref{e248}) with ${\bf n}$ yields
+  The scalar product of Equation~(\ref{e248}) with ${\bf n}$ yields
  \begin{equation}\label{e254}
  \frac{\partial\hat{V}_{\parallel\,i}}{\partial\hat{t}}\simeq [\phi,\hat{V}_{\parallel\,i}]-[\delta p,\psi] -{\bf n}\cdot\hat{\nabla}\cdot\hat{\bpi}_i.
  \end{equation}
@@ -1378,7 +1372,7 @@ It follows that
  -\frac{2}{3}\,(1-c_\beta^{\,2})\,\hat{\nabla}\cdot\hat{\bf q} +c_\beta^{\,2}\,\hat{\eta}_\perp \hat{\nabla}^2\delta p,
  \end{align}
  where
- \begin{equation}
+ \begin{equation}\label{e257}
  c_\beta = \sqrt{\frac{\beta}{1+\beta}}.
  \end{equation}
  Finally, the scalar product of the curl of Equation~(\ref{e248}) with ${\bf n}$ gives 
@@ -1403,28 +1397,28 @@ where $\hat{\nabla}_\perp^{\,2}\equiv \hat{\nabla}\cdot\hat{\nabla}_\perp$, $\ch
 We can also
 write
 \begin{equation}
-\hat{\nabla}\cdot\hat{\bpi}_i \simeq - \hat{\chi}_\phi\,\hat{\nabla}^2\hat{\bf V}_i,
+\hat{\nabla}\cdot\hat{\bpi}_i \simeq - \hat{\chi}_\varphi\,\hat{\nabla}^2\hat{\bf V}_i,
 \end{equation}
-where $\chi_\phi = \mu_{\perp}/(n_0\,m_i)$, $\hat{\chi}_\phi = \chi_\phi/(l\,V_A)$, and $\mu_\perp$ is the anomalous
+where $\chi_\varphi = \mu_{\perp}/(n_0\,m_i)$, $\hat{\chi}_\varphi = \chi_\varphi/(l\,V_A)$, and $\mu_\perp$ is the anomalous
 ion perpendicular viscosity. Note that the previous equation is entirely phenomenological in nature.  It is easily seen that
 \begin{align}\label{e262}
-{\bf n}\cdot\hat{\nabla}\cdot\hat{\bpi}_i&\simeq -\hat{\chi}_\phi\,\hat{\nabla}^{2}\hat{V}_{\parallel\,i},\\[0.5ex]
-{\bf n}\cdot\hat{\nabla}\times \hat{\nabla}\cdot\hat{\bpi}_i&\simeq \hat{\chi}_\perp \,\hat{\nabla}^4\!\left(\phi - \frac{\hat{d}_i\,\delta p}{1+\tau}\right).\label{e263}
+{\bf n}\cdot\hat{\nabla}\cdot\hat{\bpi}_i&\simeq -\hat{\chi}_\varphi\,\hat{\nabla}^{2}\hat{V}_{\parallel\,i},\\[0.5ex]
+{\bf n}\cdot\hat{\nabla}\times \hat{\nabla}\cdot\hat{\bpi}_i&\simeq \hat{\chi}_\varphi \,\hat{\nabla}^4\!\left(\phi - \frac{\hat{d}_i\,\delta p}{1+\tau}\right).\label{e263}
 \end{align}
 
-Let us define $V=\hat{V}_{\parallel\,i}$ and $N=\delta p/c_\beta$. Equations~(\ref{e252})--(\ref{e254}), (\ref{e256}), (\ref{e258})--(\ref{e260}), (\ref{e262}), and (\ref{e263}) yield the following closed set of equations (Fitzpatrick \& Waelbroeck 2005):
+Let us define $V=\hat{V}_{\parallel\,i}$ and $N=\delta p/c_\beta$. Equations~(\ref{eJ}), (\ref{e252})--(\ref{e254}), (\ref{e256}), (\ref{e258})--(\ref{e260}), (\ref{e262}), and (\ref{e263}) yield the following closed set of equations (Fitzpatrick \& Waelbroeck 2005):
 \begin{align}\label{e264}
-\frac{\partial\psi}{\partial\hat{t}}&\simeq [\phi,\psi] + \hat{d}_\beta\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{0.71\,\eta_e}{1+\eta_e}\right)[N,\psi]
+\frac{\partial\psi}{\partial\hat{t}}&\simeq [\phi,\psi] + \hat{d}_\beta\!\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{0.71\,\eta_e}{1+\eta_e}\right)[N,\psi]
 +\hat{\eta}_\parallel\,J + \hat{E}_\parallel,\\[0.5ex]
-\frac{\partial U}{\partial \hat{t}}&\simeq [\phi,U] + \frac{\hat{d}_\beta}{2\,(1+\tau)}\left(\hat{\nabla}^2[\phi,N] + [\hat{\nabla}^2\phi,N] + [\hat{\nabla}^2 N,\phi]\right) + [J,\psi] \nonumber\\[0.5ex]&\phantom{=}+\hat{\chi}_\perp  \,\hat{\nabla}^4\!\left(\phi - \frac{\hat{d}_\beta\,N}{1+\tau}\right),\label{e265} \\[0.5ex]
+\frac{\partial U}{\partial \hat{t}}&\simeq [\phi,U] + \frac{\hat{d}_\beta}{2\,(1+\tau)}\left(\hat{\nabla}^2[\phi,N] + [\hat{\nabla}^2\phi,N] + [\hat{\nabla}^2 N,\phi]\right) + [J,\psi] \nonumber\\[0.5ex]&\phantom{=}+\hat{\chi}_\varphi  \,\hat{\nabla}^4\!\left(\phi - \frac{\hat{d}_\beta\,N}{1+\tau}\right),\label{e265} \\[0.5ex]
 \frac{\partial N}{\partial \hat{t}}&\simeq [\phi,N] -c_\beta\,[V,\psi] -\hat{d}_\beta\,[J,\psi] + \hat{D}_\parallel\,[[N,\psi],\psi]
 + \hat{D}_\perp\,\hat{\nabla}_\perp^{\,2}N,\label{e266}\\[0.5ex]
-\frac{\partial V}{\partial\hat{t}}&\simeq [\phi,V] - c_\beta\,[N,\psi] + \hat{\chi}_\phi\,\hat{\nabla}^2 V,\label{e267}\\[0.5ex]
-J &=\hat{\nabla}^2\psi,\\[0.5ex]
+\frac{\partial V}{\partial\hat{t}}&\simeq [\phi,V] - c_\beta\,[N,\psi] + \hat{\chi}_\varphi\,\hat{\nabla}^2 V,\label{e267}\\[0.5ex]
+J &=-\frac{2}{q_s\,\hat{R}_0}+\hat{\nabla}^2\psi,\\[0.5ex]
 U &=\hat{\nabla}^2 \phi.\label{e269}
 \end{align}
 Here, 
-\begin{align}
+\begin{align}\label{e270}
 d_\beta &= c_\beta\,d_i = \left(\frac{{\mit\Gamma}}{1+\beta}\right)^{1/2}\rho_s,\\[0.5ex]
  \rho_s &= \frac{v_t}{{\mit\Omega}_i},\\[0.5ex]
 v_t &= \left(\frac{T_e+T_i}{m_i}\right)^{1/2}_{r_s},
@@ -1432,8 +1426,8 @@ v_t &= \left(\frac{T_e+T_i}{m_i}\right)^{1/2}_{r_s},
 and $\hat{d}_\beta=d_\beta/l$. The quantity $\rho_s$ is usually referred to as the {\em ion sound radius}. 
 Moreover,
 \begin{align}
-\hat{D}_\parallel&= \frac{2}{3}\,(1-c_\beta^{\,2})\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\parallel\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\parallel\,i}\right),\\[0.5ex]
-\hat{D}_\perp &= c_\beta^{\,2}\,\hat{\eta}_\perp +  \frac{2}{3}\,(1-c_\beta^{\,2})\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\perp\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\perp\,i}\right).
+\hat{D}_\parallel&= \frac{2}{3}\,(1-c_\beta^{\,2})\!\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\parallel\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\parallel\,i}\right),\\[0.5ex]
+\hat{D}_\perp &= c_\beta^{\,2}\,\hat{\eta}_\perp +  \frac{2}{3}\,(1-c_\beta^{\,2})\!\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\perp\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\perp\,i}\right).
 \end{align}
 
 \subsection{Discussion}
@@ -1445,7 +1439,7 @@ Equation~(\ref{e266}) is the {\em electron number density continuity equation}\/
 governs the time evolution of the electron number density, $N$. Finally, Equation~(\ref{e267}) is the
 {\em ion parallel equation of motion}\/ that governs the time evolution of the  parallel ion velocity, $V$. 
 
-If we neglect $d_\beta$ in our reduced drift-MHD model, which is equivalent to saying that the ion sound
+If we neglect $\hat{d}_\beta$ in our reduced drift-MHD model, which is equivalent to saying that the ion sound
 radius is much smaller than the radial extent of the resonant layer, then our four-field resonant response model
 decouples into two independent two-field models. The first two-field model takes the form:
 \begin{align}\label{e275}
@@ -1461,29 +1455,524 @@ magnetic field-lines (Strauss 1976). The second two-field model takes the form:
 \end{align}
 where $\psi$ is assumed to take its unperturbed value. 
 This model describes ion sound wave dynamics parallel to magnetic field-lines. It should be noted that the
-ion sound radius is {\em not}\/ negligibly small compared to the radial extents of resonant layers in present-day
+ion sound radius is {\em not}\/ negligibly small compared to the radial extents of resonant layers in conventional 
 tokamak plasmas. Hence, the `single-fluid' reduced MHD model, (\ref{e275})--(\ref{e276}), provides  a very poor description
-of the response of  resonant layers in tokamak plasmas. 
+of the response of  resonant layers in such plasmas. 
 
 Finally, the crucial element of the reduction process, by which our original drift-MHD response model is converted into a
 reduced drift-MHD model, is the set of ordering assumptions that render $\hat{\nabla}\cdot \hat{\bf V}=\hat{\nabla}^2{\mit\Xi}$
 a second-order quantity while leaving $\hat{\bf V}$ a first-order quantity. This ordering implies that the  MHD fluid is
-{\em incompressible}\/ to lowest-order. It should be noted, however, that the small, but finite, compressibility of the
+{\em incompressible}\/ to lowest order. It should be noted, however, that the small, but finite, compressibility of the
 MHD fluid has a significant influence on the form of the continuity equation (\ref{e266}).
 
-\section{Linear Resonant Plasma Response Model}
+\section{Linear Resonant  Response Model}\label{linear}
 \subsection{Introduction}
-The aim of this section is to employ the reduced, drift-MHD, resonant, plasma response model derived in the
+The aim of this section is to employ the reduced, drift-MHD, four-field, resonant, plasma response model derived in the
 previous section to determine the {\em linear}\/ response of the resonant layer to external perturbations.
+
+It is convenient to set the normalization scale-length, $l$, in our four-field response model equal to the minor radius of the resonant surface, $r_s$. 
+Recall that the four fields in question---namely, $\psi$, $\phi$, $N$, and $V$---have the following
+definitions:
+\begin{align}\label{e279}
+\nabla\psi &= \frac{{\bf n}\times{\bf B}} {r_s\,B_z},\\[0.5ex]
+\nabla\phi &= \frac{{\bf n}\times {\bf V}}{r_s\,V_A},\\[0.5ex]
+N &= \frac{p-p_0}{c_\beta\,B_z^{\,2}/\mu_0},\\[0.5ex]
+V &= \frac{{\bf n}\cdot {\bf V}}{V_A},
+\end{align}
+where  ${\bf V}$ is the MHD velocity defined in Equation~(\ref{e217}),  $p$ is the total plasma pressure, $p_0$ is defined in Equation~(\ref{e210}), $V_A$ is the
+Alfv\'{e}n speed defined in Equation~(\ref{e226a}), and $c_\beta$ is defined in Equations~(\ref{e244}) and (\ref{e257}). Our
+model also employs the auxiliary fields $J=-2\,\epsilon_s/q_s+r_s^2\,\nabla^2 \psi$ and  $U=r_s^2\,\nabla^2 \phi$. Here, $\epsilon_s=r_s/R_0$. 
+
+\subsection{Plasma Equilibrium}
+The unperturbed plasma equilibrium is such that
+\begin{align}
+{\bf B} &= (0,\,B_\theta(r),\,B_z),\\[0.5ex]
+p &= p(r),\\[0.5ex]
+{\bf V} &= (0,\,V_E(r),\,V_z(r)),\label{e282}
+\end{align}
+where 
+\begin{equation}
+V_E(r)\simeq \frac{E_r}{B_z}
+\end{equation}
+ is the (dominant $\theta$-component of the) ${\bf E}\times {\bf B}$ velocity. Now, the resonant layer is assumed to have a radial thickness that is
+much smaller than $r_s$. (See Section~\ref{s5.3}.) Hence, we only need to evaluate plasma equilibrium quantities in the immediate vicinity of the resonant
+surface. Equations~(\ref{e279})--(\ref{e282}) suggest that 
+\begin{align}\label{e287}
+\psi &= \frac{\hat{x}^{\,2}}{2\,\hat{L}_s},\\[0.5ex]
+\phi &= - \hat{V}_E\,\hat{x},\\[0.5ex]
+N &= \frac{\hat{V}_\ast\,\hat{x}}{\hat{d}_\beta},\\[0.5ex]
+V &= \hat{V}_\parallel,\label{e290}
+\end{align}
+where $\hat{x}=(r-r_s)/r_s$, $\hat{L}_s=L_s/r_s$, $L_s=(R_0\,q/s)_{r_s}$ is the {\em magnetic shear length},  the {\em magnetic shear}, $s(r)$, is defined in Equation~(\ref{shear}), $\hat{V}_E= V_E(r_s)/V_A$,
+$\hat{V}_\ast= V_\ast(r_s)/V_A$,
+\begin{equation}
+V_\ast(r) = \frac{1}{e\,n_0\,B_z}\,\frac{dp}{dr}
+\end{equation}
+is the (dominant $\theta$-component of the) diamagnetic velocity, $\hat{d}_\beta=d_\beta/r_s$, $d_\beta$ is the modified  ion sound radius defined in 
+Equation~(\ref{e270}), and 
+ $\hat{V}_\parallel= V_z(r_s)/V_A$. We also have
+ \begin{align}\label{e292}
+ J &= -\left(\frac{2}{s_s}-1\right)\frac{1}{\hat{L}_s},\\[0.5ex]
+ U &= 0,\label{e293}\\[0.5ex]
+ \hat{E}_\parallel &=\left(\frac{2}{s_s}-1\right) \frac{\hat{\eta}_\parallel(r_s)}{\hat{L}_s},\label{e294}
+\end{align}
+where $s_s=s(r_s)$. 
+Note that we are neglecting the radial shear of the equilibrium MHD velocity because, in conventional tokamak plasmas, such shear does not significantly affect the linear response of a  resonant
+layer, due to the fact that the shear is comparatively weak (i.e., $|dV/dr|\ll V_A/a$) combined with the fact that a linear  resonant layer is
+very narrow (Chen \& Morrison 1990). 
+
+\subsection{Derivation of Linear Layer Equations}\label{s5.3}
+Suppose that the system is perturbed by a tearing mode with $m$ periods in the poloidal direction, and
+$n$ periods in the toroidal direction. In accordance with Equations~(\ref{e287})--(\ref{e290}), and (\ref{e292})--(\ref{e293}), we can write
+\begin{align}
+\psi(\hat{x},\zeta,t) &= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+\phi(\hat{x},\zeta,t) &=-\hat{V}_E\,\hat{x}+ \tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+N(\hat{x},\zeta,t) &= \frac{\hat{V}_\ast\,\hat{x}}{\hat{d}_\beta}-\frac{1}{\hat{d}_\beta}\!\left(\frac{1+\tau}{\tau}\right)\!\tilde{N}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+V(\hat{x},\zeta,t) &= \hat{V}_\parallel + \frac{c_\beta}{\hat{d}_\beta}\!\left(\frac{1+\tau}{\tau}\right)\!\tilde{V}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+J(\hat{x},\zeta,t) &=-\left(\frac{2}{s_s}-1\right)\!\frac{1}{\hat{L}_s}+ \hat{\nabla}^2\tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+U(\hat{x},\zeta,t) &=  \hat{\nabla}^2\tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\label{e300}
+\end{align}
+where $\zeta=m\,\theta-n\,\varphi$, $\hat{t}=V_A\,t/r_s$, $\hat{\omega}=r_s\,\omega/V_A$, and $\omega$ is the frequency of the tearing mode in the laboratory frame. 
+Substituting Equations~(\ref{e294})--(\ref{e300}) into the four-field model, (\ref{e264})--(\ref{e269}), and only retaining terms that
+are first order in perturbed quantities, we obtain the following set of linear layer equations:
+\begin{align}\label{e301}
+-{\rm i}\,[\omega-\omega_E -(1+\lambda_e)\,\omega_{\ast\,e}]\,\tau_H\,\tilde{\psi} &= -{\rm i} \,\hat{x}\,[\tilde{\phi}-(1+\lambda_e)\,\tilde{N}) + S^{-1}\,\hat{\nabla}^2\tilde{\psi},\\[0.5ex]
+-{\rm i}\,(\omega-\omega_E-\omega_{\ast\,i})\,\tau_H\,\hat{\nabla}^2\tilde{\psi} &= -{\rm i}\,\hat{x}\,\hat{\nabla}^2\tilde{\psi}+S^{-1}\,P_\varphi\,\hat{\nabla}^4\!\left(\tilde{\phi} + \frac{\tilde{N}}{\tau}\right),\\[0.5ex]
+-{\rm i}\,(\omega-\omega_E)\,\tau_H\,\tilde{N} &= -{\rm i}\,\omega_{\ast\,e}\,\tau_H\,\tilde{\phi} - {\rm i}\!\left(\frac{\tau}{1+\tau}\right)\hat{d}_\beta^{\,2}\,\hat{x}\,\hat{\nabla}^2\tilde{\psi} -{\rm i}\,c_\beta^2\,\hat{x}\,\tilde{V}\\[0.5ex]
+&\phantom{=}
++S^{-1}\,P_\parallel\!\left(m\,\omega_{\ast\,e}\,\tau_H\,\hat{x}\,\tilde{\psi}-\frac{m}{\hat{L}_s}\,\hat{x}^2\,\tilde{N}\right)
++ S^{-1}\,P_\perp\,\hat{\nabla}^2 \tilde{N},\nonumber\\[0.5ex]
+-{\rm i}\,(\omega-\omega_E)\,\tau_H\,\tilde{V} &= {\rm i}\,\omega_{\ast\,e}\,\tau_H\,\tilde{\psi} - {\rm i}\,\hat{x}\,\tilde{N}
++ S^{-1}\,P_\varphi\,\hat{\nabla}^2\tilde{V}.\label{e304}
+\end{align}
+Here, $\tau_H = L_s/(m\,V_A)$ is the {\em hydromagnetic time}, $\omega_E = (m/r_s)\,V_E(r_s)$  the 
+{\em E-cross-B frequency}, $\omega_{\ast\,e} = -[\tau/(1+\tau)]\,(m/r_s)\,V_\ast(r_s)$  the {\em electron diamagnetic
+frequency}, $\lambda_e = 0.71\,[\eta_e/(1+\eta_e)]\,[\tau/(1+\tau)]$, $\omega_{\ast\,i} = [1/(1+\tau)]\,(m/r_s)\,V_\ast(r_s)$  the {\em ion diamagnetic
+frequency}, $S=\tau_R/\tau_H$ the {\em Lundquist number}, $\tau_R = \mu_0\,r_s^{\,2}/\eta_\parallel(r_s)$  the
+{\em resistive diffusion time}, $P_\varphi = \tau_R/\tau_\varphi$ the {\em magnetic Prandtl number}, $\tau_\varphi
+= r_s^{\,2}/\chi_\varphi(r_s)$  the {\em toroidal momentum confinement time}, $P_\perp = \tau_R/\tau_\perp$, 
+$\tau_\perp = r_s^{\,2}/D_\perp(r_s)$  the {\em particle/energy confinement time}, 
+$P_\parallel=\tau_R/\tau_\parallel$, and $\tau_\parallel =r_s^{\,2}/D_\parallel(r_s)$. 
+
+In conventional tokamak plasmas, the Lundquist number, $S$, which is the ratio of the resistive diffusion and plasma inertia terms in the plasma Ohm's law, is very much greater than unity. In fact, $S$ typically exceeds $10^8$ (Wesson 2011). However, a resonant layer is
+characterized by a balance between plasma inertia and resistive diffusion (Furth, et al.\ 1963). Such a balance is
+only possible if the layer is very narrow in the radial direction (because a narrow layer enhances radial derivatives, and, thereby, enhances
+resistive diffusion). Let us define the stretched radial variable (Ara, et al.\ 1978)
+\begin{equation}
+X = S^{1/3}\,\hat{x}.
+\end{equation}
+Assuming that $X\sim{\cal O}(1)$ in the layer (i.e., assuming that the layer thickness is of order $S^{-1/3}\,r_s$),
+and making use of the fact that $S\gg 1$, we deduce that $\hat{\nabla}^2\simeq \hat{\nabla}_\perp^2\simeq S^{\,2/3}\,d^{\,2}/dX^2$.
+Hence, the linear layer equations, (\ref{e301})--(\ref{e304}), reduce to (Cole \& Fitzpatrick 2006)
+\begin{align}\label{e306}
+-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_{e}]\,\tilde{\psi}&= - {\rm i}\,X\left[\tilde{\phi}-(1+\lambda_e)\,\tilde{N}\right] + \frac{d^{\,2}\tilde{\psi}}{d X^2},\\[0.5ex]
+-{\rm i}\,(Q-Q_E -Q_{i})\,\frac{d^{\,2}\tilde{\phi}}{dX^2}&= - {\rm i}\,X\,\frac{d^{\,2}\tilde{\psi}}{dX^2}+ P_\varphi\,\frac{d^{\,4}}{dX^4}\!\left(\tilde{\phi} + \frac{\tilde{N}}{\tau}\right),\\[0.5ex]
+-{\rm i}\,(Q-Q_E)\tilde{N} &= - {\rm i}\,Q_{e}\,\tilde{\phi} - {\rm i} \,D^{2}\,X\,\frac{d^{\,2}\tilde{\psi}}{dX^{2}}
+ - {\rm i}\,c_\beta^{\,2}\,X\,\tilde{V} + P_\perp\,\frac{d^{\,2} \tilde{N}}{dX^{2}},\label{e308}\\[0.5ex]
+ -{\rm i}\,(Q-Q_E)\,\tilde{V} &= {\rm i}\,Q_{e}\,\tilde{\psi} - {\rm i}\,X\,\tilde{N} + P_\varphi\,\frac{d^{\,2}\tilde{V}}{dX^{2}}.\label{e309}
+\end{align}
+Here, $Q=S^{\,1/3}\,\omega\,\tau_H$, $Q_E = S^{\,1/3}\,\omega_E\,\tau_H$, $Q_{e,i} = S^{\,1/3}\,\omega_{\ast\,e,i}\,\tau_H$,
+and $D = S^{\,1/3}\,[\tau/(1+\tau)]^{1/2}\,\hat{d}_\beta$. Note that the terms involving parallel transport have dropped out of
+Equation~(\ref{e308}). The neglect of these terms is justified provided that the layer width is much less than the critical value,
+\begin{equation}
+\delta_c = \left(\frac{1}{\epsilon\,s\,n}\sqrt{\frac{D_\perp}{D_\parallel}}\right)^{1/2}_{r_s} r_s,
+\end{equation}
+below which parallel transport is unable to constrain the electron number density (and, by implication, the electron and
+ion temperatures) to be constant along magnetic field-lines (Fitzpatrick 1995). This condition is well satisfied in conventional
+tokamak plasmas. 
+Note that all of the terms appearing in the 
+normalized layer equations, (\ref{e306})--(\ref{e309}), are assumed to be roughly the same order of magnitude. 
+
+\subsection{Asymptotic Matching}
+The normalized linear layer equations, (\ref{e306})--(\ref{e309}), possess independent {\em tearing parity}\/ solutions,
+characterized by the symmetry $\tilde{\psi}(-X)=\tilde\psi(X)$, $\tilde{\phi}(-X)=-\tilde{\phi}(X)$, 
+$\tilde{N}(-X)= - \tilde{N}(X)$, $\tilde{V}(-X)=\tilde{V}(X)$, and {\em twisting parity}\/ solutions, characterized by the symmetry 
+$\tilde{\psi}(-X)=-\tilde\psi(X)$, $\tilde{\phi}(-X)=\tilde{\phi}(X)$, 
+$\tilde{N}(-X)=  \tilde{N}(X)$, $\tilde{V}(-X)=-\tilde{V}(X)$ (Fitzpatrick \& Hender 1994). However, only the tearing parity
+solutions can be asymptotically matched to tearing mode solutions in the outer region. If we assume that
+the asymptotic behavior of the tearing parity layer solutions is
+\begin{equation}\label{e311}
+\tilde{\psi}\rightarrow  \psi_0\!\left[1+ \frac{\hat{\mit\Delta}}{2}\,|X| + {\cal O}(X^2)\right]
+\end{equation}
+as $|X|\rightarrow\infty$, where $\psi_0$ is an arbitrary constant, then asymptotic matching to the outer solution yields
+\begin{equation}\label{e312}
+{\mit\Delta\Psi}_s= S^{1/3}\,\hat{\mit\Delta}\,\,{\mit\Psi}_s.
+\end{equation}
+[See Equations~(\ref{e109}) and (\ref{e134}).] 
+
+\subsection{Fourier Transformation}
+Equations~(\ref{e306})--(\ref{e309}) are most conveniently solved in Fourier transform space (Cole \& Fitzpatrick 2006). 
+Let
+\begin{equation}
+\bar{\phi}(p) = \int_{-\infty}^\infty \tilde{\phi}(X)\,{\rm e}^{-{\rm i}\,p\,X}\,dX,
+\end{equation}
+et cetera. The Fourier transformed linear layer equations become
+\begin{align}\label{e314}
+-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_{e}]\,\bar{\psi}&=\frac{d}{dp}\!\left[\bar{\phi}-(1+\lambda_e)\,\bar{N}\right] -p^2\,\bar{\psi},\\[0.5ex]
+-{\rm i}\,(Q-Q_E -Q_{i})\,p^2\,\bar{\phi}&=  \frac{d(p^2\,\bar{\psi})}{dp}- P_\varphi\,p^4\!\left(\bar{\phi} + \frac{\bar{N}}{\tau}\right),\\[0.5ex]
+-{\rm i}\,(Q-Q_E)\bar{N} &= - {\rm i}\,Q_{e}\,\bar{\phi} -D^{2}\,\frac{d(p^2\,\bar{\psi})}{dp}
+ + c_\beta^{\,2}\,\frac{d\bar{V}}{dp} - P_\perp\,p^2\bar{N},\label{e316}\\[0.5ex]
+ -{\rm i}\,(Q-Q_E)\,\bar{V} &= {\rm i}\,Q_{e}\,\bar{\psi} +\frac{d\bar{N}}{dp}- P_\varphi\,p^2\,\bar{V},\label{e317}
+\end{align}
+where, for a tearing parity solution, 
+\begin{equation}
+\bar{\phi}(p)\rightarrow \bar{\phi}_0\!\left[\frac{\hat{\mit\Delta}}{\pi\,p} + 1+ {\cal O}(p)\right]
+\end{equation}
+as $p\rightarrow 0$. 
+
+Let us ignore the term $c_\beta^{\,2}\,d\bar{V}/dp$ in Equation~(\ref{e316}). This approximation can
+be justified {\em a posteriori}. It is equivalent to the neglect of the contribution of ion parallel dynamics to the linear  plasma
+response in the resonant layer, and effectively decouples Equation~(\ref{e317}) from Equations~(\ref{e314})--(\ref{e316}) (Waelbroeck, et al.\ 2012). Equations~(\ref{e314})--(\ref{e317}) reduce to (Cole \& Fitzpatrick 2006)
+\begin{equation}\label{e320}
+\frac{d}{dp}\!\left[G(p)\,\frac{dY}{dp}\right] - H(p)\,p^{2}\,Y = 0,
+\end{equation}
+where
+\begin{align}
+G(p)&= \frac{p^2}{-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] + p^2},\\[0.5ex]
+H(p) &=\frac{A(p)}{B(p)},\\[0.5ex]
+ A(p) &= -(Q-Q_E)\,(Q-Q_E-Q_i)-{\rm i}\,(Q-Q_E-Q_i)\,(P_\varphi+P_\perp)\,p^2 + P_\varphi\,P_\perp\,p^4,\\[0.5ex]
+ B(p) &= 
+-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] +\{P_\perp - {\rm i}\,(1+\lambda_e)\,(Q-Q_E-Q_i)\,D^2\}p^2\nonumber\\[0.5ex]
+&\phantom{=}+[(1+\lambda_e)+1/\tau]\,P_\varphi\,D^2\,p^4,
+\end{align}
+and $Y=\bar{\phi} - (1+\lambda_e)\,\bar{N}$. The boundary conditions are that $Y(p)$ is bounded as $p\rightarrow\infty$, and
+\begin{equation}\label{e325}
+Y(p)\rightarrow Y_0\!\left[\frac{\hat{\mit\Delta}}{\pi\,p} + 1+ {\cal O}(p)\right]
+\end{equation}
+as $p\rightarrow 0$. In the following, we shall assume that $|Q|\sim |Q_E|\sim |Q_e|\sim |Q_i|$, $P_\varphi\sim P_\perp \sim P$, $\tau\sim {\cal O}(1)$, and $\lambda_e\sim{\cal O}(1)$,  for the
+sake of simplicity. 
+
+\subsection{Constant-$\psi$ Approximation}\label{s5.6}
+Let us suppose that there are two layers in $p$ space. In the small-$p$ layer, suppose that Equation~(\ref{e320}) reduces to
+\begin{equation}
+\frac{d}{dp}\!\left[\frac{p^2}{-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] + p^2}\,\frac{dY}{dp}\right]\simeq 0
+\end{equation}
+when $p\sim Q^{1/2}$. Integrating directly, we find that
+\begin{equation}
+Y(p) \simeq Y_0 \left[\frac{\hat{\mit\Delta}}{\pi}\left(\frac{1}{p} + \frac{p}{{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}\right) + 1 + {\cal O}(p^2)\right]
+\end{equation}
+for $p\lesssim {\cal O}(Q^{1/2})$, where use has been made of Equation~(\ref{e325}). The two-layer  approximation, which is
+equivalent to the well-known {\em constant-$\psi$ approximation}\/ (Furth, et al.\ 1963), is valid provided
+\begin{equation}
+\frac{Q^3\,(1+P)}{1+Q\,D^2}\ll 1.
+\end{equation}
+In the large-$p$ layer, for  $p\gg {\cal O}(Q^{1/2})$, we obtain 
+\begin{equation}\label{e329}
+\frac{d^{\,2} Y}{dp^2} - H(p)\,p^2\,Y\simeq 0,
+\end{equation}
+with $Y$ bounded as $p\rightarrow \infty$. Asymptotic matching to the small-$p$ layer yields the boundary
+condition 
+\begin{equation}\label{e330}
+Y(p)\simeq Y_0\left\{1+ \frac{\hat{\mit\Delta}}{\pi}\,\frac{p}{{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}+ {\cal O}(p^2)\right\}
+\end{equation}
+as $p\rightarrow 0$. 
+
+In the various constant-$\psi$ linear response regimes considered in Section~\ref{scp}, Equation~(\ref{e329}) reduces to an
+equation of the form
+\begin{equation}\label{e330a}
+\frac{d^{\,2}Y}{dp^2}- C\,p^m\,Y\simeq 0,
+\end{equation}
+where $m$ is real and non-negative, and $C$ is a complex constant. Let $Y=\sqrt{p}\,Z$ and $q=\sqrt{C}\,p^n/n$, where
+$n=(m+2)/2$. The previous equation transforms into a modified Bessel equation of general order, 
+\begin{equation}
+q^2\,\frac{d^{\,2}Z}{dq^2} + q\,\frac{dZ}{dq} - (q^2+\nu^2)\,Z =0,
+\end{equation}
+where $\nu=1/(m+2)$. The solution that is bounded as $q\rightarrow \infty$ has the small-$q$
+expansion
+\begin{equation}\label{e332}
+K_\nu(z)= \frac{1}{{\mit\Gamma}(1-\nu)}\left(\frac{2}{q}\right)^\nu - \frac{1}{{\mit\Gamma}(1+\nu)}\left(\frac{q}{2}\right)^\nu + {\cal O}(q^{2-\nu}),
+\end{equation}
+where ${\mit\Gamma}(z)$ is a gamma function. 
+A comparison of this expression with Equation~(\ref{e330}) reveals that
+\begin{equation}
+\hat{\mit\Delta} = \pi\,(-{\rm i}\,\left[Q-Q_E-(1+\lambda_e)\,Q_e\right])\, \frac{{\mit\Gamma}(1-\nu)}{{\mit\Gamma}(\nu)}\,\nu^{2\nu-1}\,C^{\,\nu}.
+\end{equation}
+Note, finally, that $p_\ast\sim |C|^{-\nu}$, where $p_\ast$ denotes the width of the large-$p$ layer in $p$ space.
+
+\subsection{Constant-$\psi$ Linear Response Regimes}\label{scp}
+Suppose that $Q\gg P\,p^2$ and $D^2\,p^2 \ll 1$. It follows that $\nu=1/4$ and
+\begin{equation}
+C = \frac{[-{\rm i}\,(Q-Q_E)]\,[-{\rm i}\,(Q-Q_E-Q_i)]}{-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}.
+\end{equation}
+Hence, we deduce that
+\begin{equation}\label{ri}
+\hat{\mit\Delta} = \frac{2\pi\,{\mit\Gamma}(3/4)}{{\mit\Gamma}(1/4)}\,(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])^{3/4}\,[-{\rm i}\,(Q-Q_E)]^{1/4}\,[-{\rm i}\,(Q-Q_E-Q_i)]^{1/4}.
+\end{equation}
+This response regime is known as the {\em resistive-inertial regime}, because the layer response is dominated by
+resistivity and ion inertia (Furth, et al.\ 1963; Ara, et al.\ 1976; Fitzpatrick 1998). The characteristic layer width is $p_\ast \sim Q^{-1/4}$,
+which implies that the regime is valid when $P\ll Q^{3/2}$, $Q\gg D^4$, and $Q\ll 1$. 
+
+Suppose that $Q\ll P\,p^2$ and $D^2\,p^2\ll 1$. It follows that $\nu=1/6$ and $C=P_\varphi$. 
+Hence, we deduce that
+\begin{equation}\label{vr}
+\hat{\mit\Delta} = \frac{6^{2/3}\,\pi\,{\mit\Gamma}(5/6)}{{\mit\Gamma}(1/6)}\, (-{\rm i}\,\left[Q-Q_E-(1+\lambda_e)\,Q_e\right])\,P_\varphi^{1/6}.
+\end{equation}
+This response regime is known as the {\em visco-resistive regime}, because the layer response is dominated by
+resistivity and viscosity. (Fitzpatrick 1998). The characteristic layer width is $p_\ast \sim P^{-1/6}$, which implies that
+the regime is valid when  $P\gg Q^{3/2}$, $P\gg D^6$, and $P\ll Q^{-3}$. 
+
+Suppose that $Q\gg P\,p^2$ and $D^2\,p^2\gg 1$. It follows that $\nu=1/2$ and
+\begin{equation}
+C = \frac{-{\rm i}\,(Q-Q_E)}{(1+\lambda_e)\,D^2}.
+\end{equation}
+Hence, we deduce that
+\begin{equation}\label{sc}
+\hat{\mit\Delta}= \frac{\pi\,(-{\rm i}\,\left[Q-Q_E-(1+\lambda_e)\,Q_e\right])\,[-{\rm i}\,(Q-Q_E)]^{1/2}}{\sqrt{1+\lambda_e}\,D}.
+\end{equation}
+This response regime is known as the {\em semi-collisional regime}\/ (Drake \& Lee 1977; Waelbroeck 2003). The characteristic
+layer width is $p_\ast\sim D\,Q^{-1/2}$. which implies that the regime is valid when $Q\ll D^4$,
+ $P\ll Q^2/D^2$, and $Q\ll D$. 
+
+Suppose, finally, that $Q\ll P\,p^2$ and $D^2\,p^2\gg 1$. It follows that $\nu=1/4$ and
+\begin{equation}
+C = \frac{P_\perp}{[(1+\lambda_e)+1/\tau]\,D^2}.
+\end{equation}
+Hence, we deduce that 
+\begin{equation}\label{hr}
+\hat{\mit\Delta}= \frac{2\pi\,{\mit\Gamma}(3/4)}{{\mit\Gamma}(1/4)}\,\frac{(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])\,P_\perp^{1/4}}{[(1+\lambda_e)+1/\tau]^{1/4}\,D^{1/2}}.
+\end{equation}
+This response regime is known as the {\em Hall-resistive regime}\/ (Cole \& Fitzpatrick 2006). The characteristic
+layer width is $p_\ast \sim D^{1/2}\,P^{-1/4}$, which implies that the regime is valid when $P\gg Q^2/D^2$,
+$P\ll D^6$, and $P\ll D^2/Q^2$. 
+
+\subsection{Nonconstant-$\psi$ Regimes}
+Suppose that $p\ll Q^{-1/2}$. In this limit, Equation~(\ref{e320}) reduces to 
+\begin{equation}
+\frac{d}{dp}\!\left(p^2\,\frac{dY}{dp}\right)-(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])\,H(p)\,p^2\,Y=0.
+\end{equation}
+
+In the various nonconstant-$\psi$ regimes considered in this section, the previous equation takes the form
+\begin{equation}
+\frac{d}{dp}\!\left(p^2\,\frac{dY}{dp}\right)-C\,p^{m+2}\,Y = 0,
+\end{equation}
+where $m$ is real and non-negative, and $C$ is a complex constant. Let $U=p\,Y$. The previous equation
+yields
+\begin{equation}
+\frac{d^{\,2} U}{dp^2} - C\,p^m\,U = 0.
+\end{equation}
+This equation is identical in form to Equation~(\ref{e330a}), which we have already solved. Indeed, the solution that
+is bounded as $p\rightarrow\infty$ has the small-$p$ expansion (\ref{e332}), where $z=\sqrt{C}\,p^n/n$, 
+$n=(m+2)/2$, and $\nu=1/(m+2)$. The layer width in $p$-space again scales as $p_\ast\sim |C|^{-\nu}$. 
+Matching to Equation~(\ref{e325}) yields
+\begin{equation}
+\hat{\mit\Delta} = -\pi\,\frac{{\mit\Gamma}(\nu)}{{\mit\Gamma}(1-\nu)}\,\nu^{1-2\nu}\,C^{-\nu}.
+\end{equation}
+
+\begin{figure}
+\centerline{\includegraphics[width=0.9\textwidth]{RegimeI.pdf}}
+\caption{Linear resonant plasma response regimes in $Q$-$P$ space for the case $D=0.9$. The various regimes are
+the Hall-resisitive (HR), the semi-collisional (SC), the resistive-inertial (RI), the visco-resistive (VR), the visco-inertial
+(VI), and the inertial (I).}\label{f1}
+\end{figure}
+
+Suppose that $Q\gg P\,p^2$ and $D^2\,p^2 \ll 1$. It follows that $\nu=1/2$ and
+\begin{equation}
+C = [-{\rm i}\,(Q-Q_E)]\,[-{\rm i}\,(Q-Q_E-Q_i)].
+\end{equation}
+Hence, we deduce that
+\begin{equation}
+\hat{\mit\Delta} = -\frac{\pi}{[-{\rm i}\,(Q-Q_E)]^{1/2}\,[-{\rm i}\,(Q-Q_E-Q_i)]^{1/2}}.
+\end{equation}
+This response regime is known as the {\em inertial regime}, because the layer response is dominated by
+ ion inertia (Ara, et al.\ 1976; Fitzpatrick 1998). Note that the plasma response in the inertial regime is
+ equivalent to that of two closely spaced Alfv\'{e}n resonances that straddle the resonant surface (Boozer 1996). 
+ The characteristic layer width is $p_\ast \sim Q^{-1}$,
+which implies that the regime is valid when $P\ll Q^3$, $Q\gg D$, and $Q\gg 1$. 
+
+Suppose that $Q\ll P\,p^2$ and $D^2\,p^2 \ll 1$. It follows that $\nu=1/4$ and
+\begin{equation}
+C = (-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])\,P_\varphi.
+\end{equation}
+Hence, we deduce that
+\begin{equation}
+\hat{\mit\Delta} =- \frac{\pi}{2}\,\frac{{\mit\Gamma}(1/4)}{{\mit\Gamma}(3/4)}\, (-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])^{-1/4}\,P_\varphi^{-1/4}.
+\end{equation}
+This response regime is known as the {\em visco-inertial regime}, because the layer response is dominated by
+viscosity and ion inertia (Fitzpatrick 1998). 
+ The characteristic layer width is $p_\ast \sim Q^{-1/4}\,P^{-1/4}$,
+which implies that the regime is valid when $P\gg Q^3$, $P\gg D^4/Q$, and $P\gg Q^{-3}$. 
+
+Suppose, finally, that $Q\ll P\,p^2$ and $D^2\,p^2\gg 1$. It follows that $\nu=1/2$ and
+\begin{equation}
+C = \frac{(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e)]\,P_\perp}{[(1+\lambda_e)+1/\tau]\,D^2}.
+\end{equation}
+Hence, we deduce that
+\begin{equation}
+\hat{\mit\Delta}= -\frac{\pi\,[(1+\lambda_e)+1/\tau]^{1/2}\,D}{(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e)])^{1/2}\,P_\perp^{1/2}}.
+\end{equation}
+This response regime is known as the {\em Hall-viscous regime}. The characteristic layer width is $p_\ast\sim
+D\,Q^{-1/2}\,P^{-1/2}$, which implies that the regime is valid when $Q\ll D$, $P\ll D^4/Q$, and $P\gg D^2/Q^2$. 
+
+\begin{figure}
+\centerline{\includegraphics[width=0.9\textwidth]{RegimeII.pdf}}
+\caption{Linear resonant plasma response regimes in $Q$-$P$ space for the case $D=1.2$. The various regimes are
+the Hall-resisitive (HR), the semi-collisional (SC), the Hall-viscous (HV), the visco-resistive (VR), the visco-inertial
+(VI), and the inertial (I).}\label{f2}
+\end{figure}
+
+Figures~\ref{f1} and \ref{f2} show the extents of the various different response regimes in the $Q$-$P$ plane for the
+cases $D<1$ and $D>1$, respectively. 
+
+\section{Linear Tearing Mode Stability}
+\subsection{Introduction}
+The aim of this section is to combine the analysis of Sections~\ref{cyl} and \ref{linear} to determine the linear stability
+of tearing modes in tokamak plasmas. In this study, we shall assume that the wall is perfectly conducting. 
+
+\subsection{Linear Dispersion Relation}
+Let us write
+\begin{equation}
+\omega = \gamma+{\rm i}\,\omega_r,
+\end{equation}
+where $\gamma$ is the growth-rate of the tearing mode, whereas $\omega_r$ is the real
+phase velocity of the mode in the laboratory frame. We shall assume that $|\gamma|\ll |\omega_r|$. This assumption can
+easily be verified {\em a posteriori}. Asymptotic matching between the solution in the outer region and that in the
+thin linear layer surrounding the resonant surface yields a linear tearing mode dispersion relation of the form
+\begin{equation}\label{e352}
+S^{1/3}\,\hat{\mit\Delta}(\gamma,\omega_r) = E_{ss},
+\end{equation}
+where use has been made of Equations~(\ref{e110}) and (\ref{e312}). Here, $E_{ss}$ is the real tearing stability index, 
+whereas the complex layer matching parameter, $\hat{\mit\Delta}$, is defined in Equation~(\ref{e311}). 
+
+In a conventional tokamak plasma, $E_{ss}\sim {\cal O}(1)$,\footnote{Note that we are neglecting $m=1$ modes, for which $|E_{ss}|\gg 1$,
+because these are not really tearing modes
+(Wesson 1978).} and $S^{1/3}\gg 1$. Hence, the previous dispersion relation can only be satisfied if $\omega_r$ takes a
+value that renders $|\hat{\mit\Delta}|\ll 1$. It is clear from Equations~(\ref{ri}), (\ref{vr}), (\ref{sc}), and (\ref{hr}) that this goal
+can be achieved in all of the constant-$\psi$ linear response regimes if
+\begin{equation}\label{e353}
+\omega_r = \omega_{\perp\,e},
+\end{equation}
+where
+\begin{equation}\label{e354}
+\omega_{\perp\,e} = \omega_E+(1+\lambda_e)\,\omega_{\ast\,e}.
+\end{equation}
+According to Equations~(\ref{e353}) and (\ref{e354}), the tearing mode co-rotates with the electron fluid at the resonant
+ surface.\footnote{In fact, it
+rotates slightly faster than the electron fluid because of the influence of the thermal force, ${\bf F}_T$ [see Equation~(\ref{e43})],
+which generates the factor $\lambda_e$ in Equation~(\ref{e354}).}
+
+\subsection{Determination of Growth-Rates}
+Reusing the analysis of Sections~\ref{s5.6} and \ref{scp}, there are two layers in $p$ space (i.e., Fourier space). The
+small-$p$ layer is of width $|\hat{\gamma}|^{1/2}$, where $\hat{\gamma} = S^{1/3}\,\gamma\,\tau_H$. Given that we are effectively assuming that
+$|\hat{\gamma}|\ll 1$, the condition for the separation of the layer solution into two layers (i.e., that the width of the small-$p$ layer is less than that of the large-$p$ layer) is always satisfied. The large-$p$ layer is governed by the equation
+\begin{equation}\label{e355}
+\frac{d^{\,2} Y}{dp^2} - \frac{A(p)}{C(p)} \,Y =0,
+\end{equation}
+where 
+\begin{align}
+A(p) &= (1+\lambda_e)\left(\frac{\tau}{1+\tau}\right)\left(1+ \frac{\lambda_e\,\tau}{1+\tau}\right)Q_\ast^{\,2}
++{\rm i}\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right)Q_\ast\,(P_\varphi+P_\perp)\,p^2\nonumber\\[0.5ex]
+&\phantom{=} + P_\varphi\,P_\perp\,p^4,\\[0.5ex]
+C(p)&= P_\perp - {\rm i}\,(1+\lambda_e)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right)Q_\ast\,D^2 +\left(\frac{1+\tau}{\tau}\right)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right) D^2\,P_\varphi\,p^2.
+\end{align}
+Here, $Q_\ast = S^{1/3}\,\omega_\ast\,\tau_H$, where
+\begin{equation}
+\omega_\ast = -\frac{m}{r_s}\frac{1}{e\,n_0\,B_z}\left.\frac{dp}{dr}\right|_{r_s}.
+\end{equation}
+In the following, $\omega_\ast$ is assumed to be positive. The boundary conditions on Equation~(\ref{e355}) are
+that $Y$ is bounded as $p\rightarrow\infty$, and
+\begin{equation}\label{e359}
+Y(p)= Y_0\left[1+\frac{\hat{\mit\Delta}\,p}{\pi\,\hat{\gamma}} + {\cal O}(p^2)\right]
+\end{equation}
+as $p\rightarrow 0$. 
+
+In the various constant-$\psi$ linear response regimes considered in this section, Equation~(\ref{e355}) reduces to an equation of the form
+\begin{equation}
+\frac{d^{\,2} Y}{dp^2} - C\,p^m\,Y = 0,
+\end{equation}
+where $m$ is real and non-negative, and $C$ is a complex constant. As described in Section~\ref{s5.6}, the solution of this
+equation that is bounded as $p\rightarrow \infty$ can be matched to the small-$p$ asymptotic form (\ref{e359}) to give 
+\begin{equation}
+{\mit\Delta} = \pi\,\hat{\gamma}\,\frac{{\mit\Gamma}(1-\nu)}{{\mit\Gamma}(\nu)}\,\nu^{2\nu-1}\,C^\nu,
+\end{equation}
+where $\nu=1/(m+2)$. The width of the large-$p$ layer in $p$ space is $C^{-\nu}$. 
+
+As before, we shall assume that. $P_\varphi\sim P_\perp \sim P$, $\lambda_e\sim{\cal O}(1)$, and $\tau\sim {\cal O}(2)$, for
+the sake of simplicity. 
+Suppose that $Q_\ast\gg P\,p^2$ and $P\gg Q_\ast\,D^2$. It follows that $\nu=1/2$ and
+\begin{equation}
+C = (1+\lambda_e)\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right)\frac{Q_\ast}{P_\perp^{1/2}}.
+\end{equation}
+Hence, 
+\begin{equation}
+{\mit\Delta} = \pi\,\hat{\gamma}\left[ (1+\lambda_e)\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right)\right]^{1/2}\,\frac{Q_\ast}{P_\perp^{1/2}},
+\end{equation}
+and $p_\ast\sim P^{1/2}/Q_\ast$. This so-called {\em resisrtive-inertial regime}\/ is valid when $P\ll Q_\ast^{3/2}$ and
+$P\gg Q_\ast\,D^2$. 
+Making use of Equation~(\ref{e352}), the corresponding tearing mode growth-rate is
+\begin{equation}
+\gamma = \frac{E_{ss}}{\pi\left[ (1+\lambda_e)\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right)\right]^{1/2}\,}\,\frac{1}{\omega_\ast\,\tau_H\,\tau_R^{1/2}\,\tau_\perp^{1/2}}.
+\end{equation}
+
+Suppose that $Q_\ast \ll P\,p^2$ and $D^2\,p^2\ll 1$. 
+It follows that $\nu=1/6$ and
+$C = P_\varphi$. 
+Hence, 
+\begin{equation}
+{\mit\Delta} = \frac{6^{2/3}\,\pi\,\hat{\gamma}\, {\mit\Gamma}(5/6)}{\Gamma(1/6)}\,P_\varphi^{1/6}, 
+\end{equation}
+and $p_\ast\sim P^{-1/6}$. This so-called {\em visco-resistive regime}\/ is valid when $P\gg Q_\ast^{3/2}$ and
+$P\gg D^6$. 
+The corresponding tearing mode growth-rate is
+\begin{equation}
+\gamma = \frac{E_{ss}}{6^{2/3}\,\pi\,[{\mit\Gamma}(5/6)/{\mit\Gamma}(1/6)]}\,\frac{\tau_\varphi^{1/6}}{\tau_R^{5/6}\,\tau_H^{1/3}}.
+\end{equation}
+
+Suppose that $Q_\ast\gg P\,p^2$ and $P\ll Q_\ast\,D^2$. It follows that $\nu=1/2$ and
+\begin{equation}
+C = {\rm i}\left(\frac{\tau}{1+\tau}\right)\frac{Q_\ast}{D^2}.
+\end{equation} 
+Hence, 
+\begin{equation}
+{\mit\Delta} = \pi\,\hat{\gamma}\left(\frac{\tau}{1+\tau}\right)^{1/2}\,\frac{Q_\ast^{1/2}}{D},
+\end{equation}
+and $p_\ast\sim D/Q_\ast^{1/2}$. This so-called {\em semi-collisional regime}\/ is valid when $P\ll Q_\ast^{\,2}/D^2$ and
+$P\ll Q_\ast\,D^2$. 
+The corresponding tearing mode growth-rate is
+\begin{equation}
+\gamma = \frac{E_{ss}\,{\rm e}^{-{\rm i}\,\pi/4}}{\pi}\,\frac{d_\beta/r_s}{\omega_\ast^{1/2}\,\tau_H\,\tau_R^{1/2}}.
+\end{equation}
+
+Suppose, finally, that $Q_\ast \ll P\,p^2$ and $D^2\,p^2\gg 1$. It follows that $\nu=1/4$ and
+\begin{equation}
+C = \frac{P_\perp\,[\tau/(1+\tau)]}{[1+\lambda_e\,\tau/(1+\tau)]\,D^2}.
+\end{equation}
+Hence,
+\begin{equation} 
+\hat{\Delta} = 2\pi\,\hat{\gamma}\,\frac{{\mit\Gamma}(3/4)}{\Gamma(1/4)}\,\frac{[\tau/(1+\tau)]^{1/4}\,P_\perp^{1/4}}{[1+\lambda_e\,\tau/(1+\tau)]^{1/4}\,D^{1/2}},
+\end{equation}
+and $p_\ast \sim D^{1/2}/P^{1/4}$. This so-called {\em Hall-resistive regime}\/ is valid when $P\gg Q_\ast^2/D^2$ and
+$P\ll D^6$. The corresponding tearing mode growth rate is 
+\begin{equation}
+\gamma= \frac{E_{ss}}{2\pi\,[{\mit\Gamma}(3/4)/{\mit\Gamma}(1/4)]\,[1+\lambda_e\,\tau/(1+\tau)]^{-1/4}}\,\frac{(d_\beta/r_s)^{1/4}\,\tau_\perp^{1/4}}{\tau_H^{1/3}\,\tau_R^{11/12}}.
+\end{equation}
+
+\subsection{Discussion}
+
+\begin{figure}
+\centerline{\includegraphics[width=0.9\textwidth]{RegimeIII.pdf}}
+\caption{Linear tearing mode growth-rate regimes  in $Q_\ast$-$P$ space for the case $D=1$. The various regimes are
+the Hall-resisitive (HR), the semi-collisional (SC),  the visco-resistive (VR), and the resistive-inertia (RI).}\label{f3}
+\end{figure}
+
 
 \section*{Bibliography}
 \begin{description}
+\item Ara, A., et al.\ 1978. {\em Magnetic Reconnection and m = 1 Oscillations in Current Carrying Plasmas}. Ann.\ Physics (NY) 
+{\bf 112}, 443. 
+\item Boozer, A.H.\ 1996. {\em Shielding of Resonant Magnetic Perturbations by Rotation}. Phys.\ Plasmas {\bf 3}, 4620.
 \item Braginskii, S.I.\ 1965. {\em Transport Processes in a Plasma}. In {\em Reviews of Plasma Physics}. Consultants Bureau. Vol.~1, 205.
 \item Brau, K., et al.\ 1983. {\em Plasma Rotation in the PDX Tokamak}. Nucl.\ Fusion {\bf 23}, 1643.
 \item Chapman, S., and Cowling, T.G.\ 1953. {\em The Mathematical Theory of Non-Uniform Gases}. Cambridge University Press.
+\item Chen, X.L.\ and Morrison, P.J.\ 1990. {\em Resistive Tearing Instability with Equilibrium Shear Flow}. Phys.\ Plasmas {\bf 2}, 495. 
+\item Cole, A.\ and Fitzpatrick, R.\ 2006. {\em Drift-Magnetohydrodynamical Model of Error-Field Penetration in Tokamak
+Plasmas}. Phys.\ Plasmas {\bf 13}, 032503. 
+\item Drake, J.F.\ and Lee, Y.C.\ 1977. {\em Kinetic Theory of Tearing Instabilities}. Phys.\ Fluids {\bf 20}, 1341.
 \item Fitzpatrick, R.\ 1993. {\em Interaction of Tearing Modes with External Structures in Cylindrical Geometry}. Nucl.\ Fusion {\bf 33}, 1049. 
+\item Fitzpatrick, R.\ 1995. {\em Helical Temperature Perturbations Associated with Tearing Modes in Tokamak Plasmas}. Phys.\ Plasmas {\bf 2}, 825. 
+\item Fitzpatrick, R.\ 1998. {\em Bifurcated States of a Rotating Tokamak Plasma in the Presence of a Static Error-Field}. Phys.\ Plasmas {\bf 5}, 3325. 
 \item Fitzpatrick, R.\ 2008. {\em Maxwell's Equations and the Principles of Electromagnetism}. Jones \& Bartlett.
 \item Fitzpatrick, R.\ 2015. {\em Plasma Physics: An Introduction}. Taylor \& Francis, CRC Press. 
+\item Fitzpatrick, R.\ and Hender, T.C.\ 1994. {\em Effect of a Static External Magnetic Perturbation on Resistive Mode Stability in Tokamaks}. Phys.\ Plasmas {\bf 1}, 3337. 
 \item Fitzpatrick, R.\ and Waelbroeck, F.L.\ 2005. {\em Two-Fluid Magnetic Island Dynamics in Slab Geometry. I. Isolated Islands}.
 Phys.\ Plasmas {\bf 12}, 022307. 
 \item Fitzpatrick, R.\ and Waelbroeck, F.L.\ 2009. {\em Effect of Flow Damping on Drift-Tearing Magnetic Islands in Tokamak Plasmas}.
@@ -1503,7 +1992,10 @@ Based on the Four-Field Reduced Neoclassical MHD Equation}. J.\ Phys.\ Soc.\ Jap
 \item Richardson, A.S.\ 2019. {\em 2019 NRL Plasma Formulary}.  Naval Research Laboratory.
 \item Stix, T.H.\ 1973. {\em Decay of Poloidal Rotation in a Tokamak Plasma}. Phys.\ Fluids {\bf 16}, 1260.
 \item Strauss, H.R.\ 1976. {\em Nonlinear, Three-Dimensional Magnetohydrodynamics of  Noncircular Tokamaks}. Phys.\ Fluids {\bf 19},  134.
-\item Vahala, G., et al., 1980. {\em Perturbed Magnetic-Field Phase Slip for Tokamaks}. Nucl.\ Fusion {\bf 20}, 17.
+\item Vahala, G., et al.\ 1980. {\em Perturbed Magnetic-Field Phase Slip for Tokamaks}. Nucl.\ Fusion {\bf 20}, 17.
+\item Waelbroeck, F.L.\ 2003. {\em Shielding of Resonant Magnetic Perturbations in the Long Mean-Free Path Regime}. Phys.\ Plasmas {\bf 10}, 4040.
+\item Waelbroeck, F.L., et al.\ 2012. {\em Role of Singular Layers in the Plasma Response to Resonant Magnetic Perturbations}.
+Nucl.\ Fusion {\bf 52}, 074004.
 \item Wesson, J.\  1978. {\em Hydrodynamic Stability of Tokamaks}. Nucl.\ Fusion {\bf 18}, 87.
 \item Wesson, J.\ 2011. {\em Tokamaks}. Oxford University Press. 
 \end{description}
