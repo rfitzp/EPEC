@@ -35,8 +35,8 @@ plt.text(0.35, 1.03, '$P=D^6$', fontsize=20, color='red')
 plt.text(0.741, 0.4, r'$P=Q_\ast^2 D^{-2}$', fontsize=20, color='red')
 plt.text(1.525, 1.4, r'$P=Q_\ast D^2$', fontsize=20, color='red')
 
-plt.xlabel(r'$Q_\ast$', fontsize=16)
-plt.ylabel('$P$', fontsize=16)
+plt.xlabel(r'$Q_\ast/D^4$', fontsize=16)
+plt.ylabel('$P/D^6$', fontsize=16)
 
 plt.savefig("RegimeIII.pdf")
 
