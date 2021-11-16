@@ -10,7 +10,7 @@
 \contentsline {subsection}{\numberline {3.2}Tokamak Equilibrium}{13}{}%
 \contentsline {subsection}{\numberline {3.3}Perturbed Magnetic Field}{14}{}%
 \contentsline {subsection}{\numberline {3.4}Cylindrical Tearing Mode Equation}{14}{}%
-\contentsline {subsection}{\numberline {3.5}Solution in Presence of Perfectly-Conducting Wall}{14}{}%
+\contentsline {subsection}{\numberline {3.5}Solution in Presence of Perfectly-Conducting Wall}{15}{}%
 \contentsline {subsection}{\numberline {3.6}Solution in Presence of Resistive Wall}{16}{}%
 \contentsline {subsection}{\numberline {3.7}Resistive Wall Physics}{17}{}%
 \contentsline {subsection}{\numberline {3.8}Resonant Layer Physics}{18}{}%
