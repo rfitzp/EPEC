@@ -1,53 +1,57 @@
-\contentsline {section}{\numberline {1}Introduction}{3}
-\contentsline {section}{\numberline {2}Plasma Fluid Theory}{3}
-\contentsline {subsection}{\numberline {2.1}Introduction}{3}
-\contentsline {subsection}{\numberline {2.2}Fundamental Quantities}{3}
-\contentsline {subsection}{\numberline {2.3}Braginskii Equations}{4}
-\contentsline {subsection}{\numberline {2.4}Normalization of Braginskii Equations}{7}
-\contentsline {subsection}{\numberline {2.5}Lowest-Order Fluid Equations}{11}
-\contentsline {section}{\numberline {3}Cylindrical Tearing Mode Theory}{13}
-\contentsline {subsection}{\numberline {3.1}Introduction}{13}
-\contentsline {subsection}{\numberline {3.2}Tokamak Equilibrium}{13}
-\contentsline {subsection}{\numberline {3.3}Perturbed Magnetic Field}{14}
-\contentsline {subsection}{\numberline {3.4}Cylindrical Tearing Mode Equation}{14}
-\contentsline {subsection}{\numberline {3.5}Solution in Presence of Perfectly-Conducting Wall}{15}
-\contentsline {subsection}{\numberline {3.6}Solution in Presence of Resistive Wall}{16}
-\contentsline {subsection}{\numberline {3.7}Resistive Wall Physics}{17}
-\contentsline {subsection}{\numberline {3.8}Resonant Layer Physics}{18}
-\contentsline {subsection}{\numberline {3.9}Solution in Presence of External Magnetic Field-Coil}{19}
-\contentsline {subsection}{\numberline {3.10}Electromagnetic Torques}{20}
-\contentsline {subsection}{\numberline {3.11}Plasma Angular Equations of Motion}{22}
-\contentsline {subsection}{\numberline {3.12}Solution of Plasma Angular Equations of Motion}{25}
-\contentsline {subsection}{\numberline {3.13}No-Slip Constraint}{26}
-\contentsline {subsection}{\numberline {3.14}Final Equations}{27}
-\contentsline {section}{\numberline {4}Reduced Drift-MHD Resonant Response Model}{27}
-\contentsline {subsection}{\numberline {4.1}Introduction}{27}
-\contentsline {subsection}{\numberline {4.2}Drift-MHD Equations}{28}
-\contentsline {subsection}{\numberline {4.3}Normalization Scheme}{30}
-\contentsline {subsection}{\numberline {4.4}Reduction Process}{31}
-\contentsline {subsection}{\numberline {4.5}Four-Field Model}{34}
-\contentsline {subsection}{\numberline {4.6}Discussion}{35}
-\contentsline {section}{\numberline {5}Linear Resonant Response Model}{35}
-\contentsline {subsection}{\numberline {5.1}Introduction}{35}
-\contentsline {subsection}{\numberline {5.2}Plasma Equilibrium}{36}
-\contentsline {subsection}{\numberline {5.3}Derivation of Linear Layer Equations}{37}
-\contentsline {subsection}{\numberline {5.4}Asymptotic Matching}{39}
-\contentsline {subsection}{\numberline {5.5}Fourier Transformation}{40}
-\contentsline {subsection}{\numberline {5.6}Constant-$\psi $ Approximation}{41}
-\contentsline {subsection}{\numberline {5.7}Constant-$\psi $ Linear Response Regimes}{42}
-\contentsline {subsection}{\numberline {5.8}Nonconstant-$\psi $ Regimes}{43}
-\contentsline {subsection}{\numberline {5.9}Discussion}{45}
-\contentsline {section}{\numberline {6}Linear Tearing Mode Stability}{48}
-\contentsline {subsection}{\numberline {6.1}Introduction}{48}
-\contentsline {subsection}{\numberline {6.2}Linear Dispersion Relation}{48}
-\contentsline {subsection}{\numberline {6.3}Determination of Linear Growth-Rates}{49}
-\contentsline {subsection}{\numberline {6.4}Discussion}{51}
-\contentsline {section}{\numberline {7}Error-Field Penetration in Tokamak Plasmas}{53}
-\contentsline {subsection}{\numberline {7.1}Introduction}{53}
-\contentsline {subsection}{\numberline {7.2}Asymptotic Matching}{54}
-\contentsline {subsection}{\numberline {7.3}Resonant Layer Response}{55}
-\contentsline {subsection}{\numberline {7.4}Torque Balance}{56}
-\contentsline {subsection}{\numberline {7.5}Scaling Analysis}{59}
-\contentsline {section}{\numberline {8}Nonlinear Resonant Response Model}{64}
-\contentsline {subsection}{\numberline {8.1}Introduction}{64}
-\contentsline {subsection}{\numberline {8.2}Rescaled Four-Field Model}{65}
+\contentsline {section}{\numberline {1}Introduction}{3}{}%
+\contentsline {section}{\numberline {2}Plasma Fluid Theory}{3}{}%
+\contentsline {subsection}{\numberline {2.1}Introduction}{3}{}%
+\contentsline {subsection}{\numberline {2.2}Fundamental Quantities}{3}{}%
+\contentsline {subsection}{\numberline {2.3}Braginskii Equations}{4}{}%
+\contentsline {subsection}{\numberline {2.4}Normalization of Braginskii Equations}{7}{}%
+\contentsline {subsection}{\numberline {2.5}Lowest-Order Fluid Equations}{11}{}%
+\contentsline {section}{\numberline {3}Cylindrical Tearing Mode Theory}{13}{}%
+\contentsline {subsection}{\numberline {3.1}Introduction}{13}{}%
+\contentsline {subsection}{\numberline {3.2}Tokamak Equilibrium}{13}{}%
+\contentsline {subsection}{\numberline {3.3}Perturbed Magnetic Field}{14}{}%
+\contentsline {subsection}{\numberline {3.4}Cylindrical Tearing Mode Equation}{14}{}%
+\contentsline {subsection}{\numberline {3.5}Solution in Presence of Perfectly-Conducting Wall}{15}{}%
+\contentsline {subsection}{\numberline {3.6}Solution in Presence of Resistive Wall}{16}{}%
+\contentsline {subsection}{\numberline {3.7}Resistive Wall Physics}{17}{}%
+\contentsline {subsection}{\numberline {3.8}Resonant Layer Physics}{18}{}%
+\contentsline {subsection}{\numberline {3.9}Solution in Presence of External Magnetic Field-Coil}{19}{}%
+\contentsline {subsection}{\numberline {3.10}Electromagnetic Torques}{20}{}%
+\contentsline {subsection}{\numberline {3.11}Plasma Angular Equations of Motion}{22}{}%
+\contentsline {subsection}{\numberline {3.12}Solution of Plasma Angular Equations of Motion}{25}{}%
+\contentsline {subsection}{\numberline {3.13}No-Slip Constraint}{26}{}%
+\contentsline {subsection}{\numberline {3.14}Final Equations}{27}{}%
+\contentsline {section}{\numberline {4}Reduced Resonant Response Model}{27}{}%
+\contentsline {subsection}{\numberline {4.1}Introduction}{27}{}%
+\contentsline {subsection}{\numberline {4.2}Drift-MHD Equations}{28}{}%
+\contentsline {subsection}{\numberline {4.3}Normalization Scheme}{30}{}%
+\contentsline {subsection}{\numberline {4.4}Reduction Process}{31}{}%
+\contentsline {subsection}{\numberline {4.5}Four-Field Model}{34}{}%
+\contentsline {subsection}{\numberline {4.6}Discussion}{35}{}%
+\contentsline {section}{\numberline {5}Linear Resonant Response Model}{35}{}%
+\contentsline {subsection}{\numberline {5.1}Introduction}{35}{}%
+\contentsline {subsection}{\numberline {5.2}Plasma Equilibrium}{36}{}%
+\contentsline {subsection}{\numberline {5.3}Derivation of Linear Layer Equations}{37}{}%
+\contentsline {subsection}{\numberline {5.4}Asymptotic Matching}{39}{}%
+\contentsline {subsection}{\numberline {5.5}Fourier Transformation}{40}{}%
+\contentsline {subsection}{\numberline {5.6}Constant-$\psi $ Approximation}{41}{}%
+\contentsline {subsection}{\numberline {5.7}Constant-$\psi $ Linear Response Regimes}{42}{}%
+\contentsline {subsection}{\numberline {5.8}Nonconstant-$\psi $ Regimes}{43}{}%
+\contentsline {subsection}{\numberline {5.9}Discussion}{45}{}%
+\contentsline {section}{\numberline {6}Linear Tearing Mode Stability}{48}{}%
+\contentsline {subsection}{\numberline {6.1}Introduction}{48}{}%
+\contentsline {subsection}{\numberline {6.2}Linear Dispersion Relation}{48}{}%
+\contentsline {subsection}{\numberline {6.3}Determination of Linear Growth-Rates}{49}{}%
+\contentsline {subsection}{\numberline {6.4}Discussion}{51}{}%
+\contentsline {section}{\numberline {7}Error-Field Penetration in Tokamak Plasmas}{53}{}%
+\contentsline {subsection}{\numberline {7.1}Introduction}{53}{}%
+\contentsline {subsection}{\numberline {7.2}Asymptotic Matching}{54}{}%
+\contentsline {subsection}{\numberline {7.3}Resonant Layer Response}{55}{}%
+\contentsline {subsection}{\numberline {7.4}Torque Balance}{56}{}%
+\contentsline {subsection}{\numberline {7.5}Scaling Analysis}{59}{}%
+\contentsline {section}{\numberline {8}Nonlinear Resonant Response Model}{64}{}%
+\contentsline {subsection}{\numberline {8.1}Introduction}{64}{}%
+\contentsline {subsection}{\numberline {8.2}Rescaled Four-Field Model}{65}{}%
+\contentsline {subsection}{\numberline {8.3}Ordering Scheme}{67}{}%
+\contentsline {subsection}{\numberline {8.4}Lowest-Order Solution}{68}{}%
+\contentsline {subsection}{\numberline {8.5}Discussion}{69}{}%
+\contentsline {subsection}{\numberline {8.6}Flux-Surface Average Operator}{70}{}%

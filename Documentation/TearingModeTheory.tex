@@ -1181,7 +1181,7 @@ Here,
 \tilde{E}_{ww} &= E_{ww} + \frac{2m\,(r_w/r_c)^{2m}}{1-(r_w/r_c)^{2m}}.\label{e208}
 \end{align}
 
-\section{Reduced Drift-MHD Resonant  Response Model}\label{ff}
+\section{Reduced Resonant  Response Model}\label{ff}
 \subsection{Introduction}
 Equations~(\ref{e202})--(\ref{e206}) contain two quantities---namely, the reconnection time, $\tau_s$, and the unperturbed
 natural frequency, $\omega_{s\,0}$---that can only be determined by solving for the plasma response in the radially-thin resonant layer surrounding the resonant surface. Unfortunately, determining the resonant plasma response is not a straightforward task. The
@@ -1191,9 +1191,10 @@ Section~\ref{lowest} are not applicable in the resonant layer. In particular, ma
 
 A tearing mode is a modified shear-Alfv\'{e}n wave (Hazeltine \& Meiss 1985), and has very little connection with a compressible-Alfv\'{e}n wave. For instance, the resonance condition, ${\bf k}\cdot{\bf B}=0$, which determines the position of the resonant
 surface, is identical to the resonance condition for a  shear-Alfv\'{e}n wave, but differs substantially from that of a  compressible-Alfv\'{e}n wave (Fitzpatrick 2015). Hence, one very effective way of simplifying the resonant layer equations is to remove the
-physics of  compressible-Alfv\'{e}n waves from them altogether, in the process converting a drift-magnetohydrodynamical (MHD) response model
-into a so-called {\em reduced}\/ drift-MHD response model (Strauss 1976; Hazeltine, Kotschenreuther \& Morrison 1985; 
-Furuya, Yagi \& Itoh 2003). The aim of
+physics of  compressible-Alfv\'{e}n waves from them altogether, in the process converting a 
+drift-magnetohydrodynamical\footnote{The  `drift' appellation  merely indicates that we are taking diamagnetic flows into account. However, this necessarily entails treating the ion and electron flow separately. In other words, a
+drift-MHD model is also a `two-fluid' model. }(MHD) response model  
+into a so-called {\em reduced}\/ drift-MHD response model (Strauss 1976; Hazeltine, Kotschenreuther \& Morrison 1985). The aim of
 this section is to describe the reduction process (which essentially boils down to arguing that the divergence of the
 plasma flow is small), and to derive the reduced drift-MHD equations that will subsequently be used to model the resonant
 response of the plasma. 
@@ -1238,7 +1239,7 @@ fluid velocity. The lowest-order electron and ion fluid velocities take the resp
 Following Hazeltine \& Meiss 1992, if we neglect electron inertia and electron viscosity  in the electron equation of motion, (\ref{e3.79b}), then
 we obtain the {\em generalized Ohm's law}: 
 \begin{equation}\label{e220}
-{\bf E} + {\bf V}\times {\bf B} + \frac{1}{e\,n_0}\!\left[\nabla p + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\nabla p)\,{\bf b} -{\bf j}\times{\bf b}\right] = \eta_\parallel\,{\bf j}_\parallel + \eta_\perp\,{\bf j}_\perp.
+{\bf E} + {\bf V}\times {\bf B} + \frac{1}{e\,n_0}\!\left[\nabla p + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\nabla p)\,{\bf b} -{\bf j}\times{\bf B}\right] = \eta_\parallel\,{\bf j}_\parallel + \eta_\perp\,{\bf j}_\perp.
 \end{equation}
 Here, $\eta_\parallel=1/\sigma_\parallel(r_s)$ and $\eta_\perp=1/\sigma_\perp(r_s)$ are the parallel and perpendicular plasma
 resistivities,  respectively, at the resonant surface. (See Section~\ref{sbrag}.) We have neglected the cross term in Equation~(\ref{e3.91a})
@@ -1270,7 +1271,7 @@ are, at least, factors $({\mit\Omega}_e\,\tau_e)^{-1}$ or  $({\mit\Omega}_i\,\ta
 expect the dominant contribution, which comes from the parallel viscosity, to be much smaller than its nominal magnitude in a large aspect-ratio tokamak
 plasma. 
 
-Equations~(\ref{e220})--(\ref{e223}) are known collectively as the {\em drift-MHD equations},\footnote{The  `drift' appellation  merely indicates that we are taking diamagnetic flows into account.} and contain both shear-Alfv\'{e}n
+Equations~(\ref{e220})--(\ref{e223}) are known collectively as the {\em drift-MHD equations}, and contain both shear-Alfv\'{e}n
 and compressible-Alfv\'{e}n wave dynamics. The system of equations is completed by a subset of Maxwell's equations:
 \begin{align}
 \nabla\cdot{\bf B} &= 0,\\[0.5ex]
@@ -1297,7 +1298,7 @@ $\hat{\bf j} = {\bf j}/(B_z/\mu_0\,l)$, $\hat{\eta}_{\parallel,\perp} = \eta_{\p
 $\hat{{\bf V}}_{\ast,i}= {\bf V}_{\ast,i}/V_A$, $\hat{V}_{\parallel\,i}= V_{\parallel\,i}/V_A$, $\hat{p} = p/(B_z^{\,2}/\mu_0)$, $\hat{p}_0 = p_0/(B_z^{\,2}/\mu_0)$, $\hat{\bpi}_{i} = \bpi_{i}/(B_z^{\,2}/\mu_0)$,
 $\hat{\bf q} = {\bf q} /(B_z^{\,2}\,V_A/\mu_0)$. Equations~(\ref{e220})--(\ref{e226}) yield
 \begin{align}\label{e227}
-\hat{\bf E} + \hat{\bf V}\times \hat{\bf B} + \hat{d}_i\!\left[\hat{\nabla} \hat{p} + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\hat{\nabla} \hat{p})\,{\bf b} + \hat{\nabla}\cdot\hat{\bpi}_e-\hat{\bf j}\times\hat{\bf b}\right] &= \hat{\eta}_\parallel\,\hat{\bf j}_\parallel+ \hat{\eta}_\perp\,\hat{\bf j}_\perp,\\[0.5ex]
+\hat{\bf E} + \hat{\bf V}\times \hat{\bf B} + \hat{d}_i\!\left[\hat{\nabla} \hat{p} + \frac{1}{1+\tau}\left(\frac{0.71\,\eta_e\,\tau}{1+\eta_e}-1\right)({\bf b}\cdot\hat{\nabla} \hat{p})\,{\bf b} + \hat{\nabla}\cdot\hat{\bpi}_e-\hat{\bf j}\times\hat{\bf B}\right] &= \hat{\eta}_\parallel\,\hat{\bf j}_\parallel+ \hat{\eta}_\perp\,\hat{\bf j}_\perp,\\[0.5ex]
 \frac{\partial \hat{\bf V}}{\partial \hat{t}} 
 + (\hat{\bf V}\cdot\hat{\nabla} )\hat{\bf V} + 
 \frac{1}{1+\tau}\,(\hat{\bf V}_\ast\cdot\hat{\nabla})\hat{\bf V}_E
@@ -1317,7 +1318,7 @@ Finally,
 \hat{\bf V}_E &= \hat{\bf E}\times {\bf b},\\[0.5ex]
 \hat{\bf V} &= \hat{\bf V}_E + \hat{V}_{\parallel\,i}\,{\bf b},\\[0.5ex]
 \hat{\bf V}_\ast &= \hat{d}_i\,{\bf b}\times \hat{\nabla} \hat{p},\\[0.5ex]
-\hat{\bf V}_i &= \hat{\bf V} + \frac{\hat{\bf V}_{\ast\,i}}{1+\tau}.
+\hat{\bf V}_i &= \hat{\bf V} + \frac{\hat{\bf V}_{\ast}}{1+\tau}.
 \end{align}
 
 \subsection{Reduction Process} 
@@ -1481,8 +1482,8 @@ and
 \end{align}
 
 \subsection{Discussion}
-Equations~(\ref{e264})--(\ref{e269}) constitute our reduced, four-field, drift-MHD, resonant, plasma response model. Our model is very similar
-to the original four-field model derived by Hazeltine, et al.\ (Hazeltine, et al.\ 1985). Equation~(\ref{e264}) is the {\em generalized
+Equations~(\ref{e264})--(\ref{e269}) constitute our reduced drift-MHD resonant plasma response model. Our model is very similar
+to the original four-field model derived by Hazeltine, et al.\ (Hazeltine, Kotschenreuther \& Morrison 1985). Equation~(\ref{e264}) is the {\em generalized
 Ohm's law}\/ that governs the time evolution of the (normalized) helical magnetic flux, $\hat{\psi}$. Equation~(\ref{e265}) is the {\em parallel
 ion vorticity equation}\/ that governs the  time evolution of the (normalized) parallel ion vorticity, $U$. 
 Equation~(\ref{e266}) is the {\em electron number density continuity equation}\/ that 
@@ -1502,7 +1503,7 @@ MHD fluid has a significant influence on the form of the continuity equation (\r
 
 \section{Linear Resonant  Response Model}\label{linear}
 \subsection{Introduction}
-The aim of this section is to employ the reduced, drift-MHD, four-field, resonant, plasma response model derived in Section~\ref{ff} to determine the {\em linear}\/ response of the resonant layer to external perturbations.
+The aim of this section is to employ the reduced resonant plasma response model derived in Section~\ref{ff} to determine the {\em linear}\/ response of the resonant layer to external perturbations.
 
 It is convenient to set the normalization scale-length, $l$, in our four-field response model equal to the minor radius of the resonant surface, $r_s$. 
 Recall that the four fields in question---namely, $\hat{\psi}$, $\phi$, $N$, and $V$---have the following
@@ -1569,12 +1570,12 @@ very narrow (Chen \& Morrison 1990).
 Suppose that the system is perturbed by a tearing mode with $m$ periods in the poloidal direction, and
 $n$ periods in the toroidal direction. In accordance with Equations~(\ref{e287})--(\ref{e290}), and (\ref{e292})--(\ref{e293}), we can write
 \begin{align}\label{e295}
-\hat{\psi}(\hat{x},\zeta,t) &= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
-\phi(\hat{x},\zeta,t) &=-\hat{V}_E\,\hat{x}+ \tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
-N(\hat{x},\zeta,t) &= -\hat{V}_\ast\,\hat{x}+\left(\frac{1+\tau}{\tau}\right)\!\tilde{N}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
-V(\hat{x},\zeta,t) &= \hat{V}_\parallel + \left(\frac{1+\tau}{\tau}\right)\!\tilde{V}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
-J(\hat{x},\zeta,t) &=-\left(\frac{2}{s_s}-1\right)\!\frac{1}{\hat{L}_s}+ \hat{\nabla}^2\tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
-U(\hat{x},\zeta,t) &=  \hat{\nabla}^2\tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\label{e300}
+\hat{\psi}(\hat{x},\zeta,\hat{t}) &= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+\phi(\hat{x},\zeta,\hat{t}) &=-\hat{V}_E\,\hat{x}+ \tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+N(\hat{x},\zeta,\hat{t}) &= -\hat{V}_\ast\,\hat{x}+\left(\frac{1+\tau}{\tau}\right)\!\tilde{N}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+V(\hat{x},\zeta,\hat{t}) &= \hat{V}_\parallel + \left(\frac{1+\tau}{\tau}\right)\!\tilde{V}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+J(\hat{x},\zeta,\hat{t}) &=-\left(\frac{2}{s_s}-1\right)\!\frac{1}{\hat{L}_s}+ \hat{\nabla}^2\tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+U(\hat{x},\zeta,\hat{t}) &=  \hat{\nabla}^2\tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\label{e300}
 \end{align}
 where $\hat{t}=V_A\,t/r_s$, $\hat{\omega}=r_s\,\omega/V_A$, and $\omega$ is the frequency of the tearing mode in the laboratory frame. 
 Substituting Equations~(\ref{e294})--(\ref{e300}) into the four-field model, (\ref{e264})--(\ref{e269}), and only retaining terms that
@@ -1909,7 +1910,7 @@ across a `nonconstant-$\psi$' layer.
 Suppose that the resonant layer lies in a constant-$\psi$ response regime. According to Equation~(\ref{e295}),
 the perturbed magnetic flux in the layer takes the form:
 \begin{equation}
-\hat{\psi}(\hat{x},\zeta,t) = \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},
+\hat{\psi}(\hat{x},\zeta,\hat{t}) = \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},
 \end{equation}
 where $\tilde{\psi}$ is a complex constant. Of course, the physical flux is the real part of the previous expression; that is,
 \begin{equation}\label{e352a}
@@ -1921,7 +1922,7 @@ where
 \end{equation}
 Now, it is clear from Equation~(\ref{e279}) that ${\bf B}\cdot\hat{\nabla}\hat{\psi}=0$. In other words, the contours of
 $\hat{\psi}(\hat{x},\xi)$ map out the perturbed magnetic flux-surfaces in the vicinity of the resonant layer. 
-Let $\hat{W} = 4\,(|\tilde{\psi}|\,\hat{L}_s)^{1/2}$. Equation~(\ref{e352a}) can be written
+Let $\hat{W} = 4\,(\hat{L}_s|\,\tilde{\psi}|)^{1/2}$. Equation~(\ref{e352a}) can be written
 \begin{equation}
 \frac{\hat{\psi}(\hat{x},\xi)}{|\tilde{\psi}|} = 8\left(\frac{\hat{x}}{\hat{W}}\right)^2 + \cos\xi.
 \end{equation}
@@ -1930,7 +1931,7 @@ tearing mode has reconnected magnetic field-lines to produce a {\em helical magn
 surface ($\hat{x}=0$). The chain has $m$ periods in the poloidal direction, $n$ periods in the toroidal direction, and propagates at the
 helical phase velocity $\omega$. The maximum full (as opposed to half) radial width of the magnetic separatrix is 
 \begin{equation}\label{e355s}
-W =  \hat{W}\,r_s= 4\,(|\tilde{\psi}|\,\hat{L}_s)^{1/2}\,r_s = 4\left(\frac{q_s}{s_s}\,|\hat{\mit\Psi}_s|\right)^{1/2}R_0,
+W =  \hat{W}\,r_s= 4\,(\hat{L}_s\,|\tilde{\psi}|)^{1/2}\,r_s = 4\left(L_s\,R_0\,|\hat{\mit\Psi}_s|\right)^{1/2},
 \end{equation}
 where ${\mit\Psi}_s = r_s\,B_z\,\tilde{\psi}$ is the reconnected magnetic flux defined in Equation~(\ref{e99}), and
 $\hat{\mit\Psi}_s= {\mit\Psi}_s/(R_0\,B_z)$. 
@@ -2371,7 +2372,7 @@ The aim of this section is to use the previous analysis to predict the scaling o
 threshold with the standard dimensionless scaling parameters (Connor \& Taylor 1977)
 \begin{align}
 \rho_\ast &= \frac{T_0^{1/2}\,m_i^{1/2}}{e\,B_z\,L_s},\label{e428}\\[0.5ex]
-\nu_\ast &= \frac{L_s\,n_0\,e^2\,\eta_\parallel(r_s)}{m_e^{1/2}\,T_0^{1/2}},\\[0.5ex]
+\nu_\ast &= \frac{L_s\,n_0\,e^2\,\eta_\parallel}{m_e^{1/2}\,T_0^{1/2}},\\[0.5ex]
 \beta&=\frac{\mu_0\,n_0\,T_0}{B_z^{\,2}},\label{e430}
 \end{align}
 where $T_0=p_0/n_0$. In the following, for the sake of simplicity, we
@@ -2381,7 +2382,7 @@ constants such as $s_s$, $\eta_e$, $\eta_i$, $\lambda_e$, $\tau$, $\pi$, $\ln(r_
  Now, in an ohmically-heated tokamak
 plasma, the energy confinement timescale, $\tau_E$, satisfies the constraint
 \begin{equation}
-\frac{n_0\,T_0}{\tau_E} = \eta_\parallel(r_s)\left(\frac{B_z}{\mu_0\,L_s}\right)^2,
+\frac{n_0\,T_0}{\tau_E} = \eta_\parallel\left(\frac{B_z}{\mu_0\,L_s}\right)^2,
 \end{equation}
 which is obtained by equating the energy loss rate to the ohmic heating rate. Let us assume that the momentum confinement
 time, $\tau_\varphi$, and the particle/energy confinement time, $\tau_\perp$, are both equal to $\tau_E$, as is generally
@@ -2523,32 +2524,34 @@ The ratio of $W$ to $\delta$, just prior to penetration, in the four regimes dis
 \section{Nonlinear Resonant Response Model}
 \subsection{Introduction}
 As was discussed in Section~\ref{dis1}, the linear resonant response model derived in Section~\ref{linear} is only
-valid when the width of the magnetic island chain at the resonant surface is much less than the linear layer width. 
+valid when the width of the magnetic island chain that develops at the resonant surface is much less than the linear layer width. 
 In the opposite limit, in which the island width greatly exceeds the layer width, a nonlinear approach is required. 
-The aim of this section  is to employ the reduced, drift-MHD, four-field, resonant, plasma response model derived in Section~\ref{ff} to 
-construct a nonlinear resonant response model. 
+The aim of this section  is to employ the reduced four-field resonant plasma response model derived in Section~\ref{ff} to 
+construct a suitable nonlinear resonant response model. 
 
-It is convenient to set the normalization scale-length, $l$, in our four-field response model equal to the minor radius of the resonant surface, $r_s$. It is also convenient to work in a frame of reference that corotates with the island chain. In this reference frame, the
+It is convenient to set the normalization scale-length, $l$, in the four-field  model equal to the minor radius of the resonant surface, $r_s$. It is also convenient to work in a frame of reference that corotates with the island chain. In this reference frame, the
 normalized reconnected flux, $\hat{\mit\Psi}_s(\hat{t})$, is assumed to be a positive real quantity. 
 Furthermore, the four fields,
-$\hat{\psi}$, $\phi$, $N$, and $V$, as well as the auxiliary field, $J$, are assumed to only be functions of the
-normalized time, $\hat{t}= t\,V_A/r_s$, the normalized radial coordinate $\hat{x} = (r-r_s)/r_s$, and the
-helical angle $\zeta= m\,\theta-n\,\varphi$. 
+$\hat{\psi}$, $\phi$, $N$, and $V$, as well as the auxiliary field, $J$, are assumed to only be functions of  the normalized radial coordinate, $\hat{x} = (r-r_s)/r_s$, the
+helical angle, $\zeta= m\,\theta-n\,\varphi$, and the
+normalized time, $\hat{t}= t\,V_A/r_s$. 
 
 It is helpful to define the reduced island width
 \begin{equation}
 w = \frac{W}{4} = (L_s\,R_0\,{\mit\Psi}_s)^{1/2}.
 \end{equation}
+[See Equation~(\ref{e355s}).]
 It is assumed that $\delta\ll w\ll r_s$, where $\delta$ is the linear layer width. Let $\hat{w}= w/r_s$.  Reusing the analysis of Section~\ref{linear},
-in the limit $|\hat{x}|/\hat{w}\gg 1$ (i.e., many island widths from the resonant surface), we expect 
+in the limit $|\hat{x}|/\hat{w}\gg 1$ (i.e., many island widths from the resonant surface), we find that 
 \begin{align}
 \hat{\psi} &\rightarrow \frac{\hat{x}^{\,2}}{2\,\hat{L}_s} + \hat{R}_0\,\hat{\mit\Psi}_s\,\cos\zeta,\\[0.5ex]
 \phi &\rightarrow \left(\frac{\hat{\omega}}{m}- \hat{V}_E\right)\hat{x} - \frac{s}{4}\,\hat{V}_E'\,\hat{x}^{\,2},\\[0.5ex]
 N &\rightarrow -\hat{V}_\ast\,\hat{x},\\[0.5ex]
 V&\rightarrow \hat{V}_\parallel,\\[0.5ex]
-J& \rightarrow -\frac{2}{q_s\,\hat{R}_0} + \frac{1}{\hat{L}_s}.
+J& \rightarrow -\frac{2}{q_s\hat{R}_0} + \frac{1}{\hat{L}_s}.
 \end{align}
-Here, 
+Here, $\omega = \hat{\omega}\,V_A/r_s$ is the helical phase velocity of the island chain in the
+laboratory frame,
 \begin{equation}
 s = {\rm sgn}(\hat{x}),
 \end{equation}
@@ -2556,7 +2559,7 @@ and
 \begin{equation}
 \hat{V}_E' = \frac{1}{V_A}\left[r\,\frac{dV_E}{dr}\right]_{r_{s-}}^{r_{s+}}.
 \end{equation}
-The parameter $\hat{V}_E'$ is included in the analysis to take into account the fact that the plasma rotation profile in the outer region develops a
+The parameter $\hat{V}_E'$ is introduced  into the analysis in order to take into account the fact that the plasma rotation profile in the outer region develops a
 gradient discontinuity at the resonant surface in response to the nonlinear localized electromagnetic torque that develops
 there. 
 
@@ -2566,7 +2569,7 @@ Let
 X &= \frac{\hat{x}}{\hat{w}},\\[0.5ex]
 T &= \omega_\ast\,t.
 \end{align}
-Thus, $|X|\sim {\cal O}(1)$ in the immediate vicinity of the island chain. It is helpful to define the
+It follows that $|X|\sim {\cal O}(1)$ in the immediate vicinity of the island chain. It is helpful to define the
 rescaled fields ${\mit\Psi}(X,\zeta,T)$, ${\mit\Phi}(X,\zeta,T)$, ${\cal N}(X,\zeta,T)$,
 ${\cal V}(X,\zeta,T)$, and ${\cal J}(X,\zeta,T)$, where
 \begin{align}
@@ -2574,20 +2577,20 @@ ${\cal V}(X,\zeta,T)$, and ${\cal J}(X,\zeta,T)$, where
 \phi &=\left(\frac{\hat{\omega}_\ast\,\hat{w}}{m}\right){\mit\Phi},\\[0.5ex]
 N &= \left(\frac{\hat{\omega}_\ast\,\hat{w}}{m}\right){\cal N},\\[0.5ex]
 V&= \hat{V}_\parallel + \left(\frac{\hat{L}_s\,\hat{\omega}_\ast^{\,2}}{m^2\,c_\beta^{\,2}}\right){\cal V},\\[0.5ex]
-J & =-\frac{2}{q_s\,\hat{R}_0} + \frac{1}{\hat{L}_s} + \left(\frac{\hat{L}_s\,\hat{\omega}_\ast^{\,2}}{m^2\,\hat{w}^{\,2}}\right){\cal J}.
+J & =-\frac{2}{q_s \hat{R}_0} + \frac{1}{\hat{L}_s} + \left(\frac{\hat{L}_s\,\hat{\omega}_\ast^{\,2}}{m^2\,\hat{w}^{\,2}}\right){\cal J}.
 \end{align}
-The four-field model introduced in Section~\ref{fourf} rescales to give
+The four-field model specified in Section~\ref{fourf} rescales to give
 \begin{align}\label{e469}
 \frac{d(\ln \hat{w}^2)}{dT}\,\cos\zeta &= \left\{{\mit\Phi}-\left(\frac{\tau}{1+\tau}\right)(1+\lambda_e)\,{\cal N}, {\mit\Psi}\right\}
 + \epsilon_\beta\,\epsilon_d\,\epsilon_\eta\,{\cal J},\\[0.5ex]
-\frac{\partial(\partial_X^{\,2}\,{\mit\Phi})}{\partial T} &= \partial_X\!\!\left\{{\mit\Phi} + \frac{{\cal N}}{1+\tau},{\mit\Psi}\right\}
-+ [{\cal J},{\mit\Psi}]+ \epsilon_\chi \,\partial_X^{\,4}\!\left({\mit\Phi} + \frac{{\cal N}}{1+\tau}\right),\\[0.5ex]
+\frac{\partial(\partial_X^{\,2}\,{\mit\Phi})}{\partial T} &= \partial_X\!\!\left\{{\mit\Phi} + \frac{{\cal N}}{1+\tau},\partial_X{\mit\Phi}\right\}
++ \{{\cal J},{\mit\Psi}\}+ \epsilon_\chi \,\partial_X^{\,4}\!\left({\mit\Phi} + \frac{{\cal N}}{1+\tau}\right),\label{e470}\\[0.5ex]
 \frac{\partial {\cal N}}{\partial T} &= \{{\mit\Phi}, {\cal N}\} + \{{\cal V},{\mit\Psi}\} + \epsilon_d\,\epsilon_n\,\{{\cal J},{\mit\Psi}\}\nonumber\\[0.5ex]&\phantom{=}
-+ \epsilon_D \!\left[\left(\frac{w}{w_c}\right)^4\,\{\{{\cal N},{\mit\Psi}\}, {\mit\Psi}\}+\partial_X^{\,2}{\cal N}\right],\\[0.5ex]
-\epsilon_d\,\frac{\partial {\cal V}}{\partial T} &= \epsilon_d\,\{{\mit\Phi},{\cal V}\}+\{{\cal N}, {\mit\Psi}\} + \epsilon_d\,\epsilon_\chi\,\partial_X^{\,2} {\cal V},\\[0.5ex]
++ \epsilon_D \!\left[\left(\frac{w}{w_c}\right)^4\,\{\{{\cal N},{\mit\Psi}\}, {\mit\Psi}\}+\partial_X^{\,2}{\cal N}\right],\label{e471}\\[0.5ex]
+\epsilon_d\,\frac{\partial {\cal V}}{\partial T} &= \epsilon_d\,\{{\mit\Phi},{\cal V}\}+\{{\cal N}, {\mit\Psi}\} + \epsilon_d\,\epsilon_\chi\,\partial_X^{\,2} {\cal V},\label{e472}\\[0.5ex]
 \partial_X^{\,2}{\mit\Psi} &= 1+ \epsilon_\beta\,\epsilon_d\,{\cal J}.\label{e473}
 \end{align}
-Here, $\partial_X\equiv \partial/\partial X$, 
+Here,  $\partial_X\equiv \partial/\partial X$, 
 \begin{equation}
 \{A,B\} \equiv \frac{\partial A}{\partial X}\,\frac{\partial B}{\partial\zeta} - \frac{\partial A}{\partial \zeta}\,\frac{\partial B}{\partial X},
 \end{equation}
@@ -2609,24 +2612,174 @@ Finally,
 \frac{1}{L_n}= -\frac{1}{{\mit\Gamma}\,(1-c_\beta^{\,2})}\left(\frac{d\ln n}{dr}\right)_{r_s}
 \end{equation}
 is the {\em density gradient scalelength}, 
-and the critical island width, $w_c$, is defined in Equation~(\ref{wcdef}). 
+and the critical reduced island width, $w_c$, is defined in Equation~(\ref{wcdef}). 
 
 Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary conditions
 \begin{align}
-{\mit\Psi}&\rightarrow \frac{X^{\,2}}{2} + \cos\zeta,\label{e483}\\[0.5ex]
-{\mit\Phi} &\rightarrow v\,X +\frac{ s\,v'\,X^{\,2}}{2},\\[0.5ex]
-{\cal N}&\rightarrow X,\\[0.5ex]
+{\mit\Psi}&\rightarrow \frac{X^{2}}{2} + \cos\zeta,\label{e483}\\[0.5ex]
+{\mit\Phi} &\rightarrow v\,X +\frac{ s\,v'\,X^{2}}{2},\label{e484}\\[0.5ex]
+{\cal N}&\rightarrow X,\label{e486}\\[0.5ex]
 {\cal V}&\rightarrow 0,\\[0.5ex]
 {\cal J}& \rightarrow 0,\label{e487}
 \end{align}
-as $|X|\rightarrow\infty$. Here,
+as $|X|\rightarrow\infty$.  Here,
 \begin{align}
 v &= \frac{\omega-\omega_E}{\omega_\ast},\\[0.5ex]
 v' &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.
 \end{align}
-In the following, it is assumed that $v\sim{\cal O}(1)$ and $|v'|\ll 1$. Note that the boundary conditions (\ref{e483})--(\ref{e487}),
+In the following, it is assumed that $v\sim{\cal O}(1)$ and $|v'|\ll 1$. Note that ${\mit\Psi}$, ${\mit\Phi}$, ${\cal N}$, ${\cal V}$, and ${\cal J}$ are all ${\cal O}(1)$ quantities.
+Note, further,  that the boundary conditions (\ref{e483})--(\ref{e487}),
 as well as the symmetry of the rescaled four-field equations,  (\ref{e469})--(\ref{e473}), ensure that ${\mit\Psi}$, ${\cal V}$, and
 ${\cal J}$ are even functions of $X$, whereas ${\mit\Phi}$ and ${\cal N}$ are odd functions. 
+
+\subsection{Ordering Scheme}
+In the following, the dimensionless parameters $\epsilon_d$, $\epsilon_\beta$, $\epsilon_n$, $\epsilon_\eta$, $\epsilon_\chi$,
+and $\epsilon_D$ are all assumed to be of similar size, but much smaller than unity. The orderings $\epsilon_n\ll 1$ and $\epsilon_\beta\ll 1$
+are consistent with the standard large-aspect ratio, low-$\beta$ orderings used to describe conventional tokamak
+plasmas (Freidberg 1987). As will become apparent, the ordering $\epsilon_d\ll 1$ ensures that the island chain is
+sufficiently wide that ion acoustic waves propagating parallel to the magnetic field are able to smooth out any
+variations in the normalized electron number density, ${\cal N}$, around magnetic flux-surfaces (Scott, Hassam \& Drake 1985). The orderings $\epsilon_\eta\ll 1$, $\epsilon_\chi\ll 1$, and $\epsilon_D\ll 1$ ensure that the island
+chain is sufficiently wide that the perpendicular diffusion of magnetic flux, momentum, and particles are not dominant
+effects in the rescaled four-field equations. We shall also assume that $w/w_c\sim{\cal O}(1)$. In other words, the
+island chain is sufficiently wide for the parallel diffusion of particles to compete with perpendicular diffusion. 
+
+Let 
+\begin{align}
+\frac{\partial}{\partial T}&\sim {\cal O}(\epsilon_d^3),\\[0.5ex]
+{\mit\Psi}&= {\mit\Psi}_0+\epsilon_d^2\,{\mit\Psi}_2+ \epsilon_d^3\,{\mit\Psi}_3 + \cdots,\\[0.5ex]
+{\mit\Phi}&= {\mit\Phi}_0+\epsilon_d^2\,{\mit\Phi}_2+ \epsilon_d^3\,{\mit\Phi}_3 + \cdots,\\[0.5ex]
+{\cal N}&= {\cal N}_0+\epsilon_d^2\,{\cal N}_2+ \epsilon_d^3\,{\cal N}_3 + \cdots,\\[0.5ex]
+{\cal V} & ={\cal V}_0. +\epsilon_d\,{\cal V}_1 +\cdots,\\[0.5ex]
+{\cal J} &= {\cal J}_0 + \epsilon_d\,{\cal J}_1 +\cdots. 
+\end{align}
+Here, ${\mit\Psi}_0$, ${\mit\Psi}_1$, et cetera are assumed to be ${\cal O}(1)$. 
+
+\subsection{Lowest-Order Solution}
+To lowest order in $\epsilon_d$, Equation~(\ref{e473}) yields
+\begin{equation}
+\partial_X^{\,2}{\mit\Psi}_0 = 1.
+\end{equation} 
+Solving this equation subject to the boundary condition (\ref{e483}), we obtain
+\begin{equation}\label{e498}
+{\mit\Psi}_0 = {\mit\Omega}(X,\zeta)\equiv \frac{X^2}{2} + \cos\zeta.
+\end{equation}
+Thus, we conclude that, to lowest order in our expansion, the magnetic flux-surfaces in the island region have the constant-$\psi$
+structure pictured in Figure~\ref{f2a}. The island O-points correspond to ${\mit\Omega}=-1$ and $\zeta=(2k-1)\,\pi$ (where $k$ is an integer), the
+X-points correspond to ${\mit\Omega}=+1$ and $\zeta = 2k\,\pi$, and the magnetic separatrix corresponds to 
+${\mit\Omega}=+1$. 
+
+To lowest order in $\epsilon_d$, Equation~(\ref{e472}) yields
+\begin{equation}
+\{{\cal N}_0, {\mit\Omega}\}= 0,
+\end{equation}
+where use has been made of Equation~(\ref{e498}). Given that ${\cal N}$ is an odd function of $X$, it
+follows that
+\begin{equation}\label{e500}
+{\cal N}_0 = s\, {\cal N}_{(0)}({\mit\Omega}).
+\end{equation}
+We conclude that parallel
+ion acoustic waves, whose dynamics are described by Equation~(\ref{e473}), have smoothed out
+any variations in the lowest-order electron number density, ${\cal N}_0$,  around magnetic flux-surfaces. 
+By symmetry, ${\cal N}_{0}=0$ inside the magnetic separatrix of the island chain. In other words, the electron number
+density profile (and, by implication, the electron and ion temperature profile) has been completely flattened inside 
+the  separatrix. 
+
+It is helpful to define
+\begin{equation}\label{e501}
+L({\mit\Omega}) = \frac{d{\cal N}_{(0)}}{d{\mit\Omega}}.
+\end{equation}
+It follows that $L({\mit\Omega}<1)=0$. Also, Equations~(\ref{e486}) and (\ref{e498}) imply that
+\begin{equation}
+L({\mit\Omega}\rightarrow\infty) = \frac{1}{\sqrt{2\,{\mit\Omega}}}.
+\end{equation}
+
+To lowest order in $\epsilon_d$, Equation~(\ref{e469}) gives
+\begin{equation}
+\{{\mit\Phi}_0,{\mit\Omega}\}=0,
+\end{equation}
+where use has been made of Equations~(\ref{e498}) and (\ref{e500}). Given that
+${\mit\Phi}$ is an odd function of $X$, it follows that 
+\begin{equation}\label{e503}
+{\mit\Phi}_0 = s\, {\mit\Phi}_{(0)}({\mit\Omega}).
+\end{equation}
+ We conclude that the lowest-order normalized
+electrostatic potential (in the island rest frame), ${\mit\Phi}_{0}$, is also constant on magnetic flux-surfaces. 
+By symmetry, ${\mit\Phi}_{0}=0$ inside the magnetic separatrix of the island chain. In other words, the electrostatic
+potential profile has been completely flattened inside the separatrix. 
+
+It is helpful to define
+\begin{equation}\label{e505}
+M({\mit\Omega}) = \frac{d{\mit\Phi}_{(0)}}{d{\mit\Omega}}.
+\end{equation}
+It follows that $M({\mit\Omega}<1)=0$. Also, Equations~(\ref{e484}) and (\ref{e498}) imply that
+\begin{equation}
+M({\mit\Omega}\rightarrow\infty) = \frac{v}{\sqrt{2\,{\mit\Omega}}}+ v'.
+\end{equation}
+
+To lowest-order in $\epsilon_d$, Equation~(\ref{e471}) yields
+\begin{equation}
+\{{\cal V}_0,{\mit\Omega}\} = 0,
+\end{equation}
+where use has been made of Equations~(\ref{e498}), (\ref{e500}), and (\ref{e503}). Given that
+${\cal V}$ is an even function of $X$, we can write
+\begin{equation}
+{\cal V}_0 = {\cal V}_{(0)}({\mit\Omega}).
+\end{equation}
+In other words, the lowest-order normalized parallel ion velocity, ${\cal V}_0$, is also constant on
+magnetic flux-surfaces. 
+
+Finally, to lowest order in $\epsilon_d$, Equation~(\ref{e470}) yields
+\begin{equation}\label{e509}
+\{{\cal J}_0,{\mit\Omega}\} = -\partial_X\!\left({\mit\Phi}_0+\frac{{\cal N}_0}{1+\tau}, \partial_X {\mit\Phi}_0\right)=
+\frac{1}{2}\left\{d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]X^2, {\mit\Omega}\right\},
+\end{equation}
+where use has been made of Equations~(\ref{e498}), (\ref{e501}), and (\ref{e505}). Moreover, $d_{\mit\Omega}\equiv
+\partial/\partial{\mit\Omega}$. 
+
+\subsection{Discussion}
+To lowest order, the rescaled four-field model, (\ref{e469})--(\ref{e473}), requires the density, temperature, 
+electrostatic potential, and ion parallel velocity profiles to be magnetic flux-surface functions. This should come as no surprise. In essence,
+a magnetic island chain is a helical magnetic equilibrium that evolves (in its local rest frame) on the very
+slow resistive timescale (Rutherford 1973). Hence, we would expect all of the results derived in Section~\ref{lowest}
+to apply to the plasma in the region of the island chain, as is indeed the case. Note, however, that
+while solving the  rescaled four-field model, (\ref{e469})--(\ref{e473}), tells us that
+${\cal N}=s\,{\cal N}_{(0)}({\mit\Omega})$, ${\mit\Phi}_0 =s\,{\mit\Psi}_{(0)}({\mit\Omega})$, and
+${\cal V}_0 = {\cal V}_{(0)}({\mit\Omega})$, the solution leaves the forms of the  functions ${\cal N}_{(0)}({\mit\Omega})$,
+${\mit\Phi}_{(0)}({\mit\Omega})$, and ${\cal V}_{(0)}({\mit\Omega})$ undetermined. In order to determine
+the forms of these functions, we must solve the rescaled four-field model to higher order. In particular,
+we must include the terms that describe the perpendicular diffusion of magnetic flux, ion momentum, and
+particles in the analysis (Fitzpatrick \& Waelbroeck 2005). The essential point is that the magnetic island
+chain persists in the plasma for a sufficiently long time for the relatively small perpendicular diffusion
+terms to relax the lowest-order profiles across the island region (and, in fact, across the whole plasma). 
+
+\subsection{Flux-Surface Average Operator}
+The {\em flux-surface average operator}, $\langle\cdots\rangle$, is defined (Rutherford 1973)
+\begin{equation}
+\langle A(s,{\mit\Omega},\zeta)\rangle
+\equiv \left\{
+\begin{array}{lll}
+\int_{\zeta_0}^{2\pi-\zeta_0}\frac{A(s,{\mit\Omega}\,\zeta)+A(-s,{\mit\Omega},\zeta)}{2\,[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}&~~~~~&0\leq {\mit\Omega}<1\\[2ex]
+\oint \frac{A(s,{\mit\Omega}\,\zeta)}{[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}
+&&{\mit\Omega}\geq 1
+\end{array}
+\right.
+\end{equation}
+It follows that
+\begin{equation}
+\langle\{A,{\mit\Omega}\}\rangle = 0
+\end{equation}
+for any $A(s,{\mit\Omega},\zeta)$. It is helpful to define
+\begin{equation}
+\tilde{A}  \equiv A - \frac{\langle A\rangle}{\langle 1\rangle}.
+\end{equation}
+It follows that $\langle \tilde{A}\rangle =0$ for any $A(s,{\mit\Omega},\zeta)$.
+
+Equation~(\ref{e509}) yields 
+\begin{equation}
+{\cal J}_0({\mit\Omega},\zeta)= 
+\frac{1}{2}\,d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]\!\tilde{X}^2 + \bar{\cal J}_0({\mit\Omega}),
+\end{equation}
+where $\bar{{\cal J}}_0({\mit\Omega})$ is an undetermined function. 
 
 \section*{Bibliography}
 \begin{description}
@@ -2660,8 +2813,8 @@ Phys.\ Plasmas {\bf 12}, 022307.
 Phys.\ Plasmas {\bf 16}, 072507.
 \item Freidberg, J.P.\ 1987. {\em Ideal Magnetohydrodynamics}. Plenum, New York NY. 
 \item Furth, H.P., Killeen, J., and Rosenbluth, M.N.\ 1963. {\em Finite-Resistivity Instabilities of a Sheet Pinch}. Phys.\ Fluids {\bf 6}, 459.
-\item Furuya, A., Yagi, M., and Itoh, S.-I.\ 2003. {\em Linear Analysis of Neoclassical Tearing Mode
-Based on the Four-Field Reduced Neoclassical MHD Equation}. J.\ Phys.\ Soc.\ Japan {\bf 72}, 313.
+%\item Furuya, A., Yagi, M., and Itoh, S.-I.\ 2003. {\em Linear Analysis of Neoclassical Tearing Mode
+%Based on the Four-Field Reduced Neoclassical MHD Equation}. J.\ Phys.\ Soc.\ Japan {\bf 72}, 313.
 \item Gimblett, C.G., and Peckover, R.S.\ 1979. {\em On the Mutual Interaction Between Rotation and Magnetic Fields
 for Axisymmetric Bodies.} Proc.\ Roy.\ Soc.\ London {\bf 369}, 1732. 
 \item Goldston, R.J. 1984. {\em Energy Confinement Scaling in Tokamaks: Some Implications of Recent Experiments with Ohmic and Strong Auxiliary Heating}. Plasma Phys.\ Control.\ Fusion {\bf 26}, 87. 
@@ -2683,6 +2836,9 @@ for Axisymmetric Bodies.} Proc.\ Roy.\ Soc.\ London {\bf 369}, 1732.
 \item Park, J.-K., et al.\ 2012. {\em  Sensitivity to Error Fields in NSTX High $\beta$ Plasmas}. Nucl.\ Fusion {\bf 52}, 023004. 
 \item Reif, F.\ 1965. {\em Fundamentals of Statistical and Thermal Physics}. McGraw-Hill, New York NY. 
 \item Richardson, A.S.\ 2019. {\em 2019 NRL Plasma Formulary}.  Naval Research Laboratory, Washington DC. 
+\item Rutherford, P.H.\ 1973. {\em Nonlinear Growth of the Tearing Mode}. Phys.\ Fluids {\bf 16}, 1903. 
+\item Scott, B.D., Hassam, A.B., and Drake, J.F.\ 1985. {\em Nonlinear Evolution of Drift-Tearing Modes}. Phys.\ Fluids
+{\bf 28}, 275. 
 \item Scoville, J.T., et al.\ 1991. {\em Locked Modes in DIII-D and a Method for Prevention of the Low Density Mode}. Nucl.\ Fusion {\bf 31}, 875. 
 \item Simmet, E.E., et al.\ 1996. {\em Statistical Analysis of the Global Energy Confinement Time in Ohmic Discharges in the ASDEX Tokamak}. Plasma Phys.\ Control.\ Fusion {\bf 38}, 689.
 \item Stix, T.H.\ 1973. {\em Decay of Poloidal Rotation in a Tokamak Plasma}. Phys.\ Fluids {\bf 16}, 1260.
