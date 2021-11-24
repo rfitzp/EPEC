@@ -1137,7 +1137,7 @@ is the {\em momentum confinement time},
  \end{equation}
  is the {\em inverse aspect-ratio}\/ of the plasma, and
  \begin{align}
-{\mit\Delta\hat{\Psi}}_s &=\frac{{\mit\Delta\Psi}_s}{R_0\,B_z},\\[0.5ex]
+{\mit\Delta\hat{\Psi}}_s &=\frac{{\mit\Delta\Psi}_s}{R_0\,B_z},\label{e204}\\[0.5ex]
  \hat{\mit\Psi}_s &=\frac{{\mit\Psi}_s}{R_0\,B_z}.
  \end{align}
   Moreover,
@@ -1192,14 +1192,14 @@ Section~\ref{lowest} are not applicable in the resonant layer. In particular, ma
 A tearing mode is a modified shear-Alfv\'{e}n wave (Hazeltine \& Meiss 1985), and has very little connection with a compressible-Alfv\'{e}n wave. For instance, the resonance condition, ${\bf k}\cdot{\bf B}=0$, which determines the position of the resonant
 surface, is identical to the resonance condition for a  shear-Alfv\'{e}n wave, but differs substantially from that of a  compressible-Alfv\'{e}n wave (Fitzpatrick 2015). Hence, one very effective way of simplifying the resonant layer equations is to remove the
 physics of  compressible-Alfv\'{e}n waves from them altogether, in the process converting a 
-drift-magnetohydrodynamical\footnote{The  `drift' appellation  merely indicates that we are taking diamagnetic flows into account. However, this necessarily entails treating the ion and electron flow separately. In other words, a
-drift-MHD model is also a `two-fluid' model. }(MHD) response model  
+drift-magnetohydrodynamical\footnote{The  `drift' appellation  merely indicates that we are taking diamagnetic flows into account. However, this necessarily entails treating the ion and electron flows separately. In other words, a
+drift-MHD model is,  by definition, also a `two-fluid' model. }(MHD) response model  
 into a so-called {\em reduced}\/ drift-MHD response model (Strauss 1976; Hazeltine, Kotschenreuther \& Morrison 1985). The aim of
 this section is to describe the reduction process (which essentially boils down to arguing that the divergence of the
 plasma flow is small), and to derive the reduced drift-MHD equations that will subsequently be used to model the resonant
 response of the plasma. 
 
-\subsection{Drift-MHD Equations}
+\subsection{Drift-MHD Equations}\label{s4.2}
  It is helpful to define
 the following parameters:
 \begin{align}
@@ -1279,7 +1279,7 @@ and compressible-Alfv\'{e}n wave dynamics. The system of equations is completed 
 \mu_0\,{\bf j} &= \nabla \times {\bf B}.\label{e226}
 \end{align}
 
-\subsection{Normalization Scheme}
+\subsection{Normalization Scheme}\label{s4.3}
 Let $l$ be a typical variation lengthscale in the resonant layer. The {\em Alfv\'{e}n velocity}, which is the typical phase
 velocity of compressible Alfv\'{e}n waves, is defined
 \begin{equation}\label{e226a}
@@ -1324,22 +1324,27 @@ Finally,
 \subsection{Reduction Process} 
 All variables in the resonant layer are assumed to be functions of 
 $\hat{x}=(r-r_s)/l$,
- and 
  \begin{equation}
- \zeta=m\,\theta-n\,\varphi
+ \zeta=m\,\theta-n\,\varphi,
  \end{equation}
+ and $\hat{t}$, 
  only. 
 Let ${\bf n} = (0,\,\epsilon/q_s,\,1)$, where $\epsilon=r/R_0$ and 
 \begin{equation}
 q_s=q(r_s)= \frac{m}{n}.
 \end{equation}
- It follows that ${\bf n}\cdot\nabla A=0$ for any $A(\hat{x},\zeta)$. 
+ It follows that ${\bf n}\cdot\nabla A=0$ for any $A(\hat{x},\zeta,\hat{t})$. 
 Let us write (Fitzpatrick \& Waelbroeck 2009)
 \begin{equation}\label{e238}
 \hat{\bf B} \simeq (1+ \delta b)\,{\bf n} + \hat{\nabla}\hat{\psi}\times {\bf n},
 \end{equation}
-which automatically satisfies Equation~(\ref{e230}). Note that $\hat{\psi}=\psi/(r_s\,B_z)$, where $\psi$ is defined in Equation~(\ref{e93}).
- Here, $\delta b(\hat{x},\zeta)$ and $\hat{\psi}(\hat{x},\zeta)$ are assumed to be small
+which automatically satisfies Equation~(\ref{e230}). Note that 
+\begin{equation}\label{e247a}
+\hat{\psi}=\frac{\psi}{r_s\,B_z},
+\end{equation}
+ where $\psi$ is defined in Equation~(\ref{e93}).
+ Here, $\delta b(\hat{x},\zeta,
+ \hat{t})$ and $\hat{\psi}(\hat{x},\zeta,\hat{t})$ are assumed to be small
 compared to unity, which merely indicates that the perturbed magnetic field due to the tearing mode is small compared to the
 equilibrium magnetic field.  We can write
 \begin{equation}
@@ -1349,7 +1354,7 @@ which automatically satisfies Equation~(\ref{e231}) provided that
 \begin{equation}
 \hat{\nabla}^2\chi =\delta b.
 \end{equation}
-Here, $\hat{E}_\parallel = E_\parallel/(B_z\,V_A)$, where $E_\parallel$ represents the constant inductive electric field that drives the equilibrium plasma current in the vicinity of the resonant surface. Moreover, $\partial/\partial \hat{t}$ and $\phi(\hat{x},\zeta)$
+Here, $\hat{E}_\parallel = E_\parallel/(B_z\,V_A)$, where $E_\parallel$ represents the constant inductive parallel electric field that drives the equilibrium plasma current in the vicinity of the resonant surface. Moreover, $\partial/\partial \hat{t}$ and $\phi(\hat{x},\zeta,\hat{t})$
 are 
 assumed to be first order in small quantities, whereas $\hat{E}_\parallel$ is assumed to be second order. 
 It follows that
@@ -1357,7 +1362,7 @@ It follows that
 \hat{\bf V}_E &\simeq \hat{\nabla}\phi\times {\bf n},\\[0.5ex]
 \hat{\bf V} &\simeq \hat{V}_{\parallel\,i}\,{\bf n}+  \hat{\nabla}\phi\times {\bf n}+\hat{\nabla}{\mit\Xi},
 \end{align}
-where $\hat{V}_{\parallel\,i}(\hat{x},\zeta)$ is assumed to be first order in small quantities, whereas ${\mit\Xi}(\hat{x},\zeta)$ is assumed to be
+where $\hat{V}_{\parallel\,i}(\hat{x},\zeta,\hat{t})$ is assumed to be first order in small quantities, whereas ${\mit\Xi}(\hat{x},\zeta,\hat{t})$ is assumed to be
 second order. 
 We can write
 \begin{equation}
@@ -1367,7 +1372,7 @@ where
 \begin{equation}\label{e244}
 \beta= {\mit\Gamma}\,\hat{p}_0= \frac{{\mit\Gamma}\,p_0\,\mu_0}{B_z^{\,2}}.
 \end{equation}
- Here, $\delta p(\hat{x},\zeta)$ is assumed to be first order in small
+ Here, $\delta p(\hat{x},\zeta,\hat{t})$ is assumed to be first order in small
 quantities. 
 It follows that
 \begin{align}
@@ -1477,8 +1482,8 @@ Moreover,
 \end{equation}
 and
 \begin{align}
-\hat{D}_\parallel&=\frac{D_{\parallel}}{l\,V_A}= \frac{2}{3}\left(1-c_\beta^{\,2}\right)\!\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\parallel\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\parallel\,i}\right),\\[0.5ex]
-\hat{D}_\perp &=\frac{D_{\perp}}{l\,V_A}= c_\beta^{\,2}\,\hat{\eta}_\perp +  \frac{2}{3}\left(1-c_\beta^{\,2}\right)\!\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\perp\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\perp\,i}\right).
+\hat{D}_\parallel&\equiv\frac{D_{\parallel}}{l\,V_A}= \frac{2}{3}\left(1-c_\beta^{\,2}\right)\!\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\parallel\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\parallel\,i}\right),\\[0.5ex]
+\hat{D}_\perp &\equiv \frac{D_{\perp}}{l\,V_A}= c_\beta^{\,2}\,\hat{\eta}_\perp +  \frac{2}{3}\left(1-c_\beta^{\,2}\right)\!\left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\perp\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\perp\,i}\right).
 \end{align}
 
 \subsection{Discussion}
@@ -1614,12 +1619,12 @@ frequency},
 S=\frac{\tau_R}{\tau_H}
 \end{equation}
  the {\em Lundquist number}, 
-\begin{equation}
+\begin{equation}\label{e317a}
 \tau_R = \frac{\mu_0\,r_s^{\,2}}{\eta_\parallel}
 \end{equation}
  the
 {\em resistive diffusion time}, 
-\begin{equation}
+\begin{equation}\label{e318a}
 \tau_\varphi
 = \frac{r_s^{\,2}}{\chi_\varphi}=\frac{r_s^{\,2}\,n_0\,m_i}{\mu_\perp(r_s)}
 \end{equation} 
@@ -1630,7 +1635,7 @@ the {\em toroidal momentum confinement time}, and
  the {\em particle/energy confinement time}. Furthermore, $P_\varphi = \tau_R/\tau_\varphi$, $P_\perp = \tau_R/\tau_\perp$, 
 $P_\parallel=\tau_R/\tau_\parallel$, and $\tau_\parallel =r_s^{\,2}/D_\parallel$.
 
-In conventional tokamak plasmas, the Lundquist number, $S$, which is the nominal ratio of the plasma inertia to the   resistive diffusion  terms in the plasma Ohm's law, is very much greater than unity. In fact, $S$ typically exceeds $10^8$ (Wesson 2011). However, a resonant layer is
+In conventional tokamak plasmas, the Lundquist number, $S$, which is the nominal ratio of the plasma inertia term to the   resistive diffusion  term in the plasma Ohm's law, is very much greater than unity. In fact, $S$ typically exceeds $10^8$ (Wesson 2011). However, a resonant layer is
 characterized by a balance between plasma inertia and resistive diffusion (Furth, Killeen \& Rosenbluth 1963). Such a balance is
 only possible if the layer is very narrow in the radial direction (because a narrow layer enhances radial derivatives, and, thereby, enhances
 resistive diffusion). Let us define the stretched radial variable (Ara, et al.\ 1978)
@@ -1700,7 +1705,7 @@ Let us ignore the term $c_\beta^{\,2}\,d\bar{V}/dp$ in Equation~(\ref{e316}). Th
 be justified {\em a posteriori}. It is equivalent to the neglect of the contribution of ion parallel dynamics to the linear  plasma
 response in the resonant layer, and effectively decouples Equation~(\ref{e317}) from Equations~(\ref{e314})--(\ref{e316}) (Waelbroeck, et al.\ 2012). Equations~(\ref{e314})--(\ref{e316}) reduce to (Cole \& Fitzpatrick 2006)
 \begin{equation}\label{e320}
-\frac{d}{dp}\!\left[G(p)\,\frac{dY}{dp}\right] - \frac{A(p)}{B(p)}\,p^{2}\,Y = 0,
+\frac{d}{dp}\!\left[G(p)\,\frac{dY_e}{dp}\right] - \frac{A(p)}{B(p)}\,p^{2}\,Y_e = 0,
 \end{equation}
 where
 \begin{align}
@@ -1710,9 +1715,9 @@ G(p)&= \frac{p^2}{-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] + p^2},\\[0.5ex]
 -{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] +\{P_\perp - {\rm i}\,(1+\lambda_e)\,(Q-Q_E-Q_i)\,D^2\}p^2\nonumber\\[0.5ex]
 &\phantom{=}+[(1+\lambda_e)+1/\tau]\,P_\varphi\,D^2\,p^4,
 \end{align}
-and $Y=\bar{\phi} - (1+\lambda_e)\,\bar{N}$. The boundary conditions are that $Y(p)$ is bounded as $p\rightarrow\infty$, and
+and $Y_e=\bar{\phi} - (1+\lambda_e)\,\bar{N}$. The boundary conditions are that $Y_e(p)$ is bounded as $p\rightarrow\infty$, and
 \begin{equation}\label{e325}
-Y(p)\rightarrow Y_0\!\left[\frac{\hat{\mit\Delta}}{\pi\,p} + 1+ {\cal O}(p)\right]
+Y_e(p)\rightarrow Y_0\!\left[\frac{\hat{\mit\Delta}}{\pi\,p} + 1+ {\cal O}(p)\right]
 \end{equation}
 as $p\rightarrow 0$. In the following, we shall assume that $|Q|\sim |Q_E|\sim |Q_e|\sim |Q_i|$, $P_\varphi\sim P_\perp \sim P$, $\tau\sim {\cal O}(1)$, and $\lambda_e\sim{\cal O}(1)$,  for the
 sake of simplicity. 
@@ -1720,32 +1725,32 @@ sake of simplicity.
 \subsection{Constant-$\psi$ Approximation}\label{s5.6}
 Let us suppose that there are two layers in $p$ space. In the small-$p$ layer, suppose that Equation~(\ref{e320}) reduces to
 \begin{equation}
-\frac{d}{dp}\!\left[\frac{p^2}{-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] + p^2}\,\frac{dY}{dp}\right]\simeq 0
+\frac{d}{dp}\!\left[\frac{p^2}{-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e] + p^2}\,\frac{dY_e}{dp}\right]\simeq 0
 \end{equation}
 when $p\sim Q^{1/2}$. Integrating directly, we find that
 \begin{equation}
-Y(p) \simeq Y_0 \left[\frac{\hat{\mit\Delta}}{\pi}\left(\frac{1}{p} + \frac{p}{{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}\right) + 1 + {\cal O}(p^2)\right]
+Y_e(p) \simeq Y_0 \left[\frac{\hat{\mit\Delta}}{\pi}\left(\frac{1}{p} + \frac{p}{{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}\right) + 1 + {\cal O}(p^2)\right]
 \end{equation}
 for $p\lesssim {\cal O}(Q^{1/2})$, where use has been made of Equation~(\ref{e325}). The two-layer  approximation is
 equivalent to the well-known {\em constant-$\psi$ approximation}\/ (Furth, Killeen \& Rosenbluth 1963).
 
 In the large-$p$ layer, for  $p\gg {\cal O}(Q^{1/2})$, we obtain 
 \begin{equation}\label{e329}
-\frac{d^{\,2} Y}{dp^2} - \frac{A(p)}{B(p)}\,p^2\,Y\simeq 0,
+\frac{d^{\,2} Y_e}{dp^2} - \frac{A(p)}{B(p)}\,p^2\,Y_e\simeq 0,
 \end{equation}
-with $Y$ bounded as $p\rightarrow \infty$. Asymptotic matching to the small-$p$ layer yields the boundary
+with $Y_e$ bounded as $p\rightarrow \infty$. Asymptotic matching to the small-$p$ layer yields the boundary
 condition 
 \begin{equation}\label{e330}
-Y(p)\simeq Y_0\left\{1+ \frac{\hat{\mit\Delta}}{\pi}\,\frac{p}{{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}+ {\cal O}(p^2)\right\}
+Y_e(p)\simeq Y_0\left\{1+ \frac{\hat{\mit\Delta}}{\pi}\,\frac{p}{{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e]}+ {\cal O}(p^2)\right\}
 \end{equation}
 as $p\rightarrow 0$. 
 
 In the various constant-$\psi$ linear response regimes considered in Section~\ref{scp}, Equation~(\ref{e329}) reduces to an
 equation of the form
 \begin{equation}\label{e330a}
-\frac{d^{\,2}Y}{dp^2}- C\,p^m\,Y\simeq 0,
+\frac{d^{\,2}Y_e}{dp^2}- C\,p^m\,Y_e\simeq 0,
 \end{equation}
-where $m$ is real and non-negative, and $C$ is a complex constant. Let $Y=\sqrt{p}\,Z$ and $q=\sqrt{C}\,p^n/n$, where
+where $m$ is real and non-negative, and $C$ is a complex constant. Let $Y_e=\sqrt{p}\,Z$ and $q=\sqrt{C}\,p^n/n$, where
 $n=(m+2)/2$. The previous equation transforms into a modified Bessel equation of general order, 
 \begin{equation}
 q^2\,\frac{d^{\,2}Z}{dq^2} + q\,\frac{dZ}{dq} - (q^2+\nu^2)\,Z =0,
@@ -1811,13 +1816,13 @@ $P\ll D^6$, and $P\ll D^2/Q^2$.
 \subsection{Nonconstant-$\psi$ Regimes}\label{sncp}
 Suppose that $p\ll Q^{1/2}$. In this limit, Equation~(\ref{e320}) reduces to 
 \begin{equation}
-\frac{d}{dp}\!\left(p^2\,\frac{dY}{dp}\right)-(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])\,\frac{A(p)}{B(p)}\,p^2\,Y=0.
+\frac{d}{dp}\!\left(p^2\,\frac{dY_e}{dp}\right)-(-{\rm i}\,[Q-Q_E-(1+\lambda_e)\,Q_e])\,\frac{A(p)}{B(p)}\,p^2\,Y_e=0.
 \end{equation}
 In the various nonconstant-$\psi$ regimes considered in this section, the previous equation takes the form
 \begin{equation}
-\frac{d}{dp}\!\left(p^2\,\frac{dY}{dp}\right)-C\,p^{m+2}\,Y = 0,
+\frac{d}{dp}\!\left(p^2\,\frac{dY_e}{dp}\right)-C\,p^{m+2}\,Y_e = 0,
 \end{equation}
-where $m$ is real and non-negative, and $C$ is a complex constant. Let $U=p\,Y$. The previous equation
+where $m$ is real and non-negative, and $C$ is a complex constant. Let $U=p\,Y_e$. The previous equation
 yields
 \begin{equation}
 \frac{d^{\,2} U}{dp^2} - C\,p^m\,U = 0.
@@ -1848,7 +1853,7 @@ Hence, we deduce that
 \end{equation}
 This response regime is known as the {\em inertial regime}, because the layer response is dominated by
  ion inertia (Ara, et al.\ 1976; Fitzpatrick 1998). Note that the plasma response in the inertial regime is
- equivalent to that of two closely spaced Alfv\'{e}n resonances that straddle the resonant surface (Boozer 1996). 
+ equivalent to that of two closely-spaced Alfv\'{e}n resonances that straddle the resonant surface (Boozer 1996). 
  The characteristic layer width is $p_\ast \sim Q^{-1}$,
 which implies that the regime is valid when $P\ll Q^3$, $Q\gg D$, and $Q\gg 1$. 
 
@@ -1937,7 +1942,7 @@ where ${\mit\Psi}_s = r_s\,B_z\,\tilde{\psi}$ is the reconnected magnetic flux d
 $\hat{\mit\Psi}_s= {\mit\Psi}_s/(R_0\,B_z)$. 
 
 Finally, our four-field resonant plasma response model, (\ref{e264})--(\ref{e269}), contains many term of the general form $[\hat{\psi},\tilde{A}]$,
-where $\tilde{A}(\hat{x},\zeta)$ is a perturbed quantity. According to Equation~(\ref{e352a}), such terms
+where $\tilde{A}(\hat{x},\zeta,\hat{t})$ is a perturbed quantity. According to Equation~(\ref{e352a}), such terms
 can be written
 \begin{equation}
 [\hat{\psi},\tilde{A}] = {\rm i}\,\frac{m}{r_s}\left(\frac{\hat{x}}{\hat{L}_s}\,\tilde{A} - \tilde{\psi}\,\frac{\partial \tilde{A}}{\partial\hat{x}}\right)
@@ -1996,7 +2001,7 @@ Reusing the analysis of Sections~\ref{s5.6} and \ref{scp}, let us again suppose 
 small-$p$ layer turns out to be of width $|\hat{\gamma}|^{1/2}$, where $\hat{\gamma} = S^{1/3}\,\gamma\,\tau_H$. Given that we are effectively assuming that
 $|\hat{\gamma}|\ll 1$, the condition for the separation of the layer solution into two layers (i.e., that the width of the small-$p$ layer is less than that of the large-$p$ layer) is always satisfied. The large-$p$ layer is governed by the equation
 \begin{equation}\label{e355}
-\frac{d^{\,2} Y}{dp^2} - \frac{A(p)}{\tilde{B}(p)} \,Y =0,
+\frac{d^{\,2} Y_e}{dp^2} - \frac{A(p)}{\tilde{B}(p)} \,Y_e =0,
 \end{equation}
 where 
 \begin{align}
@@ -2010,15 +2015,15 @@ Here, $Q_\ast = S^{1/3}\,\omega_\ast\,\tau_H$, where
 \omega_\ast = -\frac{m}{r_s}\frac{1}{e\,n_0\,B_z}\left.\frac{dp}{dr}\right|_{r_s}.
 \end{equation}
 In the following, $\omega_\ast$ is assumed to be positive. The boundary conditions on Equation~(\ref{e355}) are
-that $Y$ is bounded as $p\rightarrow\infty$, and
+that $Y_e$ is bounded as $p\rightarrow\infty$, and
 \begin{equation}\label{e359}
-Y(p)= Y_0\left[1-\frac{\hat{\mit\Delta}\,p}{\pi\,\hat{\gamma}} + {\cal O}(p^2)\right]
+Y_e(p)= Y_0\left[1-\frac{\hat{\mit\Delta}\,p}{\pi\,\hat{\gamma}} + {\cal O}(p^2)\right]
 \end{equation}
 as $p\rightarrow 0$. 
 
 In the various constant-$\psi$ linear response regimes considered in this section, Equation~(\ref{e355}) reduces to an equation of the form
 \begin{equation}
-\frac{d^{\,2} Y}{dp^2} - C\,p^m\,Y = 0,
+\frac{d^{\,2} Y_e}{dp^2} - C\,p^m\,Y_e = 0,
 \end{equation}
 where $m$ is real and non-negative, and $C$ is a complex constant. As described in Section~\ref{s5.6}, the solution of this
 equation that is bounded as $p\rightarrow \infty$ can be matched to the small-$p$ asymptotic form (\ref{e359}) to give 
@@ -2537,12 +2542,12 @@ helical angle, $\zeta= m\,\theta-n\,\varphi$, and the
 normalized time, $\hat{t}= t\,V_A/r_s$. 
 
 It is helpful to define the reduced island width
-\begin{equation}
-w = \frac{W}{4} = (L_s\,R_0\,{\mit\Psi}_s)^{1/2}.
+\begin{equation}\label{e456}
+w = \frac{W}{4} = (L_s\,R_0\,\hat{\mit\Psi}_s)^{1/2}.
 \end{equation}
 [See Equation~(\ref{e355s}).]
 It is assumed that $\delta\ll w\ll r_s$, where $\delta$ is the linear layer width. Let $\hat{w}= w/r_s$.  Reusing the analysis of Section~\ref{linear},
-in the limit $|\hat{x}|/\hat{w}\gg 1$ (i.e., many island widths from the resonant surface), we find that 
+in the limit $|\hat{x}|/\hat{w}\gg 1$ (i.e., many island widths from the resonant surface) we find that 
 \begin{align}
 \hat{\psi} &\rightarrow \frac{\hat{x}^{\,2}}{2\,\hat{L}_s} + \hat{R}_0\,\hat{\mit\Psi}_s\,\cos\zeta,\\[0.5ex]
 \phi &\rightarrow \left(\frac{\hat{\omega}}{m}- \hat{V}_E\right)\hat{x} - \frac{s}{4}\,\hat{V}_E'\,\hat{x}^{\,2},\\[0.5ex]
@@ -2563,7 +2568,7 @@ The parameter $\hat{V}_E'$ is introduced  into the analysis in order to take int
 gradient discontinuity at the resonant surface in response to the nonlinear localized electromagnetic torque that develops
 there. 
 
-\subsection{Rescaled Four-Field Model}
+\subsection{Rescaled Four-Field Model}\label{s8.2}
 Let
 \begin{align}
 X &= \frac{\hat{x}}{\hat{w}},\\[0.5ex]
@@ -2573,7 +2578,7 @@ It follows that $|X|\sim {\cal O}(1)$ in the immediate vicinity of the island ch
 rescaled fields ${\mit\Psi}(X,\zeta,T)$, ${\mit\Phi}(X,\zeta,T)$, ${\cal N}(X,\zeta,T)$,
 ${\cal V}(X,\zeta,T)$, and ${\cal J}(X,\zeta,T)$, where
 \begin{align}
-\hat{\psi} &= \left(\frac{\hat{w}^{\,2}}{\hat{L}_s}\right){\mit\Psi},\\[0.5ex]
+\hat{\psi} &= \left(\frac{\hat{w}^{\,2}}{\hat{L}_s}\right){\mit\Psi},\label{e466}\\[0.5ex]
 \phi &=\left(\frac{\hat{\omega}_\ast\,\hat{w}}{m}\right){\mit\Phi},\\[0.5ex]
 N &= \left(\frac{\hat{\omega}_\ast\,\hat{w}}{m}\right){\cal N},\\[0.5ex]
 V&= \hat{V}_\parallel + \left(\frac{\hat{L}_s\,\hat{\omega}_\ast^{\,2}}{m^2\,c_\beta^{\,2}}\right){\cal V},\\[0.5ex]
@@ -2603,15 +2608,15 @@ Furthermore,
 \epsilon_d &= \left(\frac{L_s}{L_n}\right)\left(\frac{d_\beta}{w}\right)^2,\\[0.5ex]
 \epsilon_\beta &= c_\beta^{\,2},\\[0.5ex]
 \epsilon_n&= \left(\frac{L_n}{L_s}\right)^2,\\[0.5ex]
-\epsilon_\eta &= \frac{\eta_\parallel}{\mu_0\,\omega_\ast\,w^2},\\[0.5ex]
-\epsilon_\chi &= \frac{\chi_\phi}{\omega_\ast\,w^2},\\[0.5ex]
+\epsilon_\eta &= \frac{\eta_\parallel}{\mu_0\,\omega_\ast\,w^2},\label{e481}\\[0.5ex]
+\epsilon_\chi &= \frac{\chi_\phi}{\omega_\ast\,w^2},\label{e482}\\[0.5ex]
 \epsilon_D &= \frac{D_\perp}{\omega_\ast\,w^2}.
 \end{align}
 Finally,
 \begin{equation}
 \frac{1}{L_n}= -\frac{1}{{\mit\Gamma}\,(1-c_\beta^{\,2})}\left(\frac{d\ln n}{dr}\right)_{r_s}
 \end{equation}
-is the {\em density gradient scalelength}, 
+is the {\em density gradient scalelength}\/  at the resonant surface, 
 and the critical reduced island width, $w_c$, is defined in Equation~(\ref{wcdef}). 
 
 Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary conditions
@@ -2619,13 +2624,13 @@ Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary cond
 {\mit\Psi}&\rightarrow \frac{X^{2}}{2} + \cos\zeta,\label{e483}\\[0.5ex]
 {\mit\Phi} &\rightarrow v\,X +\frac{ s\,v'\,X^{2}}{2},\label{e484}\\[0.5ex]
 {\cal N}&\rightarrow X,\label{e486}\\[0.5ex]
-{\cal V}&\rightarrow 0,\\[0.5ex]
+{\cal V}&\rightarrow 0,\label{e486a}\\[0.5ex]
 {\cal J}& \rightarrow 0,\label{e487}
 \end{align}
 as $|X|\rightarrow\infty$.  Here,
 \begin{align}
-v &= \frac{\omega-\omega_E}{\omega_\ast},\\[0.5ex]
-v' &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.
+v(T) &= \frac{\omega-\omega_E}{\omega_\ast},\\[0.5ex]
+v'(T) &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.
 \end{align}
 In the following, it is assumed that $v\sim{\cal O}(1)$ and $|v'|\ll 1$. Note that ${\mit\Psi}$, ${\mit\Phi}$, ${\cal N}$, ${\cal V}$, and ${\cal J}$ are all ${\cal O}(1)$ quantities.
 Note, further,  that the boundary conditions (\ref{e483})--(\ref{e487}),
@@ -2643,14 +2648,17 @@ chain is sufficiently wide that the perpendicular diffusion of magnetic flux, mo
 effects in the rescaled four-field equations. We shall also assume that $w/w_c\sim{\cal O}(1)$. In other words, the
 island chain is sufficiently wide for the parallel diffusion of particles to compete with perpendicular diffusion. 
 
-Let 
+Suppose that 
 \begin{align}
-\frac{\partial}{\partial T}&\sim {\cal O}(\epsilon_d^3),\\[0.5ex]
-{\mit\Psi}&= {\mit\Psi}_0+\epsilon_d^2\,{\mit\Psi}_2+ \epsilon_d^3\,{\mit\Psi}_3 + \cdots,\\[0.5ex]
+\frac{\partial}{\partial T}&\sim {\cal O}(\epsilon_d^3).
+\end{align}
+Let us expand the various fields in our model as follows:
+\begin{align}
+{\mit\Psi}&= {\mit\Psi}_0+\epsilon_d^2\,{\mit\Psi}_2+ \epsilon_d^3\,{\mit\Psi}_3 + \cdots,\label{e429}\\[0.5ex]
 {\mit\Phi}&= {\mit\Phi}_0+\epsilon_d^2\,{\mit\Phi}_2+ \epsilon_d^3\,{\mit\Phi}_3 + \cdots,\\[0.5ex]
-{\cal N}&= {\cal N}_0+\epsilon_d^2\,{\cal N}_2+ \epsilon_d^3\,{\cal N}_3 + \cdots,\\[0.5ex]
+{\cal N}&= {\cal N}_0+\epsilon_d^2\,{\cal N}_2+ \epsilon_d^3\,{\cal N}_3 + \cdots,\label{e431}\\[0.5ex]
 {\cal V} & ={\cal V}_0. +\epsilon_d\,{\cal V}_1 +\cdots,\\[0.5ex]
-{\cal J} &= {\cal J}_0 + \epsilon_d\,{\cal J}_1 +\cdots. 
+{\cal J} &= {\cal J}_0 + \epsilon_d\,{\cal J}_1 +\cdots. \label{e496}
 \end{align}
 Here, ${\mit\Psi}_0$, ${\mit\Psi}_1$, et cetera are assumed to be ${\cal O}(1)$. 
 
@@ -2675,22 +2683,22 @@ To lowest order in $\epsilon_d$, Equation~(\ref{e472}) yields
 where use has been made of Equation~(\ref{e498}). Given that ${\cal N}$ is an odd function of $X$, it
 follows that
 \begin{equation}\label{e500}
-{\cal N}_0 = s\, {\cal N}_{(0)}({\mit\Omega}).
+{\cal N}_0(X,\zeta,T) = s\, {\cal N}_{(0)}({\mit\Omega},T).
 \end{equation}
 We conclude that parallel
-ion acoustic waves, whose dynamics are described by Equation~(\ref{e473}), have smoothed out
+ion acoustic waves, whose dynamics are described by Equation~(\ref{e472}), have smoothed out
 any variations in the lowest-order electron number density, ${\cal N}_0$,  around magnetic flux-surfaces. 
 By symmetry, ${\cal N}_{0}=0$ inside the magnetic separatrix of the island chain. In other words, the electron number
-density profile (and, by implication, the electron and ion temperature profile) has been completely flattened inside 
+density profile (and, by implication, the electron and ion temperature profile) is completely flattened inside 
 the  separatrix. 
 
 It is helpful to define
 \begin{equation}\label{e501}
-L({\mit\Omega}) = \frac{d{\cal N}_{(0)}}{d{\mit\Omega}}.
+L({\mit\Omega},T) = \frac{d{\cal N}_{(0)}}{d{\mit\Omega}}.
 \end{equation}
-It follows that $L({\mit\Omega}<1)=0$. Also, Equations~(\ref{e486}) and (\ref{e498}) imply that
-\begin{equation}
-L({\mit\Omega}\rightarrow\infty) = \frac{1}{\sqrt{2\,{\mit\Omega}}}.
+It follows that $L({\mit\Omega}<1,T)=0$. Furthermore, Equations~(\ref{e486}) and (\ref{e498}) imply that
+\begin{equation}\label{e502}
+L({\mit\Omega}\rightarrow\infty,T) = \frac{1}{\sqrt{2\,{\mit\Omega}}}.
 \end{equation}
 
 To lowest order in $\epsilon_d$, Equation~(\ref{e469}) gives
@@ -2700,20 +2708,20 @@ To lowest order in $\epsilon_d$, Equation~(\ref{e469}) gives
 where use has been made of Equations~(\ref{e498}) and (\ref{e500}). Given that
 ${\mit\Phi}$ is an odd function of $X$, it follows that 
 \begin{equation}\label{e503}
-{\mit\Phi}_0 = s\, {\mit\Phi}_{(0)}({\mit\Omega}).
+{\mit\Phi}_0(X,\zeta,T) = s\, {\mit\Phi}_{(0)}({\mit\Omega},T).
 \end{equation}
  We conclude that the lowest-order normalized
 electrostatic potential (in the island rest frame), ${\mit\Phi}_{0}$, is also constant on magnetic flux-surfaces. 
 By symmetry, ${\mit\Phi}_{0}=0$ inside the magnetic separatrix of the island chain. In other words, the electrostatic
-potential profile has been completely flattened inside the separatrix. 
+potential profile is  completely flattened inside the separatrix. 
 
 It is helpful to define
 \begin{equation}\label{e505}
-M({\mit\Omega}) = \frac{d{\mit\Phi}_{(0)}}{d{\mit\Omega}}.
+M({\mit\Omega},T) = \frac{d{\mit\Phi}_{(0)}}{d{\mit\Omega}}.
 \end{equation}
 It follows that $M({\mit\Omega}<1)=0$. Also, Equations~(\ref{e484}) and (\ref{e498}) imply that
-\begin{equation}
-M({\mit\Omega}\rightarrow\infty) = \frac{v}{\sqrt{2\,{\mit\Omega}}}+ v'.
+\begin{equation}\label{e506}
+M({\mit\Omega}\rightarrow\infty,T) = \frac{v}{\sqrt{2\,{\mit\Omega}}}+ v'.
 \end{equation}
 
 To lowest-order in $\epsilon_d$, Equation~(\ref{e471}) yields
@@ -2722,8 +2730,8 @@ To lowest-order in $\epsilon_d$, Equation~(\ref{e471}) yields
 \end{equation}
 where use has been made of Equations~(\ref{e498}), (\ref{e500}), and (\ref{e503}). Given that
 ${\cal V}$ is an even function of $X$, we can write
-\begin{equation}
-{\cal V}_0 = {\cal V}_{(0)}({\mit\Omega}).
+\begin{equation}\label{e508}
+{\cal V}_0(X,\zeta,T) = {\cal V}_{(0)}({\mit\Omega},T).
 \end{equation}
 In other words, the lowest-order normalized parallel ion velocity, ${\cal V}_0$, is also constant on
 magnetic flux-surfaces. 
@@ -2736,50 +2744,251 @@ Finally, to lowest order in $\epsilon_d$, Equation~(\ref{e470}) yields
 where use has been made of Equations~(\ref{e498}), (\ref{e501}), and (\ref{e505}). Moreover, $d_{\mit\Omega}\equiv
 \partial/\partial{\mit\Omega}$. 
 
-\subsection{Discussion}
-To lowest order, the rescaled four-field model, (\ref{e469})--(\ref{e473}), requires the density, temperature, 
-electrostatic potential, and ion parallel velocity profiles to be magnetic flux-surface functions. This should come as no surprise. In essence,
-a magnetic island chain is a helical magnetic equilibrium that evolves (in its local rest frame) on the very
-slow resistive timescale (Rutherford 1973). Hence, we would expect all of the results derived in Section~\ref{lowest}
-to apply to the plasma in the region of the island chain, as is indeed the case. Note, however, that
-while solving the  rescaled four-field model, (\ref{e469})--(\ref{e473}), tells us that
-${\cal N}=s\,{\cal N}_{(0)}({\mit\Omega})$, ${\mit\Phi}_0 =s\,{\mit\Psi}_{(0)}({\mit\Omega})$, and
-${\cal V}_0 = {\cal V}_{(0)}({\mit\Omega})$, the solution leaves the forms of the  functions ${\cal N}_{(0)}({\mit\Omega})$,
-${\mit\Phi}_{(0)}({\mit\Omega})$, and ${\cal V}_{(0)}({\mit\Omega})$ undetermined. In order to determine
-the forms of these functions, we must solve the rescaled four-field model to higher order. In particular,
-we must include the terms that describe the perpendicular diffusion of magnetic flux, ion momentum, and
-particles in the analysis (Fitzpatrick \& Waelbroeck 2005). The essential point is that the magnetic island
-chain persists in the plasma for a sufficiently long time for the relatively small perpendicular diffusion
-terms to relax the lowest-order profiles across the island region (and, in fact, across the whole plasma). 
-
 \subsection{Flux-Surface Average Operator}
 The {\em flux-surface average operator}, $\langle\cdots\rangle$, is defined (Rutherford 1973)
 \begin{equation}
 \langle A(s,{\mit\Omega},\zeta)\rangle
 \equiv \left\{
-\begin{array}{lll}
-\int_{\zeta_0}^{2\pi-\zeta_0}\frac{A(s,{\mit\Omega}\,\zeta)+A(-s,{\mit\Omega},\zeta)}{2\,[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}&~~~~~&0\leq {\mit\Omega}<1\\[2ex]
+\begin{array}{llr}
+\int_{\zeta_0}^{2\pi-\zeta_0}\frac{A(s,{\mit\Omega}\,\zeta)+A(-s,{\mit\Omega},\zeta)}{2\,[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}&~~~~~&0\leq {\mit\Omega}\leq 1\\[2ex]
 \oint \frac{A(s,{\mit\Omega}\,\zeta)}{[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}
-&&{\mit\Omega}\geq 1
+&&{\mit\Omega}> 1
 \end{array}
-\right.
+\right.,
 \end{equation}
+where $\zeta_0=\cos^{-1}({\mit\Omega})$ and $0\leq\zeta_0\leq\pi$. 
 It follows that
-\begin{equation}
+\begin{equation}\label{e5111}
 \langle\{A,{\mit\Omega}\}\rangle = 0
 \end{equation}
-for any $A(s,{\mit\Omega},\zeta)$. It is helpful to define
+for {\em any}\/ $A(s,{\mit\Omega},\zeta,T)$. It is helpful to define
 \begin{equation}
 \tilde{A}  \equiv A - \frac{\langle A\rangle}{\langle 1\rangle}.
 \end{equation}
-It follows that $\langle \tilde{A}\rangle =0$ for any $A(s,{\mit\Omega},\zeta)$.
+It follows that 
+\begin{equation}\label{e512}
+\langle \tilde{A}\rangle =0
+\end{equation}
+ for {\em any}\/ $A(s,{\mit\Omega},\zeta,T)$.
 
 Equation~(\ref{e509}) yields 
-\begin{equation}
-{\cal J}_0({\mit\Omega},\zeta)= 
-\frac{1}{2}\,d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]\!\tilde{X}^2 + \bar{\cal J}_0({\mit\Omega}),
+\begin{equation}\label{e513}
+{\cal J}_0({\mit\Omega},\zeta,T)= 
+\frac{1}{2}\,d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]\!\widetilde{X}^2 + \overline{\cal J}_0({\mit\Omega},T),
 \end{equation}
-where $\bar{{\cal J}}_0({\mit\Omega})$ is an undetermined function. 
+where $\overline{{\cal J}}_0({\mit\Omega},T)$ is an undetermined flux-surface function. 
+
+\subsection{Fluid Velocities}\label{s8.6}
+The flux-surface functions $M({\mit\Omega},T)$ and $L({\mit\Omega},T)$ are directly related to the lowest-order perpendicular
+velocities of the various fluid species in the island rest frame. In fact, as is clear from Sections~\ref{s4.2}, \ref{s4.3}, and \ref{s8.2}, 
+\begin{align}
+V_\theta(x,\zeta,T) &= -\frac{\omega_\ast}{m}\,x\,M({\mit\Omega},T),\\[0.5ex]
+V_{\theta\,i}(x,\zeta,T)& = -\frac{\omega_\ast}{m}\,x\,Y_i({\mit\Omega},T)\\[0.5ex]
+V_{\theta\,e}(x,\zeta,T)& = -\frac{\omega_\ast}{m}\,x\,Y_e({\mit\Omega},T),
+\end{align}
+where
+\begin{align}
+Y_i({\mit\Omega},T)&= M+\left(\frac{1}{1+\tau}\right)L,\label{e518}\\[0.5ex]
+Y_e({\mit\Omega},T)&= Y_i- L.
+\end{align}
+Here, $V_\theta$, $V_{\theta\,i}$, and $V_{\theta\,e}$ refer to velocity components of the MHD, ion, and
+electron fluid, respectively. Note that $Y_i$ and $Y_e$ are both zero inside the magnetic separatrix of the island chain. 
+
+\subsection{Need for Higher-Order Solution}
+To lowest order in our expansion scheme, the rescaled four-field model, (\ref{e469})--(\ref{e473}), requires the density, temperature, and  
+electrostatic potential profiles to be magnetic flux-surface functions. This should come as no surprise. In essence,
+a magnetic island chain is a helical magnetic equilibrium that evolves (in its local rest frame) on the very
+slow resistive timescale (Rutherford 1973). Hence, we would expect all of the results derived in Section~\ref{lowest}
+to apply to the plasma in the immediate region of the island chain, as is indeed the case. Note, however, that, 
+while solving the  rescaled four-field model (\ref{e469})--(\ref{e473}) to lowest order  tells us that
+${\cal N}=s\,{\cal N}_{(0)}({\mit\Omega},T)$, ${\mit\Phi}_0 =s\,{\mit\Psi}_{(0)}({\mit\Omega},T)$, and
+${\cal V}_0 = {\cal V}_{(0)}({\mit\Omega},T)$, and that the lowest-order current density profile has the form (\ref{e513}), the lowest-order solution leaves the  flux-surface functions ${\cal N}_{(0)}({\mit\Omega},T)$,
+${\mit\Phi}_{(0)}({\mit\Omega},T)$,  ${\cal V}_{(0)}({\mit\Omega},T)$, and $\overline{\cal J}_0({\mit\Omega},T)$ undetermined. In fact, in order to determine
+the forms of these  four flux-surface functions we need to solve the rescaled four-field model to higher order in our expansion. In particular,
+we need to include the terms that describe the perpendicular diffusion of magnetic flux, ion momentum, and
+particles in our analysis (Fitzpatrick \& Waelbroeck 2005). The essential point is that the magnetic island
+chain persists in the plasma for a sufficiently long time that  the relatively small perpendicular diffusion
+terms are able to relax the lowest-order profiles across the island region (and, in fact, across the whole plasma). 
+
+\subsection{Higher-Order Solution}
+We need to evaluate Equation~(\ref{e469}) to third order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
+we obtain
+\begin{equation}\label{e514}
+\frac{d(\ln \hat{w}^{\,2})}{dT}\,\cos\zeta = \{F, {\mit\Omega}\} + \epsilon_\beta\,\epsilon_d\,\epsilon_\eta\,{\cal J}_0,
+\end{equation}
+where
+\begin{equation}
+F ({\mit\Omega},\zeta,T)= \epsilon_d^2\,({\mit\Phi}_2+\epsilon_d\,{\mit\Phi}_3)-\epsilon_d^{\,2}\left(\frac{\tau}{1+\tau}\right)({\cal N}_2+\epsilon_d\,{\cal N}_3)
+- \epsilon_d^2\,s\,Y_e({\mit\Psi}_2+\epsilon_d\,{\mit\Psi}_3),
+\end{equation}
+and use has been made of Equations~(\ref{e429})--(\ref{e431}), (\ref{e500}), (\ref{e501}), (\ref{e503}), and (\ref{e505}). 
+The flux-surface average of Equation~(\ref{e514}) yields
+\begin{equation}
+\overline{\cal J}_0({\mit\Omega},T) = \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{\,2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
+\end{equation}
+where use has been made of Equations~(\ref{e5111}), (\ref{e512}), and (\ref{e513}). Hence, we
+can write
+\begin{equation}\label{e524a}
+{\cal J}_0({\mit\Omega},\zeta)= 
+\frac{1}{2}\,d_{\mit\Omega}\!\left(M\,Y_i\right)\widetilde{X}^2+ \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{\,2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
+\end{equation}
+where use has been made of Equation~(\ref{e518}). 
+The first term on the right-hand side of the previous equation represents the parallel return current driven by the perpendicular {\em polarization current}\/ associated with the
+acceleration of the ion fluid around the magnetic separatrix of the island chain (Smolyakov 1993; Smolyakov, et al.\ 1995). 
+In fact, it is easily seen that if the ion fluid could pass freely through the separatrix (i.e., ${\mit\Phi}_0\propto X$ and ${\cal N}_0\propto X$) then the term in question would be zero. The second term on the right-hand side of the previous equation represents the parallel current driven
+inductively when the reconnected flux at the resonant surfaces varies in time. 
+
+We need to evaluate Equation~(\ref{e471}) to first order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
+we obtain
+\begin{equation}
+0= \epsilon_d\,\{{\cal V}_1, {\mit\Omega}\} + \epsilon_D\,(X^2\,d_{\mit\Omega} L + L),
+\end{equation}
+where use has been made of Equations~(\ref{e498}), (\ref{e500}),  and (\ref{e501}). The flux-surface average of the
+previous equation yields
+\begin{equation}
+\langle X^2\rangle\,d_{\mit\Omega} L +\langle 1\rangle\,L = 0,
+\end{equation}
+where use has been made of Equation~(\ref{e5111}). 
+We can solve the previous equation, subject to the boundary condition (\ref{e502}), to give
+\begin{equation}\label{e526}
+L({\mit\Omega})=\left\{
+\begin{array}{llr}
+0&&-1\leq {\mit\Omega}\leq 1\\[0.5ex]
+1/\langle X^2\rangle&~~&{\mit\Omega}>1
+\end{array}\right..
+\end{equation}
+Here, we have taken into account the previously mentioned fact that $L=0$ within the island separatrix.
+
+We need to evaluate Equation~(\ref{e470}) to first order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
+we obtain
+\begin{equation}\label{e528a}
+0 =\epsilon_d\,\{{\cal J}_1,{\mit\Omega}\} +\epsilon_\chi\,X\,d_{{\mit\Omega}}\!\left[d_{\mit\Omega}\!\left(X^3\,d_{\mit\Omega} Y_i\right)\right].
+\end{equation}
+where use has been made of Equations~(\ref{e498}), (\ref{e500}), (\ref{e501}), (\ref{e503}), (\ref{e505}), and (\ref{e518}). The flux-surface average of the previous equation yields 
+\begin{equation}
+d_{\mit\Omega}^{\,2}\!\left(\langle X^4\rangle\,d_{\mit\Omega} Y_i\right)= 0.
+\end{equation}
+We can solve the previous equation, subject to the boundary conditions (\ref{e502}) and (\ref{e506}), to give
+\begin{equation}\label{e530}
+Y_i({\mit\Omega},T)=\frac{v'(T)}{\int_1^\infty \!\frac{d{\mit\Omega}}{\langle X^4\rangle}}\left\{
+\begin{array}{llr}
+0&&-1\leq {\mit\Omega}\leq 1\\[0.5ex]
+\int_1^{\mit\Omega}\! \frac{d{\mit\Omega}'}{\langle X^4\rangle}&~~&{\mit\Omega}>1
+\end{array}\right.
+\end{equation}
+(Fitzpatrick \& Waelbroeck 2005).
+Here, we have made use of the fact that $Y_i=0$ within the magnetic separatrix of the island chain. We have also demanded that the ion
+fluid velocity, and, hence, the function $Y_i$,  be continuous across the separatrix, because the ion fluid possesses finite perpendicular viscosity. 
+Note, however, that the discontinuity in the function $L({\mit\Omega})$ across the separatrix [see Equation~(\ref{e526})] implies that the
+MHD and electron fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.)
+
+We need to evaluate Equation~(\ref{e472}) to second order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
+we obtain
+\begin{equation}
+0=\epsilon_d\,\{{\cal V}_1,{\mit\Omega}\} + \epsilon_\chi\,(X^2\,d_{\mit\Omega} {\cal V}_{(0)} + {\cal V}_{(0)}),
+\end{equation}
+where use has been made of Equations~(\ref{e498}) and (\ref{e508}). The flux-surface average of the
+previous equation yields
+\begin{equation}
+\langle X^2\rangle\,d_{\mit\Omega} {\cal V}_{(0)} +\langle 1\rangle \,{\cal V}_{(0)}= 0.
+\end{equation}
+ This equation can be solved, subject to the boundary condition (\ref{e486a}) to
+give
+\begin{equation}
+{\cal V}_{(0)}({\mit\Omega}, T) = 0.
+\end{equation}
+Hence, we conclude that the lowest-order ion parallel flow is unaffected by the presence of the island chain. 
+
+\subsection{Asymptotic Matching}
+Now that we have solved the four-field model in the immediate vicinity of the magnetic island chain, it is
+necessary to asymptotically match this solution to the solution in the outer region. 
+In the island rest frame, the reconnected magnetic flux, defined in Equation~(\ref{e99}), can be written
+\begin{equation}
+{\mit\Psi}_s = R_0\,B_z\,\hat{\mit\Psi}_s\,(\cos\zeta + {\rm i}\,\sin\zeta),
+\end{equation}
+where $\hat{\mit\Psi}_s$ is real and positive. It follows from
+Equations~(\ref{e110}), (\ref{e204}), and (\ref{e247a}) that
+\begin{align}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= \frac{2\,r_s}{R_0\,B_z\,\hat{\mit\Psi}_s}\int_{r_{s-}}^{r_{s+}}\oint
+\frac{\partial^2\psi}{\partial r^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dx\nonumber\\[0.5ex]&=\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
+\frac{\partial^2\hat{\psi}}{\partial X^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= -\frac{2\,r_s}{R_0\,B_z\,\hat{\mit\Psi}_s}\int_{r_{s-}}^{r_{s+}}\oint
+\frac{\partial^2\psi}{\partial r^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dx\nonumber\\[0.5ex]&=-\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
+\frac{\partial^2\hat{\psi}}{\partial X^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dX.
+\end{align}
+Making use of Equations~(\ref{e456}), and (\ref{e466}), we obtain
+\begin{align}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=\frac{2}{\hat{w}}\int_{-\infty}^{\infty}\oint
+\partial_X^{\,2}{\mit\Psi}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=-\frac{2}{\hat{w}}\int_{-\infty}^{\infty}\oint
+\partial_X^{\,2}{\mit\Psi}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dX.
+\end{align}
+However, according to Equations~(\ref{e473}) and (\ref{e496}),
+\begin{equation}
+\partial_X^{\,2}{\mit\Psi} = 1 + \epsilon_\beta\,\epsilon_d\,{\cal J}_0 + \epsilon_\beta\,\epsilon_d^{\,2}\,{\cal J}_1.
+\end{equation}
+Moreover, it is clear from Equations~(\ref{e524a}) and (\ref{e528a}) that ${\cal J}_0$ has the symmetry of $\cos\zeta$,
+whereas ${\cal J}_1$ has the symmetry of $\sin\zeta$. 
+Hence, we deduce that
+\begin{align}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=\frac{2\,\epsilon_\beta\,\epsilon_d}{\hat{w}}\int_{-\infty}^{\infty}\oint
+{\cal J}_0\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=-\frac{2\,\epsilon_\beta\,\epsilon_d^{\,2}}{\hat{w}}\int_{-\infty}^{\infty}\oint
+{\cal J}_1\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dX.
+\end{align}
+The previous two equations can also be written
+\begin{align}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=\frac{4\,\epsilon_\beta\,\epsilon_d}{\hat{w}}\int_{-1}^\infty
+\langle {\cal J}_0\,\cos\zeta\rangle\,d{\mit\Omega},\label{e542}\\[0.5ex]
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=-\frac{4\,\epsilon_\beta\,\epsilon_d^{\,2}}{\hat{w}}\int_{-1}^\infty
+\langle {\cal J}_1\,\sin\zeta\rangle\,d{\mit\Omega}=-\frac{4\,\epsilon_\beta\,\epsilon_d^{\,2}}{\hat{w}}\int_{-1}^\infty
+\langle X\,\{{\cal J}_1,{\mit\Omega}\}\rangle\,d{\mit\Omega}.\label{e543}
+\end{align}
+
+Equations~(\ref{e528a}) and (\ref{e543}) can be combined to give (Fitzpatrick \& Waelbroeck 2005)
+\begin{align}
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_0^\infty
+\left\langle X^{2}\,d_{\mit\Omega}\!\left[d_{\mit\Omega}(X^3\,d_{\mit\Omega}Y_i)\right]\right\rangle d{\mit\Omega}\nonumber\\[0.5ex]
+&=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_1^\infty d_{\mit\Omega}\!\left(-\langle X\rangle\,Y_i
++2\,\langle X^3\rangle\,d_{\mit\Omega} Y_i + \langle X^5\rangle\,d_{\mit\Omega}^{\,2} Y_i\right)d{\mit\Omega}\nonumber\\[0.5ex]
+&= \frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\,\lim_{\mit\Omega\rightarrow\infty}\left(-\langle X\rangle\,Y_i
++2\,\langle X^3\rangle\,d_{\mit\Omega} Y_i + \langle X^5\rangle\,d_{\mit\Omega}^{\,2} Y_i\right),
+\end{align}
+where use has been made of the fact that $Y_i$ is continuous across the island separatrix. 
+Combining the previous equation with Equation~(\ref{e530}), we obtain (Fitzpatrick \& Waelbroeck 2005)
+\begin{equation}\label{e545}
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)  =- \frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi\,v'}{\hat{w}}.
+\end{equation}
+
+Equations~(\ref{e524a}) and (\ref{e542}) can be combined to give
+\begin{align}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= \frac{2\,\epsilon_\beta\,\epsilon_d}{\hat{w}}
+\int_1^\infty d_{\mit\Omega}(M\,Y_i)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
++\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega}
+\end{align}
+Making use of Equations~(\ref{e518}), (\ref{e526}), and (\ref{e530}), the previous equation yields
+\begin{align}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= -\frac{2\,\epsilon_\beta\,\epsilon_d\,v'}{(1+\tau)\,\hat{w}}
+\int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
+\nonumber\\[0.5ex]&\phantom{=}+\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega},\label{e547}
+\end{align}
+where
+\begin{equation}
+F_i({\mit\Omega})=\left.\int_1^{\mit\Omega}\frac{d{\mit\Omega}'}{\langle X^4\rangle}\right/\int_1^\infty\frac{d{\mit\Omega}}{\langle X^4\rangle}
+\end{equation}
+Here, we have neglected terms that are quadratic in the small parameter $v'$. Finally, Equations~(\ref{e545}) and (\ref{e547})
+can be combined to give (Waelbroeck \& Fitzpatrick 1997)
+\begin{equation}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)= I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)
++ I_2\left(\frac{\omega_\ast\,\tau_\varphi}{1+\tau}\right)\left(\frac{W}{r_s}\right)^2 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
+\end{equation}
+where
+\begin{align}
+I_1 &= 2\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega},\\[0.5ex]
+I_2 &= \frac{1}{32}\int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}.
+\end{align}
+Here, use has been made of Equations~(\ref{e317a}), (\ref{e318a}), (\ref{e481}), and (\ref{e482}). 
+
 
 \section*{Bibliography}
 \begin{description}
@@ -2841,10 +3050,14 @@ for Axisymmetric Bodies.} Proc.\ Roy.\ Soc.\ London {\bf 369}, 1732.
 {\bf 28}, 275. 
 \item Scoville, J.T., et al.\ 1991. {\em Locked Modes in DIII-D and a Method for Prevention of the Low Density Mode}. Nucl.\ Fusion {\bf 31}, 875. 
 \item Simmet, E.E., et al.\ 1996. {\em Statistical Analysis of the Global Energy Confinement Time in Ohmic Discharges in the ASDEX Tokamak}. Plasma Phys.\ Control.\ Fusion {\bf 38}, 689.
+\item Smolyakov, A.I.\ 1993. {\em Nonlinear Evolution of Tearing Modes in Inhomogeneous Plasmas}. Plasma Phys.\ Contol.\ Fusion 
+{\bf 35}, 657. 
+\item Smolyakov, A.I., et al.\ 1995. {\em Rotating Nonlinear Magnetic islands in a Tokamak Plasma}. Phys.\ Plasmas {\bf 2}, 1581.
 \item Stix, T.H.\ 1973. {\em Decay of Poloidal Rotation in a Tokamak Plasma}. Phys.\ Fluids {\bf 16}, 1260.
 \item Strauss, H.R.\ 1976. {\em Nonlinear, Three-Dimensional Magnetohydrodynamics of  Noncircular Tokamaks}. Phys.\ Fluids {\bf 19},  134.
 \item Vahala, G., et al.\ 1980. {\em Perturbed Magnetic-Field Phase Slip for Tokamaks}. Nucl.\ Fusion {\bf 20}, 17.
 \item Waelbroeck, F.L.\ 2003. {\em Shielding of Resonant Magnetic Perturbations in the Long Mean-Free Path Regime}. Phys.\ Plasmas {\bf 10}, 4040.
+\item Waelbroeck, F.L., and Fitzpatrick, R.\ 1997. {\em Rotation and Locking of Magnetic Islands}. Phys.\ Rev.\ Lett.\ {\bf 78}, 1703. 
 \item Waelbroeck, F.L., Hazeltine, R.D., and Morrison, P.J.\ 2009. {\em A Hamiltonian Electromagnetic Gyrofluid Model}. Phys.\ Plasmas {\bf 16}, 032109. 
 \item Waelbroeck, F.L., et al.\ 2012. {\em Role of Singular Layers in the Plasma Response to Resonant Magnetic Perturbations}.
 Nucl.\ Fusion {\bf 52}, 074004.
