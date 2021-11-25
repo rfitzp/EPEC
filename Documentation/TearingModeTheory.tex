@@ -1610,7 +1610,7 @@ is the {\em hydromagnetic time},
 \end{equation}
   the {\em electron diamagnetic
 frequency},
-\begin{align}
+\begin{align}\label{omegai}
   \omega_{\ast\,i} &= \left(\frac{1}{1+\tau}\right)\left(\frac{m}{r_s}\right)V_\ast(r_s)
   \end{align}
     the {\em ion diamagnetic
@@ -2011,8 +2011,8 @@ A(p) &= (1+\lambda_e)\left(\frac{\tau}{1+\tau}\right)\left(1+ \frac{\lambda_e\,\
 \tilde{B}(p)&= P_\perp - {\rm i}\,(1+\lambda_e)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right)Q_\ast\,D^2 +\left(\frac{1+\tau}{\tau}\right)\left(1+\frac{\lambda_e\,\tau}{1+\tau}\right) D^2\,P_\varphi\,p^2.
 \end{align}
 Here, $Q_\ast = S^{1/3}\,\omega_\ast\,\tau_H$, where
-\begin{equation}
-\omega_\ast = -\frac{m}{r_s}\frac{1}{e\,n_0\,B_z}\left.\frac{dp}{dr}\right|_{r_s}.
+\begin{equation}\label{omega}
+\omega_\ast = -\frac{m}{r_s}\,V_\ast(r_s)= -\frac{m}{r_s}\frac{1}{e\,n_0\,B_z}\left.\frac{dp}{dr}\right|_{r_s}.
 \end{equation}
 In the following, $\omega_\ast$ is assumed to be positive. The boundary conditions on Equation~(\ref{e355}) are
 that $Y_e$ is bounded as $p\rightarrow\infty$, and
@@ -2566,7 +2566,7 @@ and
 \end{equation}
 The parameter $\hat{V}_E'$ is introduced  into the analysis in order to take into account the fact that the plasma rotation profile in the outer region develops a
 gradient discontinuity at the resonant surface in response to the nonlinear localized electromagnetic torque that develops
-there. 
+at the surface. 
 
 \subsection{Rescaled Four-Field Model}\label{s8.2}
 Let
@@ -2605,8 +2605,8 @@ and we have set
 \end{equation}
 Furthermore,
 \begin{align}
-\epsilon_d &= \left(\frac{L_s}{L_n}\right)\left(\frac{d_\beta}{w}\right)^2,\\[0.5ex]
-\epsilon_\beta &= c_\beta^{\,2},\\[0.5ex]
+\epsilon_d &= \left(\frac{L_s}{L_n}\right)^2\left(\frac{d_\beta}{w}\right)^2,\label{e479}\\[0.5ex]
+\epsilon_\beta &= c_\beta^{\,2},\label{e480}\\[0.5ex]
 \epsilon_n&= \left(\frac{L_n}{L_s}\right)^2,\\[0.5ex]
 \epsilon_\eta &= \frac{\eta_\parallel}{\mu_0\,\omega_\ast\,w^2},\label{e481}\\[0.5ex]
 \epsilon_\chi &= \frac{\chi_\phi}{\omega_\ast\,w^2},\label{e482}\\[0.5ex]
@@ -2629,7 +2629,7 @@ Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary cond
 \end{align}
 as $|X|\rightarrow\infty$.  Here,
 \begin{align}
-v(T) &= \frac{\omega-\omega_E}{\omega_\ast},\\[0.5ex]
+v(T) &= \frac{\omega-\omega_E}{\omega_\ast},\label{e488}\\[0.5ex]
 v'(T) &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.
 \end{align}
 In the following, it is assumed that $v\sim{\cal O}(1)$ and $|v'|\ll 1$. Note that ${\mit\Psi}$, ${\mit\Phi}$, ${\cal N}$, ${\cal V}$, and ${\cal J}$ are all ${\cal O}(1)$ quantities.
@@ -2686,7 +2686,7 @@ follows that
 {\cal N}_0(X,\zeta,T) = s\, {\cal N}_{(0)}({\mit\Omega},T).
 \end{equation}
 We conclude that parallel
-ion acoustic waves, whose dynamics are described by Equation~(\ref{e472}), have smoothed out
+ion acoustic waves, whose dynamics are described by Equation~(\ref{e472}),  smooth  out
 any variations in the lowest-order electron number density, ${\cal N}_0$,  around magnetic flux-surfaces. 
 By symmetry, ${\cal N}_{0}=0$ inside the magnetic separatrix of the island chain. In other words, the electron number
 density profile (and, by implication, the electron and ion temperature profile) is completely flattened inside 
@@ -2711,7 +2711,7 @@ ${\mit\Phi}$ is an odd function of $X$, it follows that
 {\mit\Phi}_0(X,\zeta,T) = s\, {\mit\Phi}_{(0)}({\mit\Omega},T).
 \end{equation}
  We conclude that the lowest-order normalized
-electrostatic potential (in the island rest frame), ${\mit\Phi}_{0}$, is also constant on magnetic flux-surfaces. 
+electrostatic potential (in the island rest frame), ${\mit\Phi}_{0}$, is  constant on magnetic flux-surfaces. 
 By symmetry, ${\mit\Phi}_{0}=0$ inside the magnetic separatrix of the island chain. In other words, the electrostatic
 potential profile is  completely flattened inside the separatrix. 
 
@@ -2719,7 +2719,7 @@ It is helpful to define
 \begin{equation}\label{e505}
 M({\mit\Omega},T) = \frac{d{\mit\Phi}_{(0)}}{d{\mit\Omega}}.
 \end{equation}
-It follows that $M({\mit\Omega}<1)=0$. Also, Equations~(\ref{e484}) and (\ref{e498}) imply that
+It follows that $M({\mit\Omega}<1,T)=0$. Furthermore, Equations~(\ref{e484}) and (\ref{e498}) imply that
 \begin{equation}\label{e506}
 M({\mit\Omega}\rightarrow\infty,T) = \frac{v}{\sqrt{2\,{\mit\Omega}}}+ v'.
 \end{equation}
@@ -2742,7 +2742,7 @@ Finally, to lowest order in $\epsilon_d$, Equation~(\ref{e470}) yields
 \frac{1}{2}\left\{d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]X^2, {\mit\Omega}\right\},
 \end{equation}
 where use has been made of Equations~(\ref{e498}), (\ref{e501}), and (\ref{e505}). Moreover, $d_{\mit\Omega}\equiv
-\partial/\partial{\mit\Omega}$. 
+d/d{\mit\Omega}$. 
 
 \subsection{Flux-Surface Average Operator}
 The {\em flux-surface average operator}, $\langle\cdots\rangle$, is defined (Rutherford 1973)
@@ -2804,7 +2804,7 @@ while solving the  rescaled four-field model (\ref{e469})--(\ref{e473}) to lowes
 ${\cal N}=s\,{\cal N}_{(0)}({\mit\Omega},T)$, ${\mit\Phi}_0 =s\,{\mit\Psi}_{(0)}({\mit\Omega},T)$, and
 ${\cal V}_0 = {\cal V}_{(0)}({\mit\Omega},T)$, and that the lowest-order current density profile has the form (\ref{e513}), the lowest-order solution leaves the  flux-surface functions ${\cal N}_{(0)}({\mit\Omega},T)$,
 ${\mit\Phi}_{(0)}({\mit\Omega},T)$,  ${\cal V}_{(0)}({\mit\Omega},T)$, and $\overline{\cal J}_0({\mit\Omega},T)$ undetermined. In fact, in order to determine
-the forms of these  four flux-surface functions we need to solve the rescaled four-field model to higher order in our expansion. In particular,
+the forms of these  four  functions we need to solve the rescaled four-field model to higher order in our expansion. In particular,
 we need to include the terms that describe the perpendicular diffusion of magnetic flux, ion momentum, and
 particles in our analysis (Fitzpatrick \& Waelbroeck 2005). The essential point is that the magnetic island
 chain persists in the plasma for a sufficiently long time that  the relatively small perpendicular diffusion
@@ -2814,11 +2814,11 @@ terms are able to relax the lowest-order profiles across the island region (and,
 We need to evaluate Equation~(\ref{e469}) to third order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
 we obtain
 \begin{equation}\label{e514}
-\frac{d(\ln \hat{w}^{\,2})}{dT}\,\cos\zeta = \{F, {\mit\Omega}\} + \epsilon_\beta\,\epsilon_d\,\epsilon_\eta\,{\cal J}_0,
+\frac{d(\ln \hat{w}^{\,2})}{dT}\,\cos\zeta = \{F_e, {\mit\Omega}\} + \epsilon_\beta\,\epsilon_d\,\epsilon_\eta\,{\cal J}_0,
 \end{equation}
 where
 \begin{equation}
-F ({\mit\Omega},\zeta,T)= \epsilon_d^2\,({\mit\Phi}_2+\epsilon_d\,{\mit\Phi}_3)-\epsilon_d^{\,2}\left(\frac{\tau}{1+\tau}\right)({\cal N}_2+\epsilon_d\,{\cal N}_3)
+F_e({\mit\Omega},\zeta,T)= \epsilon_d^2\,({\mit\Phi}_2+\epsilon_d\,{\mit\Phi}_3)-\epsilon_d^{\,2}\left(\frac{\tau}{1+\tau}\right)({\cal N}_2+\epsilon_d\,{\cal N}_3)
 - \epsilon_d^2\,s\,Y_e({\mit\Psi}_2+\epsilon_d\,{\mit\Psi}_3),
 \end{equation}
 and use has been made of Equations~(\ref{e429})--(\ref{e431}), (\ref{e500}), (\ref{e501}), (\ref{e503}), and (\ref{e505}). 
@@ -2882,6 +2882,29 @@ fluid velocity, and, hence, the function $Y_i$,  be continuous across the separa
 Note, however, that the discontinuity in the function $L({\mit\Omega})$ across the separatrix [see Equation~(\ref{e526})] implies that the
 MHD and electron fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.)
 
+In the limit ${\mit\Omega}\gg 1$, the previous equation yields
+\begin{equation}
+Y_i\simeq v' -\left. \frac{v'}{\sqrt{2\,{\mit\Omega}}}\right/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle}.
+\end{equation}
+Hence, it follows from Equations~(\ref{e518}) and (\ref{e526}) that
+\begin{equation}
+M\simeq v' -\left. \frac{v'}{\sqrt{2\,{\mit\Omega}}}\right/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle} -\left(\frac{1}{1+\tau}\right)
+\frac{1}{\sqrt{2\,{\mit\Omega}}}
+\end{equation}
+in the same limit. A comparison with Equation~(\ref{e506}) reveals that
+\begin{equation}
+v = -\frac{1}{1+\tau} - v'\left/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle}\right.,
+\end{equation}
+or 
+\begin{equation}\label{e534}
+\omega = \omega_{\perp\,i} -v'\,\omega_\ast\left/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle}\right.,
+\end{equation}
+where
+\begin{equation}
+\omega_{\perp\,i} = \omega_E + \omega_{\ast\,i},
+\end{equation}
+and use has been made of Equations~(\ref{omegai}), (\ref{omega}), and (\ref{e488}). 
+
 We need to evaluate Equation~(\ref{e472}) to second order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
 we obtain
 \begin{equation}
@@ -2907,16 +2930,16 @@ In the island rest frame, the reconnected magnetic flux, defined in Equation~(\r
 {\mit\Psi}_s = R_0\,B_z\,\hat{\mit\Psi}_s\,(\cos\zeta + {\rm i}\,\sin\zeta),
 \end{equation}
 where $\hat{\mit\Psi}_s$ is real and positive. It follows from
-Equations~(\ref{e110}), (\ref{e204}), and (\ref{e247a}) that
+Equations~(\ref{e109}), (\ref{e204}), and (\ref{e247a}) that
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= \frac{2\,r_s}{R_0\,B_z\,\hat{\mit\Psi}_s}\int_{r_{s-}}^{r_{s+}}\oint
-\frac{\partial^2\psi}{\partial r^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dx\nonumber\\[0.5ex]&=\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
+\frac{\partial^2\psi}{\partial r^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dr\nonumber\\[0.5ex]&=\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
 \frac{\partial^2\hat{\psi}}{\partial X^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= -\frac{2\,r_s}{R_0\,B_z\,\hat{\mit\Psi}_s}\int_{r_{s-}}^{r_{s+}}\oint
-\frac{\partial^2\psi}{\partial r^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dx\nonumber\\[0.5ex]&=-\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
+\frac{\partial^2\psi}{\partial r^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dr\nonumber\\[0.5ex]&=-\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
 \frac{\partial^2\hat{\psi}}{\partial X^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dX.
 \end{align}
-Making use of Equations~(\ref{e456}), and (\ref{e466}), we obtain
+Making use of Equations~(\ref{e456}) and (\ref{e466}), we obtain
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&=\frac{2}{\hat{w}}\int_{-\infty}^{\infty}\oint
 \partial_X^{\,2}{\mit\Psi}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
@@ -2947,23 +2970,32 @@ The previous two equations can also be written
 
 Equations~(\ref{e528a}) and (\ref{e543}) can be combined to give (Fitzpatrick \& Waelbroeck 2005)
 \begin{align}
-{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_0^\infty
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_1^\infty
 \left\langle X^{2}\,d_{\mit\Omega}\!\left[d_{\mit\Omega}(X^3\,d_{\mit\Omega}Y_i)\right]\right\rangle d{\mit\Omega}\nonumber\\[0.5ex]
 &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_1^\infty d_{\mit\Omega}\!\left(-\langle X\rangle\,Y_i
 +2\,\langle X^3\rangle\,d_{\mit\Omega} Y_i + \langle X^5\rangle\,d_{\mit\Omega}^{\,2} Y_i\right)d{\mit\Omega}\nonumber\\[0.5ex]
 &= \frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\,\lim_{\mit\Omega\rightarrow\infty}\left(-\langle X\rangle\,Y_i
 +2\,\langle X^3\rangle\,d_{\mit\Omega} Y_i + \langle X^5\rangle\,d_{\mit\Omega}^{\,2} Y_i\right),
 \end{align}
-where use has been made of the fact that $Y_i$ is continuous across the island separatrix. 
+where use has been made of the facts that $Y_i$ is zero inside the island separatrix, and $Y_i$ is continuous across the separatrix.
 Combining the previous equation with Equation~(\ref{e530}), we obtain (Fitzpatrick \& Waelbroeck 2005)
 \begin{equation}\label{e545}
 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)  =- \frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi\,v'}{\hat{w}}.
 \end{equation}
+Finally, the previous equation can be combined with Equation~(\ref{e534}) to give
+\begin{equation}
+\omega=\omega_{\perp\,i} + I_1\left(\frac{\tau_\varphi}{\tau_H^{\,2}}\right)\left(\frac{W}{r_s}\right)^5{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
+\end{equation}
+where
+\begin{equation}
+I_1 = 2^{-12}\left/\int_1^{\infty} \frac{d{\mit\Omega}}{\langle X^4\rangle}\right. =3.584\times 10^{-4}. 
+\end{equation}
+Here, use has been made of Equations~(\ref{e479}), (\ref{e480}), and (\ref{e482}). 
 
 Equations~(\ref{e524a}) and (\ref{e542}) can be combined to give
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= \frac{2\,\epsilon_\beta\,\epsilon_d}{\hat{w}}
-\int_1^\infty d_{\mit\Omega}(M\,Y_i)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
+\int_{1+}^\infty d_{\mit\Omega}(M\,Y_i)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
 +\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega}
 \end{align}
 Making use of Equations~(\ref{e518}), (\ref{e526}), and (\ref{e530}), the previous equation yields
@@ -2979,13 +3011,13 @@ F_i({\mit\Omega})=\left.\int_1^{\mit\Omega}\frac{d{\mit\Omega}'}{\langle X^4\ran
 Here, we have neglected terms that are quadratic in the small parameter $v'$. Finally, Equations~(\ref{e545}) and (\ref{e547})
 can be combined to give (Waelbroeck \& Fitzpatrick 1997)
 \begin{equation}
-{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)= I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)
-+ I_2\left(\frac{\omega_\ast\,\tau_\varphi}{1+\tau}\right)\left(\frac{W}{r_s}\right)^2 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)= I_2\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)
+- I_3\left(\frac{c_\beta}{1+\tau}\right)\left(\frac{d_\beta}{r_s}\right)\left(\frac{L_s}{L_n}\right)\left(\frac{\tau_\varphi}{\tau_H}\right)\left(\frac{W}{r_s}\right)^2 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
 \end{equation}
 where
 \begin{align}
-I_1 &= 2\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega},\\[0.5ex]
-I_2 &= \frac{1}{32}\int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}.
+I_2 &= 2\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega} =0.8227,\\[0.5ex]
+I_3&= 2^{-6}\int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} = 3.055\times 10^{-3}.
 \end{align}
 Here, use has been made of Equations~(\ref{e317a}), (\ref{e318a}), (\ref{e481}), and (\ref{e482}). 
 
