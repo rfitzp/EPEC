@@ -29,13 +29,15 @@ void Integrals::Solve ()
 
   double k, h, t_err;
   int rept; count = 0;
-  Array<double,1> y(3);
+  Array<double,1> y(4);
 
   k    = eps;
   y(0) = 0.;
   y(1) = 0.;
   y(2) = 0.;
+  y(3) = 0.;
   h    = h0;
+
   do
     {
       RK4Adaptive (k, y, h, t_err, acc, 2., rept, 20, hmin, 1.e-1, 2, 0, NULL);
@@ -51,11 +53,12 @@ void Integrals::Solve ()
     }
   while (k < kmax);
 
-  double I1 = 1./y(0)/pow(2., 11.);
+  double I1 = 1. /y(0) /2.;
   double I2 = 4. * y(1);
-  double I3 = (1./pow(2.,4.)/y(0)) * y(2);
+  double I3 = (1./y(0)) * y(2);
+  double I4 = (1./y(0)/y(0)) * y(3);
 
-  printf ("\nI1 = %11.4e  I2 = %11.4e  I3 = %11.4e\n\n", I1, I2, I3);
+  printf ("\nI1 = %11.4e  I2 = %11.4e  I3 = %11.4e  I4 = %11.4e\n\n", I1, I2, I3, I4);
 }
 
 // ##############################################################
@@ -65,7 +68,7 @@ void Integrals::Rhs (double k, Array<double,1>& y, Array<double,1>& dydk)
 {
   double ak = Ak(k);
   double ck = Ck(k);
-  double fk = (2.*k*k - 1.)*ak - 2.*k*k*ck;
+  double fk = (2.*k*k - 1.)*ak  - 2.*k*k*ck;
 
   if (k > 1.)
     {
@@ -73,13 +76,15 @@ void Integrals::Rhs (double k, Array<double,1>& y, Array<double,1>& dydk)
 
       dydk(0) = 1./k/k/ek;
       dydk(1) = fk*fk /ak;
-      dydk(2) = (1. - y(0) *k*ak*ek/ck) * (1./ck - ck/ak/ek);
+      dydk(2) = (1. - y(0)*k*ak*ek/ck) * (1./ck - ck/ak/ek);
+      dydk(3) = y(0) * (1. - ck*ck/ak/ek) * k;
     }
   else
     {
       dydk(0) = 0.;
       dydk(1) = fk*fk /ak;
       dydk(2) = 0.;
+      dydk(3) = 0.;
     }
 }
  
@@ -102,14 +107,6 @@ double Integrals::Ak (double k)
 }
 
 // ####
-// B(k)
-// ####
-double Integrals::Bk (double k)
-{
-  return 1.;
-}
-
-// ####
 // C(k)
 // ####
 double Integrals::Ck (double k)
@@ -125,14 +122,6 @@ double Integrals::Ck (double k)
     {
       return (2./M_PI) * (gsl_sf_ellint_Ecomp (k, GSL_PREC_DOUBLE) + (k*k-1.) * gsl_sf_ellint_Kcomp (k, GSL_PREC_DOUBLE)) /k;
     }
-}
-
-// ####
-// D(k)
-// ####
-double Integrals::Dk (double k)
-{
-  return 1. - 1./2./k/k;
 }
 
 // ####

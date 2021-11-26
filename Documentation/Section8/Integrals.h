@@ -49,9 +49,7 @@ class Integrals
 
   // Useful functions
   double Ak  (double k);
-  double Bk  (double k);
   double Ck  (double k);
-  double Dk  (double k);
   double Ek  (double k);
 
   // Evaluate right-hand sides of differential equations

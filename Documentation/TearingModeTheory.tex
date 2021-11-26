@@ -2188,7 +2188,11 @@ where
 \begin{equation}
 {\mit\Delta}_{nw} = {\mit\Delta}_{pw} + \frac{E_{sw}^{\,2}}{(-\tilde{E}_{ww})}
 \end{equation}
-is the (real) tearing stability index in the absence of a wall, ${\mit\Delta}_{pw}= E_{ss}$ is the
+is the (real) tearing stability index in the absence of a wall, 
+\begin{equation}\label{epw}
+{\mit\Delta}_{pw}= E_{ss}
+\end{equation}
+ is the
 (real) tearing stability index in the presence of a perfectly conducting wall at $r=r_w$, and
 \begin{equation}
 \tilde{I}_c =\left(\frac{{\mit\Delta}_{nw} - {\mit\Delta}_{pw}}{E_{sw}}\right)\left(
@@ -2630,9 +2634,9 @@ Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary cond
 as $|X|\rightarrow\infty$.  Here,
 \begin{align}
 v(T) &= \frac{\omega-\omega_E}{\omega_\ast},\label{e488}\\[0.5ex]
-v'(T) &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.
+v'(T) &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.\label{e489}
 \end{align}
-In the following, it is assumed that $v\sim{\cal O}(1)$ and $|v'|\ll 1$. Note that ${\mit\Psi}$, ${\mit\Phi}$, ${\cal N}$, ${\cal V}$, and ${\cal J}$ are all ${\cal O}(1)$ quantities.
+Note that ${\mit\Psi}$, ${\mit\Phi}$, ${\cal N}$, ${\cal V}$, and ${\cal J}$ are all ${\cal O}(1)$ quantities.
 Note, further,  that the boundary conditions (\ref{e483})--(\ref{e487}),
 as well as the symmetry of the rescaled four-field equations,  (\ref{e469})--(\ref{e473}), ensure that ${\mit\Psi}$, ${\cal V}$, and
 ${\cal J}$ are even functions of $X$, whereas ${\mit\Phi}$ and ${\cal N}$ are odd functions. 
@@ -2643,7 +2647,16 @@ and $\epsilon_D$ are all assumed to be of similar size, but much smaller than un
 are consistent with the standard large-aspect ratio, low-$\beta$ orderings used to describe conventional tokamak
 plasmas (Freidberg 1987). As will become apparent, the ordering $\epsilon_d\ll 1$ ensures that the island chain is
 sufficiently wide that ion acoustic waves propagating parallel to the magnetic field are able to smooth out any
-variations in the normalized electron number density, ${\cal N}$, around magnetic flux-surfaces (Scott, Hassam \& Drake 1985). The orderings $\epsilon_\eta\ll 1$, $\epsilon_\chi\ll 1$, and $\epsilon_D\ll 1$ ensure that the island
+variations in the normalized electron number density, ${\cal N}$, around magnetic flux-surfaces (Scott, Hassam \& Drake 1985). The fact that $\epsilon_d\ll 1$ implies that
+\begin{equation}
+w \gg \rho_\beta,
+\end{equation}
+where
+\begin{equation}
+\rho_\beta = \left(\frac{L_s}{L_n}\right)d_\beta
+\end{equation}
+is a characteristic lengthscale that is of order the ion poloidal gyroradius. 
+ The orderings $\epsilon_\eta\ll 1$, $\epsilon_\chi\ll 1$, and $\epsilon_D\ll 1$ ensure that the island
 chain is sufficiently wide that the perpendicular diffusion of magnetic flux, momentum, and particles are not dominant
 effects in the rescaled four-field equations. We shall also assume that $w/w_c\sim{\cal O}(1)$. In other words, the
 island chain is sufficiently wide for the parallel diffusion of particles to compete with perpendicular diffusion. 
@@ -2738,7 +2751,7 @@ magnetic flux-surfaces.
 
 Finally, to lowest order in $\epsilon_d$, Equation~(\ref{e470}) yields
 \begin{equation}\label{e509}
-\{{\cal J}_0,{\mit\Omega}\} = -\partial_X\!\left({\mit\Phi}_0+\frac{{\cal N}_0}{1+\tau}, \partial_X {\mit\Phi}_0\right)=
+\{{\cal J}_0,{\mit\Omega}\} = -\partial_X\!\left\{{\mit\Phi}_0+\frac{{\cal N}_0}{1+\tau}, \partial_X {\mit\Phi}_0\right\}=
 \frac{1}{2}\left\{d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]X^2, {\mit\Omega}\right\},
 \end{equation}
 where use has been made of Equations~(\ref{e498}), (\ref{e501}), and (\ref{e505}). Moreover, $d_{\mit\Omega}\equiv
@@ -2782,9 +2795,9 @@ where $\overline{{\cal J}}_0({\mit\Omega},T)$ is an undetermined flux-surface fu
 The flux-surface functions $M({\mit\Omega},T)$ and $L({\mit\Omega},T)$ are directly related to the lowest-order perpendicular
 velocities of the various fluid species in the island rest frame. In fact, as is clear from Sections~\ref{s4.2}, \ref{s4.3}, and \ref{s8.2}, 
 \begin{align}
-V_\theta(x,\zeta,T) &= -\frac{\omega_\ast}{m}\,x\,M({\mit\Omega},T),\\[0.5ex]
-V_{\theta\,i}(x,\zeta,T)& = -\frac{\omega_\ast}{m}\,x\,Y_i({\mit\Omega},T)\\[0.5ex]
-V_{\theta\,e}(x,\zeta,T)& = -\frac{\omega_\ast}{m}\,x\,Y_e({\mit\Omega},T),
+V_\theta(x,\zeta,T) &= -\frac{r_s\,\omega_\ast}{m}\,|X|\,M({\mit\Omega},T),\\[0.5ex]
+V_{\theta\,i}(x,\zeta,T)& = -\frac{r_s\,\omega_\ast}{m}\,|X|\,Y_i({\mit\Omega},T)\\[0.5ex]
+V_{\theta\,e}(x,\zeta,T)& = -\frac{r_s\,\omega_\ast}{m}\,|X|\,Y_e({\mit\Omega},T),
 \end{align}
 where
 \begin{align}
@@ -2858,6 +2871,11 @@ L({\mit\Omega})=\left\{
 \end{array}\right..
 \end{equation}
 Here, we have taken into account the previously mentioned fact that $L=0$ within the island separatrix.
+Note that $L$ is discontinuous across the island separatrix, which implies that the density gradient, and, hence,
+the diamagnetic velocity, are both also discontinuous across the separatrix. Of course, there is not a real
+discontinuity. Given that the discontinuity in $L$ is mandated by the ordering $\epsilon_d=(\rho_\beta/w)^2\ll 1$, which
+requires $L$ to be a flux-surface function, and, hence, zero by symmetry inside the separatrix, it follows that the discontinuity is resolved by a thin layer of characteristic thickness $\rho_\beta$ on the island
+separatrix.
 
 We need to evaluate Equation~(\ref{e470}) to first order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
 we obtain
@@ -2877,33 +2895,12 @@ Y_i({\mit\Omega},T)=\frac{v'(T)}{\int_1^\infty \!\frac{d{\mit\Omega}}{\langle X^
 \end{array}\right.
 \end{equation}
 (Fitzpatrick \& Waelbroeck 2005).
-Here, we have made use of the fact that $Y_i=0$ within the magnetic separatrix of the island chain. We have also demanded that the ion
+Here, we have rejected, as unphysical, the solution that blows up as ${\mit\Omega}^{\,1/2}$ as ${\mit\Omega}\rightarrow\infty$. 
+We have also made use of the fact that $Y_i=0$ within the magnetic separatrix of the island chain. Finally, we have  demanded that the ion
 fluid velocity, and, hence, the function $Y_i$,  be continuous across the separatrix, because the ion fluid possesses finite perpendicular viscosity. 
 Note, however, that the discontinuity in the function $L({\mit\Omega})$ across the separatrix [see Equation~(\ref{e526})] implies that the
-MHD and electron fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.)
-
-In the limit ${\mit\Omega}\gg 1$, the previous equation yields
-\begin{equation}
-Y_i\simeq v' -\left. \frac{v'}{\sqrt{2\,{\mit\Omega}}}\right/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle}.
-\end{equation}
-Hence, it follows from Equations~(\ref{e518}) and (\ref{e526}) that
-\begin{equation}
-M\simeq v' -\left. \frac{v'}{\sqrt{2\,{\mit\Omega}}}\right/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle} -\left(\frac{1}{1+\tau}\right)
-\frac{1}{\sqrt{2\,{\mit\Omega}}}
-\end{equation}
-in the same limit. A comparison with Equation~(\ref{e506}) reveals that
-\begin{equation}
-v = -\frac{1}{1+\tau} - v'\left/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle}\right.,
-\end{equation}
-or 
-\begin{equation}\label{e534}
-\omega = \omega_{\perp\,i} -v'\,\omega_\ast\left/\int_1^\infty \frac{d{\mit\Omega}}{\langle X^4\rangle}\right.,
-\end{equation}
-where
-\begin{equation}
-\omega_{\perp\,i} = \omega_E + \omega_{\ast\,i},
-\end{equation}
-and use has been made of Equations~(\ref{omegai}), (\ref{omega}), and (\ref{e488}). 
+MHD and electron fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.) As previously
+mentioned, these discontinuities are resolved in a layer of characteristic thickness $\rho_\beta$. 
 
 We need to evaluate Equation~(\ref{e472}) to second order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
 we obtain
@@ -2982,15 +2979,18 @@ Combining the previous equation with Equation~(\ref{e530}), we obtain (Fitzpatri
 \begin{equation}\label{e545}
 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)  =- \frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi\,v'}{\hat{w}}.
 \end{equation}
-Finally, the previous equation can be combined with Equation~(\ref{e534}) to give
+The previous equation yields
 \begin{equation}
-\omega=\omega_{\perp\,i} + I_1\left(\frac{\tau_\varphi}{\tau_H^{\,2}}\right)\left(\frac{W}{r_s}\right)^5{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
+\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}} = \left(\frac{\tau_\varphi\,\hat{w}^{\,4}}{2\,\tau_H^{\,2}}{\rm Im}\!\right)\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
 \end{equation}
-where
+where use has been made of Equation~(\ref{e489}). The same relation can be obtained by integrating Equation~(\ref{e182}) across the resonant surface, making use of Equation~(\ref{e157}), as well as the
+identification
 \begin{equation}
-I_1 = 2^{-12}\left/\int_1^{\infty} \frac{d{\mit\Omega}}{\langle X^4\rangle}\right. =3.584\times 10^{-4}. 
+\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}} = m\left[r\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right]_{r_{s-}}^{r_{s+}}.
 \end{equation}
-Here, use has been made of Equations~(\ref{e479}), (\ref{e480}), and (\ref{e482}). 
+The latter result merely states that the  discontinuity in the MHD fluid velocity gradient that develop at the resonant
+surface is mirrored by an equal discontinuity in the ion fluid velocity gradient (because the discontinuity is ultimately due to 
+a discontinuity in the ${\bf E}\times {\bf B}$ velocity gradient). 
 
 Equations~(\ref{e524a}) and (\ref{e542}) can be combined to give
 \begin{align}
@@ -3002,25 +3002,51 @@ Making use of Equations~(\ref{e518}), (\ref{e526}), and (\ref{e530}), the previo
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= -\frac{2\,\epsilon_\beta\,\epsilon_d\,v'}{(1+\tau)\,\hat{w}}
 \int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
-\nonumber\\[0.5ex]&\phantom{=}+\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega},\label{e547}
+\nonumber\\[0.5ex]
+&\phantom{=}+ \frac{2\,\epsilon_\beta\,\epsilon_d\,v'^{\,2}}{\hat{w}} \,\int_1^\infty d_{\mit\Omega}\!\left(F_i^{\,2}\right)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}\nonumber\\[0.5ex]
+&\phantom{=}+\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega},\label{e547}
 \end{align}
 where
 \begin{equation}
 F_i({\mit\Omega})=\left.\int_1^{\mit\Omega}\frac{d{\mit\Omega}'}{\langle X^4\rangle}\right/\int_1^\infty\frac{d{\mit\Omega}}{\langle X^4\rangle}
 \end{equation}
-Here, we have neglected terms that are quadratic in the small parameter $v'$. Finally, Equations~(\ref{e545}) and (\ref{e547})
-can be combined to give (Waelbroeck \& Fitzpatrick 1997)
-\begin{equation}
-{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)= I_2\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)
-- I_3\left(\frac{c_\beta}{1+\tau}\right)\left(\frac{d_\beta}{r_s}\right)\left(\frac{L_s}{L_n}\right)\left(\frac{\tau_\varphi}{\tau_H}\right)\left(\frac{W}{r_s}\right)^2 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right),
-\end{equation}
+Finally, Equations~(\ref{e545}) and (\ref{e547})
+can be combined to give (Waelbroeck \& Fitzpatrick 1997; Fitzpatrick \& Waelbroeck 2005a)
+\begin{align}\label{e559}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{4\,w}{r_s}\right)
+- I_2\left(\frac{c_\beta}{1+\tau}\right)\left(\frac{\rho_\beta}{r_s}\right)\left(\frac{\tau_\varphi}{\tau_H}\right)\left(\frac{w}{r_s}\right)^2 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)\nonumber\\[0.5ex]
+&\phantom{=} -I_3\left(\frac{\tau_\varphi}{\tau_H}\right)^2 \left(\frac{w}{r_s}\right)^7\left[{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)\right]^2, 
+\end{align}
 where
 \begin{align}
-I_2 &= 2\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega} =0.8227,\\[0.5ex]
-I_3&= 2^{-6}\int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} = 3.055\times 10^{-3}.
+I_1 &= 2\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega} =0.8227,\\[0.5ex]
+I_2&= \frac{1}{4}\int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} =4.889\times 10^{-2},\\[0.5ex]
+I_3&= \frac{1}{16}\int_1^\infty d_{\mit\Omega}\!\left(F_i^{\,2}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} =2.944\times 10^{-2}.
 \end{align}
 Here, use has been made of Equations~(\ref{e317a}), (\ref{e318a}), (\ref{e481}), and (\ref{e482}). 
 
+\section{Isolated Magnetic Island Chain}
+\subsection{Introduction}
+Suppose that the wall surrounding the plasma is perfectly conducting (i.e.\, $\tau_w\rightarrow\infty$), and that there is no current
+flowing through the external magnetic-field coil (i.e., $\hat{I}_c=0$). In this case, assuming that $d/dt = -{\rm i}\,\omega$, Equations~(\ref{e202}), 
+(\ref{e203}), and (\ref{epw}),  yield 
+\begin{equation}\label{e563}
+\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) ={\mit\Delta}_{pw},
+\end{equation}
+where ${\mit\Delta}_{pw}$ is the (real) perfect-wall tearing stability index. 
+
+\subsection{Rutherford Island Width Evolution Equation}
+It is clear from the previous equation that
+\begin{equation}
+{\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) = 0,
+\end{equation}
+which implies that no electromagnetic torque is exerted at the resonant surface. (See Section~\ref{storque}.) 
+Hence, Equations~(\ref{e559}) and (\ref{e563}) yield the {\em Rutherford island width evolution equation}\/ (Rutherford 1973):
+\begin{equation}
+I_2\,\tau_R\,\frac{d}{dt}\!\left(\frac{4\,w}{r_s}\right)= {\mit\Delta}_{nw}.
+\end{equation}
+According to this equation, if the perfect-wall tearing stability index is positive then the width of the magnetic
+island chain at the resonant surface grows algebraically on the resistive evolution timescale, $\tau_R$. 
 
 \section*{Bibliography}
 \begin{description}
@@ -3049,7 +3075,8 @@ Plasmas}. Phys.\ Plasmas {\bf 13}, 032503.
 \item Fitzpatrick, R., and Hender, T.C.\ 1994. {\em Effect of a Static External Magnetic Perturbation on Resistive Mode Stability in Tokamaks}. Phys.\ Plasmas {\bf 1}, 3337. 
 \item Fitzpatrick, R., and Nelson, A.O.\ 2020. {\em An Improved Theory of the Response of DIII-D H-mode Discharges to Static Resonant Magnetic Perturbations and its Implications for the Suppression of Edge Localized Modes}. Phys.\ Plasmas {\bf 27}, 072501.
 \item Fitzpatrick, R., and Waelbroeck, F.L.\ 2005. {\em Two-Fluid Magnetic Island Dynamics in Slab Geometry. I. Isolated Islands}.
-Phys.\ Plasmas {\bf 12}, 022307. 
+\item Fitzpatrick, R., and Waelbroeck, F.L.\ 2005a. {\em Two-Fluid Magnetic Island Dynamics in Slab Geometry. II. Islands Interacting with Resistive Walls or Resonant Magnetic Perturbations}.
+Phys.\ Plasmas {\bf 12}, 022308. 
 \item Fitzpatrick, R., and Waelbroeck, F.L.\ 2009. {\em Effect of Flow Damping on Drift-Tearing Magnetic Islands in Tokamak Plasmas}.
 Phys.\ Plasmas {\bf 16}, 072507.
 \item Freidberg, J.P.\ 1987. {\em Ideal Magnetohydrodynamics}. Plenum, New York NY. 
