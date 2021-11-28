@@ -2787,7 +2787,7 @@ It follows that
 Equation~(\ref{e509}) yields 
 \begin{equation}\label{e513}
 {\cal J}_0({\mit\Omega},\zeta,T)= 
-\frac{1}{2}\,d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]\!\widetilde{X}^2 + \overline{\cal J}_0({\mit\Omega},T),
+\frac{1}{2}\,d_{\mit\Omega}\!\left[M\left(M+\frac{L}{1+\tau}\right)\right]\!\widetilde{X^2} + \overline{\cal J}_0({\mit\Omega},T),
 \end{equation}
 where $\overline{{\cal J}}_0({\mit\Omega},T)$ is an undetermined flux-surface function. 
 
@@ -2795,17 +2795,17 @@ where $\overline{{\cal J}}_0({\mit\Omega},T)$ is an undetermined flux-surface fu
 The flux-surface functions $M({\mit\Omega},T)$ and $L({\mit\Omega},T)$ are directly related to the lowest-order perpendicular
 velocities of the various fluid species in the island rest frame. In fact, as is clear from Sections~\ref{s4.2}, \ref{s4.3}, and \ref{s8.2}, 
 \begin{align}
-V_\theta(x,\zeta,T) &= -\frac{r_s\,\omega_\ast}{m}\,|X|\,M({\mit\Omega},T),\\[0.5ex]
-V_{\theta\,i}(x,\zeta,T)& = -\frac{r_s\,\omega_\ast}{m}\,|X|\,Y_i({\mit\Omega},T)\\[0.5ex]
-V_{\theta\,e}(x,\zeta,T)& = -\frac{r_s\,\omega_\ast}{m}\,|X|\,Y_e({\mit\Omega},T),
+V_{\theta\,e}(X,\zeta,T)& = -\frac{r_s\,\omega_\ast}{m}\,|X|\,Y_e({\mit\Omega},T),\\[0.5ex]
+V_\theta(X,\zeta,T) &= -\frac{r_s\,\omega_\ast}{m}\,|X|\,M({\mit\Omega},T),\\[0.5ex]
+V_{\theta\,i}(X,\zeta,T)& = -\frac{r_s\,\omega_\ast}{m}\,|X|\,Y_i({\mit\Omega},T),
 \end{align}
 where
 \begin{align}
-Y_i({\mit\Omega},T)&= M+\left(\frac{1}{1+\tau}\right)L,\label{e518}\\[0.5ex]
-Y_e({\mit\Omega},T)&= Y_i- L.
+Y_e({\mit\Omega},T)&= M- \left(\frac{\tau}{1+\tau}\right)L,\\[0.5ex]
+Y_i({\mit\Omega},T)&= M+\left(\frac{1}{1+\tau}\right)L,\label{e518}
 \end{align}
-Here, $V_\theta$, $V_{\theta\,i}$, and $V_{\theta\,e}$ refer to velocity components of the MHD, ion, and
-electron fluid, respectively. Note that $Y_i$ and $Y_e$ are both zero inside the magnetic separatrix of the island chain. 
+Here,  $V_{\theta\,e}$, $V_\theta$, and $V_{\theta\,i}$  refer to velocity components of the electron, MHD, and ion 
+ fluid, respectively. Note that $Y_e$ and $Y_i$ are both zero inside the magnetic separatrix of the island chain. 
 
 \subsection{Need for Higher-Order Solution}
 To lowest order in our expansion scheme, the rescaled four-field model, (\ref{e469})--(\ref{e473}), requires the density, temperature, and  
@@ -2831,19 +2831,19 @@ we obtain
 \end{equation}
 where
 \begin{equation}
-F_e({\mit\Omega},\zeta,T)= \epsilon_d^2\,({\mit\Phi}_2+\epsilon_d\,{\mit\Phi}_3)-\epsilon_d^{\,2}\left(\frac{\tau}{1+\tau}\right)({\cal N}_2+\epsilon_d\,{\cal N}_3)
+F_e({\mit\Omega},\zeta,T)= \epsilon_d^2\,({\mit\Phi}_2+\epsilon_d\,{\mit\Phi}_3)-\epsilon_d^{2}\left(\frac{\tau}{1+\tau}\right)({\cal N}_2+\epsilon_d\,{\cal N}_3)
 - \epsilon_d^2\,s\,Y_e({\mit\Psi}_2+\epsilon_d\,{\mit\Psi}_3),
 \end{equation}
 and use has been made of Equations~(\ref{e429})--(\ref{e431}), (\ref{e500}), (\ref{e501}), (\ref{e503}), and (\ref{e505}). 
 The flux-surface average of Equation~(\ref{e514}) yields
 \begin{equation}
-\overline{\cal J}_0({\mit\Omega},T) = \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{\,2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
+\overline{\cal J}_0({\mit\Omega},T) = \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
 \end{equation}
 where use has been made of Equations~(\ref{e5111}), (\ref{e512}), and (\ref{e513}). Hence, we
 can write
 \begin{equation}\label{e524a}
 {\cal J}_0({\mit\Omega},\zeta)= 
-\frac{1}{2}\,d_{\mit\Omega}\!\left(M\,Y_i\right)\widetilde{X}^2+ \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{\,2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
+\frac{1}{2}\,d_{\mit\Omega}\!\left(M\,Y_i\right)\widetilde{X^2}+ \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
 \end{equation}
 where use has been made of Equation~(\ref{e518}). 
 The first term on the right-hand side of the previous equation represents the parallel return current driven by the perpendicular {\em polarization current}\/ associated with the
@@ -2871,10 +2871,10 @@ L({\mit\Omega})=\left\{
 \end{array}\right..
 \end{equation}
 Here, we have taken into account the previously mentioned fact that $L=0$ within the island separatrix.
-Note that $L$ is discontinuous across the island separatrix, which implies that the density gradient, and, hence,
-the diamagnetic velocity, are both also discontinuous across the separatrix. Of course, there is not a real
+Note that $L$ is discontinuous across the island separatrix, which implies that the density gradient---and, hence,
+the diamagnetic velocity---are both also discontinuous across the separatrix. Of course, there is not a real
 discontinuity. Given that the discontinuity in $L$ is mandated by the ordering $\epsilon_d=(\rho_\beta/w)^2\ll 1$, which
-requires $L$ to be a flux-surface function, and, hence, zero by symmetry inside the separatrix, it follows that the discontinuity is resolved by a thin layer of characteristic thickness $\rho_\beta$ on the island
+requires $L$ to be a flux-surface function---and, hence, zero, by symmetry, inside the separatrix---it is plausible that the discontinuity is resolved by a thin layer of characteristic thickness $\rho_\beta$ on the island
 separatrix.
 
 We need to evaluate Equation~(\ref{e470}) to first order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
@@ -2897,9 +2897,9 @@ Y_i({\mit\Omega},T)=\frac{v'(T)}{\int_1^\infty \!\frac{d{\mit\Omega}}{\langle X^
 (Fitzpatrick \& Waelbroeck 2005).
 Here, we have rejected, as unphysical, the solution that blows up as ${\mit\Omega}^{\,1/2}$ as ${\mit\Omega}\rightarrow\infty$. 
 We have also made use of the fact that $Y_i=0$ within the magnetic separatrix of the island chain. Finally, we have  demanded that the ion
-fluid velocity, and, hence, the function $Y_i$,  be continuous across the separatrix, because the ion fluid possesses finite perpendicular viscosity. 
+fluid velocity---and, hence, the function $Y_i$---is continuous across the separatrix, because the ion fluid possesses finite perpendicular viscosity. 
 Note, however, that the discontinuity in the function $L({\mit\Omega})$ across the separatrix [see Equation~(\ref{e526})] implies that the
-MHD and electron fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.) As previously
+electron and MHD  fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.) As previously
 mentioned, these discontinuities are resolved in a layer of characteristic thickness $\rho_\beta$. 
 
 We need to evaluate Equation~(\ref{e472}) to second order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
@@ -2912,7 +2912,7 @@ previous equation yields
 \begin{equation}
 \langle X^2\rangle\,d_{\mit\Omega} {\cal V}_{(0)} +\langle 1\rangle \,{\cal V}_{(0)}= 0.
 \end{equation}
- This equation can be solved, subject to the boundary condition (\ref{e486a}) to
+ The previous equation can be solved, subject to the boundary condition (\ref{e486a}) to
 give
 \begin{equation}
 {\cal V}_{(0)}({\mit\Omega}, T) = 0.
@@ -2988,7 +2988,7 @@ identification
 \begin{equation}
 \left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}} = m\left[r\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right]_{r_{s-}}^{r_{s+}}.
 \end{equation}
-The latter result merely states that the  discontinuity in the MHD fluid velocity gradient that develop at the resonant
+The previous identification  merely states that the  discontinuity in the MHD fluid velocity gradient that develop at the resonant
 surface is mirrored by an equal discontinuity in the ion fluid velocity gradient (because the discontinuity is ultimately due to 
 a discontinuity in the ${\bf E}\times {\bf B}$ velocity gradient). 
 
@@ -3031,19 +3031,23 @@ Suppose that the wall surrounding the plasma is perfectly conducting (i.e.\, $\t
 flowing through the external magnetic-field coil (i.e., $\hat{I}_c=0$). In this case, assuming that $d/dt = -{\rm i}\,\omega$, Equations~(\ref{e202}), 
 (\ref{e203}), and (\ref{epw}),  yield 
 \begin{equation}\label{e563}
-\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) ={\mit\Delta}_{pw},
+\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s} ={\mit\Delta}_{pw},
 \end{equation}
 where ${\mit\Delta}_{pw}$ is the (real) perfect-wall tearing stability index. 
 
 \subsection{Rutherford Island Width Evolution Equation}
 It is clear from the previous equation that
-\begin{equation}
+\begin{equation}\label{e559}
 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) = 0,
 \end{equation}
-which implies that no electromagnetic torque is exerted at the resonant surface. (See Section~\ref{storque}.) 
-Hence, Equations~(\ref{e559}) and (\ref{e563}) yield the {\em Rutherford island width evolution equation}\/ (Rutherford 1973):
+which implies that zero electromagnetic torque is exerted at the resonant surface. (See Section~\ref{storque}.) 
+Moreover, 
 \begin{equation}
-I_2\,\tau_R\,\frac{d}{dt}\!\left(\frac{4\,w}{r_s}\right)= {\mit\Delta}_{nw}.
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) = {\mit\Delta}_{pw}.
+\end{equation}
+Hence, Equations~(\ref{e456}), (\ref{e559}), and (\ref{e559}) yield the {\em Rutherford island width evolution equation}\/ (Rutherford 1973):
+\begin{equation}
+I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)= {\mit\Delta}_{pw}.
 \end{equation}
 According to this equation, if the perfect-wall tearing stability index is positive then the width of the magnetic
 island chain at the resonant surface grows algebraically on the resistive evolution timescale, $\tau_R$. 
