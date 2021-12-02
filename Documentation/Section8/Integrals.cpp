@@ -54,8 +54,8 @@ void Integrals::Solve ()
   while (k < kmax);
 
   double I1 = 4.             * y(1);
-  double I2 = (1./y(0))      * y(2);
-  double I3 = (1./y(0)/y(0)) * y(3);
+  double I2 = 4. * (1./y(0))      * y(2);
+  double I3 = 16. * (1./y(0)/y(0)) * y(3);
 
   printf ("\nI1 = %11.4e  I2 = %11.4e  I3 = %11.4e\n\n", I1, I2, I3);
 }
