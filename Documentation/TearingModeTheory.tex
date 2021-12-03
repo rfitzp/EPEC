@@ -809,12 +809,11 @@ valid as long as
 \subsection{Resonant Layer Physics}\label{sres}
 By analogy with Equation~(\ref{e133}), we can write
 \begin{equation}\label{e134}
-{\mit\Delta\Psi}_s = \tau_s\left(\frac{d{\mit\Psi}_s}{dt} + {\rm i}\,\omega\,{\mit\Psi}_s\right).
+{\mit\Delta\Psi}_s = \tau_s\left(\frac{d{\mit\Psi}_s}{dt} + {\rm i}\,\omega_s\,{\mit\Psi}_s\right).
 \end{equation}
 Here, $\tau_s$ is the {\em reconnection time}\/ (i.e., the typical timescale on which magnetic reconnection takes place in the
-resonant layer surrounding the resonant surface), whereas $\omega$ is the phase velocity 
-of the tearing mode when the wall is perfectly conducting. The
-phase velocity  is non-zero because the reconnected flux in the resonant layer is convected by the local plasma
+resonant layer surrounding the resonant surface), whereas $\omega_s$ is the {\em natural frequency}\/ of the tearing mode. The natural frequency is defined as oscillation frequency of a naturally unstable tearing mode. The
+natural frequency  is non-zero because the reconnected flux in the resonant layer is convected by the local plasma
 flow (Fitzpatrick 1993). (See Sections~\ref{s6.2} and \ref{sphase1}.)
 
 \subsection{Solution in Presence of External Magnetic Field-Coil}\label{sfc}
@@ -1146,16 +1145,16 @@ use has been made of Equations~(\ref{e157}), (\ref{e158}), and (\ref{e190})--(\r
 \subsection{No-Slip Constraint}\label{sns}
 The reconnected magnetic flux at the resonant surface is assumed to convected by the local plasma flow. (See Section~\ref{sres}.) Hence, changes in the
 plasma flow at the resonant surface induced by the electromagnetic torques that develop in the vicinity of this
-surface will modify the convection velocity. Consequently, the phase velocity of the tearing mode can be written
+surface will modify the convection velocity. Consequently, the natural frequency of the tearing mode can be written
 \begin{equation}\label{e200}
- \omega(t) = \omega_{0} + ({\bf k}\cdot {\mit\Delta}{\bf V}_i)_{r=r_s}=
- \omega_{0} + m\,{\mit\Delta\Omega}_\theta(r_s,t) - n\,{\mit\Delta\Omega}_\varphi(r_s,t),
+ \omega_s(t) = \omega_{s\,0} + ({\bf k}\cdot {\mit\Delta}{\bf V}_i)_{r=r_s}=
+ \omega_{s\,0} + m\,{\mit\Delta\Omega}_\theta(r_s,t) - n\,{\mit\Delta\Omega}_\varphi(r_s,t),
 \end{equation}
-where $\omega_{0}$ is the unperturbed phase velocity. The previous expression is known as the {\em no-slip constraint}\/ (Fitzpatrick 1993), and has been verified experimentally (Vahala, et al.\ 1980). 
+where $\omega_{s\,0}$ is the unperturbed natural frequency. The previous expression is known as the {\em no-slip constraint}\/ (Fitzpatrick 1993), and has been verified experimentally (Vahala, et al.\ 1980). 
 It follows from Equations~(\ref{e190})
 and (\ref{e191}) that
 \begin{equation}\label{e201}
-\omega(t) = \omega_{0} - \sum_{p=1,\infty}\left[\alpha_p(t)+\beta_p(t)\right].
+\omega_s(t) = \omega_{s\,0} - \sum_{p=1,\infty}\left[\alpha_p(t)+\beta_p(t)\right].
 \end{equation}
 (See Section~\ref{stb}.)
 
@@ -1164,10 +1163,10 @@ Equations~(\ref{e123}), (\ref{e133}), (\ref{e134}),  (\ref{e145})--(\ref{e151}),
 can be combined to give the following complete set of equations that determine the time evolution of the reconnected 
 magnetic flux at the resonant surface:
 \begin{align}\label{e202}
-{\mit\Delta\hat{\Psi}}_s\equiv \tau_s\left(\frac{d\hat{\mit\Psi}_s}{dt} + {\rm i}\,\omega\,\hat{\mit\Psi}_s\right) &= E_{ss}\,\hat{\mit\Psi}_s + E_{sw}\,\hat{\mit\Psi}_w,\\[0.5ex]
+{\mit\Delta\hat{\Psi}}_s\equiv \tau_s\left(\frac{d\hat{\mit\Psi}_s}{dt} + {\rm i}\,\omega_s\,\hat{\mit\Psi}_s\right) &= E_{ss}\,\hat{\mit\Psi}_s + E_{sw}\,\hat{\mit\Psi}_w,\\[0.5ex]
 \tau_w\,\frac{d\hat{\mit\Psi}_w}{dt} &= E_{sw}\,\hat{\mit\Psi}_s +\tilde{E}_{ww}\,\hat{\mit\Psi}_w
 +\hat{I}_c,\label{e203}\\[0.5ex]
-\omega(t)& = \omega_{0} - \sum_{p=1,\infty}\left[\alpha_p(t)+\beta_p(t)\right],\label{e210a}\\[0.5ex]
+\omega_s(t)& = \omega_{s\,0} - \sum_{p=1,\infty}\left[\alpha_p(t)+\beta_p(t)\right],\label{e210a}\\[0.5ex]
 (1+2\,q_s^{\,2})\,\frac{d\alpha_p}{dt} + \left(\frac{1}{\tau_{\theta\,s}}+\frac{j_{1\,p}^{\,2}}{\tau_{M}}\right)\alpha_p
 &= \frac{m^{2}\,[y_p(r_s/a)]^{\,2}}{\tau_A^{\,2}\,\epsilon_a^{\,2}\,[J_2(j_{1\,p})]^{\,2}}
 \,{\rm Im}({\mit\Delta\hat{\Psi}}_s\,\hat{\mit\Psi}_s^{\,\ast}),\label{e205}\\[0.5ex]
@@ -1184,7 +1183,7 @@ Here,
 \section{Reduced Resonant  Response Model}\label{ff}
 \subsection{Introduction}
 Equations~(\ref{e202})--(\ref{e206}) contain two quantities---namely, the reconnection time, $\tau_s$, and the unperturbed
-phase velocity, $\omega_{0}$---that can only be determined by solving for the plasma response in the radially-thin resonant layer surrounding the resonant surface. Unfortunately, determining the resonant plasma response is not a straightforward task. The
+natural frequency, $\omega_{s\,0}$---that can only be determined by solving for the plasma response in the radially-thin resonant layer surrounding the resonant surface. Unfortunately, determining the resonant plasma response is not a straightforward task. The
 problem is that the small characteristic lengthscale in the resonant region (i.e., the resonant layer width) causes the fundamental ordering parameters
 $\delta_e$ and $\delta_i$ (see Section~\ref{s3.9}) to take values that are of order unity. Consequently, most of the simplifications described in
 Section~\ref{lowest} are not applicable in the resonant layer. In particular, many of the terms in the Braginskii equations (see Section~\ref{sbrag}) that are negligible in the outer region (e.g., plasma resistivity) have to be taken into account in the resonant layer. 
@@ -1582,7 +1581,7 @@ V(\hat{x},\zeta,\hat{t}) &= \hat{V}_\parallel + \left(\frac{1+\tau}{\tau}\right)
 J(\hat{x},\zeta,\hat{t}) &=-\left(\frac{2}{s_s}-1\right)\!\frac{1}{\hat{L}_s}+ \hat{\nabla}^2\tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
 U(\hat{x},\zeta,\hat{t}) &=  \hat{\nabla}^2\tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\label{e300}
 \end{align}
-where $\hat{t}=V_A\,t/r_s$, $\hat{\omega}=r_s\,\omega/V_A$, and $\omega$ is the phase velocity of the tearing mode in the laboratory frame. 
+where $\hat{t}=V_A\,t/r_s$, $\hat{\omega}=r_s\,\omega/V_A$, and $\omega$ is the natural frequency of the tearing mode in the laboratory frame. 
 Substituting Equations~(\ref{e294})--(\ref{e300}) into the four-field model, (\ref{e264})--(\ref{e269}), and only retaining terms that
 are first order in perturbed quantities, we obtain the following set of linear layer equations:
 \begin{align}\label{e301}
@@ -1933,7 +1932,7 @@ Let $\hat{W} = 4\,(\hat{L}_s\,|\tilde{\psi}|)^{1/2}$. Equation~(\ref{e352a}) can
 \end{equation}
 Figure~\ref{f2a} shows the contours of $\hat{\psi}(\hat{x},\xi)$ specified by the previous equation. It can be seen that the
 tearing mode has reconnected magnetic field-lines to produce a {\em helical magnetic island chain}\/ centered on the resonant
-surface ($\hat{x}=0$). The chain has $m$ periods in the poloidal direction, $n$ periods in the toroidal direction, and propagates at the phase velocity $\omega$. The maximum full (as opposed to half) radial width of the magnetic separatrix is 
+surface ($\hat{x}=0$). The chain has $m$ periods in the poloidal direction, $n$ periods in the toroidal direction, and propagates at the helical phase velocity $\omega$. The maximum full (as opposed to half) radial width of the magnetic separatrix is 
 \begin{equation}\label{e355s}
 W =  \hat{W}\,r_s= 4\,(\hat{L}_s\,|\tilde{\psi}|)^{1/2}\,r_s = 4\left(L_s\,R_0\,|\hat{\mit\Psi}_s|\right)^{1/2},
 \end{equation}
@@ -1969,7 +1968,7 @@ Let us write
 \omega = {\rm i}\,\gamma+\omega_r,
 \end{equation}
 where $\gamma$ is the growth-rate of the tearing mode, whereas $\omega_r$ is the real
-phase velocity of the mode in the laboratory frame. We shall assume that $|\gamma|\ll |\omega_r|$. This assumption can
+frequency of the mode in the laboratory frame. We shall assume that $|\gamma|\ll |\omega_r|$. This assumption can
 easily be verified {\em a posteriori}. Asymptotic matching between the solution in the outer region and that in the
 thin linear layer surrounding the resonant surface yields a linear tearing mode dispersion relation of the form
 \begin{equation}\label{e352}
@@ -2077,7 +2076,7 @@ The corresponding tearing mode growth-rate is
 \gamma = \frac{E_{ss}}{\sqrt{2}\,\pi}\,\frac{d_\beta/r_s}{\omega_\ast^{1/2}\,\tau_H\,\tau_R^{1/2}}.
 \end{equation}
 Here, we have neglected the imaginary component of $\gamma$ because it merely gives rise to a small correction to the
-phase velocity  of the mode. 
+real frequency of the mode. 
 
 Suppose, finally, that $Q_\ast \ll P\,p^2$ and $D^2\,p^2\gg 1$. It follows that $\nu=1/4$ and
 \begin{equation}
@@ -2248,7 +2247,7 @@ is the Hall-resistive layer width (normalized to $r_s$).
 
 We can combine the previous two results to give the composite layer response equation
 \begin{equation}\label{e389}
-{\mit\Delta} = {\rm i}\,\tau_s\,(\omega_{0}+ {\mit\Delta}\omega_E),
+{\mit\Delta} = {\rm i}\,\tau_s\,(\omega_{s\,0}+ {\mit\Delta}\omega_E),
 \end{equation}
 where $\tau_s=\tau_R\,\hat{\delta}$, 
 \begin{equation}
@@ -2256,8 +2255,10 @@ where $\tau_s=\tau_R\,\hat{\delta}$,
 \end{equation}
 and 
 \begin{equation}
-\omega_{0}= \omega_{\perp\,e}.
+\omega_{s\,0}= \omega_{\perp\,e}.
 \end{equation} 
+Here, $\omega_{\perp\,e}$ is understood to take its unperturbed (by any electromagnetic torques that
+develop in the resonant layer) value. 
 
 It can be seen, by comparison with the analysis of Section~\ref{tauw}, that the resonant layer responds to the error-field
 perturbation in an analogous manner to a thin, rigid, resistive wall whose resistivity matches that of the plasma at the
@@ -2275,9 +2276,9 @@ current is only excited in the immediate vicinity of this surface.
 
 Equations~(\ref{e384}) and (\ref{e389}) yield
 \begin{equation}\label{e392}
-\hat{\mit\Psi}_s=\frac{\tilde{I}_c}{(-{\mit\Delta}_{nw})+ {\rm i}\,\tau_s\,(\omega_{0}+ {\mit\Delta}\omega_E)}.
+\hat{\mit\Psi}_s=\frac{\tilde{I}_c}{(-{\mit\Delta}_{nw})+ {\rm i}\,\tau_s\,(\omega_{s\,0}+ {\mit\Delta}\omega_E)}.
 \end{equation}
-Now, in a conventional ohmically-heated tokamak plasma, $\tau_s\,\omega_{0}\gg (-{\mit\Delta}_{nw})$. Consequently, the
+Now, in a conventional ohmically-heated tokamak plasma, $\tau_s\,\omega_{s\,0}\gg (-{\mit\Delta}_{nw})$. Consequently, the
 shielding current that develops at the resonant surface, in response to the local plasma rotation, is strong enough to largely
 suppress error-field-driven magnetic reconnection [i.e., $|\hat{\mit\Psi}_s|\ll |\tilde{I}_c|/(-{\mit\Delta}_{nw})$]. However, the shielding current also gives rise to a localized electromagnetic
 torque at the resonant surface (see Section~\ref{storque}) that acts to slow the plasma rotation. 
@@ -2299,12 +2300,12 @@ T_{\rm VS}(v)= T_{\rm EM}(v),
 \end{equation}
 where 
 \begin{align}
-v&=\frac{\omega_{0}+{\mit\Delta}\omega_E}{\omega_{0}},\\[0.5ex]
+v&=\frac{\omega_{s\,0}+{\mit\Delta}\omega_E}{\omega_{s\,0}},\\[0.5ex]
 T_{\rm VS}(v) &= 1- v,\\[0.5ex]
 T_{\rm EM}(v) &= \frac{1}{4}\,\frac{v}{\zeta_s^{\,2}+v^2}
 \left(\frac{|\tilde{I}_c|}{\tilde{I}_{c\,{\rm crit}}}\right)^2,\\[0.5ex]
-\zeta_s &= \frac{(-{\mit\Delta}_{nw})}{\tau_s\,\omega_{0}}\ll 1,\\[0.5ex]
-\tilde{I}_{c\,{\rm crit}}&= (\epsilon_s\,s_s)\,(\omega_{0}\,\tau_H)\left/
+\zeta_s &= \frac{(-{\mit\Delta}_{nw})}{\tau_s\,\omega_{s\,0}}\ll 1,\\[0.5ex]
+\tilde{I}_{c\,{\rm crit}}&= (\epsilon_s\,s_s)\,(\omega_{s\,0}\,\tau_H)\left/
 \left[\frac{q_s}{\epsilon_s}\left(\frac{\sqrt{\tau_\varphi\,\tau_i/\mu_{00}^i}}{\tau_s}\right)+2\left(\frac{\tau_\varphi}{\tau_s}\right) \ln\!\left(\frac{a}{r_s}\right)\right]^{1/2}\right..\label{e420}
 \end{align}
 Here, use has been made of the identities
@@ -2364,7 +2365,7 @@ Fitzpatrick 1998). (See Figure~\ref{f5}.)
 The bifurcation is associated with a sudden decrease in the plasma rotation at the resonant surface, and a sudden
 increase in the driven reconnected magnetic flux, and is identified with the error-field penetration phenomenon observed in tokamak
 experiments. As is clear from Equation~(\ref{e420}), the critical error-field coil current needed to trigger error-field
-penetration increases linearly with the unperturbed plasma rotation at the resonant surface, which is parameterized by $\omega_{0}$. 
+penetration increases linearly with the unperturbed plasma rotation at the resonant surface, which is parameterized by $\omega_{s\,0}$. 
 Once error-field penetration has occurred, the magnitude of the error-field coil current must be reduced to a value
 that is substantially less than $\tilde{I}_{c\,{\rm crit}}$ in order to trigger a reverse bifurcation to the unshielded solution branch (Fitzpatrick 1998). 
 
@@ -2384,7 +2385,7 @@ threshold with the standard dimensionless scaling parameters (Connor \& Taylor 1
 \beta_\ast&=\frac{\mu_0\,n_0\,T_0}{B_z^{\,2}},\label{e430}
 \end{align}
 where $T_0=p_0/n_0$. In the following, for the sake of simplicity, we
-shall assume that $T_i=T_e=T_0$, $\omega_{0}=\omega_\ast$, and $-(d\ln p/dr)_{r_s} = 1/r_s$. We shall also neglect ${\cal O}(1)$
+shall assume that $T_i=T_e=T_0$, $\omega_{s\,0}=\omega_\ast$, and $-(d\ln p/dr)_{r_s} = 1/r_s$. We shall also neglect ${\cal O}(1)$
 constants such as $s_s$, $\eta_e$, $\eta_i$, $\lambda_e$, $\tau$, $\pi$, $\ln(r_s/a)$, et cetera.
 
  Now, in an ohmically-heated tokamak
@@ -2398,7 +2399,7 @@ time, $\tau_\varphi$, and the particle/energy confinement time, $\tau_\perp$, ar
 
 It is easily demonstrated that
 \begin{align}
-\omega_{0}\,\tau_H&\simeq \left(\frac{q_s}{\epsilon_s}\right)^2\rho_\ast\,\beta_\ast^{\,1/2},\\[0.5ex]
+\omega_{s\,0}\,\tau_H&\simeq \left(\frac{q_s}{\epsilon_s}\right)^2\rho_\ast\,\beta_\ast^{\,1/2},\\[0.5ex]
 \frac{\tau_H}{\tau_R}&\simeq \left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{m_e}{m_i}\right)^{1/2}\rho_\ast^{\,2}\,\nu_\ast\,\beta_\ast^{-1/2},\\[0.5ex]
 \frac{\tau_\varphi}{\tau_R} = \frac{\tau_\perp}{\tau_R} &\simeq \left(\frac{q_s}{\epsilon_s}\right)^2\beta_\ast,\\[0.5ex]
 \frac{\tau_i}{\tau_R} &\simeq  \left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{m_e}{m_i}\right)^{1/2}\rho_\ast^{\,2}\,\beta_\ast^{-1},\\[0.5ex]
@@ -2558,7 +2559,7 @@ N &\rightarrow -\hat{V}_\ast\,\hat{x},\\[0.5ex]
 V&\rightarrow \hat{V}_\parallel,\\[0.5ex]
 J& \rightarrow -\frac{2}{q_s\hat{R}_0} + \frac{1}{\hat{L}_s}.
 \end{align}
-Here, $\omega = \hat{\omega}\,V_A/r_s$ is the phase velocity of the island chain in the
+Here, $\omega = \hat{\omega}\,V_A/r_s$ is the frequency of the tearing mode  in the
 laboratory frame,
 \begin{equation}
 s = {\rm sgn}(\hat{x}),
@@ -3045,10 +3046,9 @@ Equation~(\ref{e563}) implies that
 \end{equation}
 Equations~(\ref{e456}), (\ref{e559}), (\ref{e559x}), and (\ref{e560x}) yield the {\em Rutherford island width evolution equation}\/ (Rutherford 1973):
 \begin{equation}\label{e561}
-I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)= {\mit\Delta}_{pw},
+I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)= {\mit\Delta}_{pw}.
 \end{equation}
-where $d/dt$ represents a time derivative in the island rest frame. 
-According to the Rutherford equation, if the perfect-wall tearing stability index is positive then the width of the magnetic
+ According to the Rutherford equation, if the perfect-wall tearing stability index is positive then the width of the magnetic
 island chain at the resonant surface grows {\em algebraically}\/ on the resistive evolution timescale, $\tau_R$. 
 
 \subsection{Saturated Island Width}\label{sat}
@@ -3111,7 +3111,7 @@ On the other hand, if the resonant surface lies close to the plasma boundary the
 saturates at a much higher width. However, the presence of a close-fitting perfectly conducting wall can mitigate this
 effect to some extent. 
 
-\subsection{Island Phase Velocity}\label{sphase1}
+\subsection{Natural Frequency}\label{sphase1}
 Equations~(\ref{e545}) and (\ref{e559x}) imply that 
 \begin{equation}\label{evz}
 v'=0 
@@ -3157,7 +3157,7 @@ thickness $\rho_\beta$ on the separatrix. It is clear from the figure that the i
 the unperturbed ${\bf E}\times {\bf B}$ frame at the resonant surface (Fitzpatrick \& Waelbroeck 2005). 
 
 \subsection{Discussion}
-The phase velocity of an isolated tearing mode is determined by the
+The rotation frequency of an isolated tearing mode is determined by the
 equilibrium plasma flow at the resonant surface. Now, a magnetic
 island chain is a helical pattern in the magnetic field generated by a
 helical current perturbation that is localized in the vicinity of the resonant surface. Given that plasma current is predominately carried by
@@ -3173,9 +3173,9 @@ inside the separatrix, and are, therefore, forced to co-rotate with the
 island chain. There is no such constraint outside the separatrix, so the
 electron and ion fluids rotate at different speeds in this region, as a
 consequence of diamagnetism. It follows that one or other of the electron and the ion fluid rotation profiles must exhibit a strong gradient
-across the separatrix. The island phase velocity is determined by
+across the separatrix. The island rotation frequency is determined by
 which of the two fluids is most resistant to the formation of such a gradient. Of course, it is the ion fluid which is more resistant because of
-its much greater perpendicular viscosity. Hence, a nonlinear magnetic island chain is convected by the ion fluid in the vicinity of the resonant surface, because this choice of phase velocity minimizes the ion fluid velocity gradient across the separatrix (Fitzpatrick 2000). Incidentally, there is clear experimental evidence that wide magnetic island chains in tokamak plasmas rotate in the ion
+its much greater perpendicular viscosity. Hence, a nonlinear magnetic island chain is convected by the ion fluid in the vicinity of the resonant surface, because this choice of frequency minimizes the ion fluid velocity gradient across the separatrix (Fitzpatrick 2000). Incidentally, there is clear experimental evidence that wide magnetic island chains in tokamak plasmas rotate in the ion
 diamagnetic direction relative to the unperturbed ${\bf E}\times {\bf B}$ frame at the resonant surface (La Haye, et al.\ 2003;
 Burratti, et al.\ 2016). 
 
@@ -3191,7 +3191,7 @@ resistive wall surrounding the plasma, causing the mode to eventually {\em lock}
 
 \subsection{Resistive-Wall Rotation Braking}\label{wall}
 Let us, first of all, investigate the braking of tearing mode rotation due to electromagnetic interaction with the resistive wall, in the absence of the error-field. 
-Assuming that the tearing mode possesses the phase velocity $\omega$, and that $\hat{I}_c=0$, 
+Assuming that the tearing mode possesses the frequency $\omega$ in the laboratory frame, and that $\hat{I}_c=0$, 
 Equation~(\ref{e203}) yields
 \begin{equation}
 \hat{\mit\Psi}_w = \frac{E_{sw}/(-\tilde{E}_{ww})}{1-{\rm i}\,\omega\,\tau_{LR}},
@@ -3228,37 +3228,37 @@ I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{4\,w}{r_s}\right) &= {\mit\Delta}_{pw}(0)
 \end{align}
 The first term on the right-hand side of the previous equation governs the growth and saturation of the tearing mode when the wall
 is perfectly conducting. The second term describes  the loss of wall
-stabilization when the phase velocity of the mode is sufficiently small that the associated perturbed magnetic field  can penetrate through the wall.  The third and fourth terms represent the destabilizing effect of the ion polarization
+stabilization when the rotation frequency of the mode is sufficiently small that the associated perturbed magnetic field  can penetrate through the wall.  The third and fourth terms represent the destabilizing effect of the ion polarization
 current induced in the vicinity of the island chain when the ion fluid flows around the chain's magnetic separatrix (Waelbroeck \& Fitzpatrick 1997; Fitzpatrick \& Waelbroeck 2005a). Unlike the case of an isolated island chain, the polarization effect
 is non-zero because, according to Equation~(\ref{e521a}), (\ref{e530}), (\ref{e545}), and (\ref{e584}), the electromagnetic
 braking torque exerted on the plasma in the immediate vicinity of the island chain, due to interaction with the resistive wall, 
 generates finite ion flow in the island rest frame. 
 
-Equations~(\ref{e210a}) and (\ref{e574}) imply that
+Assuming that the tearing mode oscillates at its natural frequency, Equations~(\ref{e210a}) and (\ref{e574}) imply that
 \begin{equation}
-\omega = \omega_{0} -\sum_{p=1,\infty}(\alpha_p+\beta_p),
+\omega = \omega_{s\,0} -\sum_{p=1,\infty}(\alpha_p+\beta_p),
 \end{equation}
-where $\omega_0=\omega_{\perp\,i}$ is the island phase velocity in the absence of the resistive wall. In the following, $\omega_0$ is
-assumed to be positive for the sake of definiteness. The modifications to the analysis when $\omega_0$ is
+where $\omega_{s\,0}=\omega_{\perp\,i}$ is the unperturbed natural frequency. Note that $\omega_{\perp\,i}$ is
+assumed to take its unperturbed (by any electromagnetic torques that develop in the resonant region) value. Furthermore, in the following, $\omega_{s\,0}$ is
+assumed to be positive for the sake of definiteness. The modifications to the analysis when $\omega_{s\,0}$ is
 negative are trivial. 
 The previous equation can be combined with Equations~(\ref{e205}), (\ref{e206}), (\ref{e417a}), (\ref{e418a}), (\ref{e456}),
 and (\ref{e584}) to give the following torque balance equation:
 \begin{equation}\label{e588}
-\omega_0 - \omega = \frac{1}{4}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]
+\omega_{s\,0} - \omega = \frac{1}{4}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]
 \left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w}{r_s}\right)^4\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right),
 \end{equation}
 where
 \begin{equation}
 \tau_V = 2\,\ln\!\left(\frac{a}{r_s}\right)\tau_\varphi + \left(\frac{q_s}{\epsilon_s}\right)\left(\frac{\tau_i\,\tau_\varphi}{\mu_{00}^i}\right)^{1/2}.
 \end{equation}
-The left-hand side of Equation~(\ref{e588}) represents the viscous restoring torque that acts to prevent changes in the
-island chain's phase velocity. The right-hand side represents the electromagnetic braking torque acting on the island chain due to eddy currents induced in the
+The left-hand side of Equation~(\ref{e588}) represents the viscous restoring torque that acts to prevent changes in plasma rotation at the resonant surface. The right-hand side represents the electromagnetic braking torque acting on the island chain due to eddy currents induced in the
 resistive wall. 
 
 Let
 \begin{align}
 x &= \frac{x}{x_{pw}},\\[0.5ex]
-y &= \frac{\omega}{\omega_0},\\[0.5ex]
+y &= \frac{\omega}{\omega_{s\,0} },\\[0.5ex]
 T &= \frac{t}{\tau_{pw}},\\[0.5ex]
 \tau_{pw}&= \frac{I_1\,\tau_R}{{\mit\Delta}_{pw}(0)}\,\frac{W_{pw}}{r_s}.
 \end{align}
@@ -3272,11 +3272,11 @@ written in the nondimensional forms (Waelbroeck \& Fitzpatrick 1997)
 respectively, 
 where
 \begin{align}
-\alpha_l & = \omega_0\,\tau_{LR},\\[0.5ex]
+\alpha_l & = \omega_{s\,0}\,\tau_{LR},\\[0.5ex]
 \beta_l &= 1 - \frac{{\mit\Delta}_{pw}(0)}{{\mit\Delta}_{nw}(0)},\\[0.5ex]
 \gamma_l&= \frac{I_2}{{\mit\Delta}_{nw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{c_\beta}{1+\tau}\right)
-\left(\frac{\rho_\beta}{r_s}\right)\left(\frac{\tau_\varphi\,\tau_H\,\omega_0}{\tau_V}\right)\left(\frac{r_s}{w_{pw}}\right)^2,\\[0.5ex]
-\delta_l&= \frac{I_3}{{\mit\Delta}_{nw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^4\left(\frac{\tau_\varphi\,\tau_H\,\omega_0}{\tau_V}\right)^2\left(\frac{r_s}{w_{pw}}\right),\\[0.5ex]
+\left(\frac{\rho_\beta}{r_s}\right)\left(\frac{\tau_\varphi\,\tau_H\,\omega_{s\,0}}{\tau_V}\right)\left(\frac{r_s}{w_{pw}}\right)^2,\\[0.5ex]
+\delta_l&= \frac{I_3}{{\mit\Delta}_{nw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^4\left(\frac{\tau_\varphi\,\tau_H\,\omega_{s\,0}}{\tau_V}\right)^2\left(\frac{r_s}{w_{pw}}\right),\\[0.5ex]
 \epsilon_l &= \frac{\beta_l}{4\,{\mit\Delta}_{pw}(0)}\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_{LR}\,\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w_{pw}}{r_s}\right)^4.
 \end{align}
 
@@ -3293,7 +3293,7 @@ where
 x_h =\left(\frac{\alpha_l^2}{4\,\epsilon_l}\right)^{1/4}.
 \end{equation}
 The high-rotation solution branch ceases to exist when the normalized island width, $x$, exceeds the
-critical value, $x_h$---at which point the island phase velocity has been reduced to {\em half}\/ of its original value---and
+critical value, $x_h$---at which point the island rotation frequency has been reduced to {\em half}\/ of its original value---and
 there is a bifurcation to the low-rotation solution branch. 
 The low-rotation solution branch is characterized by $0\leq y\leq 1/\alpha_l$, and is such that
 \begin{equation}
@@ -3307,7 +3307,7 @@ The low-rotation solution branch ceases to exist when the normalized island widt
 $x_l$, and there is a bifurcation to the high-rotation solution branch. Note that $x_h\gg x_l$, which indicates that once the
 island chain has grown sufficiently to trigger a high-rotation to low-rotation bifurcation it is unlikely to ever attain a
 high-rotation state again (because it would have to shrink by a considerable factor to trigger the reverse bifurcation). 
-Note that, in the presence of a resistive wall, there is a forbidden band of island phase velocities: $\omega_0/\alpha_l < \omega< \omega_0/2$. The existence of this forbidden band has been verified experimentally (Gates \& Hender 1996).
+Note that, in the presence of a resistive wall, there is a forbidden band of tearing mode frequencies: $\omega_{s\,0}/\alpha_l < \omega< \omega_{s\,0}/2$. The existence of this forbidden band has been verified experimentally (Gates \& Hender 1996).
 
 It is clear from Equation~(\ref{e594}) that rotation braking due to eddy currents induced in the
 resistive wall has a {\em destabilizing}\/ effect on a tearing mode. In fact, if there is no
@@ -3324,8 +3324,8 @@ indicating that the normalized island width saturates at a value that is greater
 destabilized by the loss of wall stabilization, and also by the ion polarization effect associated with rotation braking. 
 
 \subsection{Locking to Static Error-Field}\label{error}
-Rotation braking due to interaction with a resistive wall can reduce the phase velocity of a tearing mode
-by a large factor, but it cannot reduce the velocity to zero (because the braking torque is zero when $\omega=0$).
+Rotation braking due to interaction with a resistive wall can reduce the rotation frequency of a tearing mode
+by a large factor, but it cannot reduce the frequency to zero (because the braking torque is zero when $\omega=0$).
 The later goal can be achieved by locking to a static error-field, a process that is greatly facilitated once the phase
 velocity of the tearing mode has been reduced to a comparatively small value by wall braking. 
 
@@ -3336,7 +3336,7 @@ Because
 the mode is locked (i.e., $\omega=0$), Equations~(\ref{e202}) and (\ref{e203}) yield
 \begin{equation}
 \frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s} = {\mit\Delta}_{pw} + ({\mit\Delta}_{nw}-{\mit\Delta}_{pw}) +
-\left(\frac{{\mit\Delta}_{nw} - {\Delta}_{pw}}{E_{sw}}\right)\frac{\hat{I}_c}{\hat{\mit\Psi}_s}.
+\left(\frac{{\mit\Delta}_{nw} - {\mit\Delta}_{pw}}{E_{sw}}\right)\frac{\hat{I}_c}{\hat{\mit\Psi}_s}.
 \end{equation}
 Let ${\mit\Psi}_s = |{\mit\Psi}_s|\,{\rm e}^{-{\rm i}\,\varphi_s}$. It is convenient to define the normalized vacuum
 flux,
@@ -3367,10 +3367,9 @@ x_u^{4} = x_v^{2}\,x^2\,\sin\varphi_s.
 \end{equation}
 Here, $x_u = w_u/w_{pw}$, and
 \begin{equation}
-w_u = \left[\frac{4}{{\mit\Delta}_{pw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{\tau_H^{\,2}\,\omega_0}{\tau_V}\right)\right]^{1/4}r_s.
+w_u = \left[\frac{4}{{\mit\Delta}_{pw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{\tau_H^{\,2}\,\omega_{s\,0}}{\tau_V}\right)\right]^{1/4}r_s.
 \end{equation}
-The left-hand side of Equation~(\ref{e613}) represents the viscous restoring torque that acts to prevent changes in the island
-chain's phase velocity. The right-hand side represents the electromagnetic locking torque exerted on the island chain by
+The left-hand side of Equation~(\ref{e613}) represents the viscous restoring torque that acts to prevent changes in the plasma rotation at the resonant surface. The right-hand side represents the electromagnetic locking torque exerted on the island chain by
 the error-field. It is clear from Equation~(\ref{e613}) that the error-field is only able to lock the island chain when
 $x_v\,x> x_u^2$, or, equivalently, 
 \begin{equation}
