@@ -1013,7 +1013,7 @@ viscosity tensor is greatly enhanced above the value predicted by the Braginskii
 plasma turbulence (Wesson 2011). Hence, it is reasonable to include the contribution of the enhanced perpendicular
 viscosity tensor to $\{ r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\}$. Our model form for $\{ r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\}$ is written
 \begin{equation}\label{e178}
-\{ r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\} = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right].
+\{ r\,\nabla\cdot \bpi_i\cdot{\bf e}_\theta\} = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^3\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^3\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right].
 \end{equation}
 Here, $\rho(r)$ is the equilibrium plasma mass density profile, $\tau_\theta(r)$ is the {\em poloidal flow-damping time}\/ [which
 is generally of order $(a/q\,R_0)^2\,\tau_i$], ${\mit\Omega}_{\theta\,{\rm nc}}(r)$ is the neoclassical poloidal angular velocity profile, and
@@ -1021,14 +1021,14 @@ $\mu_\perp(r)$ is a phenomenological perpendicular viscosity due to plasma turbu
 
 When evaluated with the zeroth-order ion flow, Equation~(\ref{e176}) reduces to 
 \begin{equation}\label{e179}
-4\pi^2\,R_0\left[\rho\,r^{\,3}\,\frac{\partial {\mit\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[\rho\,r^3\,\frac{\partial {\mit\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^3\,({\mit\Omega}_\theta-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^3\,\frac{\partial{\mit\Omega}_\theta}{\partial r}\right)\right]
 =T_{\theta\,s}\,\delta(r-r_s)+ S_\theta,
 \end{equation}
 where use has been made of Equation~(\ref{e178}). 
 Here, we have added a source term, $S_\theta(r)$, to the equation in order to account for the equilibrium poloidal flow. Let ${\mit\Omega}_{\theta\,0}(r)$ be the 
 unperturbed (by the tearing mode) ion poloidal angular velocity profile. It follows that 
 \begin{equation}
-S_\theta = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^{\,3}\,({\mit\Omega}_{\theta\,0}-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{d}{d r}\!\left(\mu_\perp\,r^{\,3}\,\frac{d{\mit\Omega}_{\theta\,0}}{d r}\right)\right].
+S_\theta = 4\pi^2\,R_0\left[ \frac{\rho}{\tau_\theta}\,r^3\,({\mit\Omega}_{\theta\,0}-{\mit\Omega}_{\theta\,{\rm nc}}) -\frac{d}{d r}\!\left(\mu_\perp\,r^3\,\frac{d{\mit\Omega}_{\theta\,0}}{d r}\right)\right].
 \end{equation}
 Hence, writing
 \begin{equation}
@@ -1038,14 +1038,14 @@ where ${\mit\Delta\Omega}_{\theta}(r,t)$ is the  modification to the ion poloida
 induced by the poloidal electromagnetic torque that develops at the resonant surface, Equation~(\ref{e179})
 yields 
 \begin{equation}
-4\pi^2\,R_0\left[\rho\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[\rho\,r^3\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^3\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^3\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
 =T_{\theta\,s}\,\delta(r-r_s).
 \end{equation}
 There is one further refinement that we can make to the previous equation. It turns out that neoclassical poloidal
-flow damping gives rise to an enhancement of poloidal ion inertia by a factor of $1+2\,q^{\,2}$ (Hirshman 1978). Hence,
+flow damping gives rise to an enhancement of poloidal ion inertia by a factor of $1+2\,q^2$ (Hirshman 1978). Hence,
 our final version of the perturbed plasma poloidal angular equation of motion becomes 
 \begin{equation}\label{e182}
-4\pi^2\,R_0\left[(1+2\,q^{\,2})\,\rho\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[(1+2\,q^2)\,\rho\,r^3\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho}{\tau_\theta}\,r^3\,{\mit\Delta\Omega}_\theta-\frac{\partial}{\partial r}\!\left(\mu_\perp\,r^3\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
 =T_{\theta\,s}\,\delta(r-r_s).
 \end{equation}
 
@@ -1082,7 +1082,7 @@ In most situations of interest, the perturbed angular velocity profiles, ${\mit\
 localized in the vicinity of the resonant surface (Fitzpatrick 1993). Hence, it is reasonable to express  the perturbed angular
 equations of motion, (\ref{e182}) and (\ref{e185}), in the simplified  forms
 \begin{align}\label{e188}
-4\pi^2\,R_0\left[(1+2\,q_s^{\,2})\,\rho_s\,r^{\,3}\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho_s}{\tau_{\theta\,s}}\,r^{\,3}\,{\mit\Delta\Omega}_\theta-\mu_{\perp\,s}\,\frac{\partial}{\partial r}\!\left(r^{\,3}\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
+4\pi^2\,R_0\left[(1+2\,q_s^{\,2})\,\rho_s\,r^3\,\frac{\partial {\mit\Delta\Omega}_\theta}{\partial t}+ \frac{\rho_s}{\tau_{\theta\,s}}\,r^3\,{\mit\Delta\Omega}_\theta-\mu_{\perp\,s}\,\frac{\partial}{\partial r}\!\left(r^3\,\frac{\partial{\mit\Delta\Omega}_\theta}{\partial r}\right)\right]
 &=T_{\theta\,s}\,\delta(r-r_s),\\[0.5ex]
 4\pi^2\,R_0^{\,3}\left[\rho_s\,r\,\frac{\partial {\mit\Delta\Omega}_\varphi}{\partial t}-\mu_{\perp\,s}\,\frac{\partial}{\partial r}\!\left(r\,\frac{\partial{\mit\Delta\Omega}_\varphi}{\partial r}\right)\right]
 =T_{\varphi\,s}\,\delta(r-r_s),\label{e189}
@@ -1581,7 +1581,7 @@ V(\hat{x},\zeta,\hat{t}) &= \hat{V}_\parallel + \left(\frac{1+\tau}{\tau}\right)
 J(\hat{x},\zeta,\hat{t}) &=-\left(\frac{2}{s_s}-1\right)\!\frac{1}{\hat{L}_s}+ \hat{\nabla}^2\tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
 U(\hat{x},\zeta,\hat{t}) &=  \hat{\nabla}^2\tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\label{e300}
 \end{align}
-where $\hat{t}=V_A\,t/r_s$, $\hat{\omega}=r_s\,\omega/V_A$, and $\omega$ is the natural frequency of the tearing mode in the laboratory frame. 
+where $\hat{t}=V_A\,t/r_s$, $\hat{\omega}=r_s\,\omega/V_A$, and $\omega$ is the frequency of the tearing mode in the laboratory frame. 
 Substituting Equations~(\ref{e294})--(\ref{e300}) into the four-field model, (\ref{e264})--(\ref{e269}), and only retaining terms that
 are first order in perturbed quantities, we obtain the following set of linear layer equations:
 \begin{align}\label{e301}
@@ -2302,11 +2302,12 @@ where
 \begin{align}
 v&=\frac{\omega_{s\,0}+{\mit\Delta}\omega_E}{\omega_{s\,0}},\\[0.5ex]
 T_{\rm VS}(v) &= 1- v,\\[0.5ex]
-T_{\rm EM}(v) &= \frac{1}{4}\,\frac{v}{\zeta_s^{\,2}+v^2}
+T_{\rm EM}(v) &= \frac{1}{4}\,\frac{v}{\zeta_s^{2}+v^2}
 \left(\frac{|\tilde{I}_c|}{\tilde{I}_{c\,{\rm crit}}}\right)^2,\\[0.5ex]
 \zeta_s &= \frac{(-{\mit\Delta}_{nw})}{\tau_s\,\omega_{s\,0}}\ll 1,\\[0.5ex]
-\tilde{I}_{c\,{\rm crit}}&= (\epsilon_s\,s_s)\,(\omega_{s\,0}\,\tau_H)\left/
-\left[\frac{q_s}{\epsilon_s}\left(\frac{\sqrt{\tau_\varphi\,\tau_i/\mu_{00}^i}}{\tau_s}\right)+2\left(\frac{\tau_\varphi}{\tau_s}\right) \ln\!\left(\frac{a}{r_s}\right)\right]^{1/2}\right..\label{e420}
+\tilde{I}_{c\,{\rm crit}}&=\epsilon_s\,s_s\left(\frac{\tau_s\,\tau_H\,\omega_{s\,0}}{\tau_V}\right),\label{e420}
+\\[0.5ex]
+\tau_V&= \frac{q_s}{\epsilon_s}\left(\frac{\tau_\varphi\,\tau_i}{\mu_{00}^i}\right)^{1/2}+ 2\ \ln\!\left(\frac{a}{r_s}\right)\tau_\varphi.\label{e421a}
 \end{align}
 Here, use has been made of the identities
 \begin{align}\label{e417a}
@@ -2373,7 +2374,7 @@ Finally, the criterion for the validity of the theory presented in this section 
 chain driven at the resonant surface, just prior to mode penetration, is much less than the linear layer width (so that the resonant
 plasma response is governed by linear physics). This is the case provided that (Fitzpatrick 1998)
 \begin{equation}
-\hat{\delta}\gg 4\,S^{-2/5}\left(\frac{q_s}{\epsilon_s}\right)^{2/5}\left[\frac{q_s}{\epsilon_s}\left(\frac{\sqrt{\tau_\varphi\,\tau_i/\mu_{00}^i}}{\tau_R}\right)+2\left(\frac{\tau_\varphi}{\tau_R}\right) \ln\!\left(\frac{a}{r_s}\right)\right]^{-1/5}.
+\hat{\delta}\gg 4\left(\frac{q_s}{\epsilon_s}\right)^{2/5}\left(\frac{\tau_H^{\,2}}{\tau_R\,\tau_V}\right)^{1/5}.
 \end{equation}
 
 \subsection{Scaling Analysis}
@@ -2431,7 +2432,7 @@ and vice versa. The change in the ion rotation at the resonant surface is predom
 \begin{equation}
 \rho_\ast < \left(\frac{\epsilon_s}{q_s}\right)\left(\frac{m_i}{m_e}\right)^{1/4}\beta_\ast,
 \end{equation}
-and vice vera. 
+and vice versa. 
 
 Let us define 
 \begin{align}
@@ -2559,7 +2560,7 @@ N &\rightarrow -\hat{V}_\ast\,\hat{x},\\[0.5ex]
 V&\rightarrow \hat{V}_\parallel,\\[0.5ex]
 J& \rightarrow -\frac{2}{q_s\hat{R}_0} + \frac{1}{\hat{L}_s}.
 \end{align}
-Here, $\omega = \hat{\omega}\,V_A/r_s$ is the frequency of the tearing mode  in the
+Here, $\omega = \hat{\omega}\,V_A/r_s$ is the rotation frequency of the tearing mode  in the
 laboratory frame,
 \begin{equation}
 s = {\rm sgn}(\hat{x}),
@@ -2618,7 +2619,7 @@ Furthermore,
 \end{align}
 Finally,
 \begin{equation}
-\frac{1}{L_n}= -\frac{1}{{\mit\Gamma}\,(1-c_\beta^{\,2})}\left(\frac{d\ln n}{dr}\right)_{r_s}
+L_n= \left[-\frac{1}{{\mit\Gamma}\,(1-c_\beta^{\,2})}\left(\frac{d\ln n}{dr}\right)_{r_s}\right]^{-1}
 \end{equation}
 is the {\em density gradient scalelength}\/  at the resonant surface, 
 and the critical reduced island width, $w_c$, is defined in Equation~(\ref{wcdef}). 
@@ -3023,7 +3024,7 @@ I_1 &= 2\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{
 I_2&= \int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} =0.1955,\\[0.5ex]
 I_3&= \int_1^\infty d_{\mit\Omega}\!\left(F_i^{\,2}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} =0.4711.
 \end{align}
-Here, use has been made of Equations~(\ref{e317a}), (\ref{e318a}), (\ref{e481}), and (\ref{e482}). Note that $d/dt$ in Equation~(\ref{e559}) represents a time derivative in the island rest frame. 
+Here, use has been made of Equations~(\ref{e317a}), (\ref{e318a}), (\ref{e481}), and (\ref{e482}). 
 
 \section{Isolated Magnetic Island Chains}
 \subsection{Introduction}
@@ -3234,7 +3235,7 @@ is non-zero because, according to Equation~(\ref{e521a}), (\ref{e530}), (\ref{e5
 braking torque exerted on the plasma in the immediate vicinity of the island chain, due to interaction with the resistive wall, 
 generates finite ion flow in the island rest frame. 
 
-Assuming that the tearing mode oscillates at its natural frequency, Equations~(\ref{e210a}) and (\ref{e574}) imply that
+Assuming that the tearing mode rotates at its natural frequency, Equations~(\ref{e210a}) and (\ref{e574}) imply that
 \begin{equation}
 \omega = \omega_{s\,0} -\sum_{p=1,\infty}(\alpha_p+\beta_p),
 \end{equation}
@@ -3242,22 +3243,18 @@ where $\omega_{s\,0}=\omega_{\perp\,i}$ is the unperturbed natural frequency. No
 assumed to take its unperturbed (by any electromagnetic torques that develop in the resonant region) value. Furthermore, in the following, $\omega_{s\,0}$ is
 assumed to be positive for the sake of definiteness. The modifications to the analysis when $\omega_{s\,0}$ is
 negative are trivial. 
-The previous equation can be combined with Equations~(\ref{e205}), (\ref{e206}), (\ref{e417a}), (\ref{e418a}), (\ref{e456}),
+The previous equation can be combined with Equations~(\ref{e205}), (\ref{e206}), (\ref{e421a}), (\ref{e417a}), (\ref{e418a}), (\ref{e456}),
 and (\ref{e584}) to give the following torque balance equation:
 \begin{equation}\label{e588}
 \omega_{s\,0} - \omega = \frac{1}{4}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]
-\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w}{r_s}\right)^4\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right),
-\end{equation}
-where
-\begin{equation}
-\tau_V = 2\,\ln\!\left(\frac{a}{r_s}\right)\tau_\varphi + \left(\frac{q_s}{\epsilon_s}\right)\left(\frac{\tau_i\,\tau_\varphi}{\mu_{00}^i}\right)^{1/2}.
+\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w}{r_s}\right)^4\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right).
 \end{equation}
 The left-hand side of Equation~(\ref{e588}) represents the viscous restoring torque that acts to prevent changes in plasma rotation at the resonant surface. The right-hand side represents the electromagnetic braking torque acting on the island chain due to eddy currents induced in the
 resistive wall. 
 
 Let
 \begin{align}
-x &= \frac{x}{x_{pw}},\\[0.5ex]
+x &= \frac{w}{w_{pw}},\\[0.5ex]
 y &= \frac{\omega}{\omega_{s\,0} },\\[0.5ex]
 T &= \frac{t}{\tau_{pw}},\\[0.5ex]
 \tau_{pw}&= \frac{I_1\,\tau_R}{{\mit\Delta}_{pw}(0)}\,\frac{W_{pw}}{r_s}.
@@ -3273,11 +3270,11 @@ respectively,
 where
 \begin{align}
 \alpha_l & = \omega_{s\,0}\,\tau_{LR},\\[0.5ex]
-\beta_l &= 1 - \frac{{\mit\Delta}_{pw}(0)}{{\mit\Delta}_{nw}(0)},\\[0.5ex]
-\gamma_l&= \frac{I_2}{{\mit\Delta}_{nw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{c_\beta}{1+\tau}\right)
+\beta_l &= \frac{{\mit\Delta}_{nw}(0)}{{\mit\Delta}_{pw}(0)}-1,\\[0.5ex]
+\gamma_l&= \frac{I_2}{{\mit\Delta}_{pw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{c_\beta}{1+\tau}\right)
 \left(\frac{\rho_\beta}{r_s}\right)\left(\frac{\tau_\varphi\,\tau_H\,\omega_{s\,0}}{\tau_V}\right)\left(\frac{r_s}{w_{pw}}\right)^2,\\[0.5ex]
-\delta_l&= \frac{I_3}{{\mit\Delta}_{nw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^4\left(\frac{\tau_\varphi\,\tau_H\,\omega_{s\,0}}{\tau_V}\right)^2\left(\frac{r_s}{w_{pw}}\right),\\[0.5ex]
-\epsilon_l &= \frac{\beta_l}{4\,{\mit\Delta}_{pw}(0)}\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_{LR}\,\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w_{pw}}{r_s}\right)^4.
+\delta_l&= \frac{I_3}{{\mit\Delta}_{pw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^4\left(\frac{\tau_\varphi\,\tau_H\,\omega_{s\,0}}{\tau_V}\right)^2\left(\frac{r_s}{w_{pw}}\right),\\[0.5ex]
+\epsilon_l &= \frac{[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]}{4}\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_{LR}\,\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w_{pw}}{r_s}\right)^4.
 \end{align}
 
 In conventional tokamaks, it is generally the case that $\alpha_l\gg 1$. In other words, in the absence of wall braking,
