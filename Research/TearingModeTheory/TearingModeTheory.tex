@@ -651,6 +651,11 @@ where
 \begin{equation}
 J_z(r)= \frac{R_0\,\mu_0\,j_z(r)}{B_z}.
 \end{equation}
+Note that Equation~(\ref{e97}) is singular at the so-called {\em resonant}\/ magnetic flux-surface, radius $r=r_s$, at which 
+\begin{equation}\label{e104}
+q(r_s)= \frac{m}{n}.
+\end{equation}
+At the resonant surface, ${\bf k}\cdot{\bf B}=0$, where ${\bf k} = (0,\,m/r,\,-n/R_0)$ is the wavevector of the tearing perturbation. 
 
 \subsection{Solution in Presence of Perfectly-Conducting Wall}\label{perfect}
 Suppose that the plasma occupies the region $0\leq r\leq a$, where $a$ is the plasma {\em minor radius}. (By definition, $a\ll R_0$ in a large aspect-ratio tokamak.) It follows that
@@ -671,13 +676,6 @@ that satisfies
 \hat{\psi}_s(r\geq r_w) &= 0.\label{e103}
 \end{align}
 
-Note that Equation~(\ref{e100}) is singular at the so-called {\em resonant}\/ magnetic flux-surface, radius $r=r_s$, at which 
-\begin{equation}\label{e104}
-q(r_s)= \frac{m}{n}.
-\end{equation}
-At the resonant surface, ${\bf k}\cdot{\bf B}=0$, where ${\bf k} = (0,\,m/r,\,-n/R_0)$ is the wavevector of the tearing perturbation. 
-The value of $\delta\psi(r,t)$ at the resonant surface---namely, ${\mit\Psi}_s(t)$---is known as the {\em reconnected magnetic flux}\/ (Fitzpatrick 1993). (See Section~\ref{dis1}.)
-Note that ${\mit\Psi}_s$ is, in general, a complex quantity. 
 Let $\rho=(r-r_s)/r_s$. 
 The solution of Equation~(\ref{e100}) in the vicinity of the resonant surface is
 \begin{equation}\label{e105}
@@ -696,6 +694,8 @@ Moreover,  the real parameters ${\mit\Delta}_{s+}$ and  ${\mit\Delta}_{s-}$ are 
 and the boundary conditions (\ref{e101})--(\ref{e103}). Note that, in general, $\delta\psi$ is continuous across the resonant surface (in accordance with Maxwell's equations),
 whereas $\partial\delta\psi/\partial r$ is discontinuous. The discontinuity in $\partial \delta\psi/\partial r$ implies the presence of a radially-thin, helical,  current sheet  at the resonant surface. This current sheet can only be resolved by retaining more terms in the perturbed plasma equation of motion, (\ref{e96}). (See Section~\ref{linear}.) 
 
+The value of $\delta\psi(r,t)$ at the resonant surface---namely, ${\mit\Psi}_s(t)$---is known as the {\em reconnected magnetic flux}\/ (Fitzpatrick 1993). (See Section~\ref{dis1}.)
+Note that ${\mit\Psi}_s$ is, in general, a complex quantity. 
 The complex quantity
 \begin{equation}\label{e109}
 {\mit\Delta\Psi}_s = \left[r\,\frac{\partial \delta\psi}{\partial r}\right]_{r_{s-}}^{r_{s+}}
@@ -3006,7 +3006,7 @@ Equations~(\ref{e524a}) and (\ref{e542}) can be combined to give
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= \frac{2\,\epsilon_\beta\,\epsilon_d}{\hat{w}}
 \int_{1+}^\infty d_{\mit\Omega}(M\,Y_i)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
-+\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega}
++\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega}.
 \end{align}
 Making use of Equations~(\ref{e518}), (\ref{e526}), and (\ref{e530}), the previous equation yields
 \begin{align}

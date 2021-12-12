@@ -46,14 +46,15 @@ The perturbed magnetic field associated with the tearing mode is written $\delta
 where
 $\delta\psi(r,\theta,\varphi,t)= \delta\psi(r,t)\,\exp[\,{\rm i}\,(m\,\theta-n\,\varphi)]$, 
 and $\varphi=z/R_0$ is a simulated toroidal angle. 
-Throughout most of the plasma $\delta\psi(r,t)$ satisfies the
+Throughout most of the plasma, $\delta\psi(r,t)$ satisfies the
 {\em cylindrical tearing mode equation}:\cite{wes}
 \begin{equation}\label{e3}
 \frac{\partial^2\delta\psi}{\partial r^2} + \frac{1}{r}\,\frac{\partial\delta\psi}{\partial r}-\frac{m^2}{r^2}\,\delta\psi - \frac{J_z'\,\delta\psi}{r\,(1/q-n/m)}=  0,
 \end{equation}
 where 
 $J_z(r)= R_0\,\mu_0\,j_z(r)/B_z$,
-and $j_z(r)$ is the equilibrium `toroidal' current density. Here, $'\equiv d/dr$.
+and $j_z(r)$ is the equilibrium `toroidal' current density. Here, $'\equiv d/dr$.  Note that Eq.~(\ref{e3}) is singular at the so-called {\em resonant}\/ magnetic flux-surface, radius $r=r_s$, at which 
+$q(r_s)= m/n$. 
 
 \subsection{Outer Solution}\label{perfect}
 Suppose that the plasma occupies the region $0\leq r\leq a$, where $a$ is the plasma  minor radius. It follows that
@@ -77,12 +78,10 @@ $\hat{\psi}_w(r\leq r_s) = 0$,
 $\hat{\psi}_w(r_w) = 1$,
 and $\hat{\psi}_w(\infty) = 0$.
 
-Note that Eq.~(\ref{e100}) is singular at the so-called {\em resonant}\/ magnetic flux-surface, radius $r=r_s$, at which 
-$q(r_s)= m/n$. 
-As is well-known, the general solution of Eq.~(\ref{e100} is such that $\delta\psi$ is continuous across the resonant surface,
+As is well known, the general solution of Eq.~(\ref{e100}) is such that $\delta\psi$ is continuous across the resonant surface,
 whereas $\partial\delta\psi/\partial r$ is discontinuous. The discontinuity in $\partial \delta\psi/\partial r$ implies the presence of a helical  current sheet  at the resonant surface. 
 The complex quantity 
-\begin{equation}
+\begin{equation}\label{e108}
 {\mit\Psi}_s(t)= \delta\psi(r_s,t) 
 \end{equation}
 parameterizes the amplitude and phase of the
@@ -109,21 +108,27 @@ Here, $E_{ss}= [r\,d\hat{\psi}_s/dr]_{r_{s-}}^{r_{s+}}$,
 $E_{ww}= [r\,d\hat{\psi}_w/dr]_{r_{w-}}^{r_{w+}}$,
 $E_{sw} =[r\,{d\hat\psi}_w/dr]_{r=r_{s+}}$, and 
 $E_{ws} =-[r\,{d\hat\psi}_s/dr]_{r=r_{w-}}$
-are real quantities determined by the solutions of Eqs.~(\ref{e100}) and (\ref{e100a}) in the outer region.
+are real quantities determined by the solutions of Eqs.~(\ref{e100}) and (\ref{e100a}).
 It is easily demonstrated that 
 $E_{sw} = E_{ws}$.\cite{rf1993}
 
 Standard electromagnetic theory applied to the resistive wall reveals that\,\cite{nave,rf1993}
-\begin{equation}
+\begin{equation}\label{e9}
 {\mit\Delta\Psi}_w = \tau_w\,\frac{d{\mit\Psi}_w}{dt},
 \end{equation}
 where
 $\tau_w= \mu_0\,r_w\,\delta_w/\eta_w$.
 Here, $\eta_w$ and $\delta_w$ are the electrical resistivity and radial thickness  of the wall, respectively. 
+In deriving Eq.~(\ref{e9}), we have made use of the so-called {\em thin wall}\/ approximation, according to
+which the radial variation of $\delta\psi$ across the wall is negligible.  The thin wall approximation is
+valid as long as
+\begin{equation}
+\frac{r_w}{\delta_w}\gg \tau_w\left|\frac{d\ln{\mit\Psi}_w}{dt}\right|.
+\end{equation}
 
 Assuming an $\exp(-{\rm i}\,\omega\,t)$ time dependence of perturbed quantities, the previous four equations
 can be combined to give
-\begin{equation}
+\begin{equation}\label{e11}
 \frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}= {\mit\Delta}_{pw} + \frac{{\mit\Delta}_{nw}-{\mit\Delta}_{pw}}{1-{\rm i}\,\omega\,\tau_{LR}},
 \end{equation}
 where ${\mit\Delta}_{pw}= E_{ss}$ is the  tearing stability index\cite{fkr} when the wall is perfectly conducting,
@@ -175,7 +180,7 @@ $V_A =B_z/\sqrt{\mu_0\,n_0\,m_i}$,
 $d_i = \sqrt{m_i/(n_0\,e^{\,2}\,\mu_0)}$,  $\hat{d}_i=d_i/r_s$, 
 $\epsilon_s=r_s/R_0$, and $\hat{\nabla} = r_s\,\nabla$. 
 
-Our resonant plasma response model takes the form:\cite{fw}
+Our resonant plasma response model takes the form:\,\cite{fw}
 \begin{align}
 \frac{\partial\psi}{\partial\hat{t}}&= [\phi,\psi] -\left(\frac{\tau}{1+\tau}\right)(1+\lambda_e)\,[N,\psi]
 +\hat{\eta}_\parallel\,J + \hat{E}_\parallel,\\[0.5ex]
@@ -187,7 +192,7 @@ Our resonant plasma response model takes the form:\cite{fw}
 Here, $[A,B]\equiv \hat{\nabla} A\times \hat{\nabla} B\cdot {\bf n}$, $\hat{t} = t/(r_s/V_A)$, $\hat{\eta}_{\parallel,\perp} = \eta_{\parallel,\perp}/(\mu_0\,r_s\,V_A)$, $\hat{E}_\parallel = E_\parallel/(B_z\,V_A)$, 
 $\hat{\chi}_\varphi= \chi_\varphi/(r_s\,V_A)$, where $\eta_{\parallel,\perp}$ is the parallel/perpendicular plasma electrical
 resistivity at the resonant surface, $E_\parallel$ the parallel inductive electric field that maintains the equilibrium toroidal
-plasma current in the vicinity of the resonant surface, and $\chi_\varphi$  the anomalous perpendicular ion momentum
+plasma current in the vicinity of the resonant surface, and $\chi_\varphi$  the (anomalous) perpendicular ion momentum
 diffusivity at the resonant surface. 
 Moreover, $d_\beta=c_\beta\,d_i$, and $\hat{d}_\beta=d_\beta/r_s$, where $c_\beta = \sqrt{\beta/(1+\beta)}$, and
 $\beta=(5/3)\,\mu_0\,p_0/B_z^{\,2}$. Here, $d_\beta$ is usually referred to as the {\em ion sound radius}. Furthermore,
@@ -213,7 +218,7 @@ It is convenient  to work in a frame of reference that corotates with the tearin
 reconnected flux, ${\mit\Psi}_s$, is assumed to be a positive real
 quantity. If $W$ is the full radial width of the magnetic island chain that develops at the resonant surface then it is
 helpful to define the reduced island width:
-\begin{equation}
+\begin{equation}\label{e26a}
 w = \frac{W}{4}= \left(\frac{L_s\,{\mit\Psi}_s}{B_z}\right)^{1/2}.
 \end{equation}
 It is assumed that $w\ll r_s$. Let $\hat{w}=w/r_s$. 
@@ -242,7 +247,7 @@ and
 \end{equation}
 The parameter $\hat{V}_E'$ is introduced  into the analysis in order to take into account the fact that the plasma rotation profile in the outer region develops a
 gradient discontinuity at the resonant surface in response to the nonlinear localized electromagnetic torque that emerges 
-at the surface. Finally, 
+at the surface.\cite{fw} Finally, 
  $\hat{E}_\parallel =(2/s_s-1) \,(\hat{\eta}_\parallel/\hat{L}_s)$.
  
 \section{Nonlinear Solution of Resonant Plasma Response Model}
@@ -296,7 +301,7 @@ L_n= \left[-\frac{1}{{\mit\Gamma}\,(1-c_\beta^{\,2})}\left(\frac{d\ln n}{dr}\rig
 \end{equation}
 is the {\em density gradient scalelength}\/  at the resonant surface. 
 
-Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary conditions [see Eqs.~(\ref{e26})--(\ref{e30})] 
+Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary conditions [cf.\ Eqs.~(\ref{e26})--(\ref{e30})] 
 \begin{align}
 {\mit\Psi}&\rightarrow \frac{X^{2}}{2} + \cos\zeta,\label{e483}\\[0.5ex]
 {\mit\Phi} &\rightarrow v\,X +\frac{ s\,v'\,X^{2}}{2},\label{e484}\\[0.5ex]
@@ -306,8 +311,8 @@ Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary cond
 \end{align}
 as $|X|\rightarrow\infty$.  Here,
 \begin{align}
-v(T) &= \frac{\omega-\omega_E}{\omega_\ast},\label{e488}\\[0.5ex]
-v'(T) &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.\label{e489}
+v &= \frac{\omega-\omega_E}{\omega_\ast},\label{e488}\\[0.5ex]
+v' &= -\frac{\hat{w}}{2\,\omega_\ast}\left[r\,\frac{d\omega_E}{dr}\right]_{r_{s-}}^{r_{s+}}.\label{e489}
 \end{align}
 Note that ${\mit\Psi}$, ${\mit\Phi}$, ${\cal N}$, ${\cal V}$, and ${\cal J}$ are all ${\cal O}(1)$ quantities.
 Note, further,  that the boundary conditions (\ref{e483})--(\ref{e487}),
@@ -321,9 +326,7 @@ are consistent with the standard large-aspect ratio, low-$\beta$ orderings used 
 plasmas. As will become apparent, the ordering $\epsilon_d\ll 1$ ensures that the island chain is
 sufficiently wide that ion acoustic waves propagating parallel to the magnetic field are able to smooth out any
 variations in the normalized electron number density, ${\cal N}$, around magnetic flux-surfaces.\cite{scott} The fact that $\epsilon_d\ll 1$ implies that
-\begin{equation}
-w \gg \rho_\beta,
-\end{equation}
+$w \gg \rho_\beta$,
 where
 \begin{equation}
 \rho_\beta = \left(\frac{L_s}{L_n}\right)d_\beta
@@ -331,7 +334,7 @@ where
 is a characteristic lengthscale that is of order the ion poloidal gyroradius. 
  The orderings $\epsilon_\eta\ll 1$, $\epsilon_\chi\ll 1$, and $\epsilon_D\ll 1$ ensure that the island
 chain is sufficiently wide that the perpendicular diffusion of magnetic flux, momentum, and particles are not dominant
-effects in the rescaled four-field equations. We shall also assume that $w/w_c\sim{\cal O}(1)$. In other words, the
+effects in the rescaled resonant response equations. We shall also assume that $w/w_c\sim{\cal O}(1)$. In other words, the
 island chain is sufficiently wide for the parallel diffusion of particles to compete with perpendicular diffusion.\cite{rff} 
 
 Suppose that 
@@ -445,11 +448,11 @@ The {\em flux-surface average operator}, $\langle\cdots\rangle$, is defined\,\ci
 where $\zeta_0=\cos^{-1}({\mit\Omega})$ and $0\leq\zeta_0\leq\pi$. 
 It follows that
 $\langle\{A,{\mit\Omega}\}\rangle = 0$
-for {\em any}\/ $A(s,{\mit\Omega},\zeta,T)$. It is helpful to define
+for any $A(s,{\mit\Omega},\zeta,T)$. It is helpful to define
 $\tilde{A}  \equiv A - \langle A\rangle/\langle 1\rangle$.
 It follows that 
 $\langle \tilde{A}\rangle =0$
- for {\em any}\/ $A(s,{\mit\Omega},\zeta,T)$.
+ for any $A(s,{\mit\Omega},\zeta,T)$.
 
 Equation~(\ref{e509}) yields 
 \begin{equation}\label{e513}
@@ -488,7 +491,10 @@ can write
 {\cal J}_0({\mit\Omega},\zeta)= 
 \frac{1}{2}\,d_{\mit\Omega}\!\left(M\,Y_i\right)\widetilde{X^2}+ \frac{1}{\epsilon_\beta\,\epsilon_d\,\epsilon_\eta}\frac{d(\ln \hat{w}^{2})}{dT}\,\frac{\langle\cos\zeta\rangle}{\langle 1\rangle},
 \end{equation}
-where use has been made of Eq.~(\ref{e513}). Here, $Y_i= M + [1/(1+\tau)]\,L$. 
+where use has been made of Eq.~(\ref{e513}). Here, 
+\begin{equation}\label{yi}
+Y_i= M + \left(\frac{1}{1+\tau}\right)L.
+\end{equation} 
 The first term on the right-hand side of the previous equation represents the parallel return current driven by the perpendicular {\em polarization current}\/ associated with the
 acceleration of the ion fluid around the magnetic separatrix of the island chain.\cite{smol1,smol2} 
 In fact, it is easily seen that if the ion fluid could pass freely through the separatrix (i.e., ${\mit\Phi}_0\propto X$ and ${\cal N}_0\propto X$) then the term in question would be zero. The second term on the right-hand side of the previous equation represents the parallel current driven
@@ -534,7 +540,7 @@ Y_i({\mit\Omega},T)=\frac{v'(T)}{\int_1^\infty \!\frac{d{\mit\Omega}}{\langle X^
 \begin{array}{llr}
 0&&-1\leq {\mit\Omega}\leq 1\\[0.5ex]
 \int_1^{\mit\Omega}\! \frac{d{\mit\Omega}'}{\langle X^4\rangle}&~~&{\mit\Omega}>1
-\end{array}\right.
+\end{array}\right..
 \end{equation}
 Here, we have rejected, as unphysical, the solution that blows up as ${\mit\Omega}^{\,1/2}$ as ${\mit\Omega}\rightarrow\infty$. 
 We have also made use of the fact that $Y_i=0$ within the magnetic separatrix of the island chain. Finally, we have  demanded that the ion
@@ -563,7 +569,7 @@ Hence, we conclude that the lowest-order ion parallel flow is unaffected by the 
 \subsection{Asymptotic Matching}
 Now that we have solved the resonant response model in the immediate vicinity of the magnetic island chain, it is
 necessary to asymptotically match this solution to the solution in the outer region. 
-It is easily seen that  
+It is easily seen from Eqs.~(\ref{e108}) and (\ref{e109}) that  
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}{\mit\Psi}_s}{{\mit\Psi}_s}\right)&=\frac{2}{\hat{w}}\int_{-\infty}^{\infty}\oint
 \partial_X^{\,2}{\mit\Psi}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
@@ -594,7 +600,7 @@ The previous two equations can also be written
 
 Equations~(\ref{e528a}) and (\ref{e543}) can be combined to give\,\cite{fw,fw1}
 \begin{align}
-{\rm Im}\!\left(\frac{{\mit\Delta\Psi}_s}{\hat{\mit\Psi}_s}\right) &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_1^\infty
+{\rm Im}\!\left(\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}\right) &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_1^\infty
 \left\langle X^{2}\,d_{\mit\Omega}\!\left[d_{\mit\Omega}(X^3\,d_{\mit\Omega}Y_i)\right]\right\rangle d{\mit\Omega}\nonumber\\[0.5ex]
 &=\frac{4\,\epsilon_\beta\,\epsilon_d\,\epsilon_\chi}{\hat{w}}\int_1^\infty d_{\mit\Omega}\!\left(-\langle X\rangle\,Y_i
 +2\,\langle X^3\rangle\,d_{\mit\Omega} Y_i + \langle X^5\rangle\,d_{\mit\Omega}^{\,2} Y_i\right)d{\mit\Omega}\nonumber\\[0.5ex]
@@ -611,7 +617,7 @@ Equations~(\ref{e524a}) and (\ref{e542}) can be combined to give
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}{\mit\Psi}_s}{{\mit\Psi}_s}\right)&= \frac{2\,\epsilon_\beta\,\epsilon_d}{\hat{w}}
 \int_{1+}^\infty d_{\mit\Omega}(M\,Y_i)\left\langle\widetilde{X^2}\,\cos\zeta\right\rangle d{\mit\Omega}
-+\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega}
++\frac{4}{\epsilon_\eta\,\hat{w}}\,\frac{d(\ln \hat{w}^2)}{dT}\int_{-1}^\infty \frac{\langle \cos\zeta\rangle^2}{\langle 1\rangle}\,d{\mit\Omega}. 
 \end{align}
 Making use of Eqs.~(\ref{e526}) and (\ref{e530}), the previous equation yields
 \begin{align}
@@ -639,10 +645,92 @@ I_2&= \int_1^\infty d_{\mit\Omega}\!\left(\frac{F_i}{\langle X^2\rangle}\right)\
 I_3&= \int_1^\infty d_{\mit\Omega}\!\left(F_i^{\,2}\right)\left(\langle X^4\rangle - \frac{\langle X^2\rangle^2}{\langle 1\rangle}\right)d{\mit\Omega} =0.4711.
 \end{align}
 
+\section{Isolated Magnetic Island Chains}
+\subsection{Introduction}
+Suppose, for the sake of argument,  that the wall surrounding the plasma is perfectly conducting (i.e.\, $\tau_{LR}\rightarrow\infty$). In this case, Eq.~(\ref{e11}) yields 
+\begin{equation}\label{e563}
+\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s} ={\mit\Delta}_{pw},
+\end{equation}
+where ${\mit\Delta}_{pw}$ is the (real) perfect-wall tearing stability index. It is clear from the previous equation that
+\begin{equation}\label{e559x}
+{\rm Im}\!\left(\frac{{\mit\Delta\Psi}_s}{{\mit\Psi}_s}\right) = 0,
+\end{equation}
+which implies that zero electromagnetic torque is exerted at the resonant surface. In this respect, the magnetic island chain that develops at the resonant surface can be termed `isolated'. 
+
+\subsection{Rutherford Island Width Evolution Equation}
+Equation~(\ref{e563}) implies that 
+\begin{equation}\label{e560x}
+{\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right) = {\mit\Delta}_{pw}.
+\end{equation}
+Equations~(\ref{e26a}), (\ref{e559}), (\ref{e559x}), and (\ref{e560x}) yield the {\em Rutherford island width evolution equation}:\,\cite{rutherford}
+\begin{equation}\label{e561}
+I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)= {\mit\Delta}_{pw}.
+\end{equation}
+ According to the Rutherford equation, if the perfect-wall tearing stability index is positive then the width of the magnetic
+island chain at the resonant surface grows  algebraically on the resistive evolution timescale, $\tau_R$. 
+
+\subsection{Saturated Island Width}\label{sat}
+Equation~(\ref{e561}) gives the impression that if ${\mit\Delta}_{pw}>0$ then the width of the magnetic island chain 
+grows without limit. In fact, this is not the case. Instead, the width of the island chain eventually stops growing, and the
+tearing mode attains a saturated steady state. In order to model this effect, it is necessary to perform the
+asymptotic matching between the inner and outer regions to higher order, taking into account the finite
+width of the island chain.\cite{white,thy,esc,mit}
+
+For the case of an island chain that is sufficiently wide to flatten  the density and temperature profiles within its magnetic separatrix, the appropriate saturation theory is given in Ref.~\onlinecite{has}.
+According to this theory, ${\mit\Delta}_{pw}$ in Eq.~(\ref{e561}) must be replaced by
+\begin{equation}\label{e562}
+{\mit\Delta}_{pw}(0) - \left(0.8\,\alpha_s^{2}-0.27\,\beta_s - 0.09\,\alpha_s\right)\frac{W}{r_s},
+\end{equation}
+where ${\mit\Delta}_{pw}(0)$ denotes the zero-island-width tearing stability index, $\alpha_s$ is defined in  Eq.~(\ref{e108}),
+and
+\begin{equation}
+\beta_s = -\left(\frac{r\,q\,J_z''}{s}\right)_{r=r_s}.
+\end{equation}
+
+Equations~(\ref{e561}) and (\ref{e562}) can be combined to give
+\begin{equation}\label{e564}
+I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)= {\mit\Delta}_{pw}(0)- \left(0.8\,\alpha_s^{2}-0.27\,\beta_s - 0.09\,\alpha_s\right)\frac{W}{r_s}.
+\end{equation}
+If we define
+\begin{align}
+W_{\rm sat} &= \frac{{\mit\Delta}_{pw}(0)\,r_s}{0.8\,\alpha_s^{2}-0.27\,\beta_s - 0.09\,\alpha_s},\\[0.5ex]
+\tau_{\rm sat} &= \frac{I_1\,\tau_R}{{\mit\Delta}_{pw}(0)}\,\frac{W_{\rm sat}}{r_s},
+\end{align}
+then Eq.~(\ref{e564}) reduces to
+\begin{equation}
+\tau_{\rm sat} \,\frac{d}{dt}\!\left(\frac{W}{W_{\rm sat}}\right) = 1-\frac{W}{W_{\rm sat}}.
+\end{equation}
+The previous equation can be solved to give
+\begin{equation}
+W(t) = W_{\rm sat}\left(1-{\rm e}^{-t/\tau_{\rm sat}}\right),
+\end{equation}
+assuming that the island width is zero at $t=0$. It follows that the width of the island chain does not grow without limit, 
+but instead eventually attains the saturated 
+value $W_{\rm sat}$. Moreover, the time required to attain saturation, $\tau_{\rm sat}$, is of order $\tau_R\,(W_{\rm sat}/r_s)$. 
+
+\subsection{Natural Frequency}\label{sphase1}
+Equations~(\ref{e545}) and (\ref{e559x}) imply that 
+\begin{equation}\label{evz}
+v'=0 
+\end{equation}
+for an isolated magnetic island chain. It follows from
+ Equations~(\ref{e488}), (\ref{e506}), (\ref{yi}), (\ref{e526}), (\ref{e530}), and (\ref{evz}) yield $v=-1/(1+\tau)$, or
+\begin{equation}\label{e574}
+\omega= \omega_{\perp\,i},
+\end{equation}
+where
+\begin{equation}
+\omega_{\perp\,i} = \omega_E + \omega_{\ast\,i},
+\end{equation}
+and
+\begin{equation}
+\omega_{\ast\,i} = -\left(\frac{1}{1+\tau}\right)\omega_\ast.
+\end{equation}
+We conclude that, unlike a linear tearing mode, which is convected by the electron fluid at the resonant surface,\cite{ara} a nonlinear
+tearing mode is convected by the  ion  fluid.\cite{fw} 
+
 \section*{Acknowledgements}
 This research was directly funded by the U.S.\ Department of Energy, Office of Science, Office of Fusion Energy Sciences,  under  contracts DE-FG02-04ER54742 and DE-SC0021156. 
-
-\section*{Disclaimer} This report was prepared as an account of work sponsored by an agency of the United States Government. Neither the United States Government nor any agency thereof, nor any of their employees, makes any warranty, express or implied, or assumes any legal liability or responsibility for the accuracy, completeness, or usefulness of any information, apparatus, product, or process disclosed, or represents that its use would not infringe privately owned rights. Reference herein to any specific commercial product, process, or service by trade name, trademark, manufacturer, or otherwise does not necessarily constitute or imply its endorsement, recommendation, or favoring by the United States Government or any agency thereof. The views and opinions of authors expressed herein do not necessarily state or reflect those of the United States Government or any agency thereof. 
  
 \section*{Data Availability Statement}
 The data that support the findings of this study are available from the corresponding author upon reasonable request.
@@ -680,6 +768,16 @@ The data that support the findings of this study are available from the correspo
 \bibitem{smol2} A.I.~Smolyakov, A.~Hirose E.~Lazzaro, G.B.~Re, and  J.D.~Callen, Phys.\ Plasmas {\bf 2}, 1581 (1995). 
 
 \bibitem{wf} F.L.~Waelbroeck, and R.~Fitzpatrick, Phys.\ Rev.\ Lett.\ {\bf 78}, 1703 (1997). 
+
+\bibitem{white} R.A.~White, D.A.~Monticello, M.N.~Rosenbluth, and B.V.~Waddell, Phys.\ Fluids {\bf 20}, 800 (1977). 
+
+\bibitem{thy} A.~Thyagaraja, Phys.\ Fluids {\bf 24}, 1716 (1981). 
+
+\bibitem{esc} D.F.~Escande, and M.~Ottaviani, Phys. Lett.\ A {\bf 323}, 278 (2004).
+
+\bibitem{mit} F.~Militello, and F.~Porcelli, Phys.\ Plasmas {\bf 1}, L13 (2004).
+
+\bibitem{has} R.J.~Hastie, F.~Militello, and F.~Porcelli, Phys.\ Rev.\ Lett.\ {\bf 95}, 065001 (2005).
 
 \end{thebibliography}
 
