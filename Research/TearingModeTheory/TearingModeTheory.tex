@@ -1336,19 +1336,19 @@ q_s=q(r_s)= \frac{m}{n}.
  It follows that ${\bf n}\cdot\nabla A=0$ for any $A(\hat{x},\zeta,\hat{t})$. 
 Let us write (Fitzpatrick \& Waelbroeck 2009)
 \begin{equation}\label{e238}
-\hat{\bf B} \simeq (1+ \delta b)\,{\bf n} + \hat{\nabla}\hat{\psi}\times {\bf n},
+\hat{\bf B} \simeq (1+ \delta b)\,{\bf n} + \hat{\nabla}\psi\times {\bf n},
 \end{equation}
 which automatically satisfies Equation~(\ref{e230}). Note that 
 \begin{equation}\label{e247a}
-\hat{\psi}=\frac{\psi_0+\delta\psi}{r_s\,B_z},
+\psi=\frac{\psi_0+\delta\psi}{r_s\,B_z},
 \end{equation}
  where $\psi_0(r) = \int_{r_s}^r r'(1/q_s-1/q)\,(B_z/R_0)\,dr'$, and $\delta\psi$ is defined in Equation~(\ref{e93}).
  Here, $\delta b(\hat{x},\zeta,
- \hat{t})$ and $\hat{\psi}(\hat{x},\zeta,\hat{t})$ are assumed to be small
+ \hat{t})$ and $\psi(\hat{x},\zeta,\hat{t})$ are assumed to be small
 compared to unity, which merely indicates that the perturbed magnetic field due to the tearing mode is small compared to the
 equilibrium magnetic field.  We can write
 \begin{equation}
-\hat{\bf E} \simeq \left(\hat{E}_\parallel- \frac{\partial \hat{\psi}}{\partial \hat{t}}\right)\!{\bf n} + \hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}}\right)\times {\bf n} + \hat{\nabla}\phi,
+\hat{\bf E} \simeq \left(\hat{E}_\parallel- \frac{\partial \psi}{\partial \hat{t}}\right)\!{\bf n} + \hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}}\right)\times {\bf n} + \hat{\nabla}\phi,
 \end{equation}
 which automatically satisfies Equation~(\ref{e231}) provided that
 \begin{equation}
@@ -1382,21 +1382,21 @@ It follows that
 
  The normalized drift-MHD equations, (\ref{e227})--(\ref{e229}), yield 
  \begin{align}\label{e247}
- \hat{d}_i\,\hat{\nabla}(\delta p + \delta b)\nonumber\\[0.5ex]+ \left(\hat{E}_{\parallel}-\frac{\partial\hat{\psi}}{\partial \hat{t}} - [\hat{\psi},\phi]+ \frac{\hat{d}_i\,[\hat{\psi},\delta p]}{1+\tau}\left(1-\frac{0.71\,\eta_e\,\tau}{1+\eta_e}\right)
- + \hat{d}_i\,[\hat{\psi},\delta b]+ \hat{\eta}_\parallel\,J\right){\bf n}\nonumber\\[0.5ex]
- +\hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}} + {\mit\Xi} -\hat{\eta}_\perp\,\delta b\right)\times {\bf n} + \frac{\hat{d}_i}{2}\,\hat{\nabla}\delta b^{\,2}- b_z\,\hat{\nabla}\phi + \hat{V}_{\parallel\,i}\,\hat{\nabla}\hat{\psi}
-+  \hat{d}_i\,J\,\hat{\nabla}\hat{\psi}= 0,\\[0.5ex]
- \hat{\nabla}(\delta p + \delta b) + \left(\frac{\partial \hat{V}_{\parallel\,i}}{\partial \hat{t}} + [\hat{V}_{\parallel\,i},\phi] + [\hat{\psi},\delta b]\right){\bf n}\nonumber\\[0.5ex]
+ \hat{d}_i\,\hat{\nabla}(\delta p + \delta b)\nonumber\\[0.5ex]+ \left(\hat{E}_{\parallel}-\frac{\partial\psi}{\partial \hat{t}} - [\psi,\phi]+ \frac{\hat{d}_i\,[\psi,\delta p]}{1+\tau}\left(1-\frac{0.71\,\eta_e\,\tau}{1+\eta_e}\right)
+ + \hat{d}_i\,[\psi,\delta b]+ \hat{\eta}_\parallel\,J\right){\bf n}\nonumber\\[0.5ex]
+ +\hat{\nabla}\!\left(\frac{\partial\chi}{\partial \hat{t}} + {\mit\Xi} -\hat{\eta}_\perp\,\delta b\right)\times {\bf n} + \frac{\hat{d}_i}{2}\,\hat{\nabla}\delta b^{\,2}- b_z\,\hat{\nabla}\phi + \hat{V}_{\parallel\,i}\,\hat{\nabla}\psi
++  \hat{d}_i\,J\,\hat{\nabla}\psi= 0,\\[0.5ex]
+ \hat{\nabla}(\delta p + \delta b) + \left(\frac{\partial \hat{V}_{\parallel\,i}}{\partial \hat{t}} + [\hat{V}_{\parallel\,i},\phi] + [\psi,\delta b]\right){\bf n}\nonumber\\[0.5ex]
  +\hat{\nabla}\!\left(\frac{\partial\phi}{\partial \hat{t}} - \frac{\hat{d}_i\,[\phi,\delta p]}{2\,(1+\tau)}\right)\times {\bf n} 
  + \frac{1}{2}\,\hat{\nabla}\!
  \left(\hat{V}_\perp^{\,2}+ \frac{\hat{\bf V}_\ast\cdot\hat{\bf V}_E }{1+\tau}+ \delta b^{\,2}\right)  \nonumber\\[0.5ex]
--\hat{\nabla}^2\phi\,\hat{\nabla}\phi + \frac{\hat{d}_i}{2\,(1+\tau)}\left(\hat{\nabla}^2\phi\,\hat{\nabla}\delta p +\hat{\nabla}^2\delta p\,\hat{\nabla}\phi\right) + J\,\hat{\nabla}\hat{\psi} + \hat{\nabla}\cdot\hat{\bpi}_i = 0,\label{e248}\\[0.5ex]
+-\hat{\nabla}^2\phi\,\hat{\nabla}\phi + \frac{\hat{d}_i}{2\,(1+\tau)}\left(\hat{\nabla}^2\phi\,\hat{\nabla}\delta p +\hat{\nabla}^2\delta p\,\hat{\nabla}\phi\right) + J\,\hat{\nabla}\psi + \hat{\nabla}\cdot\hat{\bpi}_i = 0,\label{e248}\\[0.5ex]
 \frac{\partial \delta p}{\partial \hat{t}} + [\delta p,\phi] +\beta\,\hat{\nabla}^2{\mit\Xi} + \frac{2}{3}\,\hat{\nabla}\cdot \hat{\bf q}= 0,\label{e249}
  \end{align}
  where use has been made of Equation~(\ref{e232}), and
  \begin{align}
  [A,B] &\equiv \hat{\nabla} A\times \hat{\nabla} B\cdot{\bf n},\\[0.5ex]
- J &= -\frac{2}{q_s\,\hat{R}_0}+ \hat{\nabla}^2\hat{\psi},\label{eJ}
+ J &= -\frac{2}{q_s\,\hat{R}_0}+ \hat{\nabla}^2\psi,\label{eJ}
  \end{align}
  with $\hat{R}_0=R_0/l$. 
  Here, $\hat{d}_i$ and $\beta$ are assumed to be zeroth order in small quantities, $J$, $1/\hat{R}_0$, $\hat{\eta}_\parallel$, and $\hat{\eta}_\perp$ are assumed to be first order, while $\hat{\nabla}\cdot \hat{\bpi}_{i}$ and $\hat{\nabla}\cdot\hat{\bf q}$ are assumed to be second order. 
@@ -1407,21 +1407,21 @@ It follows that
  \end{equation}
  which is simply an expression of lowest-order equilibrium force balance. The scalar product of Equation~(\ref{e247}) with ${\bf n}$ gives
  \begin{equation}\label{e252}
- \frac{\partial\hat{\psi}}{\partial\hat{t}}= [\phi,\hat{\psi}] +\hat{d}_i\!\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{0.71\,\eta_e}{1+\eta_e}\right)
- [\delta p,\hat{\psi}] + \hat{\eta}_\parallel\,J + \hat{E}_\parallel.
+ \frac{\partial\psi}{\partial\hat{t}}= [\phi,\psi] +\hat{d}_i\!\left(\frac{\tau}{1+\tau}\right)\left(1+\frac{0.71\,\eta_e}{1+\eta_e}\right)
+ [\delta p,\psi] + \hat{\eta}_\parallel\,J + \hat{E}_\parallel.
  \end{equation}
   The scalar product of Equation~(\ref{e248}) with ${\bf n}$ yields
  \begin{equation}\label{e254}
- \frac{\partial\hat{V}_{\parallel\,i}}{\partial\hat{t}}= [\phi,\hat{V}_{\parallel\,i}]-[\delta p,\hat{\psi}] -{\bf n}\cdot\hat{\nabla}\cdot\hat{\bpi}_i.
+ \frac{\partial\hat{V}_{\parallel\,i}}{\partial\hat{t}}= [\phi,\hat{V}_{\parallel\,i}]-[\delta p,\psi] -{\bf n}\cdot\hat{\nabla}\cdot\hat{\bpi}_i.
  \end{equation}
  The scalar product of the curl of Equation~(\ref{e247}) with ${\bf n}$ gives
  \begin{equation}
- \frac{\partial\delta p}{\partial\hat{t}}= [\phi,\delta p]+\hat{\nabla}^2{\mit\Xi}-[\hat{V}_{\parallel\,i},\hat{\psi}]
- -\hat{d}_i\,[J,\hat{\psi}] +\hat{\eta}_\perp\,\hat{\nabla}^{2}\delta p.
+ \frac{\partial\delta p}{\partial\hat{t}}= [\phi,\delta p]+\hat{\nabla}^2{\mit\Xi}-[\hat{V}_{\parallel\,i},\psi]
+ -\hat{d}_i\,[J,\psi] +\hat{\eta}_\perp\,\hat{\nabla}^{2}\delta p.
  \end{equation}
  Eliminating $\hat{\nabla}^2{\mit\Xi}$ between Equation~(\ref{e249}) and the previous equation, we obtain
  \begin{align}\label{e256}
- \frac{\partial\delta p}{\partial\hat{t}}= [\phi,\delta p]-c_\beta^{\,2}\,[\hat{V}_{\parallel\,i},\hat{\psi}]-c_\beta^{\,2}\,\hat{d}_i\,[J,\hat{\psi}]
+ \frac{\partial\delta p}{\partial\hat{t}}= [\phi,\delta p]-c_\beta^{\,2}\,[\hat{V}_{\parallel\,i},\psi]-c_\beta^{\,2}\,\hat{d}_i\,[J,\psi]
  -\frac{2}{3}\,(1-c_\beta^{\,2})\,\hat{\nabla}\cdot\hat{\bf q} +c_\beta^{\,2}\,\hat{\eta}_\perp \hat{\nabla}^2\delta p,
  \end{align}
  where
@@ -1432,7 +1432,7 @@ It follows that
  \begin{align}\label{e258}
  \frac{\partial U}{\partial\hat{t}}& = [\phi,U] + \frac{\hat{d}_i}{2\,(1+\tau)}\left(
  \hat{\nabla}^2[\phi,\delta p] + [\hat{\nabla}^2\phi,\delta p] + [\hat{\nabla}^2 \delta p,\phi]\right)
- + [J,\hat{\psi}] \nonumber\\[0.5ex]&\phantom{=} + {\bf n}\cdot\hat{\nabla}\times \hat{\nabla}\cdot\hat{\bpi}_i,
+ + [J,\psi] \nonumber\\[0.5ex]&\phantom{=} + {\bf n}\cdot\hat{\nabla}\times \hat{\nabla}\cdot\hat{\bpi}_i,
  \end{align}
  where 
  \begin{equation}
@@ -1441,7 +1441,7 @@ It follows that
  
 We can write
 \begin{align}
-\hat{\nabla}\cdot \hat{\bf q} &=- \left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\parallel\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\parallel\,i}\right)[[\delta p,\hat{\psi}],\hat{\psi}]\nonumber\\[0.5ex]
+\hat{\nabla}\cdot \hat{\bf q} &=- \left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\parallel\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\parallel\,i}\right)[[\delta p,\psi],\psi]\nonumber\\[0.5ex]
 &\phantom{=} - \left(\frac{\eta_e}{1+\eta_e}\,\frac{\tau}{1+\tau}\,\hat{\chi}_{\perp\,e} + \frac{\eta_i}{1+\eta_i}\,\frac{1}{1+\tau}\,\hat{\chi}_{\perp\,i}\right)\nabla_\perp^{\,2} \delta p,\label{e260}
 \end{align}
 where $\hat{\nabla}_\perp^{\,2}\equiv \hat{\nabla}\cdot\hat{\nabla}_\perp$, $\chi_{\parallel\,e,i} = \kappa_{\parallel\,e,i}(r_s)/n_0$, $\chi_{\perp\,e,i} = \kappa_{\perp\,e,i}(r_s)/n_0$, $\hat{\chi}_{\parallel\,e,i}=
@@ -1462,13 +1462,13 @@ ion perpendicular viscosity. Note that the previous equation is entirely phenome
 \subsection{Four-Field Model}\label{fourf}
 Let us define $V=\hat{d}_i\,\hat{V}_{\parallel\,i}$ and $N=-\hat{d}_i\,\delta p$. Equations~(\ref{eJ}), (\ref{e252})--(\ref{e254}), (\ref{e256}), (\ref{e258})--(\ref{e260}), (\ref{e262}), and (\ref{e263}) yield the following closed set of equations (Fitzpatrick \& Waelbroeck 2005):
 \begin{align}\label{e264}
-\frac{\partial\hat{\psi}}{\partial\hat{t}}&= [\phi,\hat{\psi}] -\left(\frac{\tau}{1+\tau}\right)(1+\lambda_e)\,[N,\hat{\psi}]
+\frac{\partial\psi}{\partial\hat{t}}&= [\phi,\psi] -\left(\frac{\tau}{1+\tau}\right)(1+\lambda_e)\,[N,\psi]
 +\hat{\eta}_\parallel\,J + \hat{E}_\parallel,\\[0.5ex]
-\frac{\partial U}{\partial \hat{t}}&= [\phi,U] - \frac{1}{2\,(1+\tau)}\left(\hat{\nabla}^2[\phi,N] + [\hat{\nabla}^2\phi,N] + [\hat{\nabla}^2 N,\phi]\right) + [J,\hat{\psi}] \nonumber\\[0.5ex]&\phantom{=}+\hat{\chi}_\varphi  \,\hat{\nabla}^4\!\left(\phi + \frac{N}{1+\tau}\right),\label{e265} \\[0.5ex]
-\frac{\partial N}{\partial \hat{t}}&= [\phi,N] +c_\beta^{\,2}\,[V,\hat{\psi}] +\hat{d}_\beta^{\,2}\,[J,\hat{\psi}] + \hat{D}_\parallel\,[[N,\hat{\psi}],\hat{\psi}]
+\frac{\partial U}{\partial \hat{t}}&= [\phi,U] - \frac{1}{2\,(1+\tau)}\left(\hat{\nabla}^2[\phi,N] + [\hat{\nabla}^2\phi,N] + [\hat{\nabla}^2 N,\phi]\right) + [J,\psi] \nonumber\\[0.5ex]&\phantom{=}+\hat{\chi}_\varphi  \,\hat{\nabla}^4\!\left(\phi + \frac{N}{1+\tau}\right),\label{e265} \\[0.5ex]
+\frac{\partial N}{\partial \hat{t}}&= [\phi,N] +c_\beta^{\,2}\,[V,\psi] +\hat{d}_\beta^{\,2}\,[J,\psi] + \hat{D}_\parallel\,[[N,\psi],\psi]
 + \hat{D}_\perp\,\hat{\nabla}_\perp^{\,2}N,\label{e266}\\[0.5ex]
-\frac{\partial V}{\partial\hat{t}}&= [\phi,V] +[N,\hat{\psi}] + \hat{\chi}_\varphi\,\hat{\nabla}^2 V,\label{e267}\\[0.5ex]
-J &=-\frac{2}{q_s\,\hat{R}_0}+\hat{\nabla}^2\hat{\psi},\\[0.5ex]
+\frac{\partial V}{\partial\hat{t}}&= [\phi,V] +[N,\psi] + \hat{\chi}_\varphi\,\hat{\nabla}^2 V,\label{e267}\\[0.5ex]
+J &=-\frac{2}{q_s\,\hat{R}_0}+\hat{\nabla}^2\psi,\\[0.5ex]
 U &=\hat{\nabla}^2 \phi.\label{e269}
 \end{align}
 Here, the quantity 
@@ -1489,7 +1489,7 @@ and
 \subsection{Discussion}
 Equations~(\ref{e264})--(\ref{e269}) constitute our reduced drift-MHD resonant plasma response model. Our model is very similar
 to the original four-field model derived by Hazeltine, et al.\ (Hazeltine, Kotschenreuther \& Morrison 1985). Equation~(\ref{e264}) is the {\em generalized
-Ohm's law}\/ that governs the time evolution of the (normalized) helical magnetic flux, $\hat{\psi}$. Equation~(\ref{e265}) is the {\em parallel
+Ohm's law}\/ that governs the time evolution of the (normalized) helical magnetic flux, $\psi$. Equation~(\ref{e265}) is the {\em parallel
 ion vorticity equation}\/ that governs the  time evolution of the (normalized) parallel ion vorticity, $U$. 
 Equation~(\ref{e266}) is the {\em electron number density continuity equation}\/ that 
 governs the time evolution of the (normalized) electron number density, $N$. Finally, Equation~(\ref{e267}) is the
@@ -1511,16 +1511,16 @@ MHD fluid has a significant influence on the form of the continuity equation (\r
 The aim of this section is to employ the reduced resonant plasma response model derived in Section~\ref{ff} to determine the {\em linear}\/ response of the resonant layer to external perturbations.
 
 It is convenient to set the normalization scale-length, $l$, in our four-field response model equal to the minor radius of the resonant surface, $r_s$. 
-Recall that the four fields in question---namely, $\hat{\psi}$, $\phi$, $N$, and $V$---have the following
+Recall that the four fields in question---namely, $\psi$, $\phi$, $N$, and $V$---have the following
 definitions:
 \begin{align}\label{e279}
-\nabla\hat{\psi} &= \frac{{\bf n}\times{\bf B}} {r_s\,B_z},\\[0.5ex]
+\nabla\psi &= \frac{{\bf n}\times{\bf B}} {r_s\,B_z},\\[0.5ex]
 \nabla\phi &= \frac{{\bf n}\times {\bf V}}{r_s\,V_A},\\[0.5ex]
 N &=-\hat{d}_i\left(\frac{p-p_0}{B_z^{\,2}/\mu_0}\right),\\[0.5ex]
 V &= \hat{d}_i\left(\frac{{\bf n}\cdot {\bf V}}{V_A}\right).
 \end{align}
  Our
-model also employs the auxiliary fields $J=-2\,\epsilon_s/q_s+r_s^2\,\nabla^2 \hat{\psi}$ and  $U=r_s^2\,\nabla^2 \phi$. Here, 
+model also employs the auxiliary fields $J=-2\,\epsilon_s/q_s+r_s^2\,\nabla^2 \psi$ and  $U=r_s^2\,\nabla^2 \phi$. Here, 
 \begin{equation}
 \epsilon_s=\frac{r_s}{R_0}\ll 1. 
 \end{equation}
@@ -1540,7 +1540,7 @@ V_E(r)\simeq \frac{E_r}{B_z}
 much smaller than $r_s$. (See Section~\ref{s5.3}.) Hence, we only need to evaluate plasma equilibrium quantities in the immediate vicinity of the resonant
 surface. Equations~(\ref{e279})--(\ref{e282}) suggest that 
 \begin{align}\label{e287}
-\hat{\psi} &= \frac{\hat{x}^{\,2}}{2\,\hat{L}_s},\\[0.5ex]
+\psi &= \frac{\hat{x}^{\,2}}{2\,\hat{L}_s},\\[0.5ex]
 \phi &= - \hat{V}_E\,\hat{x},\\[0.5ex]
 N &= -\hat{V}_\ast\,\hat{x},\\[0.5ex]
 V &= \hat{V}_\parallel,\label{e290}
@@ -1575,7 +1575,7 @@ very narrow (Chen \& Morrison 1990).
 Suppose that the system is perturbed by a tearing mode with $m$ periods in the poloidal direction, and
 $n$ periods in the toroidal direction. In accordance with Equations~(\ref{e287})--(\ref{e290}), and (\ref{e292})--(\ref{e293}), we can write
 \begin{align}\label{e295}
-\hat{\psi}(\hat{x},\zeta,\hat{t}) &= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
+\psi(\hat{x},\zeta,\hat{t}) &= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
 \phi(\hat{x},\zeta,\hat{t}) &=-\hat{V}_E\,\hat{x}+ \tilde{\phi}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
 N(\hat{x},\zeta,\hat{t}) &= -\hat{V}_\ast\,\hat{x}+\left(\frac{1+\tau}{\tau}\right)\!\tilde{N}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
 V(\hat{x},\zeta,\hat{t}) &= \hat{V}_\parallel + \left(\frac{1+\tau}{\tau}\right)\!\tilde{V}(\hat{x})\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},\\[0.5ex]
@@ -1916,29 +1916,29 @@ across a `nonconstant-$\psi$' layer.
 
 \begin{figure}[t]
 \centerline{\includegraphics[width=0.95\textwidth]{Island.pdf}}
-\caption{Equally-spaced contours of $\hat{\psi}(\hat{x},\xi)$. The magnetic separatrix is shown in red. }\label{f2a}
+\caption{Equally-spaced contours of $\psi(\hat{x},\xi)$. The magnetic separatrix is shown in red. }\label{f2a}
 \end{figure}
 
 Suppose that the resonant layer lies in a constant-$\psi$ response regime. According to Equation~(\ref{e295}),
 the perturbed magnetic flux in the layer takes the form:
 \begin{equation}
-\hat{\psi}(\hat{x},\zeta,\hat{t}) = \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},
+\psi(\hat{x},\zeta,\hat{t}) = \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ \tilde{\psi}\,{\rm e}^{\,{\rm i}\,(\zeta-\hat{\omega}\,\hat{t})},
 \end{equation}
 where $\tilde{\psi}$ is a complex constant. Of course, the physical flux is the real part of the previous expression; that is,
 \begin{equation}\label{e352a}
-\hat{\psi}(\hat{x},\xi)= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ |\tilde{\psi}|\,\cos\xi,
+\psi(\hat{x},\xi)= \frac{\hat{x}^{\,2} }{2\,\hat{L}_s}+ |\tilde{\psi}|\,\cos\xi,
 \end{equation}
 where
 \begin{equation}
 \xi = \zeta +{\rm arg}(\tilde{\psi})-\hat{\omega}\,\hat{t} = m\,\theta-n\,\varphi +{\rm arg}(\tilde{\psi}) -\omega\,t.
 \end{equation}
-Now, it is clear from Equation~(\ref{e279}) that ${\bf B}\cdot\hat{\nabla}\hat{\psi}=0$. In other words, the contours of
-$\hat{\psi}(\hat{x},\xi)$ map out the perturbed magnetic flux-surfaces in the vicinity of the resonant layer. 
+Now, it is clear from Equation~(\ref{e279}) that ${\bf B}\cdot\hat{\nabla}\psi=0$. In other words, the contours of
+$\psi(\hat{x},\xi)$ map out the perturbed magnetic flux-surfaces in the vicinity of the resonant layer. 
 Let $\hat{W} = 4\,(\hat{L}_s\,|\tilde{\psi}|)^{1/2}$. Equation~(\ref{e352a}) can be written
 \begin{equation}
-\frac{\hat{\psi}(\hat{x},\xi)}{|\tilde{\psi}|} = 8\left(\frac{\hat{x}}{\hat{W}}\right)^2 + \cos\xi.
+\frac{\psi(\hat{x},\xi)}{|\tilde{\psi}|} = 8\left(\frac{\hat{x}}{\hat{W}}\right)^2 + \cos\xi.
 \end{equation}
-Figure~\ref{f2a} shows the contours of $\hat{\psi}(\hat{x},\xi)$ specified by the previous equation. It can be seen that the
+Figure~\ref{f2a} shows the contours of $\psi(\hat{x},\xi)$ specified by the previous equation. It can be seen that the
 tearing mode has reconnected magnetic field-lines to produce a {\em helical magnetic island chain}\/ centered on the resonant
 surface ($\hat{x}=0$). The chain has $m$ periods in the poloidal direction, $n$ periods in the toroidal direction, and propagates at the helical phase velocity $\omega$. The maximum full (as opposed to half) radial width of the magnetic separatrix is 
 \begin{equation}\label{e355s}
@@ -1947,11 +1947,11 @@ W =  \hat{W}\,r_s= 4\,(\hat{L}_s\,|\tilde{\psi}|)^{1/2}\,r_s = 4\left(L_s\,R_0\,
 where ${\mit\Psi}_s = r_s\,B_z\,\tilde{\psi}$ is the reconnected magnetic flux defined in Equation~(\ref{e99}), and
 $\hat{\mit\Psi}_s= {\mit\Psi}_s/(R_0\,B_z)$. 
 
-Finally, our four-field resonant plasma response model, (\ref{e264})--(\ref{e269}), contains many term of the general form $[\hat{\psi},\tilde{A}]$,
+Finally, our four-field resonant plasma response model, (\ref{e264})--(\ref{e269}), contains many term of the general form $[\psi,\tilde{A}]$,
 where $\tilde{A}(\hat{x},\zeta,\hat{t})$ is a perturbed quantity. According to Equation~(\ref{e352a}), such terms
 can be written
 \begin{equation}
-[\hat{\psi},\tilde{A}] = {\rm i}\,\frac{m}{r_s}\left(\frac{\hat{x}}{\hat{L}_s}\,\tilde{A} - \tilde{\psi}\,\frac{\partial \tilde{A}}{\partial\hat{x}}\right)
+[\psi,\tilde{A}] = {\rm i}\,\frac{m}{r_s}\left(\frac{\hat{x}}{\hat{L}_s}\,\tilde{A} - \tilde{\psi}\,\frac{\partial \tilde{A}}{\partial\hat{x}}\right)
 \sim {\rm i}\,\frac{m}{r_s}\,\frac{\hat{\delta}}{\hat{L}_s}\,\tilde{A} - {\rm i}\,\frac{m}{r_s}\,\frac{\tilde{\psi}}{\hat{\delta}}\,\tilde{A}, 
 \end{equation}
 where $\delta = \hat{\delta}\,r_s$ is the width of the linear layer. Now, linear layer theory is only valid when the second
@@ -2550,20 +2550,20 @@ construct a suitable nonlinear resonant response model.
 It is convenient to set the normalization scale-length, $l$, in the four-field  model equal to the minor radius of the resonant surface, $r_s$. It is also convenient to work in a frame of reference that corotates with the island chain. In this reference frame, the
 normalized reconnected flux, $\hat{\mit\Psi}_s(\hat{t})$, is assumed to be a positive real quantity. 
 Furthermore, the four fields,
-$\hat{\psi}$, $\phi$, $N$, and $V$, as well as the auxiliary field, $J$, are assumed to only be functions of  the normalized radial coordinate, $\hat{x} = (r-r_s)/r_s$, the
+$\psi$, $\phi$, $N$, and $V$, as well as the auxiliary field, $J$, are assumed to only be functions of  the normalized radial coordinate, $\hat{x} = (r-r_s)/r_s$, the
 helical angle, $\zeta= m\,\theta-n\,\varphi$, and the
 normalized time, $\hat{t}= t\,V_A/r_s$. 
 
 It is helpful to define the reduced island width
 \begin{equation}\label{e456}
-w = \frac{W}{4} = (L_s\,R_0\,\hat{\mit\Psi}_s)^{1/2}.
+w \equiv \frac{W}{4} = (L_s\,R_0\,\hat{\mit\Psi}_s)^{1/2}.
 \end{equation}
 [See Equation~(\ref{e355s}).]
 It is assumed that $\delta\ll w\ll r_s$, where $\delta$ is the linear layer width. Let $\hat{w}= w/r_s$.  Reusing the analysis of Section~\ref{linear},
 in the limit $|\hat{x}|/\hat{w}\gg 1$ (i.e., many island widths from the resonant surface) we find that 
 \begin{align}
-\hat{\psi} &\rightarrow \frac{\hat{x}^{\,2}}{2\,\hat{L}_s} + \hat{R}_0\,\hat{\mit\Psi}_s\,\cos\zeta,\\[0.5ex]
-\phi &\rightarrow \left(\frac{\hat{\omega}}{m}- \hat{V}_E\right)\hat{x} - \frac{s}{4}\,\hat{V}_E'\,\hat{x}^{\,2},\\[0.5ex]
+\psi &\rightarrow \frac{\hat{x}^{\,2}}{2\,\hat{L}_s} + \hat{R}_0\,\hat{\mit\Psi}_s\,\cos\zeta,\\[0.5ex]
+\phi &\rightarrow \left(\frac{\hat{\omega}}{m}- \hat{V}_E\right)\hat{x} - \frac{\varsigma}{4}\,\hat{V}_E'\,\hat{x}^{\,2},\\[0.5ex]
 N &\rightarrow -\hat{V}_\ast\,\hat{x},\\[0.5ex]
 V&\rightarrow \hat{V}_\parallel,\\[0.5ex]
 J& \rightarrow -\frac{2}{q_s\,\hat{R}_0} + \frac{1}{\hat{L}_s}.
@@ -2571,7 +2571,7 @@ J& \rightarrow -\frac{2}{q_s\,\hat{R}_0} + \frac{1}{\hat{L}_s}.
 Here, $\omega = \hat{\omega}\,V_A/r_s$ is the rotation frequency of the tearing mode  in the
 laboratory frame,
 \begin{equation}
-s = {\rm sgn}(\hat{x}),
+\varsigma = {\rm sgn}(\hat{x}),
 \end{equation}
 and 
 \begin{equation}
@@ -2591,7 +2591,7 @@ It follows that $|X|\sim {\cal O}(1)$ in the immediate vicinity of the island ch
 rescaled fields ${\mit\Psi}(X,\zeta,T)$, ${\mit\Phi}(X,\zeta,T)$, ${\cal N}(X,\zeta,T)$,
 ${\cal V}(X,\zeta,T)$, and ${\cal J}(X,\zeta,T)$, where
 \begin{align}
-\hat{\psi} &= \left(\frac{\hat{w}^{\,2}}{\hat{L}_s}\right){\mit\Psi},\label{e466}\\[0.5ex]
+\psi &= \left(\frac{\hat{w}^{\,2}}{\hat{L}_s}\right){\mit\Psi},\label{e466}\\[0.5ex]
 \phi &=\left(\frac{\hat{\omega}_\ast\,\hat{w}}{m}\right){\mit\Phi},\\[0.5ex]
 N &= \left(\frac{\hat{\omega}_\ast\,\hat{w}}{m}\right){\cal N},\\[0.5ex]
 V&= \hat{V}_\parallel + \left(\frac{\hat{L}_s\,\hat{\omega}_\ast^{\,2}}{m^2\,c_\beta^{\,2}}\right){\cal V},\\[0.5ex]
@@ -2636,7 +2636,7 @@ and the critical reduced island width, $w_c$, is defined in Equation~(\ref{wcdef
 Equations~(\ref{e469})--(\ref{e473}) must be solved subject to the boundary conditions
 \begin{align}
 {\mit\Psi}&\rightarrow \frac{X^{2}}{2} + \cos\zeta,\label{e483}\\[0.5ex]
-{\mit\Phi} &\rightarrow v\,X +\frac{ s\,v'\,X^{2}}{2},\label{e484}\\[0.5ex]
+{\mit\Phi} &\rightarrow v\,X +\frac{\varsigma\,v'\,X^{2}}{2},\label{e484}\\[0.5ex]
 {\cal N}&\rightarrow X,\label{e486}\\[0.5ex]
 {\cal V}&\rightarrow 0,\label{e486a}\\[0.5ex]
 {\cal J}& \rightarrow 0,\label{e487}
@@ -2680,7 +2680,7 @@ Let us expand the various fields in our model as follows:
 {\mit\Psi}&= {\mit\Psi}_0+\epsilon_d^2\,{\mit\Psi}_2+ \epsilon_d^3\,{\mit\Psi}_3 + \cdots,\label{e429}\\[0.5ex]
 {\mit\Phi}&= {\mit\Phi}_0+\epsilon_d^2\,{\mit\Phi}_2+ \epsilon_d^3\,{\mit\Phi}_3 + \cdots,\\[0.5ex]
 {\cal N}&= {\cal N}_0+\epsilon_d^2\,{\cal N}_2+ \epsilon_d^3\,{\cal N}_3 + \cdots,\label{e431}\\[0.5ex]
-{\cal V} & ={\cal V}_0. +\epsilon_d\,{\cal V}_1 +\cdots,\\[0.5ex]
+{\cal V} & ={\cal V}_0 +\epsilon_d\,{\cal V}_1 +\cdots,\\[0.5ex]
 {\cal J} &= {\cal J}_0 + \epsilon_d\,{\cal J}_1 +\cdots. \label{e496}
 \end{align}
 Here, ${\mit\Psi}_0$, ${\mit\Psi}_1$, et cetera are assumed to be ${\cal O}(1)$. 
@@ -2706,7 +2706,7 @@ To lowest order in $\epsilon_d$, Equation~(\ref{e472}) yields
 where use has been made of Equation~(\ref{e498}). Given that ${\cal N}$ is an odd function of $X$, it
 follows that
 \begin{equation}\label{e500}
-{\cal N}_0(X,\zeta,T) = s\, {\cal N}_{(0)}({\mit\Omega},T).
+{\cal N}_0(X,\zeta,T) = \varsigma\, {\cal N}_{(0)}({\mit\Omega},T).
 \end{equation}
 We conclude that parallel
 ion acoustic waves, whose dynamics are described by Equation~(\ref{e472}),  smooth  out
@@ -2731,7 +2731,7 @@ To lowest order in $\epsilon_d$, Equation~(\ref{e469}) gives
 where use has been made of Equations~(\ref{e498}) and (\ref{e500}). Given that
 ${\mit\Phi}$ is an odd function of $X$, it follows that 
 \begin{equation}\label{e503}
-{\mit\Phi}_0(X,\zeta,T) = s\, {\mit\Phi}_{(0)}({\mit\Omega},T).
+{\mit\Phi}_0(X,\zeta,T) = \varsigma\, {\mit\Phi}_{(0)}({\mit\Omega},T).
 \end{equation}
  We conclude that the lowest-order normalized
 electrostatic potential, ${\mit\Phi}_{0}$, is  constant on magnetic flux-surfaces. 
@@ -2770,11 +2770,11 @@ d/d{\mit\Omega}$.
 \subsection{Flux-Surface Average Operator}
 The {\em flux-surface average operator}, $\langle\cdots\rangle$, is defined (Rutherford 1973)
 \begin{equation}
-\langle A(s,{\mit\Omega},\zeta)\rangle
+\langle A(\varsigma,{\mit\Omega},\zeta)\rangle
 \equiv \left\{
 \begin{array}{llr}
-\int_{\zeta_0}^{2\pi-\zeta_0}\frac{A(s,{\mit\Omega}\,\zeta)+A(-s,{\mit\Omega},\zeta)}{2\,[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}&~~~~~&0\leq {\mit\Omega}\leq 1\\[2ex]
-\oint \frac{A(s,{\mit\Omega}\,\zeta)}{[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}
+\int_{\zeta_0}^{2\pi-\zeta_0}\frac{A(\varsigma,{\mit\Omega}\,\zeta)+A(-\varsigma,{\mit\Omega},\zeta)}{2\,[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}&~~~~~&0\leq {\mit\Omega}\leq 1\\[2ex]
+\oint \frac{A(\varsigma,{\mit\Omega}\,\zeta)}{[2\,({\mit\Omega}-\cos\zeta)]^{1/2}}\,\frac{d\zeta}{2\pi}
 &&{\mit\Omega}> 1
 \end{array}
 \right.,
@@ -2784,7 +2784,7 @@ It follows that
 \begin{equation}\label{e5111}
 \langle\{A,{\mit\Omega}\}\rangle = 0
 \end{equation}
-for {\em any}\/ $A(s,{\mit\Omega},\zeta,T)$. It is helpful to define
+for {\em any}\/ $A(\varsigma,{\mit\Omega},\zeta,T)$. It is helpful to define
 \begin{equation}
 \tilde{A}  \equiv A - \frac{\langle A\rangle}{\langle 1\rangle}.
 \end{equation}
@@ -2792,7 +2792,7 @@ It follows that
 \begin{equation}\label{e512}
 \langle \tilde{A}\rangle =0
 \end{equation}
- for {\em any}\/ $A(s,{\mit\Omega},\zeta,T)$.
+ for {\em any}\/ $A(\varsigma,{\mit\Omega},\zeta,T)$.
 
 Equation~(\ref{e509}) yields 
 \begin{equation}\label{e513}
@@ -2824,7 +2824,7 @@ a magnetic island chain is a helical magnetic equilibrium that evolves (in its l
 slow resistive timescale (Rutherford 1973). Hence, we would expect all of the results derived in Section~\ref{lowest}
 to apply to the plasma in the immediate region of the island chain, as is indeed the case. Note, however, that, 
 while solving the  rescaled four-field model (\ref{e469})--(\ref{e473}) to lowest order  tells us that
-${\cal N}=s\,{\cal N}_{(0)}({\mit\Omega},T)$, ${\mit\Phi}_0 =s\,{\mit\Psi}_{(0)}({\mit\Omega},T)$, and
+${\cal N}=\varsigma\,{\cal N}_{(0)}({\mit\Omega},T)$, ${\mit\Phi}_0 =\varsigma\,{\mit\Psi}_{(0)}({\mit\Omega},T)$, and
 ${\cal V}_0 = {\cal V}_{(0)}({\mit\Omega},T)$, and that the lowest-order current density profile has the form (\ref{e513}), the lowest-order solution leaves the  flux-surface functions ${\cal N}_{(0)}({\mit\Omega},T)$,
 ${\mit\Phi}_{(0)}({\mit\Omega},T)$,  ${\cal V}_{(0)}({\mit\Omega},T)$, and $\overline{\cal J}_0({\mit\Omega},T)$ undetermined. In fact, in order to determine
 the forms of these  four  functions it is necessary to solve the rescaled four-field model to higher order in our expansion. In particular,
@@ -2908,9 +2908,9 @@ Y_i({\mit\Omega},T)=\frac{v'(T)}{\int_1^\infty \!\frac{d{\mit\Omega}}{\langle X^
 Here, we have rejected, as unphysical, the solution that blows up as ${\mit\Omega}^{\,1/2}$ as ${\mit\Omega}\rightarrow\infty$. 
 We have also made use of the fact that $Y_i=0$ within the magnetic separatrix of the island chain. Finally, we have  demanded that the ion
 fluid velocity---and, hence, the function $Y_i$---be continuous across the separatrix, because the ion fluid possesses finite perpendicular viscosity. 
-Note, however, that the discontinuity in the function $L({\mit\Omega})$ across the separatrix [see Equation~(\ref{e526})] implies that the
+Note, however, that the discontinuity in the function $L({\mit\Omega})$ across the island separatrix [see Equation~(\ref{e526})] implies that the
 electron and MHD  fluid velocities are  discontinuous across the separatrix. (See Section~\ref{s8.6}.) As previously
-mentioned, these discontinuities are resolved in a layer of characteristic thickness $\rho_\beta$. 
+mentioned, these discontinuities are resolved in a layer of characteristic thickness $\rho_\beta$ on the separatrix. 
 
 We need to evaluate Equation~(\ref{e472}) to second order in $\epsilon_d$ in order to include the perpendicular transport term. Doing so,
 we obtain
@@ -2941,10 +2941,10 @@ Equations~(\ref{e109}), (\ref{e204}), and (\ref{e247a}) that
 \begin{align}
 {\rm Re}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= \frac{2\,r_s}{R_0\,B_z\,\hat{\mit\Psi}_s}\int_{r_{s-}}^{r_{s+}}\oint
 \frac{\partial^2\psi}{\partial r^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dr\nonumber\\[0.5ex]&=\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
-\frac{\partial^2\hat{\psi}}{\partial X^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
+\frac{\partial^2\psi}{\partial X^2}\,\cos\zeta\,\frac{d\zeta}{2\pi}\,dX,\\[0.5ex]
 {\rm Im}\!\left(\frac{{\mit\Delta}\hat{\mit\Psi}_s}{\hat{\mit\Psi}_s}\right)&= -\frac{2\,r_s}{R_0\,B_z\,\hat{\mit\Psi}_s}\int_{r_{s-}}^{r_{s+}}\oint
 \frac{\partial^2\psi}{\partial r^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dr\nonumber\\[0.5ex]&=-\frac{2}{\hat{w}\,\hat{R}_0\,\hat{\mit\Psi}_s}\int_{-\infty}^{\infty}\oint
-\frac{\partial^2\hat{\psi}}{\partial X^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dX.
+\frac{\partial^2\psi}{\partial X^2}\,\sin\zeta\,\frac{d\zeta}{2\pi}\,dX.
 \end{align}
 Making use of Equations~(\ref{e456}) and (\ref{e466}), we obtain
 \begin{align}
@@ -3092,20 +3092,20 @@ I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{W}{r_s}\right)= {\mit\Delta}_{pw}(0)- \le
 \end{equation}
 If we define
 \begin{align}
-W_{\rm sat} &= \frac{{\mit\Delta}_{pw}(0)\,r_s}{0.8\,\alpha_s^{2}-0.27\,\beta_s - 0.09\,\alpha_s},\\[0.5ex]
-\tau_{\rm sat} &= \frac{I_1\,\tau_R}{{\mit\Delta}_{pw}(0)}\,\frac{W_{\rm sat}}{r_s},
+W_{pw} &= \frac{{\mit\Delta}_{pw}(0)\,r_s}{0.8\,\alpha_s^{2}-0.27\,\beta_s - 0.09\,\alpha_s},\label{epwa}\\[0.5ex]
+\tau_{pw} &= \frac{I_1\,\tau_R}{{\mit\Delta}_{pw}(0)}\,\frac{W_{pw}}{r_s},\label{tpw}
 \end{align}
 then Equation~(\ref{e564}) reduces to
 \begin{equation}
-\tau_{\rm sat} \,\frac{d}{dt}\!\left(\frac{W}{W_{\rm sat}}\right) = 1-\frac{W}{W_{\rm sat}}.
+\tau_{pw} \,\frac{d}{dt}\!\left(\frac{W}{W_{pw}}\right) = 1-\frac{W}{W_{pw}}.
 \end{equation}
 The previous equation can be solved to give
 \begin{equation}
-W(t) = W_{\rm sat}\left(1-{\rm e}^{-t/\tau_{\rm sat}}\right),
+W(t) = W_{pw}\left(1-{\rm e}^{-t/\tau_{pw}}\right),
 \end{equation}
 assuming that the island width is zero at $t=0$. It follows that the width of the island chain does not grow without limit, 
 but instead eventually attains the saturated 
-value $W_{\rm sat}$. Moreover, the time required to attain saturation, $\tau_{\rm sat}$, is of order $\tau_R\,(W_{\rm sat}/r_s)$. 
+value $W_{\rm pw}$. Moreover, the time required to attain saturation, $\tau_{pw}$, is of order $\tau_R\,(W_{pw}/r_s)$. 
 
 Figure~\ref{f7} shows the saturated island width of an $m=2/n=1$ tearing mode\footnote{This is, generally, the most unstable tearing mode in conventional tokamak plasmas (Wesson 1978).}  in a so-called `Wesson' equilibrium (Wesson 1978) characterized by 
 \begin{align}
@@ -3116,7 +3116,7 @@ where $\nu = q(a)/q(0)-1$.  Here, $q(0)$ and $q(a)$ are the safety-factor values
 boundary, respectively. In the calculation shown in Figure~\ref{f7}, ${\mit\Delta}_{pw}(0)$ is determined by solving the cylindrical tearing mode
 equation, subject to suitable boundary conditions, as described in Section~\ref{perfect}.  Moreover, $q(0)$ is given the plausible value 0.8 (Wesson 2011), while
 $q(a)$ is varied in order to shift the position of the resonant surface within the plasma. It can be seen that if the resonant
-surface lies far from the plasma boundary then the 2/1 island chain saturates at relatively small width (i.e., $W_{\rm sat}/a\ll 1$). 
+surface lies far from the plasma boundary then the 2/1 island chain saturates at relatively small width (i.e., $W_{pw}/a\ll 1$). 
 On the other hand, if the resonant surface lies close to the plasma boundary then the island chain
 saturates at a much higher width. However, the presence of a close-fitting perfectly conducting wall can mitigate this
 effect to some extent. 
@@ -3204,7 +3204,7 @@ Let us, first of all, investigate the braking of tearing mode rotation due to el
 Assuming that the tearing mode possesses the frequency $\omega$ in the laboratory frame, and that $\hat{I}_c=0$, 
 Equation~(\ref{e203}) yields
 \begin{equation}
-\hat{\mit\Psi}_w = \frac{E_{sw}/(-\tilde{E}_{ww})}{1-{\rm i}\,\omega\,\tau_{LR}},
+\hat{\mit\Psi}_w = \frac{E_{sw}/(-\tilde{E}_{ww})}{1-{\rm i}\,\tau_{LR}\,\omega},
 \end{equation}
 where
 \begin{equation}
@@ -3212,29 +3212,26 @@ where
 \end{equation}
 is the effective $L/R$ time of the wall. Equation~(\ref{e202}) then gives
 \begin{equation}
-\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s} = {\mit\Delta}_{pw} + ({\mit\Delta}_{nw}-{\mit\Delta}_{pw})\left(\frac{1+{\rm i}\,\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right),
+\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s} = {\mit\Delta}_{pw} + ({\mit\Delta}_{nw}-{\mit\Delta}_{pw})\left(\frac{1+{\rm i}\,\tau_{LR}\,\omega}{1+\tau_{LR}^{\,2}\,\omega^2}\right),
 \end{equation}
 where use has been made of Equations~(\ref{enw}) and (\ref{epw}). It follows that
 \begin{align}
-{\rm Re}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&= {\mit\Delta}_{pw} + ({\mit\Delta}_{nw}-{\mit\Delta}_{pw})\left(\frac{1}{1+\omega^2\,\tau_{LR}^{\,2}}\right),\\[0.5ex]
-{\rm Im}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&=({\mit\Delta}_{nw}-{\mit\Delta}_{pw})\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right).
+{\rm Re}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&= {\mit\Delta}_{pw} + ({\mit\Delta}_{nw}-{\mit\Delta}_{pw})\left(\frac{1}{1+\tau_{LR}^{\,2}\,\omega^2}\right),\\[0.5ex]
+{\rm Im}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&=({\mit\Delta}_{nw}-{\mit\Delta}_{pw})\left(\frac{\tau_{LR}\,\omega}{1+\tau_{LR}^{\,2}\,\omega^2}\right).
 \end{align} 
 Finally, making use of the island saturation theory presented in Section~\ref{sat}, we obtain
 \begin{align}\label{e583}
-{\rm Re}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&= {\mit\Delta}_{pw}(0)\left(1-\frac{w}{w_{pw}}\right) + [{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{1}{1+\omega^2\,\tau_{LR}^{\,2}}\right),\\[0.5ex]
-{\rm Im}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&=[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right),\label{e584}
+{\rm Re}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&= {\mit\Delta}_{pw}(0)\left(1-\frac{w}{w_{pw}}\right) + [{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{1}{1+\tau_{LR}^{\,2}\,\omega^2}\right),\\[0.5ex]
+{\rm Im}\left(\frac{{\mit\Delta\hat{\Psi}}_s}{\hat{\mit\Psi}_s}\right)&=[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{\tau_{LR}\,\omega}{1+\tau_{LR}^{\,2}\,\omega^2}\right),\label{e584}
 \end{align} 
-where $w_{pw}=W_{pw}/4$, and
-\begin{equation}
-W_{pw} = \frac{{\mit\Delta}_{pw}(0)\,r_s}{0.8\,\alpha_s^2 -0.27\,\beta_s-0.09\,\alpha_s}
-\end{equation}
-is the saturated island width when the wall is perfectly conducting. 
+where $w_{pw}=W_{pw}/4$, and $W_{pw}$ 
+is the saturated island width when the wall is perfectly conducting. [See Equation~(\ref{epwa}).]
 
 Equations~(\ref{e559}), (\ref{e583}), and (\ref{e584}) yield the following modified Rutherford island width evolution equation: 
 \begin{align}\label{e586}
-I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{4\,w}{r_s}\right) &= {\mit\Delta}_{pw}(0)\left(1-\frac{w}{w_{pw}}\right) + [{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{1}{1+\omega^2\,\tau_{LR}^{\,2}}\right)\nonumber\\[0.5ex]
+I_1\,\tau_R\,\frac{d}{dt}\!\left(\frac{4\,w}{r_s}\right) &= {\mit\Delta}_{pw}(0)\left(1-\frac{w}{w_{pw}}\right) + [{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{1}{1+\tau_{LR}^{\,2}\,\omega^2}\right)\nonumber\\[0.5ex]
 &\phantom{=} +\frac{I_2}{4}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]\left(\frac{c_\beta}{1+\tau}\right)\left(\frac{\rho_\beta}{r_s}\right)
-\left(\frac{\tau_\varphi}{\tau_H}\right)\left(\frac{w}{r_s}\right)^2\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right)\nonumber\\[0.5ex]&\phantom{=}+\frac{I_3}{16}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]^2\left(\frac{\tau_\varphi}{\tau_H}\right)^2\left(\frac{w}{r_s}\right)^7\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right)^2.
+\left(\frac{\tau_\varphi}{\tau_H}\right)\left(\frac{w}{r_s}\right)^2\left(\frac{\tau_{LR}\,\omega}{1+\tau_{LR}^{\,2}\,\omega^2}\right)\nonumber\\[0.5ex]&\phantom{=}+\frac{I_3}{16}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]^2\left(\frac{\tau_\varphi}{\tau_H}\right)^2\left(\frac{w}{r_s}\right)^7\left(\frac{\tau_{LR}\,\omega}{1+\tau_{LR}^{\,2}\,\omega^2}\right)^2.
 \end{align}
 The first term on the right-hand side of the previous equation governs the growth and saturation of the tearing mode when the wall
 is perfectly conducting. The second term describes  the loss of wall
@@ -3256,7 +3253,7 @@ The previous equation can be combined with Equations~(\ref{e205}), (\ref{e206}),
 and (\ref{e584}) to give the following torque balance equation:
 \begin{equation}\label{e588}
 \omega_{s\,0} - \omega = \frac{1}{4}\,[{\mit\Delta}_{nw}(0)-{\mit\Delta}_{pw}(0)]
-\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w}{r_s}\right)^4\left(\frac{\omega\,\tau_{LR}}{1+\omega^2\,\tau_{LR}^{\,2}}\right).
+\left(\frac{\epsilon_s}{q_s}\right)^2\left(\frac{\tau_V}{\tau_H^{\,2}}\right)\left(\frac{w}{r_s}\right)^4\left(\frac{\tau_{LR}\,\omega}{1+\tau_{LR}^{\,2}\,\omega^2}\right).
 \end{equation}
 The left-hand side of Equation~(\ref{e588}) represents the viscous restoring torque that acts to prevent changes in plasma rotation at the resonant surface. The right-hand side represents the electromagnetic braking torque acting on the island chain due to eddy currents induced in the
 resistive wall. 
@@ -3265,9 +3262,9 @@ Let
 \begin{align}
 x &= \frac{w}{w_{pw}},\\[0.5ex]
 y &= \frac{\omega}{\omega_{s\,0} },\\[0.5ex]
-T &= \frac{t}{\tau_{pw}},\\[0.5ex]
-\tau_{pw}&= \frac{I_1\,\tau_R}{{\mit\Delta}_{pw}(0)}\,\frac{W_{pw}}{r_s}.
+T &= \frac{t}{\tau_{pw}},
 \end{align}
+where $\tau_{pw}$ is defined in Equation~(\ref{tpw}).
 The modified Rutherford equation, (\ref{e586}), and the torque balance equation, (\ref{e588}), can be
 written in the nondimensional forms (Waelbroeck \& Fitzpatrick 1997)
 \begin{align}\label{e594}
@@ -3278,7 +3275,7 @@ written in the nondimensional forms (Waelbroeck \& Fitzpatrick 1997)
 respectively, 
 where
 \begin{align}
-\alpha_l & = \omega_{s\,0}\,\tau_{LR},\\[0.5ex]
+\alpha_l & =\tau_{LR} \,\omega_{s\,0},\\[0.5ex]
 \beta_l &= \frac{{\mit\Delta}_{nw}(0)}{{\mit\Delta}_{pw}(0)}-1,\\[0.5ex]
 \gamma_l&= \frac{I_2}{{\mit\Delta}_{pw}(0)}\left(\frac{q_s}{\epsilon_s}\right)^2\left(\frac{c_\beta}{1+\tau}\right)
 \left(\frac{\rho_\beta}{r_s}\right)\left(\frac{\tau_\varphi\,\tau_H\,\omega_{s\,0}}{\tau_V}\right)\left(\frac{r_s}{w_{pw}}\right)^2,\\[0.5ex]

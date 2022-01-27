@@ -46,6 +46,6 @@ yequals (0., s0);
 pen qq = fontsize (20.);
 defaultpen (qq);
 xaxis ("$r_s/a$", BottomTop, LeftTicks);
-yaxis ("$W_{\rm sat}/a$", LeftRight, RightTicks);
+yaxis ("$W_{pw}/a$", LeftRight, RightTicks);
 
 
