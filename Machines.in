@@ -1,13 +1,18 @@
 # Machine dependent part of Makefiles
 
 UNAME  := $(shell uname)
-NNAME  := $(findstring iris, $(shell uname -n))
+IRIS   := $(findstring iris, $(shell uname -n))
+NNAME  := $(shell uname -n) 
+
+$(info $$UNAME is [${UNAME}])
+$(info $$IRIS is [${IRIS}])
+$(info $$NNAME is [${NNAME}])
 
 ifeq ($(UNAME), Darwin)
 
-     # ##################
-     # Machine is ifs mac
-     # ##################
+     # ###############################
+     # Machine is one of rfitzp's Macs
+     # ###############################
      F_COMPILER = gfortran
      F_FLAGS    =
      F_INCLUDE  = -I/opt/local/include
@@ -17,7 +22,7 @@ ifeq ($(UNAME), Darwin)
      C_INCLUDE  = -I/opt/local/include
      C_LIBS     = -L/opt/local/lib -L/opt/local/lib/libgcc -lgfortran.5 -lgsl -lgslcblas  -lnetcdf -lnetcdff
 
-else ifeq ($(NNAME), iris)
+else ifeq ($(IRIS), iris)
 
      # #######################
      # Machine is iris.gat.com
@@ -36,6 +41,20 @@ else ifeq ($(NNAME), iris)
      C_INCLUDE  = -I$(NCINC) -I$(HONE)/include 
      C_LIBS	= -L$(NCLIB) -L$(HOME)/lib  $(LIB)
 
+else ifeq ($(NNAME), archimedes.ph.utexas.edu )
+
+     #####################################
+     # Machine is archimedes.ph.utexas.edu
+     #####################################
+     F_COMPILER = gfortran
+     F_FLAGS    =
+     F_INCLUDE  = -I/usr/include -I/usr/lib64/gfortran/modules
+
+     C_COMPILER = clang++ -O3
+     C_FLAGS    = -w $(VERSION_FLAGS)
+     C_INCLUDE  = -I/usr/include 
+     C_LIBS     = -L/usr/lib -L/usr/lib/libgcc -lgfortran -lgsl -lgslcblas  -lnetcdf -lnetcdff
+
 else
 
      #########
@@ -43,11 +62,11 @@ else
      #########
      F_COMPILER = gfortran
      F_FLAGS    =
-     F_INCLUDE  = -I/usr/include
+     F_INCLUDE  = -I/usr/include 
 
      C_COMPILER = clang++ -O3
      C_FLAGS    = -w $(VERSION_FLAGS)
-     C_INCLUDE  = -I/usr/include
+     C_INCLUDE  = -I/usr/include 
      C_LIBS     = -L/usr/lib -L/usr/lib/libgcc -lgfortran -lgsl -lgslcblas  -lnetcdf -lnetcdff
      
 endif
