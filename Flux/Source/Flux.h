@@ -293,14 +293,14 @@ class Flux
   double*     I7;      // Neoclassical integral
   double*     I8;      // Neoclassical integral
 
-  // Tesring stability matrices
+  // Tearing stability matrices
   gsl_matrix_complex* FF;  // F-matrix
   gsl_matrix_complex* EE;  // E-matrix
 
   // Cylindrical tearing stability data
   double* A;         // Island saturation parameters
   double* B;         // Island saturation parameters
-  double* Delta_nw;  // Even parity tearing stability indices th no wall
+  double* Delta_nw;  // Even parity tearing stability indices with no wall
   double* Sigma_nw;  // Odd parity tearing stability indices with no wall
   double* Delta_pw;  // Even parity tearing stability indices with perfect wall
   double* Sigma_pw;  // Odd parity tearing stability indices with perfect wall

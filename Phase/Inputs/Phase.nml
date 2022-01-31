@@ -2,19 +2,19 @@
  PMAX = 2.0
  STAGE5 = 1
  TSTART = 0.0
- TEND = 200.0
+ TEND = 2.e2
  DT = 0.1
  TOFF = 5.
- MID = 1
+ MID = 2
  COPT = 0
  CORE = 1.0
  FREQ = 1
  FFAC = 0.4
  LIN = 0
  CXD = 1
- BOOT = 0
- CURV = 0
- POLZ = 0
+ BOOT = 1
+ CURV = 1
+ POLZ = 1
  TAUW = 1.
  CHIR = 2.0
  INTF = 0
@@ -24,6 +24,6 @@
  RATS = 1
  OLD = 0
  HIGH = 1
- SCALE = 2.0
+ SCALE = 2.
  NFLOW = 100
  /

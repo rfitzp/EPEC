@@ -401,11 +401,11 @@ void Flux::CalcTearingSolutionNoWall (int i)
   double lp  = psipp /psip;
   double SDp = (a2p * lp - a1p) /(b1p - b2p * lp);
   
-  gsl_odeiv2_driver_free (d);
-  delete[]                y;
-
   Delta_nw[i] = rs * 0.5 * (SDp - SDm);
   Sigma_nw[i] = rs * 0.5 * (SDp + SDm);
+
+  gsl_odeiv2_driver_free (d);
+  delete[]                y;
 }
 
 // ########################################################################################
@@ -481,12 +481,12 @@ void Flux::CalcTearingSolutionPerfectWall (int i)
   double lp  = psipp /psip;
   double SDp = (a2p * lp - a1p) /(b1p - b2p * lp);
   
-  gsl_odeiv2_driver_free (d);
-  delete[]                y;
-
   Delta_pw[i] = rs * 0.5 * (SDp - SDm);
   Sigma_pw[i] = rs * 0.5 * (SDp + SDm);
   Sigma_w [i] = 2.*m * pow(rs/ra/RW, m) /(1. - pow (1./RW, 2.*m)) /y[0];
+
+  gsl_odeiv2_driver_free (d);
+  delete[]                y;
 }
 
 // #####################################################
