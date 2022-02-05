@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ ! -d "Outputs" ]        
+then
+    mkdir Outputs
+fi
+if [ ! -d "Outputs/Stage3" ] 
+then
+    mkdir Outputs/Stage3
+fi
+
+neoclassical

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ ! -d "Outputs" ]        
+then
+    mkdir Outputs
+fi
+if [ ! -d "Outputs/Stage4" ] 
+then
+    mkdir Outputs/Stage4
+fi
+if [ ! -d "Outputs/Stage5" ]
+then 
+    mkdir Outputs/Stage5
+fi
+
+phase

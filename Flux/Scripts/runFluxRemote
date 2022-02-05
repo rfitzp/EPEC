@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ ! -d "Outputs" ]        
+then
+    mkdir Outputs
+fi
+if [ ! -d "Outputs/Stage1" ] 
+then
+    mkdir Outputs/Stage1
+fi
+if [ ! -d "Outputs/Stage2" ] 
+then
+    mkdir Outputs/Stage2
+fi
+
+flux
