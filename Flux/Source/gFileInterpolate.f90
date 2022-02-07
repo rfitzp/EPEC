@@ -44,9 +44,9 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
   ! -----------------------
   open (unit = 100, file = 'Interface.txt', status = 'old')
 
-  read (100, '(a100)')  gFile1
+  read (100, '(a200)')  gFile1
   read (100, '(e16.9)') time1
-  read (100, '(a100)')  gFile
+  read (100, '(a200)')  gFile
   read (100, '(e16.9)') time
 
   close (unit = 100)
@@ -239,11 +239,11 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
   ! -----------------------
   open (unit = 100, file = 'Interface.txt', status = 'old')
 
-  read (100, '(a100)')  gFile1
+  read (100, '(a200)')  gFile1
   read (100, '(e16.9)') time1
-  read (100, '(a100)')  gFile2
+  read (100, '(a200)')  gFile2
   read (100, '(e16.9)') time2
-  read (100, '(a100)')  gFile
+  read (100, '(a200)')  gFile
   read (100, '(e16.9)') time
 
   close (unit = 100)
@@ -524,13 +524,13 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
   ! -----------------------
   open (unit = 100, file = 'Interface.txt', status = 'old')
 
-  read (100, '(a100)')  gFile1
+  read (100, '(a200)')  gFile1
   read (100, '(e16.9)') time1
-  read (100, '(a100)')  gFile2
+  read (100, '(a200)')  gFile2
   read (100, '(e16.9)') time2
-  read (100, '(a100)')  gFile3
+  read (100, '(a200)')  gFile3
   read (100, '(e16.9)') time3
-  read (100, '(a100)')  gFile
+  read (100, '(a200)')  gFile
   read (100, '(e16.9)') time
 
   close (unit = 100)
@@ -877,15 +877,15 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
   ! -----------------------
   open (unit = 100, file = 'Interface.txt', status = 'old')
 
-  read (100, '(a100)')  gFile1
+  read (100, '(a200)')  gFile1
   read (100, '(e16.9)') time1
-  read (100, '(a100)')  gFile2
+  read (100, '(a200)')  gFile2
   read (100, '(e16.9)') time2
-  read (100, '(a100)')  gFile3
+  read (100, '(a200)')  gFile3
   read (100, '(e16.9)') time3
-  read (100, '(a100)')  gFile4
+  read (100, '(a200)')  gFile4
   read (100, '(e16.9)') time4
-  read (100, '(a100)')  gFile
+  read (100, '(a200)')  gFile
   read (100, '(e16.9)') time
 
   close (unit = 100)
