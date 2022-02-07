@@ -16,10 +16,10 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
 
   implicit none
 
-  character (len = 100) :: gFile1, gFile
+  character (len = 200) :: gFile1, gFile
   double precision      :: time1,  weight1, time
   
-  character (len = 100) :: string
+  character (len = 200) :: string
   integer               :: i, j, i3
   double precision      :: zero
 
@@ -203,10 +203,10 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
 
   implicit none
 
-  character (len = 100) :: gFile1, gFile2, gFile
+  character (len = 200) :: gFile1, gFile2, gFile
   double precision      :: time1,  time2,  weight1, weight2, time
   
-  character (len = 100) :: string
+  character (len = 200) :: string
   integer               :: i, j, i3
   double precision      :: zero
 
@@ -480,10 +480,10 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
 
   implicit none
 
-  character (len = 100) :: gFile1, gFile2, gFile3, gFile
+  character (len = 200) :: gFile1, gFile2, gFile3, gFile
   double precision      :: time1,  time2,  time3,  weight1, weight2, weight3, time
   
-  character (len = 100) :: string
+  character (len = 200) :: string
   integer               :: i, j, i3
   double precision      :: zero
 
@@ -825,10 +825,10 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
 
   implicit none
 
-  character (len = 100) :: gFile1, gFile2, gFile3, gFile4, gFile
+  character (len = 200) :: gFile1, gFile2, gFile3, gFile4, gFile
   double precision      :: time1,  time2,  time3,  time4, weight1, weight2, weight3, weight4, time
   
-  character (len = 100) :: string
+  character (len = 200) :: string
   integer               :: i, j, i3
   double precision      :: zero
 
