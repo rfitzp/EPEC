@@ -169,8 +169,9 @@ subroutine gFileInterpolateLinear () bind (c, name = 'gFileInterpolateLinear')
 
   close (unit = 100)
 
-  write (*, *) "gFile Interpolation:"
-  write (*, "(A, E11.4)") gFile1, weight1
+  write (*, "(a20)") "gFile Interpolation:"
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time1, weight1
+  flush (6)
   
   ! ........
   ! Clean up
@@ -434,9 +435,10 @@ subroutine gFileInterpolateQuadratic () bind (c, name = 'gFileInterpolateQuadrat
 
   close (unit = 100)
 
-  write (*, *) "gFile Interpolation:"
-  write (*, "(A, E11.4)") gFile1, weight1
-  write (*, "(A, E11.4)") gFile2, weight2
+  write (*, "(a20)") "gFile Interpolation:"
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time1, weight1
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time2, weight2
+  flush (6)
   
   ! ........
   ! Clean up
@@ -767,10 +769,11 @@ subroutine gFileInterpolateCubic () bind (c, name = 'gFileInterpolateCubic')
 
   close (unit = 100)
 
-  write (*, "(A)") "gFile Interpolation:"
-  write (*, "(A, E11.4)") gFile1, weight1
-  write (*, "(A, E11.4)") gFile2, weight2
-  write (*, "(A, E11.4)") gFile3, weight3
+  write (*, "(a20)") "gFile Interpolation:"
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time1, weight1
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time2, weight2
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time3, weight3
+  flush (6)
   
   ! ........
   ! Clean up
@@ -1168,11 +1171,12 @@ subroutine gFileInterpolateQuartic () bind (c, name = 'gFileInterpolateQuartic')
 
   close (unit = 100)
 
-  write (*, *) "gFile Interpolation:"
-  write (*, "(A, E11.4)") gFile1, weight1
-  write (*, "(A, E11.4)") gFile2, weight2
-  write (*, "(A, E11.4)") gFile3, weight3
-  write (*, "(A, E11.4)") gFile4, weight4
+  write (*, "(a20)") "gFile Interpolation:"
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time1, weight1
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time2, weight2
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time3, weight3
+  write (*, "(1p,e11.4, 1x, 1p,e11.4)") time4, weight4
+  flush (6)
   
   ! ........
   ! Clean up

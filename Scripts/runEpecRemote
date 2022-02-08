@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -e
+
+# ########
+# Run Flux
+# ########
+if [ ! -d "Flux" ]
+then
+    mkdir Flux
+fi
+if [ ! -d "Flux/Outputs" ]        
+then
+    mkdir Flux/Outputs
+fi
+if [ ! -d "Flux/Outputs/Stage1" ] 
+then
+    mkdir Flux/Outputs/Stage1
+fi
+if [ ! -d "Flux/Outputs/Stage2" ] 
+then
+    mkdir Flux/Outputs/Stage2
+fi
+
+cd Flux
+flux
+
+# ################
+# Run Neoclassical
+# ################
+cd ../
+cp Flux/Outputs/fFile Neoclassical/Inputs/fFile
+
+if [ ! -d "Neoclassical" ]
+then
+    mkdir Neoclassical
+fi
+if [ ! -d "Neoclassical/Outputs" ]        
+then
+    mkdir Neoclassical/Outputs
+fi
+if [ ! -d "Neoclassical/Outputs/Stage3" ] 
+then
+    mkdir Neoclassical/Outputs/Stage3
+fi
+
+cd Neoclassical
+neoclassical
+
+# #########
+# Run Phase
+# #########
+cd ../
+cp Flux/Outputs/fFile Phase/Inputs/fFile
+cp Neoclassical/Outputs/nFile Phase/Inputs/nFile
+
+if [ ! -d "Phase" ]
+then
+    mkdir Phase
+fi
+if [ ! -d "Phase/Outputs" ]        
+then
+    mkdir Phase/Outputs
+fi
+if [ ! -d "Phase/Outputs/Stage4" ] 
+then
+    mkdir Phase/Outputs/Stage4
+fi
+if [ ! -d "Phase/Outputs/Stage5" ]
+then 
+    mkdir Phase/Outputs/Stage5
+fi
+
+cd Phase
+phase

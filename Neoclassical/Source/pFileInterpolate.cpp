@@ -1796,8 +1796,6 @@ void Neoclassical::pFileInterpolateCubic (char* pFile1, double time1, char* pFil
       printf ("NEOCLASSICAL::pFileInterpolateCubic: Missing field in pFile_3\n");
       exit (1);
     }
-  
-  fclose (file);
 
   // ########################
   // Interpolate profile data
@@ -2636,8 +2634,6 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
       printf ("NEOCLASSICAL::pFileInterpolateQuartic: Missing field in pFile_3\n");
       exit (1);
     }
-  
-  fclose (file);
 
   // #################
   // Read fourth pFile
@@ -2882,8 +2878,6 @@ void Neoclassical::pFileInterpolateQuartic (char* pFile1, double time1, char* pF
       exit (1);
     }
   
-  fclose (file);
-
   // ########################
   // Interpolate profile data
   // ########################
