@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+# ################
+# Run Neoclassical
+# ################
+
+if [ ! -d "Neoclassical" ]
+then
+    mkdir Neoclassical
+fi
+if [ ! -d "Neoclassical/Outputs" ]        
+then
+    mkdir Neoclassical/Outputs
+fi
+if [ ! -d "Neoclassical/Outputs/Stage3" ] 
+then
+    mkdir Neoclassical/Outputs/Stage3
+fi
+
+cd Neoclassical
+neoclassical
+

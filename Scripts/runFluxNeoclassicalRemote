@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -e
+
+# ########
+# Run Flux
+# ########
+if [ ! -d "Flux" ]
+then
+    mkdir Flux
+fi
+if [ ! -d "Flux/Outputs" ]        
+then
+    mkdir Flux/Outputs
+fi
+if [ ! -d "Flux/Outputs/Stage1" ] 
+then
+    mkdir Flux/Outputs/Stage1
+fi
+if [ ! -d "Flux/Outputs/Stage2" ] 
+then
+    mkdir Flux/Outputs/Stage2
+fi
+
+cd Flux
+flux
+
+# ################
+# Run Neoclassical
+# ################
+cd ../
+cp Flux/Outputs/fFile Neoclassical/Inputs/fFile
+
+if [ ! -d "Neoclassical" ]
+then
+    mkdir Neoclassical
+fi
+if [ ! -d "Neoclassical/Outputs" ]        
+then
+    mkdir Neoclassical/Outputs
+fi
+if [ ! -d "Neoclassical/Outputs/Stage3" ] 
+then
+    mkdir Neoclassical/Outputs/Stage3
+fi
+
+cd Neoclassical
+neoclassical
+
