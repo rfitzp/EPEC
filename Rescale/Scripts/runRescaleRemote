@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ ! -d "Outputs" ]        
+then
+    mkdir Outputs
+fi
+
+rescale
