@@ -73,3 +73,9 @@ PEND
  Maximum duration of applied type 2 RMP spike (ms)
 DP 
  Difference between durations of applied type 2 RMP spikes (ms) 
+FSTART
+ Minumum phase velocity of applied type 2 RMP spike (starts at SSTART) (kA)
+FEND 
+ Maximum phase velocity of applied type 2 RMP spike (kA)
+DF 
+ Difference between phase velocities of applied type 2 RMP spikes (kA) 

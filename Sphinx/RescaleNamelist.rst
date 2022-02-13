@@ -21,7 +21,7 @@ SCALE
 PSHIFT
    Pressure profile shift factor (kPa) (TYPE=5)
 WSHIFT
-   ExB frequency profile shift factor (krad/s) (TYPE=6
+   ExB frequency profile shift factor (krad/s) (TYPE=6)
 Q95
    Target safety-factor at 95% flux surface (TYPE=7)
 OPOINT

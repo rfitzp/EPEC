@@ -9,13 +9,13 @@ Suite of programs to simulate island dynamics in presence of RMP
 
 Keywords
 --------
-island, dynamics, RMP, GPEC
+tokamak, magnetic island, dynamics, resonant magnetic perturbation (RMP), GPEC code
 
 Long Description
 ----------------
 Suite of programs to simulate multi-harmonic magnetic island chain dynamics 
 in presence of resonant magnetic perturbation in time-varying toroidal 
-tokamak equilibrium.
+tokamak equilibrium. The simulation scheme is based on asymptotic matching.
 
 Relevant Publications
 ---------------------
@@ -34,11 +34,11 @@ Relevant Publications
 
 Weblinks
 --------
-* `EPEC Homepage <http://farside.ph.utexas.edu/img/EPEC-documentation/epec.html>`_
+* `EPEC Homepage <http://farside.ph.utexas.edu/EPEC-documentation/epec.html>`_
 * `Asymptotic Matching Approach to Modeling Tearing Mode Dynamics in Tokamak Plasmas <http://farside.ph.utexas.edu/talks/ifs2021.pdf>`_
 * `Predicting Stability Windows in q95 for RMP-Induced ELM Suppression in H-Mode Tokamak Discharges <http://farside.ph.utexas.edu/talks/PoPWebinar.pdf>`_
 
-Contents
+Programs
 --------
 /FLUX 
   Program to read gFile(s) and write equilibrium data needed by 
@@ -55,9 +55,117 @@ Contents
   state of plasma saved in sFile.
 
 /RESCALE 
-  Program to rescale equilibrium gFile (and pFile) so as to modify q95 by modifying 
-  toroidal plasma current while keeping toroidal magnetic field the same
-
+  Program to rescale equilibrium gFile, as well as profile pFile and cFile,
+  so as to scan physical quantity as function of time. Allowed scans
+  are electron density (n_e), electron temperature (T_e), major radius
+  (R_0), toroidal momentum diffusivity (chi_p), total pressure (P),
+  ExB frequency (w_E), and edge safety-factor (q_95).
+  
 /GPEC
   Independent OMFIT module used to calculate ideal-MHD response of tokamak
   plasma equilibirum to resonant magnetic perturbation
+
+Servers
+-------
+EPEC can be run either on the local server (assuming that the EPEC source is installed on the
+local server) or on a remote server (by default archimedes.ph.utexas.edu), depending on whether
+the "Remote" checkbox on the MAIN screen of the GUI is unchecked or checked, respectively.
+There is also a "Batch" checkbox on the MAIN screen: if checked this enables batch execution of
+remote jobs (when practical and advantageous). The remote server can be changed in the MAIN
+screen of the GUI. 
+
+Filesystems
+-----------
+* **Local OMFIT file system.** Usually in /tmp/<username>/OMFIT/ on local machine.
+* **Remote OMFIT file system.** Usually in /tmp/<username>/OMFIT/ on remote server.
+* **Local EPEC-run database.**
+  In  ~<username>/EPEC-run/<Device>.<Shot>.<Time>.<runid>
+  or  ~<username>/EPEC-run/<Device>.<Shot>.<Times[0]>.<Times[-1]>.<runid> on local machine.
+  Here, <Devivce>, <Shot>, <Time>, <Times[]>, <runid> are set on the MAIN
+  page of the GUI. 
+  Previous runs of EPEC can be loaded from the EPEC-run database using the
+  "Load Previous run ..." button, which will appear on the MAIN page of the GUI if the run is present
+  in the database. The present run can be saved to the database by giving "runid" on the
+  MAIN page of the GUI a unique value, and then hitting the "Save run"
+  button on the MAIN page.
+
+Test Data  
+---------
+Test data can be loaded into EPEC using the TEST DATA page of the GUI. The following data is available:
+
+* NSTX Shot 127317 at 400 ms, n=1 RMP.
+* KSTAR Shot 18594 at 6450 ms, n=2 RMP.
+* DIIID Shot 145380 at 3400 ms, n=3 RMP.
+* DIIID Shot 145380 between 2000 and 4500 ms, 50 ms interval, n=3 RMP.
+
+Workflows
+---------
+* **Basic run**
+   * Edit the namelists that control FLUX, NEOCLASSICAL, and PHASE:
+       * EPEC/INPUTS/epec_namelist - should not need to change.
+       * FLUX/INPUTS/flux_namelist - need to choose NTOR, PSIPED.
+       * NEOCLASSICAL/INPUTS/neoclassical_namelist - need to choose ExB, NN, LN, YN.
+       * PHASE/INPUTS/phase_namelist - need to choose TSTART, TEND, DT, MID, COPT, FREQ.
+       * PHASE/INPUTS/rmp_waveform - need to specify RMP waveform. 
+   * Load the gFile into FLUX/INPUTS/.
+   * Load the pFile into NEOCLASSICAL/INPUTS/. 
+   * Load the cFile into NEOCLASSICAL/INPUTS/. 
+   * Load the gFile into GPEC.
+   * Run GPEC with 1kA (with the correct toroidal mode number) flowing in the desired coil-set. The toroidal mode number 'nn' in the GPEC GUI namelist must match
+     NTOR in FLUX/INPUTS/flux_namelist.
+   * Hit 'Import l/u/m files from GPEC (attempts to guess coil set)'
+     on EPEC page of GUI.
+   * Repeat the previous two steps until all coil-sets have been accounted for. (The maximum allowed number of coil-sets is presently 3.)
+   * Hit 'Run FLUX + NEOCLASSICAL + PHASE' on the EPEC page of the GUI.
+   * The RMP waveform can be modified by changing entries in the PHASE/INPUTS/rmp_waveform namelist. Once the waveform is
+     changed, it is only necessary to rerun PHASE (hit the 'Run PHASE' button on the PHASE page of the GUI). 
+
+* **Interpolated run**
+   * Edit the namelists that control EPEC, FLUX. NEOCLASSICAL, and PHASE:
+       * EPEC/INPUTS/epec_namelist - need to choose TSTART, TEND, DTF, DTP.
+       * FLUX/INPUTS/flux_namelist - need to choose NTOR, PSIPED.
+       * NEOCLASSICAL/INPUTS/neoclassical_namelist - need to choose ExB, NN, LN, YN.
+       * PHASE/INPUTS/phase_namelist - need to choose DT, MID, COPT, FREQ.
+       * PHASE/INPUTS/rmp_waveform - need to specify RMP waveform. 
+   * Load the gFiles into FLUX/INPUTS/gFiles/. Load the Index into FLUX/INPUTS/gFiles/. The Index should list the g-filenames and the corresponding experimental  times
+     in two columns, in order of increasing time.
+   * Load the pFiles into NEOCLASSICAL/INPUTS/pFiles/. Load the Index into NEOCLASSICAL/INPUTS/pFiles/. The Index should list
+     the p-filenames and the corresponding experimental times in two columns, in order of increasing time.
+   * Load the cFiles into NEOCLASSICAL/INPUTS/pFiles/. Load the Index into NEOCLASSICAL/INPUTS/cFiles/. The Index should list
+     the c-filenames and the corresponding experimental times in two columns, in order of increasing time.     
+   * Load the gFiles into GPEC.
+   * Run GPEC with 1kA (with the correct toroidal mode number) flowing in the desired coil-set. The toroidal mode number 'nn' in GPEC GUI must match
+     NTOR in FLUX/INPUTS/flux_namelist.
+   * Hit 'Import l/u/m files from GPEC (attempts to guess coil set)'
+     on the EPEC page of the GUI.
+   * Repeat previous two steps until all coil-sets have been accounted for. (The maximum allowed number of coil-sets is presently 3.)
+   * Hit 'Generate fFiles and nFiles' on the EPEC page of the GUI.
+   * Hit 'Run EPEC' on the EPEC page of the GUI.
+   * The RMP waveform can be modified by changing entries in the PHASE/INPUTS/rmp_waveform namelist. Once the waveform is
+     changed, you can hit 'Run EPEC' again.
+
+* **Rescaled run**
+   * Edit the namelists that control EPEC, RESCALE, FLUX. NEOCLASSICAL, and PHASE:
+       * EPEC/INPUTS/epec_namelist  - need to choose TSTART, TEND, DTF, DTP and RESCALE parameters. 
+       * FLUX/INPUTS/flux_namelist - need to choose NTOR, PSIPED.
+       * NEOCLASSICAL/INPUTS/neoclassical_namelist - need to choose ExB, NN, LN, YN.
+       * PHASE/INPUTS/phase_namelist - need to choose DT, MID, COPT, FREQ.
+       * PHASE/INPUTS/rmp_waveform - need to specify RMP waveform. 
+   * Load the gFile into FLUX/INPUTS/.
+   * Load the pFile into NEOCLASSICAL/INPUTS/. 
+   * Load the cFile into NEOCLASSICAL/INPUTS/.
+   * Hit one of the buttons on the SCAN page of the GUI. This will rescale the gFile/pFile/cFile (e.g., by changing q_95).
+     The rescaled files will be loaded into FLUX/INPUTS/gFiles, NEOCLASSSICAL/INPUTS/pFiles, and NEOCLASSICAL/INPUTS/cFiles,
+     together with the appropriate Index files. 
+   * Load the gFiles into GPEC.
+   * Run GPEC with 1kA (with the correct toroidal mode number) flowing in the desired coil-set. The toroidal mode number 'nn' in GPEC GUI must match
+     NTOR in FLUX/INPUTS/flux_namelist.
+   * Hit 'Import l/u/m files from GPEC (attempts to guess coil set)'
+     on the EPEC page of the GUI.
+   * Repeat the previous two steps until all coil-sets have been accounted for. (The maximum allowed number of coil-sets is presently 3.)
+   * Hit 'Generate fFiles and nFiles' on the EPEC page of the GUI.
+   * Hit 'Run EPEC' on the EPEC page of the GUI.
+   * The RMP waveform can be modified by changing entries in the PHASE/INPUTS/rmp_waveform namelist. Once the waveform is
+     changed, you can hit 'Run EPEC' again. 
+    
+    
