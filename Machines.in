@@ -29,7 +29,7 @@ else ifeq ($(IRIS), iris)
      # #######################
      NCLIB := /fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/lib
      NCINC := /fusion/usc/opt/netcdf/netcdf-4.3.3.1-mpich-gcc-4.7.2/include
-     HOME  := /home/fitzpatrickr
+     HOME  := /cscratch/fitzpatrickr
      LIB   := -lgsl -lgslcblas -lblitz -lgfortran -lnetcdf -lnetcdff
   
      F_COMPILER = gfortran
@@ -38,7 +38,7 @@ else ifeq ($(IRIS), iris)
 
      C_COMPILER = g++ -O3
      C_FLAGS    = -w $(VERSION_FLAGS)
-     C_INCLUDE  = -I$(NCINC) -I$(HONE)/include 
+     C_INCLUDE  = -I$(NCINC) -I$(HOME)/include 
      C_LIBS	= -L$(NCLIB) -L$(HOME)/lib  $(LIB)
 
 else ifeq ($(NNAME), archimedes.ph.utexas.edu )
