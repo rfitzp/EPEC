@@ -65,29 +65,45 @@ Programs
   Independent OMFIT module used to calculate ideal-MHD response of tokamak
   plasma equilibirum to resonant magnetic perturbation
 
+Calculation Phases
+------------------
+* **PHASE 1**: PHASE reads gFile(s) and outputs plasma equilibrium data for Stage 2
+* **PHASE 2**: PHASE constructs flux coordinate system, calculates metric quantities, 
+  locates resonant surfaces, calculates neoclassical data at resonant surfaces, calculates
+  tearing stability matrix, calculates GGJ data, calculates island
+  saturation data, and outputs all data to fFile(s). 
+* **PHASE 3**: NEOCLASSICAL reads fFile(s), pFile(s), and cFiles(s), calculates neoclassical/profile data at resonant surfaces, 
+  and outputs data to nFile(s).
+* **PHASE 4**: PHASE reads fFile(s), nFile(s), lfiles(s), uFile(s), mFile(s) for Stages 5 & 6,  and calculates vacuum island widths as function of relative 
+  RMP coil phase.
+* **PHASE 5**: PHASE performs island dynamics simulation in fixed equilibrium.
+* **PHASE 6**: PHASE performs island dynamics simulation in dynamic equilibrium.  
+  
+
 Servers
 -------
-EPEC can be run either on the local server (assuming that the EPEC source is installed on the
-local server) or on a remote server (by default archimedes.ph.utexas.edu), depending on whether
-the "Remote" checkbox on the MAIN screen of the GUI is unchecked or checked, respectively.
+EPEC can be run either directly on the local server (assuming that the EPEC source is installed on the
+local server) or via SLURM on a SLURM server, depending on whether
+the "SLURM" checkbox on the MAIN screen of the GUI is unchecked or checked, respectively.
 There is also a "Batch" checkbox on the MAIN screen: if checked this enables batch execution of
-remote jobs (when practical and advantageous). The remote server can be changed in the MAIN
+SLURM jobs (when practical and advantageous). The SLURM server can be changed in the MAIN
 screen of the GUI. 
 
 Filesystems
 -----------
 * **Local OMFIT file system.** Usually in /tmp/<username>/OMFIT/ on local machine.
-* **Remote OMFIT file system.** Usually in /tmp/<username>/OMFIT/ on remote server.
-* **Local EPEC-run database.**
-  In  ~<username>/EPEC-run/<Device>.<Shot>.<Time>.<runid>
-  or  ~<username>/EPEC-run/<Device>.<Shot>.<Times[0]>.<Times[-1]>.<runid> on local machine.
-  Here, <Devivce>, <Shot>, <Time>, <Times[]>, <runid> are set on the MAIN
-  page of the GUI. 
-  Previous runs of EPEC can be loaded from the EPEC-run database using the
-  "Load Previous run ..." button, which will appear on the MAIN page of the GUI if the run is present
-  in the database. The present run can be saved to the database by giving "runid" on the
-  MAIN page of the GUI a unique value, and then hitting the "Save run"
-  button on the MAIN page.
+* **Remote OMFIT file system.** Usually in /tmp/<username>/OMFIT/ on SLURM server.
+* **Local EPEC-runs database.**
+    * In  projectsDir/../EPEC-runs/<Device>.<Shot>.<Time>.<runid>
+    * Alternately in projectsDir/EPEC-runs/<Device>.<Shot>.<Times[0]>.<Times[-1]>.<runid> on local machine.
+    * Here, <Device>, <Shot>, <Time>, <Times[]>, <runid> are set on the MAIN
+      page of the GUI. 
+    * Previous runs of EPEC can be loaded from the EPEC-runs database using the
+      "Load Previous run ..." button, which will appear on the MAIN page of the GUI if the run is present
+      in the database.
+    * The present run can be saved to the database by giving "runid" on the
+      MAIN page of the GUI a unique value, and then hitting the "Save run"
+      button on the MAIN page.
 
 Test Data  
 ---------
@@ -100,6 +116,11 @@ Test data can be loaded into EPEC using the TEST DATA page of the GUI. The follo
 
 Workflows
 ---------
+
+* **Test run**
+  * Hit 'DIIID #145380 3400 ms n=3' button on the TEST DATA page of the GUI.
+  * Hit 'Run FLUX + NEOCLASSICAL + PHASE' on the EPEC page of the GUI. 
+
 * **Basic run**
    * Edit the namelists that control FLUX, NEOCLASSICAL, and PHASE:
        * EPEC/INPUTS/epec_namelist - should not need to change.
