@@ -64,6 +64,7 @@
 // 2.1  - Added cylindrical tearing mode calculation
 // 2.2  - Removed command line options
 // 2.3  - Added resistive wall
+// 2.4  - Added cylindrical quantities to NETCDF file
 
 // #####################################################################################
 
@@ -73,7 +74,7 @@
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 3
+#define VERSION_MINOR 4
 
 #include <stdio.h>
 #include <math.h>

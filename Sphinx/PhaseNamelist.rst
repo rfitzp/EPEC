@@ -62,12 +62,16 @@ LIN
   Flag for purely linear island dynamics simulation
 CXD 
   Flag for including charge exhange damping in angular equations of motion
+POEM
+  Flag for including island saturation terms in Rutherford equations 
 BOOT
-  Flag for including bootstrap current in Rutherford equations
+  Flag for including bootstrap current terms in Rutherford equations
 CURV
-  Flag for including magnetic field-line curvature in Rutherford equations
+  Flag for including magnetic field-line curvature terms in Rutherford equations
 POLZ
-  Flag for including ion polarization current in Rutherford equations
+  Flag for including ion polarization current terms in Rutherford equations
+WALL
+  FLag for including resistive wall in calculation
 TAUW
   Time constant of resistive wall (ms)
 CHIR

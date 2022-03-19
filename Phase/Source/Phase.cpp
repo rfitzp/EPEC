@@ -128,9 +128,11 @@ void Phase::Read_Data ()
   FFAC    = 0.;
   LIN     = 0;
   CXD     = 1;
-  BOOT    = 1;
-  CURV    = 1;
-  POLZ    = 1;
+  POEM    = 0;
+  BOOT    = 0;
+  CURV    = 0;
+  POLZ    = 0;
+  WALL    = 0;
   TAUW    = 1.;
   CHIR    = 1.;
   INTF    = 0;
@@ -166,7 +168,7 @@ void Phase::Read_Data ()
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
 		&DT, &TSTART, &TEND, &TOFF, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
-		&CXD, &BOOT, &CURV, &POLZ, &TAUW, &TYPE, &NCTRL, TCTRL, ICTRL, PCTRL,
+		&CXD, &POEM, &BOOT, &CURV, &POLZ, &WALL, &TAUW, &TYPE, &NCTRL, TCTRL, ICTRL, PCTRL,
 		&SSTART, &SEND, &SAMP, &SPHA, &SPVE, &BACK, &RPERIOD, &RSTART, &REND, &RPHA);
 
   TT.resize (NCTRL);
@@ -209,6 +211,11 @@ void Phase::Read_Data ()
       printf ("PHASE:: Invalid MID value\n");
       exit (1);
     }
+  if (POEM < 0 || POEM > 2)
+    {
+      printf ("PHASE:: Invalid POEM value\n");
+      exit (1);
+    }
   if (TAUW <= 0.)
     {
       printf ("PHASE:: Invalid TAUW value\n");
@@ -240,8 +247,8 @@ void Phase::Read_Data ()
   // .............................
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
-	  FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
+  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d POEM = %2d BOOT = %2d CURV = %2d POLZ = %2d WALL = %2dTAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
+	  FREQ, FFAC, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
   printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e SAMP = %10.3e SPHA/pi = %10.3e SPVE = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
 	  TYPE, NCTRL, SSTART, SEND, SAMP, SPHA/M_PI, SPVE, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
   for (int i = 0; i < NCTRL; i++)
@@ -254,8 +261,8 @@ void Phase::Read_Data ()
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d \n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d BOOT = %2d CURV = %2d POLZ = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
-	   FREQ, FFAC, CXD, BOOT, CURV, POLZ, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
+  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d POEM = %2d BOOT = %2d CURV = %2d POLZ = %2d WALL = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
+	   FREQ, FFAC, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
   fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e SAMP = %10.3e SPHA/pi = %10.3e SPVE = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
 	   TYPE, NCTRL, SSTART, SEND, SAMP, SPHA/M_PI, SPVE, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
   for (int i = 0; i < NCTRL; i++)
@@ -363,6 +370,22 @@ void Phase::Read_Data ()
 	  exit (1);
 	}
     }
+
+  if (WALL == 0)
+    for (int j = 0; j < nres; j++)
+      {
+	Deltaw (j) = -1.;
+	Sigmaw (j) = 0.;
+      }
+  else
+    for (int j = 0; j < nres; j++)
+      {
+	if (Deltaw (j) > 0.)
+	  {
+	    printf ("PHASE::Error Deltaw(%2d) > 0.\n", j);
+	    exit (1);
+	  }
+      }
   
   FF = gsl_matrix_complex_alloc (nres, nres);
   FFh.resize (nres, nres);
@@ -1878,20 +1901,20 @@ void Phase::CalcRMP (double t)
   // Type 2 spike waveform
   if (TYPE == 2)
     {
-      if (t < SSTART)
+      if (t < Sstart)
 	{
 	  irmp = BACK;
-	  prmp = RPHA; 
+	  prmp = SPHA; 
 	}
       else if (t >= Sstart && t <= Send)
 	{
 	  irmp = SAMP;
-	  prmp = RPHA;
+	  prmp = SPHA + (t - Sstart) * Spve;
 	}
       else
 	{
 	  irmp = BACK;
-	  prmp = RPHA;
+	  prmp = SPHA + (Send - Sstart) * Spve;
 	}
     }
 
@@ -2726,7 +2749,13 @@ void Phase::Rhs (double t, Array<double,1>& y, Array<double,1>& dydt)
       double curv = alphac  (j) * facc;
       double polz = alphap  (j) * (facpTi + facpni);
       double wall = Sigmaw (j) * Sigmaw (j) /Deltaw (j);
-      double poem = ((Poem1 (j) * W * log (1./W) + Poem2 (j) * W) * WTek*WTek + Poem3 (j) * W * Wk*Wk) /(WTek*WTek + Wk*Wk);
+      double poem;
+      if (POEM == 0)
+	poem = 0.;
+      else if (POEM == 1)
+	poem = ((Poem1 (j) * W * log (1./W) + Poem2 (j) * W) * WTek*WTek + Poem3 (j) * W * Wk*Wk) /(WTek*WTek + Wk*Wk);
+      else if (POEM == 2)
+	poem = Poem3 (j) * W;
       
       Cosk (j) = EEh (j, j) * chi (j) * cos (zeta (j)) + (boot + curv + polz + wall - poem) * Xk (j) + Sigmaw (j) * Uk (j);
       Sink (j) = EEh (j, j) * chi (j) * sin (zeta (j)) + (boot + curv + polz + wall - poem) * Yk (j) + Sigmaw (j) * Vk (j);

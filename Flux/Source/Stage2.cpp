@@ -416,6 +416,34 @@ void Flux::WriteStage2Netcdfc ()
   int eimag;
   err += nc_def_var (dataFile, "E_imag", NC_DOUBLE, 2, est_d, &eimag);
 
+  // Delta_w
+  int dw;
+  err += nc_def_var (dataFile, "Delta_w", NC_DOUBLE, 1, &S_d, &dw);
+
+  // Sigma_w
+  int sw;
+  err += nc_def_var (dataFile, "Sigma_w", NC_DOUBLE, 1, &S_d, &sw);
+
+  // Poem1
+  int p1;
+  err += nc_def_var (dataFile, "Poem1", NC_DOUBLE, 1, &S_d, &p1);
+
+  // Poem2
+  int p2;
+  err += nc_def_var (dataFile, "Poem2", NC_DOUBLE, 1, &S_d, &p2);
+
+  // Poem3
+  int p3;
+  err += nc_def_var (dataFile, "Poem3", NC_DOUBLE, 1, &S_d, &p3);
+
+  // A
+  int aa;
+  err += nc_def_var (dataFile, "A", NC_DOUBLE, 1, &S_d, &aa);
+
+  // B
+  int bb;
+  err += nc_def_var (dataFile, "B", NC_DOUBLE, 1, &S_d, &bb);
+  
   err += nc_enddef (dataFile);
 
   if (err != 0)
@@ -465,7 +493,14 @@ void Flux::WriteStage2Netcdfc ()
   err += nc_put_var_double (dataFile, cnc,      DATA11);
   err += nc_put_var_double (dataFile, ereal,    DATA8);
   err += nc_put_var_double (dataFile, eimag,    DATA9);
- 
+  err += nc_put_var_double (dataFile, dw,       Delta_w);
+  err += nc_put_var_double (dataFile, sw,       Sigma_w);
+  err += nc_put_var_double (dataFile, p1,       Poem1);
+  err += nc_put_var_double (dataFile, p2,       Poem2);
+  err += nc_put_var_double (dataFile, p3,       Poem3);
+  err += nc_put_var_double (dataFile, aa,       A);
+  err += nc_put_var_double (dataFile, bb,       B);
+  
   if (err != 0)
     {
       printf ("FLUX::WriteStage2Netcdfc: Error writing Outputs/Stage2.nc\n");

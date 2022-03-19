@@ -75,6 +75,7 @@
 // 3.3  - Added resistive wall
 // 3.4  - Added TOFF and electromagnetic torques
 // 3.5  - Added spike and repeated ramp waveforms
+// 3.6  - Added WALL and POEM switches
 
 // #######################################################################
 
@@ -82,7 +83,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 3
-#define VERSION_MINOR 5
+#define VERSION_MINOR 6
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
 #define MAXULFILELINELENGTH 500
@@ -110,7 +111,7 @@ using namespace blitz;
 // Namelist function
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* TOFF, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, double* FFAC, int* CXD, int* BOOT, int* CURV, int* POLZ, double* TAUW, 
+			      double* CORE, double* FFAC, int* CXD, int* POEM, int* BOOT, int* CURV, int* POLZ, int* WALL, double* TAUW, 
 			      int* TYPE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL,
 			      double* SSTART, double* SEND, double* SAMP, double* SPHA, double* SPVE, double* BACK,
 			      double* RPERIOD, double* RSTART, double* REND, double* RPHA);
@@ -153,11 +154,17 @@ class Phase
   double  FFAC;    // Natural frequency parameter (for FREQ = 3)
 
   int     LIN;     // If != 0 then perform purely linear calculation
-  int     CXD;     // If != 0 include charge exchange damping in plasma angular equations of motion
-  int     BOOT;    // If != 0 include effect of bootstrap current in Rutherford equations
-  int     CURV;    // If != 0 include effect of magnetic field-line curvature in Rutherford equations
-  int     POLZ;    // If != 0 include effect of ion polarization current in Rutherford equations
+  int     CXD;     // If != 0 then include charge exchange damping in plasma angular equations of motion
 
+  int     POEM;    // Island saturation term switch:
+                   //  If == 0 then do  not include island saturation terms in Rutherford equations
+                   //  If == 1 then use full POEM model
+                   //  If == 2 then only use POEM3 model
+  int     BOOT;    // If != 0 then include effect of bootstrap current in Rutherford equations
+  int     CURV;    // If != 0 then include effect of magnetic field-line curvature in Rutherford equations
+  int     POLZ;    // If != 0 then include effect of ion polarization current in Rutherford equations
+
+  int     WALL;    // If != 0 then include resistive wall in calculation
   double  TAUW;    // Wall time constant (ms)
   
   double  CHIR;    // Maximum allowable Chirikov parameter for vacuum islands
@@ -166,7 +173,7 @@ class Phase
   int     INTN;    // If != 0 then use interpolated nFile
   int     INTU;    // If != 0 then use interpolated lFile, uFile, and mFile
   int     NATS;    // If != 0 then use linear-only nFile interpolation
-  int     RATS;    // If != 0 use linear-only interpolation for uFiles/mFiles/lFiles
+  int     RATS;    // If != 0 then use linear-only interpolation for uFiles/mFiles/lFiles
   int     OLD;     // If != 0 then restart old calculation
 
   int     HIGH;    // If != 0 use higher-order transport analysis
@@ -182,8 +189,6 @@ class Phase
 
   double  SSTART;  // Time of start of RMP spike (ms)
   double  SEND;    // Time of end of RMP spike (ms)
-  double  WAMOD;   // Amplitude modulation frequency of RMP coil currents duing spike (krad/s)
-  double  WPMOD;   // Realtive phase velocity of RMP coil currents during spike (krad/s)
   double  SAMP;    // RMP coils current amplitudes at start of spike (kA)
   double  SPHA;    // Relative phase of RMP coil currents at start of spike (units of PI)
   double  SPVE;    // Phase velocity of RMP coil currents during spike (krad/s)

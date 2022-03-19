@@ -1581,6 +1581,9 @@ void Neoclassical::WriteStage3Netcdfc ()
   Array<double,2> RHS1 (nres, NISLAND);
   Array<double,2> RHS2 (nres, NISLAND);
   Array<double,2> RHS3 (nres, NISLAND);
+  Array<double,2> RHS1a (nres, NISLAND);
+  Array<double,2> RHS2a (nres, NISLAND);
+  Array<double,2> RHS3a (nres, NISLAND);
   double WPSIMAX = 0.2;
 
   for (int j = 0; j < nres; j++)
@@ -1620,21 +1623,35 @@ void Neoclassical::WriteStage3Netcdfc ()
 	double rhs2 = rhs1 + boot + curv + polz;
 	double rhs3 = rhs1 + boot + curv + polz + wall;
 
+	double rhs1a = - EEh (j, j) + poem3;
+	double rhs2a = rhs1a + boot + curv + polz;
+	double rhs3a = rhs1a + boot + curv + polz + wall;
+
 	RHS1 (j, i) = rhs1;
 	RHS2 (j, i) = rhs2;
 	RHS3 (j, i) = rhs3;
+
+	RHS1a (j, i) = rhs1a;
+	RHS2a (j, i) = rhs2a;
+	RHS3a (j, i) = rhs3a;
       }
 
-  double* w_x    = new double [NISLAND];
-  double* rhs1_x = new double [nres*NISLAND];
-  double* rhs2_x = new double [nres*NISLAND];
-  double* rhs3_x = new double [nres*NISLAND];
+  double* w_x     = new double [NISLAND];
+  double* rhs1_x  = new double [nres*NISLAND];
+  double* rhs2_x  = new double [nres*NISLAND];
+  double* rhs3_x  = new double [nres*NISLAND];
+  double* rhs1a_x = new double [nres*NISLAND];
+  double* rhs2a_x = new double [nres*NISLAND];
+  double* rhs3a_x = new double [nres*NISLAND];
   for (int j = 0; j < nres; j++)
     for (int i = 0; i < NISLAND; i++)
       {
-	rhs1_x[i + j*NISLAND] = RHS1 (j, i);
-	rhs2_x[i + j*NISLAND] = RHS2 (j, i);
-	rhs3_x[i + j*NISLAND] = RHS3 (j, i);
+	rhs1_x [i + j*NISLAND] = RHS1  (j, i);
+	rhs2_x [i + j*NISLAND] = RHS2  (j, i);
+	rhs3_x [i + j*NISLAND] = RHS3  (j, i);
+	rhs1a_x[i + j*NISLAND] = RHS1a (j, i);
+	rhs2a_x[i + j*NISLAND] = RHS2a (j, i);
+	rhs3a_x[i + j*NISLAND] = RHS3a (j, i);
       }
 
   for (int i = 0; i < NISLAND; i++)
@@ -1930,12 +1947,15 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_def_var (dataFile, "w_psi", NC_DOUBLE, 1, &island_d, &w_y);
   
   // rhs
-  int rhs_d[2], rhs1_y, rhs2_y, rhs3_y;
+  int rhs_d[2], rhs1_y, rhs2_y, rhs3_y, rhs1a_y, rhs2a_y, rhs3a_y;
   rhs_d[0] = nres_d;
   rhs_d[1] = island_d;
-  err += nc_def_var (dataFile, "rhs1", NC_DOUBLE, 2, rhs_d, &rhs1_y);
-  err += nc_def_var (dataFile, "rhs2", NC_DOUBLE, 2, rhs_d, &rhs2_y);
-  err += nc_def_var (dataFile, "rhs3", NC_DOUBLE, 2, rhs_d, &rhs3_y);
+  err += nc_def_var (dataFile, "rhs1",  NC_DOUBLE, 2, rhs_d, &rhs1_y);
+  err += nc_def_var (dataFile, "rhs2",  NC_DOUBLE, 2, rhs_d, &rhs2_y);
+  err += nc_def_var (dataFile, "rhs3",  NC_DOUBLE, 2, rhs_d, &rhs3_y);
+  err += nc_def_var (dataFile, "rhs1a", NC_DOUBLE, 2, rhs_d, &rhs1a_y);
+  err += nc_def_var (dataFile, "rhs2a", NC_DOUBLE, 2, rhs_d, &rhs2a_y);
+  err += nc_def_var (dataFile, "rhs3a", NC_DOUBLE, 2, rhs_d, &rhs3a_y);
 
   err += nc_enddef (dataFile);
 
@@ -2018,6 +2038,9 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, rhs1_y,        rhs1_x);
   err += nc_put_var_double (dataFile, rhs2_y,        rhs2_x);
   err += nc_put_var_double (dataFile, rhs3_y,        rhs3_x);
+  err += nc_put_var_double (dataFile, rhs1a_y,       rhs1a_x);
+  err += nc_put_var_double (dataFile, rhs2a_y,       rhs2a_x);
+  err += nc_put_var_double (dataFile, rhs3a_y,       rhs3a_x);
  
   if (err != 0)
     {
@@ -2049,7 +2072,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   delete[] w_para_x;   delete[] w_EB0_x;    delete[] w_EB1_x;    delete[] w_EB2_x;       delete[] w_nc_I0_x;  
   delete[] w_nc_I1_x;  delete[] w_nc_I2_x;  delete[] w_pnc_I0_x; delete[] w_pnc_I1_x;    delete[] w_pnc_I2_x; 
   delete[] w_tk_x;     delete[] w_pk_x;     delete[] rhs1_x;     delete[] w_x;           delete[] mk_x;
-  delete[] rhs2_x;     delete[] rhs3_x;
+  delete[] rhs2_x;     delete[] rhs3_x;     delete[] rhs1a_x;    delete[] rhs2a_x;       delete[] rhs3a_x;
 }
 
 // #######################################################################################

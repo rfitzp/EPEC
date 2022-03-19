@@ -15,6 +15,7 @@
  BOOT = 0
  CURV = 0
  POLZ = 0
+ WALL = 0
  TAUW = 1.
  CHIR = 2.0
  INTF = 0
