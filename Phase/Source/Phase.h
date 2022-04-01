@@ -76,6 +76,7 @@
 // 3.4  - Added TOFF and electromagnetic torques
 // 3.5  - Added spike and repeated ramp waveforms
 // 3.6  - Added WALL and POEM switches
+// 3.7  - Added MSTOP
 
 // #######################################################################
 
@@ -111,7 +112,7 @@ using namespace blitz;
 // Namelist function
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* TOFF, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, double* FFAC, int* CXD, int* POEM, int* BOOT, int* CURV, int* POLZ, int* WALL, double* TAUW, 
+			      double* CORE, double* FFAC, int* CXD, int* POEM, int* BOOT, int* CURV, int* POLZ, int* WALL, double* TAUW, int* MSTOP,
 			      int* TYPE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL,
 			      double* SSTART, double* SEND, double* SAMP, double* SPHA, double* SPVE, double* BACK,
 			      double* RPERIOD, double* RSTART, double* REND, double* RPHA);
@@ -179,6 +180,8 @@ class Phase
   int     HIGH;    // If != 0 use higher-order transport analysis
   double  SCALE;   // GPEC scalefactor
   int     NFLOW;   // Number of flow harmonics included in model
+
+  int     MSTOP;   // Stop calculation if MPOL = MSTOP mode locks (only active if MSTOP > 0)
 
   int     TYPE;    // RMP waveform type (1=programmed, 2=spike, 3=repeated ramp) 
 

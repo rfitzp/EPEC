@@ -67,6 +67,8 @@ AMIN
  Minimum amplitude of applied type 2 RMP spike (kA)
 AMAX
  Maximum amplitude of applied type 2 RMP spike (kA)
+DA
+ Resolution to which trigger amplitude determined (kA)
 PSTART
  Minumum duration of applied type 2 RMP spike (starts at SSTART) (ms)
 PEND 

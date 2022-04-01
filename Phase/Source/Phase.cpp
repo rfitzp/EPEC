@@ -144,6 +144,7 @@ void Phase::Read_Data ()
   HIGH    = 1;
   SCALE   = 2.;
   NFLOW   = 200;
+  MSTOP   = -1;
  
   TYPE    = 1;
   SSTART  = 10.;
@@ -168,7 +169,7 @@ void Phase::Read_Data ()
 
   NameListRead (&NFLOW, &STAGE5, &INTF, &INTN, &INTU, &NATS, &OLD, &FREQ, &LIN, &MID, &COPT,
 		&DT, &TSTART, &TEND, &TOFF, &SCALE, &PMAX, &CHIR, &HIGH, &RATS, &CORE, &FFAC, 
-		&CXD, &POEM, &BOOT, &CURV, &POLZ, &WALL, &TAUW, &TYPE, &NCTRL, TCTRL, ICTRL, PCTRL,
+		&CXD, &POEM, &BOOT, &CURV, &POLZ, &WALL, &TAUW, &MSTOP, &TYPE, &NCTRL, TCTRL, ICTRL, PCTRL,
 		&SSTART, &SEND, &SAMP, &SPHA, &SPVE, &BACK, &RPERIOD, &RSTART, &REND, &RPHA);
 
   TT.resize (NCTRL);
@@ -247,8 +248,8 @@ void Phase::Read_Data ()
   // .............................
   printf ("NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d\n",
 	  NFLOW, STAGE5, INTF, INTN, INTU, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d POEM = %2d BOOT = %2d CURV = %2d POLZ = %2d WALL = %2dTAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
-	  FREQ, FFAC, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
+  printf ("FREQ = %2d FFAC = %10.3e CXD = %2d POEM = %2d BOOT = %2d CURV = %2d POLZ = %2d WALL = %2dTAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e MSTOP = %3d\n",
+	  FREQ, FFAC, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, MSTOP);
   printf ("TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e SAMP = %10.3e SPHA/pi = %10.3e SPVE = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
 	  TYPE, NCTRL, SSTART, SEND, SAMP, SPHA/M_PI, SPVE, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
   for (int i = 0; i < NCTRL; i++)
@@ -261,8 +262,8 @@ void Phase::Read_Data ()
   fprintf (namelist, "Input parameters (from Inputs/Phase.nml):\n");
   fprintf (namelist, "NFLOW = %4d STAGE5 = %2d INTF = %2d INTN = %2d INTU = %2d NATS = %2d OLD = %2d LIN = %2d MID = %2d COPT = %2d CORE = %10.3e HIGH = %2d RATS = %2d \n",
 	   NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, LIN, MID, COPT, CORE, HIGH, RATS);
-  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d POEM = %2d BOOT = %2d CURV = %2d POLZ = %2d WALL = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e\n",
-	   FREQ, FFAC, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR);
+  fprintf (namelist, "FREQ = %2d FFAC = %10.3e CXD = %2d POEM = %2d BOOT = %2d CURV = %2d POLZ = %2d WALL = %2d TAUW = %10.3e DT = %10.3e TSTART = %10.3e TEND = %10.3e TOFF = %10.3e SCALE = %10.3e PMAX = %10.3e CHIR = %10.3e MSTOP = %3d\n",
+	   FREQ, FFAC, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW, DT, TSTART, TEND, TOFF, SCALE, PMAX, CHIR, MSTOP);
   fprintf (namelist, "TYPE = %2d NCTRL = %4d SSTART = %10.3e SEND = %10.3e SAMP = %10.3e SPHA/pi = %10.3e SPVE = %10.3e BACK = %10.3e RPERIOD = %10.3e RSTART = %10.3e REND = %10.3e RPHA/pi = %10.3e\n",
 	   TYPE, NCTRL, SSTART, SEND, SAMP, SPHA/M_PI, SPVE, BACK, RPERIOD, RSTART, REND, RPHA/M_PI);
   for (int i = 0; i < NCTRL; i++)
@@ -1627,6 +1628,7 @@ void Phase::IslandDynamics ()
   printf ("......................\n");
   printf ("Performing simulation:\n");
   printf ("......................\n");
+  int mlock = 1;
   do
     {
       for (int j = 0; j < nres; j++)
@@ -1661,6 +1663,9 @@ void Phase::IslandDynamics ()
 
 	    printf ("m = %3d locks at t = %10.3e s  irmp = %10.3e kA  prmp/pi = %10.3e\n",
 		    mk (j), t*tau_A, irmp, prmp /M_PI);
+
+	    if (mk (j) == MSTOP)
+	      mlock = 0;
 
 	    ztlock[j]  = t *tau_A/1.e-3;
 	    zIlock[j]  = irmp;
@@ -1820,8 +1825,9 @@ void Phase::IslandDynamics ()
 	  fflush (stdout);
 	}
     }
-  while (t < Tend);
-  RK4Fixed (t, y, Tend - t);
+  while (t < Tend && mlock);
+  if (mlock)
+    RK4Fixed (t, y, Tend - t);
 
   printf ("t(ms) = %10.3e h(ms) = %10.3e h/tau_A = %10.3e irmp(kA) = %10.3e prmp/pi = %10.3e\n", t*tau_A*1.e3, h*tau_A*1.e3, h, irmp, prmp /M_PI);
 

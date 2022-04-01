@@ -76,6 +76,8 @@ TAUW
   Time constant of resistive wall (ms)
 CHIR
   Maximum Chirikov parameter for vacuum islands
+MSTOP
+  Stop claculation if m = MSTOP mode locks (only active if MSTOP > 0)
 INTF
   Flag for fFile interpolation
 INTN

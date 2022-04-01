@@ -28,4 +28,5 @@
  HIGH = 1
  SCALE = 2.0
  NFLOW = 100
+ MSTOP = -1
  /

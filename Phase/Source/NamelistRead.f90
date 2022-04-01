@@ -2,7 +2,7 @@
 
 subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, MID, COPT, DT,&
      TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, FFAC, CXD, POEM, BOOT, CURV, POLZ,&
-     WALL, TAUW, TYPE, NCTRL, xTCTRL, xICTRL, xPCTRL,&
+     WALL, TAUW, MSTOP, TYPE, NCTRL, xTCTRL, xICTRL, xPCTRL,&
      SSTART, SEND, SAMP, SPHA, SPVE, BACK, RPERIOD, RSTART, REND, RPHA)&
      bind (c, name = 'NameListRead')
 
@@ -30,6 +30,7 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   integer (kind = c_int),    intent (inout) :: POLZ
   integer (kind = c_int),    intent (inout) :: TYPE
   integer (kind = c_int),    intent (inout) :: WALL
+  integer (kind = c_int),    intent (inout) :: MSTOP
   real    (kind = c_double), intent (inout) :: FFAC
   real    (kind = c_double), intent (inout) :: DT
   real    (kind = c_double), intent (inout) :: TSTART
@@ -63,7 +64,8 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   double precision :: pi
  
   namelist /PHASE_CONTROL/ STAGE5, NFLOW, INTF, INTN, INTU, NATS, OLD, FREQ, FFAC, LIN, MID, COPT, DT,&
-       TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW
+       TSTART, TEND, TOFF, SCALE, PMAX, CHIR, HIGH, RATS, CORE, CXD, POEM, BOOT, CURV, POLZ, WALL, TAUW,&
+       MSTOP
   namelist /WAVEFORM_CONTROL/ TYPE, NCTRL
   namelist /TYPE1_WAVEFORM/ TCTRL, ICTRL, PCTRL
   namelist /TYPE2_WAVEFORM/ SSTART, SEND, SAMP, SPHA, SPVE, BACK
