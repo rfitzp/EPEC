@@ -77,6 +77,7 @@
 // 3.5  - Added spike and repeated ramp waveforms
 // 3.6  - Added WALL and POEM switches
 // 3.7  - Added MSTOP
+// 3.8  - Modified reading of lfile/ufile/mfile to take into account new GPEC 1.5 output format
 
 // #######################################################################
 

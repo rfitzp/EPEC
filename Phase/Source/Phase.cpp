@@ -769,7 +769,7 @@ void Phase::Read_Data ()
   char    line[MAXULFILELINELENGTH];
   char    line1[MAXULFILELINELENGTH];
   char    line0[MAXULFILELINELENGTH];
-  double  v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12;
+  double  v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13;
   double* QIN = new double[nres];
   double* PSI = new double[nres];
   double* DRE = new double[nres];
@@ -817,8 +817,8 @@ void Phase::Read_Data ()
 	}
       
        for (int i = 0; i < nres1; i++)
-	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
+	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13) != 13)
 	  {
 	    printf ("Error reading mFile\n");
 	    exit (1);
@@ -897,8 +897,8 @@ void Phase::Read_Data ()
       
       double sum = 0.;
       for (int i = 0; i < nres1; i++)
-	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
+	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13) != 13)
 	  {
 	    printf ("Error reading uFile\n");
 	    exit (1);
@@ -976,8 +976,8 @@ void Phase::Read_Data ()
 	}
       
       for (int i = 0; i < nres1; i++)
-	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12) != 12)
+	if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		    &v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8, &v9, &v10, &v11, &v12, &v13) != 13)
 	  {
 	    printf ("Error reading lFile\n");
 	    exit (1);

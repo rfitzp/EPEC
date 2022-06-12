@@ -178,10 +178,11 @@ void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, dou
   double* v10_1 = new double[nres_1];
   double* v11_1 = new double[nres_1];
   double* v12_1 = new double[nres_1];
+  double* v13_1 = new double[nres_1];
 
   for (int i = 0; i < nres_1; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i], &v13_1[i]) != 13)
       {
 	printf ("PHASE:lFileInterpolateLinear: Error reading lFile_1\n");
 	exit (1);
@@ -206,6 +207,7 @@ void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, dou
   double* v10 = new double[nres];
   double* v11 = new double[nres];
   double* v12 = new double[nres];
+  double* v13 = new double[nres];
 
   double weight1 = 1.;
 
@@ -222,7 +224,8 @@ void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, dou
       v09[i] = v09_1[i]; 
       v10[i] = v10_1[i]; 
       v11[i] = v11_1[i]; 
-      v12[i] = v12_1[i]; 
+      v12[i] = v12_1[i];
+      v13[i] = v13_1[i]; 
     }
 
   // ........................
@@ -240,8 +243,8 @@ void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, dou
   fprintf (file, "%s", line8);
 
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i]);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i], v13[i]);
   
   fclose (file);
 
@@ -253,10 +256,10 @@ void Phase::lFileInterpolateLinear (char* lFile1, double time1, char* lFile, dou
   // ........
   delete[] v01_1; delete[] v02_1; delete[] v03_1; delete[] v04_1;
   delete[] v05_1; delete[] v06_1; delete[] v07_1; delete[] v08_1;
-  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1;
+  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1; delete[] v13_1;
   delete[] v01;   delete[] v02;   delete[] v03;   delete[] v04;
   delete[] v05;   delete[] v06;   delete[] v07;   delete[] v08;
-  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12; 
+  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12;   delete[] v13;
 }
 
 void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2, double time2, char* lFile, double time)
@@ -298,10 +301,11 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
   double* v10_1 = new double[nres_1];
   double* v11_1 = new double[nres_1];
   double* v12_1 = new double[nres_1];
+  double* v13_1 = new double[nres_1];
 
   for (int i = 0; i < nres_1; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i], &v13_1[i]) != 13)
       {
 	printf ("PHASE:lFileInterpolateQuadratic: Error reading lFile_1\n");
 	exit (1);
@@ -341,10 +345,11 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
   double* v10_2 = new double[nres_2];
   double* v11_2 = new double[nres_2];
   double* v12_2 = new double[nres_2];
+  double* v13_2 = new double[nres_2];
   
   for (int i = 0; i < nres_2; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i], &v13_2[i]) != 13)
       {
 	printf ("PHASE:lFileInterpolateQuadratic: Error reading lFile_2\n");
 	exit (1);
@@ -379,6 +384,7 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
   double* v10 = new double[nres_0];
   double* v11 = new double[nres_0];
   double* v12 = new double[nres_0];
+  double* v13 = new double[nres_0];
 
   double weight1 = (time - time2) /(time1 - time2);
   double weight2 = (time - time1) /(time2 - time1);
@@ -397,6 +403,7 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
       v10[i] = weight1 * v10_1[i] + weight2 * v10_2[i];
       v11[i] = weight1 * v11_1[i] + weight2 * v11_2[i];
       v12[i] = weight1 * v12_1[i] + weight2 * v12_2[i];
+      v13[i] = weight1 * v13_1[i] + weight2 * v13_2[i];
     }
 
   if (nres_1 > nres)
@@ -415,6 +422,7 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
 	  v10[i] = weight1 * v10_1[i];
 	  v11[i] = weight1 * v11_1[i];
 	  v12[i] = weight1 * v12_1[i];
+	  v13[i] = weight1 * v13_1[i];
 	}
     }
 
@@ -434,6 +442,7 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
 	   v10[i] = weight2 * v10_2[i];
 	   v11[i] = weight2 * v11_2[i];
 	   v12[i] = weight2 * v12_2[i];
+	   v13[i] = weight2 * v13_2[i];
 	 }
      }
    
@@ -455,8 +464,8 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
   fprintf (file, "%s", line8);
 
   for (int i = 0; i < nres_0; i++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i]);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i], v13[i]);
   
   fclose (file);
 
@@ -469,13 +478,13 @@ void Phase::lFileInterpolateQuadratic (char* lFile1, double time1, char* lFile2,
   // ........
   delete[] v01_1; delete[] v02_1; delete[] v03_1; delete[] v04_1;
   delete[] v05_1; delete[] v06_1; delete[] v07_1; delete[] v08_1;
-  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1;
+  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1; delete[] v13_1;
   delete[] v01_2; delete[] v02_2; delete[] v03_2; delete[] v04_2;
   delete[] v05_2; delete[] v06_2; delete[] v07_2; delete[] v08_2;
-  delete[] v09_2; delete[] v10_2; delete[] v11_2; delete[] v12_2;
+  delete[] v09_2; delete[] v10_2; delete[] v11_2; delete[] v12_2; delete[] v13_2;
   delete[] v01;   delete[] v02;   delete[] v03;   delete[] v04;
   delete[] v05;   delete[] v06;   delete[] v07;   delete[] v08;
-  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12; 
+  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12;   delete[] v13;
 }
 
 void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, double time2, char* lFile3, double time3, char* lFile, double time)
@@ -517,10 +526,11 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   double* v10_1 = new double[nres_1];
   double* v11_1 = new double[nres_1];
   double* v12_1 = new double[nres_1];
+  double* v13_1 = new double[nres_1];
 
   for (int i = 0; i < nres_1; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i], &v13_1[i]) != 13)
       {
 	printf ("PHASE:lFileInterpolateCubic: Error reading lFile_1\n");
 	exit (1);
@@ -560,10 +570,11 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   double* v10_2 = new double[nres_2];
   double* v11_2 = new double[nres_2];
   double* v12_2 = new double[nres_2];
+  double* v13_2 = new double[nres_2];
   
   for (int i = 0; i < nres_2; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i], &v13_2[i]) != 13)
       {
 	printf ("PHASE:lFileInterpolateCubic: Error reading lFile_2\n");
 	exit (1);
@@ -603,10 +614,11 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   double* v10_3 = new double[nres_3];
   double* v11_3 = new double[nres_3];
   double* v12_3 = new double[nres_3];
+  double* v13_3 = new double[nres_3];
   
   for (int i = 0; i < nres_3; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_3[i], &v02_3[i], &v03_3[i], &v04_3[i], &v05_3[i], &v06_3[i], &v07_3[i], &v08_3[i], &v09_3[i], &v10_3[i], &v11_3[i], &v12_3[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_3[i], &v02_3[i], &v03_3[i], &v04_3[i], &v05_3[i], &v06_3[i], &v07_3[i], &v08_3[i], &v09_3[i], &v10_3[i], &v11_3[i], &v12_3[i], &v13_3) != 13)
       {
 	printf ("PHASE:lFileInterpolateCubic: Error reading lFile_3\n");
 	exit (1);
@@ -648,6 +660,7 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   double* v10 = new double[nres];
   double* v11 = new double[nres];
   double* v12 = new double[nres];
+  double* v13 = new double[nres];
 
   double weight1 = (time - time2) * (time - time3) /(time1 - time2) /(time1 - time3);
   double weight2 = (time - time1) * (time - time3) /(time2 - time1) /(time2 - time3);
@@ -667,6 +680,7 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
       v10[i] = weight1 * v10_1[i] + weight2 * v10_2[i] + weight3 * v10_3[i];
       v11[i] = weight1 * v11_1[i] + weight2 * v11_2[i] + weight3 * v11_3[i];
       v12[i] = weight1 * v12_1[i] + weight2 * v12_2[i] + weight3 * v12_3[i];
+      v13[i] = weight1 * v13_1[i] + weight2 * v13_2[i] + weight3 * v13_3[i];
     }
 
   // ........................
@@ -689,8 +703,8 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   fprintf (file, "%s", line8);
 
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i]);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i], v13[i]);
   
   fclose (file);
 
@@ -704,16 +718,16 @@ void Phase::lFileInterpolateCubic (char* lFile1, double time1, char* lFile2, dou
   // ........
   delete[] v01_1; delete[] v02_1; delete[] v03_1; delete[] v04_1;
   delete[] v05_1; delete[] v06_1; delete[] v07_1; delete[] v08_1;
-  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1;
+  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1; delete[] v13_1;
   delete[] v01_2; delete[] v02_2; delete[] v03_2; delete[] v04_2;
   delete[] v05_2; delete[] v06_2; delete[] v07_2; delete[] v08_2;
-  delete[] v09_2; delete[] v10_2; delete[] v11_2; delete[] v12_2;
+  delete[] v09_2; delete[] v10_2; delete[] v11_2; delete[] v12_2; delete[] v13_2;
   delete[] v01_3; delete[] v02_3; delete[] v03_3; delete[] v04_3;
   delete[] v05_3; delete[] v06_3; delete[] v07_3; delete[] v08_3;
-  delete[] v09_3; delete[] v10_3; delete[] v11_3; delete[] v12_3;
+  delete[] v09_3; delete[] v10_3; delete[] v11_3; delete[] v12_3; delete[] v13_3;
   delete[] v01;   delete[] v02;   delete[] v03;   delete[] v04;
   delete[] v05;   delete[] v06;   delete[] v07;   delete[] v08;
-  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12; 
+  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12;   delete[] v13; 
 }
 
 void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, double time2, char* lFile3, double time3,
@@ -756,10 +770,11 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   double* v10_1 = new double[nres_1];
   double* v11_1 = new double[nres_1];
   double* v12_1 = new double[nres_1];
+  double* v13_1 = new double[nres_1];
 
   for (int i = 0; i < nres_1; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_1[i], &v02_1[i], &v03_1[i], &v04_1[i], &v05_1[i], &v06_1[i], &v07_1[i], &v08_1[i], &v09_1[i], &v10_1[i], &v11_1[i], &v12_1[i], &v13_1[i]) != 13)
       {
 	printf ("PHASE::lFileInterpolateQuartic: Error reading lFile_1\n");
 	exit (1);
@@ -799,10 +814,11 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   double* v10_2 = new double[nres_2];
   double* v11_2 = new double[nres_2];
   double* v12_2 = new double[nres_2];
+  double* v13_2 = new double[nres_2];
   
   for (int i = 0; i < nres_2; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_2[i], &v02_2[i], &v03_2[i], &v04_2[i], &v05_2[i], &v06_2[i], &v07_2[i], &v08_2[i], &v09_2[i], &v10_2[i], &v11_2[i], &v12_2[i], &v13_2[i]) != 13)
       {
 	printf ("PHASE::lFileInterpolateQuartic: Error reading lFile_2\n");
 	exit (1);
@@ -842,10 +858,11 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   double* v10_3 = new double[nres_3];
   double* v11_3 = new double[nres_3];
   double* v12_3 = new double[nres_3];
+  double* v13_3 = new double[nres_3];
   
   for (int i = 0; i < nres_3; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_3[i], &v02_3[i], &v03_3[i], &v04_3[i], &v05_3[i], &v06_3[i], &v07_3[i], &v08_3[i], &v09_3[i], &v10_3[i], &v11_3[i], &v12_3[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_3[i], &v02_3[i], &v03_3[i], &v04_3[i], &v05_3[i], &v06_3[i], &v07_3[i], &v08_3[i], &v09_3[i], &v10_3[i], &v11_3[i], &v12_3[i], &v13_3[i]) != 13)
       {
 	printf ("PHASE::lFileInterpolateQuartic: Error reading lFile_3\n");
 	exit (1);
@@ -885,10 +902,11 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   double* v10_4 = new double[nres_4];
   double* v11_4 = new double[nres_4];
   double* v12_4 = new double[nres_4];
+  double* v13_4 = new double[nres_4];
   
   for (int i = 0; i < nres_4; i++)
-    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
-		&v01_4[i], &v02_4[i], &v03_4[i], &v04_4[i], &v05_4[i], &v06_4[i], &v07_4[i], &v08_4[i], &v09_4[i], &v10_4[i], &v11_4[i], &v12_4[i]) != 12)
+    if (fscanf (file, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+		&v01_4[i], &v02_4[i], &v03_4[i], &v04_4[i], &v05_4[i], &v06_4[i], &v07_4[i], &v08_4[i], &v09_4[i], &v10_4[i], &v11_4[i], &v12_4[i], &v13_4[i]) != 13)
       {
 	printf ("PHASE::lFileInterpolateQuartic: Error reading lFile_4\n");
 	exit (1);
@@ -937,6 +955,7 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   double* v10 = new double[nres];
   double* v11 = new double[nres];
   double* v12 = new double[nres];
+  double* v13 = new double[nres];
 
   double weight1 = (time - time2) * (time - time3) * (time - time4) /(time1 - time2) /(time1 - time3) /(time1 - time4);
   double weight2 = (time - time1) * (time - time3) * (time - time4) /(time2 - time1) /(time2 - time3) /(time2 - time4);
@@ -957,6 +976,7 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
       v10[i] = weight1 * v10_1[i] + weight2 * v10_2[i] + weight3 * v10_3[i] + weight4 * v10_4[i];
       v11[i] = weight1 * v11_1[i] + weight2 * v11_2[i] + weight3 * v11_3[i] + weight4 * v11_4[i];
       v12[i] = weight1 * v12_1[i] + weight2 * v12_2[i] + weight3 * v12_3[i] + weight4 * v12_4[i];
+      v13[i] = weight1 * v13_1[i] + weight2 * v13_2[i] + weight3 * v13_3[i] + weight4 * v13_4[i];
     }
 
   // ........................
@@ -981,8 +1001,8 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   fprintf (file, "%s", line8);
 
   for (int i = 0; i < nres; i++)
-    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
-	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i]);
+    fprintf (file, "%16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
+	     v01[i], v02[i], v03[i], v04[i], v05[i], v06[i], v07[i], v08[i], v09[i], v10[i], v11[i], v12[i], v13[i]);
   
   fclose (file);
 
@@ -997,18 +1017,18 @@ void Phase::lFileInterpolateQuartic (char* lFile1, double time1, char* lFile2, d
   // ........
   delete[] v01_1; delete[] v02_1; delete[] v03_1; delete[] v04_1;
   delete[] v05_1; delete[] v06_1; delete[] v07_1; delete[] v08_1;
-  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1;
+  delete[] v09_1; delete[] v10_1; delete[] v11_1; delete[] v12_1; delete[] v13_1;
   delete[] v01_2; delete[] v02_2; delete[] v03_2; delete[] v04_2;
   delete[] v05_2; delete[] v06_2; delete[] v07_2; delete[] v08_2;
-  delete[] v09_2; delete[] v10_2; delete[] v11_2; delete[] v12_2;
+  delete[] v09_2; delete[] v10_2; delete[] v11_2; delete[] v12_2; delete[] v13_2;
   delete[] v01_3; delete[] v02_3; delete[] v03_3; delete[] v04_3;
   delete[] v05_3; delete[] v06_3; delete[] v07_3; delete[] v08_3;
-  delete[] v09_3; delete[] v10_3; delete[] v11_3; delete[] v12_3;
+  delete[] v09_3; delete[] v10_3; delete[] v11_3; delete[] v12_3; delete[] v13_3;
   delete[] v01_4; delete[] v02_4; delete[] v03_4; delete[] v04_4;
   delete[] v05_4; delete[] v06_4; delete[] v07_4; delete[] v08_4;
-  delete[] v09_4; delete[] v10_4; delete[] v11_4; delete[] v12_4;
+  delete[] v09_4; delete[] v10_4; delete[] v11_4; delete[] v12_4; delete[] v13_4;
   delete[] v01;   delete[] v02;   delete[] v03;   delete[] v04;
   delete[] v05;   delete[] v06;   delete[] v07;   delete[] v08;
-  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12; 
+  delete[] v09;   delete[] v10;   delete[] v11;   delete[] v12;   delete[] v13;
 }
 
