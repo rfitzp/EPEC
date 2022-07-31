@@ -257,7 +257,7 @@ class Flux
   double* C2res;       // C2 values at rational surfaces
   double* alpres;      // alpha values at rational surfaces
   double* betres;      // beta values at rational surfaces
-  double* gamres;      // gamma' values at rational surfaces
+  double* gamres;      // gamma values at rational surfaces
 
   // Glasser-Greene-Johnson data
   double* J1;          // GGJ integral
@@ -282,7 +282,7 @@ class Flux
   gsl_matrix* Znc;     // Z versus Theta on rational surfaces
   gsl_matrix* Bnc;     // B versus Theta on rational surfaces
   gsl_matrix* Cnc;     // dB/dTheta versus Theta on rational surfaces
-  gsl_matrix* factor;  // Transformation function for neoclassical E-matrix interagration
+  gsl_matrix* factor;  // Transformation function for neoclassical E-matrix integration
 
   // Neoclassical parameter data
   double*     I1;      // Neoclassical integral
