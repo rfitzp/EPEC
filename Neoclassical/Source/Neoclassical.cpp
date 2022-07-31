@@ -131,10 +131,12 @@ void Neoclassical::Read_Parameters ()
   TAUMIN   = - 0.8;
   DMAX     = 10.;
   DMIN     = 0.01;
+
+  WPSIMAX  = 0.2;
  
   // Read namelist
   NameListRead (&IMPURITY, &NEUTRAL, &EXB, &INTP, &INTF, &INTC, &NTYPE, &NN, &LN, &SVN, &YN, &EN, &TIME,
-		&COULOMB, &NSMOOTH, &CATS, &TAUMIN, &DMIN, &DMAX);
+		&COULOMB, &NSMOOTH, &CATS, &TAUMIN, &DMIN, &DMAX, &WPSIMAX);
 
   // Sanity check
   if (YN < 0.)
@@ -182,22 +184,27 @@ void Neoclassical::Read_Parameters ()
       printf ("NEOCLASSICAL::Read_Parameters: Error invalid DMIN/DMAX value\n");
       exit (1);
     }
+  if (WPSIMAX <= 0.)
+    {
+      printf ("NEOCLASSICAL::Read_Parameters: Error invalid WPSIMAX value\n");
+      exit (1);
+    }
 
   // Output input parameters
   printf ("Git Hash     = "); printf (GIT_HASH);     printf ("\n");
   printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
   printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
   printf ("Input parameters (from Inputs/Neoclassical.nml):\n");
-  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e DMIN = %11.4e DMAX = %11.4e\n",
-	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, DMIN, DMAX);
+  printf ("IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e DMIN = %11.4e DMAX = %11.4e WPSIMAX = %11.4e\n",
+	  IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, DMIN, DMAX, WPSIMAX);
   
   FILE* namelist = OpenFilew ((char*) "Outputs/InputParameters.txt");
   fprintf (namelist, "Git Hash     = "); fprintf (namelist, GIT_HASH);     fprintf (namelist, "\n");
   fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
   fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
   fprintf (namelist, "Input parameters (from Inputs/Neoclassical.nml):\n");
-  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e DMIN = %11.4e DMAX = %11.4e\n",
-	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, DMIN, DMAX);
+  fprintf (namelist, "IMPURITY = %2d NEUTRAL = %2d EXB = %2d INTP = %2d INTF = %2d INTC = %2d NTYPE = %2d NN = %11.4e LN = %11.4e SVN = %11.4e YN = %11.4e EN = %11.4e TIME = %11.4e NSMOOTH = %3d CATS = %2d TAUMIN = %11.4e DMIN = %11.4e DMAX = %11.4e WPSIMAX = %11.4e\n",
+	   IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE, NN, LN, SVN, YN, EN, TIME, NSMOOTH, CATS, TAUMIN, DMIN, DMAX, WPSIMAX);
   fclose (namelist);
 }
 
@@ -1584,7 +1591,6 @@ void Neoclassical::WriteStage3Netcdfc ()
   Array<double,2> RHS1a (nres, NISLAND);
   Array<double,2> RHS2a (nres, NISLAND);
   Array<double,2> RHS3a (nres, NISLAND);
-  double WPSIMAX = 0.2;
 
   for (int j = 0; j < nres; j++)
     for (int i = 0; i < NISLAND; i++)
@@ -2126,7 +2132,7 @@ double Neoclassical::psi_fun (double x)
   return gsl_sf_erf (x) - (2./sqrt(M_PI)) * x * exp (-x*x);
 }
 
-// ####################################
+ // ####################################
 // Derivative of Chandrasekhar function
 // ####################################
 double Neoclassical::psi_fun_p (double x)
@@ -2141,32 +2147,32 @@ void Neoclassical::Rhs (double x, Array<double,1>& y, Array<double,1>& dydx)
 {
   if (flag == 0)
     {
-      double nuDi = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x)) /x
-	+ (3.*sqrt(M_PI) /4.) * alphak (jj) * ((1. - x_iI (jj) /2./x) * psi_fun (x /x_iI (jj)) + psi_fun_p (x /x_iI (jj))) /x;
+      double nuDi = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x/x) * psi_fun (x) + psi_fun_p (x)) /x
+	+ (3.*sqrt(M_PI) /4.) * alphak (jj) * ((1. - x_iI (jj) * x_iI (jj) /2./x/x) * psi_fun (x /x_iI (jj)) + psi_fun_p (x /x_iI (jj))) /x;
       double nuEi = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x)) /x
 	+ (3.*sqrt(M_PI) /2.) * alphak (jj) * ((AI/AII) * psi_fun (x /x_iI (jj)) - psi_fun_p (x /x_iI (jj))) /x;
       double nuTi = 3. * nuDi + nuEi;
       
-      double nuDI = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x)) /x
-	+ (3.*sqrt(M_PI) /4.) * (1./alphak (jj)) * ((1. - x_Ii (jj) /2./x) * psi_fun (x /x_Ii (jj)) + psi_fun_p (x /x_Ii (jj))) /x;
+      double nuDI = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x/x) * psi_fun (x) + psi_fun_p (x)) /x
+	+ (3.*sqrt(M_PI) /4.) * (1./alphak (jj)) * ((1. - x_Ii (jj) * x_Ii (jj) /2./x/x) * psi_fun (x /x_Ii (jj)) + psi_fun_p (x /x_Ii (jj))) /x;
       double nuEI = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x)) /x
 	+ (3.*sqrt(M_PI) /2.) * (1./alphak (jj)) * ((AII/AI) * psi_fun (x /x_Ii (jj)) - psi_fun_p (x /x_Ii (jj))) /x;
       double nuTI = 3. * nuDI + nuEI;
       
-      double nuDe = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x) * psi_fun (x) + psi_fun_p (x))
+      double nuDe = (3.*sqrt(M_PI) /4.) * ((1. - 1. /2./x/x) * psi_fun (x) + psi_fun_p (x))
 	+ (3.*sqrt(M_PI) /4.) * Zeffk (jj);
       double nuEe = (3.*sqrt(M_PI) /2.) * (psi_fun (x) - psi_fun_p (x));
       double nuTe = 3. * nuDe + nuEe;
       
-      dydx (0) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 2.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
-      dydx (1) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 3.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
-      dydx (2) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDi / (x   + nu_P_i (jj) * nuDi) /(x   + nu_PS_i (jj) * nuTi);
-      dydx (3) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 2.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
-      dydx (4) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 3.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
-      dydx (5) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDI / (x   + nu_P_I (jj) * nuDI) /(x   + nu_PS_I (jj) * nuTI);
-      dydx (6) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 4.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
-      dydx (7) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 5.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
-      dydx (8) = gt (jj) * (4./3./sqrt(M_PI)) * exp (-x) * pow (x, 6.) * nuDe / (x*x + nu_P_e (jj) * nuDe) /(x*x + nu_PS_e (jj) * nuTe);
+      dydx (0) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 8.)  * nuDi / (x*x*x   + nu_P_i (jj) * nuDi) /(x*x*x   + nu_PS_i (jj) * nuTi);
+      dydx (1) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 10.) * nuDi / (x*x*x   + nu_P_i (jj) * nuDi) /(x*x*x   + nu_PS_i (jj) * nuTi);
+      dydx (2) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 12.) * nuDi / (x*x*x   + nu_P_i (jj) * nuDi) /(x*x*x   + nu_PS_i (jj) * nuTi);
+      dydx (3) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 8.)  * nuDI / (x*x*x   + nu_P_I (jj) * nuDI) /(x*x*x   + nu_PS_I (jj) * nuTI);
+      dydx (4) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 10.) * nuDI / (x*x*x   + nu_P_I (jj) * nuDI) /(x*x*x   + nu_PS_I (jj) * nuTI);
+      dydx (5) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 12.) * nuDI / (x*x*x   + nu_P_I (jj) * nuDI) /(x*x*x   + nu_PS_I (jj) * nuTI);
+      dydx (6) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 9.)  * nuDe / (x*x*x*x + nu_P_e (jj) * nuDe) /(x*x*x*x + nu_PS_e (jj) * nuTe);
+      dydx (7) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 11.) * nuDe / (x*x*x*x + nu_P_e (jj) * nuDe) /(x*x*x*x + nu_PS_e (jj) * nuTe);
+      dydx (8) = gt (jj) * (8./3./sqrt(M_PI)) * exp (-x*x) * pow (x, 13.) * nuDe / (x*x*x*x + nu_P_e (jj) * nuDe) /(x*x*x*x + nu_PS_e (jj) * nuTe);
     }
   else
     {

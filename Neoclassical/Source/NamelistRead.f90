@@ -5,7 +5,7 @@
 ! ######################################
 
 subroutine NameListRead (IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE,&
-     NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS, TAUMIN, DMIN, DMAX)& 
+     NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS, TAUMIN, DMIN, DMAX, WPSIMAX)& 
      bind (c, name = 'NameListRead')
   
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -30,9 +30,10 @@ subroutine NameListRead (IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE,&
   real    (kind = c_double), intent (inout) :: TAUMIN
   real    (kind = c_double), intent (inout) :: DMIN
   real    (kind = c_double), intent (inout) :: DMAX
+  real    (kind = c_double), intent (inout) :: WPSIMAX
   
   namelist /NEOCLASSICAL_CONTROL/ IMPURITY, NEUTRAL, EXB, INTP, INTF, INTC, NTYPE,&
-       NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS, TAUMIN, DMIN, DMAX
+       NN, LN, SVN, YN, EN, TIME, COULOMB, NSMOOTH, CATS, TAUMIN, DMIN, DMAX, WPSIMAX
   
   open  (unit = 100, file = 'Inputs/Neoclassical.nml', status = 'old')
   read  (unit = 100, nml = NEOCLASSICAL_CONTROL) 

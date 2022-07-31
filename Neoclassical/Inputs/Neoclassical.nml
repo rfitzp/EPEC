@@ -17,5 +17,6 @@
  TIME = 0.	   
  TAUMIN = -0.8	   
  COULOMB = 17.	   
- NSMOOTH = 100     
+ NSMOOTH = 100
+ WPSIMAX = 0.2
  / 

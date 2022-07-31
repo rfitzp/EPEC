@@ -58,4 +58,5 @@ COULOMB
   Coulomb logarithm
 NSMOOTH
   Number of smoothing cycles for calculation of higher derivatives of profiles
-
+PSIMAX  
+  Maximum value of PSIN for Rutherford right-hand sides

@@ -55,6 +55,8 @@
 // 2.2  - Removed command line options
 // 2.3  - Added DMIN/DMAX
 // 2.4  - Added resistive wall
+// 2.5  - Corrected neoclassical viscosity calculation
+// 2.6  - Added WPSIMAX 
 
 // ################################################################
 
@@ -62,7 +64,7 @@
 #define NEOCLASSICAL
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 3
+#define VERSION_MINOR 6
 #define MAXFILENAMELENGTH 500
 #define MAXPFILELINELENGTH 500
 
@@ -89,7 +91,7 @@ using namespace blitz;
 extern "C" void NameListRead (int* IMPURITY, int* NEUTRAL, int* EXB, int* INTP, int* INTF, int* INTC, 
 			      int* NTYPE, double* NN, double* LN, double* SVN, double* YN, double* EN,
 			      double* TIME, double* COULOMB, int* NSMOOTH, int *CATS, double* TAUMIN,
-			      double* DMIN, double* DMAX);
+			      double* DMIN, double* DMAX, double* WPSIMAX);
 
 // ############
 // Class header
@@ -134,6 +136,7 @@ class Neoclassical
                    //  1+tau must be positive otherwise layer width calculation fails.
   int    NSMOOTH;  // Number of smoothing cycles for higher devivatives of profiles
   double COULOMB;  // Coulomb logarithm
+  double WPSIMAX;  // Maximum value of PSIN for Rutherford right-hand sides
  
   // ------------------
   // Physical constants
@@ -535,7 +538,7 @@ class Neoclassical
   void fFileInterpolateQuartic   (char* fFile1, double time1, char* fFile2, double time2, char* fFile3, double time3,
 				  char* fFile4, double time4, char* fFile,  double time);
  
-   // Chandrasekhar function
+  // Chandrasekhar function
   double psi_fun (double x);
   // Derivative of Chandrasekhar function
   double psi_fun_p (double x);

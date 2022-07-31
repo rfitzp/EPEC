@@ -63,7 +63,13 @@ LIN
 CXD 
   Flag for including charge exhange damping in angular equations of motion
 POEM
-  Flag for including island saturation terms in Rutherford equations 
+  Switch for selecting island saturation terms in Rutherford equations
+   0:
+    No island saturation terms
+   1:
+    Full POEM model
+   2:
+    Only use POEM3 model
 BOOT
   Flag for including bootstrap current terms in Rutherford equations
 CURV
