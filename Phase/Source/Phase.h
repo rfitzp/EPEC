@@ -78,6 +78,7 @@
 // 3.6  - Added WALL and POEM switches
 // 3.7  - Added MSTOP
 // 3.8  - Modified reading of lfile/ufile/mfile to take into account new GPEC 1.5 output format
+// 3.9  - Added mode detection
 
 // #######################################################################
 
@@ -85,7 +86,7 @@
 #define PHASE
 
 #define VERSION_MAJOR 3
-#define VERSION_MINOR 8
+#define VERSION_MINOR 9
 #define MAXFILENAMELENGTH 500
 #define MAXCONTROLPOINTNUMBER 500
 #define MAXULFILELINELENGTH 500
@@ -113,8 +114,8 @@ using namespace blitz;
 // Namelist function
 extern "C" void NameListRead (int* NFLOW, int* STAGE5, int* INTF, int* INTN, int* INTU, int* NATS, int* OLD, int* FREQ, int* LIN, int* MID, int* COPT,
 			      double* DT, double* TSTART, double* TEND, double* TOFF, double* SCALE, double* PMAX, double* CHIR, int* HIGH, int* RATS,
-			      double* CORE, double* FFAC, int* CXD, int* POEM, int* BOOT, int* CURV, int* POLZ, int* WALL, double* TAUW, int* MSTOP,
-			      int* TYPE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL,
+			      double* CORE, double* FFAC, int* CXD, int* POEM, int* BOOT, int* CURV, int* POLZ, int* WALL, double* TAUW, double* THRES,
+			      int* MSTOP, int* TYPE, int* NCTRL, double* TCTRL, double* ICTRL, double* PCTRL,
 			      double* SSTART, double* SEND, double* SAMP, double* SPHA, double* SPVE, double* BACK,
 			      double* RPERIOD, double* RSTART, double* REND, double* RPHA);
 
@@ -182,7 +183,8 @@ class Phase
   double  SCALE;   // GPEC scalefactor
   int     NFLOW;   // Number of flow harmonics included in model
 
-  int     MSTOP;   // Stop calculation if MPOL = MSTOP mode locks (only active if MSTOP > 0)
+  double  THRES;   // Threshold island width for mode detection
+  int     MSTOP;   // Switch for stopping calculation if mode detected 
 
   int     TYPE;    // RMP waveform type (1=programmed, 2=spike, 3=repeated ramp) 
 
@@ -358,7 +360,8 @@ class Phase
   Array<double,2> betakp;  // Toroidal velocity factors
   Array<double,1> ww;      // Island frequencies
   Array<double,1> vp;      // Island phase velocities
-  Array<int,1>    lock;    // Locking flags
+  Array<int,1>    mode;    // Tearing mode detection flags
+  Array<int,1>    zero;    // Frequency zero crossing flags
   Array<double,1> chi;     // RMP amplitudes at rational surfaces
   Array<double,1> zeta;    // RMP phases at rational surfaces
 
