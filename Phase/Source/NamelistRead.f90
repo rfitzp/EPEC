@@ -83,9 +83,9 @@ subroutine NameListRead (NFLOW, STAGE5, INTF, INTN, INTU, NATS, OLD, FREQ, LIN, 
   allocate (ICTRL (NCTRL))
   allocate (PCTRL (NCTRL))
 
-  read  (unit = 100, nml  = TYPE1_WAVEFORM)
-  read  (unit = 100, nml  = TYPE2_WAVEFORM)
-  read  (unit = 100, nml  = TYPE3_WAVEFORM)
+  read (unit = 100, nml  = TYPE1_WAVEFORM)
+  read (unit = 100, nml  = TYPE2_WAVEFORM)
+  read (unit = 100, nml  = TYPE3_WAVEFORM)
 
   close (unit = 100)
   

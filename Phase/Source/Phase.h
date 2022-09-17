@@ -342,10 +342,10 @@ class Phase
   Array<double,1> TT;      // Normalized type1 waveform control times
   double          dTT;     // Normalized recording time interval
   double          tauw;    // Normalized wall time constant
-  double          Sstart;  // Normaized type 2 RMP spike start time
-  double          Send;    // Normaized type 2 RMP spike end time
+  double          Sstart;  // Normalized type 2 RMP spike start time
+  double          Send;    // Normalized type 2 RMP spike end time
   double          Spve;    // Normalized type 2 RMP phase velocity
-  double          Rperiod; // Normaized type 3 RMP repeated ramp repeat time
+  double          Rperiod; // Normalized type 3 RMP repeated ramp repeat time
   double          irmp;    // Peak current flowing in RMP coils (kA) at current time
   double          prmp;    // Relative phases of RMP coil currents (radians) at current time
   Array<double,1> Psik;    // Normalized magnitutudes of reconnected fluxes at resonant surfaces
