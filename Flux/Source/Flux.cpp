@@ -33,7 +33,7 @@ void Flux::Solve ()
   // Input Stage1 data and output Stage2 data.
   // Stage2 data output to directory Outputs/Stage2.
   // Data passed to other programs output to Outputs/fFile.
-  Stage2 ();
+  if (STAGE2) Stage2 ();
 }
 
 // #################################
@@ -62,6 +62,8 @@ void Flux::SetParameters ()
   NSMOOTH = 100;
   NEOANG  = 0;
 
+  STAGE2  = 1;
+
   H0      = 1.e-6;
   ACC     = 1.e-14;
   ETA     = 1.e-8;
@@ -70,7 +72,7 @@ void Flux::SetParameters ()
   DELTA   = 1.e-7;
   
   // Read namelist file Inputs/Flux.nml
-  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NEOANG, &RW);
+  NameListRead (&INTG, &NPSI, &PACK, &NTHETA, &NNC, &NTOR, &H0, &ACC, &ETA, &MMIN, &MMAX, &PSILIM, &TIME, &PSIPED, &NSMOOTH, &PSIRAT, &NEOANG, &RW, &STAGE2);
 
   // Sanity check
   if (NPSI < 1)
@@ -154,8 +156,8 @@ void Flux::SetParameters ()
    printf ("Compile time = "); printf (COMPILE_TIME); printf ("\n");
    printf ("Git Branch   = "); printf (GIT_BRANCH);   printf ("\n\n");
    printf ("Input Parameters (from Inputs/Flux.nml):\n");
-   printf ("NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d\n",
-	   NPSI, NTHETA, NNC, PACK, NEOANG);
+   printf ("NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d  STAGE2 = %2d\n",
+	   NPSI, NTHETA, NNC, PACK, NEOANG, STAGE2);
    printf ("NTOR = %2d  MMIN = %2d  MMAX = %2d  PSILIM = %10.3e  PSIRAT = %10.3e  PSIPED = %10.3e  TIME = %10.3e  INTG = %2d  RW = %10.3e\n",
 	   NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, RW);
    printf ("H0 = %10.3e  ACC = %10.3e  ETA = %10.3e  NSMOOTH = %3d\n",
@@ -166,8 +168,8 @@ void Flux::SetParameters ()
    fprintf (namelist, "Compile time = "); fprintf (namelist, COMPILE_TIME); fprintf (namelist, "\n");
    fprintf (namelist, "Git Branch   = "); fprintf (namelist, GIT_BRANCH);   fprintf (namelist, "\n\n");
    fprintf (namelist, "Input Parameters (from Inputs/Flux.nml):\n");
-   fprintf (namelist, "NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d\n",
-	    NPSI, NTHETA, NNC, PACK, NEOANG);
+   fprintf (namelist, "NPSI = %4d  NTHETA = %4d  NNC = %3d  PACK = %10.3e  NEOANG = %2d  STAGE2 = %2d\n",
+	    NPSI, NTHETA, NNC, PACK, NEOANG, STAGE2);
    fprintf (namelist, "NTOR = %2d  MMIN = %2d  MMAX = %2d  PSILIM = %10.3e  PSIRAT = %10.3e  PSIPED = %10.3e  TIME = %10.3e  INTG = %2d  RW = %10.3e\n",
 	    NTOR, MMIN, MMAX, PSILIM, PSIRAT, PSIPED, TIME, INTG, RW);
    fprintf (namelist, "H0 = %10.3e  ACC = %10.3e  ETA = %10.3e  NSMOOTH = %3d\n",

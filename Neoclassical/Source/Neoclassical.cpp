@@ -803,7 +803,7 @@ void Neoclassical::Get_Derived ()
       else if (NTYPE == 1)
 	NNk (j) = NN / (1. + (rk(j) - 1.) * (rk(j) - 1.) /(LN /a) /(LN /a));
  
-      printf ("m = %3d r = %9.2e ne = %9.2e Te = %9.2e ni = %9.2e Ti = %9.2e nI = %9.2e TI = %9.2e nb = %9.2e wt = %9.2e wp = %9.2e  wE = %9.2e Z_eff = %9.2e NN = %9.2e rho = %9.2e chip = %9.2e chie = %9.2e chin = %9.2e chii = %9.2e\n",
+      printf ("m = %3d r = %10.3e ne = %10.3e Te = %10.3e ni = %10.3e Ti = %10.3e nI = %10.3e TI = %10.3e nb = %10.3e wt = %10.3e wp = %10.3e  wE = %10.3e Z_eff = %10.3e NN = %10.3e rho = %10.3e chip = %10.3e chie = %10.3e chin = %10.3e chii = %10.3e\n",
 	      mk(j), rk(j), nek(j)/1.e19, Tek(j)/e/1.e3, nik(j)/1.e19, Tik(j)/e/1.e3, nIk(j)/1.e19, TIk(j)/e/1.e3, nbk(j)/1.e19, wtk(j)/1.e3, wpk(j)/1.e3, wEk(j)/1.e3, Zeffk(j), NNk(j)/1.e19, rhok(j), chipk(j), chiek(j), chink(j), chii(j));
     }
 
@@ -857,38 +857,38 @@ void Neoclassical::Get_Derived ()
   for (int j = 0; j < nres; j++)
     {
       double x               = 1.;
-      double chi_para_e_brag = 1.55 /(1. + 0.38 * Zeffk (j)) * v_T_ek (j) * v_T_ek (j) /nu_eek (j);
+      double chi_para_e_brag = 1.581 /(1. + 0.2535 * Zeffk (j)) * v_T_ek (j) * v_T_ek (j) /nu_eek (j);
       for (int i = 0; i < 100; i++)
 	{
-	  double chi_para_e_max = 2. * R_0 * v_T_ek (j) /double (ntor) /sk (j) /x;
+	  double chi_para_e_max = 2. * R_0 * v_T_ek (j) /sqrt(M_PI) /double (ntor) /sk (j) /x;
 	  double chi_para_e     = chi_para_e_brag * chi_para_e_max /(chi_para_e_brag + chi_para_e_max);
 
-	  x = 5.07 * pow (chiek (j) /chi_para_e, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
+	  x = sqrt(8.) * pow (chiek (j) /chi_para_e, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
 	}
       WcritTek (j) = x * rk (j) * a;
 
       x = 1.;
-      double chi_para_i_brag = 1.95 * v_T_ik (j) * v_T_ik (j) /nu_iik (j);
+      double chi_para_i_brag = sqrt(2.) * 1.953 * v_T_ik (j) * v_T_ik (j) /nu_iik (j) /Zeffk (j);
       for (int i = 0; i < 100; i++)
 	{
-	  double chi_para_i_max = 2. * R_0 * v_T_ik (j) /double (ntor) /sk (j) /x;
+	  double chi_para_i_max = 2. * R_0 * v_T_ik (j) /sqrt(M_PI) /double (ntor) /sk (j) /x;
 	  double chi_para_i     = chi_para_i_brag * chi_para_i_max /(chi_para_i_brag + chi_para_i_max);
 
-	  x = 5.07 * pow (chiik (j) /chi_para_i, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
+	  x = sqrt(8.) * pow (chiik (j) /chi_para_i, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
 	}
       WcritTik (j) = x * rk (j) * a;
 
       x = 1.;
       for (int i = 0; i < 100; i++)
 	{
-	  double chi_para_i_max = 2. * R_0 * v_T_ik (j) /double (ntor) /sk (j) /x;
+	  double chi_para_i_max = 2. * R_0 * v_T_ik (j) /sqrt(M_PI) /double (ntor) /sk (j) /x;
 	  double chi_para_i     = chi_para_i_brag * chi_para_i_max /(chi_para_i_brag + chi_para_i_max);
 
-	  x = 5.07 * pow (chink (j) /chi_para_i, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
+	  x = sqrt(8.) * pow (chink (j) /chi_para_i, 0.25) * sqrt (R_0 /rk (j) /a /sk (j) /double (ntor));
 	}
       Wcritnek (j) = x * rk (j) * a;
 
-      printf ("m = %3d  WcritTe/a = %9.2e  WcritTi/a = %9.2e  Wcritne/a = %9.2e\n",
+      printf ("m = %3d  WcritTe/a = %10.3e  WcritTi/a = %10.3e  Wcritne/a = %10.3e\n",
 	      mk (j), WcritTek (j)/a, WcritTik (j)/a, Wcritnek (j)/a);
     }
 
@@ -910,27 +910,27 @@ void Neoclassical::Get_Derived ()
       w_betak  (j) = sk (j) * gk (j) * fabs (B_0) /mu_0 /nek (j) /R_0/R_0 /e /qk(j);
       w_Omegk  (j) = sk (j) * qk (j) * e * gk (j) * fabs (B_0) /AI /m_p;
 
-      printf ("m = %3d  wE = %9.2e  w_ast_e = %9.2e  w_ast_i = %9.2e  w_ast_I = %9.2e  w_beta = %9.2e  w_Omega = %9.2e\n",
-	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3, w_betak (j) /1.e3, w_Omegk (j) /1.e3);
+      printf ("m = %3d wE = %10.3e w_ast_e = %10.3e w_ast_i = %10.3e w_ast_I = %10.3e w_beta = %10.3e w_Omega = %10.3e eta_e = %10.3e eta_i = %10.3e eta_I = %10.3e\n",
+	      mk (j), wEk (j) /1.e3, w_ast_ek (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_Ik (j) /1.e3, w_betak (j) /1.e3, w_Omegk (j) /1.e3, eta_ek (j), eta_ik(j), eta_Ik(j));
     }
 
   // -----------------------------------------
   // Calculate timescales at rational surfaces
   // -----------------------------------------
-  rho_sk.resize (nres); tau_Hk.resize (nres); tau_Rk.resize (nres); tau_Mk.resize (nres); tau_thk.resize (nres); tau_cxk.resize (nres);
+  rho_sk.resize (nres); tau_Ak.resize (nres); tau_Hk.resize (nres); tau_Rk.resize (nres); tau_Mk.resize (nres); tau_thk.resize (nres); tau_cxk.resize (nres);
  
-
   for (int j = 0; j < nres; j++)
     {
-      rho_sk  (j) = sqrt (AI * m_p * Tek (j)) /e /fabs (B_0) /gk (j);
-      
+      rho_sk  (j) = sqrt ((5./3.) * AI * m_p * (Tek (j) + (nik (j) /nek (j)) * Tik (j) + (nIk (j) /nek (j)) * TIk (j))) /e /fabs (B_0) /gk (j);
+
+      tau_Ak  (j) = tau_A * sqrt (rhok(j));
       tau_Hk  (j) = tau_A * sqrt (rhok(j)) * R_0 /a /gk(j) /sk(j) /double (ntor);
       tau_Rk  (j) = mu_0 * a*a * rk(j)*rk(j) * nek (j) * e*e /nu_eek (j) /m_e;
       tau_Mk  (j) = a*a /chipk(j);
       tau_thk (j) = 1. /nu_iik (j) / (1. + (qk(j) * R_0 /rk(j) /a) * (qk(j) * R_0 /rk(j) /a) /akk(j));
       tau_cxk (j) = 1. /NNk(j) /SVN;
 
-      printf ("m = %3d  P0 = %9.2e  tau_A = %9.2e  tau_R = %9.2e  tau_M = %9.2e  tau_th = %9.2e  tau_cx = %9.2e\n",
+      printf ("m = %3d  P0 = %10.3e  tau_A = %10.3e  tau_R = %10.3e  tau_M = %10.3e  tau_th = %10.3e  tau_cx = %10.3e\n",
 	      mk (j), P0 /1.e19/e/1.e3, tau_A, tau_Rk (j), tau_Mk (j), tau_thk (j), tau_cxk (j));
     }
 
@@ -998,7 +998,7 @@ void Neoclassical::Get_Viscosities ()
       mu_01_e (j) = (5./2.) * y (6) - y (7);
       mu_11_e (j) = y (8) - 5. * y (7) + (25./4.) * y (6);
 
-      printf ("m = %3d  mu_i = (%9.2e, %9.2e, %9.2e)  mu_I = (%9.2e, %9.2e, %9.2e)  mu_e = (%9.2e, %9.2e, %9.2e)\n",
+      printf ("m = %3d  mu_i = (%10.3e, %10.3e, %10.3e)  mu_I = (%10.3e, %10.3e, %10.3e)  mu_e = (%10.3e, %10.3e, %10.3e)\n",
 	      mk (j), mu_00_i (j), mu_01_i (j), mu_11_i (j), mu_00_I (j), mu_01_I (j), mu_11_I (j), mu_00_e (j), mu_01_e (j), mu_11_e (j));
     }
 }
@@ -1312,7 +1312,7 @@ void Neoclassical::Get_Frequencies ()
 	  w_EB        (j) = - double (ntor) * (w_E2k (j));
 	}
 
-      printf ("m = %3d  w_linear = %9.2e  w_nonlinear = %9.2e  w_EB = %9.2e  w_ast_ik = %9.2e  w_ast_ek = %9.2e  w_nc_i = %9.2e  w_nc_e = %9.2e\n",
+      printf ("m = %3d  w_linear = %10.3e  w_nonlinear = %10.3e  w_EB = %10.3e  w_ast_ik = %10.3e  w_ast_ek = %10.3e  w_nc_i = %10.3e  w_nc_e = %10.3e\n",
 	      mk (j), w_linear (j) /1.e3, w_nonlinear (j) /1.e3, w_EB (j) /1.e3, w_ast_ik (j) /1.e3, w_ast_ek (j) /1.e3, w_nc_ik (j) /1.e3, (w_nc_eek (j) + w_nc_eik (j)) /1.e3);
     }
   
@@ -1333,7 +1333,7 @@ void Neoclassical::Get_Frequencies ()
       rhothek (j) =   v_T_ek (j)      * m_e * qk (j) * R_0 /e /fabs(B_0) /gk (j) /rk (j) /a;
       rhothik (j) =   v_T_ik (j) * AI * m_p * qk (j) * R_0 /e /fabs(B_0) /gk (j) /rk (j) /a;
 
-      printf ("m = %3d  alpha_b_e = %9.2e  alpha_b_i = %9.2e  alpha_c = %9.2e  alpha_p = %9.2e  rho_th_e/a = %9.2e  rho_th_i/a = %9.2e\n",
+      printf ("m = %3d  alpha_b_e = %10.3e  alpha_b_i = %10.3e  alpha_c = %10.3e  alpha_p = %10.3e  rho_th_e/a = %10.3e  rho_th_i/a = %10.3e\n",
 	      mk (j), alpbek (j), alpbik (j), alpck (j), alppk (j), rhothek (j)/a, rhothik (j)/a);
     }
 }
@@ -1351,24 +1351,29 @@ void Neoclassical::Get_LayerWidths ()
   
   for (int j = 0; j < nres; j++)
     {
-      double tauE = a*a * rk (j)*rk (j) /(chink (j) + (2./3.) * chiek (j));
-      double tauM = R_0*R_0 * qk (j)*qk (j) /chipk (j);
+      double tauE = a*a * rk (j)*rk (j) /chink (j);
+      double tauM = a*a * rk (j)*rk (j) /chipk (j);
 
       Sk   (j) = Q_00 (j) * tau_Rk (j) /tau_Hk (j);
-      tauk (j) = - w_ast_ik (j) /w_ast_ek (j);
+      tauk (j) = - w_ast_ek (j) /w_ast_ik (j);
       PEk  (j) = tau_Rk(j) /tauE;
       PMk  (j) = tau_Rk(j) /tauM;
-      Dk   (j) = (5./3.) * pow (Sk (j), 1./3.) * rho_sk (j) /a/rk(j);
-      QEk  (j) =   pow (Sk (j), 1./3.) * double (ntor) * wEk (j)      * tau_Hk (j);
+      Dk   (j) = pow (Sk (j), 1./3.) * sqrt (tauk (j)/ (1. + tauk (j))) * rho_sk (j) /a/rk(j);
+      if (EXB == 0)
+	QEk (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_E0k (j) * tau_Hk (j);
+      else if (EXB == 1)
+	QEk (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_E1k (j) * tau_Hk (j);
+      else if (EXB == 2)
+	QEk (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_E2k (j) * tau_Hk (j);
       Qek  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ek (j) * tau_Hk (j);
       Qik  (j) = - pow (Sk (j), 1./3.) * double (ntor) * w_ast_ik (j) * tau_Hk (j);
 
       // Prevent 1 + tauk from taking negative value
-      if (tauk (j) < TAUMIN)
-	tauk (j) = TAUMIN;
+      if (1. /tauk (j) < TAUMIN)
+	tauk (j) = 1. /TAUMIN;
 
-      printf ("m = %3d  tau = %9.2e  P_E = %9.2e  P_M = %9.2e  D = %9.2e  Q_E = %9.2e  Q_e = %9.2e  Q_i = %9.2e\n",
-	    mk (j), tauk (j), PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
+      printf ("m = %3d  S = %11.4e  tau = %10.3e  P_E = %10.3e  P_M = %10.3e  D = %10.3e  Q_E = %10.3e  Q_e = %10.3e  Q_i = %10.3e\n",
+	      mk (j), Sk (j), tauk (j), PEk (j), PMk (j), Dk (j), QEk (j), Qek (j), Qik (j));
     }
 
   // -----------------------------
@@ -1381,7 +1386,7 @@ void Neoclassical::Get_LayerWidths ()
       double          x, h = h0, t_err, max = 1.e20;
       int             rept, step = 0, skip = 0; count = 0; flag = 1;
       Array<double,1> y (8);
-      double          C    = PEk (j) / (1. + tauk (j)) /Dk (j)/Dk (j);
+      double          C    = PEk (j) / (1. + 1./tauk (j)) /Dk (j)/Dk (j);
       double          xmax = sqrt (2. * log (max) /sqrt (C));
 
       if (C < 0.)
@@ -1467,6 +1472,7 @@ void Neoclassical::WriteStage3Netcdfc ()
 
   int*    mk_x          = new int[nres];
   double* PsiNk_x       = new double[nres];
+  double* tau_Ak_x      = new double[nres];
   double* tau_Hk_x      = new double[nres];
   double* tau_Rk_x      = new double[nres];
   double* tau_Mk_x      = new double[nres];
@@ -1486,6 +1492,13 @@ void Neoclassical::WriteStage3Netcdfc ()
   double* w_ast_ek_x    = new double[nres];
   double* w_ast_ik_x    = new double[nres];
   double* Sk_x          = new double[nres];
+  double* tauk_x        = new double[nres];
+  double* PEk_x         = new double[nres];
+  double* PMk_x         = new double[nres];
+  double* Dk_x          = new double[nres];
+  double* QEk_x         = new double[nres];
+  double* Qek_x         = new double[nres];
+  double* Qik_x         = new double[nres];
   double* alpbek_x      = new double[nres];
   double* alpbik_x      = new double[nres];
   double* alpck_x       = new double[nres];
@@ -1521,6 +1534,7 @@ void Neoclassical::WriteStage3Netcdfc ()
     {
       mk_x[i]          = mk(i);
       PsiNk_x[i]       = PsiNk(i);
+      tau_Ak_x[i]      = tau_Ak(i);
       tau_Hk_x[i]      = tau_Hk(i);
       tau_Rk_x[i]      = tau_Rk(i) * Q_00(i);
       tau_Mk_x[i]      = tau_Mk(i);
@@ -1551,6 +1565,13 @@ void Neoclassical::WriteStage3Netcdfc ()
       w_ast_ek_x[i]    = w_ast_ek(i) /1.e3;
       w_ast_ik_x[i]    = w_ast_ik(i) /1.e3;
       Sk_x[i]          = Sk(i);
+      tauk_x[i]        = tauk(i);
+      PEk_x[i]         = PEk(i);
+      PMk_x[i]         = PMk(i);
+      Dk_x[i]          = Dk(i);
+      QEk_x[i]         = QEk(i);
+      Qek_x[i]         = Qek(i);
+      Qik_x[i]         = Qik(i);
       alpbek_x[i]      = alpbek(i);
       alpbik_x[i]      = alpbik(i);
       alpck_x[i]       = alpck(i);
@@ -1585,9 +1606,9 @@ void Neoclassical::WriteStage3Netcdfc ()
     }
 
   int NISLAND = 200;
-  Array<double,2> RHS1 (nres, NISLAND);
-  Array<double,2> RHS2 (nres, NISLAND);
-  Array<double,2> RHS3 (nres, NISLAND);
+  Array<double,2> RHS1  (nres, NISLAND);
+  Array<double,2> RHS2  (nres, NISLAND);
+  Array<double,2> RHS3  (nres, NISLAND);
   Array<double,2> RHS1a (nres, NISLAND);
   Array<double,2> RHS2a (nres, NISLAND);
   Array<double,2> RHS3a (nres, NISLAND);
@@ -1747,6 +1768,10 @@ void Neoclassical::WriteStage3Netcdfc ()
   int PsiNk_y;
   err += nc_def_var (dataFile, "PsiN_k", NC_DOUBLE, 1, &nres_d, &PsiNk_y);
 
+  // tau_Ak
+  int tau_Ak_y;
+  err += nc_def_var (dataFile, "tau_A", NC_DOUBLE, 1, &nres_d, &tau_Ak_y);
+
   // tau_Hk
   int tau_Hk_y;
   err += nc_def_var (dataFile, "tau_H", NC_DOUBLE, 1, &nres_d, &tau_Hk_y);
@@ -1866,6 +1891,34 @@ void Neoclassical::WriteStage3Netcdfc ()
   // Sk
   int Sk_y;
   err += nc_def_var (dataFile, "S", NC_DOUBLE, 1, &nres_d, &Sk_y);
+
+  // tauk
+  int tauk_y;
+  err += nc_def_var (dataFile, "tau", NC_DOUBLE, 1, &nres_d, &tauk_y);
+
+  // PEk
+  int PEk_y;
+  err += nc_def_var (dataFile, "P_perp", NC_DOUBLE, 1, &nres_d, &PEk_y);
+
+  // PMk
+  int PMk_y;
+  err += nc_def_var (dataFile, "P_phi", NC_DOUBLE, 1, &nres_d, &PMk_y);
+
+  // Dk
+  int Dk_y;
+  err += nc_def_var (dataFile, "D", NC_DOUBLE, 1, &nres_d, &Dk_y);
+
+  // QEk
+  int QEk_y;
+  err += nc_def_var (dataFile, "Q_E", NC_DOUBLE, 1, &nres_d, &QEk_y);
+   
+  // Qek
+  int Qek_y;
+  err += nc_def_var (dataFile, "Q_e", NC_DOUBLE, 1, &nres_d, &Qek_y);
+   
+  // Qik
+  int Qik_y;
+  err += nc_def_var (dataFile, "Q_i", NC_DOUBLE, 1, &nres_d, &Qik_y);
   
   // alpbek
   int alpbek_y;
@@ -1990,6 +2043,7 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, chii_y,        chii_x);
   err += nc_put_var_int    (dataFile, mk_y,          mk_x);
   err += nc_put_var_double (dataFile, PsiNk_y,       PsiNk_x);
+  err += nc_put_var_double (dataFile, tau_Ak_y,      tau_Ak_x);
   err += nc_put_var_double (dataFile, tau_Hk_y,      tau_Hk_x);
   err += nc_put_var_double (dataFile, tau_Rk_y,      tau_Rk_x);
   err += nc_put_var_double (dataFile, tau_Mk_y,      tau_Mk_x);
@@ -2020,6 +2074,13 @@ void Neoclassical::WriteStage3Netcdfc ()
   err += nc_put_var_double (dataFile, w_ast_ik_y,    w_ast_ik_x);
   err += nc_put_var_double (dataFile, w_ast_Ik_y,    w_ast_Ik_x);
   err += nc_put_var_double (dataFile, Sk_y,          Sk_x);
+  err += nc_put_var_double (dataFile, tauk_y,        tauk_x);
+  err += nc_put_var_double (dataFile, PEk_y,         PEk_x);
+  err += nc_put_var_double (dataFile, PMk_y,         PMk_x);
+  err += nc_put_var_double (dataFile, Dk_y,          Dk_x);
+  err += nc_put_var_double (dataFile, QEk_y,         QEk_x);
+  err += nc_put_var_double (dataFile, Qek_y,         Qek_x);
+  err += nc_put_var_double (dataFile, Qik_y,         Qik_x);
   err += nc_put_var_double (dataFile, alpbek_y,      alpbek_x);
   err += nc_put_var_double (dataFile, alpbik_y,      alpbik_x);
   err += nc_put_var_double (dataFile, alpck_y,       alpck_x);
@@ -2079,6 +2140,8 @@ void Neoclassical::WriteStage3Netcdfc ()
   delete[] w_nc_I1_x;  delete[] w_nc_I2_x;  delete[] w_pnc_I0_x; delete[] w_pnc_I1_x;    delete[] w_pnc_I2_x; 
   delete[] w_tk_x;     delete[] w_pk_x;     delete[] rhs1_x;     delete[] w_x;           delete[] mk_x;
   delete[] rhs2_x;     delete[] rhs3_x;     delete[] rhs1a_x;    delete[] rhs2a_x;       delete[] rhs3a_x;
+  delete[] tauk_x;     delete[] PEk_x;      delete[] PMk_x;      delete[] Dk_x;          delete[] QEk_x;
+  delete[] Qek_x;      delete[] Qik_x;      delete[] tau_Ak_x;
 }
 
 // #######################################################################################
@@ -2092,8 +2155,6 @@ void Neoclassical::Get_Normalized ()
  
   for (int j = 0; j < nres; j++)
     {
-      double dk  = M_PI * sqrt (double (ntor) * fabs (w_ast_ek (j))) * tau_Hk (j) * rk (j) * a
-	/ (rho_sk (j) /rk(j) /a) /sqrt (tau_Rk (j) * Q_00 (j));
       double Sk  = tau_Rk (j) * Q_00 (j) /tau_A;
       double wkl = w_linear (j) * tau_A;
       double wke = w_EB (j) * tau_A;
@@ -2102,8 +2163,8 @@ void Neoclassical::Get_Normalized ()
       double th  = tau_thk (j) /mu_00_i (j) /tau_A;
       double tx  = tau_cxk (j) /tau_A;
      
-      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del_SCi = %10.3e del_true = %10.3e\n",
-	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, dk, delk (j));
+      printf ("m = %3d Psi = %10.3e r = %10.3e q = %10.3e rho = %10.3e a = %10.3e S = %10.3e tauM = %10.3e tauth = %10.3e taucx = %10.3e del = %10.3e\n",
+	      mk (j), PsiNk (j), rk (j), qk (j), rhok (j), a /R_0, Sk, tm, th, tx, delk (j));
 
       fprintf (file, "%4d %4d %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e %16.9e\n",
 	       mk (j),                      ntor,                        rk (j),                     qk (j),                     rhok (j),
@@ -2188,8 +2249,8 @@ void Neoclassical::Rhs (double x, Array<double,1>& y, Array<double,1>& dydx)
       gsl_complex Y2 = gsl_complex_rect (y (4), y (5));
       
       gsl_complex I    = gsl_complex_rect (0., 1.);
-      gsl_complex fac1 = gsl_complex_rect (- QE * (QE - Qi) + PM * PE * x*x*x*x,       (QE - Qi) * (PM + PE) * x*x);
-      gsl_complex fac2 = gsl_complex_rect (PE * x*x + (1. + tau) * PM * D*D * x*x*x*x, (QE - Qe) + (QE - Qi) * D*D * x*x);
+      gsl_complex fac1 = gsl_complex_rect (- QE * (QE + Qi) + PM * PE * x*x*x*x,          (QE + Qi) * (PM + PE) * x*x);
+      gsl_complex fac2 = gsl_complex_rect (PE * x*x + (1. + 1./tau) * PM * D*D * x*x*x*x, (QE + Qe) + (QE + Qi) * D*D * x*x);
       gsl_complex fac  = gsl_complex_div (fac1, fac2);
       gsl_complex rhs1 = gsl_complex_mul (fac, Y1);
       gsl_complex rhs2 = gsl_complex_mul (fac, Y2);

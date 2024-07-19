@@ -65,6 +65,7 @@
 // 2.2  - Removed command line options
 // 2.3  - Added resistive wall
 // 2.4  - Added cylindrical quantities to NETCDF file
+// 2.5  - Added STAGE2 flag
 
 // #####################################################################################
 
@@ -74,7 +75,7 @@
 #define MAXFILENAMELENGTH 500
 
 #define VERSION_MAJOR 2
-#define VERSION_MINOR 4
+#define VERSION_MINOR 5
 
 #include <stdio.h>
 #include <math.h>
@@ -106,7 +107,7 @@ extern "C" int pRhs8 (double, const double[], double[], void*);
 // Namelist reading function
 extern "C" void NameListRead (int* INTG, int* NPSI, double* PACK, int* NTHETA, int* NNC, int* NTOR, double* H0,
 			      double* ACC, double* ETA, int* MMIN, int* MMAX, double* PSILIM, double* TIME,
-			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NEOANG, double* RW);
+			      double* PSIPED, int* NSMOOTH, double* PSIRAT, int* NEOANG, double* RW, int* STAGE2);
 
 // gFile reading function
 extern "C" void gFileRead ();
@@ -150,7 +151,9 @@ class Flux
   int    NEOANG;  // Flag for using neoclassical angle in E-matrix calculation
 
   double EPS;     // Cylindrical tearing solutions launched from magnetic axis at r = EPS 
-  double DELTA;   // Cylindrical tearing solutions integrated to r = r_s +/- DELTA 
+  double DELTA;   // Cylindrical tearing solutions integrated to r = r_s +/- DELTA
+
+  int    STAGE2;  // If false terminate calculation at end of Stage1, otherwise proceed to Stage2
   
   // Stage 1 parameters
   double          R0;       // Scale major radius (m)

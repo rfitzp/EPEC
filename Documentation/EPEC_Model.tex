@@ -89,38 +89,6 @@ at the various resonant magnetic flux-surfaces in the plasma in response to the 
 \end{equation}
 where $q_k= m_k/n$, and $a_{kk}(r) = \oint |\nabla r|^{-2}\,d\theta/(2\pi)$. 
 
-\subsection{Glasser-Greene-Johnson Data}
-Let us write
-\begin{equation}
-{\bf B} = \nabla\phi\times\nabla\psi_p+g(\psi_p)\,\nabla\phi.
-\end{equation}
-The angle $\theta^{\,\ast}$ is defined such that
-\begin{equation}
-\nabla\phi\times\nabla\psi_p\cdot\nabla\theta^{\,\ast} = \gamma(\psi_p)\,B.
-\end{equation}
-Let
-\begin{align}
-J_1(\psi_p) &= \oint\frac{1}{B}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
-J_2(\psi_p) &= \oint B\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
-J_3(\psi_p) &= \oint\frac{1}{B^{\,3}}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
-J_4(\psi_p) &= \oint\frac{1}{B\,|\nabla\psi_p|^{\,2}}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
-J_5(\psi_p) &= \oint\frac{B}{|\nabla\psi_p|^{\,2}}\,\frac{d\theta^{\,\ast}}{2\pi},\\[0.5ex]
-J_6(\psi_p) &= \oint\frac{1}{B^{\,3}\,|\nabla\psi_p|^{\,2}}\,\frac{d\theta^{\,\ast}}{2\pi}.
-\end{align}
-It follows that
-\begin{align}
-E(\psi_p) &= - \frac{dP/d\psi_p}{(dq/d\psi_p)^{\,2}}\,\frac{1}{\gamma}\left[\frac{d}{d\psi_p}\!\left(\frac{J_1}{\gamma}\right) - g\,\frac{dq}{d\psi_p}\,\frac{J_1}{J_2}\right]J_5,\\[0.5ex]
-F(\psi_p) &= \frac{(dP/d\psi_p)^{\,2}}{(dq/d\psi_p)^{\,2}}\,\frac{1}{\gamma^{\,2}}\left[g^{\,2}\left(J_5\,J_6- J_4^{\,2}\right)+ J_5\,J_3\right],
-\\[0.5ex]
-H(\psi_p)&= \frac{dP/d\psi_p}{dq/d\psi_p}\,\frac{g}{\gamma}\left(J_4 - \frac{J_1\,J_5}{J_2}\right),
-\end{align}
-where $P(\psi_p)$ is the total plasma pressure. 
-Finally,
-\begin{equation}
-D_R(\psi_p)= E + F + H^{\,2}.
-\end{equation}
-
-
 \subsection{Cylindrical Tearing Mode Equation}
 The cylindrical tearing mode equation for the eigenfunction, $\psi(r)$,  of the $m_k$, $n$ tearing mode takes the form
 \begin{equation}
@@ -279,22 +247,22 @@ $\mu_{11}^{\,a} = K_{11}^{\,a} - 5\,K_{01}^{\,a}+(25/4)\,K_{00}^{\,a}$.
 Here,
 \begin{align}
  K_{jk}^{\,e} &= g_t\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
-\frac{e^{-x}\,x^{\,4+j+k}\,\nu_D^{\,e}(x)\,dx}{[x^{\,2}+\nu_{\ast\,e}\,\nu_D^{\,e}(x)]\,[x^{\,2}+(5\pi/8)\,(\omega_{t\,e}\,\tau_{ee})^{\,-1}\,\nu_T^{\,e}(x)]},\\[0.5ex]
-\nu_D^{\,e}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]+\frac{3\sqrt{\pi}}{4}\,Z_{\rm eff},\\[0.5ex]
+\frac{e^{-x^{\,2}}\,x^{\,5+2\,(j+k)}\,\nu_D^{\,e}(x)\,dx}{[x^{\,4}+\nu_{\ast\,e}\,\nu_D^{\,e}(x)]\,[x^{\,4}+(5\pi/8)\,(\omega_{t\,e}\,\tau_{ee})^{\,-1}\,\nu_T^{\,e}(x)]},\\[0.5ex]
+\nu_D^{\,e}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x^2}\right)\psi(x)+\psi'(x)\right]+\frac{3\sqrt{\pi}}{4}\,Z_{\rm eff},\\[0.5ex]
 \nu_\epsilon^{\,e}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right],\\[0.5ex]
 \nu_T^{\,a}(x) &= 3\,\nu_D^{\,a}(x)+\nu_{\epsilon}^{\,a}(x),
 \end{align}
 and
 \begin{align}
-\psi(x) &= \frac{2}{\sqrt{\pi}}\int_0^x{\rm e}^{-t^{\,2}}\,dt -\frac{2}{\sqrt{\pi}}\,x\,{\rm e}^{-x^{\,2}},\\[0.5ex]
+\psi(x) &= \frac{2}{\sqrt{\pi}}\int_0^{x^{\,2}}\sqrt{t}\,{\rm e}^{-t}\,dt,\\[0.5ex]
 \psi'(x)&= \frac{2}{\sqrt{\pi}}\,x\,{\rm e}^{-x^{\,2}}.
 \end{align}
 Furthermore, 
 \begin{align}
  K_{jk}^{\,i} &=g_t\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
-\frac{e^{-x}\,x^{\,2+j+k}\,\nu_D^{\,i}(x)\,dx}{[x+\nu_{\ast\,i}\,\nu_D^{\,i}(x)]\,[x+(5\pi/8)\,(\omega_{t\,i}\,\tau_{ii})^{\,-1}\,\nu_T^{\,i}(x)]},\\[0.5ex]
- \nu_D^{\,i}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
-&\phantom{=}+\frac{3\sqrt{\pi}}{4}\,\alpha_I\left[\left(1-\frac{x_{iI}}{2\,x}\right)\psi\!\left(\frac{x}{x_{iI}}\right)
+\frac{e^{-x^{\,2}}\,x^{\,4+2\,(j+k)}\,\nu_D^{\,i}(x)\,dx}{[x^{\,3}+\nu_{\ast\,i}\,\nu_D^{\,i}(x)]\,[x^{\,3}+(5\pi/8)\,(\omega_{t\,i}\,\tau_{ii})^{\,-1}\,\nu_T^{\,i}(x)]},\\[0.5ex]
+ \nu_D^{\,i}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x^{\,2}}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
+&\phantom{=}+\frac{3\sqrt{\pi}}{4}\,\alpha_I\left[\left(1-\frac{x_{iI}^{\,2}}{2\,x^{\,2}}\right)\psi\!\left(\frac{x}{x_{iI}}\right)
 +\psi'\!\left(\frac{x}{x_{iI}}\right)\right]\frac{1}{x},\\[0.5ex]
  \nu_\epsilon^{\,i}&=\frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
 &\phantom{=}+\frac{3\sqrt{\pi}}{2}\,\alpha_I\left[\frac{m_i}{m_I}\,\psi\!\left(\frac{x}{x_{iI}}\right)
@@ -303,9 +271,9 @@ Furthermore,
 and, finally, 
 \begin{align}
  K_{jk}^{\,I} &= g_t\,\frac{4}{3\sqrt{\pi}}\int_0^\infty
-\frac{e^{-x}\,x^{\,2+j+k}\,\nu_D^{\,I}(x)\,dx}{[x+\nu_{\ast\,I}\,\nu_D^{\,I}(x)]\,[x+(5\pi/8)\,(\omega_{t\,I}\,\tau_{II})^{\,-1}\,\nu_T^{\,I}(x)]},\\[0.5ex]
- \nu_D^{\,I}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
-&\phantom{=}+\frac{3\sqrt{\pi}}{4}\,\frac{1}{\alpha_I}\left[\left(1-\frac{x_{Ii}}{2\,x}\right)\psi\!\left(\frac{x}{x_{Ii}}\right)
+\frac{e^{-x^{\,2}}\,x^{\,4+2\,(j+k)}\,\nu_D^{\,I}(x)\,dx}{[x^{\,3}+\nu_{\ast\,I}\,\nu_D^{\,I}(x)]\,[x^{\,3}+(5\pi/8)\,(\omega_{t\,I}\,\tau_{II})^{\,-1}\,\nu_T^{\,I}(x)]},\\[0.5ex]
+ \nu_D^{\,I}&= \frac{3\sqrt{\pi}}{4}\left[\left(1-\frac{1}{2\,x^{\,2}}\right)\psi(x)+\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
+&\phantom{=}+\frac{3\sqrt{\pi}}{4}\,\frac{1}{\alpha_I}\left[\left(1-\frac{x_{Ii}^{\,2}}{2\,x^{\,2}}\right)\psi\!\left(\frac{x}{x_{Ii}}\right)
 +\psi'\!\left(\frac{x}{x_{Ii}}\right)\right]\frac{1}{x},\\[0.5ex]
  \nu_\epsilon^{\,I}&= \frac{3\sqrt{\pi}}{2}\left[\psi(x)-\psi'(x)\right]\frac{1}{x}\nonumber\\[0.5ex]\phantom{===}
 &\phantom{=}+\frac{3\sqrt{\pi}}{2}\,\frac{1}{\alpha_I}\left[\frac{m_I}{m_i}\,\psi\!\left(\frac{x}{x_{Ii}}\right)
@@ -401,6 +369,29 @@ where
 K_\theta(r) = \frac{R_0^{\,2}\,B_0^{\,2}\,g^{\,2}}{R^{\,2}\,\langle B^{\,2}\rangle}.
 \end{equation}
 
+\subsection{Glasser-Greene-Johnson Data}
+Let $\hat{B}=|{\bf B}|/B_0$, $\hat{\nabla}= R_0\,\nabla$, $d\psi_p/dr = f(r)/R_0$, and 
+\begin{align}
+J_1(r) &= \oint\frac{1}{\hat{B}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+J_2(r) &= \oint \hat{B}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+J_3(r) &= \oint\frac{1}{\hat{B}^{\,3}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+J_4(r) &= \oint\frac{1}{\hat{B}\,|\hat{\nabla}\psi_p|^{\,2}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+J_5(r) &= \oint\frac{\hat{B}}{|\hat{\nabla}\psi_p|^{\,2}}\,\frac{d{\mit\Theta}}{2\pi},\\[0.5ex]
+J_6(r) &= \oint\frac{1}{\hat{B}^{\,3}\,|\hat{\nabla}\psi_p|^{\,2}}\,\frac{d{\mit\Theta}}{2\pi}.
+\end{align}
+It follows that
+\begin{align}
+E(r) &= - \frac{dp/d\psi_p}{(dq/d\psi_p)^{\,2}}\,\frac{1}{\gamma}\left[\frac{d}{d\psi_p}\!\left(\frac{J_1}{\gamma}\right) - g\,\frac{dq}{d\psi_p}\,\frac{J_1}{J_2}\right]J_5,\\[0.5ex]
+F(r) &= \frac{(dp/d\psi_p)^{\,2}}{(dq/d\psi_p)^{\,2}}\,\frac{1}{\gamma^{\,2}}\left[g^{\,2}\left(J_5\,J_6- J_4^{\,2}\right)+ J_5\,J_3\right],
+\\[0.5ex]
+H(r)&= \frac{dp/d\psi_p}{dq/d\psi_p}\,\frac{g}{\gamma}\left(J_4 - \frac{J_1\,J_5}{J_2}\right),
+\end{align}
+where $P(r)$ is the total plasma pressure. 
+Finally,
+\begin{equation}
+D_R(r)= E + F + H^{\,2}.
+\end{equation}
+
 \section{Plasma Response in Inner Region}
 \subsection{Linear Layer Widths}\label{linear}
 Let
@@ -409,24 +400,24 @@ Let
 \sigma_{ee}(r) &=\frac{n_e\,e^{\,2}\,\tau_{ee}}{m_e},\\[0.5ex]
 \tau_H(r) &= \frac{R_0}{B_0\,g}\,\frac{\sqrt{\mu_0\,\rho}}{n\,s},\\[0.5ex]
 \rho(r)&= m_i\left[n_i(r) + n_b(r)\right] + m_I\,n_I(r),\\[0.5ex]
-\tau_E(r) &= \frac{r^{\,2}}{D_\perp + (2/3)\,\chi_e},\\[0.5ex]
-\tau_M(r) &= \frac{R_0^{\,2}\,q^{\,2}}{\chi_\phi},\\[0.5ex]
-\rho_s (r)&= \frac{\sqrt{m_i\,T_e}}{e\,B_0\,g},\\[0.5ex]
-\tau(r)& = -\frac{\omega_{\ast\,i}}{\omega_{\ast\,e}},\\[0.5ex]
+\tau_\perp(r) &= \frac{r^{\,2}}{D_\perp},\\[0.5ex]
+\tau_\varphi(r) &= \frac{r^{\,2}}{\chi_\phi},\\[0.5ex]
+\tau(r)& = -\frac{\omega_{\ast\,e}}{\omega_{\ast\,i}},\\[0.5ex]
+d_\beta (r)&= \frac{\sqrt{(5/3)\,m_i\,[T_e + (n_i/n_e)\,T_i + (n_I/n_e)\,T_I]}}{e\,B_0\,g},\\[0.5ex]
 S(r) &= \frac{\tau_R}{\tau_H},\\[0.5ex]
-P_M(r) &= \frac{\tau_R}{\tau_M},\\[0.5ex]
-P_E(r) &= \frac{\tau_R}{\tau_E},\\[0.5ex]
-D(r)&= \frac{5}{3}\,S^{\,1/3}\,\frac{\rho_s}{r},\\[0.5ex]
-Q_E(r)&= S^{\,1/3}\,n\,\omega_E\,\tau_H,\\[0.5ex]
+P_\varphi(r) &= \frac{\tau_R}{\tau_\varphi},\\[0.5ex]
+P_\perp(r) &= \frac{\tau_R}{\tau_\perp},\\[0.5ex]
+D(r)&= S^{\,1/3}\,\left(\frac{\tau}{1+\tau}\right)^{1/2}\,\frac{d_\beta}{r},\\[0.5ex]
+Q_E(r)&= -S^{\,1/3}\,n\,\omega_E\,\tau_H,\\[0.5ex]
 Q_{e,i}(r)&= -S^{\,1/3}\,n\,\omega_{\ast\,e,i}\,\tau_H
 \end{align}
 Here, $\chi_e(r)$, $D_\perp(r)$, and $\chi_\phi(r)$ are the perpendicular electron energy, particle,
 and toroidal momentum diffusivity profiles, respectively. Moreover, $n_b(r)$ is the number density of fast (as opposed to thermal) majority ions. 
 The constant-$\psi$ linear layer width is determined from the solution of
 \begin{equation}\label{e87}
-\frac{d^{\,2}\,Y}{dp^{\,2}} -\left[\frac{-Q_E\,(Q_E-Q_i)+{\rm i}\,(Q_E-Q_i)\,(P_M+P_E)\,p^{\,2}+
-P_M\,P_E\,p^{\,4}}
-{{\rm i}\,(Q_E-Q_e) +\{P_E + {\rm i}\,(Q_E-Q_i)\,D^{\,2}\}\,p^{\,2}+(1+\tau)\,P_M\,D^{\,2}\,p^{\,4}}
+\frac{d^{\,2}\,Y}{dp^{\,2}} -\left[\frac{-Q_E\,(Q_E+Q_i)+{\rm i}\,(Q_E+Q_i)\,(P_\varphi+P_\perp)\,p^{\,2}+
+P_\varphi\,P_\perp\,p^{\,4}}
+{{\rm i}\,(Q_E+Q_e) +\{P_\perp + {\rm i}\,(Q_E+Q_i)\,D^{\,2}\}\,p^{\,2}+(1+1/\tau)\,P_\varphi\,D^{\,2}\,p^{\,4}}
 \right] p^{\,2}\, Y = 0.
 \end{equation}
 If the small-$p$ behavior of solution of the previous equation that is well-behaved as $p\rightarrow \infty$ is
@@ -438,7 +429,7 @@ linear layer width is
 \begin{equation}
 \delta_{\rm linear}(r) = \frac{\pi\,|c|\,r}{S^{\,1/3}}.
 \end{equation}
-Note that Eq.~(\ref{e87}) can only be solved when $1+\tau>0$. 
+Note that Eq.~(\ref{e87}) can only be solved when $1+1/\tau>0$. 
 
 \subsection{Island Widths}
 Let ${\mit\Psi}_k= R_0\,B_0\,\hat{\mit\Psi}_k\,{\rm e}^{-{\rm i}\,\varphi_k}$, where $\hat{\mit\Psi}_k>0$  and $\varphi_k$ are both real quantities.

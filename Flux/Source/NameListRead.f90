@@ -5,7 +5,7 @@
 ! %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN, MMAX,&
-     PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG, RW) &
+     PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG, RW, STAGE2) &
      bind (c, name = 'NameListRead')
 
   use, intrinsic :: iso_c_binding, only: c_int, c_double
@@ -20,6 +20,7 @@ subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN
   integer (kind = c_int),    intent (inout) :: MMAX
   integer (kind = c_int),    intent (inout) :: NSMOOTH
   integer (kind = c_int),    intent (inout) :: NEOANG
+  integer (kind = c_int),    intent (inout) :: STAGE2
   real    (kind = c_double), intent (inout) :: PACK
   real    (kind = c_double), intent (inout) :: H0
   real    (kind = c_double), intent (inout) :: ACC
@@ -31,7 +32,7 @@ subroutine NameListRead (INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN
   real    (kind = c_double), intent (inout) :: RW
     
   namelist /FLUX_CONTROL/ INTG, NPSI, PACK, NTHETA, NNC, NTOR, H0, ACC, ETA, MMIN, MMAX,&
-       PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG, RW
+       PSILIM, TIME, PSIPED, NSMOOTH, PSIRAT, NEOANG, RW, STAGE2
   
   open  (unit = 100, file = 'Inputs/Flux.nml', status = 'old')
   read  (unit = 100, nml  = FLUX_CONTROL)

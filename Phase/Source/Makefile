@@ -1,4 +1,4 @@
-# Makefile for Porgram PHASE
+# Makefile for Program PHASE
 
 F_OBJECT = NamelistRead.o
 F_SOURCE = NamelistRead.f90

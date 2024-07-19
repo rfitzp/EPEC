@@ -379,7 +379,8 @@ class Neoclassical
   Array<double,1> w_Omegk;    // Polarization frequencies (rad/s)
 
   Array<double,1> rho_sk;     // Ion sound radii (m)
-  
+
+  Array<double,1> tau_Ak;     // Alfven timescales (s)
   Array<double,1> tau_Hk;     // Hydromagnetic timescales (s)
   Array<double,1> tau_Rk;     // Classical resistive timescales (s)
   Array<double,1> tau_Mk;     // Momentum confinement timescales (s)
